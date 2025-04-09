@@ -17,7 +17,7 @@ import groundingdino.util.vl_utils as gdino_vl_utils
 
 from utils import get_text_query, create_bbox_annotations
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
+openai.api_key = os.environ.get("OPENAI_API_KEY", "")
 
 
 class ViLaIn:
