@@ -12,8 +12,8 @@ import torch
 from torchvision.ops import box_convert
 from transformers import Blip2Processor, Blip2ForConditionalGeneration
 import openai
-import groundingdino.util.inference as gdino_inference
-import groundingdino.util.vl_utils as gdino_vl_utils
+# import groundingdino.util.inference as gdino_inference
+# import groundingdino.util.vl_utils as gdino_vl_utils
 
 from utils import get_text_query, create_bbox_annotations
 

@@ -7,6 +7,7 @@ import random
 from vilain import ViLaIn
 from utils import seed_everything, parse_args, PDDL, get_error_meaning
 
+# python main.py --data_dir "../data/cooking" --result_dir "./results/tmp/cooking" --grounding_dino_dir "../GroundingDINO" --predict_bboxes
 
 def main():
     args = parse_args()
@@ -20,6 +21,8 @@ def main():
         fname.rsplit(".", 1)[0]
         for fname in os.listdir(f"{args.data_dir}/problems")
     ]
+    print(task_names)
+    import sys; sys.exit()
 
     if args.predict_bboxes:
         # create directories

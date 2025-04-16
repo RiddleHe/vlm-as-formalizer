@@ -44,7 +44,7 @@ def parse_args():
     parser.add_argument("--text_threshold", type=float, default=0.25, help="")
 
     # downward
-    parser.add_argument("--downward_dir", type=str, default=None, help="")
+    parser.add_argument("--downward_dir", type=str, default="../downward", help="")
     parser.add_argument("--time_limit", type=int, default=200, help="")
 
     # related to problem generation and refinement
@@ -621,7 +621,7 @@ def validate_problem(
             shell=True,
         ).decode()
     except Exception as e:
-        output = str(e.output)
+        output = str(e)
 
     return output
 

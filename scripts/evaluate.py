@@ -2,9 +2,11 @@
 
 import os
 import glob
-
+from tqdm import tqdm
 from utils import parse_args, PDDL
 from utils import validate_problem, validate_plan, calculate_rpart, calculate_rall
+
+# python evaluate.py --data_dir "../data/cooking" --result_dir "./results/tmp/cooking"
 
 
 def main():
@@ -17,7 +19,11 @@ def main():
 
     # calculate r_syntax
     num_valid_problems = 0
-    for gen_idx in range(1, num_problems+1):
+    for gen_idx in tqdm(
+        range(1, num_problems+1),
+        total=num_problems,
+        desc="Calculating r_syntax"
+    ):
         problem_path = f"{generated_problem_dir}/problem{gen_idx}.pddl"
 
         output = validate_problem(
@@ -25,6 +31,8 @@ def main():
             domain_path,
             problem_path,
         )
+        print(output)
+        import sys; sys.exit()
 
         if len(output) <= 0:
             num_valid_problems += 1
