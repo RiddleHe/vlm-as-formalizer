@@ -1,0 +1,5 @@
+(:objects
+    cucumber
+    carrot
+    tomato
+)

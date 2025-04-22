@@ -1,0 +1,32 @@
+```pddl
+(define (problem kitchen1)
+    (:domain cooking)
+    (:objects
+        robot1 - robot
+        tomato - vegetable
+        carrot - vegetable
+        knife - tool
+        bowl - location
+        cutting_board - location
+    )
+    (:init
+        (available tomato)
+        (available carrot)
+        (is-whole tomato)
+        (is-whole carrot)
+        (free robot1)
+        (at tomato cutting_board)
+        (at carrot cutting_board)
+        (at knife cutting_board)
+        (can-cut knife)
+        (is-workspace cutting_board)
+        (is-workspace bowl)
+    )
+    (:goal (and
+        (is-sliced tomato)
+        (is-sliced carrot)
+        (at tomato bowl)
+        (at carrot bowl)
+    ))
+)
+```

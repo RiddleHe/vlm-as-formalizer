@@ -1,0 +1,25 @@
+(define (problem cooking) 
+(:domain cooking) 
+(:objects
+    cucumber
+    tomato1
+    tomato2
+    bowl
+) 
+(:init
+    (on-table cucumber)
+    (on-table tomato1)
+    (on-table tomato2)
+    (clear cucumber)
+    (clear tomato1)
+    (clear tomato2)
+) 
+(:goal (and 
+    (in-bowl cucumber)
+    (in-bowl tomato1)
+    (in-bowl tomato2)
+    (sliced cucumber)
+    (sliced tomato1)
+    (sliced tomato2)
+)) 
+)

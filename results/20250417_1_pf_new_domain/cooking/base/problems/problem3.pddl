@@ -1,0 +1,24 @@
+(define (problem cooking) 
+(:domain cooking) 
+(:objects
+    robot1 - robot
+    carrot - vegetable
+    cutting_board - location
+    bowl - location
+    knife - tool
+) 
+(:init
+    (is-whole carrot)
+    (available carrot)
+    (at carrot cutting_board)
+    (at knife cutting_board)
+    (can-cut knife)
+    (free robot1)
+    (is-workspace cutting_board)
+    (is-workspace bowl)
+) 
+(:goal (and 
+    (is-sliced carrot)
+    (at carrot bowl)
+)) 
+)

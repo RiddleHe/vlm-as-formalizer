@@ -1,0 +1,21 @@
+```lisp
+(define (problem cooking1)
+    (:domain cooking)
+    (:objects
+        tomato1
+        carrot1
+        carrot2
+        bowl1
+    )
+    (:init
+        (on-board tomato1)
+        (on-board carrot1)
+        (on-board carrot2)
+        (clear tomato1)
+        (clear carrot1)
+        (clear carrot2)
+        (clear bowl1)
+    )
+    (:goal (and (in-bowl tomato1) (in-bowl carrot1) (in-bowl carrot2)))
+)
+```

@@ -6,7 +6,7 @@ from tqdm import tqdm
 from utils import parse_args, PDDL
 from utils import validate_problem, validate_plan, calculate_rpart, calculate_rall
 
-# python evaluate.py --data_dir "../data/cooking" --result_dir "./results/tmp/cooking"
+# python evaluate.py --data_dir "../data/cooking" --result_dir "../results/20250417_1_pf_new_domain/cooking"
 
 
 def main():

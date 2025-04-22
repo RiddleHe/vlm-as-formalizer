@@ -1,0 +1,15 @@
+(define (domain cooking)
+    (:requirements :strips)
+    (:predicates
+        (slice ?item)
+        (in-bowl ?item)
+        (on-board ?item)
+        (has-knife)
+        (clear ?item)
+    )
+    (:action slice
+        :parameters (?tomato)
+        :precondition (and (on-board ?tomato) (clear ?tomato) (has-knife))
+        :effect (and (slice ?tomato) (not (on-board ?tomato)) (in-bowl ?tomato))
+    )
+)

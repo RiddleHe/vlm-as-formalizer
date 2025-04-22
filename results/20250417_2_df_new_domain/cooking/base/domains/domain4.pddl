@@ -1,0 +1,20 @@
+(define (domain cooking)
+    (:requirements :strips)
+    (:predicates
+        (sliced ?x)
+        (in_bowl ?x)
+        (on_table ?x)
+        (holding ?x)
+        (clear ?x)
+    )
+    (:action slice
+        :parameters (?veg)
+        :precondition (and (on_table ?veg) (clear ?veg))
+        :effect (and (sliced ?veg) (not (clear ?veg)))
+    )
+    (:action put_in_bowl
+        :parameters (?veg ?bowl)
+        :precondition (and (sliced ?veg) (clear ?bowl))
+        :effect (and (in_bowl ?veg) (not (on_table ?veg)) (not (clear ?bowl)))
+    )
+)
