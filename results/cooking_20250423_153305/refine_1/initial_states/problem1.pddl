@@ -1,0 +1,12 @@
+(:init
+    (is-workspace cutting_board1)
+    (at cucumber1 cutting_board1)
+    (at knife1 cutting_board1)
+    (at bowl1 counter)
+    (is-whole cucumber1)
+    (available cucumber1)
+    (available knife1)
+    (can-cut knife1)
+    (free robot1)
+    (free robot2)
+)

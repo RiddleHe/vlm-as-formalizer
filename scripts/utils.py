@@ -28,7 +28,6 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     # for main.py and evaluate.py
-    parser.add_argument("--data_dir", type=str, default=None, help="directory for data")
     parser.add_argument("--result_dir", type=str, default=None, help="direcotry for predicted bboxes, generated problems, and found plans")
     parser.add_argument("--domain_name", type=str, default=None, help="domain name (cooking/blocksworld/hanoi)")
 
@@ -55,7 +54,6 @@ def parse_args():
     parser.add_argument("--num_repeat", type=int, default=1, help="the number of problems to generate per task")
     parser.add_argument("--use_cot", action="store_true", help="refine problem with chain-of-thought (cot)")
     parser.add_argument("--refine_all", action="store_true", help="refine all problems regardless of errors")
-    parser.add_argument("--prompt_type", type=str, default="pf", help="prompt type (pf/df)")
     args = parser.parse_args()
 
     return args

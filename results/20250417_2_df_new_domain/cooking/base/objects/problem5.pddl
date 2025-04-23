@@ -1,5 +1,0 @@
-(:objects
-    cucumber
-    tomato
-    bowl
-)
