@@ -40,18 +40,28 @@ begin_variable
 var4
 -1
 2
-Atom available(cucumber1)
-NegatedAtom available(cucumber1)
+Atom available(carrot1)
+NegatedAtom available(carrot1)
 end_variable
 begin_variable
 var5
 -1
 2
-Atom available(tomato1)
-NegatedAtom available(tomato1)
+Atom available(cucumber1)
+NegatedAtom available(cucumber1)
 end_variable
 begin_variable
 var6
+-1
+5
+Atom at(carrot1, bowl1)
+Atom at(carrot1, counter1)
+Atom at(carrot1, cutting_board1)
+Atom carry(robot1, carrot1)
+Atom carry(robot2, carrot1)
+end_variable
+begin_variable
+var7
 -1
 5
 Atom at(cucumber1, bowl1)
@@ -59,16 +69,6 @@ Atom at(cucumber1, counter1)
 Atom at(cucumber1, cutting_board1)
 Atom carry(robot1, cucumber1)
 Atom carry(robot2, cucumber1)
-end_variable
-begin_variable
-var7
--1
-5
-Atom at(tomato1, bowl1)
-Atom at(tomato1, counter1)
-Atom at(tomato1, cutting_board1)
-Atom carry(robot1, tomato1)
-Atom carry(robot2, tomato1)
 end_variable
 begin_variable
 var8
@@ -81,8 +81,8 @@ begin_variable
 var9
 -1
 2
-Atom is-sliced(tomato1)
-Atom is-whole(tomato1)
+Atom is-sliced(carrot1)
+Atom is-whole(carrot1)
 end_variable
 5
 begin_mutex_group
@@ -93,28 +93,28 @@ begin_mutex_group
 end_mutex_group
 begin_mutex_group
 3
-0 3
-0 4
-1 0
-end_mutex_group
-begin_mutex_group
-3
 7 3
 7 4
 5 0
 end_mutex_group
 begin_mutex_group
+3
+0 3
+0 4
+1 0
+end_mutex_group
+begin_mutex_group
 4
 6 3
-0 3
 7 3
+0 3
 2 0
 end_mutex_group
 begin_mutex_group
 4
 6 4
-0 4
 7 4
+0 4
 3 0
 end_mutex_group
 begin_state
@@ -138,7 +138,7 @@ begin_goal
 end_goal
 40
 begin_operator
-pick robot1 cucumber1 bowl1
+pick robot1 carrot1 bowl1
 0
 3
 0 6 0 3
@@ -147,7 +147,7 @@ pick robot1 cucumber1 bowl1
 1
 end_operator
 begin_operator
-pick robot1 cucumber1 counter1
+pick robot1 carrot1 counter1
 0
 3
 0 6 1 3
@@ -156,11 +156,38 @@ pick robot1 cucumber1 counter1
 1
 end_operator
 begin_operator
-pick robot1 cucumber1 cutting_board1
+pick robot1 carrot1 cutting_board1
 0
 3
 0 6 2 3
 0 4 0 1
+0 2 0 1
+1
+end_operator
+begin_operator
+pick robot1 cucumber1 bowl1
+0
+3
+0 7 0 3
+0 5 0 1
+0 2 0 1
+1
+end_operator
+begin_operator
+pick robot1 cucumber1 counter1
+0
+3
+0 7 1 3
+0 5 0 1
+0 2 0 1
+1
+end_operator
+begin_operator
+pick robot1 cucumber1 cutting_board1
+0
+3
+0 7 2 3
+0 5 0 1
 0 2 0 1
 1
 end_operator
@@ -192,34 +219,7 @@ pick robot1 knife1 cutting_board1
 1
 end_operator
 begin_operator
-pick robot1 tomato1 bowl1
-0
-3
-0 7 0 3
-0 5 0 1
-0 2 0 1
-1
-end_operator
-begin_operator
-pick robot1 tomato1 counter1
-0
-3
-0 7 1 3
-0 5 0 1
-0 2 0 1
-1
-end_operator
-begin_operator
-pick robot1 tomato1 cutting_board1
-0
-3
-0 7 2 3
-0 5 0 1
-0 2 0 1
-1
-end_operator
-begin_operator
-pick robot2 cucumber1 bowl1
+pick robot2 carrot1 bowl1
 0
 3
 0 6 0 4
@@ -228,7 +228,7 @@ pick robot2 cucumber1 bowl1
 1
 end_operator
 begin_operator
-pick robot2 cucumber1 counter1
+pick robot2 carrot1 counter1
 0
 3
 0 6 1 4
@@ -237,11 +237,38 @@ pick robot2 cucumber1 counter1
 1
 end_operator
 begin_operator
-pick robot2 cucumber1 cutting_board1
+pick robot2 carrot1 cutting_board1
 0
 3
 0 6 2 4
 0 4 0 1
+0 3 0 1
+1
+end_operator
+begin_operator
+pick robot2 cucumber1 bowl1
+0
+3
+0 7 0 4
+0 5 0 1
+0 3 0 1
+1
+end_operator
+begin_operator
+pick robot2 cucumber1 counter1
+0
+3
+0 7 1 4
+0 5 0 1
+0 3 0 1
+1
+end_operator
+begin_operator
+pick robot2 cucumber1 cutting_board1
+0
+3
+0 7 2 4
+0 5 0 1
 0 3 0 1
 1
 end_operator
@@ -273,34 +300,7 @@ pick robot2 knife1 cutting_board1
 1
 end_operator
 begin_operator
-pick robot2 tomato1 bowl1
-0
-3
-0 7 0 4
-0 5 0 1
-0 3 0 1
-1
-end_operator
-begin_operator
-pick robot2 tomato1 counter1
-0
-3
-0 7 1 4
-0 5 0 1
-0 3 0 1
-1
-end_operator
-begin_operator
-pick robot2 tomato1 cutting_board1
-0
-3
-0 7 2 4
-0 5 0 1
-0 3 0 1
-1
-end_operator
-begin_operator
-place robot1 cucumber1 bowl1
+place robot1 carrot1 bowl1
 0
 3
 0 6 3 0
@@ -309,7 +309,7 @@ place robot1 cucumber1 bowl1
 1
 end_operator
 begin_operator
-place robot1 cucumber1 counter1
+place robot1 carrot1 counter1
 0
 3
 0 6 3 1
@@ -318,11 +318,38 @@ place robot1 cucumber1 counter1
 1
 end_operator
 begin_operator
-place robot1 cucumber1 cutting_board1
+place robot1 carrot1 cutting_board1
 0
 3
 0 6 3 2
 0 4 -1 0
+0 2 1 0
+1
+end_operator
+begin_operator
+place robot1 cucumber1 bowl1
+0
+3
+0 7 3 0
+0 5 -1 0
+0 2 1 0
+1
+end_operator
+begin_operator
+place robot1 cucumber1 counter1
+0
+3
+0 7 3 1
+0 5 -1 0
+0 2 1 0
+1
+end_operator
+begin_operator
+place robot1 cucumber1 cutting_board1
+0
+3
+0 7 3 2
+0 5 -1 0
 0 2 1 0
 1
 end_operator
@@ -354,34 +381,7 @@ place robot1 knife1 cutting_board1
 1
 end_operator
 begin_operator
-place robot1 tomato1 bowl1
-0
-3
-0 7 3 0
-0 5 -1 0
-0 2 1 0
-1
-end_operator
-begin_operator
-place robot1 tomato1 counter1
-0
-3
-0 7 3 1
-0 5 -1 0
-0 2 1 0
-1
-end_operator
-begin_operator
-place robot1 tomato1 cutting_board1
-0
-3
-0 7 3 2
-0 5 -1 0
-0 2 1 0
-1
-end_operator
-begin_operator
-place robot2 cucumber1 bowl1
+place robot2 carrot1 bowl1
 0
 3
 0 6 4 0
@@ -390,7 +390,7 @@ place robot2 cucumber1 bowl1
 1
 end_operator
 begin_operator
-place robot2 cucumber1 counter1
+place robot2 carrot1 counter1
 0
 3
 0 6 4 1
@@ -399,11 +399,38 @@ place robot2 cucumber1 counter1
 1
 end_operator
 begin_operator
-place robot2 cucumber1 cutting_board1
+place robot2 carrot1 cutting_board1
 0
 3
 0 6 4 2
 0 4 -1 0
+0 3 1 0
+1
+end_operator
+begin_operator
+place robot2 cucumber1 bowl1
+0
+3
+0 7 4 0
+0 5 -1 0
+0 3 1 0
+1
+end_operator
+begin_operator
+place robot2 cucumber1 counter1
+0
+3
+0 7 4 1
+0 5 -1 0
+0 3 1 0
+1
+end_operator
+begin_operator
+place robot2 cucumber1 cutting_board1
+0
+3
+0 7 4 2
+0 5 -1 0
 0 3 1 0
 1
 end_operator
@@ -435,46 +462,28 @@ place robot2 knife1 cutting_board1
 1
 end_operator
 begin_operator
-place robot2 tomato1 bowl1
-0
-3
-0 7 4 0
-0 5 -1 0
-0 3 1 0
+slice robot1 carrot1 knife1 cutting_board1
+2
+6 2
+0 3
 1
-end_operator
-begin_operator
-place robot2 tomato1 counter1
-0
-3
-0 7 4 1
-0 5 -1 0
-0 3 1 0
-1
-end_operator
-begin_operator
-place robot2 tomato1 cutting_board1
-0
-3
-0 7 4 2
-0 5 -1 0
-0 3 1 0
+0 9 1 0
 1
 end_operator
 begin_operator
 slice robot1 cucumber1 knife1 cutting_board1
 2
-6 2
+7 2
 0 3
 1
 0 8 1 0
 1
 end_operator
 begin_operator
-slice robot1 tomato1 knife1 cutting_board1
+slice robot2 carrot1 knife1 cutting_board1
 2
-0 3
-7 2
+6 2
+0 4
 1
 0 9 1 0
 1
@@ -482,19 +491,10 @@ end_operator
 begin_operator
 slice robot2 cucumber1 knife1 cutting_board1
 2
-6 2
+7 2
 0 4
 1
 0 8 1 0
-1
-end_operator
-begin_operator
-slice robot2 tomato1 knife1 cutting_board1
-2
-0 4
-7 2
-1
-0 9 1 0
 1
 end_operator
 0

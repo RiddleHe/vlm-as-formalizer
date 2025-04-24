@@ -4,19 +4,17 @@
     robot1 robot2 - robot
     carrot1 - vegetable
     knife1 - tool
-    bowl1 - object
+    bowl1 - location
     cutting_board1 - location
     counter1 - location
   )
   (:init
     (available carrot1)
     (available knife1)
-    (available bowl1)
     (is-whole carrot1)
-    (not (is-sliced carrot1))
     (at carrot1 counter1)
-    (at bowl1 counter1)
     (at knife1 counter1)
+    (at bowl1 counter1)
     (at cutting_board1 counter1)
     (is-workspace cutting_board1)
     (free robot1)

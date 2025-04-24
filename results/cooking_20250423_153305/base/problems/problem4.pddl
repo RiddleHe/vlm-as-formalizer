@@ -1,16 +1,12 @@
-(define (problem cooking) 
-(:domain cooking) 
-(:objects
-    left_robot - robot
-    right_robot - robot
-    carrot - vegetable
-    tomato - vegetable
-    bowl - location
-    cutting_board - location
-    counter - location
+(define (problem slice_carrot_tomato)
+  (:domain cooking)
+  (:objects
+    left_robot right_robot - robot
+    carrot tomato - vegetable
+    bowl cutting_board counter - location
     knife - tool
-) 
-(:init
+  )
+  (:init
     (available carrot)
     (available tomato)
     (available knife)
@@ -25,11 +21,13 @@
     (at bowl counter)
     (at knife counter)
     (at cutting_board counter)
-) 
-(:goal (and 
-    (is-sliced carrot)
-    (is-sliced tomato)
-    (at carrot bowl)
-    (at tomato bowl)
-)) 
+  )
+  (:goal
+    (and
+      (is-sliced carrot)
+      (is-sliced tomato)
+      (at carrot bowl)
+      (at tomato bowl)
+    )
+  )
 )

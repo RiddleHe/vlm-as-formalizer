@@ -134,12 +134,7 @@ def generate_problem(target, examples, domain_name, refine=False):
         print(f"Response: {response}\n\n")
         raise ValueError("No PDDL file found in the response")
 
-    pddl = PDDL(pddl_file)
-    objects = pddl.pddl_objects
-    initial_state = pddl.pddl_initial_state
-    goal_specification = pddl.pddl_goal_specification
-
-    return objects, initial_state, goal_specification, response, prompt
+    return pddl_file, response, prompt
 
 def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
     def get_cost(line: str):
@@ -203,7 +198,7 @@ def main():
     with open(f"{data_dir}/domain.pddl", "r") as f:
         domain_file = f.read()
 
-    folders = ["objects", "initial_states", "goal_specifications", "problems", "responses", "instructions"]
+    folders = ["problems", "responses", "instructions"]
 
     # Generate / refine PDDL problems
     if args.generate_problem or args.refine_problem:
@@ -243,12 +238,8 @@ def main():
             with open(f"{example_domain_dir}/domain.pddl", "r") as f:
                 example_domain = f.read()
 
-            example_problem = PDDL(example_problem_file)
             examples += [{
-                "problem": example_problem.pddl_problem,
-                "objects": example_problem.pddl_objects,
-                "initial_state": example_problem.pddl_initial_state,
-                "goal_specification": example_problem.pddl_goal_specification,
+                "problem": example_problem_file,
                 "instruction": example_instruction,
                 "domain": example_domain,
             }]
@@ -260,10 +251,7 @@ def main():
             observation = f"{data_dir}/observations/problem{task_idx}.jpg"  # image path of the scene
 
             all_targets += [{
-                "problem": None,
-                "objects": None,
-                "initial_state": None,
-                "goal_specification": None,
+                "problem": None,    
                 "response": None,
                 "observation": observation,
                 "instruction": instruction,
@@ -277,9 +265,13 @@ def main():
                 problem_path = f"{result_dir}/{args.gen_step}/problems/problem{task_idx}.pddl"
                 if os.path.exists(error_path) and os.path.exists(problem_path):
                     with open(error_path, "r") as f:
-                        target["error"] = f.read()
+                        error = f.read()
+                    if "Search stopped without finding a solution" in error:  
+                        target["error"] = "There is no possible plan after exhaustive search."
+                    else:
+                        target["error"] = "The solver fails because of syntax errors."
                     with open(problem_path, "r") as f:
-                        target["problem"] = PDDL(f.read()).pddl_problem
+                        target["problem"] = f.read()
                 else:
                     # print(f"Problem {task_idx} has no error, skipping...")
                     target["error"] = None
@@ -295,7 +287,7 @@ def main():
 
             # generate PDDL objects, initial state, and goal specification
             if args.generate_problem:
-                objects, initial_state, goal_specification, response, prompt = generate_problem(
+                pddl_file, response, prompt = generate_problem(
                     target,
                     examples,
                     domain_name=args.domain_name,
@@ -308,16 +300,14 @@ def main():
                     gen_idx += 1
                     continue
 
-                objects, initial_state, goal_specification, response, prompt = generate_problem(
+                pddl_file, response, prompt = generate_problem(
                     target,
                     examples,
                     domain_name=args.domain_name,
                     refine=True
                 )
 
-            target["objects"] = objects
-            target["initial_state"] = initial_state
-            target["goal_specification"] = goal_specification
+            target["problem"] = pddl_file
             target["response"] = response
 
             # save PDDL objects
@@ -327,31 +317,14 @@ def main():
                 save_step = refine_step
 
             try:
-                with open(f"{result_dir}/{save_step}/responses/problem{gen_idx}.txt", "w") as fw:
-                    fw.write(response)
-
                 with open(f"{result_dir}/{save_step}/instructions/problem{gen_idx}.txt", "w") as fw:
                     fw.write(prompt)
 
-                with open(f"{result_dir}/{save_step}/objects/problem{gen_idx}.pddl", "w") as fw:
-                    fw.write(objects)
-
-                with open(f"{result_dir}/{save_step}/initial_states/problem{gen_idx}.pddl", "w") as fw:
-                    fw.write(initial_state)
-
-                with open(f"{result_dir}/{save_step}/goal_specifications/problem{gen_idx}.pddl", "w") as fw:
-                    fw.write(goal_specification)
-
-                # concat all parts and generate problem
-                problem = f"(define (problem {args.domain_name}) \n" + \
-                            f"(:domain {args.domain_name}) \n" + \
-                            f"{objects} \n" + \
-                            f"{initial_state} \n" + \
-                            f"{goal_specification} \n" + \
-                            f")"
-
                 with open(f"{result_dir}/{save_step}/problems/problem{gen_idx}.pddl", "w") as fw:
-                    fw.write(problem)
+                    fw.write(pddl_file)
+
+                with open(f"{result_dir}/{save_step}/responses/problem{gen_idx}.txt", "w") as fw:
+                    fw.write(response)
             
             except Exception as e:
                 print(f"Error saving PDDL: {traceback.format_exc()}")

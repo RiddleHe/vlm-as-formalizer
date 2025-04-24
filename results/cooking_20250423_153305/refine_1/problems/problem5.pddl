@@ -1,15 +1,12 @@
-(define (problem cooking) 
-(:domain cooking) 
+(define (problem cooking-slice-place)
+(:domain cooking)
 (:objects
-    robot1 - robot
-    robot2 - robot
-    tomato1 - vegetable
-    cucumber1 - vegetable
+    robot1 robot2 - robot
+    tomato1 cucumber1 - vegetable
     bowl1 - object
     knife1 - tool
-    cutting_board1 - location
-    counter1 - location
-) 
+    cutting_board1 counter1 - location
+)
 (:init
     (is-workspace cutting_board1)
     (at cutting_board1 counter1)
@@ -26,11 +23,11 @@
     (can-cut knife1)
     (free robot1)
     (free robot2)
-) 
+)
 (:goal (and 
     (is-sliced tomato1)
     (is-sliced cucumber1)
     (at tomato1 bowl1)
     (at cucumber1 bowl1)
-)) 
+))
 )
