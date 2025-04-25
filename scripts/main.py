@@ -206,7 +206,7 @@ def find_pddl(response):
 
     return pddl_file
 
-def generate_problem(target, examples, domain_name, model, refine=False, generate_domain=False):
+def generate_answers(target, examples, domain_name, model, refine=False, generate_domain=False):
     res = {
         "problem": {
             "file": None,
@@ -302,13 +302,16 @@ def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
 
 def main():
     args = parse_args()
-    model = VLMClient(args.model)
 
     data_dir = f"../data/{args.domain_name}"
     if args.result_dir is None:
         result_dir = f"../results/{args.domain_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     else:
         result_dir = f"../results/{args.domain_name}_{args.result_dir}"
+    if args.model is not None:
+        result_dir += f"_{args.model}"
+    if args.generate_domain:
+        result_dir += "_domain"
 
     seed_everything(args.seed) 
 
@@ -326,6 +329,7 @@ def main():
 
     # Generate / refine PDDL problems
     if args.generate_problem or args.refine_problem:
+        model = VLMClient(args.model)
         for dname in folders:
             os.makedirs(
                 f"{result_dir}/{args.gen_step}/{dname}",
@@ -376,7 +380,7 @@ def main():
                 instruction = f.read()
             observation = f"{data_dir}/observations/problem{task_idx}.jpg"  # image path of the scene
 
-            if args.generate_domain:
+            if args.generate_domain and args.refine_problem:
                 with open(f"{result_dir}/{args.gen_step}/domains/domain{task_idx}.pddl", "r") as f:
                     domain_file = f.read()
 
@@ -417,11 +421,11 @@ def main():
 
             # generate PDDL objects, initial state, and goal specification
             if args.generate_problem:
-                res = generate_problem(
+                res = generate_answers(
                     target,
                     examples,
-                    model,
                     domain_name=args.domain_name,
+                    model=model,
                     refine=False,
                     generate_domain=args.generate_domain,
                 )
@@ -432,11 +436,11 @@ def main():
                     gen_idx += 1
                     continue
 
-                res = generate_problem(
+                res = generate_answers(
                     target,
                     examples,
-                    model,
                     domain_name=args.domain_name,
+                    model=model,
                     refine=True,
                     generate_domain=args.generate_domain,
                 )
@@ -493,6 +497,8 @@ def main():
             desc="Finding plans"
         ):
             domain_path = f"{data_dir}/domain.pddl"
+            if args.generate_domain:
+                domain_path = f"{result_dir}/{args.gen_step}/domains/domain{idx+1}.pddl"
 
             found, err = find_plan(
                 domain_path,

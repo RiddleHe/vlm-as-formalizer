@@ -1,0 +1,44 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL domain file which contains object types, predicates, and actions suitable for the instruction.
+    You will be given all possible actions of the robot along with the arguments of the actions.
+    You will complete the action definitions by adding precondtions and effects, and also complete the object types and predicates.
+
+    Here;s how standard PDDL domain files look like:
+    
+        Domain: hanoi: 
+        Instruction:Move all disks to the rightmost peg while keeping a rule that larger disks are below.
+
+        Domain file:
+(define (domain hanoi)
+    (:requirements :strips)
+    (:predicates
+        (clear ?x)
+        (on ?x ?y)
+        (smaller ?x ?y)
+        (move ?disc ?to)
+    )
+    (:action move
+        :parameters (?disc ?from ?to)
+        :precondition (and (smaller ?to ?disc) (on ?disc ?from)
+                      (clear ?disc) (clear ?to))
+        :effect  (and (clear ?from) (on ?disc ?to) (not (on ?disc ?from))
+                 (not (clear ?to)))
+    )
+)
+
+
+
+        
+    For the current domain, cooking, the image of the scene has been provided.
+    Instruction: Slice the cucumber and tomato and place the sliced cucumbers and tomatoes in a bowl.
+
+
+    All possible actions and their signatures for the robot:
+    action: pick parameters: ?robot - robot ?obj - object ?pick_loc - location
+action: place parameters: ?robot - robot ?obj - object ?place_loc - location
+action: slice parameters: ?robot - robot ?veg - vegetable ?tool - tool ?loc - location
+
+    Please complete the domain file based on the image and instruction. 
+    Do not generate anything after the PDDL domain file.
+    
