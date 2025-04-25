@@ -14,10 +14,6 @@ import glob
 from PIL import Image
 from utils import seed_everything, parse_args, PDDL, get_error_meaning
 
-# python main.py --data_dir "../data/cooking"  --generate_problem
-# python main.py --data_dir "../data/cooking" --refine_problem
-# python main.py --data_dir "../data/cooking" --find_plan
-
 from dotenv import load_dotenv
 load_dotenv('.env')
 from openai import OpenAI
