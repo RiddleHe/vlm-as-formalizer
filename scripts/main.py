@@ -85,7 +85,7 @@ class VLMClient:
 
         return full_answer
 
-def build_pf_prompt(examples, target, domain_name):
+def build_problem_prompt(examples, target, domain_name):
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
@@ -97,7 +97,7 @@ def build_pf_prompt(examples, target, domain_name):
 
     for example in examples:
         prompt += f"""
-        Instruction: {example["instruction"]}
+        Instruction for {example["domain_name"]}: {example["instruction"]}
         PDDL problem:
         {example["problem"]}\n\n
         """
@@ -117,32 +117,10 @@ def build_pf_prompt(examples, target, domain_name):
     
     return prompt
 
-def build_refine_pf_prompt(examples, target, domain_name):
-    prompt = f"""
-    You are helping a robotic planning task. 
-    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
-    Your output should adhere to the constraints defined in the domain file.
-    You must output the PDDL file in the correct format.
-
-    Examples of PDDL problems given a different domain instruction:
-    """
-
-    for example in examples:
-        prompt += f"""
-        Instruction: {example["instruction"]}
-        PDDL problem:
-        {example["problem"]}\n\n
-        """
+def build_refine_problem_prompt(examples, target, domain_name):
+    prompt = build_problem_prompt(examples, target, domain_name)
 
     prompt += f"""
-    For the current domain, {domain_name}, this is the domain file:
-    {target["domain"]}
-    """
-
-    prompt += f"""
-    The image of the scene has been provided.
-    Instruction: {target["instruction"]}
-
     The following is the PDDL problem you generated last time:
     {target["problem"]}
 
@@ -155,26 +133,128 @@ def build_refine_pf_prompt(examples, target, domain_name):
     
     return prompt
 
-def generate_problem(target, examples, domain_name, model, refine=False):
-    observation = target["observation"]
+def build_domain_prompt(examples, target, domain_name):
+    prompt = f"""
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL domain file which contains object types, predicates, and actions suitable for the instruction.
+    You will be given all possible actions of the robot along with the arguments of the actions.
+    You will complete the action definitions by adding precondtions and effects, and also complete the object types and predicates.
 
-    if refine:
-        prompt = build_refine_pf_prompt(examples, target, domain_name)
-    else:
-        prompt = build_pf_prompt(examples, target, domain_name)
+    Here;s how standard PDDL domain files look like:
+    """
+
+    for example in examples:
+        prompt += f"""
+        Domain: {example["domain_name"]}: 
+        Instruction:{example["instruction"]}
+        Domain file:\n{example["domain"]}\n\n
+        """
     
-    response = model.generate(prompt, observation) 
+    prompt += f"""
+    For the current domain, {domain_name}, the image of the scene has been provided.
+    Instruction: {target["instruction"]}
 
-    # Match the PDDL file in the response by header and footer
-    pf_regex_pattern = r'(\(define.*\))'
-    pddl_match = re.search(pf_regex_pattern, response, re.DOTALL)
+    All possible actions and their signatures for the robot:
+    {parse_actions(target["domain"])}
+
+    Please complete the domain file based on the image and instruction. 
+    Do not generate anything after the PDDL domain file.
+    """
+
+    return prompt
+
+def build_refine_domain_prompt(examples, target, domain_name):
+    prompt = build_domain_prompt(examples, target, domain_name)
+
+    prompt += f"""
+    The following is the PDDL domain file you generated last time:
+    {target["domain"]}
+
+    The following is the PDDL problem you generated last time:
+    {target["problem"]}
+
+    The following is the error you made last time:
+    {target["error"]}
+
+    Please first analyze where the error is.
+    If the error is due to the domain file, please generate the PDDL domain file based on the error.
+    If the error is not due to the domain file, explain why it is not, and don't generate any PDDL.
+    """
+
+def parse_actions(domain_file):
+    regex_patern = r'\(:action\s+(\w+).*?:parameters\s*\((.*?)\)'
+    compiled_regex = re.compile(regex_patern, re.DOTALL) 
+    matches = compiled_regex.findall(domain_file)
+    actions = []
+    for match in matches:
+        action_name = match[0]
+        parameters = re.sub(r'\s+', ' ', match[1].strip())
+        actions.append(f"action: {action_name} parameters: {parameters}")
+    return "\n".join(actions)
+
+def find_pddl(response):
+    if "(define" not in response:  # Assume we instruct the model to not generate PDDL at all
+        return None
+    
+    regex_pattern = r'(\(define.*\))'
+    pddl_match = re.search(regex_pattern, response, re.DOTALL)
     if pddl_match:
         pddl_file = pddl_match.group(1).strip()
     else:
         print(f"Response: {response}\n\n")
         raise ValueError("No PDDL file found in the response")
 
-    return pddl_file, response, prompt
+    return pddl_file
+
+def generate_problem(target, examples, domain_name, model, refine=False, generate_domain=False):
+    res = {
+        "problem": {
+            "file": None,
+            "response": None,
+            "prompt": None,
+        },
+        "domain": {
+            "file": None,
+            "response": None,
+            "prompt": None,
+        }
+    }
+    
+    observation = target["observation"]
+
+    if generate_domain:
+        if refine:
+            domain_prompt = build_refine_domain_prompt(examples, target, domain_name)
+        else:
+            domain_prompt = build_domain_prompt(examples, target, domain_name)
+
+        domain_response = model.generate(domain_prompt, observation)
+        domain_file = find_pddl(domain_response)
+
+        # Keep original domain if the model does not generate any PDDL
+        if domain_file is None and refine:
+            domain_file = target["domain"]
+        target["domain"] = domain_file
+
+        res["domain"]["file"] = domain_file
+        res["domain"]["response"] = domain_response
+        res["domain"]["prompt"] = domain_prompt
+
+    if refine:
+        problem_prompt = build_refine_problem_prompt(examples, target, domain_name)
+    else:
+        problem_prompt = build_problem_prompt(examples, target, domain_name)
+    
+    response = model.generate(problem_prompt, observation) 
+
+    # Match the PDDL file in the response by header and footer
+    problem_file = find_pddl(response)
+
+    res["problem"]["file"] = problem_file
+    res["problem"]["response"] = response
+    res["problem"]["prompt"] = problem_prompt
+
+    return res
 
 def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
     def get_cost(line: str):
@@ -241,6 +321,8 @@ def main():
         domain_file = f.read()
 
     folders = ["problems", "responses", "instructions"]
+    if args.generate_domain:
+        folders += ["domains"]
 
     # Generate / refine PDDL problems
     if args.generate_problem or args.refine_problem:
@@ -284,13 +366,19 @@ def main():
                 "problem": example_problem_file,
                 "instruction": example_instruction,
                 "domain": example_domain,
+                "domain_name": example_domain_name,
             }]
 
         # Set up problem tasks
         num_tasks = len(os.listdir(f"{data_dir}/problems"))
         for task_idx in range(1, num_tasks+1):
-            instruction = open(f"{data_dir}/instructions/problem{task_idx}.txt").read()  # instruction for VLM
+            with open(f"{data_dir}/instructions/problem{task_idx}.txt", "r") as f:
+                instruction = f.read()
             observation = f"{data_dir}/observations/problem{task_idx}.jpg"  # image path of the scene
+
+            if args.generate_domain:
+                with open(f"{result_dir}/{args.gen_step}/domains/domain{task_idx}.pddl", "r") as f:
+                    domain_file = f.read()
 
             all_targets += [{
                 "problem": None,    
@@ -329,12 +417,13 @@ def main():
 
             # generate PDDL objects, initial state, and goal specification
             if args.generate_problem:
-                pddl_file, response, prompt = generate_problem(
+                res = generate_problem(
                     target,
                     examples,
                     model,
                     domain_name=args.domain_name,
                     refine=False,
+                    generate_domain=args.generate_domain,
                 )
 
             elif args.refine_problem:
@@ -343,16 +432,14 @@ def main():
                     gen_idx += 1
                     continue
 
-                pddl_file, response, prompt = generate_problem(
+                res = generate_problem(
                     target,
                     examples,
                     model,
                     domain_name=args.domain_name,
-                    refine=True
+                    refine=True,
+                    generate_domain=args.generate_domain,
                 )
-
-            target["problem"] = pddl_file
-            target["response"] = response
 
             # save PDDL objects
             if args.generate_problem:
@@ -362,13 +449,23 @@ def main():
 
             try:
                 with open(f"{result_dir}/{save_step}/instructions/problem{gen_idx}.txt", "w") as fw:
-                    fw.write(prompt)
+                    fw.write(res["problem"]["prompt"])
 
                 with open(f"{result_dir}/{save_step}/problems/problem{gen_idx}.pddl", "w") as fw:
-                    fw.write(pddl_file)
+                    fw.write(res["problem"]["file"])
 
                 with open(f"{result_dir}/{save_step}/responses/problem{gen_idx}.txt", "w") as fw:
-                    fw.write(response)
+                    fw.write(res["problem"]["response"])
+
+                if args.generate_domain:
+                    with open(f"{result_dir}/{save_step}/domains/domain{gen_idx}.pddl", "w") as fw:
+                        fw.write(res["domain"]["file"])
+
+                    with open(f"{result_dir}/{save_step}/responses/domain{gen_idx}.txt", "w") as fw:
+                        fw.write(res["domain"]["response"])
+
+                    with open(f"{result_dir}/{save_step}/instructions/domain{gen_idx}.txt", "w") as fw:
+                        fw.write(res["domain"]["prompt"])
             
             except Exception as e:
                 print(f"Error saving PDDL: {traceback.format_exc()}")
