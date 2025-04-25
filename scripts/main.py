@@ -356,7 +356,7 @@ def main():
             found, err = find_plan(
                 domain_path,
                 problems[idx],
-                problems[idx].replace("problems", "plans"),
+                problems[idx].replace("problems", "plans").replace(".pddl", ""),
                 args.downward_dir,
                 args.time_limit,
             )

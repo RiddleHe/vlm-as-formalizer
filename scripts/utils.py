@@ -30,6 +30,7 @@ def parse_args():
     # for main.py and evaluate.py
     parser.add_argument("--result_dir", type=str, default=None, help="direcotry for predicted bboxes, generated problems, and found plans")
     parser.add_argument("--domain_name", type=str, default=None, help="domain name (cooking/blocksworld/hanoi)")
+    parser.add_argument("-m", "--model", type=str, default=None, help="model name")
 
     # for main.py 
     parser.add_argument("--predict_bboxes", action="store_true", help="detect objects with bboxes and generate captions")
