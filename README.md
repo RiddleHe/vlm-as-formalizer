@@ -1,120 +1,78 @@
-### [[Website]](https://kskshr.github.io/vilain)&nbsp; [[Paper]](https://arxiv.org/abs/2311.00967)&nbsp; [Code]
+# Villain
 
-# ViLaIn
-An official implementation of Vision-Language Interpreter (ViLaIn). See [our paper](http://arxiv.org/abs/2311.00967) for more details.
 
-## Requirements
-- This implementation requires `Python>=3.10` and `torch>=2.0.0`. To install PyTorch, please follow the instruction in https://pytorch.org/.
-
-- Install [fast-downward](https://github.com/aibasel/downward) and [VAL](https://github.com/KCL-Planning/VAL) following [the build instructions](https://github.com/aibasel/downward/blob/main/BUILD.md). After the installation, copy the `validate` binary under the `downward` directory.
-
-- Install [Grounding DINO](https://github.com/IDEA-Research/GroundingDINO) following [the instructions](https://github.com/IDEA-Research/GroundingDINO#hammer_and_wrench-install).
-
-## The ProDG dataset
-`data` contains PDDL files, observations, and instructions for three domains, which we denoted the ProDG dataset in the paper. This directory also contains annotated bounding boxes in `annotated_bboxes`. The directory structure is as follows:
-```
-data
- └─domains
-    └─domain.pddl                   (A PDDL domain file)
-    └─problems                      (PDDL problem files)
-       └─problem*.pddl
-    └─observations                  (Observations for the initial state)
-       └─problem*.jpg
-    └─instructions                  (Linguistic instructions)
-       └─problem*.txt
-    └─annotated_bboxes              (Annotated bounding boxes)
-       └─problem*.json
-```
-
-## Results
-`results/reported_results` contains the generated PDDL problems and found plans reported in the paper. In the directory, there are also three subdirectories for each domain:
-- `plain`: the results without corrective reprompting
-- `refine_once`: the results by applying corrective reprompting for the problems in `plain`
-- `refine_twice`: the results by applying corrective reprompting for the problems in `refine_once`
-
-## Getting Started
-### Detecting Objects and Generating Captions
-To detect objects with bounding boxes and generate captions, run:
-```
-export domain=cooking
-export grounding_dino_dir=./GroundingDINO
-export result_dir=./results/temp/${domain}
-
-python scripts/main.py \
-    --data_dir "./data/${domain}" \
-    --result_dir ${result_dir} \
-    --grounding_dino_dir ${grounding_dino_dir} \
-    --predict_bboxes
-```
-This step should be done prior to PDDL problem generation.
-
-### Generating PDDL Problems and Finding Plans
-To generate PDDL problems based on the predicted bounding boxes and captions and find plans, run:
-```
-export domain=cooking
-export downward_dir=./downward
-export result_dir=./results/temp/${domain}
-export num_repeat=2
-export num_examples=3
-
-python scripts/main.py \
-    --downward_dir ${downward_dir} \
-    --data_dir "./data/${domain}" \
-    --result_dir "${result_dir}" \
-    --num_repeat ${num_repeat} \
-    --num_examples ${num_examples} \
-    --gen_step "plain" \
-    --generate_problem \
-    --find_plan
-```
-
-### Evaluating Generated PDDL Problems and Found Plans
-To evaluate the generated PDDL problems and validate the found plans, run:
+## Folder Structure
 
 ```
-export domain=cooking
-export downward_dir=./downward
-export result_dir=./results/temp/${domain}
-export num_repeat=2
-
-python scripts/evaluate.py \
-    --downward_dir ${downward_dir} \
-    --data_dir "./data/${domain}" \
-    --result_dir "${result_dir}" \
-    --num_repeat ${num_repeat} \
-    --gen_step "plain"
+.
+├── data/
+│   └── <domain_name>/
+│       ├── domain.pddl         # Domain definition file
+│       ├── instructions/       # Natural language instructions for each task
+│       │   └── problem<N>.txt
+│       ├── observations/       # Images corresponding to each task
+│       │   └── problem<N>.jpg
+│       └── problems/           # Ground truth PDDL problems
+│           └── problem<N>.pddl
+├── results/
+│   └── <domain_name>_<result_dir_or_timestamp>/ # Results for a specific run
+│       ├── base/               # Initial generation results
+│       │   ├── problems/
+│       │   ├── responses/
+│       │   ├── instructions/
+│       │   ├── plans/
+│       │   └── errors/
+│       └── refine_<M>/         # Refinement step M results
+│           ├── problems/
+│           ├── responses/
+│           ├── instructions/
+│           ├── plans/
+│           └── errors/
+├── scripts/
+│   ├── main.py             # Main pipeline script
+│   ├── utils.py            # Utility functions
+│   └── model_names.json    # VLM model names
+└── README.md               # This file
 ```
 
-### Refining Generated PDDL Problems
-To refine the generated PDDL problems by corrective reprompting, run:
-```
-export domain=cooking
-export downward_dir=./downward
-export result_dir=./results/temp/${domain}
-export num_repeat=2
+## Command Usage
 
-python scripts/main.py \
-    --downward_dir ${downward_dir} \
-    --data_dir "./data/${domain}" \
-    --result_dir "${result_dir}" \
-    --num_repeat ${num_repeat} \
-    --gen_step "refine_once" \
-    --prev_gen_step "plain" \
-    --refine_problem \
-    --use_cot \
-    --find_plan
+The core script is `scripts/main.py`.
+
+**General Syntax:**
+
+```bash
+python scripts/main.py --domain_name <domain> [--result_dir <name>] [--gen_step <step>] [OPTIONS]
 ```
 
-## Citation
-```
-@misc{shirai2023visionlanguage,
-      title={Vision-Language Interpreter for Robot Task Planning}, 
-      author={Keisuke Shirai and Cristian C. Beltran-Hernandez and Masashi Hamaya and Atsushi Hashimoto and Shohei Tanaka and Kento Kawaharazuka and Kazutoshi Tanaka and Yoshitaka Ushiku and Shinsuke Mori},
-      year={2023},
-      eprint={2311.00967},
-      archivePrefix={arXiv},
-      primaryClass={cs.RO}
-}
-```
+**Arguments:**
 
+*   `--domain_name`: (Required) The name of the domain (e.g., `cooking`, `blocksworld`). Must correspond to a directory in `data/`.
+*   `--result_dir`: (Optional) A custom suffix for the results directory name. If not provided, a timestamp is used.
+*   `--gen_step`: (Optional) Specifies which generation step's results to use for finding plans or as a basis for refinement (e.g., `base`, `refine_1`). Defaults to `base`.
+*   `--generate_problem`: Flag to run the initial PDDL generation step. Results are saved in `<results_dir>/base/`.
+*   `--refine_problem`: Flag to run the PDDL refinement step. Requires results from a previous step (specified by `--gen_step`). Results are saved in `<results_dir>/refine_<M>/`.
+*   `--find_plan`: Flag to run the Fast Downward planner on the PDDL files in the specified `gen_step`.
 
+**Examples:**
+
+1.  **Initial Generation and Planning for 'cooking' domain:**
+    ```bash
+    python scripts/main.py --domain_name cooking --generate_problem --find_plan
+    ```
+    *   Generates PDDL problems into `results/cooking_<timestamp>/base/problems/`.
+    *   Finds plans for the generated problems, saving plans/errors in `results/cooking_<timestamp>/base/`.
+
+2.  **Refine problems from 'base' step and find plans:**
+    ```bash
+    python scripts/main.py --domain_name cooking --result_dir my_run --gen_step base --refine_problem --find_plan
+    ```
+    *   Assumes `results/cooking_my_run/base/` exists with generated problems and potentially errors.
+    *   Refines problems based on errors in `base`, saving results to `results/cooking_my_run/refine_1/`.
+    *   Finds plans for the *refined* problems in `refine_1`, saving plans/errors in `results/cooking_my_run/refine_1/`.
+
+3.  **Only find plans for existing 'refine_1' results:**
+    ```bash
+    python scripts/main.py --domain_name cooking --result_dir my_run --gen_step refine_1 --find_plan
+    ```
+    *   Runs the planner on problems in `results/cooking_my_run/refine_1/problems/`.
