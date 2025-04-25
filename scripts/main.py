@@ -12,34 +12,78 @@ from datetime import datetime
 import subprocess
 import glob
 from PIL import Image
-from utils import seed_everything, parse_args, PDDL, get_error_meaning
+from utils import seed_everything, parse_args
 
 from dotenv import load_dotenv
 load_dotenv('.env')
-from openai import OpenAI
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
-)
 
-def run_model(prompt, observation, client_name="gpt-4.1-2025-04-14"):
-    with open(observation, "rb") as image_file:
-        base64_image = base64.b64encode(image_file.read()).decode("utf-8")
-    
-    response = client.responses.create(
-        model=client_name,
-        input=[{
-            "role": "user",
-            "content": [
-                {"type": "input_text", "text": prompt},
+class VLMClient:
+    def __init__(self, client_name):
+        # Determine client type
+        if any(name in client_name for name in ["gpt", "o3", "o4"]):  # OpenAI models
+            self.type = "openai"
+            if "gpt" in client_name:
+                self.client_name = client_name + "-2025-04-14"
+            elif "o3-mini" in client_name:
+                self.client_name = client_name + "-2025-01-31"
+            elif "o4-mini" in client_name:
+                self.client_name = client_name + "-2025-04-16"
+        elif "/" in client_name:
+            self.type = "huggingface"
+            self.client_name = client_name
+        if self.client_name is None:
+            raise ValueError(f"Unknown client type: {client_name}")
+        
+        # Load client
+        if self.type == "openai":
+            from openai import OpenAI
+            self.client = OpenAI(
+                api_key=os.getenv("OPENAI_API_KEY"),
+            )
+        elif self.type == "huggingface":
+            from transformers import pipeline
+            self.client = pipeline(
+                "image-to-text",
+                model=client_name,
+            )
+        print(f"Loaded {self.type} client: {self.client_name}")
+
+    def generate(self, prompt: str, observation: str):
+        # Convert image to base64
+        with open(observation, "rb") as image_file:
+            base64_image = base64.b64encode(image_file.read()).decode("utf-8")
+
+        # Generate response
+        if self.type == "openai":
+            response = self.client.responses.create(
+                model=self.client_name,
+                input=[{
+                    "role": "user",
+                    "content": [
+                        {"type": "input_text", "text": prompt},
+                        {
+                            "type": "input_image",
+                            "image_url": f"data:image/jpeg;base64,{base64_image}"
+                        },
+                    ],
+                }],
+            )
+            full_answer = response.output_text
+
+        elif self.type == "huggingface":
+            messages = [
                 {
-                    "type": "input_image",
-                    "image_url": f"data:image/jpeg;base64,{base64_image}"
+                    "role": "user",
+                    "content": [
+                        {"type": "image", "url": f"data:image/jpeg;base64,{base64_image}"},
+                        {"type": "text", "text": prompt},
+                    ],
                 },
-            ],
-        }],
-    )
-    full_answer = response.output_text
-    return full_answer
+            ]
+            response = self.client(text=messages)
+            full_answer = response[0]["generated_text"]
+
+        return full_answer
 
 def build_pf_prompt(examples, target, domain_name):
     prompt = f"""
@@ -111,7 +155,7 @@ def build_refine_pf_prompt(examples, target, domain_name):
     
     return prompt
 
-def generate_problem(target, examples, domain_name, refine=False):
+def generate_problem(target, examples, domain_name, model, refine=False):
     observation = target["observation"]
 
     if refine:
@@ -119,7 +163,7 @@ def generate_problem(target, examples, domain_name, refine=False):
     else:
         prompt = build_pf_prompt(examples, target, domain_name)
     
-    response = run_model(prompt, observation) 
+    response = model.generate(prompt, observation) 
 
     # Match the PDDL file in the response by header and footer
     pf_regex_pattern = r'(\(define.*\))'
@@ -178,6 +222,8 @@ def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
 
 def main():
     args = parse_args()
+    model = VLMClient(args.model)
+
     data_dir = f"../data/{args.domain_name}"
     if args.result_dir is None:
         result_dir = f"../results/{args.domain_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
@@ -286,6 +332,7 @@ def main():
                 pddl_file, response, prompt = generate_problem(
                     target,
                     examples,
+                    model,
                     domain_name=args.domain_name,
                     refine=False,
                 )
@@ -299,6 +346,7 @@ def main():
                 pddl_file, response, prompt = generate_problem(
                     target,
                     examples,
+                    model,
                     domain_name=args.domain_name,
                     refine=True
                 )
