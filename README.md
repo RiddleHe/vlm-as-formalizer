@@ -50,20 +50,21 @@ python scripts/main.py --domain_name <domain> [--result_dir <name>] [--gen_step 
 *   `--domain_name`: (Required) The name of the domain (e.g., `cooking`, `blocksworld`). Must correspond to a directory in `data/`.
 *   `--result_dir`: (Optional) A custom suffix for the results directory name. If not provided, a timestamp is used.
 *   `--gen_step`: (Optional) Specifies which generation step's results to use for finding plans or as a basis for refinement (e.g., `base`, `refine_1`). Defaults to `base`.
-*   `--generate_problem`: Flag to run the initial PDDL generation step. Results are saved in `<results_dir>/base/`.
-*   `--refine_problem`: Flag to run the PDDL refinement step. Requires results from a previous step (specified by `--gen_step`). Results are saved in `<results_dir>/refine_<M>/`.
+*   `--generate_domain`: Flag to generate both the PDDL domain and problem files. If omitted, only the problem file is generated.
+*   `--generate_problem`: Flag to run the initial PDDL generation step. Generates problem file only, unless `--generate_domain` is also specified. Results are saved in `<results_dir>/base/`.
+*   `--refine_problem`: Flag to run the PDDL refinement step. Requires results from a previous step (specified by `--gen_step`). Refines problem file only, unless `--generate_domain` is also specified. Results are saved in `<results_dir>/refine_<M>/`.
 *   `--find_plan`: Flag to run the Fast Downward planner on the PDDL files in the specified `gen_step`.
 
 **Examples:**
 
-1.  **Initial Generation and Planning for 'cooking' domain:**
+1.  **Initial Generation (Domain + Problem) and Planning for 'cooking' domain:**
     ```bash
-    python scripts/main.py --domain_name cooking --generate_problem --find_plan
+    python scripts/main.py --domain_name cooking --generate_problem --generate_domain --find_plan
     ```
-    *   Generates PDDL problems into `results/cooking_<timestamp>/base/problems/`.
+    *   Generates PDDL domain and problem files into `results/cooking_<timestamp>/base/`.
     *   Finds plans for the generated problems, saving plans/errors in `results/cooking_<timestamp>/base/`.
 
-2.  **Refine problems from 'base' step and find plans:**
+2.  **Refine problems (and optionally domains if `--generate_domain` is added) from 'base' step and find plans:**
     ```bash
     python scripts/main.py --domain_name cooking --result_dir my_run --gen_step base --refine_problem --find_plan
     ```
