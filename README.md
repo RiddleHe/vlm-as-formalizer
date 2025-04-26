@@ -49,8 +49,8 @@ python scripts/main.py --domain_name <domain> [--result_dir <name>] [--gen_step 
 
 *   `--domain_name`: (Required) The name of the domain (e.g., `cooking`, `blocksworld`). Must correspond to a directory in `data/`.
 *   `--result_dir`: (Optional) A custom suffix for the results directory name. If not provided, a timestamp is used.
+*   `--model`: (Required) Specifies the VLM model to use (e.g., `gpt-4o-mini`, `meta-llama/Meta-Llama-3-8B-Instruct`). The model name is appended to the `result_dir`.
 *   `--gen_step`: (Optional) Specifies which generation step's results to use for finding plans or as a basis for refinement (e.g., `base`, `refine_1`). Defaults to `base`.
-*   `--model`: (Optional) Specifies the VLM model to use (e.g., `gpt-4o-mini`, `meta-llama/Meta-Llama-3-8B-Instruct`). If provided, the model name is appended to the `result_dir`. Defaults to a model specified in `scripts/main.py`.
 *   `--generate_domain`: Flag to generate both the PDDL domain and problem files. If omitted, only the problem file is generated.
 *   `--generate_problem`: Flag to run the initial PDDL generation step. Generates problem file only, unless `--generate_domain` is also specified. Results are saved in `<results_dir>/base/`.
 *   `--refine_problem`: Flag to run the PDDL refinement step. Requires results from a previous step (specified by `--gen_step`). Refines problem file only, unless `--generate_domain` is also specified. Results are saved in `<results_dir>/refine_<M>/`.
