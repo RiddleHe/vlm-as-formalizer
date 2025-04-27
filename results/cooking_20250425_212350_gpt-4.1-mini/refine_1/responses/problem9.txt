@@ -1,0 +1,53 @@
+; Analysis of the error:
+; The previous problem had the knife at robot2, but the robots were both free.
+; The carrot was at the counter, but to slice, the robot needs to carry the knife and the carrot has to be at the workspace.
+; Additionally, the knife must be carried by a robot to slice.
+; Also, the cucumber is whole and never sliced, but the goal wants it to be at the bowl but not sliced.
+; The cucumber is at cutting_board which is workspace, but no slice action is recommended for cucumber.
+; The carrot is at counter, not at workspace cutting_board; since slicing requires the veg at workspace.
+; The robot must pick the carrot and knife, place them at workspace, slice the carrot.
+; The carrot and cucumber must both then be placed into the bowl.
+; The initial locations and carrying status must be consistent so the plan is executable.
+
+; Solution:
+; Place carrot and knife at cutting_board which is workspace.
+; The robot must carry the knife.
+; The carrot must be available at the cutting_board.
+; The carrot and cucumber must be available to pick/place.
+; At end, both carrot and cucumber should be at bowl.
+; The carrot must be sliced.
+; To slice, the robot must carry the knife, knife can-cut, carrot is whole, not sliced, at workspace.
+
+(define (problem cooking_task2)
+(:domain cooking)
+(:objects
+    robot1 robot2 - robot
+    carrot cucumber - vegetable
+    knife - tool
+    bowl cutting_board counter - location
+)
+(:init
+    (free robot1)
+    (free robot2)
+    (available carrot)
+    (available cucumber)
+    (available knife)
+    (can-cut knife)
+
+    (is-whole carrot)
+    (is-whole cucumber)
+    (not (is-sliced carrot))
+    (not (is-sliced cucumber))
+
+    (at carrot cutting_board)
+    (at cucumber counter)
+    (at knife counter)
+    (is-workspace cutting_board)
+    (at bowl counter)
+)
+(:goal (and
+    (is-sliced carrot)
+    (at carrot bowl)
+    (at cucumber bowl)
+))
+)

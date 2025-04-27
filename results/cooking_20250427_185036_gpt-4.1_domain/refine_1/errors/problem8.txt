@@ -1,0 +1,17 @@
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: None
+INFO     translator memory limit: None
+INFO     translator command line string: /home/mh3897/miniconda3/envs/villain/bin/python /home/mh3897/pddl/villain/downward/builds/release/bin/translate/translate.py ../results/cooking_20250427_185036_gpt-4.1_domain/refine_1/domains/domain1.pddl ../results/cooking_20250427_185036_gpt-4.1_domain/refine_1/problems/problem8.pddl --sas-file ../results/cooking_20250427_185036_gpt-4.1_domain/refine_1/plans/problem8.sas
+Parsing...
+Parsing task
+	->Parsing element #10 in init block
+Undefined predicate
+Got: is-tool
+translate exit code: 31
+
+Driver aborting after translate
+INFO     Planner time: 0.04s

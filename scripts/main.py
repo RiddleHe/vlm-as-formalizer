@@ -28,6 +28,7 @@ class VLMClient:
                 self.client_name = client_name + "-2025-01-31"
             elif "o4-mini" in client_name:
                 self.client_name = client_name + "-2025-04-16"
+
         elif "/" in client_name:
             self.type = "huggingface"
             self.client_name = client_name
@@ -43,9 +44,10 @@ class VLMClient:
         elif self.type == "huggingface":
             from transformers import pipeline
             self.client = pipeline(
-                "image-to-text",
+                "image-text-to-text",
                 model=client_name,
             )
+            # print(f"Model config: {self.client.model.config}")
         print(f"Loaded {self.type} client: {self.client_name}")
 
     def generate(self, prompt: str, observation: str):
@@ -73,15 +75,15 @@ class VLMClient:
         elif self.type == "huggingface":
             messages = [
                 {
-                    "role": "user",
-                    "content": [
-                        {"type": "image", "url": f"data:image/jpeg;base64,{base64_image}"},
-                        {"type": "text", "text": prompt},
+                "role": "user",
+                "content": [
+                    {"type": "image", "path": observation},
+                    {"type": "text", "text": prompt},
                     ],
                 },
             ]
-            response = self.client(text=messages)
-            full_answer = response[0]["generated_text"]
+            response = self.client(text=messages, max_new_tokens=1024)
+            full_answer = response[0]["generated_text"][1]["content"]
 
         return full_answer
 
@@ -181,6 +183,8 @@ def build_refine_domain_prompt(examples, target, domain_name):
     If the error is not due to the domain file, explain why it is not, and don't generate any PDDL.
     """
 
+    return prompt
+
 def parse_actions(domain_file):
     regex_patern = r'\(:action\s+(\w+).*?:parameters\s*\((.*?)\)'
     compiled_regex = re.compile(regex_patern, re.DOTALL) 
@@ -225,6 +229,7 @@ def generate_answers(target, examples, domain_name, model, refine=False, generat
     if generate_domain:
         if refine:
             domain_prompt = build_refine_domain_prompt(examples, target, domain_name)
+
         else:
             domain_prompt = build_domain_prompt(examples, target, domain_name)
 
@@ -232,8 +237,13 @@ def generate_answers(target, examples, domain_name, model, refine=False, generat
         domain_file = find_pddl(domain_response)
 
         # Keep original domain if the model does not generate any PDDL
-        if domain_file is None and refine:
-            domain_file = target["domain"]
+        if refine:
+            if domain_file is None:
+                domain_file = target["domain"]
+                res["domain"]["new_domain"] = False
+            else:
+                res["domain"]["new_domain"] = True
+
         target["domain"] = domain_file
 
         res["domain"]["file"] = domain_file
@@ -249,6 +259,8 @@ def generate_answers(target, examples, domain_name, model, refine=False, generat
 
     # Match the PDDL file in the response by header and footer
     problem_file = find_pddl(response)
+    if problem_file is None:
+        problem_file = ""
 
     res["problem"]["file"] = problem_file
     res["problem"]["response"] = response
@@ -309,7 +321,7 @@ def main():
     else:
         result_dir = f"../results/{args.domain_name}_{args.result_dir}"
     if args.model is not None:
-        result_dir += f"_{args.model}"
+        result_dir += f"_{args.model.replace('/', '-')}"
     if args.generate_domain:
         result_dir += "_domain"
 
@@ -470,6 +482,11 @@ def main():
 
                     with open(f"{result_dir}/{save_step}/instructions/domain{gen_idx}.txt", "w") as fw:
                         fw.write(res["domain"]["prompt"])
+
+                    if args.refine_problem:
+                        if res["domain"]["new_domain"]:
+                            with open(f"{result_dir}/{save_step}/domains/domain{gen_idx}_legacy.pddl", "w") as fw:
+                                fw.write(target["domain"])
             
             except Exception as e:
                 print(f"Error saving PDDL: {traceback.format_exc()}")
