@@ -501,11 +501,11 @@ def main():
                 exist_ok=True,
             )
 
-        problems = [
+        problems = sorted([
             os.path.join(f"{result_dir}/{args.gen_step}/problems", f) 
             for f 
             in os.listdir(f"{result_dir}/{args.gen_step}/problems")
-        ]
+        ])  # Need to sort
         num_problems = len(problems)
 
         for idx in tqdm(
