@@ -32,17 +32,13 @@ def parse_args():
     parser.add_argument("--domain_name", type=str, default=None, help="domain name (cooking/blocksworld/hanoi)")
     parser.add_argument("--model", type=str, required=True, help="model name")
     parser.add_argument("--generate_domain", action="store_true", help="generate PDDL domain")
+    parser.add_argument("--generate_plan", action="store_true", help="generate PDDL plans")
 
     # for main.py 
     parser.add_argument("--predict_bboxes", action="store_true", help="detect objects with bboxes and generate captions")
     parser.add_argument("--generate_problem", action="store_true", help="generate PDDL problems")
     parser.add_argument("--refine_problem", action="store_true", help="refine generated problems by corrective reprompting")
     parser.add_argument("--find_plan", action="store_true", help="refine generated problems by corrective reprompting")
-
-    # grounding dino
-    parser.add_argument("--grounding_dino_dir", type=str, default=None, help="directory for grounding dino")
-    parser.add_argument("--box_threshold", type=float, default=0.35, help="")
-    parser.add_argument("--text_threshold", type=float, default=0.25, help="")
 
     # downward
     parser.add_argument("--downward_dir", type=str, default="../downward", help="")

@@ -196,7 +196,7 @@ def parse_actions(domain_file):
         actions.append(f"action: {action_name} parameters: {parameters}")
     return "\n".join(actions)
 
-def find_pddl(response):
+def parse_pddl(response):
     if "(define" not in response:  # Assume we instruct the model to not generate PDDL at all
         return None
     
@@ -210,61 +210,109 @@ def find_pddl(response):
 
     return pddl_file
 
-def generate_answers(target, examples, domain_name, model, refine=False, generate_domain=False):
-    res = {
-        "problem": {
-            "file": None,
-            "response": None,
-            "prompt": None,
-        },
-        "domain": {
-            "file": None,
+def parse_plan(response):
+    regex_pattern = r'(\(.*?\))'
+    matches = re.findall(regex_pattern, response)
+    plan = []
+    for match in matches:
+        plan.append(match.strip())
+    return "\n".join(plan)
+
+def build_plan_prompt(examples, target, domain_name):
+    prompt = f"""
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate a step-by-step plan for the robot.
+    All the possible actions and their arguments are given below:
+    {parse_actions(target["domain"])}
+
+    You must first reason what objects are in the scene that can be the arguments of the actions.
+    Then you must reason what action to take. Be mindful of the preconditions and effects of the actions.
+
+    For the current domain, {domain_name}, the image of the scene has been provided.
+    Instruction: {target["instruction"]}
+
+    Please generate the plan for the robot.
+    The plan should be a sequence of actions, each taking one line.
+    The plan should be in the following format:
+    (action1 arg1 arg2 arg3)
+    (action2 arg1 arg2 arg3)
+    ...
+    Do not generate anything after the plan.
+    """
+
+    return prompt
+
+def generate_answers(target, examples, domain_name, model, refine_problem=False, generate_domain=False, generate_plan=False):
+    observation = target["observation"]
+
+    if generate_plan:
+        res = {
+            "plan": None,
             "response": None,
             "prompt": None,
         }
-    }
-    
-    observation = target["observation"]
 
-    if generate_domain:
-        if refine:
-            domain_prompt = build_refine_domain_prompt(examples, target, domain_name)
+        plan_prompt = build_plan_prompt(examples, target, domain_name)
+        response = model.generate(plan_prompt, observation)
 
-        else:
-            domain_prompt = build_domain_prompt(examples, target, domain_name)
+        plan_file = parse_plan(response)
+        res["plan"] = plan_file
+        res["response"] = response
+        res["prompt"] = plan_prompt
 
-        domain_response = model.generate(domain_prompt, observation)
-        domain_file = find_pddl(domain_response)
-
-        # Keep original domain if the model does not generate any PDDL
-        if refine:
-            if domain_file is None:
-                domain_file = target["domain"]
-                res["domain"]["new_domain"] = False
-            else:
-                res["domain"]["new_domain"] = True
-
-        target["domain"] = domain_file
-
-        res["domain"]["file"] = domain_file
-        res["domain"]["response"] = domain_response
-        res["domain"]["prompt"] = domain_prompt
-
-    if refine:
-        problem_prompt = build_refine_problem_prompt(examples, target, domain_name)
     else:
-        problem_prompt = build_problem_prompt(examples, target, domain_name)
-    
-    response = model.generate(problem_prompt, observation) 
+        res = {
+            "problem": {
+                "file": None,
+                "response": None,
+                "prompt": None,
+            },
+            "domain": {
+                "file": None,
+                "response": None,
+                "prompt": None,
+            }
+        }
 
-    # Match the PDDL file in the response by header and footer
-    problem_file = find_pddl(response)
-    if problem_file is None:
-        problem_file = ""
+        if generate_domain:
+            if refine_problem:
+                domain_prompt = build_refine_domain_prompt(examples, target, domain_name)
 
-    res["problem"]["file"] = problem_file
-    res["problem"]["response"] = response
-    res["problem"]["prompt"] = problem_prompt
+            else:
+                domain_prompt = build_domain_prompt(examples, target, domain_name)
+
+            domain_response = model.generate(domain_prompt, observation)
+            domain_file = parse_pddl(domain_response)
+
+            # Keep original domain if the model does not generate any PDDL
+            if refine_problem:
+                if domain_file is None:
+                    domain_file = target["domain"]
+                    res["domain"]["new_domain"] = False
+                else:
+                    res["domain"]["new_domain"] = True
+
+            target["domain"] = domain_file
+
+            res["domain"]["file"] = domain_file
+            res["domain"]["response"] = domain_response
+            res["domain"]["prompt"] = domain_prompt
+
+        if refine_problem:
+            problem_prompt = build_refine_problem_prompt(examples, target, domain_name)
+        else:
+            problem_prompt = build_problem_prompt(examples, target, domain_name)
+        
+        response = model.generate(problem_prompt, observation) 
+
+        # Match the PDDL file in the response by header and footer
+        problem_file = parse_pddl(response)
+        if problem_file is None:
+            problem_file = ""
+
+        res["problem"]["file"] = problem_file
+        res["problem"]["response"] = response
+        res["problem"]["prompt"] = problem_prompt
 
     return res
 
@@ -314,6 +362,9 @@ def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
 
 def main():
     args = parse_args()
+    if args.generate_plan:
+        assert not args.generate_problem and not args.refine_problem, \
+            "generate_plan is not compatible with generate_problem or refine_problem"
 
     data_dir = f"../data/{args.domain_name}"
     if args.result_dir is None:
@@ -324,6 +375,8 @@ def main():
         result_dir += f"_{args.model.replace('/', '-')}"
     if args.generate_domain:
         result_dir += "_domain"
+    if args.generate_plan:
+        result_dir += "_plan"
 
     seed_everything(args.seed) 
 
@@ -335,18 +388,23 @@ def main():
     with open(f"{data_dir}/domain.pddl", "r") as f:
         domain_file = f.read()
 
-    folders = ["problems", "responses", "instructions"]
-    if args.generate_domain:
-        folders += ["domains"]
-
     # Generate / refine PDDL problems
-    if args.generate_problem or args.refine_problem:
-        model = VLMClient(args.model)
+    if args.generate_problem or args.refine_problem or args.generate_plan:
+        # Create folders
+        if args.generate_plan:
+            folders = ["plans", "responses", "instructions"]
+        else:
+            folders = ["problems", "responses", "instructions"]
+            if args.generate_domain:
+                folders += ["domains"]
+
         for dname in folders:
             os.makedirs(
                 f"{result_dir}/{args.gen_step}/{dname}",
                 exist_ok=True,
             )
+         # Load model
+        model = VLMClient(args.model)
         if args.refine_problem:
             idx = len(os.listdir(f"{result_dir}"))
             # If has only base, will be refine_1
@@ -432,61 +490,63 @@ def main():
             target = all_targets[task_name_idx]
 
             # generate PDDL objects, initial state, and goal specification
-            if args.generate_problem:
-                res = generate_answers(
-                    target,
-                    examples,
-                    domain_name=args.domain_name,
-                    model=model,
-                    refine=False,
-                    generate_domain=args.generate_domain,
-                )
-
-            elif args.refine_problem:
+            if args.refine_problem:
                 if target["error"] is None:
                     print(f"Problem {gen_idx} has no error, skipping...")
                     gen_idx += 1
                     continue
 
-                res = generate_answers(
-                    target,
-                    examples,
-                    domain_name=args.domain_name,
-                    model=model,
-                    refine=True,
-                    generate_domain=args.generate_domain,
-                )
-
+            res = generate_answers(
+                target,
+                examples,
+                domain_name=args.domain_name,
+                model=model,
+                refine_problem=args.refine_problem,
+                generate_domain=args.generate_domain,
+                generate_plan=args.generate_plan,
+            )
+            
             # save PDDL objects
-            if args.generate_problem:
+            if args.generate_problem or args.generate_plan:
                 save_step = args.gen_step
             elif args.refine_problem:
                 save_step = refine_step
 
             try:
-                with open(f"{result_dir}/{save_step}/instructions/problem{gen_idx}.txt", "w") as fw:
-                    fw.write(res["problem"]["prompt"])
+                if args.generate_problem or args.refine_problem:
+                    with open(f"{result_dir}/{save_step}/instructions/problem{gen_idx}.txt", "w") as fw:
+                        fw.write(res["problem"]["prompt"])
 
-                with open(f"{result_dir}/{save_step}/problems/problem{gen_idx}.pddl", "w") as fw:
-                    fw.write(res["problem"]["file"])
+                    with open(f"{result_dir}/{save_step}/problems/problem{gen_idx}.pddl", "w") as fw:
+                        fw.write(res["problem"]["file"])
 
-                with open(f"{result_dir}/{save_step}/responses/problem{gen_idx}.txt", "w") as fw:
-                    fw.write(res["problem"]["response"])
+                    with open(f"{result_dir}/{save_step}/responses/problem{gen_idx}.txt", "w") as fw:
+                        fw.write(res["problem"]["response"])
 
-                if args.generate_domain:
-                    with open(f"{result_dir}/{save_step}/domains/domain{gen_idx}.pddl", "w") as fw:
-                        fw.write(res["domain"]["file"])
+                    if args.generate_domain:
+                        with open(f"{result_dir}/{save_step}/domains/domain{gen_idx}.pddl", "w") as fw:
+                            fw.write(res["domain"]["file"])
 
-                    with open(f"{result_dir}/{save_step}/responses/domain{gen_idx}.txt", "w") as fw:
-                        fw.write(res["domain"]["response"])
+                        with open(f"{result_dir}/{save_step}/responses/domain{gen_idx}.txt", "w") as fw:
+                            fw.write(res["domain"]["response"])
 
-                    with open(f"{result_dir}/{save_step}/instructions/domain{gen_idx}.txt", "w") as fw:
-                        fw.write(res["domain"]["prompt"])
+                        with open(f"{result_dir}/{save_step}/instructions/domain{gen_idx}.txt", "w") as fw:
+                            fw.write(res["domain"]["prompt"])
 
-                    if args.refine_problem:
-                        if res["domain"]["new_domain"]:
-                            with open(f"{result_dir}/{save_step}/domains/domain{gen_idx}_legacy.pddl", "w") as fw:
-                                fw.write(target["domain"])
+                        if args.refine_problem:
+                            if res["domain"]["new_domain"]:
+                                with open(f"{result_dir}/{save_step}/domains/domain{gen_idx}_legacy.pddl", "w") as fw:
+                                    fw.write(target["domain"])
+                
+                elif args.generate_plan:
+                    with open(f"{result_dir}/{save_step}/instructions/problem{gen_idx}.txt", "w") as fw:
+                        fw.write(res["plan"]["prompt"])
+
+                    with open(f"{result_dir}/{save_step}/plans/plan{gen_idx}.txt", "w") as fw:
+                        fw.write(res["plan"]["file"])
+                        
+                    with open(f"{result_dir}/{save_step}/responses/problem{gen_idx}.txt", "w") as fw:
+                        fw.write(res["plan"]["response"])
             
             except Exception as e:
                 print(f"Error saving PDDL: {traceback.format_exc()}")
