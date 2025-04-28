@@ -1,0 +1,22 @@
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: None
+INFO     translator memory limit: None
+INFO     translator command line string: /home/mh3897/miniconda3/envs/villain/bin/python /home/mh3897/pddl/villain/downward/builds/release/bin/translate/translate.py ../results/cooking_20250425_212540_gpt-4.1-mini_domain/refine_1/domains/domain6.pddl ../results/cooking_20250425_212540_gpt-4.1-mini_domain/refine_1/problems/problem6.pddl --sas-file ../results/cooking_20250425_212540_gpt-4.1-mini_domain/refine_1/plans/problem6.sas
+Parsing...
+Parsing domain
+	->Parsing axiom/action entry #1
+	->Parsing action #1
+	->Parsing action 'pick'
+	->Parsing effect
+	->Parsing effect
+	->Parsing literal
+Undefined variable
+Got: ?container
+translate exit code: 31
+
+Driver aborting after translate
+INFO     Planner time: 0.05s

@@ -1,0 +1,143 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL domain file which contains object types, predicates, and actions suitable for the instruction.
+    You will be given all possible actions of the robot along with the arguments of the actions.
+    You will complete the action definitions by adding precondtions and effects, and also complete the object types and predicates.
+
+    Here;s how standard PDDL domain files look like:
+    
+        Domain: hanoi: 
+        Instruction:Move all disks to the rightmost peg while keeping a rule that larger disks are below.
+
+        Domain file:
+(define (domain hanoi)
+    (:requirements :strips)
+    (:predicates
+        (clear ?x)
+        (on ?x ?y)
+        (smaller ?x ?y)
+        (move ?disc ?to)
+    )
+    (:action move
+        :parameters (?disc ?from ?to)
+        :precondition (and (smaller ?to ?disc) (on ?disc ?from)
+                      (clear ?disc) (clear ?to))
+        :effect  (and (clear ?from) (on ?disc ?to) (not (on ?disc ?from))
+                 (not (clear ?to)))
+    )
+)
+
+
+
+        
+    For the current domain, cooking, the image of the scene has been provided.
+    Instruction: Slice the tomatoes and place the sliced tomatoes and carrots in a bowl.
+
+
+    All possible actions and their signatures for the robot:
+    action: pick parameters: ?robot - robot ?obj - object ?pick_loc - location
+action: place parameters: ?robot - robot ?obj - object ?place_loc - location
+action: slice parameters: ?robot - robot ?veg - vegetable ?tool - tool ?loc - location
+
+    Please complete the domain file based on the image and instruction. 
+    Do not generate anything after the PDDL domain file.
+    
+    The following is the PDDL domain file you generated last time:
+    (define (domain cooking)
+  (:requirements :strips)
+  (:types
+    robot
+    object
+    location
+    vegetable - object
+    tool - object
+    bowl - object
+  )
+  (:predicates
+    (at ?obj - object ?loc - location)
+    (in-bowl ?obj - object ?bowl - bowl)
+    (sliced ?veg - vegetable)
+    (holding ?robot - robot ?obj - object)
+    (free ?robot - robot)
+    (is-tool ?tool - tool)
+    (is-vegetable ?veg - vegetable)
+    (is-bowl ?bowl - bowl)
+  )
+  (:action pick
+    :parameters (?robot - robot ?obj - object ?pick_loc - location)
+    :precondition (and 
+      (at ?obj ?pick_loc)
+      (free ?robot)
+      )
+    :effect (and
+      (holding ?robot ?obj)
+      (not (free ?robot))
+      (not (at ?obj ?pick_loc))
+      )
+  )
+  (:action place
+    :parameters (?robot - robot ?obj - object ?place_loc - location)
+    :precondition (and
+      (holding ?robot ?obj)
+      )
+    :effect (and
+      (at ?obj ?place_loc)
+      (free ?robot)
+      (not (holding ?robot ?obj))
+      )
+  )
+  (:action slice
+    :parameters (?robot - robot ?veg - vegetable ?tool - tool ?loc - location)
+    :precondition (and
+      (at ?veg ?loc)
+      (at ?tool ?loc)
+      (is-tool ?tool)
+      (is-vegetable ?veg)
+      )
+    :effect (and
+      (sliced ?veg)
+      )
+  )
+)
+
+    The following is the PDDL problem you generated last time:
+    (define (problem cooking01)
+  (:domain cooking)
+  (:objects
+    robot1 - robot
+    carrot1 carrot2 - vegetable
+    tomato1 - vegetable
+    knife1 - tool
+    bowl1 - bowl
+    table1 station1 - location
+  )
+  (:init
+    (at carrot1 station1)
+    (at carrot2 station1)
+    (at tomato1 table1)
+    (at knife1 station1)
+    (at bowl1 table1)
+    (is-tool knife1)
+    (is-vegetable carrot1)
+    (is-vegetable carrot2)
+    (is-vegetable tomato1)
+    (is-bowl bowl1)
+    (free robot1)
+    (sliced carrot1)
+    (sliced carrot2)
+  )
+  (:goal (and
+    (sliced tomato1)
+    (in-bowl carrot1 bowl1)
+    (in-bowl carrot2 bowl1)
+    (in-bowl tomato1 bowl1)
+  ))
+)
+
+    The following is the error you made last time:
+    There is no possible plan after exhaustive search.
+
+    Please first analyze where the error is.
+    If the error is due to the domain file, please generate the PDDL domain file based on the error.
+    If the error is not due to the domain file, explain why it is not, and don't generate any PDDL.
+    

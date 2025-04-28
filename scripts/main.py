@@ -568,25 +568,25 @@ def main():
         ])  # Need to sort
         num_problems = len(problems)
 
-        for idx in tqdm(
-            range(num_problems),
-            total=num_problems,
+        for problem in tqdm(
+            problems,
             desc="Finding plans"
         ):
+            idx = os.path.basename(problem).split("problem")[1].split(".pddl")[0]
             domain_path = f"{data_dir}/domain.pddl"
             if args.generate_domain:
-                domain_path = f"{result_dir}/{args.gen_step}/domains/domain{idx+1}.pddl"
+                domain_path = f"{result_dir}/{args.gen_step}/domains/domain{idx}.pddl"
 
             found, err = find_plan(
                 domain_path,
-                problems[idx],
-                problems[idx].replace("problems", "plans").replace(".pddl", ""),
+                problem,
+                problem.replace("problems", "plans").replace(".pddl", ""),
                 args.downward_dir,
                 args.time_limit,
             )
 
             if not found:
-                with open(problems[idx].replace("problems", "errors").replace(".pddl", ".txt"), "w") as fw:
+                with open(problem.replace("problems", "errors").replace(".pddl", ".txt"), "w") as fw:
                     fw.write(err)
 
 
