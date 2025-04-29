@@ -1,0 +1,14 @@
+Objects in the scene that can be arguments:
+- robot: robot
+- objects: cucumber, tomato1, tomato2, bowl, knife, cutting_board
+
+Plan:
+(pick robot cucumber table)
+(pick robot knife table)
+(slice robot cucumber knife table)
+(pick robot sliced_cucumber table)
+(place robot sliced_cucumber bowl)
+(pick robot tomato1 cutting_board)
+(place robot tomato1 bowl)
+(pick robot tomato2 cutting_board)
+(place robot tomato2 bowl)

@@ -34,6 +34,8 @@ def parse_args():
     parser.add_argument("--generate_domain", action="store_true", help="generate PDDL domain")
     parser.add_argument("--generate_plan", action="store_true", help="generate PDDL plans")
 
+    parser.add_argument("--device", type=str, default="cuda:0", help="device")
+
     # for main.py 
     parser.add_argument("--predict_bboxes", action="store_true", help="detect objects with bboxes and generate captions")
     parser.add_argument("--generate_problem", action="store_true", help="generate PDDL problems")

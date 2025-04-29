@@ -13,6 +13,7 @@ import subprocess
 import glob
 from PIL import Image
 from utils import seed_everything, parse_args
+import torch
 
 from dotenv import load_dotenv
 load_dotenv('.env')
@@ -20,7 +21,7 @@ load_dotenv('.env')
 # Model loader
 
 class VLMClient:
-    def __init__(self, client_name):
+    def __init__(self, client_name, device):
         # Determine client type
         if any(name in client_name for name in ["gpt", "o3", "o4"]):  # OpenAI models
             self.type = "openai"
@@ -48,6 +49,8 @@ class VLMClient:
             self.client = pipeline(
                 "image-text-to-text",
                 model=client_name,
+                device=device,
+                torch_dtype=torch.bfloat16
             )
             # print(f"Model config: {self.client.model.config}")
         print(f"Loaded {self.type} client: {self.client_name}")
@@ -459,7 +462,7 @@ def main():
                 exist_ok=True,
             )
          # Load model
-        model = VLMClient(args.model)
+        model = VLMClient(args.model, args.device)
         if args.refine_problem:
             idx = len(os.listdir(f"{result_dir}"))
             # If has only base, will be refine_1
@@ -595,13 +598,13 @@ def main():
                 
                 elif args.generate_plan:
                     with open(f"{result_dir}/{save_step}/instructions/problem{gen_idx}.txt", "w") as fw:
-                        fw.write(res["plan"]["prompt"])
+                        fw.write(res["prompt"])
 
                     with open(f"{result_dir}/{save_step}/plans/plan{gen_idx}.txt", "w") as fw:
-                        fw.write(res["plan"]["file"])
+                        fw.write(res["plan"])
                         
                     with open(f"{result_dir}/{save_step}/responses/problem{gen_idx}.txt", "w") as fw:
-                        fw.write(res["plan"]["response"])
+                        fw.write(res["response"])
             
             except Exception as e:
                 print(f"Error saving PDDL: {traceback.format_exc()}")

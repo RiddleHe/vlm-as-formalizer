@@ -1,0 +1,5 @@
+(pick robot tomato table)
+(pick robot knife table)
+(slice robot tomato knife table)
+(pick robot bowl table)
+(place robot tomato bowl)

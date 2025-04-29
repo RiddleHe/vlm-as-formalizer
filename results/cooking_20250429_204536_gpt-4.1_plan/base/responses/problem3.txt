@@ -1,0 +1,5 @@
+(pick robot carrot tray)
+(place robot carrot cutting_board)
+(slice robot carrot knife cutting_board)
+(pick robot carrot_slices cutting_board)
+(place robot carrot_slices bowl)
