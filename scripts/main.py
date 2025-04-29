@@ -17,6 +17,8 @@ from utils import seed_everything, parse_args
 from dotenv import load_dotenv
 load_dotenv('.env')
 
+# Model loader
+
 class VLMClient:
     def __init__(self, client_name):
         # Determine client type
@@ -86,6 +88,8 @@ class VLMClient:
             full_answer = response[0]["generated_text"][1]["content"]
 
         return full_answer
+
+# Prompt builder
 
 def build_problem_prompt(target, domain_name, add_examples=True):
     prompt = f"""
@@ -238,6 +242,8 @@ def build_plan_prompt(target, domain_name):
 
     return prompt
 
+# PDDL parser
+
 def parse_actions(domain_file):
     regex_patern = r'\(:action\s+(\w+).*?:parameters\s*\((.*?)\)'
     compiled_regex = re.compile(regex_patern, re.DOTALL) 
@@ -249,20 +255,33 @@ def parse_actions(domain_file):
         actions.append(f"action: {action_name}\nparameters: {parameters}")
     return "\n".join(actions)
 
-def parse_pddl(response):
+def parse_pddl(response):  # Use parentheses matching to find the PDDL file
     start_index = response.find("(define")
     if start_index == -1:
         return None
     
-    regex_pattern = r'(\(define.*\))'
-    pddl_match = re.search(regex_pattern, response, re.DOTALL)
-    if pddl_match:
-        pddl_file = pddl_match.group(1).strip()
-    else:
-        print(f"Response: {response}\n\n")
-        raise ValueError("No PDDL file found in the response")
+    open_paren_count = 0
+    end_index = -1
 
-    return pddl_file
+    first_paren_index = response.find("(", start_index)
+    if first_paren_index == -1:
+        return None
+    
+    for i in range(first_paren_index, len(response)):
+        if response[i] == '(':
+            open_paren_count += 1
+        elif response[i] == ')':
+            open_paren_count -= 1
+            if open_paren_count == 0:
+                end_index = i+1
+                break
+    
+    if end_index != -1:
+        pddl_file = response[start_index:end_index].strip()
+        return pddl_file
+    
+    else:
+        return None
 
 def parse_plan(response):
     regex_pattern = r'(\(.*?\))'
@@ -271,6 +290,8 @@ def parse_plan(response):
     for match in matches:
         plan.append(match.strip())
     return "\n".join(plan)
+
+# Main actions
 
 def generate_answers(target, examples, domain_name, model, refine_problem=False, generate_domain=False, generate_plan=False):
     observation = target["observation"]
@@ -313,10 +334,12 @@ def generate_answers(target, examples, domain_name, model, refine_problem=False,
 
             domain_response = model.generate(domain_prompt, observation)
             domain_file = parse_pddl(domain_response)
+            if domain_file is None:
+                domain_file = ""
 
             # Keep original domain if the model does not generate any PDDL
             if refine_problem:
-                if domain_file is None:
+                if domain_file == "":
                     domain_file = target["domain"]
                     res["domain"]["new_domain"] = False
                 else:
@@ -389,6 +412,8 @@ def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
 
     except Exception as e:
         return False, e.output.decode()
+
+# Main
 
 def main():
     args = parse_args()
