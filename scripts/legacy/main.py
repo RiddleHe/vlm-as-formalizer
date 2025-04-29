@@ -4,7 +4,7 @@ import os
 import json
 import random
 
-from vilain import ViLaIn
+from scripts.legacy.vilain import ViLaIn
 from utils import seed_everything, parse_args, PDDL, get_error_meaning
 
 # python main.py --data_dir "../data/cooking" --result_dir "./results/tmp/cooking" --grounding_dino_dir "../GroundingDINO" --predict_bboxes

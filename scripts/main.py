@@ -87,22 +87,37 @@ class VLMClient:
 
         return full_answer
 
-def build_problem_prompt(examples, target, domain_name):
+def build_problem_prompt(target, domain_name, add_examples=True):
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
     Your output should adhere to the constraints defined in the domain file.
     You must output the PDDL file in the correct format.
-
-    Examples of PDDL problems given a different domain instruction:
     """
 
-    for example in examples:
-        prompt += f"""
-        Instruction for {example["domain_name"]}: {example["instruction"]}
-        PDDL problem:
-        {example["problem"]}\n\n
-        """
+    example_prompt = f"""Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    """
+
+    if add_examples:
+        prompt += example_prompt
 
     prompt += f"""
     For the current domain, {domain_name}, this is the domain file:
@@ -119,11 +134,11 @@ def build_problem_prompt(examples, target, domain_name):
     
     return prompt
 
-def build_refine_problem_prompt(examples, target, domain_name):
-    prompt = build_problem_prompt(examples, target, domain_name)
+def build_refine_problem_prompt(target, domain_name):
+    prompt = build_problem_prompt(target, domain_name, add_examples=False)
 
     prompt += f"""
-    The following is the PDDL problem you generated last time:
+    The following is the PDDL problem file you generated last time:
     {target["problem"]}
 
     The following is the error you made last time:
@@ -135,44 +150,60 @@ def build_refine_problem_prompt(examples, target, domain_name):
     
     return prompt
 
-def build_domain_prompt(examples, target, domain_name):
+def build_domain_prompt(target, domain_name, add_examples=True):
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate the PDDL domain file which contains object types, predicates, and actions suitable for the instruction.
     You will be given all possible actions of the robot along with the arguments of the actions.
     You will complete the action definitions by adding precondtions and effects, and also complete the object types and predicates.
-
-    Here;s how standard PDDL domain files look like:
     """
 
-    for example in examples:
-        prompt += f"""
-        Domain: {example["domain_name"]}: 
-        Instruction:{example["instruction"]}
-        Domain file:\n{example["domain"]}\n\n
-        """
+    example_prompt = f"""Examples of PDDL domains given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg while keeping a rule that larger disks are below.
+    PDDL domain:
+    (define (domain hanoi)
+        (:requirements :strips)
+        (:predicates
+            (clear ?x)
+            (on ?x ?y)
+            (smaller ?x ?y)
+            (move ?disc ?to)
+        )
+        (:action move
+            :parameters (?disc ?from ?to)
+            :precondition (and (smaller ?to ?disc) (on ?disc ?from)
+                        (clear ?disc) (clear ?to))
+            :effect  (and (clear ?from) (on ?disc ?to) (not (on ?disc ?from))
+                    (not (clear ?to)))
+        )
+    )
+    """
+
+    if add_examples:
+        prompt += example_prompt
     
     prompt += f"""
     For the current domain, {domain_name}, the image of the scene has been provided.
     Instruction: {target["instruction"]}
 
-    All possible actions and their signatures for the robot:
+    All possible actions that should be included in the domain file:
     {parse_actions(target["domain"])}
 
-    Please complete the domain file based on the image and instruction. 
+    Please complete the domain file based on the image, the instruction, and the possible actions. 
     Do not generate anything after the PDDL domain file.
     """
 
     return prompt
 
-def build_refine_domain_prompt(examples, target, domain_name):
-    prompt = build_domain_prompt(examples, target, domain_name)
+def build_refine_domain_prompt(target, domain_name):
+    prompt = build_domain_prompt(target, domain_name, add_examples=False)
 
     prompt += f"""
     The following is the PDDL domain file you generated last time:
     {target["domain"]}
 
-    The following is the PDDL problem you generated last time:
+    The following is the PDDL problem file you generated last time:
     {target["problem"]}
 
     The following is the error you made last time:
@@ -180,7 +211,29 @@ def build_refine_domain_prompt(examples, target, domain_name):
 
     Please first analyze where the error is.
     If the error is due to the domain file, please generate the PDDL domain file based on the error.
-    If the error is not due to the domain file, explain why it is not, and don't generate any PDDL.
+    If the error is not due to the domain file, explain why it is not, and don't generate any PDDL domain file.
+    """
+
+    return prompt
+
+def build_plan_prompt(target, domain_name):
+    prompt = f"""
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate a step-by-step plan for the robot.
+    All the possible actions and their arguments are given below:
+    {parse_actions(target["domain"])}
+
+    You must first reason what objects are in the scene that can be the arguments of the actions.
+    Then you must reason what actions to take in the plan. Be mindful of the preconditions and effects of the actions.
+    Each action should take one line in the plan.
+    The plan should be in the following format:
+    (action1 arg1 arg2 arg3)
+    (action2 arg1 arg2 arg3)
+    ...
+
+    For the current domain, {domain_name}, the image of the scene has been provided.
+    Instruction: {target["instruction"]}
+    Please generate the plan for the robot. Do not generate anything after the plan.
     """
 
     return prompt
@@ -193,11 +246,12 @@ def parse_actions(domain_file):
     for match in matches:
         action_name = match[0]
         parameters = re.sub(r'\s+', ' ', match[1].strip())
-        actions.append(f"action: {action_name} parameters: {parameters}")
+        actions.append(f"action: {action_name}\nparameters: {parameters}")
     return "\n".join(actions)
 
 def parse_pddl(response):
-    if "(define" not in response:  # Assume we instruct the model to not generate PDDL at all
+    start_index = response.find("(define")
+    if start_index == -1:
         return None
     
     regex_pattern = r'(\(define.*\))'
@@ -218,30 +272,6 @@ def parse_plan(response):
         plan.append(match.strip())
     return "\n".join(plan)
 
-def build_plan_prompt(examples, target, domain_name):
-    prompt = f"""
-    You are helping a robotic planning task. 
-    Given the image of a scene and an instruction, generate a step-by-step plan for the robot.
-    All the possible actions and their arguments are given below:
-    {parse_actions(target["domain"])}
-
-    You must first reason what objects are in the scene that can be the arguments of the actions.
-    Then you must reason what action to take. Be mindful of the preconditions and effects of the actions.
-
-    For the current domain, {domain_name}, the image of the scene has been provided.
-    Instruction: {target["instruction"]}
-
-    Please generate the plan for the robot.
-    The plan should be a sequence of actions, each taking one line.
-    The plan should be in the following format:
-    (action1 arg1 arg2 arg3)
-    (action2 arg1 arg2 arg3)
-    ...
-    Do not generate anything after the plan.
-    """
-
-    return prompt
-
 def generate_answers(target, examples, domain_name, model, refine_problem=False, generate_domain=False, generate_plan=False):
     observation = target["observation"]
 
@@ -252,7 +282,7 @@ def generate_answers(target, examples, domain_name, model, refine_problem=False,
             "prompt": None,
         }
 
-        plan_prompt = build_plan_prompt(examples, target, domain_name)
+        plan_prompt = build_plan_prompt(target, domain_name)
         response = model.generate(plan_prompt, observation)
 
         plan_file = parse_plan(response)
@@ -276,10 +306,10 @@ def generate_answers(target, examples, domain_name, model, refine_problem=False,
 
         if generate_domain:
             if refine_problem:
-                domain_prompt = build_refine_domain_prompt(examples, target, domain_name)
+                domain_prompt = build_refine_domain_prompt(target, domain_name)
 
             else:
-                domain_prompt = build_domain_prompt(examples, target, domain_name)
+                domain_prompt = build_domain_prompt(target, domain_name)
 
             domain_response = model.generate(domain_prompt, observation)
             domain_file = parse_pddl(domain_response)
@@ -299,9 +329,9 @@ def generate_answers(target, examples, domain_name, model, refine_problem=False,
             res["domain"]["prompt"] = domain_prompt
 
         if refine_problem:
-            problem_prompt = build_refine_problem_prompt(examples, target, domain_name)
+            problem_prompt = build_refine_problem_prompt(target, domain_name)
         else:
-            problem_prompt = build_problem_prompt(examples, target, domain_name)
+            problem_prompt = build_problem_prompt(target, domain_name)
         
         response = model.generate(problem_prompt, observation) 
 
