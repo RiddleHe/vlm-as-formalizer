@@ -428,11 +428,11 @@ def main():
         assert not args.generate_problem and not args.refine_problem, \
             "generate_plan is not compatible with generate_problem or refine_problem"
 
-    data_dir = f"../data/{args.domain_name}"
+    data_dir = f"../data/{args.domain}"
     if args.result_dir is None:
-        result_dir = f"../results/{args.domain_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        result_dir = f"../results/{args.domain}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     else:
-        result_dir = f"../results/{args.domain_name}_{args.result_dir}"
+        result_dir = f"../results/{args.domain}_{args.result_dir}"
     if args.model is not None:
         result_dir += f"_{args.model.replace('/', '-')}"
     if args.generate_domain:
@@ -492,9 +492,9 @@ def main():
 
         # Set up example domain
         domains = ["cooking", "hanoi", "blocksworld"]
-        domains.remove(args.domain_name) # choose another domain as example
+        domains.remove(args.domain) # choose another domain as example
         example_domain_name = random.choice(domains)
-        example_domain_dir = data_dir.replace(args.domain_name, example_domain_name)
+        example_domain_dir = data_dir.replace(args.domain, example_domain_name)
 
         # Load examples
         for idx in range(args.num_examples):
@@ -571,7 +571,7 @@ def main():
                 target,
                 examples,
                 config,
-                domain_name=args.domain_name,
+                domain_name=args.domain,
                 model=model,
                 refine_problem=args.refine_problem,
                 generate_domain=args.generate_domain,

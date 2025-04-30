@@ -29,8 +29,8 @@ def parse_args():
 
     # for main.py and evaluate.py
     parser.add_argument("--result_dir", type=str, default=None, help="direcotry for predicted bboxes, generated problems, and found plans")
-    parser.add_argument("--domain_name", type=str, default=None, help="domain name (cooking/blocksworld/hanoi)")
-    parser.add_argument("--model", type=str, required=True, help="model name")
+    parser.add_argument("--domain", type=str, default=None, help="domain name (cooking/blocksworld/hanoi)")
+    parser.add_argument("--model", type=str, default=None, help="model name")
     parser.add_argument("--generate_domain", action="store_true", help="generate PDDL domain")
     parser.add_argument("--generate_plan", action="store_true", help="generate PDDL plans")
 

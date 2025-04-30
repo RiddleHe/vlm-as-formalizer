@@ -1,4 +1,0 @@
-(pick robot carrot tray)
-(slice robot carrot knife tray)
-(pick robot bowl tray)
-(place robot carrot bowl)

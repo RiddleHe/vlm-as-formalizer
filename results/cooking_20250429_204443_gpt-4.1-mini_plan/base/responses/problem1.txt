@@ -1,4 +1,0 @@
-(pick robot cucumber table)
-(pick robot cleaver chopping_board)
-(slice robot cucumber cleaver chopping_board)
-(place robot cucumber bowl)

@@ -1,6 +1,0 @@
-(pick robot carrot cutting_board)
-(slice robot carrot knife cutting_board)
-(pick robot carrot cutting_board)
-(place robot carrot bowl)
-(pick robot cucumber plate)
-(place robot cucumber bowl)
