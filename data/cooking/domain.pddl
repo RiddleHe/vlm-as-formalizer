@@ -13,7 +13,7 @@
     (:types ;todo: enumerate types and their hierarchy here, e.g. car truck bus - vehicle
         location ; objects can be in a location
         vegetable tool - object ; objects that can be manipulated (pick/place/...)
-        robot ; we have to robot arms, so we can define each robot's action and states
+        robot ; we have two robot arms, so we can define each robot's action and states
         )
 
     ; un-comment following line if constants are needed

@@ -94,7 +94,7 @@ class VLMClient:
 
 # Prompt builder
 
-def build_problem_prompt(target, domain_name, add_examples=True):
+def build_problem_prompt(target, domain_name, config, add_examples=True):
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
@@ -133,6 +133,7 @@ def build_problem_prompt(target, domain_name, add_examples=True):
 
     prompt += f"""
     The image of the scene has been provided.
+    {config.get("text", "")}
     Instruction: {target["instruction"]}
 
     Please first analyze the image and then generate the PDDL problem.
@@ -157,7 +158,7 @@ def build_refine_problem_prompt(target, domain_name):
     
     return prompt
 
-def build_domain_prompt(target, domain_name, add_examples=True):
+def build_domain_prompt(target, domain_name, config, add_examples=True):
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate the PDDL domain file which contains object types, predicates, and actions suitable for the instruction.
@@ -193,9 +194,10 @@ def build_domain_prompt(target, domain_name, add_examples=True):
     prompt += f"""
     For the current domain, {domain_name}, the image of the scene has been provided.
     Instruction: {target["instruction"]}
+    {config.get("text", "")}
 
     All possible actions that should be included in the domain file:
-    {parse_actions(target["domain"])}
+    {config["actions"]}
 
     Please complete the domain file based on the image, the instruction, and the possible actions. 
     Do not generate anything after the PDDL domain file.
@@ -223,12 +225,12 @@ def build_refine_domain_prompt(target, domain_name):
 
     return prompt
 
-def build_plan_prompt(target, domain_name):
+def build_plan_prompt(target, domain_name, config):
     prompt = f"""
     You are helping a robotic planning task. 
-    Given the image of a scene and an instruction, generate a step-by-step plan for the robot.
+    Given the image of a scene and an instruction, generate a step-by-step plan for the robot(s).
     All the possible actions and their arguments are given below:
-    {parse_actions(target["domain"])}
+    {config["actions"]}
 
     You must first reason what objects are in the scene that can be the arguments of the actions.
     Then you must reason what actions to take in the plan. Be mindful of the preconditions and effects of the actions.
@@ -239,7 +241,9 @@ def build_plan_prompt(target, domain_name):
     ...
 
     For the current domain, {domain_name}, the image of the scene has been provided.
+    {config.get("text", "")}
     Instruction: {target["instruction"]}
+
     Please generate the plan for the robot. Do not generate anything after the plan.
     """
 
@@ -296,7 +300,7 @@ def parse_plan(response):
 
 # Main actions
 
-def generate_answers(target, examples, domain_name, model, refine_problem=False, generate_domain=False, generate_plan=False):
+def generate_answers(target, examples, config, domain_name, model, refine_problem=False, generate_domain=False, generate_plan=False):
     observation = target["observation"]
 
     if generate_plan:
@@ -306,7 +310,7 @@ def generate_answers(target, examples, domain_name, model, refine_problem=False,
             "prompt": None,
         }
 
-        plan_prompt = build_plan_prompt(target, domain_name)
+        plan_prompt = build_plan_prompt(target, domain_name, config)
         response = model.generate(plan_prompt, observation)
 
         plan_file = parse_plan(response)
@@ -333,7 +337,7 @@ def generate_answers(target, examples, domain_name, model, refine_problem=False,
                 domain_prompt = build_refine_domain_prompt(target, domain_name)
 
             else:
-                domain_prompt = build_domain_prompt(target, domain_name)
+                domain_prompt = build_domain_prompt(target, domain_name, config)
 
             domain_response = model.generate(domain_prompt, observation)
             domain_file = parse_pddl(domain_response)
@@ -357,7 +361,7 @@ def generate_answers(target, examples, domain_name, model, refine_problem=False,
         if refine_problem:
             problem_prompt = build_refine_problem_prompt(target, domain_name)
         else:
-            problem_prompt = build_problem_prompt(target, domain_name)
+            problem_prompt = build_problem_prompt(target, domain_name, config)
         
         response = model.generate(problem_prompt, observation) 
 
@@ -461,8 +465,7 @@ def main():
                 f"{result_dir}/{args.gen_step}/{dname}",
                 exist_ok=True,
             )
-         # Load model
-        model = VLMClient(args.model, args.device)
+
         if args.refine_problem:
             idx = len(os.listdir(f"{result_dir}"))
             # If has only base, will be refine_1
@@ -473,6 +476,16 @@ def main():
                     f"{result_dir}/{refine_step}/{dname}",
                     exist_ok=True
                 )
+
+         # Load model
+        model = VLMClient(args.model, args.device)
+
+        # Load config
+        if os.path.exists(f"{data_dir}/config.json"):
+            with open(f"{data_dir}/config.json", "r") as f:
+                config = json.load(f)
+        else:
+            config = None
 
         examples = []
         all_targets = []
@@ -557,6 +570,7 @@ def main():
             res = generate_answers(
                 target,
                 examples,
+                config,
                 domain_name=args.domain_name,
                 model=model,
                 refine_problem=args.refine_problem,
