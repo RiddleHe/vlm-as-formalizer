@@ -1,0 +1,95 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    
+    For the current domain, cooking, this is the domain file:
+    (define (domain cooking)
+(:requirements :strips)
+(:types 
+    robot 
+    object 
+    tool 
+    vegetable 
+    location
+    bowl - object
+    tomato - vegetable
+    cucumber - vegetable
+    knife - tool
+)
+
+(:predicates
+    (holding ?robot - robot ?obj - object)
+    (at ?obj - object ?loc - location)
+    (sliced ?veg - vegetable)
+    (has_tool ?robot - robot ?tool - tool)
+    (in ?obj - object ?container - bowl)
+    (free_hand ?robot - robot)
+)
+
+(:action pick
+    :parameters (?robot - robot ?obj - object ?pick_loc - location)
+    :precondition (and (at ?obj ?pick_loc) (free_hand ?robot))
+    :effect (and (holding ?robot ?obj) (not (free_hand ?robot)) (not (at ?obj ?pick_loc)))
+)
+
+(:action place
+    :parameters (?robot - robot ?obj - object ?place_loc - location)
+    :precondition (holding ?robot ?obj)
+    :effect (and (at ?obj ?place_loc) (not (holding ?robot ?obj)) (free_hand ?robot))
+)
+
+(:action slice
+    :parameters (?robot - robot ?veg - vegetable ?tool - tool ?loc - location)
+    :precondition (and (holding ?robot ?tool) (at ?veg ?loc))
+    :effect (and (sliced ?veg))
+)
+)
+    
+    The image of the scene has been provided.
+    There are 2 robots. One of them is holding a knife.
+    Instruction: Slice the cucumber and place the sliced cucumbers and tomatoes in a bowl
+
+
+    Please first analyze the image and then generate the PDDL problem.
+    Do not generate anything after the PDDL problem.
+    
+    The following is the PDDL problem file you generated last time:
+    (define (problem cooking_task1)
+    (:domain cooking)
+    (:objects
+        robot1
+        robot2
+        knife1 - knife
+        bowl1 - bowl
+        cucumber1 - cucumber
+        tomato1 - tomato
+        tomato2 - tomato
+        loc_table
+        loc_cutting_board
+    )
+    (:init
+        (free_hand robot1)
+        (free_hand robot2)
+        (at knife1 loc_table)
+        (at bowl1 loc_table)
+        (at cucumber1 loc_table)
+        (at tomato1 loc_cutting_board)
+        (at tomato2 loc_cutting_board)
+        (holding robot1 knife1)
+    )
+    (:goal (and
+        (sliced cucumber1)
+        (in cucumber1 bowl1)
+        (in tomato1 bowl1)
+        (in tomato2 bowl1)
+    ))
+)
+
+    The following is the error you made last time:
+    There is no possible plan after exhaustive search.
+
+    Please first analyze where the error is.
+    Then generate the PDDL problem based on the error. Do not generate anything after the PDDL problem.
+    

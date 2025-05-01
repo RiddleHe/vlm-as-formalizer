@@ -142,8 +142,8 @@ def build_problem_prompt(target, domain_name, config, add_examples=True):
     
     return prompt
 
-def build_refine_problem_prompt(target, domain_name):
-    prompt = build_problem_prompt(target, domain_name, add_examples=False)
+def build_refine_problem_prompt(target, domain_name, config):
+    prompt = build_problem_prompt(target, domain_name, config, add_examples=False)
 
     prompt += f"""
     The following is the PDDL problem file you generated last time:
@@ -205,8 +205,8 @@ def build_domain_prompt(target, domain_name, config, add_examples=True):
 
     return prompt
 
-def build_refine_domain_prompt(target, domain_name):
-    prompt = build_domain_prompt(target, domain_name, add_examples=False)
+def build_refine_domain_prompt(target, domain_name, config):
+    prompt = build_domain_prompt(target, domain_name, config, add_examples=False)
 
     prompt += f"""
     The following is the PDDL domain file you generated last time:
@@ -334,7 +334,7 @@ def generate_answers(target, examples, config, domain_name, model, refine_proble
 
         if generate_domain:
             if refine_problem:
-                domain_prompt = build_refine_domain_prompt(target, domain_name)
+                domain_prompt = build_refine_domain_prompt(target, domain_name, config)
 
             else:
                 domain_prompt = build_domain_prompt(target, domain_name, config)
@@ -359,7 +359,7 @@ def generate_answers(target, examples, config, domain_name, model, refine_proble
             res["domain"]["prompt"] = domain_prompt
 
         if refine_problem:
-            problem_prompt = build_refine_problem_prompt(target, domain_name)
+            problem_prompt = build_refine_problem_prompt(target, domain_name, config)
         else:
             problem_prompt = build_problem_prompt(target, domain_name, config)
         

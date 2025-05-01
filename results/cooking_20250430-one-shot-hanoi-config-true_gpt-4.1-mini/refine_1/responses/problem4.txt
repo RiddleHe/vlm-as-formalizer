@@ -1,0 +1,43 @@
+The error in the previous PDDL problem is that robot1 is already carrying the knife, but the knife is also marked as available. This is contradictory because an object cannot be both carried and available at the same time. The knife should not be available when it is being carried by the robot. 
+
+Also, the tomato and carrot initially are at the counter, but the robot currently holding the knife is not at the counter either. Since the robot is holding the knife, it cannot pick the carrot or tomato (because it already carries the knife). So, a robot must place the knife at a location, pick the vegetable, slice it, place it down, pick the bowl and place the sliced veggies there.
+
+Updated PDDL problem with proper availability and robot states, considering two robots:
+
+```lisp
+(define (problem cooking_problem2)
+(:domain cooking)
+(:objects
+    robot1
+    robot2
+    knife - tool
+    carrot tomato - vegetable
+    bowl cutting_board counter - location
+)
+(:init
+    (free robot1)
+    (free robot2)
+    (carry robot2 knife)
+    (can-cut knife)
+    (is-whole carrot)
+    (is-whole tomato)
+    (not (is-sliced carrot))
+    (not (is-sliced tomato))
+    (at carrot counter)
+    (at tomato counter)
+    (at bowl counter)
+    (at knife robot2)
+    (is-workspace counter)
+    (not (available knife))
+)
+(:goal
+    (and
+        (is-sliced carrot)
+        (is-sliced tomato)
+        (at carrot bowl)
+        (at tomato bowl)
+    )
+)
+)
+```
+This fixes the contradiction by marking the knife as carried and not available, and assigns the knife to robot2 as per the image. Robot1 is free and can pick the vegetables to slice and place in the bowl.

@@ -1,0 +1,90 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL domain file which contains object types, predicates, and actions suitable for the instruction.
+    You will be given all possible actions of the robot along with the arguments of the actions.
+    You will complete the action definitions by adding precondtions and effects, and also complete the object types and predicates.
+    
+    For the current domain, cooking, the image of the scene has been provided.
+    Instruction: Slice the carrot and place the sliced carrots and cucumbers in a bowl.
+
+    There are 2 robots. One of them is holding a knife.
+
+    All possible actions that should be included in the domain file:
+    ['pick (?robot - robot ?obj - object ?pick_loc - location)', 'place (?robot - robot ?obj - object ?place_loc - location)', 'slice (?robot - robot ?veg - vegetable ?tool - tool ?loc - location)']
+
+    Please complete the domain file based on the image, the instruction, and the possible actions. 
+    Do not generate anything after the PDDL domain file.
+    
+    The following is the PDDL domain file you generated last time:
+    (define (domain cooking)
+    (:requirements :strips)
+    (:types robot object location vegetable tool bowl)
+    (:predicates
+        (holding ?robot - robot ?obj - object)
+        (at ?obj - object ?loc - location)
+        (sliced ?veg - vegetable)
+        (sliced_in_bowl ?veg - vegetable)
+        (is_knife ?tool - tool)
+        (is_carrot ?veg - vegetable)
+        (is_cucumber ?veg - vegetable)
+        (is_bowl ?obj - object)
+    )
+    (:action pick
+        :parameters (?robot - robot ?obj - object ?pick_loc - location)
+        :precondition (and (at ?obj ?pick_loc) (not (holding ?robot ?obj)))
+        :effect (and (holding ?robot ?obj) (not (at ?obj ?pick_loc)))
+    )
+    (:action place
+        :parameters (?robot - robot ?obj - object ?place_loc - location)
+        :precondition (holding ?robot ?obj)
+        :effect (and (at ?obj ?place_loc) (not (holding ?robot ?obj)))
+    )
+    (:action slice
+        :parameters (?robot - robot ?veg - vegetable ?tool - tool ?loc - location)
+        :precondition (and (holding ?robot ?tool) (is_knife ?tool) (holding ?robot ?veg) (or (is_carrot ?veg) (is_cucumber ?veg)) (at ?veg ?loc))
+        :effect (and (sliced ?veg) (not (holding ?robot ?veg)) (not (at ?veg ?loc)))
+    )
+)
+
+    The following is the PDDL problem file you generated last time:
+    (define (problem cooking_problem_1)
+    (:domain cooking)
+    (:objects
+        robot1
+        robot2
+        knife
+        carrot
+        cucumber
+        bowl
+        table
+        cutting_board
+    )
+    (:init
+        (is_knife knife)
+        (is_carrot carrot)
+        (is_cucumber cucumber)
+        (is_bowl bowl)
+        (at knife robot1)
+        (holding robot1 knife)
+        (at carrot table)
+        (at cucumber cutting_board)
+        (at bowl table)
+        (not (holding robot1 carrot))
+        (not (holding robot2 carrot))
+        (not (holding robot1 cucumber))
+        (not (holding robot2 cucumber))
+    )
+    (:goal (and
+        (sliced carrot)
+        (sliced_in_bowl carrot)
+        (sliced_in_bowl cucumber)
+    ))
+)
+
+    The following is the error you made last time:
+    There is no possible plan after exhaustive search.
+
+    Please first analyze where the error is.
+    If the error is due to the domain file, please generate the PDDL domain file based on the error.
+    If the error is not due to the domain file, explain why it is not, and don't generate any PDDL domain file.
+    

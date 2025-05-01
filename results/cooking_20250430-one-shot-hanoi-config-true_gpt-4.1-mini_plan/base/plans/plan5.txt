@@ -1,0 +1,6 @@
+(pick robot1 cucumber table)
+(slice robot1 cucumber knife table)
+(place robot1 cucumber bowl)
+(pick robot1 tomato table)
+(slice robot1 tomato knife table)
+(place robot1 tomato bowl)

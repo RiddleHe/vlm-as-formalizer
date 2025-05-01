@@ -1,0 +1,4 @@
+(pick robot1 carrot table)
+(slice robot1 carrot knife table)
+(pick robot1 carrot table)
+(place robot1 carrot bowl)

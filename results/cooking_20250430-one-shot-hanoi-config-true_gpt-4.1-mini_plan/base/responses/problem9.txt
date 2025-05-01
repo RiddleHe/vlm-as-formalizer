@@ -1,0 +1,5 @@
+(pick robot1 carrot loc_table)
+(slice robot1 carrot knife loc_table)
+(place robot1 carrot loc_bowl)
+(pick robot2 cucumber loc_plate)
+(place robot2 cucumber loc_bowl)

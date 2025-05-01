@@ -1,0 +1,92 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    
+    For the current domain, cooking, this is the domain file:
+    (define (domain cooking)
+    (:requirements :strips)
+    (:types robot object vegetable tool location bowl)
+    (:predicates
+        (holding ?robot - robot ?obj - object)
+        (at ?obj - object ?loc - location)
+        (sliced ?veg - vegetable)
+        (is_vegetable ?obj - object)
+        (is_tool ?obj - object)
+        (is_bowl ?obj - object)
+        (robot_holding_knife ?robot - robot)
+    )
+    (:action pick
+        :parameters (?robot - robot ?obj - object ?pick_loc - location)
+        :precondition (and (at ?obj ?pick_loc) (not (holding ?robot ?obj)))
+        :effect (and (holding ?robot ?obj) (not (at ?obj ?pick_loc)))
+    )
+    (:action place
+        :parameters (?robot - robot ?obj - object ?place_loc - location)
+        :precondition (holding ?robot ?obj)
+        :effect (and (at ?obj ?place_loc) (not (holding ?robot ?obj)))
+    )
+    (:action slice
+        :parameters (?robot - robot ?veg - vegetable ?tool - tool ?loc - location)
+        :precondition (and (holding ?robot ?tool)
+                           (robot_holding_knife ?robot)
+                           (at ?veg ?loc)
+                           (not (sliced ?veg)))
+        :effect (and (sliced ?veg)
+                     ;; after slicing, vegetable remains at same location and not grounded but still an object
+                     ;; optionally we can add holding the vegetable implicitly to support placement
+                )
+    )
+)
+    
+    The image of the scene has been provided.
+    There are 2 robots. One of them is holding a knife.
+    Instruction: Slice the cucumber, carrot, and tomato and place the sliced cucumbers, carrots, and tomatoes in a bowl.
+
+
+    Please first analyze the image and then generate the PDDL problem.
+    Do not generate anything after the PDDL problem.
+    
+    The following is the PDDL problem file you generated last time:
+    (define (problem slice-and-place-vegetables)
+    (:domain cooking)
+    (:objects
+        robot1
+        robot2
+        knife
+        cucumber - vegetable
+        carrot - vegetable
+        tomato - vegetable
+        bowl
+        table
+    )
+    (:init
+        (is_vegetable cucumber)
+        (is_vegetable carrot)
+        (is_vegetable tomato)
+        (is_tool knife)
+        (is_bowl bowl)
+        (at cucumber table)
+        (at carrot table)
+        (at tomato table)
+        (at bowl table)
+        (holding robot1 knife)
+        (robot_holding_knife robot1)
+    )
+    (:goal (and
+        (sliced cucumber)
+        (sliced carrot)
+        (sliced tomato)
+        (at cucumber bowl)
+        (at carrot bowl)
+        (at tomato bowl)
+    ))
+)
+
+    The following is the error you made last time:
+    There is no possible plan after exhaustive search.
+
+    Please first analyze where the error is.
+    Then generate the PDDL problem based on the error. Do not generate anything after the PDDL problem.
+    

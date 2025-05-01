@@ -1,0 +1,4 @@
+(pick robot1 tomato table)
+(slice robot1 tomato knife cutting_board)
+(pick robot1 tomato cutting_board)
+(place robot1 tomato bowl)

@@ -1,0 +1,6 @@
+(pick robot1 cucumber counter)
+(slice robot1 cucumber knife counter)
+(pick robot1 sliced_cucumber counter)
+(place robot1 sliced_cucumber bowl)
+(pick robot2 tomato cutting_board)
+(place robot2 tomato bowl)

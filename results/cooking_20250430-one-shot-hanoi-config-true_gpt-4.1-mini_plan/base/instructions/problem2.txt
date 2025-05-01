@@ -1,0 +1,21 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate a step-by-step plan for the robot(s).
+    All the possible actions and their arguments are given below:
+    ['pick (?robot - robot ?obj - object ?pick_loc - location)', 'place (?robot - robot ?obj - object ?place_loc - location)', 'slice (?robot - robot ?veg - vegetable ?tool - tool ?loc - location)']
+
+    You must first reason what objects are in the scene that can be the arguments of the actions.
+    Then you must reason what actions to take in the plan. Be mindful of the preconditions and effects of the actions.
+    Each action should take one line in the plan.
+    The plan should be in the following format:
+    (action1 arg1 arg2 arg3)
+    (action2 arg1 arg2 arg3)
+    ...
+
+    For the current domain, cooking, the image of the scene has been provided.
+    There are 2 robots. One of them is holding a knife.
+    Instruction: Slice the tomato and place the sliced tomatoes in a bowl.
+
+
+    Please generate the plan for the robot. Do not generate anything after the plan.
+    
