@@ -1,0 +1,72 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, blocksworld, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips)
+    (:types block robot)
+    (:predicates
+        (ontable ?x - block)
+        (clear ?x - block)
+        (holding ?x - block ?r - robot)
+        (armempty ?r - robot)
+        (on ?x - block ?y - block)
+    )
+    (:action pick-up
+        :parameters (?x - block ?r - robot)
+        :precondition (and (ontable ?x) (clear ?x) (armempty ?r))
+        :effect (and (holding ?x ?r)
+                     (not (ontable ?x))
+                     (not (clear ?x))
+                     (not (armempty ?r)))
+    )
+    (:action put-down
+        :parameters (?x - block ?r - robot)
+        :precondition (holding ?x ?r)
+        :effect (and (ontable ?x) (clear ?x) (armempty ?r)
+                     (not (holding ?x ?r)))
+    )
+    (:action stack
+        :parameters (?x - block ?y - block ?r - robot)
+        :precondition (and (holding ?x ?r) (clear ?y))
+        :effect (and (on ?x ?y) (clear ?x) (armempty ?r)
+                     (not (holding ?x ?r)) (not (clear ?y)))
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?r - robot)
+        :precondition (and (on ?x ?y) (clear ?x) (armempty ?r))
+        :effect (and (holding ?x ?r) (clear ?y)
+                     (not (on ?x ?y)) (not (clear ?x)) (not (armempty ?r)))
+    )
+)
+    
+    The image of the scene has been provided.
+    
+    Instruction: Create a stack of blocks: purple over blue over green over yellow over red over orange.
+
+
+    Please first analyze the image and then generate the PDDL problem.
+    Do not generate anything after the PDDL problem.
+    

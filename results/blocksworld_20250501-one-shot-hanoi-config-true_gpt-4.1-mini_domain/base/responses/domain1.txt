@@ -1,0 +1,31 @@
+(define (domain blocksworld)
+    (:requirements :strips)
+    (:types block robot)
+    (:predicates
+        (on ?x - block ?y - block)
+        (ontable ?x - block)
+        (clear ?x - block)
+        (holding ?x - block)
+        (handempty)
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and (ontable ?x) (clear ?x) (handempty))
+        :effect (and (holding ?x) (not (ontable ?x)) (not (clear ?x)) (not (handempty)))
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (holding ?x)
+        :effect (and (ontable ?x) (clear ?x) (not (holding ?x)) (handempty))
+    )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and (holding ?x) (clear ?y))
+        :effect (and (on ?x ?y) (clear ?x) (not (holding ?x)) (handempty) (not (clear ?y)))
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and (on ?x ?y) (clear ?x) (handempty))
+        :effect (and (holding ?x) (clear ?y) (not (on ?x ?y)) (not (handempty)))
+    )
+)
