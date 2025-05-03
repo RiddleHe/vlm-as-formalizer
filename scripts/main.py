@@ -107,9 +107,9 @@ class VLMClient:
 # Prompt builder
 
 def build_problem_prompt(target, domain_name, config, add_examples=True):
-    observation = None
+    caption = None
     if ".jpg" not in target["observation"]:
-        observation = target["observation"]  # Only add observation if it is a string
+        caption = target["observation"]  # Only add caption if it is not an image path
 
     prompt = f"""
     You are helping a robotic planning task. 
@@ -147,10 +147,10 @@ def build_problem_prompt(target, domain_name, config, add_examples=True):
     {target["domain"]}
     """
 
-    if observation is not None:
+    if caption is not None:
         prompt += f"""
         The image of the scene is described below:
-        {observation}
+        {caption}
         """
     else:
         prompt += f"""
@@ -184,9 +184,9 @@ def build_refine_problem_prompt(target, domain_name, config):
     return prompt
 
 def build_domain_prompt(target, domain_name, config, add_examples=True):
-    observation = None
+    caption = None
     if ".jpg" not in target["observation"]:
-        observation = target["observation"]  # Only add observation if it is a string
+        caption = target["observation"]  # Only add caption if it is not an image path
 
     prompt = f"""
     You are helping a robotic planning task. 
@@ -224,10 +224,10 @@ def build_domain_prompt(target, domain_name, config, add_examples=True):
     For the current domain, {domain_name}
     """
 
-    if observation is not None:
+    if caption is not None:
         prompt += f"""
         The image of the scene is described below:
-        {observation}
+        {caption}
         """
     else:
         prompt += f"""
@@ -268,9 +268,9 @@ def build_refine_domain_prompt(target, domain_name, config):
     return prompt
 
 def build_plan_prompt(target, domain_name, config):
-    observation = None
+    caption = None
     if ".jpg" not in target["observation"]:
-        observation = target["observation"]  # Only add observation if it is a string
+        caption = target["observation"]  # Only add caption if it is not an image path
         
     prompt = f"""
     You are helping a robotic planning task. 
@@ -291,10 +291,10 @@ def build_plan_prompt(target, domain_name, config):
     For the current domain, {domain_name}
     """
 
-    if observation is not None:
+    if caption is not None:
         prompt += f"""
         The image of the scene is described below:
-        {target["observation"]}
+        {caption}
         """
     else:
         prompt += f"""
@@ -357,8 +357,9 @@ def parse_plan(response):
 # Main actions
 
 def generate_answers(target, examples, config, domain_name, model, refine_problem=False, generate_domain=False, generate_plan=False):
+    # Pass observation to VLM only if it is an image path
     observation = target["observation"] if ".jpg" in target["observation"] else None
-    
+
     if generate_plan:
         res = {
             "plan": None,
