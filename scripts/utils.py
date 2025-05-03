@@ -27,14 +27,19 @@ def seed_everything(seed: int=42):
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    # for main.py and evaluate.py
+    # for data and result directories
     parser.add_argument("--result_dir", type=str, default=None, help="direcotry for predicted bboxes, generated problems, and found plans")
     parser.add_argument("--domain", type=str, default=None, help="domain name (cooking/blocksworld/hanoi)")
+
+    # for generation
     parser.add_argument("--model", type=str, default=None, help="model name")
     parser.add_argument("--generate_domain", action="store_true", help="generate PDDL domain")
     parser.add_argument("--generate_plan", action="store_true", help="generate PDDL plans")
-
     parser.add_argument("--device", type=str, default="cuda:0", help="device")
+
+
+    # for input
+    parser.add_argument("--use_caption", action="store_true", help="use caption for observation")
 
     # for main.py 
     parser.add_argument("--predict_bboxes", action="store_true", help="detect objects with bboxes and generate captions")

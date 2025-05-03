@@ -95,6 +95,10 @@ class VLMClient:
 # Prompt builder
 
 def build_problem_prompt(target, domain_name, config, add_examples=True):
+    observation = None
+    if type(target["observation"]) == str:
+        observation = target["observation"]  # Only add observation if it is a string
+
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
@@ -131,8 +135,17 @@ def build_problem_prompt(target, domain_name, config, add_examples=True):
     {target["domain"]}
     """
 
+    if observation is not None:
+        prompt += f"""
+        The image of the scene is described below:
+        {observation}
+        """
+    else:
+        prompt += f"""
+        The image of the scene has been provided.
+        """
+
     prompt += f"""
-    The image of the scene has been provided.
     {config.get("text", "")}
     Instruction: {target["instruction"]}
 
@@ -159,6 +172,10 @@ def build_refine_problem_prompt(target, domain_name, config):
     return prompt
 
 def build_domain_prompt(target, domain_name, config, add_examples=True):
+    observation = None
+    if type(target["observation"]) == str:
+        observation = target["observation"]  # Only add observation if it is a string
+
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate the PDDL domain file which contains object types, predicates, and actions suitable for the instruction.
@@ -190,9 +207,22 @@ def build_domain_prompt(target, domain_name, config, add_examples=True):
 
     if add_examples:
         prompt += example_prompt
-    
+
     prompt += f"""
-    For the current domain, {domain_name}, the image of the scene has been provided.
+    For the current domain, {domain_name}
+    """
+
+    if observation is not None:
+        prompt += f"""
+        The image of the scene is described below:
+        {observation}
+        """
+    else:
+        prompt += f"""
+        The image of the scene has been provided.
+        """
+
+    prompt += f"""
     Instruction: {target["instruction"]}
     {config.get("text", "")}
 
@@ -226,6 +256,10 @@ def build_refine_domain_prompt(target, domain_name, config):
     return prompt
 
 def build_plan_prompt(target, domain_name, config):
+    observation = None
+    if type(target["observation"]) == str:
+        observation = target["observation"]  # Only add observation if it is a string
+        
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate a step-by-step plan for the robot(s).
@@ -239,10 +273,20 @@ def build_plan_prompt(target, domain_name, config):
     (action1 arg1 arg2 arg3)
     (action2 arg1 arg2 arg3)
     ...
+    """
 
-    For the current domain, {domain_name}, the image of the scene has been provided.
-    {config.get("text", "")}
-    Instruction: {target["instruction"]}
+    prompt += f"""
+    For the current domain, {domain_name}
+    """
+
+    if observation is not None:
+        prompt += f"""
+        The image of the scene is described below:
+        {target["observation"]}
+        """
+    else:
+        prompt += f"""
+        The image of the scene has been provided.
 
     Please generate the plan for the robot. Do not generate anything after the plan.
     """
@@ -519,7 +563,10 @@ def main():
         for task_idx in range(1, num_tasks+1):
             with open(f"{data_dir}/instructions/problem{task_idx}.txt", "r") as f:
                 instruction = f.read()
-            observation = f"{data_dir}/observations/problem{task_idx}.jpg"  # image path of the scene
+            if args.use_caption:
+                observation = f"{data_dir}/observations/problem{task_idx}.txt"
+            else:
+                observation = f"{data_dir}/observations/problem{task_idx}.jpg"  # image path of the scene
 
             if args.generate_domain and args.refine_problem:
                 with open(f"{result_dir}/{args.gen_step}/domains/domain{task_idx}.pddl", "r") as f:
