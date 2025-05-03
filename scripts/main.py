@@ -96,7 +96,7 @@ class VLMClient:
 
 def build_problem_prompt(target, domain_name, config, add_examples=True):
     observation = None
-    if type(target["observation"]) == str:
+    if ".jpg" not in target["observation"]:
         observation = target["observation"]  # Only add observation if it is a string
 
     prompt = f"""
@@ -173,7 +173,7 @@ def build_refine_problem_prompt(target, domain_name, config):
 
 def build_domain_prompt(target, domain_name, config, add_examples=True):
     observation = None
-    if type(target["observation"]) == str:
+    if ".jpg" not in target["observation"]:
         observation = target["observation"]  # Only add observation if it is a string
 
     prompt = f"""
@@ -257,7 +257,7 @@ def build_refine_domain_prompt(target, domain_name, config):
 
 def build_plan_prompt(target, domain_name, config):
     observation = None
-    if type(target["observation"]) == str:
+    if ".jpg" not in target["observation"]:
         observation = target["observation"]  # Only add observation if it is a string
         
     prompt = f"""
@@ -564,7 +564,8 @@ def main():
             with open(f"{data_dir}/instructions/problem{task_idx}.txt", "r") as f:
                 instruction = f.read()
             if args.use_caption:
-                observation = f"{data_dir}/observations/problem{task_idx}.txt"
+                with open(f"{data_dir}/observations/problem{task_idx}.txt", "r") as f:
+                    observation = f.read()
             else:
                 observation = f"{data_dir}/observations/problem{task_idx}.jpg"  # image path of the scene
 

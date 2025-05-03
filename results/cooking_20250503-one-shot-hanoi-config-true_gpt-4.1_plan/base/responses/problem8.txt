@@ -1,0 +1,11 @@
+Objects in the scene:
+- Robot (robot1)
+- Tomatoes (tomato1, tomato2) on a cutting board (location1)
+- Cucumber (cucumber1) on a tray (location2)
+- Cleaver (cleaver1) on the cutting board (location1)
+- Bowl (bowl1) on tray (location2)
+
+Plan:
+(pick robot1 cucumber1 location2)
+(place robot1 cucumber1 location1)
+(slice robot1 cucumber1 cleaver1 location1)

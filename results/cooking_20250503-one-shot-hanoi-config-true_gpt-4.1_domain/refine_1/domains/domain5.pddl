@@ -1,0 +1,39 @@
+(define (domain cooking)
+(:requirements :strips :typing)
+(:types
+    robot
+    object
+    vegetable - object
+    tool - object
+    bowl - object
+    location
+)
+(:predicates
+    (at ?obj - object ?loc - location)
+    (in-bowl ?veg - vegetable ?b - bowl)
+    (sliced ?veg - vegetable)
+    (holding ?robot - robot ?obj - object)
+    (handfree ?robot - robot)
+    (on-chopping-board ?obj - object)
+)
+(:action pick
+    :parameters (?robot - robot ?obj - object ?pick_loc - location)
+    :precondition (and (at ?obj ?pick_loc) (handfree ?robot))
+    :effect (and (holding ?robot ?obj) (not (handfree ?robot)) (not (at ?obj ?pick_loc)))
+)
+(:action place
+    :parameters (?robot - robot ?obj - object ?place_loc - location)
+    :precondition (holding ?robot ?obj)
+    :effect (and (at ?obj ?place_loc) (handfree ?robot) (not (holding ?robot ?obj)))
+)
+(:action slice
+    :parameters (?robot - robot ?veg - vegetable ?tool - tool ?loc - location)
+    :precondition (and (holding ?robot ?tool) (at ?veg ?loc) (on-chopping-board ?veg) (not (sliced ?veg)))
+    :effect (sliced ?veg)
+)
+(:action put-in-bowl
+    :parameters (?robot - robot ?veg - vegetable ?b - bowl)
+    :precondition (and (holding ?robot ?veg) (sliced ?veg))
+    :effect (and (in-bowl ?veg ?b) (handfree ?robot) (not (holding ?robot ?veg)))
+)
+)
