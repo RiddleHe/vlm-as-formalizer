@@ -56,35 +56,47 @@ class VLMClient:
         print(f"Loaded {self.type} client: {self.client_name}")
 
     def generate(self, prompt: str, observation: str):
-        # Convert image to base64
-        with open(observation, "rb") as image_file:
-            base64_image = base64.b64encode(image_file.read()).decode("utf-8")
+        base64_image = None
+        if observation is not None:
+            # Convert image to base64
+            with open(observation, "rb") as image_file:
+                base64_image = base64.b64encode(image_file.read()).decode("utf-8")
 
-        # Generate response
         if self.type == "openai":
+            content = [
+                {"type": "input_text", "text": prompt}
+            ]
+
+            if observation is not None:
+                content.append({
+                    "type": "input_image",
+                    "image_url": f"data:image/jpeg;base64,{base64_image}"
+                },)
+
+            # Generate response
             response = self.client.responses.create(
                 model=self.client_name,
                 input=[{
                     "role": "user",
-                    "content": [
-                        {"type": "input_text", "text": prompt},
-                        {
-                            "type": "input_image",
-                            "image_url": f"data:image/jpeg;base64,{base64_image}"
-                        },
-                    ],
+                    "content": content
                 }],
             )
             full_answer = response.output_text
 
         elif self.type == "huggingface":
+            content = [
+                {"type": "text", "text": prompt},
+            ]
+            if observation is not None:
+                content.append({
+                    "type": "image",
+                    "path": observation,
+                })
+
             messages = [
                 {
-                "role": "user",
-                "content": [
-                    {"type": "image", "path": observation},
-                    {"type": "text", "text": prompt},
-                    ],
+                    "role": "user",
+                    "content": content,
                 },
             ]
             response = self.client(text=messages, max_new_tokens=1024)
@@ -345,8 +357,8 @@ def parse_plan(response):
 # Main actions
 
 def generate_answers(target, examples, config, domain_name, model, refine_problem=False, generate_domain=False, generate_plan=False):
-    observation = target["observation"]
-
+    observation = target["observation"] if ".jpg" in target["observation"] else None
+    
     if generate_plan:
         res = {
             "plan": None,
