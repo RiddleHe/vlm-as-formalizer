@@ -1,0 +1,67 @@
+Analysis:
+
+**Objects:**
+- Locations: cutting_board, bowl, counter
+- Tools: knife
+- Ingredients/vegetables: cucumber, carrot, tomato
+- Robots: robot1, robot2
+
+**Initial state:**
+- All vegetables (cucumber, carrot, tomato) are whole and on the counter.
+- Bowl is on the counter.
+- Cutting board is next to counter (so, assume empty but available).
+- Robot1 is free.
+- Robot2 is holding the knife.
+- Knife is at cutting board or being held (since robot2 is holding it, no need to set knife's location).
+- The bowl is on the counter.
+- Knife is a cutting tool.
+- Locations that can be used for slicing should be set as workspaces as needed.
+
+**Goal:**
+- cucumber, carrot, and tomato are sliced and placed in the bowl.
+
+---
+
+```lisp
+(define (problem slice-and-place-vegetables)
+    (:domain cooking)
+    (:objects
+        robot1 robot2 - robot
+        cucumber carrot tomato - vegetable
+        knife - tool
+        bowl cutting_board counter - location
+    )
+    (:init
+        (free robot1)
+        (carry robot2 knife)
+        (can-cut knife)
+
+        (available cucumber)
+        (available carrot)
+        (available tomato)
+
+        (is-whole cucumber)
+        (is-whole carrot)
+        (is-whole tomato)
+        (not (is-sliced cucumber))
+        (not (is-sliced carrot))
+        (not (is-sliced tomato))
+
+        (at cucumber counter)
+        (at carrot counter)
+        (at tomato counter)
+        (at bowl counter)
+
+        (is-workspace cutting_board)
+    )
+    (:goal (and
+        (is-sliced cucumber)
+        (is-sliced carrot)
+        (is-sliced tomato)
+
+        (at cucumber bowl)
+        (at carrot bowl)
+        (at tomato bowl)
+    ))
+)
+```

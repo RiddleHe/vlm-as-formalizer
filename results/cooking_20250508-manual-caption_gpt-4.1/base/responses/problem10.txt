@@ -1,0 +1,40 @@
+; Analysis:
+; Objects: tomato (whole, on counter), carrots (sliced, on cutting board), knife (held by one robot), bowl (on counter), cutting board (adjacent to counter)
+; Locations: counter, cutting_board, bowl
+; Robots: robot1 (free), robot2 (holding knife)
+; Initial state: tomato is whole and on counter, carrots are sliced and on cutting board, bowl is on counter, knife is held by robot2, robot1 is free.
+; Goal: sliced tomato is in the bowl, sliced carrots are in the bowl
+
+(define (problem cooking-salad)
+    (:domain cooking)
+    (:objects
+        robot1 robot2 - robot
+        tomato carrot - vegetable
+        knife - tool
+        bowl cutting_board counter - location
+    )
+    (:init
+        (is-whole tomato)
+        (not (is-sliced tomato))
+        (is-sliced carrot)
+        (not (is-whole carrot))
+        (available tomato)
+        (available carrot)
+        (can-cut knife)
+        
+        (at bowl counter)
+        (at tomato counter)
+        (at carrot cutting_board)
+        (at knife robot2)    ; knife is being carried
+        (is-workspace cutting_board)
+
+        (free robot1)
+        (carry robot2 knife)
+        (not (free robot2))
+    )
+    (:goal (and
+        (is-sliced tomato)
+        (at tomato bowl)
+        (at carrot bowl)
+    ))
+)

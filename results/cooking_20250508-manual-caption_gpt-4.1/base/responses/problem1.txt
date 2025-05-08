@@ -1,0 +1,70 @@
+Analysis:
+
+**Objects in the scene:**
+- Cucumber (whole, on counter)
+- Bowl (on counter)
+- Cutting board (next to counter)
+- Knife (held by one robot)
+- 2 robots (robot1, robot2)
+
+**Locations:**
+- counter
+- cutting_board
+- bowl
+
+**Tools:**
+- knife
+
+**Vegetables:**
+- cucumber
+
+**State of robots:**
+- robot1: free
+- robot2: holding knife
+
+**Predicates:**
+- Whole cucumber on counter
+- Bowl on counter (or location = counter)
+- Knife held by robot2
+- Cutting board exists, is workspace
+
+**Goal:**
+- Cucumber is sliced
+- Sliced cucumber (cucumber) in bowl
+
+---
+
+(define (problem cook-slice-cucumber)
+    (:domain cooking)
+    (:objects
+        robot1 robot2 - robot
+        cucumber - vegetable
+        knife - tool
+        bowl cutting_board counter - location
+    )
+    (:init
+        ; Robots
+        (free robot1)
+        (carry robot2 knife)
+
+        ; Tools & Capabilities
+        (can-cut knife)
+        (available cucumber)
+        
+        ; Objects & Locations
+        (is-whole cucumber)
+        (at cucumber counter)
+        (at bowl counter)
+        (at knife robot2) ; knife is being held
+        (is-workspace cutting_board)
+
+        ; Initial not-sliced state
+        (not (is-sliced cucumber))
+    )
+    (:goal
+        (and
+            (is-sliced cucumber)
+            (at cucumber bowl)
+        )
+    )
+)

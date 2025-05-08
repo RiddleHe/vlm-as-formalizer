@@ -1,0 +1,61 @@
+**Analysis:**
+
+**Objects:**
+- tomato (whole) on the counter
+- bowl on the counter
+- cutting board (location)
+- counter (location)
+- 2 robots: robot1 (free), robot2 (holding a knife)
+- knife (held by robot2)
+
+**Initial state:**
+- (is-whole tomato)
+- (not (is-sliced tomato))
+- (at tomato counter)
+- (at bowl counter)
+- (at knife robot2) ‒ in the domain, "carry" not "at" for carried items
+- (carry robot2 knife)
+- (can-cut knife)
+- (free robot1)
+- (not (free robot2))
+- (is-workspace cutting_board)
+- (is-workspace counter)
+- (available tomato)
+- (available bowl)
+
+**Goal:**
+- tomato is sliced
+- sliced tomato is in bowl (`at tomato bowl`)
+
+---
+
+```lisp
+(define (problem cooking-slice-tomato)
+    (:domain cooking)
+    (:objects
+        robot1 robot2 - robot
+        tomato - vegetable
+        knife - tool
+        bowl - object
+        counter cutting_board - location
+    )
+    (:init
+        (is-whole tomato)
+        (not (is-sliced tomato))
+        (at tomato counter)
+        (at bowl counter)
+        (carry robot2 knife)
+        (can-cut knife)
+        (free robot1)
+        (not (free robot2))
+        (is-workspace cutting_board)
+        (is-workspace counter)
+        (available tomato)
+        (available bowl)
+    )
+    (:goal (and
+        (is-sliced tomato)
+        (at tomato bowl)
+    ))
+)
+```

@@ -1,0 +1,50 @@
+**Analysis:**
+
+**Objects:**
+- carrot (whole, on counter)
+- bowl (on counter)
+- cutting_board (location, next to counter)
+- counter (location)
+- 2 robots: robot1 (free), robot2 (holding knife)
+- knife (held by robot2; cutting tool)
+
+**Initial State:**
+- carrot is-whole, available, at counter
+- bowl is at counter, available
+- cutting_board is-workspace
+- knife is cutting tool; at wherever (implicitly held by robot2, not available)
+- robot1 is free; robot2 holding knife (not free)
+
+**Goal:**
+- carrot is sliced and in the bowl
+
+---
+
+```lisp
+(define (problem cook_carrot_bowl)
+    (:domain cooking)
+    (:objects
+        robot1 robot2 - robot
+        carrot - vegetable
+        knife - tool
+        bowl - object
+        cutting_board counter - location
+    )
+    (:init
+        (is-whole carrot)
+        (available carrot)
+        (at carrot counter)
+        (available bowl)
+        (at bowl counter)
+        (can-cut knife)
+        (carry robot2 knife)
+        (not (free robot2))
+        (free robot1)
+        (is-workspace cutting_board)
+    )
+    (:goal (and
+        (is-sliced carrot)
+        (at carrot bowl)
+    ))
+)
+```
