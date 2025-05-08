@@ -1,0 +1,87 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    
+    For the current domain, cooking, this is the domain file:
+    (define (domain cooking)
+(:requirements :strips)
+(:types 
+    robot
+    object
+    vegetable - object
+    tool - object
+    location
+    container - object
+)
+(:predicates
+    (holding ?robot - robot ?obj - object)
+    (at ?obj - object ?loc - location)
+    (free ?robot - robot)
+    (sharp ?tool - tool)
+    (sliced ?veg - vegetable)
+    (on ?veg - vegetable ?loc - location)
+    (in ?veg - vegetable ?container - container)
+)
+(:action pick
+    :parameters (?robot - robot ?obj - object ?pick_loc - location)
+    :precondition (and (at ?obj ?pick_loc) (free ?robot) (not (holding ?robot ?obj)))
+    :effect (and (holding ?robot ?obj) (not (at ?obj ?pick_loc)) (not (free ?robot)))
+)
+(:action place
+    :parameters (?robot - robot ?obj - object ?place_loc - location)
+    :precondition (holding ?robot ?obj)
+    :effect (and (at ?obj ?place_loc) (not (holding ?robot ?obj)) (free ?robot))
+)
+(:action slice
+    :parameters (?robot - robot ?veg - vegetable ?tool - tool ?loc - location)
+    :precondition (and (holding ?robot ?tool) (sharp ?tool) (on ?veg cutting_board) (not (sliced ?veg)))
+    :effect (sliced ?veg)
+)
+)
+    
+        The image of the scene has been provided.
+        
+    There are 2 robots. One of them is free and the other is holding a knife. To slice a vegetable, the vegetable must be put on the cutting board.
+    Instruction: Slice the cucumber and carrot and place the sliced cucumbers and carrots in a bowl.
+
+
+    Please first analyze the image and then generate the PDDL problem.
+    Do not generate anything after the PDDL problem.
+    
+    The following is the PDDL problem file you generated last time:
+    (define (problem cooking1)
+    (:domain cooking)
+    (:objects
+        robot1
+        robot2
+        knife - tool
+        cucumber carrot - vegetable
+        bowl cutting_board counter - location
+    )
+    (:init
+        (at bowl counter)
+        (at cucumber counter)
+        (at carrot counter)
+        (at knife robot2)  ; robot2 is holding the knife
+        (holding robot2 knife)
+        (free robot1)
+        (sharp knife)
+        (on cucumber counter)
+        (on carrot counter)
+    )
+    (:goal (and
+        (sliced cucumber)
+        (sliced carrot)
+        (in cucumber bowl)
+        (in carrot bowl)
+    ))
+)
+
+    The following is the error you made last time:
+    The solver fails because of syntax errors.
+
+    Please first analyze where the error is.
+    Then generate the PDDL problem based on the error. Do not generate anything after the PDDL problem.
+    

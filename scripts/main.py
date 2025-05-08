@@ -288,7 +288,8 @@ def build_plan_prompt(target, domain_name, config):
     """
 
     prompt += f"""
-    For the current domain, {domain_name}
+    For the current domain, {domain_name},
+    {config.get("text", "")}
     """
 
     if caption is not None:
@@ -299,7 +300,10 @@ def build_plan_prompt(target, domain_name, config):
     else:
         prompt += f"""
         The image of the scene has been provided.
+        """
 
+    prompt += f"""
+    Instruction: {target["instruction"]}
     Please generate the plan for the robot. Do not generate anything after the plan.
     """
 

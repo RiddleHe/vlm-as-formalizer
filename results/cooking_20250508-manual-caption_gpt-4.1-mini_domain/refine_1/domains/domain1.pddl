@@ -1,0 +1,41 @@
+(define (domain cooking)
+(:requirements :strips)
+(:types
+    robot
+    object
+    vegetable - object
+    tool - object
+    bowl - object
+    cutting_board - location
+    location
+)
+(:predicates
+    (holding ?robot - robot ?obj - object)
+    (at ?obj - object ?loc - location)
+    (free ?robot - robot)
+    (sliced ?veg - vegetable)
+    (on_cutting_board ?veg - vegetable)
+    (has_knife ?robot - robot)
+)
+(:action pick
+    :parameters (?robot - robot ?obj - object ?pick_loc - location)
+    :precondition (and (at ?obj ?pick_loc) (free ?robot) (at ?robot ?pick_loc))
+    :effect (and (holding ?robot ?obj) (not (at ?obj ?pick_loc)) (not (free ?robot)))
+)
+(:action place
+    :parameters (?robot - robot ?obj - object ?place_loc - location)
+    :precondition (and (holding ?robot ?obj) (at ?robot ?place_loc))
+    :effect (and 
+        (at ?obj ?place_loc) 
+        (not (holding ?robot ?obj)) 
+        (free ?robot)
+        (when (and (vegetable ?obj) (cutting_board ?place_loc)) (on_cutting_board ?obj))
+        (when (not (cutting_board ?place_loc)) (not (on_cutting_board ?obj)))
+    )
+)
+(:action slice
+    :parameters (?robot - robot ?veg - vegetable ?tool - tool ?loc - location)
+    :precondition (and (holding ?robot ?tool) (at ?veg ?loc) (at ?robot ?loc) (on_cutting_board ?veg))
+    :effect (and (sliced ?veg))
+)
+)
