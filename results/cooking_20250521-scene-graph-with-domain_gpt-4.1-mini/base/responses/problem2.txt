@@ -1,0 +1,39 @@
+Scene graph:
+- Object: robot1 Type: robot Property: free
+- Object: robot2 Type: robot Property: carry robot2 knife1
+- Object: knife1 Type: tool Property: can-cut
+- Object: tomato1 Type: vegetable Property: is-whole
+- Object: bowl1 Type: vegetable Property: available
+- Object: cutting_board1 Type: location Property: is-workspace
+- Relation: tomato1 at counter
+- Relation: bowl1 at counter
+- Relation: knife1 at robot2
+- Relation: cutting_board1 at counter
+
+PDDL problem: 
+(define (problem cooking1)
+    (:domain cooking)
+    (:objects
+        robot1 robot2 - robot
+        knife1 - tool
+        tomato1 - vegetable
+        bowl1 - vegetable
+        cutting_board1 - location
+        counter - location
+    )
+    (:init
+        (free robot1)
+        (carry robot2 knife1)
+        (can-cut knife1)
+        (is-whole tomato1)
+        (available bowl1)
+        (at tomato1 counter)
+        (at bowl1 counter)
+        (at cutting_board1 counter)
+        (is-workspace cutting_board1)
+    )
+    (:goal (and
+        (is-sliced tomato1)
+        (at tomato1 bowl1)
+    ))
+)
