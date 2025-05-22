@@ -172,9 +172,9 @@ def build_problem_prompt(target, domain_name, config, add_examples=True, use_cap
         Do not generate anything after the PDDL problem.
         Format:
         Scene graph:
-        - Object: <object> Property: <property>
-        - Object: <object> Property: <property>
-        - Relation: <object> <relation> <object>
+        - Object: <object> Type: <type in domain file> Property: <predicate in domain file>
+        - Object: <object> Type: <type in domain file> Property: <predicate in domain file>
+        - Relation: <object> <relation in domain file> <object>
         - ...
         PDDL problem: <PDDL problem>
         """
@@ -293,9 +293,9 @@ def build_domain_prompt(target, domain_name, config, add_examples=True, use_capt
         Then use the scene graph to generate the PDDL domain file.
         Format:
         Scene graph:
-        - Object: <object> Property: <property>
-        - Object: <object> Property: <property>
-        - Relation: <object> <relation> <object>
+        - Object: <object> Type: <type in domain file> Property: <predicate in domain file>
+        - Object: <object> Type: <type in domain file> Property: <predicate in domain file>
+        - Relation: <object> <relation in domain file> <object>
         - ...
         PDDL domain: <PDDL domain>
         """
@@ -601,7 +601,7 @@ def main():
     # Args check
     assert not (args.generate_plan and (args.generate_problem or args.refine_problem)), \
         "generate_plan is not compatible with generate_problem or refine_problem"
-    assert not (args.generate_caption or args.use_caption), \
+    assert not (args.generate_caption and args.use_caption), \
         "generate_caption is not compatible with use_caption"
 
     data_dir = f"../data/{args.domain}"

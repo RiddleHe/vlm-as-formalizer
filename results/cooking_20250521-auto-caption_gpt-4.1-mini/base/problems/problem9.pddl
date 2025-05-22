@@ -1,0 +1,29 @@
+(define (problem slice_carrot_and_place)
+    (:domain cooking)
+    (:objects
+        robot1 robot2 - robot
+        knife - tool
+        carrot cucumber - vegetable
+        bowl cutting_board counter - location
+    )
+    (:init
+        (free robot1)
+        (carry robot2 knife)
+        (can-cut knife)
+        (is-whole carrot)
+        (not (is-sliced carrot))
+        (is-whole cucumber)
+        (not (is-sliced cucumber))
+        (at carrot counter)
+        (at cucumber cutting_board)
+        (at bowl counter)
+        (is-workspace cutting_board)
+        (available carrot)
+        (available cucumber)
+    )
+    (:goal (and
+        (is-sliced carrot)
+        (at carrot bowl)
+        (at cucumber bowl)
+    ))
+)

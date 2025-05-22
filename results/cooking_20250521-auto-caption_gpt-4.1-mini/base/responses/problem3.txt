@@ -1,0 +1,33 @@
+Caption: Two robots in a kitchen setting, one holding a knife, a carrot on a black surface next to a white bowl, and a cutting board in the background.
+
+PDDL problem:
+(define (problem slice_carrot)
+  (:domain cooking)
+  (:objects
+    robot1 robot2 - robot
+    knife - tool
+    carrot - vegetable
+    bowl cutting_board counter - location
+  )
+  (:init
+    (free robot1)
+    (carry robot2 knife)
+    (can-cut knife)
+    (is-whole carrot)
+    (not (is-sliced carrot))
+    (at carrot counter)
+    (at bowl counter)
+    (at cutting_board counter)
+    (available carrot)
+    (available bowl)
+    (available cutting_board)
+    (is-workspace cutting_board)
+  )
+  (:goal
+    (and
+      (is-sliced carrot)
+      (not (is-whole carrot))
+      (at carrot bowl)
+    )
+  )
+)

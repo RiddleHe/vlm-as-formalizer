@@ -1,0 +1,42 @@
+Scene graph:
+- Object: robot1 Property: free
+- Object: robot2 Property: carrying knife
+- Object: cutting_board Property: is-workspace
+- Object: bowl Property: empty
+- Object: tomato Property: vegetable, whole, at counter
+- Object: cucumber Property: vegetable, whole, at counter
+- Relation: tomato near cucumber
+- Relation: tomato on counter
+- Relation: cucumber on counter
+- Relation: bowl on counter
+- Relation: cutting_board on counter
+
+PDDL problem:
+(define (problem slice_and_place_vegetables)
+  (:domain cooking)
+  (:objects 
+    robot1 robot2 - robot
+    knife - tool
+    cutting_board bowl counter - location
+    tomato cucumber - vegetable
+  )
+  (:init
+    (free robot1)
+    (carry robot2 knife)
+    (can-cut knife)
+    (is-workspace cutting_board)
+    (at tomato counter)
+    (at cucumber counter)
+    (at bowl counter)
+    (is-whole tomato)
+    (is-whole cucumber)
+    (available tomato)
+    (available cucumber)
+  )
+  (:goal (and
+    (is-sliced tomato)
+    (is-sliced cucumber)
+    (at tomato bowl)
+    (at cucumber bowl)
+  ))
+)
