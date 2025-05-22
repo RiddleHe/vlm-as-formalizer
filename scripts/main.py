@@ -106,7 +106,7 @@ class VLMClient:
 
 # Prompt builder
 
-def build_problem_prompt(target, domain_name, config, add_examples=True, use_caption=False, generate_caption=False):
+def build_problem_prompt(target, domain_name, config, add_examples=True, use_caption=False, generate_caption=False, generate_scene_graph=False):
     caption = None
     if use_caption:
         assert ".jpg" not in target["observation"], \
@@ -164,11 +164,24 @@ def build_problem_prompt(target, domain_name, config, add_examples=True, use_cap
         Caption: <caption>
         PDDL problem: <PDDL problem>
         """
+    elif generate_scene_graph:
+        prompt += f"""
+        The image of the scene has been provided.
+        You must first generate a scene graph for the image.
+        Then use the scene graph to generate the PDDL problem.
+        Do not generate anything after the PDDL problem.
+        Format:
+        Scene graph:
+        - Object: <object> Property: <property>
+        - Object: <object> Property: <property>
+        - Relation: <object> <relation> <object>
+        - ...
+        PDDL problem: <PDDL problem>
+        """
     else:
         prompt += f"""
         The image of the scene has been provided.
         Please first analyze the image and then generate the PDDL problem.
-        Do not generate anything after the PDDL problem.
         """
 
     prompt += f"""
@@ -178,8 +191,8 @@ def build_problem_prompt(target, domain_name, config, add_examples=True, use_cap
     
     return prompt
 
-def build_refine_problem_prompt(target, domain_name, config, use_caption=False, generate_caption=False):
-    prompt = build_problem_prompt(target, domain_name, config, add_examples=False, use_caption=use_caption, generate_caption=generate_caption)
+def build_refine_problem_prompt(target, domain_name, config, use_caption=False, generate_caption=False, generate_scene_graph=False):
+    prompt = build_problem_prompt(target, domain_name, config, add_examples=False, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
 
     prompt += f"""
     The following is the PDDL problem file you generated last time:
@@ -194,7 +207,7 @@ def build_refine_problem_prompt(target, domain_name, config, use_caption=False, 
     
     return prompt
 
-def build_domain_prompt(target, domain_name, config, add_examples=True, use_caption=False, generate_caption=False):
+def build_domain_prompt(target, domain_name, config, add_examples=True, use_caption=False, generate_caption=False, generate_scene_graph=False):
     caption = None
     if use_caption:
         assert ".jpg" not in target["observation"], \
@@ -273,6 +286,19 @@ def build_domain_prompt(target, domain_name, config, add_examples=True, use_capt
         Actions: <actions>
         PDDL domain: <PDDL domain>
         """
+    elif generate_scene_graph:
+        prompt += f"""
+        The image of the scene has been provided.
+        You must first generate a scene graph for the image.
+        Then use the scene graph to generate the PDDL domain file.
+        Format:
+        Scene graph:
+        - Object: <object> Property: <property>
+        - Object: <object> Property: <property>
+        - Relation: <object> <relation> <object>
+        - ...
+        PDDL domain: <PDDL domain>
+        """
     else:
         prompt += f"""
         The image of the scene has been provided.
@@ -291,8 +317,8 @@ def build_domain_prompt(target, domain_name, config, add_examples=True, use_capt
 
     return prompt
 
-def build_refine_domain_prompt(target, domain_name, config, use_caption=False, generate_caption=False):
-    prompt = build_domain_prompt(target, domain_name, config, add_examples=False, use_caption=use_caption, generate_caption=generate_caption)
+def build_refine_domain_prompt(target, domain_name, config, use_caption=False, generate_caption=False, generate_scene_graph=False):
+    prompt = build_domain_prompt(target, domain_name, config, add_examples=False, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
 
     prompt += f"""
     The following is the PDDL domain file you generated last time:
@@ -350,6 +376,19 @@ def build_plan_prompt(target, domain_name, config, use_caption=False, generate_c
         Then use the caption to generate the plan.
         Format:
         Caption: <caption>
+        Plan: <plan>
+        """
+    elif generate_scene_graph:
+        prompt += f"""
+        The image of the scene has been provided.
+        You must first generate a scene graph for the image.
+        Then use the scene graph to generate the plan.
+        Format:
+        Scene graph:
+        - Object: <object> Property: <property>
+        - Object: <object> Property: <property>
+        - Relation: <object> <relation> <object>
+        - ...
         Plan: <plan>
         """
     else:
@@ -428,6 +467,7 @@ def generate_answers(
         generate_plan=False,
         use_caption=False,
         generate_caption=False,
+        generate_scene_graph=False,
     ):
     # Pass observation to VLM only if it is an image path
     if use_caption:
@@ -444,7 +484,7 @@ def generate_answers(
             "prompt": None,
         }
 
-        plan_prompt = build_plan_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption)
+        plan_prompt = build_plan_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
         response = model.generate(plan_prompt, observation)
 
         plan_file = parse_plan(response)
@@ -468,10 +508,10 @@ def generate_answers(
 
         if generate_domain:
             if refine_problem:
-                domain_prompt = build_refine_domain_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption)
+                domain_prompt = build_refine_domain_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
 
             else:
-                domain_prompt = build_domain_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption)
+                domain_prompt = build_domain_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
 
             domain_response = model.generate(domain_prompt, observation)
             domain_file = parse_pddl(domain_response)
@@ -495,7 +535,7 @@ def generate_answers(
         if refine_problem:
             problem_prompt = build_refine_problem_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption)
         else:
-            problem_prompt = build_problem_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption)
+            problem_prompt = build_problem_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
         
         response = model.generate(problem_prompt, observation) 
 
@@ -718,6 +758,7 @@ def main():
                 generate_plan=args.generate_plan,
                 use_caption=args.use_caption,
                 generate_caption=args.generate_caption,
+                generate_scene_graph=args.generate_scene_graph,
             )
             
             # save PDDL objects

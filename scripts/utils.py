@@ -45,6 +45,7 @@ def parse_args():
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
     parser.add_argument("--use_caption", action="store_true", help="use caption for observation")
     parser.add_argument("--generate_caption", action="store_true", help="generate caption for observation")
+    parser.add_argument("--generate_scene_graph", action="store_true", help="generate scene graph for observation")
 
     # Downward solver
     parser.add_argument("--downward_dir", type=str, default="../downward", help="")
