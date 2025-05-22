@@ -106,10 +106,12 @@ class VLMClient:
 
 # Prompt builder
 
-def build_problem_prompt(target, domain_name, config, add_examples=True):
+def build_problem_prompt(target, domain_name, config, add_examples=True, use_caption=False, generate_caption=False):
     caption = None
-    if ".jpg" not in target["observation"]:
-        caption = target["observation"]  # Only add caption if it is not an image path
+    if use_caption:
+        assert ".jpg" not in target["observation"], \
+            "use_caption is not compatible with image path"
+        caption = target["observation"]
 
     prompt = f"""
     You are helping a robotic planning task. 
@@ -147,28 +149,37 @@ def build_problem_prompt(target, domain_name, config, add_examples=True):
     {target["domain"]}
     """
 
-    if caption is not None:
+    if use_caption:
         prompt += f"""
         The image of the scene is described below:
         {caption}
         """
+    elif generate_caption:
+        prompt += f"""
+        The image of the scene has been provided.
+        You must first generate a caption for the image.
+        Then use the caption to generate the PDDL problem.
+        Do not generate anything after the PDDL problem.
+        Format:
+        Caption: <caption>
+        PDDL problem: <PDDL problem>
+        """
     else:
         prompt += f"""
         The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        Do not generate anything after the PDDL problem.
         """
 
     prompt += f"""
     {config.get("text", "")}
     Instruction: {target["instruction"]}
-
-    Please first analyze the image and then generate the PDDL problem.
-    Do not generate anything after the PDDL problem.
     """
     
     return prompt
 
-def build_refine_problem_prompt(target, domain_name, config):
-    prompt = build_problem_prompt(target, domain_name, config, add_examples=False)
+def build_refine_problem_prompt(target, domain_name, config, use_caption=False, generate_caption=False):
+    prompt = build_problem_prompt(target, domain_name, config, add_examples=False, use_caption=use_caption, generate_caption=generate_caption)
 
     prompt += f"""
     The following is the PDDL problem file you generated last time:
@@ -178,26 +189,49 @@ def build_refine_problem_prompt(target, domain_name, config):
     {target["error"]}
 
     Please first analyze where the error is.
-    Then generate the PDDL problem based on the error. Do not generate anything after the PDDL problem.
+    Then follow the format in the original instruction to generate the PDDL problem.
     """
     
     return prompt
 
-def build_domain_prompt(target, domain_name, config, add_examples=True):
+def build_domain_prompt(target, domain_name, config, add_examples=True, use_caption=False, generate_caption=False):
     caption = None
-    if ".jpg" not in target["observation"]:
-        caption = target["observation"]  # Only add caption if it is not an image path
+    if use_caption:
+        assert ".jpg" not in target["observation"], \
+            "use_caption is not compatible with image path"
+        caption = target["observation"]
 
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate the PDDL domain file which contains object types, predicates, and actions suitable for the instruction.
     You will be given all possible actions of the robot along with the arguments of the actions.
-    You will complete the action definitions by adding precondtions and effects, and also complete the object types and predicates.
+    You will reason step by step to complete the action definitions by adding precondtions and effects, and also complete the object types and predicates.
+    Format:
+    Actions:
+    - Action name: <action name>
+    - Summarized action: <summarized action>
+    - Preconditions: <preconditions>
+    - Effects: <effects>
+    - Entities: <entities>
+    PDDL domain: <PDDL domain>
     """
 
     example_prompt = f"""Examples of PDDL domains given a different domain instruction:
     Domain: hanoi
     Instruction: Move all disks to the rightmost peg while keeping a rule that larger disks are below.
+    All possible actions:
+    (action move ?disc ?from ?to)
+
+    Actions:
+    - Action name: move
+    - Summarized action: The action moves a disc on the top of a peg to another peg that is clear of discs.
+    - Preconditions: The action requires the disc and the destination peg to be clear.
+    - Effects: The action requires the disc to be moved to the destination peg, and the source peg to be cleared.
+    - Entities:
+        - Disc: before - on source peg, after - on destination peg
+        - Source peg: before - not clear, after - clear
+        - Destination peg: before - clear, after - not clear
+    
     PDDL domain:
     (define (domain hanoi)
         (:requirements :strips)
@@ -224,14 +258,25 @@ def build_domain_prompt(target, domain_name, config, add_examples=True):
     For the current domain, {domain_name}
     """
 
-    if caption is not None:
+    if use_caption:
         prompt += f"""
         The image of the scene is described below:
         {caption}
         """
+    elif generate_caption:
+        prompt += f"""
+        The image of the scene has been provided.
+        You must first generate a caption for the image.
+        Then use the caption to generate the PDDL domain file.
+        Format:
+        Caption: <caption>
+        Actions: <actions>
+        PDDL domain: <PDDL domain>
+        """
     else:
         prompt += f"""
         The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL domain file.
         """
 
     prompt += f"""
@@ -241,14 +286,13 @@ def build_domain_prompt(target, domain_name, config, add_examples=True):
     All possible actions that should be included in the domain file:
     {config["actions"]}
 
-    Please complete the domain file based on the image, the instruction, and the possible actions. 
     Do not generate anything after the PDDL domain file.
     """
 
     return prompt
 
-def build_refine_domain_prompt(target, domain_name, config):
-    prompt = build_domain_prompt(target, domain_name, config, add_examples=False)
+def build_refine_domain_prompt(target, domain_name, config, use_caption=False, generate_caption=False):
+    prompt = build_domain_prompt(target, domain_name, config, add_examples=False, use_caption=use_caption, generate_caption=generate_caption)
 
     prompt += f"""
     The following is the PDDL domain file you generated last time:
@@ -267,10 +311,12 @@ def build_refine_domain_prompt(target, domain_name, config):
 
     return prompt
 
-def build_plan_prompt(target, domain_name, config):
+def build_plan_prompt(target, domain_name, config, use_caption=False, generate_caption=False):
     caption = None
-    if ".jpg" not in target["observation"]:
-        caption = target["observation"]  # Only add caption if it is not an image path
+    if use_caption:
+        assert ".jpg" not in target["observation"], \
+            "use_caption is not compatible with image path"
+        caption = target["observation"]
         
     prompt = f"""
     You are helping a robotic planning task. 
@@ -292,14 +338,25 @@ def build_plan_prompt(target, domain_name, config):
     {config.get("text", "")}
     """
 
-    if caption is not None:
+    if use_caption:
         prompt += f"""
         The image of the scene is described below:
         {caption}
         """
+    elif generate_caption:
+        prompt += f"""
+        The image of the scene has been provided.
+        You must first generate a caption for the image.
+        Then use the caption to generate the plan.
+        Format:
+        Caption: <caption>
+        Plan: <plan>
+        """
     else:
         prompt += f"""
         The image of the scene has been provided.
+        Please first analyze the image and then generate the plan.
+        Do not generate anything after the plan.
         """
 
     prompt += f"""
@@ -360,9 +417,25 @@ def parse_plan(response):
 
 # Main actions
 
-def generate_answers(target, examples, config, domain_name, model, refine_problem=False, generate_domain=False, generate_plan=False):
+def generate_answers(
+        target, 
+        examples, 
+        config, 
+        domain_name, 
+        model, 
+        refine_problem=False, 
+        generate_domain=False, 
+        generate_plan=False,
+        use_caption=False,
+        generate_caption=False,
+    ):
     # Pass observation to VLM only if it is an image path
-    observation = target["observation"] if ".jpg" in target["observation"] else None
+    if use_caption:
+        assert ".jpg" not in target["observation"], \
+            "use_caption is not compatible with image path"
+        observation = None
+    else:
+        observation = target["observation"]
 
     if generate_plan:
         res = {
@@ -371,7 +444,7 @@ def generate_answers(target, examples, config, domain_name, model, refine_proble
             "prompt": None,
         }
 
-        plan_prompt = build_plan_prompt(target, domain_name, config)
+        plan_prompt = build_plan_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption)
         response = model.generate(plan_prompt, observation)
 
         plan_file = parse_plan(response)
@@ -395,10 +468,10 @@ def generate_answers(target, examples, config, domain_name, model, refine_proble
 
         if generate_domain:
             if refine_problem:
-                domain_prompt = build_refine_domain_prompt(target, domain_name, config)
+                domain_prompt = build_refine_domain_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption)
 
             else:
-                domain_prompt = build_domain_prompt(target, domain_name, config)
+                domain_prompt = build_domain_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption)
 
             domain_response = model.generate(domain_prompt, observation)
             domain_file = parse_pddl(domain_response)
@@ -420,9 +493,9 @@ def generate_answers(target, examples, config, domain_name, model, refine_proble
             res["domain"]["prompt"] = domain_prompt
 
         if refine_problem:
-            problem_prompt = build_refine_problem_prompt(target, domain_name, config)
+            problem_prompt = build_refine_problem_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption)
         else:
-            problem_prompt = build_problem_prompt(target, domain_name, config)
+            problem_prompt = build_problem_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption)
         
         response = model.generate(problem_prompt, observation) 
 
@@ -485,9 +558,11 @@ def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
 
 def main():
     args = parse_args()
-    if args.generate_plan:
-        assert not args.generate_problem and not args.refine_problem, \
-            "generate_plan is not compatible with generate_problem or refine_problem"
+    # Args check
+    assert not (args.generate_plan and (args.generate_problem or args.refine_problem)), \
+        "generate_plan is not compatible with generate_problem or refine_problem"
+    assert not (args.generate_caption or args.use_caption), \
+        "generate_caption is not compatible with use_caption"
 
     data_dir = f"../data/{args.domain}"
     if args.result_dir is None:
@@ -641,6 +716,8 @@ def main():
                 refine_problem=args.refine_problem,
                 generate_domain=args.generate_domain,
                 generate_plan=args.generate_plan,
+                use_caption=args.use_caption,
+                generate_caption=args.generate_caption,
             )
             
             # save PDDL objects
