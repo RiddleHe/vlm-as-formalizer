@@ -217,11 +217,32 @@ def build_scene_graph_template(domain_file):
         predicates_str = predicates_match.group(1)
         if predicates_str:
             cleaned_predicates = re.sub(r";[^\n]*", "", predicates_str)  # Remove comments
-            predicates = [p.strip() for p in cleaned_predicates.split() if p.strip() and p.strip() != "-"]
+            idx = 0
+            while idx < len(cleaned_predicates):
+                start_char = cleaned_predicates[idx]
+                if start_char == '(':
+                    balance = 1
+                    for jdx in range(idx + 1, len(cleaned_predicates)):
+                        if cleaned_predicates[jdx] == '(':
+                            balance += 1
+                        elif cleaned_predicates[jdx] == ')':
+                            balance -= 1
+                        if balance == 0:
+                            predicate = cleaned_predicates[idx:jdx+1].strip()
+                            predicate = re.sub(r"\s+", " ", predicate)
+                            if predicate:
+                                predicates.append(predicate)
+                            idx = jdx
+                            break
+                    if balance != 0:
+                        print(f"Unbalanced parentheses at index {idx}")
+                        break
+                else:
+                    idx += 1
 
     print(f"Predicates: {predicates}")
         
-    prompt += f"""
+    prompt = f"""
     The image of the scene has been provided.
     You must first generate a scene graph for the image, using the types and predicates in the domain file.
     Then use the scene graph to generate the PDDL problem.
@@ -235,9 +256,7 @@ def build_scene_graph_template(domain_file):
     for predicate in predicates:
         prompt += f"{predicate}: \n"
 
-    prompt += f"""
-    PDDL problem: <PDDL problem>
-    """
+    return prompt
 
 def build_refine_problem_prompt(target, domain_name, config, use_caption=False, generate_caption=False, generate_scene_graph=False):
     prompt = build_problem_prompt(target, domain_name, config, add_examples=False, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
