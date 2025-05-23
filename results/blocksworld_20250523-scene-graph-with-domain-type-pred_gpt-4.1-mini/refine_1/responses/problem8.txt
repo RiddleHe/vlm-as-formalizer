@@ -1,0 +1,48 @@
+Scene graph:
+block: red orange purple pink yellow green
+robot: robot1
+(on red orange)
+(on orange purple)
+(on purple pink)
+(on pink yellow)
+(on yellow green)
+(ontable red)
+(clear green)
+(handempty robot1)
+(handfull robot1)
+(holding green)
+
+PDDL problem:
+(define (problem two_stacks)
+(:domain blocksworld)
+(:objects
+    red orange purple pink yellow green - block
+    robot1 - robot
+)
+(:init
+    (ontable red)
+    (on red orange)
+    (on orange purple)
+    (on purple pink)
+    (on pink yellow)
+    (on yellow green)
+    (clear green)
+    (handempty robot1)
+)
+(:goal (and
+    (on green yellow)
+    (on yellow pink)
+    (ontable pink)
+    (on purple orange)
+    (on orange red)
+    (ontable red)
+))
+)
+
+Analysis of error in previous problem:
+- In the previous problem, the goal had contradictory and impossible conditions: pink was both on red and ontable, and red was ontable twice (a block cannot be ontable and have blocks on top simultaneously).
+- The previous initial state implied a chain five blocks high, but the goal tried to arrange blocks inconsistently in two stacks with overlapping requirements.
+- The corrected scene graph and goal create two separate legal stacks:
+  1. green over yellow over pink (pink ontable)
+  2. purple over orange over red (red ontable)
+- The initial state and goal now reflect this valid configuration.

@@ -1,0 +1,36 @@
+Scene graph:
+block: purple pink yellow orange red
+robot: robot1
+(on purple pink)
+(on red orange)
+(ontable yellow)
+(ontable purple)
+(clear purple)
+(clear red)
+(clear yellow)
+(clear orange)
+(handempty robot1)
+
+PDDL problem: 
+(define (problem blocksworld_task)
+(:domain blocksworld)
+(:objects
+    purple pink yellow orange red
+    robot1 - robot
+)
+(:init
+    (on purple pink)
+    (on red orange)
+    (ontable yellow)
+    (ontable purple)
+    (clear purple)
+    (clear red)
+    (clear yellow)
+    (clear orange)
+    (handempty robot1)
+)
+(:goal (and
+    (on pink purple)
+    (on yellow orange)
+))
+)
