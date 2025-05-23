@@ -165,19 +165,7 @@ def build_problem_prompt(target, domain_name, config, add_examples=True, use_cap
         PDDL problem: <PDDL problem>
         """
     elif generate_scene_graph:
-        prompt += f"""
-        The image of the scene has been provided.
-        You must first generate a scene graph for the image.
-        Then use the scene graph to generate the PDDL problem.
-        Do not generate anything after the PDDL problem.
-        Format:
-        Scene graph:
-        - Object: <object> Type: <type in domain file> Property: <predicate in domain file>
-        - Object: <object> Type: <type in domain file> Property: <predicate in domain file>
-        - Relation: <object> <relation in domain file> <object>
-        - ...
-        PDDL problem: <PDDL problem>
-        """
+        prompt += build_scene_graph_template(target["domain"])
     else:
         prompt += f"""
         The image of the scene has been provided.
@@ -190,6 +178,66 @@ def build_problem_prompt(target, domain_name, config, add_examples=True, use_cap
     """
     
     return prompt
+
+def build_scene_graph_template(domain_file):
+    types = []
+    types_match = re.search(r"\(:types\s+(.*?)\s*\)", domain_file, re.DOTALL)  # Find (:types <types>)
+    if types_match:
+        raw_types = types_match.group(1).strip()
+        cleaned_types = re.sub(r";[^\n]*", "", raw_types)  # Remove comments
+        types_str = cleaned_types.strip()
+        if types_str:
+            tokens = types_str.split() # Subtypes, supertypes, delimiter -
+            idx = 0
+            while idx < len(tokens):
+                lhs_types = []
+                while idx < len(tokens) and tokens[idx] != '-':
+                    if tokens[idx].strip():
+                        lhs_types.append(tokens[idx].strip())
+                    idx += 1
+                if idx < len(tokens) and tokens[idx] == '-':
+                    idx += 1
+                    if idx < len(tokens) and tokens[idx].strip():  # Assume always have rhs
+                        supertype = tokens[idx].strip()
+                        for sub_type in lhs_types:
+                            types.appens(f"{sub_type} ({supertype})")
+                        idx += 1
+                    else:
+                        types.extend(lhs_types)
+                        if idx < len(tokens):
+                            idx += 1
+                else:
+                    types.extend(lhs_types)
+
+    print(f"Types: {types}")
+
+    predicates = []
+    predicates_match = re.search(r"\(:predicates\s+(.*?)\s*\)", domain_file, re.DOTALL)  # Find (:predicates <predicates>)
+    if predicates_match:
+        predicates_str = predicates_match.group(1)
+        if predicates_str:
+            cleaned_predicates = re.sub(r";[^\n]*", "", predicates_str)  # Remove comments
+            predicates = [p.strip() for p in cleaned_predicates.split() if p.strip() and p.strip() != "-"]
+
+    print(f"Predicates: {predicates}")
+        
+    prompt += f"""
+    The image of the scene has been provided.
+    You must first generate a scene graph for the image, using the types and predicates in the domain file.
+    Then use the scene graph to generate the PDDL problem.
+    Do not generate anything after the PDDL problem.
+    Format:
+    Scene graph:
+    """
+
+    for obj_type in types:
+        prompt += f"{obj_type}: \n"
+    for predicate in predicates:
+        prompt += f"{predicate}: \n"
+
+    prompt += f"""
+    PDDL problem: <PDDL problem>
+    """
 
 def build_refine_problem_prompt(target, domain_name, config, use_caption=False, generate_caption=False, generate_scene_graph=False):
     prompt = build_problem_prompt(target, domain_name, config, add_examples=False, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
