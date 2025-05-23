@@ -200,7 +200,7 @@ def build_scene_graph_template(domain_file):
                     if idx < len(tokens) and tokens[idx].strip():  # Assume always have rhs
                         supertype = tokens[idx].strip()
                         for sub_type in lhs_types:
-                            types.appens(f"{sub_type} ({supertype})")
+                            types.append(f"{sub_type} ({supertype})")
                         idx += 1
                     else:
                         types.extend(lhs_types)
@@ -209,38 +209,52 @@ def build_scene_graph_template(domain_file):
                 else:
                     types.extend(lhs_types)
 
-    print(f"Types: {types}")
+    # print(f"Types: {types}")
 
     predicates = []
-    predicates_match = re.search(r"\(:predicates\s+(.*?)\s*\)", domain_file, re.DOTALL)  # Find (:predicates <predicates>)
-    if predicates_match:
-        predicates_str = predicates_match.group(1)
-        if predicates_str:
-            cleaned_predicates = re.sub(r";[^\n]*", "", predicates_str)  # Remove comments
+    predicates_str = ""
+    predicates_start_match = re.search(r"\(:predicates\s+", domain_file)
+    if predicates_start_match:
+        content_start_index = predicates_start_match.end()
+
+        # Outer parentheses loop
+        outer_block_start_index = predicates_start_match.group(0).find('(') + predicates_start_match.start()
+        balance_outer_block = 0
+        
+        for i in range(outer_block_start_index, len(domain_file)):
+            if domain_file[i] == '(':
+                balance_outer_block += 1
+            elif domain_file[i] == ')':
+                balance_outer_block -= 1
+            if balance_outer_block == 0:
+                full_predicate_str = domain_file[content_start_index: i].strip() # Find inner loop
+                break
+
+        if full_predicate_str:
+            cleaned_predicate_str = re.sub(r";[^\n]*", "", full_predicate_str)
             idx = 0
-            while idx < len(cleaned_predicates):
-                start_char = cleaned_predicates[idx]
+            while idx < len(cleaned_predicate_str):
+                start_char = cleaned_predicate_str[idx]
                 if start_char == '(':
                     balance = 1
-                    for jdx in range(idx + 1, len(cleaned_predicates)):
-                        if cleaned_predicates[jdx] == '(':
+                    for jdx in range(idx + 1, len(cleaned_predicate_str)):
+                        if cleaned_predicate_str[jdx] == '(':
                             balance += 1
-                        elif cleaned_predicates[jdx] == ')':
+                        elif cleaned_predicate_str[jdx] == ')':
                             balance -= 1
                         if balance == 0:
-                            predicate = cleaned_predicates[idx:jdx+1].strip()
-                            predicate = re.sub(r"\s+", " ", predicate)
-                            if predicate:
-                                predicates.append(predicate)
+                            signature = cleaned_predicate_str[idx: jdx + 1].strip()
+                            signature = re.sub(r"\s+", " ", signature)
+                            if signature:
+                                predicates.append(signature)
                             idx = jdx
                             break
                     if balance != 0:
-                        print(f"Unbalanced parentheses at index {idx}")
+                        print(f"Unbalanced parentheses in predicate: {predicate_str}")
                         break
-                else:
-                    idx += 1
+                idx += 1
 
-    print(f"Predicates: {predicates}")
+    # print(f"Predicates: {predicates}")
         
     prompt = f"""
     The image of the scene has been provided.
@@ -252,13 +266,23 @@ def build_scene_graph_template(domain_file):
     """
 
     for obj_type in types:
-        prompt += f"{obj_type}: \n"
+        prompt += f"{obj_type}: <object1> <object2> ...\n"
     for predicate in predicates:
-        prompt += f"{predicate}: \n"
+        prompt += f"{predicate}: <predicate object1> <predicate object2> ...\n"
+
+    prompt += f"""
+    PDDL problem: <PDDL problem>
+    """
 
     return prompt
 
 def build_refine_problem_prompt(target, domain_name, config, use_caption=False, generate_caption=False, generate_scene_graph=False):
+    command = ""
+    if generate_caption:
+        command = "Re-generate the caption for the image."
+    elif generate_scene_graph:
+        command = "Re-generate the scene graph for the image."
+    
     prompt = build_problem_prompt(target, domain_name, config, add_examples=False, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
 
     prompt += f"""
@@ -269,6 +293,7 @@ def build_refine_problem_prompt(target, domain_name, config, use_caption=False, 
     {target["error"]}
 
     Please first analyze where the error is.
+    {command}
     Then follow the format in the original instruction to generate the PDDL problem.
     """
     
@@ -600,7 +625,7 @@ def generate_answers(
             res["domain"]["prompt"] = domain_prompt
 
         if refine_problem:
-            problem_prompt = build_refine_problem_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption)
+            problem_prompt = build_refine_problem_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
         else:
             problem_prompt = build_problem_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
         

@@ -1,0 +1,40 @@
+Scene graph:
+location (object): cutting_board bowl counter
+vegetable (object): carrot
+tool (object): knife
+(available ?obj - object): carrot bowl
+(is-whole ?veg - vegetable): carrot
+(is-sliced ?veg - vegetable): 
+(free ?robot - robot): robot1
+(carry ?robot - robot ?obj - object): carry robot2 knife
+(can-cut ?tool - tool): knife
+(at ?obj - object ?loc - location): at knife robot2 at bowl counter at carrot counter at cutting_board cutting_board
+(is-workspace ?loc - location): cutting_board
+
+PDDL problem: 
+(define (problem slice_carrot)
+(:domain cooking)
+(:objects
+    robot1
+    robot2
+    carrot - vegetable
+    knife - tool
+    cutting_board bowl counter - location
+)
+(:init
+    (available carrot)
+    (available bowl)
+    (is-whole carrot)
+    (free robot1)
+    (carry robot2 knife)
+    (can-cut knife)
+    (at carrot counter)
+    (at knife robot2)
+    (at bowl counter)
+    (is-workspace cutting_board)
+)
+(:goal (and 
+    (is-sliced carrot)
+    (at carrot bowl)
+))
+)

@@ -49,7 +49,7 @@ def parse_args():
 
     # Downward solver
     parser.add_argument("--downward_dir", type=str, default="../downward", help="")
-    parser.add_argument("--time_limit", type=int, default=200, help="")
+    parser.add_argument("--time_limit", type=int, default=30, help="")
 
     # related to problem generation and refinement
     parser.add_argument("--seed", type=int, default=42, help="random seed")
