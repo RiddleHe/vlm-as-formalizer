@@ -1,4 +1,4 @@
-(define (problem cooking_task1)
+(define (problem cooking1)
     (:domain cooking)
     (:objects
         robot1 robot2 - robot
@@ -7,18 +7,20 @@
         cutting_board bowl counter - location
     )
     (:init
-        (free robot1)
-        (carry robot2 knife)
-        (can-cut knife)
-        (is-workspace cutting_board)
-        (at carrot counter)
-        (at cucumber cutting_board)
-        (at bowl counter)
         (available carrot)
         (available cucumber)
         (available bowl)
+        (available cutting_board)
         (is-whole carrot)
-        (is-sliced cucumber)
+        (is-whole cucumber)
+        (free robot1)
+        (carry robot2 knife)
+        (can-cut knife)
+        (at carrot counter)
+        (at cucumber cutting_board)
+        (at bowl counter)
+        (at knife robot2)
+        (is-workspace cutting_board)
     )
     (:goal
         (and

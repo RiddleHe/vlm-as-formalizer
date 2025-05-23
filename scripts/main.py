@@ -181,10 +181,23 @@ def build_problem_prompt(target, domain_name, config, add_examples=True, use_cap
 
 def build_scene_graph_template(domain_file):
     types = []
-    types_match = re.search(r"\(:types\s+(.*?)\s*\)", domain_file, re.DOTALL)  # Find (:types <types>)
-    if types_match:
-        raw_types = types_match.group(1).strip()
-        cleaned_types = re.sub(r";[^\n]*", "", raw_types)  # Remove comments
+    types_block = ""
+    types_def_match = re.search(r'\(:types\s+', domain_file)
+    if types_def_match:
+        block_start_index = types_def_match.start()
+        content_start_index = types_def_match.end()
+        balance = 0
+        for i in range(block_start_index, len(domain_file)):
+            if domain_file[i] == '(':
+                balance += 1
+            elif domain_file[i] == ')':
+                balance -= 1
+            if balance == 0:
+                types_block = domain_file[content_start_index: i].strip()
+                break
+
+    if types_block:
+        cleaned_types = re.sub(r";[^\n]*", "", types_block)  # Remove comments
         types_str = cleaned_types.strip()
         if types_str:
             tokens = types_str.split() # Subtypes, supertypes, delimiter -
@@ -218,7 +231,7 @@ def build_scene_graph_template(domain_file):
         content_start_index = predicates_start_match.end()
 
         # Outer parentheses loop
-        outer_block_start_index = predicates_start_match.group(0).find('(') + predicates_start_match.start()
+        outer_block_start_index = predicates_start_match.start()
         balance_outer_block = 0
         
         for i in range(outer_block_start_index, len(domain_file)):
