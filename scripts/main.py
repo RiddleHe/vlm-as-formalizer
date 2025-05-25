@@ -106,13 +106,7 @@ class VLMClient:
 
 # Prompt builder
 
-def build_problem_prompt(target, domain_name, config, add_examples=True, use_caption=False, generate_caption=False, generate_scene_graph=False):
-    caption = None
-    if use_caption:
-        assert ".jpg" not in target["observation"], \
-            "use_caption is not compatible with image path"
-        caption = target["observation"]
-
+def build_problem_prompt(target, domain_name, config, add_examples=True, generate_caption=False, generate_scene_graph=False):
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
@@ -148,13 +142,8 @@ def build_problem_prompt(target, domain_name, config, add_examples=True, use_cap
     For the current domain, {domain_name}, this is the domain file:
     {target["domain"]}
     """
-
-    if use_caption:
-        prompt += f"""
-        The image of the scene is described below:
-        {caption}
-        """
-    elif generate_caption:
+    
+    if generate_caption:
         prompt += f"""
         The image of the scene has been provided.
         You must first generate a caption for the image.
@@ -180,93 +169,10 @@ def build_problem_prompt(target, domain_name, config, add_examples=True, use_cap
     return prompt
 
 def build_scene_graph_template(domain_file):
-    types = []
-    types_block = ""
-    types_def_match = re.search(r'\(:types\s+', domain_file)
-    if types_def_match:
-        block_start_index = types_def_match.start()
-        content_start_index = types_def_match.end()
-        balance = 0
-        for i in range(block_start_index, len(domain_file)):
-            if domain_file[i] == '(':
-                balance += 1
-            elif domain_file[i] == ')':
-                balance -= 1
-            if balance == 0:
-                types_block = domain_file[content_start_index: i].strip()
-                break
-
-    if types_block:
-        cleaned_types = re.sub(r";[^\n]*", "", types_block)  # Remove comments
-        types_str = cleaned_types.strip()
-        if types_str:
-            tokens = types_str.split() # Subtypes, supertypes, delimiter -
-            idx = 0
-            while idx < len(tokens):
-                lhs_types = []
-                while idx < len(tokens) and tokens[idx] != '-':
-                    if tokens[idx].strip():
-                        lhs_types.append(tokens[idx].strip())
-                    idx += 1
-                if idx < len(tokens) and tokens[idx] == '-':
-                    idx += 1
-                    if idx < len(tokens) and tokens[idx].strip():  # Assume always have rhs
-                        supertype = tokens[idx].strip()
-                        for sub_type in lhs_types:
-                            types.append(f"{sub_type} ({supertype})")
-                        idx += 1
-                    else:
-                        types.extend(lhs_types)
-                        if idx < len(tokens):
-                            idx += 1
-                else:
-                    types.extend(lhs_types)
-
+    types = parse_types(domain_file)
     # print(f"Types: {types}")
 
-    predicates = []
-    predicates_str = ""
-    predicates_start_match = re.search(r"\(:predicates\s+", domain_file)
-    if predicates_start_match:
-        content_start_index = predicates_start_match.end()
-
-        # Outer parentheses loop
-        outer_block_start_index = predicates_start_match.start()
-        balance_outer_block = 0
-        
-        for i in range(outer_block_start_index, len(domain_file)):
-            if domain_file[i] == '(':
-                balance_outer_block += 1
-            elif domain_file[i] == ')':
-                balance_outer_block -= 1
-            if balance_outer_block == 0:
-                full_predicate_str = domain_file[content_start_index: i].strip() # Find inner loop
-                break
-
-        if full_predicate_str:
-            cleaned_predicate_str = re.sub(r";[^\n]*", "", full_predicate_str)
-            idx = 0
-            while idx < len(cleaned_predicate_str):
-                start_char = cleaned_predicate_str[idx]
-                if start_char == '(':
-                    balance = 1
-                    for jdx in range(idx + 1, len(cleaned_predicate_str)):
-                        if cleaned_predicate_str[jdx] == '(':
-                            balance += 1
-                        elif cleaned_predicate_str[jdx] == ')':
-                            balance -= 1
-                        if balance == 0:
-                            signature = cleaned_predicate_str[idx: jdx + 1].strip()
-                            signature = re.sub(r"\s+", " ", signature)
-                            if signature:
-                                predicates.append(signature)
-                            idx = jdx
-                            break
-                    if balance != 0:
-                        print(f"Unbalanced parentheses in predicate: {predicate_str}")
-                        break
-                idx += 1
-
+    predicates = parse_predicates(domain_file)
     # print(f"Predicates: {predicates}")
         
     prompt = f"""
@@ -289,36 +195,25 @@ def build_scene_graph_template(domain_file):
 
     return prompt
 
-def build_refine_problem_prompt(target, domain_name, config, use_caption=False, generate_caption=False, generate_scene_graph=False):
-    command = ""
-    if generate_caption:
-        command = "Re-generate the caption for the image."
-    elif generate_scene_graph:
-        command = "Re-generate the scene graph for the image."
-    
-    prompt = build_problem_prompt(target, domain_name, config, add_examples=False, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
+def build_refine_problem_prompt(target, domain_name, config, generate_caption=False, generate_scene_graph=False):
+    prompt = build_problem_prompt(target, domain_name, config, add_examples=False, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
 
     prompt += f"""
-    The following is the PDDL problem file you generated last time:
-    {target["problem"]}
+    **********
 
-    The following is the error you made last time:
+    The following is the response you generated last time:
+    {target["response"]}
+
+    The following is the error in the PDDL file you made last time:
     {target["error"]}
 
-    Please first analyze where the error is.
-    {command}
-    Then follow the format in the original instruction to generate the PDDL problem.
+    Please first analyze where the error is, ie. is it a PDDL semantic error, or an error in the caption or scene graph?
+    After analyzing the error, generate all the output again.
     """
     
     return prompt
 
-def build_domain_prompt(target, domain_name, config, add_examples=True, use_caption=False, generate_caption=False, generate_scene_graph=False):
-    caption = None
-    if use_caption:
-        assert ".jpg" not in target["observation"], \
-            "use_caption is not compatible with image path"
-        caption = target["observation"]
-
+def build_domain_prompt(target, domain_name, config, add_examples=True, generate_caption=False, generate_scene_graph=False):
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate the PDDL domain file which contains object types, predicates, and actions suitable for the instruction.
@@ -376,12 +271,7 @@ def build_domain_prompt(target, domain_name, config, add_examples=True, use_capt
     For the current domain, {domain_name}
     """
 
-    if use_caption:
-        prompt += f"""
-        The image of the scene is described below:
-        {caption}
-        """
-    elif generate_caption:
+    if generate_caption:
         prompt += f"""
         The image of the scene has been provided.
         You must first generate a caption for the image.
@@ -392,6 +282,7 @@ def build_domain_prompt(target, domain_name, config, add_examples=True, use_capt
         PDDL domain: <PDDL domain>
         """
     elif generate_scene_graph:
+        # TODO: fix circular dependency
         prompt += f"""
         The image of the scene has been provided.
         You must first generate a scene graph for the image.
@@ -422,8 +313,8 @@ def build_domain_prompt(target, domain_name, config, add_examples=True, use_capt
 
     return prompt
 
-def build_refine_domain_prompt(target, domain_name, config, use_caption=False, generate_caption=False, generate_scene_graph=False):
-    prompt = build_domain_prompt(target, domain_name, config, add_examples=False, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
+def build_refine_domain_prompt(target, domain_name, config,  generate_caption=False, generate_scene_graph=False):
+    prompt = build_domain_prompt(target, domain_name, config, add_examples=False, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
 
     prompt += f"""
     The following is the PDDL domain file you generated last time:
@@ -442,13 +333,7 @@ def build_refine_domain_prompt(target, domain_name, config, use_caption=False, g
 
     return prompt
 
-def build_plan_prompt(target, domain_name, config, use_caption=False, generate_caption=False):
-    caption = None
-    if use_caption:
-        assert ".jpg" not in target["observation"], \
-            "use_caption is not compatible with image path"
-        caption = target["observation"]
-        
+def build_plan_prompt(target, domain_name, config, generate_caption=False, generate_scene_graph=False):
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate a step-by-step plan for the robot(s).
@@ -469,12 +354,7 @@ def build_plan_prompt(target, domain_name, config, use_caption=False, generate_c
     {config.get("text", "")}
     """
 
-    if use_caption:
-        prompt += f"""
-        The image of the scene is described below:
-        {caption}
-        """
-    elif generate_caption:
+    if generate_caption:
         prompt += f"""
         The image of the scene has been provided.
         You must first generate a caption for the image.
@@ -559,6 +439,88 @@ def parse_plan(response):
         plan.append(match.strip())
     return "\n".join(plan)
 
+def parse_block(pddl, keyword):
+    match = re.search(rf"{re.escape(keyword)}\s+", pddl)
+
+    if match:
+        content_start_index = match.end()
+        outer_block_start_index = match.start()
+        balance = 0
+        for i in range(outer_block_start_index, len(pddl)):
+            if pddl[i] == '(':
+                balance += 1
+            elif pddl[i] == ')':
+                balance -= 1
+            if balance == 0:
+                return pddl[content_start_index: i].strip()
+
+    return None
+
+def parse_types(domain_file):
+    types = []
+    types_block = parse_block(domain_file, "(:types")
+
+    if types_block:
+        cleaned_types = re.sub(r";[^\n]*", "", types_block)  # Remove comments
+        types_str = cleaned_types.strip()
+        if types_str:
+            tokens = types_str.split() # Subtypes, supertypes, delimiter -
+            idx = 0
+            while idx < len(tokens):
+                lhs_types = []
+                while idx < len(tokens) and tokens[idx] != '-':
+                    if tokens[idx].strip():
+                        lhs_types.append(tokens[idx].strip())
+                    idx += 1
+                if idx < len(tokens) and tokens[idx] == '-':
+                    idx += 1
+                    if idx < len(tokens) and tokens[idx].strip():  # Assume always have rhs
+                        supertype = tokens[idx].strip()
+                        for sub_type in lhs_types:
+                            types.append(f"{sub_type} ({supertype})")
+                        idx += 1
+                    else:
+                        types.extend(lhs_types)
+                        if idx < len(tokens):
+                            idx += 1
+                else:
+                    types.extend(lhs_types)
+
+    return types
+
+def parse_predicates(domain_file):
+    predicates = []
+    full_predicate_str = parse_block(domain_file, "(:predicates")
+
+    if full_predicate_str:
+        cleaned_predicate_str = re.sub(r";[^\n]*", "", full_predicate_str)
+        idx = 0
+        while idx < len(cleaned_predicate_str):
+            start_char = cleaned_predicate_str[idx]
+            if start_char == '(':
+                balance = 1
+                for jdx in range(idx + 1, len(cleaned_predicate_str)):
+                    if cleaned_predicate_str[jdx] == '(':
+                        balance += 1
+                    elif cleaned_predicate_str[jdx] == ')':
+                        balance -= 1
+                    if balance == 0:
+                        signature = cleaned_predicate_str[idx: jdx + 1].strip()
+                        signature = re.sub(r"\s+", " ", signature)
+                        if signature:
+                            predicates.append(signature)
+                        idx = jdx
+                        break
+                if balance != 0:
+                    print(f"Unbalanced parentheses in predicate: {cleaned_predicate_str}")
+                    break
+            idx += 1
+
+    return predicates
+
+def parse_conditions(pddl_file):
+    pass
+
 # Main actions
 
 def generate_answers(
@@ -570,17 +532,11 @@ def generate_answers(
         refine_problem=False, 
         generate_domain=False, 
         generate_plan=False,
-        use_caption=False,
         generate_caption=False,
         generate_scene_graph=False,
+        num_retries=1,
     ):
-    # Pass observation to VLM only if it is an image path
-    if use_caption:
-        assert ".jpg" not in target["observation"], \
-            "use_caption is not compatible with image path"
-        observation = None
-    else:
-        observation = target["observation"]
+    observation = target["observation"]
 
     if generate_plan:
         res = {
@@ -589,7 +545,7 @@ def generate_answers(
             "prompt": None,
         }
 
-        plan_prompt = build_plan_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
+        plan_prompt = build_plan_prompt(target, domain_name, config, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
         response = model.generate(plan_prompt, observation)
 
         plan_file = parse_plan(response)
@@ -611,49 +567,169 @@ def generate_answers(
             }
         }
 
-        if generate_domain:
-            if refine_problem:
-                domain_prompt = build_refine_domain_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
+        msg = None
+        for retry_idx in range(num_retries):
+            # if generate_domain:
+            #     if refine_problem:
+            #         domain_prompt = build_refine_domain_prompt(target, domain_name, config, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
 
+            #     else:
+            #         domain_prompt = build_domain_prompt(target, domain_name, config, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
+
+            #     domain_response = model.generate(domain_prompt, observation)
+            #     domain_file = parse_pddl(domain_response)
+            #     if domain_file is None:
+            #         domain_file = ""
+
+            #     # Keep original domain if the model does not generate any PDDL
+            #     if refine_problem:
+            #         if domain_file == "":
+            #             domain_file = target["domain"]
+            #             res["domain"]["new_domain"] = False
+            #         else:
+            #             res["domain"]["new_domain"] = True
+
+            #     target["domain"] = domain_file
+
+            #     res["domain"]["file"] = domain_file
+            #     res["domain"]["response"] = domain_response
+            #     res["domain"]["prompt"] = domain_prompt
+
+            if refine_problem:
+                problem_prompt = build_refine_problem_prompt(target, domain_name, config, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
             else:
-                domain_prompt = build_domain_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
-
-            domain_response = model.generate(domain_prompt, observation)
-            domain_file = parse_pddl(domain_response)
-            if domain_file is None:
-                domain_file = ""
-
-            # Keep original domain if the model does not generate any PDDL
-            if refine_problem:
-                if domain_file == "":
-                    domain_file = target["domain"]
-                    res["domain"]["new_domain"] = False
+                if retry_idx > 0:
+                    problem_prompt = build_refine_problem_prompt(target, domain_name, config, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
                 else:
-                    res["domain"]["new_domain"] = True
+                    problem_prompt = build_problem_prompt(target, domain_name, config, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
+            
+            response = model.generate(problem_prompt, observation) 
 
-            target["domain"] = domain_file
+            # Match the PDDL file in the response by header and footer
+            problem_file = parse_pddl(response)
+            if problem_file is None:
+                problem_file = ""
 
-            res["domain"]["file"] = domain_file
-            res["domain"]["response"] = domain_response
-            res["domain"]["prompt"] = domain_prompt
+            ret, msg = check_pddl(problem_file, target["domain"])
+            if ret:
+                break
 
-        if refine_problem:
-            problem_prompt = build_refine_problem_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
-        else:
-            problem_prompt = build_problem_prompt(target, domain_name, config, use_caption=use_caption, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
-        
-        response = model.generate(problem_prompt, observation) 
+            print(f"Retry {retry_idx} failed: {msg}")
+            target["response"] = response
+            target["error"] = msg
 
-        # Match the PDDL file in the response by header and footer
-        problem_file = parse_pddl(response)
-        if problem_file is None:
-            problem_file = ""
 
         res["problem"]["file"] = problem_file
         res["problem"]["response"] = response
         res["problem"]["prompt"] = problem_prompt
 
     return res
+
+def check_pddl(pddl_file, domain_file):
+    errors = []
+
+    # From domain: Extract all object types
+    types_raw = parse_types(domain_file)
+    type_hierarchy = {}
+    types = set()
+    
+    type_pattern = re.compile(r"([^\s(]+)\s*\((.*?)\)") # type (supertype)
+    for type_entry in types_raw:
+        match = type_pattern.match(type_entry)
+        if match:
+            subtype, supertype = match.groups()
+            type_hierarchy[subtype] = supertype
+            type_hierarchy[supertype] = []
+            types.add(subtype)
+            types.add(supertype)
+        else:  # basic type
+            type_hierarchy[type_entry] = []
+            types.add(type_entry)
+
+
+    # From problem: Map all objects to their types, check for missing types
+    objects = {}
+    objects_block = parse_block(pddl_file, "(:objects")
+
+    if objects_block:
+        cleaned_objects_block = re.sub(r";[^\n]*", "", objects_block)
+        object_lines = cleaned_objects_block.strip().split("\n")
+
+        for line in object_lines:
+            if not line: continue
+
+            parts = line.strip().split()
+            type_name = None
+            obj_names = []
+
+            if '-' in parts:
+                dash_index = parts.index('-')
+                obj_names = parts[:dash_index]
+                if dash_index + 1 < len(parts):
+                    type_name = parts[dash_index + 1]
+
+            else:
+                errors.append(f"Problem object line: {line}. Objects declared without explicit type (missing '- type').")
+                continue
+
+            if type_name:
+                if type_name not in types:
+                    errors.append(f"Problem object type '{type_name}' not defined in domain.")
+                    continue
+
+                for obj_name in obj_names:
+                    if obj_name in objects:
+                        errors.append(f"Problem object '{obj_name}' redefined. Original type: '{objects[obj_name]}', new: '{type_name}'. Using first.")
+                    else:
+                        objects[obj_name] = type_name
+
+    # From domain: Extract all predicates
+    predicates_raw = parse_predicates(domain_file)
+    predicates = {}
+
+    predicate_pattern = re.compile(r"\s*\?([\w-]*)\s*-\s*([\w-]*)\s*")
+
+    # Extract all predicates in init and goal
+    conditions = []
+
+    blocks = []
+    init_conditions_block = parse_block(pddl_file, "(:init")
+    if init_conditions_block: 
+        blocks.append(init_conditions_block)
+
+    goal_conditions_block = parse_block(pddl_file, "(:goal")
+    if goal_conditions_block:
+        and_content_start_idx = re.search(r"\(and\s+", goal_conditions_block)
+        if and_content_start_idx:
+            goal_conditions_block = goal_conditions_block[and_content_start_idx:]
+            blocks.append(goal_conditions_block)
+
+    for block in blocks:
+        block = re.sub(r";[^\n]*", "", block)
+        idx = 0
+        while idx < len(block):
+            start_char = block[idx]
+            if start_char == '(':
+                balance = 1
+                for jdx in range(idx + 1, len(block)):
+                    if block[jdx] == '(':
+                        balance += 1
+                    elif block[jdx] == ')':
+                        balance -= 1
+                    if balance == 0:
+                        signature = block[idx: jdx + 1].strip()
+                        signature = re.sub(r"\s+", " ", signature)
+                        if signature:
+                            conditions.append(signature)
+                        idx = jdx
+                        break
+                if balance != 0:
+                    errors.append(f"Unbalanced parentheses in block: {block}")
+                    break
+            idx += 1
+
+    # TODO: Finish this
+    
 
 def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
     def get_cost(line: str):
@@ -706,8 +782,6 @@ def main():
     # Args check
     assert not (args.generate_plan and (args.generate_problem or args.refine_problem)), \
         "generate_plan is not compatible with generate_problem or refine_problem"
-    assert not (args.generate_caption and args.use_caption), \
-        "generate_caption is not compatible with use_caption"
 
     data_dir = f"../data/{args.domain}"
     if args.result_dir is None:
@@ -800,11 +874,7 @@ def main():
         for task_idx in range(1, num_tasks+1):
             with open(f"{data_dir}/instructions/problem{task_idx}.txt", "r") as f:
                 instruction = f.read()
-            if args.use_caption:
-                with open(f"{data_dir}/observations/problem{task_idx}.txt", "r") as f:
-                    observation = f.read()
-            else:
-                observation = f"{data_dir}/observations/problem{task_idx}.jpg"  # image path of the scene
+            observation = f"{data_dir}/observations/problem{task_idx}.jpg"  # image path of the scene
 
             if args.generate_domain and args.refine_problem:
                 with open(f"{result_dir}/{args.gen_step}/domains/domain{task_idx}.pddl", "r") as f:
@@ -816,6 +886,7 @@ def main():
                 "observation": observation,
                 "instruction": instruction,
                 "domain": domain_file,
+                "error": None,
             }]
  
             # Set up error file for refinement
@@ -823,6 +894,7 @@ def main():
                 target = all_targets[-1]
                 error_path = f"{result_dir}/{args.gen_step}/errors/problem{task_idx}.txt"
                 problem_path = f"{result_dir}/{args.gen_step}/problems/problem{task_idx}.pddl"
+                response_path = f"{result_dir}/{args.gen_step}/responses/problem{task_idx}.txt"
                 if os.path.exists(error_path) and os.path.exists(problem_path):
                     with open(error_path, "r") as f:
                         error = f.read()
@@ -832,9 +904,8 @@ def main():
                         target["error"] = "The solver fails because of syntax errors."
                     with open(problem_path, "r") as f:
                         target["problem"] = f.read()
-                else:
-                    # print(f"Problem {task_idx} has no error, skipping...")
-                    target["error"] = None
+                    with open(response_path, "r") as f:
+                        target["response"] = f.read()
 
         # Start generating
         gen_idx = 1
@@ -861,9 +932,9 @@ def main():
                 refine_problem=args.refine_problem,
                 generate_domain=args.generate_domain,
                 generate_plan=args.generate_plan,
-                use_caption=args.use_caption,
                 generate_caption=args.generate_caption,
                 generate_scene_graph=args.generate_scene_graph,
+                num_retries=args.num_retries,
             )
             
             # save PDDL objects
