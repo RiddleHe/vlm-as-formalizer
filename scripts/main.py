@@ -537,6 +537,7 @@ def generate_answers(
         num_retries=1,
     ):
     observation = target["observation"]
+    success = False
 
     if generate_plan:
         res = {
@@ -556,14 +557,14 @@ def generate_answers(
     else:
         res = {
             "problem": {
-                "file": None,
-                "response": None,
-                "prompt": None,
+                "file": [],
+                "response": [],
+                "prompt": []
             },
             "domain": {
-                "file": None,
-                "response": None,
-                "prompt": None,
+                "file": [],
+                "response": [],
+                "prompt": [],
             }
         }
 
@@ -611,19 +612,21 @@ def generate_answers(
                 problem_file = ""
 
             ret, msg = check_pddl(problem_file, target["domain"])
+            success = ret
             if ret:
                 break
 
             print(f"Retry {retry_idx} failed: \n{msg}")
+
             target["response"] = response
             target["error"] = msg
 
 
-        res["problem"]["file"] = problem_file
-        res["problem"]["response"] = response
-        res["problem"]["prompt"] = problem_prompt
+            res["problem"]["file"].append(problem_file)
+            res["problem"]["response"].append(response)
+            res["problem"]["prompt"].append(problem_prompt)
 
-    return res
+    return res, success
 
 def check_pddl(pddl_file, domain_file):
     errors = []
@@ -996,7 +999,7 @@ def main():
                     gen_idx += 1
                     continue
 
-            res = generate_answers(
+            res, success = generate_answers(
                 target,
                 examples,
                 config,
@@ -1018,29 +1021,34 @@ def main():
 
             try:
                 if args.generate_problem or args.refine_problem:
-                    with open(f"{result_dir}/{save_step}/instructions/problem{gen_idx}.txt", "w") as fw:
-                        fw.write(res["problem"]["prompt"])
+                    for retry_idx in range(len(res["problem"]["file"])):
+                        problem_name = f"problem{gen_idx}-{retry_idx}"
+                        if success and retry_idx == len(res["problem"]["file"]) - 1:
+                            problem_name = f"problem{gen_idx}"
 
-                    with open(f"{result_dir}/{save_step}/problems/problem{gen_idx}.pddl", "w") as fw:
-                        fw.write(res["problem"]["file"])
+                        with open(f"{result_dir}/{save_step}/instructions/{problem_name}.txt", "w") as fw:
+                            fw.write(res["problem"]["prompt"][retry_idx])
 
-                    with open(f"{result_dir}/{save_step}/responses/problem{gen_idx}.txt", "w") as fw:
-                        fw.write(res["problem"]["response"])
+                        with open(f"{result_dir}/{save_step}/problems/{problem_name}.pddl", "w") as fw:
+                            fw.write(res["problem"]["file"][retry_idx])
 
-                    if args.generate_domain:
-                        with open(f"{result_dir}/{save_step}/domains/domain{gen_idx}.pddl", "w") as fw:
-                            fw.write(res["domain"]["file"])
+                        with open(f"{result_dir}/{save_step}/responses/{problem_name}.txt", "w") as fw:
+                            fw.write(res["problem"]["response"][retry_idx])
 
-                        with open(f"{result_dir}/{save_step}/responses/domain{gen_idx}.txt", "w") as fw:
-                            fw.write(res["domain"]["response"])
+                    # if args.generate_domain:
+                    #     with open(f"{result_dir}/{save_step}/domains/domain{gen_idx}.pddl", "w") as fw:
+                    #         fw.write(res["domain"]["file"])
 
-                        with open(f"{result_dir}/{save_step}/instructions/domain{gen_idx}.txt", "w") as fw:
-                            fw.write(res["domain"]["prompt"])
+                    #     with open(f"{result_dir}/{save_step}/responses/domain{gen_idx}.txt", "w") as fw:
+                    #         fw.write(res["domain"]["response"])
 
-                        if args.refine_problem:
-                            if res["domain"]["new_domain"]:
-                                with open(f"{result_dir}/{save_step}/domains/domain{gen_idx}_legacy.pddl", "w") as fw:
-                                    fw.write(target["domain"])
+                    #     with open(f"{result_dir}/{save_step}/instructions/domain{gen_idx}.txt", "w") as fw:
+                    #         fw.write(res["domain"]["prompt"])
+
+                    #     if args.refine_problem:
+                    #         if res["domain"]["new_domain"]:
+                    #             with open(f"{result_dir}/{save_step}/domains/domain{gen_idx}_legacy.pddl", "w") as fw:
+                    #                 fw.write(target["domain"])
                 
                 elif args.generate_plan:
                     with open(f"{result_dir}/{save_step}/instructions/problem{gen_idx}.txt", "w") as fw:
