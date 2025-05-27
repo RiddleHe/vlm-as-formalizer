@@ -614,7 +614,7 @@ def generate_answers(
             if ret:
                 break
 
-            print(f"Retry {retry_idx} failed: {msg}")
+            print(f"Retry {retry_idx} failed: \n{msg}")
             target["response"] = response
             target["error"] = msg
 
@@ -658,6 +658,7 @@ def check_pddl(pddl_file, domain_file):
         object_lines = cleaned_objects_block.strip().split("\n")
 
         for line in object_lines:
+            line = line.strip()
             if not line: continue
 
             parts = line.strip().split()
@@ -671,7 +672,7 @@ def check_pddl(pddl_file, domain_file):
                     type_name = parts[dash_index + 1]
 
             else:
-                errors.append(f"Problem object line: {line}. Objects declared without explicit type (missing '- type').")
+                errors.append(f"Objects missing '- type' definition: {line}")
                 continue
 
             if type_name:
@@ -720,8 +721,9 @@ def check_pddl(pddl_file, domain_file):
 
     goal_conditions_block = parse_block(pddl_file, "(:goal")
     if goal_conditions_block:
-        and_content_start_idx = re.search(r"\(and\s+", goal_conditions_block)
-        if and_content_start_idx:
+        and_content_start = re.search(r"\(and\s+", goal_conditions_block)
+        if and_content_start:
+            and_content_start_idx = and_content_start.end()
             goal_conditions_block = goal_conditions_block[and_content_start_idx:]
             blocks.append(goal_conditions_block)
         else:
@@ -758,19 +760,19 @@ def check_pddl(pddl_file, domain_file):
         condition_args = parts[1:]
 
         if condition_name not in predicates:
-            errors.append(f"Predicate '{condition_name}' not defined in domain.")
+            errors.append(f"Predicate '{condition_name}' not defined in domain. Predicate: {condition}")
             continue
 
         expected_args = predicates[condition_name]
 
         if len(condition_args) != len(expected_args):
-            errors.append(f"Predicate '{condition_name}' expects {len(expected_args)} arguments, but got {len(condition_args)}.")
+            errors.append(f"Predicate '{condition_name}' expects {len(expected_args)} arguments, but got {len(condition_args)} ({condition}).")
             continue
 
         for i, arg_object_name in enumerate(condition_args):
             object_type = objects.get(arg_object_name)
             if object_type is None:
-                errors.append(f"Object '{arg_object_name}' not defined in problem.")
+                errors.append(f"Object '{arg_object_name}' not defined in problem. Predicate: {condition}")
                 continue
 
             expected_type = expected_args[i]
@@ -784,12 +786,12 @@ def check_pddl(pddl_file, domain_file):
             current_type = object_type
             while True:
                 if current_type not in type_hierarchy:
-                    errors.append(f"Predicate '{condition_name}' argument '{arg_object_name}' has type '{object_type}', expected '{expected_type}'.")
+                    errors.append(f"Predicate '{condition}' argument '{arg_object_name}' has type '{object_type}', expected '{expected_type}'.")
                     break
                 
                 parent = type_hierarchy.get(current_type)
                 if parent is None:
-                    errors.append(f"Predicate '{condition_name}' argument '{arg_object_name}' has type '{object_type}', expected '{expected_type}'.")
+                    errors.append(f"Predicate '{condition}' argument '{arg_object_name}' has type '{object_type}', expected '{expected_type}'.")
                     break
                 
                 current_type = parent
