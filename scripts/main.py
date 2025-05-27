@@ -639,13 +639,15 @@ def check_pddl(pddl_file, domain_file):
         if match:
             subtype, supertype = match.groups()
             type_hierarchy[subtype] = supertype
-            type_hierarchy[supertype] = []
             types.add(subtype)
             types.add(supertype)
         else:  # basic type
-            type_hierarchy[type_entry] = []
+            type_hierarchy[type_entry] = None
             types.add(type_entry)
 
+    for parent_type in list(type_hierarchy.values()):
+        if parent_type and parent_type not in type_hierarchy:
+            type_hierarchy[parent_type] = None
 
     # From problem: Map all objects to their types, check for missing types
     objects = {}
@@ -688,8 +690,27 @@ def check_pddl(pddl_file, domain_file):
     predicates = {}
 
     predicate_pattern = re.compile(r"\s*\?([\w-]*)\s*-\s*([\w-]*)\s*")
+    for predicate_str in predicates_raw:
+        content = predicate_str.strip()[1:-1]
+        parts = content.split(None, 1)
+        name = parts[0]
 
-    # Extract all predicates in init and goal
+        args = []
+        param_str = parts[1]
+        cur_pos = 0
+        while cur_pos < len(param_str):
+            match = predicate_pattern.match(param_str, cur_pos)
+            if match:
+                param_name, param_type = match.groups()
+                args.append(param_type)
+                cur_pos = match.end()
+            else:
+                break
+
+        if name not in predicates:
+            predicates[name] = args
+
+    # From problem: Extract all predicates in init and goal
     conditions = []
 
     blocks = []
@@ -702,6 +723,8 @@ def check_pddl(pddl_file, domain_file):
         and_content_start_idx = re.search(r"\(and\s+", goal_conditions_block)
         if and_content_start_idx:
             goal_conditions_block = goal_conditions_block[and_content_start_idx:]
+            blocks.append(goal_conditions_block)
+        else:
             blocks.append(goal_conditions_block)
 
     for block in blocks:
@@ -717,7 +740,7 @@ def check_pddl(pddl_file, domain_file):
                     elif block[jdx] == ')':
                         balance -= 1
                     if balance == 0:
-                        signature = block[idx: jdx + 1].strip()
+                        signature = block[idx + 1: jdx].strip()
                         signature = re.sub(r"\s+", " ", signature)
                         if signature:
                             conditions.append(signature)
@@ -728,8 +751,56 @@ def check_pddl(pddl_file, domain_file):
                     break
             idx += 1
 
-    # TODO: Finish this
+    # From problem: Check if predicate args have the correct types
+    for condition in conditions:
+        parts = condition.split()
+        condition_name = parts[0]
+        condition_args = parts[1:]
+
+        if condition_name not in predicates:
+            errors.append(f"Predicate '{condition_name}' not defined in domain.")
+            continue
+
+        expected_args = predicates[condition_name]
+
+        if len(condition_args) != len(expected_args):
+            errors.append(f"Predicate '{condition_name}' expects {len(expected_args)} arguments, but got {len(condition_args)}.")
+            continue
+
+        for i, arg_object_name in enumerate(condition_args):
+            object_type = objects.get(arg_object_name)
+            if object_type is None:
+                errors.append(f"Object '{arg_object_name}' not defined in problem.")
+                continue
+
+            expected_type = expected_args[i]
+            # Exact match
+            if object_type == expected_type:
+                continue
+            # Match generic object type
+            if expected_type == "object":
+                if object_type in types:
+                    continue
+            current_type = object_type
+            while True:
+                if current_type not in type_hierarchy:
+                    errors.append(f"Predicate '{condition_name}' argument '{arg_object_name}' has type '{object_type}', expected '{expected_type}'.")
+                    break
+                
+                parent = type_hierarchy.get(current_type)
+                if parent is None:
+                    errors.append(f"Predicate '{condition_name}' argument '{arg_object_name}' has type '{object_type}', expected '{expected_type}'.")
+                    break
+                
+                current_type = parent
+                if current_type == expected_type:
+                    break
+                
+    if not errors:
+        return True, None
     
+    else:
+        return False, "\n".join(errors)
 
 def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
     def get_cost(line: str):
