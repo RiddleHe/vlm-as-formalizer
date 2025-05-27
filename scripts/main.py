@@ -616,7 +616,7 @@ def generate_answers(
             if ret:
                 break
 
-            print(f"Retry {retry_idx} failed: \n{msg}")
+            print(f"Attempt {retry_idx+1} failed: \n{msg}")
 
             target["response"] = response
             target["error"] = msg
