@@ -1,0 +1,45 @@
+Scene graph:
+location (object): cutting_board bowl counter
+vegetable (object): cucumber
+tool (object): knife
+robot: robot1 robot2
+(available ?obj - object): cucumber bowl cutting_board
+(is-whole ?veg - vegetable): cucumber
+(is-sliced ?veg - vegetable): 
+(free ?robot - robot): robot1
+(carry ?robot - robot ?obj - object): (carry robot2 knife)
+(can-cut ?tool - tool): knife
+(at ?obj - object ?loc - location): (at cucumber counter) (at bowl counter) (at cutting_board cutting_board)
+(is-workspace ?loc - location): cutting_board
+
+PDDL problem:
+(define (problem slice_cucumber)
+  (:domain cooking)
+  (:objects
+    cucumber - vegetable
+    knife - tool
+    bowl - object
+    cutting_board - location
+    counter - location
+    robot1 robot2 - robot
+  )
+  (:init
+    (available cucumber)
+    (available bowl)
+    (available cutting_board)
+    (is-whole cucumber)
+    (free robot1)
+    (carry robot2 knife)
+    (can-cut knife)
+    (at cucumber counter)
+    (at bowl counter)
+    (at cutting_board cutting_board)
+    (is-workspace cutting_board)
+  )
+  (:goal
+    (and
+      (is-sliced cucumber)
+      (at cucumber bowl)
+    )
+  )
+)

@@ -41,14 +41,14 @@ def parse_args():
     parser.add_argument("--find_plan", action="store_true", help="refine generated problems by corrective reprompting")
 
     # End-goal generation choices
-    # parser.add_argument("--generate_domain", action="store_true", help="generate PDDL domain")
+    parser.add_argument("--generate_domain", action="store_true", help="generate PDDL domain")
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
 
     # Intermediate generation choices
     parser.add_argument("--generate_caption", action="store_true", help="generate caption for observation")
     parser.add_argument("--generate_scene_graph", action="store_true", help="generate scene graph for observation")
 
-    parser.add_argument("--num_retries", type=int, default=1, help="the number of retries for each generation stage")
+    parser.add_argument("--num_tries", type=int, default=1, help="the number of tries for each generation stage")
 
     # Downward solver
     parser.add_argument("--downward_dir", type=str, default="../downward", help="")

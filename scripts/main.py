@@ -534,7 +534,7 @@ def generate_answers(
         generate_plan=False,
         generate_caption=False,
         generate_scene_graph=False,
-        num_retries=1,
+        num_tries=1,
     ):
     observation = target["observation"]
     success = False
@@ -569,7 +569,7 @@ def generate_answers(
         }
 
         msg = None
-        for retry_idx in range(num_retries):
+        for retry_idx in range(num_tries):
             # if generate_domain:
             #     if refine_problem:
             #         domain_prompt = build_refine_domain_prompt(target, domain_name, config, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
@@ -613,18 +613,19 @@ def generate_answers(
 
             ret, msg = check_pddl(problem_file, target["domain"])
             success = ret
-            if ret:
-                break
+            if not ret:
+                print(f"Attempt {retry_idx+1} failed: \n{msg}")
 
-            print(f"Attempt {retry_idx+1} failed: \n{msg}")
-
-            target["response"] = response
-            target["error"] = msg
+                target["response"] = response
+                target["error"] = msg
 
 
             res["problem"]["file"].append(problem_file)
             res["problem"]["response"].append(response)
             res["problem"]["prompt"].append(problem_prompt)
+
+            if ret:
+                break
 
     return res, success
 
@@ -775,7 +776,7 @@ def check_pddl(pddl_file, domain_file):
         for i, arg_object_name in enumerate(condition_args):
             object_type = objects.get(arg_object_name)
             if object_type is None:
-                errors.append(f"Object '{arg_object_name}' not defined in problem. Predicate: {condition}")
+                errors.append(f"Object '{arg_object_name}' does not have a type. Predicate: {condition}")
                 continue
 
             expected_type = expected_args[i]
@@ -990,6 +991,12 @@ def main():
             total=len(task_names), 
             desc="Generating PDDL problems"
         ):
+            target_problem_path = f"{result_dir}/{args.gen_step}/problems/problem{gen_idx}.pddl"
+            if os.path.exists(target_problem_path):
+                print(f"Problem {gen_idx} already exists, skipping...")
+                gen_idx += 1
+                continue
+
             target = all_targets[task_name_idx]
 
             # generate PDDL objects, initial state, and goal specification
@@ -1010,7 +1017,7 @@ def main():
                 generate_plan=args.generate_plan,
                 generate_caption=args.generate_caption,
                 generate_scene_graph=args.generate_scene_graph,
-                num_retries=args.num_retries,
+                num_tries=args.num_tries,
             )
             
             # save PDDL objects
@@ -1077,8 +1084,11 @@ def main():
             os.path.join(f"{result_dir}/{args.gen_step}/problems", f) 
             for f 
             in os.listdir(f"{result_dir}/{args.gen_step}/problems")
+            if "-" not in f
         ])  # Need to sort
         num_problems = len(problems)
+
+        error_count = 0
 
         for problem in tqdm(
             problems,
@@ -1100,6 +1110,10 @@ def main():
             if not found:
                 with open(problem.replace("problems", "errors").replace(".pddl", ".txt"), "w") as fw:
                     fw.write(err)
+
+            error_count += 1
+
+        print(f"Total errors: {error_count} / {num_problems}")
 
 
 if __name__ == "__main__":

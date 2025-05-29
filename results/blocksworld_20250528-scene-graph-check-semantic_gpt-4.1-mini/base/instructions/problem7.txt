@@ -1,0 +1,185 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    
+    For the current domain, blocksworld, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block)
+        (ontable ?x - block)
+        (clear ?x - block)
+        (handempty ?x - robot)
+        (handfull ?x - robot)
+        (holding ?x - block)
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+    The image of the scene has been provided.
+    You must first generate a scene graph for the image, using the types and predicates in the domain file.
+    Then use the scene graph to generate the PDDL problem.
+    Do not generate anything after the PDDL problem.
+    Format:
+    Scene graph:
+    block: <object1> <object2> ...
+robot: <object1> <object2> ...
+(on ?x - block ?y - block): <predicate object1> <predicate object2> ...
+(ontable ?x - block): <predicate object1> <predicate object2> ...
+(clear ?x - block): <predicate object1> <predicate object2> ...
+(handempty ?x - robot): <predicate object1> <predicate object2> ...
+(handfull ?x - robot): <predicate object1> <predicate object2> ...
+(holding ?x - block): <predicate object1> <predicate object2> ...
+
+    PDDL problem: <PDDL problem>
+    
+    
+    Instruction: Create a stack of blocks: yellow over pink over green over red over purple over blue.
+
+    
+    **********
+
+    The following is the response you generated last time:
+    Scene graph:
+block: yellow pink green red purple blue orange
+robot: robot1
+(on yellow pink)
+(on pink green)
+(ontable green)
+(on red purple)
+(ontable purple)
+(ontable blue)
+(ontable orange)
+(clear yellow)
+(clear red)
+(clear blue)
+(clear orange)
+(handempty robot1)
+(handfull robot1)
+(holding )
+
+PDDL problem:
+(define (problem blocksworld_stack)
+    (:domain blocksworld)
+    (:objects
+        yellow pink green red purple blue orange
+        robot1 - robot
+    )
+    (:init
+        (on yellow pink)
+        (on pink green)
+        (ontable green)
+        (on red purple)
+        (ontable purple)
+        (ontable blue)
+        (ontable orange)
+        (clear yellow)
+        (clear red)
+        (clear blue)
+        (clear orange)
+        (handempty robot1)
+    )
+    (:goal (and
+        (on yellow pink)
+        (on pink green)
+        (on green red)
+        (on red purple)
+        (on purple blue)
+        (ontable blue)
+    ))
+)
+
+    The following is the error in the PDDL file you made last time:
+    Objects missing '- type' definition: yellow pink green red purple blue orange
+Object 'yellow' not defined in problem. Predicate: on yellow pink
+Object 'pink' not defined in problem. Predicate: on yellow pink
+Object 'pink' not defined in problem. Predicate: on pink green
+Object 'green' not defined in problem. Predicate: on pink green
+Object 'green' not defined in problem. Predicate: ontable green
+Object 'red' not defined in problem. Predicate: on red purple
+Object 'purple' not defined in problem. Predicate: on red purple
+Object 'purple' not defined in problem. Predicate: ontable purple
+Object 'blue' not defined in problem. Predicate: ontable blue
+Object 'orange' not defined in problem. Predicate: ontable orange
+Object 'yellow' not defined in problem. Predicate: clear yellow
+Object 'red' not defined in problem. Predicate: clear red
+Object 'blue' not defined in problem. Predicate: clear blue
+Object 'orange' not defined in problem. Predicate: clear orange
+Object 'yellow' not defined in problem. Predicate: on yellow pink
+Object 'pink' not defined in problem. Predicate: on yellow pink
+Object 'pink' not defined in problem. Predicate: on pink green
+Object 'green' not defined in problem. Predicate: on pink green
+Object 'green' not defined in problem. Predicate: on green red
+Object 'red' not defined in problem. Predicate: on green red
+Object 'red' not defined in problem. Predicate: on red purple
+Object 'purple' not defined in problem. Predicate: on red purple
+Object 'purple' not defined in problem. Predicate: on purple blue
+Object 'blue' not defined in problem. Predicate: on purple blue
+Object 'blue' not defined in problem. Predicate: ontable blue
+
+    Please first analyze where the error is, ie. is it a PDDL semantic error, or an error in the caption or scene graph?
+    After analyzing the error, generate all the output again.
+    
