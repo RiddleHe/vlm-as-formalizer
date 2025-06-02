@@ -1,1 +1,1 @@
-Create 1 stacks: purple over red over orange over yellow over blue over green
+Create 2 stacks: yellow over blue over purple, red over orange over green

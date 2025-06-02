@@ -85,11 +85,12 @@ if not os.path.exists(data_path):
         os.makedirs(os.path.join(data_path, subdir), exist_ok=True)
 
 for i in tqdm(range(1, 101)):
-    n_stacks = random.randint(1, 3)
-    start_stacks = generate_random_stacks(colors, n_stacks)
-    end_stacks = generate_random_stacks(colors, n_stacks)
+    n_start_stacks = random.randint(1, 6)
+    n_end_stacks = random.randint(1, 3)
+    start_stacks = generate_random_stacks(colors, n_start_stacks, min_len=1)
+    end_stacks = generate_random_stacks(colors, n_end_stacks, min_len=2)
     while start_stacks == end_stacks:
-        end_stacks = generate_random_stacks(colors, n_stacks)
+        end_stacks = generate_random_stacks(colors, n_end_stacks, min_len=2)
     # print(start_stacks)
     # print(end_stacks)
 

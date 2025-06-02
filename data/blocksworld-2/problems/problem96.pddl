@@ -3,28 +3,27 @@
     (:objects
         orange - block
         green - block
-        yellow - block
-        purple - block
         blue - block
+        purple - block
+        yellow - block
         red - block
         robot - robot
     )
     (:init
         (ontable orange)
-        (on green orange)
-        (clear green)
-        (ontable yellow)
-        (on purple yellow)
-        (clear purple)
-        (ontable blue)
-        (on red blue)
+        (clear orange)
+        (ontable green)
+        (on blue green)
+        (on purple blue)
+        (on yellow purple)
+        (on red yellow)
         (clear red)
-        ; orange -> green
-        ; yellow -> purple
-        ; blue -> red
+        ; orange
+        ; green -> blue -> purple -> yellow -> red
     )
-    (:goal (and (on purple green)
-        (on orange blue)
-        (on red yellow)))
+    (:goal (and (on yellow blue)
+        (on green orange)
+        (on red green)
+        (on purple red)))
 )
     

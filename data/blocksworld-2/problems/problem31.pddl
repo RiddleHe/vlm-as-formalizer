@@ -4,8 +4,8 @@
         orange - block
         red - block
         yellow - block
-        purple - block
         green - block
+        purple - block
         blue - block
         robot - robot
     )
@@ -13,16 +13,21 @@
         (ontable orange)
         (on red orange)
         (on yellow red)
-        (on purple yellow)
-        (on green purple)
-        (on blue green)
+        (clear yellow)
+        (ontable green)
+        (clear green)
+        (ontable purple)
+        (clear purple)
+        (ontable blue)
         (clear blue)
-        ; orange -> red -> yellow -> purple -> green -> blue
+        ; orange -> red -> yellow
+        ; green
+        ; purple
+        ; blue
     )
-    (:goal (and (on blue green)
-        (on red blue)
-        (on purple red)
-        (on yellow purple)
-        (on orange yellow)))
+    (:goal (and (on purple yellow)
+        (on red purple)
+        (on blue green)
+        (on orange blue)))
 )
     

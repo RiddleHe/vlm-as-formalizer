@@ -1,30 +1,36 @@
 (define (problem blocksworld)
     (:domain blocksworld)
     (:objects
-        yellow - block
-        green - block
-        orange - block
-        red - block
         purple - block
         blue - block
+        yellow - block
+        red - block
+        green - block
+        orange - block
         robot - robot
     )
     (:init
-        (ontable yellow)
-        (on green yellow)
+        (ontable purple)
+        (clear purple)
+        (ontable blue)
+        (on yellow blue)
+        (clear yellow)
+        (ontable red)
+        (clear red)
+        (ontable green)
         (clear green)
         (ontable orange)
-        (on red orange)
-        (clear red)
-        (ontable purple)
-        (on blue purple)
-        (clear blue)
-        ; yellow -> green
-        ; orange -> red
-        ; purple -> blue
+        (clear orange)
+        ; purple
+        ; blue -> yellow
+        ; red
+        ; green
+        ; orange
     )
-    (:goal (and (on yellow purple)
+    (:goal (and (on orange purple)
+        (on yellow orange)
+        (on red yellow)
         (on green red)
-        (on blue orange)))
+        (on blue green)))
 )
     
