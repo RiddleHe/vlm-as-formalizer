@@ -126,21 +126,20 @@ def generate_answers(
 
             ret, msg = check_pddl(problem_file, target["domain"])
             success = ret
-            if ret:
-                # TODO: modify to take in str not path
-                ret, err = find_plan(
-                    target["domain"],
-                    problem_file,
-                    "ENTER PLAN PATH HERE",
-                    downward_dir,
-                    time_limit,
-                )
-                if "Search stopped without finding a solution" in err:
-                    msg = "Search stopped without finding a solution"
-                else:
-                    msg = "Unexplained error. Check the problem file again."
+            # if ret:
+            #     ret, err = find_plan_from_str(
+            #         target["domain"],
+            #         problem_file,
+            #         downward_dir,
+            #         time_limit,
+            #     )
 
             if not ret:
+                # if "Search stopped without finding a solution" in err:
+                #     msg = "Search stopped without finding a solution"
+                # else:
+                #     msg = "Unexplained error. Check the problem file again."
+
                 print(f"Attempt {retry_idx+1} failed: \n{msg}")
 
                 target["response"] = response
@@ -155,6 +154,9 @@ def generate_answers(
                 break
 
     return res, success
+
+def find_plan_from_str(domain_str, problem_str, downward_dir, time_limit):
+    pass
 
 def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
     def get_cost(line: str):
@@ -210,7 +212,7 @@ def main():
 
     data_dir = f"../data/{args.domain}"
     result_dir = f"../results/{args.domain}_{datetime.now().strftime('%Y%m%d')}"
-    if args.result_dir is None:
+    if args.result_dir is not None:
         result_dir += f"_{args.result_dir}"
     if args.model is not None:
         result_dir += f"_{args.model.replace('/', '-')}"
@@ -236,7 +238,7 @@ def main():
         if args.generate_plan:
             folders += ["plans"]
         else:
-            folders = ["problems"]
+            folders += ["problems"]
             if args.generate_domain:
                 folders += ["domains"]
 
@@ -270,7 +272,7 @@ def main():
                     if img_name == f"{task_name}-clean.jpg":
                         observations.append(f"{data_dir}/observations/{img_name}")
                 else:
-                    if img_name.startswith(task_name) and "clean" not in img_name:
+                    if img_name.startswith(f"{task_name}-") and "clean" not in img_name:
                         observations.append(f"{data_dir}/observations/{img_name}")
 
             targets += [{
@@ -288,8 +290,6 @@ def main():
             total=len(task_names), 
             desc="Generating PDDL problems"
         ):
-            print(f"Generating {task_name}...")
-            print(f"Observations: {target['observations']}")
 
             target_problem_path = f"{result_dir}/{args.gen_step}/problems/{task_name}.pddl"
             if os.path.exists(target_problem_path):
@@ -315,7 +315,7 @@ def main():
             try:
                 if args.generate_problem:
                     for retry_idx in range(len(res["problem"]["file"])):
-                        problem_name = f"{task_name}-{retry_idx+1}"
+                        problem_name = f"{task_name}-attempt-{retry_idx+1}"
                         if success and retry_idx == len(res["problem"]["file"]) - 1:
                             problem_name = f"{task_name}"
 
