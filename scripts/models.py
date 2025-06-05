@@ -1,6 +1,10 @@
 import os
 import base64
 import torch
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 def get_gpt_client_name(client_name):
     if "gpt" in client_name:
@@ -17,11 +21,18 @@ class VLMClient:
             self.type = "openai"
             self.client_name = get_gpt_client_name(client_name)
 
+        elif client_name.startswith("openrouter/"):  # OpenRouter models
+            self.type = "openrouter"
+            self.client_name = client_name.replace("openrouter/", "")  # Remove prefix
+            self.api_key = os.getenv("OPENROUTER_API_KEY")
+            if not self.api_key:
+                raise ValueError("OPENROUTER_API_KEY environment variable not set")
+
         elif "/" in client_name:
             self.type = "huggingface"
             self.client_name = client_name
 
-        if self.client_name is None:
+        else:
             raise ValueError(f"Unknown client type: {client_name}")
         
         # Load client
@@ -29,6 +40,12 @@ class VLMClient:
             from openai import OpenAI
             self.client = OpenAI(
                 api_key=os.getenv("OPENAI_API_KEY"),
+            )
+        elif self.type == "openrouter":
+            from openai import OpenAI
+            self.client = OpenAI(
+                base_url="https://openrouter.ai/api/v1",
+                api_key=self.api_key,
             )
         elif self.type == "huggingface":
             from transformers import pipeline
@@ -66,6 +83,48 @@ class VLMClient:
                 }],
             )
             full_answer = response.output_text
+
+        elif self.type == "openrouter":
+            # Build content array for OpenRouter (OpenAI-compatible format)
+            content = []
+            
+            # Add text prompt first
+            content.append({
+                "type": "text",
+                "text": prompt
+            })
+            
+            # Add images
+            for base64_image in base64_images:
+                content.append({
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{base64_image}"
+                    }
+                })
+
+            # Use OpenAI client to make the request
+            try:
+                completion = self.client.chat.completions.create(
+                    extra_headers={
+                        "HTTP-Referer": "https://github.com/your-repo/roboplan",
+                        "X-Title": "RoboPlan VLM Testing"
+                    },
+                    model=self.client_name,
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": content
+                        }
+                    ],
+                    max_tokens=1024,
+                    temperature=0.7,
+                )
+                
+                full_answer = completion.choices[0].message.content
+                
+            except Exception as e:
+                raise RuntimeError(f"OpenRouter API request failed: {str(e)}")
 
         elif self.type == "huggingface":
             content = [
