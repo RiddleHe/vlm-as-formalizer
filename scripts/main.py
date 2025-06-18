@@ -11,8 +11,9 @@ import traceback
 from datetime import datetime
 import subprocess
 import glob
+import tempfile
+import shutil
 from PIL import Image
-from utils import seed_everything, parse_args
 import torch
 
 from prompts import (
@@ -21,6 +22,12 @@ from prompts import (
     build_domain_prompt, 
     build_refine_domain_prompt, 
     build_plan_prompt,
+)
+from utils import (
+    seed_everything, 
+    parse_args,
+    format_command,
+    create_file_paths,
 )
 from parsers import (
     parse_pddl,
@@ -86,19 +93,8 @@ def generate_answers(
 
         msg = None
         for retry_idx in range(num_tries):
-            # if generate_domain:
-            #     domain_prompt = build_domain_prompt(target, domain_name, config, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
-
-            #     domain_response = model.generate(domain_prompt, observation)
-            #     domain_file = parse_pddl(domain_response)
-            #     if domain_file is None:
-            #         domain_file = ""
-
-            #     target["domain"] = domain_file
-
-            #     res["domain"]["file"] = domain_file
-            #     res["domain"]["response"] = domain_response
-            #     res["domain"]["prompt"] = domain_prompt
+            if generate_domain:
+                pass
 
             if retry_idx > 0:
                 problem_prompt = build_refine_problem_prompt(
@@ -124,22 +120,9 @@ def generate_answers(
             if problem_file is None:
                 problem_file = ""
 
-            ret, msg = check_pddl(problem_file, target["domain"])
-            success = ret
-            # if ret:
-            #     ret, err = find_plan_from_str(
-            #         target["domain"],
-            #         problem_file,
-            #         downward_dir,
-            #         time_limit,
-            #     )
+            success, msg = check_error(problem_file, target["domain"], downward_dir, time_limit)
 
-            if not ret:
-                # if "Search stopped without finding a solution" in err:
-                #     msg = "Search stopped without finding a solution"
-                # else:
-                #     msg = "Unexplained error. Check the problem file again."
-
+            if not success:
                 print(f"Attempt {retry_idx+1} failed: \n{msg}")
 
                 target["response"] = response
@@ -150,15 +133,30 @@ def generate_answers(
             res["problem"]["response"].append(response)
             res["problem"]["prompt"].append(problem_prompt)
 
-            if ret:
+            if success:
                 break
 
     return res, success
 
-def find_plan_from_str(domain_str, problem_str, downward_dir, time_limit):
-    pass
+def check_error(problem_file, domain_file, downward_dir, time_limit):
+    ret, msg = False, None
+    
+    ret, msg = check_pddl(problem_file, domain_file)
+    if ret:
+        with tempfile.TemporaryDirectory() as temp_dir_path:
+            domain_path, problem_path, plan_path = create_file_paths(domain_file, problem_file, temp_dir_path)
+            command = format_command(domain_path, problem_path, plan_path, downward_dir, time_limit)
+            ret, msg = find_plan(command, plan_path)
 
-def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
+        if not ret:
+            if "Search stopped without finding a solution" in msg:
+                msg = "Search stopped without finding a solution"
+            else:
+                msg = msg[:100] + "..."
+
+    return ret, msg
+
+def find_plan(command, plan_path):
     def get_cost(line: str):
         # ; cost = COST *
         if line.startswith("; cost = "):
@@ -168,21 +166,11 @@ def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
 
         return cost
 
-    sas_path = f"{plan_path}.sas"
-
-    command = f"python {downward_dir}/fast-downward.py " + \
-                f"--alias lama " + \
-                f"--search-time-limit {time_limit} " + \
-                f"--plan-file {plan_path} " + \
-                f"--sas-file {sas_path} " + \
-                f"{domain_path} " + \
-                f"{problem_path}"
-
     try:
         output = subprocess.check_output(
             command,
             shell=True,
-            stderr=subprocess.DEVNULL,
+            stderr=subprocess.STDOUT,
         )
 
         best_cost = 1e10
@@ -200,7 +188,7 @@ def find_plan(domain_path, problem_path, plan_path, downward_dir, time_limit):
         return True, None
 
     except Exception as e:
-        return False, e.output.decode()
+        return False, e.output.decode().strip()
 
 # Main
 
@@ -378,12 +366,19 @@ def main():
             if args.generate_domain:
                 domain_path = f"{result_dir}/{args.gen_step}/domains/domain{idx}.pddl"
 
-            found, err = find_plan(
+            plan_path = problem.replace("problems", "plans").replace(".pddl", "")
+
+            command = format_command(
                 domain_path,
                 problem,
-                problem.replace("problems", "plans").replace(".pddl", ""),
+                plan_path,
                 args.downward_dir,
                 args.time_limit,
+            )
+
+            found, err = find_plan(
+                command,
+                plan_path,
             )
 
             if not found:

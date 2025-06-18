@@ -61,3 +61,29 @@ def parse_args():
     args = parser.parse_args()
 
     return args
+
+def format_command(domain_path, problem_path, plan_path, downward_dir, time_limit):
+    sas_path = f"{plan_path}.sas"
+
+    command = f"python {downward_dir}/fast-downward.py " + \
+                f"--alias lama " + \
+                f"--search-time-limit {time_limit} " + \
+                f"--plan-file {plan_path} " + \
+                f"--sas-file {sas_path} " + \
+                f"{domain_path} " + \
+                f"{problem_path}"
+
+    return command
+
+def create_file_paths(domain_str, problem_str, temp_dir_path):
+    domain_path = f"{temp_dir_path}/domain.pddl"
+    problem_path = f"{temp_dir_path}/problem.pddl"
+    with open(domain_path, "w") as fw:
+        fw.write(domain_str)
+    with open(problem_path, "w") as fw:
+        fw.write(problem_str)
+
+    plan_base_name = f"output_plan"
+    plan_path = f"{temp_dir_path}/{plan_base_name}"
+
+    return domain_path, problem_path, plan_path
