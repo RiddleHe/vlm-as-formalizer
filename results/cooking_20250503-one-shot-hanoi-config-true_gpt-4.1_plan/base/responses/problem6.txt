@@ -1,7 +1,0 @@
-(pick robot1 carrot tray)
-(pick robot2 cleaver holder)
-(place robot1 carrot cutting_board)
-(slice robot2 carrot cleaver cutting_board)
-(pick robot1 cucumber tray)
-(place robot1 cucumber cutting_board)
-(slice robot2 cucumber cleaver cutting_board)

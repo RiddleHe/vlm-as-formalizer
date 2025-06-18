@@ -1,5 +1,0 @@
-(pick robot1 cucumber counter)
-(place robot1 cucumber cutting_board)
-(slice robot2 cucumber knife cutting_board)
-(pick robot2 cucumber cutting_board)
-(place robot2 cucumber bowl)

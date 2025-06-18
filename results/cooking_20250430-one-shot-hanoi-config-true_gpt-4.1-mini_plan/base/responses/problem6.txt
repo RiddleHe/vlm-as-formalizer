@@ -1,6 +1,0 @@
-(pick robot1 cucumber table)
-(slice robot1 cucumber knife table)
-(place robot1 cucumber bowl)
-(pick robot2 carrot table)
-(slice robot2 carrot knife table)
-(place robot2 carrot bowl)

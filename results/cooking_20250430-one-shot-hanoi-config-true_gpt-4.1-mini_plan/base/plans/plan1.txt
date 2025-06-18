@@ -1,3 +1,0 @@
-(pick robot1 cucumber location_table)
-(slice robot1 cucumber knife location_table)
-(place robot1 cucumber bowl)
