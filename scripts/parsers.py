@@ -1,4 +1,5 @@
 import re
+from collections import defaultdict
 
 def parse_actions(domain_file):
     regex_patern = r'\(:action\s+(\w+).*?:parameters\s*\((.*?)\)'
@@ -127,7 +128,7 @@ def parse_predicates(domain_file):
     return predicates
 
 def check_pddl(pddl_file, domain_file):
-    errors = []
+    errors = defaultdict(list)
 
     # From domain: Extract all object types
     types_raw = parse_types(domain_file)
@@ -173,17 +174,17 @@ def check_pddl(pddl_file, domain_file):
                     type_name = parts[dash_index + 1]
 
             else:
-                errors.append(f"Objects missing '- type' definition: {line}")
+                errors["Objects missing '- type' definition"].append(line)
                 continue
 
             if type_name:
                 if type_name not in types:
-                    errors.append(f"Problem object type '{type_name}' not defined in domain.")
+                    errors["Problem object type not defined in domain"].append(type_name)
                     continue
 
                 for obj_name in obj_names:
                     if obj_name in objects:
-                        errors.append(f"Problem object '{obj_name}' redefined. Original type: '{objects[obj_name]}', new: '{type_name}'. Using first.")
+                        errors["Problem object redefined"].append(f"{obj_name} ({objects[obj_name]} -> {type_name})")
                     else:
                         objects[obj_name] = type_name
 
@@ -250,7 +251,7 @@ def check_pddl(pddl_file, domain_file):
                         idx = jdx
                         break
                 if balance != 0:
-                    errors.append(f"Unbalanced parentheses in block: {block}")
+                    errors["Unbalanced parentheses in block"].append(block)
                     break
             idx += 1
 
@@ -261,19 +262,19 @@ def check_pddl(pddl_file, domain_file):
         condition_args = parts[1:]
 
         if condition_name not in predicates:
-            errors.append(f"Predicate '{condition_name}' not defined in domain. Predicate: {condition}")
+            errors["Predicate not defined in domain"].append(condition_name)
             continue
 
         expected_args = predicates[condition_name]
 
         if len(condition_args) != len(expected_args):
-            errors.append(f"Predicate '{condition_name}' expects {len(expected_args)} arguments, but got {len(condition_args)} ({condition}).")
+            errors["Predicate expects wrong number of arguments"].append(f"{condition_name} ({len(expected_args)} -> {len(condition_args)})")
             continue
 
         for i, arg_object_name in enumerate(condition_args):
             object_type = objects.get(arg_object_name)
             if object_type is None:
-                errors.append(f"Object '{arg_object_name}' does not have a type. Predicate: {condition}")
+                errors["Object does not have a type"].append(f"{arg_object_name} ({condition})")
                 continue
 
             expected_type = expected_args[i]
@@ -287,12 +288,12 @@ def check_pddl(pddl_file, domain_file):
             current_type = object_type
             while True:
                 if current_type not in type_hierarchy:
-                    errors.append(f"Predicate '{condition}' argument '{arg_object_name}' has type '{object_type}', expected '{expected_type}'.")
+                    errors["Predicate argument has wrong type"].append(f"{condition} ({arg_object_name}: {object_type} -> {expected_type})")
                     break
                 
                 parent = type_hierarchy.get(current_type)
                 if parent is None:
-                    errors.append(f"Predicate '{condition}' argument '{arg_object_name}' has type '{object_type}', expected '{expected_type}'.")
+                    errors["Predicate argument has wrong type"].append(f"{condition} ({arg_object_name}: {object_type} -> {expected_type})")
                     break
                 
                 current_type = parent
@@ -303,4 +304,11 @@ def check_pddl(pddl_file, domain_file):
         return True, None
     
     else:
-        return False, "\n".join(errors)
+        error_msg = ""
+        for error_type, error_list in errors.items():
+            error_msg += f"{error_type}:\n"
+            for error in error_list: 
+                error_msg += f"  {error}\n"
+            error_msg += "\n"
+
+        return False, error_msg

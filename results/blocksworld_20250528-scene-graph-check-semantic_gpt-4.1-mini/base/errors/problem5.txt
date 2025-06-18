@@ -1,2 +1,0 @@
-Deleted because the file is too large.
-Problem is failure to find a solution after exhaustive search.

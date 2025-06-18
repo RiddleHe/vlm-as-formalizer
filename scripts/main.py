@@ -316,15 +316,8 @@ def main():
                         with open(f"{result_dir}/{save_step}/responses/{problem_name}.txt", "w") as fw:
                             fw.write(res["problem"]["response"][retry_idx])
 
-                    # if args.generate_domain:
-                    #     with open(f"{result_dir}/{save_step}/domains/domain{gen_idx}.pddl", "w") as fw:
-                    #         fw.write(res["domain"]["file"])
-
-                    #     with open(f"{result_dir}/{save_step}/responses/domain{gen_idx}.txt", "w") as fw:
-                    #         fw.write(res["domain"]["response"])
-
-                    #     with open(f"{result_dir}/{save_step}/instructions/domain{gen_idx}.txt", "w") as fw:
-                    #         fw.write(res["domain"]["prompt"])
+                    if args.generate_domain:
+                        pass
                 
                 elif args.generate_plan:
                     with open(f"{result_dir}/{save_step}/instructions/{task_name}.txt", "w") as fw:
@@ -385,7 +378,7 @@ def main():
                 with open(problem.replace("problems", "errors").replace(".pddl", ".txt"), "w") as fw:
                     fw.write(err)
 
-            error_count += 1
+                error_count += 1
 
         print(f"Total errors: {error_count} / {num_problems}")
 
