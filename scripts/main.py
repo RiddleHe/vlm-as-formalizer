@@ -33,6 +33,7 @@ from parsers import (
     parse_pddl,
     parse_plan,
     check_pddl,
+    check_plan,
 )
 
 from models import VLMClient

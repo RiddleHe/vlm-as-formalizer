@@ -31,7 +31,7 @@ def parse_args():
 
     # Main generation stages
     parser.add_argument("--generate_problem", action="store_true", help="generate PDDL problems")
-    parser.add_argument("--find_plan", action="store_true", help="refine generated problems by corrective reprompting")
+    parser.add_argument("--find_plan", action="store_true", default=True, help="refine generated problems by corrective reprompting")
 
     # End-goal generation choices
     parser.add_argument("--generate_domain", action="store_true", help="generate PDDL domain")
