@@ -1,0 +1,4 @@
+Plan action counts mismatch.
+Ground truth has Counter({'stack': 4, 'unstack': 3, 'pick-up': 1}).
+Predicted has Counter({'pick-up': 4, 'stack': 4}).
+No consistent mapping found between ground truth and predicted plan.

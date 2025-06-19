@@ -1,0 +1,7 @@
+Plan length mismatch.
+Ground truth has 16 steps.
+Predicted has 4 steps.
+Plan action counts mismatch.
+Ground truth has Counter({'unstack': 5, 'put-down': 4, 'stack': 4, 'pick-up': 3}).
+Predicted has Counter({'pick-up': 2, 'stack': 2}).
+No consistent mapping found between ground truth and predicted plan.

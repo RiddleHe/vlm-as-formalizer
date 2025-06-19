@@ -387,7 +387,7 @@ def main():
             if success:  # check plan
                 with open(f"{plan_path}.txt", "r") as fr:
                     plan = fr.readlines()
-                with open(f"{plan_path.replace(f"{result_dir}", f"../results/{args.domain}_gt")}.txt", "r") as fr:
+                with open(f"{plan_path.replace(f'{result_dir}', f'../results/{args.domain}_gt')}.txt", "r") as fr:
                     gt_plan = fr.readlines()
                 
                 success, err = check_plan(gt_plan, plan)

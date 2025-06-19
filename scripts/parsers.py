@@ -1,5 +1,5 @@
 import re
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 def parse_actions_from_domain(domain_file):
     regex_patern = r'\(:action\s+(\w+).*?:parameters\s*\((.*?)\)'
@@ -357,20 +357,26 @@ def find_mapping_recursive(gt_actions, pred_actions, mapping):
     return None  # no consistent mapping found, backtrack
 
 def check_plan(gt_plan: list[str], pred_plan: list[str]) -> bool:
+    msg = ""
+    success = True
+
     gt_actions = parse_actions_from_plan(gt_plan)
     pred_actions = parse_actions_from_plan(pred_plan)
 
     if not len(gt_actions) == len(pred_actions):
-        return False, f"Plan length mismatch.\nGround truth has {len(gt_actions)} steps.\nPredicted has {len(pred_actions)} steps."
+        msg += f"Plan length mismatch.\nGround truth has {len(gt_actions)} steps.\nPredicted has {len(pred_actions)} steps.\n\n"
+        success = False
 
     gt_actions_counts = Counter(action["name"] for action in gt_actions)
     pred_actions_counts = Counter(action["name"] for action in pred_actions)
 
     if not gt_actions_counts == pred_actions_counts:
-        return False, f"Plan action counts mismatch.\nGround truth has {gt_actions_counts}.\nPredicted has {pred_actions_counts}."
+        msg += f"Plan action counts mismatch.\nGround truth has {gt_actions_counts}.\nPredicted has {pred_actions_counts}.\n\n"
+        success = False
 
     mapping = find_mapping_recursive(gt_actions, pred_actions, {})
     if not mapping:
-        return False, "No consistent mapping found between ground truth and predicted plan."
+        msg += "No consistent mapping found between ground truth and predicted plan.\n\n"
+        success = False
 
-    return True, None
+    return success, msg
