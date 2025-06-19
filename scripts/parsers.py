@@ -1,7 +1,7 @@
 import re
 from collections import defaultdict
 
-def parse_actions(domain_file):
+def parse_actions_from_domain(domain_file):
     regex_patern = r'\(:action\s+(\w+).*?:parameters\s*\((.*?)\)'
     compiled_regex = re.compile(regex_patern, re.DOTALL) 
     matches = compiled_regex.findall(domain_file)
@@ -11,6 +11,18 @@ def parse_actions(domain_file):
         parameters = re.sub(r'\s+', ' ', match[1].strip())
         actions.append(f"action: {action_name}\nparameters: {parameters}")
     return "\n".join(actions)
+
+def parse_actions_from_plan(plan_file):
+    actions = []
+    for line in plan_file:
+        line = line.strip()[1:-1].split()
+        action_name = line[0]
+        args = line[1:]
+        actions.append({
+            "name": action_name,
+            "args": args,
+        })
+    return actions
 
 def parse_pddl(response):  # Use parentheses matching to find the PDDL file
     start_index = response.find("(define")
@@ -127,7 +139,7 @@ def parse_predicates(domain_file):
 
     return predicates
 
-def check_pddl(pddl_file, domain_file):
+def check_pddl(pddl_file: str, domain_file: str) -> tuple[bool, str]:
     errors = defaultdict(list)
 
     # From domain: Extract all object types
@@ -312,3 +324,53 @@ def check_pddl(pddl_file, domain_file):
             error_msg += "\n"
 
         return False, error_msg
+
+def find_mapping_recursive(gt_actions, pred_actions, mapping):
+    if not gt_actions:  # all gt_actions have been mapped
+        return mapping 
+
+    current_gt_action = gt_actions[0]
+    remaining_gt_actions = gt_actions[1:]
+
+    for i, current_pred_action in enumerate(pred_actions):
+        if current_gt_action["name"] == current_pred_action["name"]:
+            temp_mapping = mapping.copy()
+            is_consistent = True
+
+            for gt_arg, pred_arg in zip(current_gt_action["args"], current_pred_action["args"]):
+                if gt_arg in temp_mapping:
+                    if temp_mapping[gt_arg] != pred_arg:  # gt_arg mapped to a different pred_arg
+                        is_consistent = False
+                        break
+                elif pred_arg in temp_mapping.values():  # pred_arg mapped to a different gt_arg
+                    is_consistent = False
+                    break 
+                else:
+                    temp_mapping[gt_arg] = pred_arg
+
+            if is_consistent: # mapping is consistent up to current pair, continue without backtracking
+                remaining_pred_actions = pred_actions[:i] + pred_actions[i+1:]
+                solution = find_mapping_recursive(remaining_gt_actions, remaining_pred_actions, temp_mapping)
+                if solution:
+                    return solution
+
+    return None  # no consistent mapping found, backtrack
+
+def check_plan(gt_plan: list[str], pred_plan: list[str]) -> bool:
+    gt_actions = parse_actions_from_plan(gt_plan)
+    pred_actions = parse_actions_from_plan(pred_plan)
+
+    if not len(gt_actions) == len(pred_actions):
+        return False, f"Plan length mismatch.\nGround truth has {len(gt_actions)} steps.\nPredicted has {len(pred_actions)} steps."
+
+    gt_actions_counts = Counter(action["name"] for action in gt_actions)
+    pred_actions_counts = Counter(action["name"] for action in pred_actions)
+
+    if not gt_actions_counts == pred_actions_counts:
+        return False, f"Plan action counts mismatch.\nGround truth has {gt_actions_counts}.\nPredicted has {pred_actions_counts}."
+
+    mapping = find_mapping_recursive(gt_actions, pred_actions, {})
+    if not mapping:
+        return False, "No consistent mapping found between ground truth and predicted plan."
+
+    return True, None

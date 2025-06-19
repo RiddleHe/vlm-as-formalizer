@@ -357,8 +357,6 @@ def main():
         ])  # Need to sort
         num_problems = len(problems)
 
-        ground_truth_dir = f"../data/{args.domain}/ground_truth"
-
         error_count = 0
 
         for problem in tqdm(
@@ -380,25 +378,24 @@ def main():
                 args.time_limit,
             )
 
-            found, err = find_plan(
+            success, err = find_plan(
                 command,
                 plan_path,
             )
 
-            if not found:
+            if success:  # check plan
+                with open(f"{plan_path}.txt", "r") as fr:
+                    plan = fr.readlines()
+                with open(f"{plan_path.replace(f"{result_dir}", f"../results/{args.domain}_gt")}.txt", "r") as fr:
+                    gt_plan = fr.readlines()
+                
+                success, err = check_plan(gt_plan, plan)
+            
+            if not success:
                 with open(problem.replace("problems", "errors").replace(".pddl", ".txt"), "w") as fw:
                     fw.write(err)
 
                 error_count += 1
-
-            else:  # check plan
-                with open(f"{plan_path}.txt", "r") as fr:
-                    plan = fr.readlines()
-                steps = len(plan)
-
-
-
-
 
         print(f"Total errors: {error_count} / {num_problems}")
 

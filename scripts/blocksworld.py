@@ -49,6 +49,8 @@ def generate_states(stacks, is_goal=False):
                 states.append("(on " + color + " " + stack[i-1] + ")")
             if i == len(stack) - 1 and not is_goal:
                 states.append("(clear " + color + ")")
+    if not is_goal: 
+        states.append("(handempty robot)")
     return states
 
 def generate_instruction(stacks):
