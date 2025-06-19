@@ -176,7 +176,9 @@ def find_plan(command, plan_path):
         best_cost = 1e10
         best_plan = None
 
-        for fname in glob.glob(f"{plan_path}.*"):
+        plan_files = glob.glob(f"{plan_path}.*")
+
+        for fname in plan_files:
             with open(fname, "r") as fr:
                 plans = fr.readlines()
                 cost = get_cost(plans[-1]) # the cost is written in the last line
@@ -184,6 +186,13 @@ def find_plan(command, plan_path):
             if cost < best_cost:
                 best_cost = cost
                 best_plan = "\n".join([p.strip() for p in plans[:-1]])
+
+        if best_plan is not None:
+            with open(f"{plan_path}.txt", "w") as fw:
+                fw.write(best_plan)
+
+            for fname in plan_files:
+                os.remove(fname)
 
         return True, None
 
@@ -199,7 +208,7 @@ def main():
         "generate_plan is not compatible with generate_problem"
 
     data_dir = f"../data/{args.domain}"
-    result_dir = f"../results/{args.domain}_{datetime.now().strftime('%Y%m%d')}"
+    result_dir = f"../results/{args.domain}"
     if args.result_dir is not None:
         result_dir += f"_{args.result_dir}"
     if args.model is not None:
@@ -348,6 +357,8 @@ def main():
         ])  # Need to sort
         num_problems = len(problems)
 
+        ground_truth_dir = f"../data/{args.domain}/ground_truth"
+
         error_count = 0
 
         for problem in tqdm(
@@ -379,6 +390,15 @@ def main():
                     fw.write(err)
 
                 error_count += 1
+
+            else:  # check plan
+                with open(f"{plan_path}.txt", "r") as fr:
+                    plan = fr.readlines()
+                steps = len(plan)
+
+
+
+
 
         print(f"Total errors: {error_count} / {num_problems}")
 
