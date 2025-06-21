@@ -282,6 +282,8 @@ def main():
                 "error": None,
             }]
 
+        success_at_k = [0] * args.num_tries
+
         # Start generating
         for i, (task_name, target) in tqdm(
             enumerate(zip(task_names, targets)), 
@@ -312,32 +314,32 @@ def main():
 
             try:
                 if args.generate_problem:
+                    dir_pairs = [
+                        ("problems", "file"),
+                        ("instructions", "prompt"),
+                        ("responses", "response"),
+                    ]
                     for retry_idx in range(len(res["problem"]["file"])):
                         problem_name = f"{task_name}-attempt-{retry_idx+1}"
                         if success and retry_idx == len(res["problem"]["file"]) - 1:
                             problem_name = f"{task_name}"
 
-                        with open(f"{result_dir}/{save_step}/instructions/{problem_name}.txt", "w") as fw:
-                            fw.write(res["problem"]["prompt"][retry_idx])
-
-                        with open(f"{result_dir}/{save_step}/problems/{problem_name}.pddl", "w") as fw:
-                            fw.write(res["problem"]["file"][retry_idx])
-
-                        with open(f"{result_dir}/{save_step}/responses/{problem_name}.txt", "w") as fw:
-                            fw.write(res["problem"]["response"][retry_idx])
+                        for dir_name, file_name in dir_pairs:
+                            with open(f"{result_dir}/{save_step}/{dir_name}/{problem_name}.txt", "w") as fw:
+                                fw.write(res["problem"][file_name][retry_idx])
 
                     if args.generate_domain:
                         pass
                 
                 elif args.generate_plan:
-                    with open(f"{result_dir}/{save_step}/instructions/{task_name}.txt", "w") as fw:
-                        fw.write(res["prompt"])
-
-                    with open(f"{result_dir}/{save_step}/plans/{task_name}.txt", "w") as fw:
-                        fw.write(res["plan"])
-                        
-                    with open(f"{result_dir}/{save_step}/responses/{task_name}.txt", "w") as fw:
-                        fw.write(res["response"])
+                    dir_pairs = [
+                        ("plans", "plan"),
+                        ("instructions", "prompt"),
+                        ("responses", "response"),
+                    ]
+                    for dir_name, file_name in dir_pairs:
+                        with open(f"{result_dir}/{save_step}/{dir_name}/{task_name}.txt", "w") as fw:
+                            fw.write(res[file_name])
             
             except Exception as e:
                 print(f"Error saving PDDL: {traceback.format_exc()}")
