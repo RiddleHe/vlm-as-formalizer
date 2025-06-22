@@ -69,6 +69,8 @@ def build_scene_graph_template(domain_file):
     # print(f"Types: {types}")
 
     predicates = parse_predicates(domain_file)
+    unary_predicates = [f"{predicate} ({args[0]})" for predicate, args in predicates.items() if len(args) == 1]
+    binary_predicates = [f"{predicate} ({args[0]}, {args[1]})" for predicate, args in predicates.items() if len(args) == 2]
     # print(f"Predicates: {predicates}")
         
     prompt = f"""
@@ -81,9 +83,11 @@ def build_scene_graph_template(domain_file):
     """
 
     for obj_type in types:
-        prompt += f"{obj_type}: <object1> <object2> ...\n"
-    for predicate in predicates:
-        prompt += f"{predicate}: <predicate object1> <predicate object2> ...\n"
+        prompt += f"{obj_type}: describe all objects of this type in the image.\n"
+    for predicate in unary_predicates:
+        prompt += f"{predicate}: describe all tuples (predicate, object) that satisfy the predicate.\n"
+    for predicate in binary_predicates:
+        prompt += f"{predicate}: describe all tuples (predicate, object1, object2...) that satisfy the predicate.\n"
 
     prompt += f"""
     PDDL problem: <PDDL problem>

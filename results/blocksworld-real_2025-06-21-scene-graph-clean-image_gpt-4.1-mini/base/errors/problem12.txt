@@ -1,0 +1,36 @@
+Plan length mismatch.
+Ground truth has 16 steps.
+Predicted has 6 steps.
+
+No consistent mapping between init conditions.
+Ground truth init:
+
+        (ontable red)
+        (on orange red)
+        (on blue orange)
+        (on yellow blue)
+        (on green yellow)
+        (on purple green)
+        (clear purple)
+        (handempty robot)
+        ; red -> orange -> blue -> yellow -> green -> purple
+    )
+    
+Predicted init:
+
+        (ontable block1)
+        (ontable block2)
+        (ontable block3)
+        (ontable block4)
+        (ontable block5)
+        (ontable block6)
+        (clear block1)
+        (clear block2)
+        (clear block3)
+        (clear block4)
+        (clear block5)
+        (clear block6)
+        (handempty robot1)
+    )
+    
+

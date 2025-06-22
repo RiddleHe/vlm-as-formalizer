@@ -1,0 +1,57 @@
+Plan action counts mismatch.
+Ground truth has Counter({'stack': 4, 'unstack': 3, 'pick-up': 1}).
+Predicted has Counter({'pick-up': 4, 'stack': 4}).
+
+Problem:
+(:init
+
+        (ontable blue)
+        (ontable purple)
+        (ontable orange)
+        (ontable red)
+        (ontable yellow)
+        (ontable green)
+
+        (clear blue)
+        (clear purple)
+        (clear orange)
+        (clear red)
+        (clear yellow)
+        (clear green)
+
+        (handempty robot1)
+    )
+    (:goal (and
+        (on green blue)
+        (on blue purple)
+        (on purple orange)
+        (on red yellow)
+        (ontable orange)
+        (ontable yellow)
+    ))
+)
+
+Ground truth problem:
+(:init
+
+        (ontable yellow)
+        (on purple yellow)
+        (clear purple)
+        (ontable green)
+        (on red green)
+        (on blue red)
+        (clear blue)
+        (ontable orange)
+        (clear orange)
+        (handempty robot)
+        ; yellow -> purple
+        ; green -> red -> blue
+        ; orange
+    )
+    (:goal (and (on purple orange)
+        (on blue purple)
+        (on green blue)
+        (on red yellow)))
+)
+    
+

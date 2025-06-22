@@ -45,7 +45,7 @@ def parse_args():
     parser.add_argument("--clean_image", action="store_true", default=False, help="Present a clean image to the model")
 
     # Runtime config
-    parser.add_argument("--num_tries", type=int, default=1, help="the number of tries for each generation stage")
+    parser.add_argument("--num_tries", type=int, default=2, help="the number of tries for each generation stage")
 
     # Downward solver
     parser.add_argument("--downward_dir", type=str, default="../downward", help="")

@@ -1,0 +1,29 @@
+(define (problem blocksworld5_corrected)
+    (:domain blocksworld)
+    (:objects
+        yellow orange blue green red purple - block
+        robot1 - robot
+    )
+    (:init
+        (ontable purple)
+        (clear purple)
+        (ontable orange)
+        (clear orange)
+        (ontable yellow)
+        (clear yellow)
+        (ontable red)
+        (clear red) ; Actually, red is not clear if green is on it, so remove clear red
+        (on green red)
+        (on red purple)
+        (clear green)
+        (on blue orange)
+        (clear blue)
+        (handempty robot1)
+    )
+    (:goal (and 
+        (on blue orange) 
+        (on yellow green)
+        (on green red)
+        (on red purple)
+    ))
+)

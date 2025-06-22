@@ -33,7 +33,7 @@ from parsers import (
     parse_pddl,
     parse_plan,
     check_pddl,
-    check_plan,
+    compare_plans,
 )
 
 from models import VLMClient
@@ -55,6 +55,7 @@ def generate_answers(
         time_limit=30,
     ):
     observations = target["observations"]
+
     success = False
 
     if generate_plan:
@@ -152,8 +153,10 @@ def check_error(problem_file, domain_file, downward_dir, time_limit):
         if not ret:
             if "Search stopped without finding a solution" in msg:
                 msg = "Search stopped without finding a solution"
+            elif "Driver aborting after search" in msg:
+                msg = "Search stopped early due to time limit"
             else:
-                msg = msg[:100] + "..."
+                msg = "..." + msg[-300:]
 
     return ret, msg
 
@@ -189,13 +192,15 @@ def find_plan(command, plan_path):
                 best_plan = "\n".join([p.strip() for p in plans[:-1]])
 
         if best_plan is not None:
-            with open(f"{plan_path}.txt", "w") as fw:
-                fw.write(best_plan)
-
             for fname in plan_files:
                 os.remove(fname)
 
-        return True, None
+            with open(f"{plan_path}", "w") as fw:
+                fw.write(best_plan)
+
+            return True, None
+
+        return False, "No plan found"
 
     except Exception as e:
         return False, e.output.decode().strip()
@@ -270,7 +275,7 @@ def main():
                     if img_name == f"{task_name}-clean.jpg":
                         observations.append(f"{data_dir}/observations/{img_name}")
                 else:
-                    if img_name.startswith(f"{task_name}-") and "clean" not in img_name:
+                    if img_name.startswith(f"{task_name}.jpg") or (img_name.startswith(f"{task_name}-") and "clean" not in img_name):
                         observations.append(f"{data_dir}/observations/{img_name}")
 
             targets += [{
@@ -282,8 +287,6 @@ def main():
                 "error": None,
             }]
 
-        success_at_k = [0] * args.num_tries
-
         # Start generating
         for i, (task_name, target) in tqdm(
             enumerate(zip(task_names, targets)), 
@@ -291,8 +294,8 @@ def main():
             desc="Generating PDDL problems"
         ):
 
-            target_problem_path = f"{result_dir}/{args.gen_step}/problems/{task_name}.pddl"
-            if os.path.exists(target_problem_path):
+            target_problem_dir = f"{result_dir}/{args.gen_step}/problems"
+            if any(path.startswith(f"{task_name}") for path in os.listdir(target_problem_dir)):
                 print(f"{task_name} already exists, skipping...")
                 continue
 
@@ -315,17 +318,17 @@ def main():
             try:
                 if args.generate_problem:
                     dir_pairs = [
-                        ("problems", "file"),
-                        ("instructions", "prompt"),
-                        ("responses", "response"),
+                        ("problems", "file", "pddl"),
+                        ("instructions", "prompt", "txt"),
+                        ("responses", "response", "txt"),
                     ]
                     for retry_idx in range(len(res["problem"]["file"])):
                         problem_name = f"{task_name}-attempt-{retry_idx+1}"
                         if success and retry_idx == len(res["problem"]["file"]) - 1:
                             problem_name = f"{task_name}"
 
-                        for dir_name, file_name in dir_pairs:
-                            with open(f"{result_dir}/{save_step}/{dir_name}/{problem_name}.txt", "w") as fw:
+                        for dir_name, file_name, file_ext in dir_pairs:
+                            with open(f"{result_dir}/{save_step}/{dir_name}/{problem_name}.{file_ext}", "w") as fw:
                                 fw.write(res["problem"][file_name][retry_idx])
 
                     if args.generate_domain:
@@ -360,7 +363,7 @@ def main():
         ])  # Need to sort
         num_problems = len(problems)
 
-        error_count = 0
+        success_count = 0        
 
         for problem in tqdm(
             problems,
@@ -371,7 +374,7 @@ def main():
             if args.generate_domain:
                 domain_path = f"{result_dir}/{args.gen_step}/domains/domain{idx}.pddl"
 
-            plan_path = problem.replace("problems", "plans").replace(".pddl", "")
+            plan_path = problem.replace("problems", "plans").replace(".pddl", ".txt")
 
             command = format_command(
                 domain_path,
@@ -381,26 +384,35 @@ def main():
                 args.time_limit,
             )
 
-            success, err = find_plan(
+            solver_success, err = find_plan(
                 command,
                 plan_path,
             )
 
-            if success:  # check plan
-                with open(f"{plan_path}.txt", "r") as fr:
+            if solver_success:  # check plan
+                with open(f"{plan_path}", "r") as fr:
                     plan = fr.readlines()
-                with open(f"{plan_path.replace(f'{result_dir}', f'../results/{args.domain}_gt')}.txt", "r") as fr:
+                with open(f"{plan_path.replace(f'{result_dir}', f'../results/{args.domain}_gt')}", "r") as fr:
                     gt_plan = fr.readlines()
                 
-                success, err = check_plan(gt_plan, plan)
+                plan_success, err = compare_plans(gt_plan, plan)
             
-            if not success:
+            if not plan_success:
+                with open(f"{problem}", "r") as fr:
+                    problem_str = fr.read()
+                with open(f"{problem.replace(f'{result_dir}', f'../results/{args.domain}_gt').replace('txt', 'pddl')}", "r") as fr:
+                    gt_problem_str = fr.read()
+
+                err += f"Problem:\n(:init\n{problem_str.split('(:init')[1]}\n\n"   
+                err += f"Ground truth problem:\n(:init\n{gt_problem_str.split('(:init')[1]}\n\n"   
+
                 with open(problem.replace("problems", "errors").replace(".pddl", ".txt"), "w") as fw:
                     fw.write(err)
 
-                error_count += 1
+            else:
+                success_count += 1
 
-        print(f"Total errors: {error_count} / {num_problems}")
+        print(f"Plan success rate {success_count} / {num_problems}")
 
 
 if __name__ == "__main__":

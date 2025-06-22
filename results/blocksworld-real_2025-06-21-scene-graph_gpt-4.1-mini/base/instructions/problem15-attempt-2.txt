@@ -1,0 +1,157 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    
+    For the current domain, blocksworld-real, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block)
+        (ontable ?x - block)
+        (clear ?x - block)
+        (handempty ?x - robot)
+        (handfull ?x - robot)
+        (holding ?x - block)
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+    The image of the scene has been provided.
+    You must first generate a scene graph for the image, using the types and predicates in the domain file.
+    Then use the scene graph to generate the PDDL problem.
+    Do not generate anything after the PDDL problem.
+    Format:
+    Scene graph:
+    block: describe all objects of this type in the image.
+robot: describe all objects of this type in the image.
+ontable (block): describe all tuples (predicate, object) that satisfy the predicate.
+clear (block): describe all tuples (predicate, object) that satisfy the predicate.
+handempty (robot): describe all tuples (predicate, object) that satisfy the predicate.
+handfull (robot): describe all tuples (predicate, object) that satisfy the predicate.
+holding (block): describe all tuples (predicate, object) that satisfy the predicate.
+on (block, block): describe all tuples (predicate, object1, object2...) that satisfy the predicate.
+
+    PDDL problem: <PDDL problem>
+    
+    
+    Instruction: Create 1 stacks: yellow over blue over purple over orange over green over red
+    
+    **********
+
+    The following is the response you generated last time:
+    Scene graph:
+block: green, yellow, red, blue, purple, orange
+robot: robot1
+ontable (block): red
+clear (block): yellow
+handempty (robot): robot1
+handfull (robot): 
+holding (block): 
+on (block, block): (yellow, blue), (blue, purple), (purple, orange), (orange, green), (green, red)
+
+PDDL problem:
+(define (problem stack_yellow_over_blue_over_purple_over_orange_over_green_over_red)
+    (:domain blocksworld)
+    (:objects
+        green yellow red blue purple orange - block
+        robot1 - robot
+    )
+    (:init
+        (ontable red)
+        (clear yellow)
+        (clear red) ; red has green on top, so not clear - remove this line
+        (handempty robot1)
+        (on yellow blue)
+        (on blue purple)
+        (on purple orange)
+        (on orange green)
+        (on green red)
+    )
+    (:goal (and
+        (on yellow blue)
+        (on blue purple)
+        (on purple orange)
+        (on orange green)
+        (on green red)
+        (ontable red)
+    ))
+)
+
+    The following is the error in the PDDL file you made last time:
+    ... landmark_sum_heuristic: 0
+[t=29.994703s, 11192 KB] New best heuristic value for ff: 0
+[t=29.994703s, 11192 KB] g=0, 1 evaluated, 0 expanded
+Peak memory: 11192 KB
+caught signal 24 -- exiting
+Time limit has been reached.
+search exit code: 23
+
+Driver aborting after search
+INFO     Planner time: 30.06s
+
+    Please first analyze where the error is, ie. is it a PDDL semantic error, or an error in the caption or scene graph?
+    After analyzing the error, generate all the output again.
+    

@@ -109,8 +109,8 @@ def parse_types(domain_file):
 
     return types
 
-def parse_predicates(domain_file):
-    predicates = []
+def parse_predicates(domain_file) -> dict[str, list[str]]:
+    predicates_raw = []
     full_predicate_str = parse_block(domain_file, "(:predicates")
 
     if full_predicate_str:
@@ -129,7 +129,7 @@ def parse_predicates(domain_file):
                         signature = cleaned_predicate_str[idx: jdx + 1].strip()
                         signature = re.sub(r"\s+", " ", signature)
                         if signature:
-                            predicates.append(signature)
+                            predicates_raw.append(signature)
                         idx = jdx
                         break
                 if balance != 0:
@@ -137,10 +137,83 @@ def parse_predicates(domain_file):
                     break
             idx += 1
 
+    predicates = {}
+
+    predicate_pattern = re.compile(r"\s*\?([\w-]*)\s*-\s*([\w-]*)\s*")
+    for predicate_str in predicates_raw:
+        content = predicate_str.strip()[1:-1]
+        parts = content.split(None, 1)
+        name = parts[0]
+
+        args = []
+        param_str = parts[1]
+        cur_pos = 0
+        while cur_pos < len(param_str):
+            match = predicate_pattern.match(param_str, cur_pos)
+            if match:
+                param_name, param_type = match.groups()
+                args.append(param_type)
+                cur_pos = match.end()
+            else:
+                break
+
+        if name not in predicates:
+            predicates[name] = args
+
     return predicates
 
+def parse_conditions(pddl_file):
+    conditions = []
+    blocks = []
+
+    init_conditions_block = parse_block(pddl_file, "(:init")
+    if init_conditions_block: 
+        blocks.append(init_conditions_block)
+
+    goal_conditions_block = parse_block(pddl_file, "(:goal")
+    if goal_conditions_block:
+        and_content_start = re.search(r"\(and\s+", goal_conditions_block)
+        if and_content_start:
+            and_content_start_idx = and_content_start.end()
+            goal_conditions_block = goal_conditions_block[and_content_start_idx:]
+            blocks.append(goal_conditions_block)
+        else:
+            blocks.append(goal_conditions_block)
+
+    for block in blocks:
+        block = re.sub(r";[^\n]*", "", block)
+        idx = 0
+        while idx < len(block):
+            start_char = block[idx]
+            if start_char == '(':
+                balance = 1
+                for jdx in range(idx + 1, len(block)):
+                    if block[jdx] == '(':
+                        balance += 1
+                    elif block[jdx] == ')':
+                        balance -= 1
+                    if balance == 0:
+                        signature = block[idx + 1: jdx].strip()
+                        signature = re.sub(r"\s+", " ", signature)
+                        if signature:
+                            parts = signature.split()
+                            name = parts[0]
+                            args = parts[1:]
+                            conditions.append({
+                                "name": name,
+                                "args": args,
+                            })
+                        idx = jdx
+                        break
+                if balance != 0:
+                    print(f"Unbalanced parentheses in block: {block}")
+                    break
+            idx += 1
+
+    return conditions
+
 def check_pddl(pddl_file: str, domain_file: str) -> tuple[bool, str]:
-    errors = defaultdict(list)
+    errors = defaultdict(set)
 
     # From domain: Extract all object types
     types_raw = parse_types(domain_file)
@@ -186,107 +259,45 @@ def check_pddl(pddl_file: str, domain_file: str) -> tuple[bool, str]:
                     type_name = parts[dash_index + 1]
 
             else:
-                errors["Objects missing '- type' definition"].append(line)
+                errors["Objects missing '- type' definition"].add(line)
                 continue
 
             if type_name:
                 if type_name not in types:
-                    errors["Problem object type not defined in domain"].append(type_name)
+                    errors["Problem object type not defined in domain"].add(type_name)
                     continue
 
                 for obj_name in obj_names:
                     if obj_name in objects:
-                        errors["Problem object redefined"].append(f"{obj_name} ({objects[obj_name]} -> {type_name})")
+                        errors["Problem object redefined"].add(f"{obj_name} ({objects[obj_name]} -> {type_name})")
                     else:
                         objects[obj_name] = type_name
 
     # From domain: Extract all predicates
-    predicates_raw = parse_predicates(domain_file)
-    predicates = {}
-
-    predicate_pattern = re.compile(r"\s*\?([\w-]*)\s*-\s*([\w-]*)\s*")
-    for predicate_str in predicates_raw:
-        content = predicate_str.strip()[1:-1]
-        parts = content.split(None, 1)
-        name = parts[0]
-
-        args = []
-        param_str = parts[1]
-        cur_pos = 0
-        while cur_pos < len(param_str):
-            match = predicate_pattern.match(param_str, cur_pos)
-            if match:
-                param_name, param_type = match.groups()
-                args.append(param_type)
-                cur_pos = match.end()
-            else:
-                break
-
-        if name not in predicates:
-            predicates[name] = args
+    predicates = parse_predicates(domain_file)
 
     # From problem: Extract all predicates in init and goal
-    conditions = []
-
-    blocks = []
-    init_conditions_block = parse_block(pddl_file, "(:init")
-    if init_conditions_block: 
-        blocks.append(init_conditions_block)
-
-    goal_conditions_block = parse_block(pddl_file, "(:goal")
-    if goal_conditions_block:
-        and_content_start = re.search(r"\(and\s+", goal_conditions_block)
-        if and_content_start:
-            and_content_start_idx = and_content_start.end()
-            goal_conditions_block = goal_conditions_block[and_content_start_idx:]
-            blocks.append(goal_conditions_block)
-        else:
-            blocks.append(goal_conditions_block)
-
-    for block in blocks:
-        block = re.sub(r";[^\n]*", "", block)
-        idx = 0
-        while idx < len(block):
-            start_char = block[idx]
-            if start_char == '(':
-                balance = 1
-                for jdx in range(idx + 1, len(block)):
-                    if block[jdx] == '(':
-                        balance += 1
-                    elif block[jdx] == ')':
-                        balance -= 1
-                    if balance == 0:
-                        signature = block[idx + 1: jdx].strip()
-                        signature = re.sub(r"\s+", " ", signature)
-                        if signature:
-                            conditions.append(signature)
-                        idx = jdx
-                        break
-                if balance != 0:
-                    errors["Unbalanced parentheses in block"].append(block)
-                    break
-            idx += 1
+    conditions = parse_conditions(pddl_file)
 
     # From problem: Check if predicate args have the correct types
     for condition in conditions:
-        parts = condition.split()
-        condition_name = parts[0]
-        condition_args = parts[1:]
+        condition_name = condition["name"]
+        condition_args = condition["args"]
 
         if condition_name not in predicates:
-            errors["Predicate not defined in domain"].append(condition_name)
+            errors["Predicate not defined in domain"].add(condition_name)
             continue
 
         expected_args = predicates[condition_name]
 
         if len(condition_args) != len(expected_args):
-            errors["Predicate expects wrong number of arguments"].append(f"{condition_name} ({len(expected_args)} -> {len(condition_args)})")
+            errors["Predicate expects wrong number of arguments"].add(f"{condition_name} ({len(expected_args)} -> {len(condition_args)})")
             continue
 
         for i, arg_object_name in enumerate(condition_args):
             object_type = objects.get(arg_object_name)
             if object_type is None:
-                errors["Object does not have a type"].append(f"{arg_object_name} ({condition})")
+                errors["Object does not have a type"].add(f"{arg_object_name}")
                 continue
 
             expected_type = expected_args[i]
@@ -300,12 +311,12 @@ def check_pddl(pddl_file: str, domain_file: str) -> tuple[bool, str]:
             current_type = object_type
             while True:
                 if current_type not in type_hierarchy:
-                    errors["Predicate argument has wrong type"].append(f"{condition} ({arg_object_name}: {object_type} -> {expected_type})")
+                    errors["Predicate argument has wrong type"].add(f"{condition} ({arg_object_name}: {object_type} -> {expected_type})")
                     break
                 
                 parent = type_hierarchy.get(current_type)
                 if parent is None:
-                    errors["Predicate argument has wrong type"].append(f"{condition} ({arg_object_name}: {object_type} -> {expected_type})")
+                    errors["Predicate argument has wrong type"].add(f"{condition} ({arg_object_name}: {object_type} -> {expected_type})")
                     break
                 
                 current_type = parent
@@ -354,9 +365,9 @@ def find_mapping_recursive(gt_actions, pred_actions, mapping):
                 if solution:
                     return solution
 
-    return None  # no consistent mapping found, backtrack
+    return {}  # no consistent mapping found, backtrack
 
-def check_plan(gt_plan: list[str], pred_plan: list[str]) -> bool:
+def compare_plans(gt_plan: list[str], pred_plan: list[str]) -> bool:
     msg = ""
     success = True
 

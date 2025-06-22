@@ -1,0 +1,58 @@
+Plan length mismatch.
+Ground truth has 18 steps.
+Predicted has 10 steps.
+
+Problem:
+(:init
+
+        ; Initial ontable blocks (visible from the first two images)
+        (ontable blue)
+        (ontable green)
+        (ontable purple)
+        (ontable yellow)
+        (ontable orange)
+        (ontable red)
+        ; Initial clear blocks - top blocks of individual stacks (in the second image, purple is partially visible below yellow and orange)
+        (clear blue)
+        (clear green)
+        (clear purple)
+        (clear yellow)
+        (clear orange)
+        (clear red)
+        ; Hand is empty initially
+        (handempty robot1)
+    )
+    (:goal
+        (and
+            (on blue orange)
+            (on orange green)
+            (on green purple)
+            (on purple yellow)
+            (on yellow red)
+            (ontable red)
+            (clear blue)
+        )
+    )
+)
+
+Ground truth problem:
+(:init
+
+        (ontable blue)
+        (on yellow blue)
+        (on purple yellow)
+        (on red purple)
+        (on green red)
+        (on orange green)
+        (clear orange)
+        (handempty robot)
+        ; blue -> yellow -> purple -> red -> green -> orange
+    )
+    (:goal (and (on yellow red)
+        (on purple yellow)
+        (on green purple)
+        (on orange green)
+        (on blue orange)))
+)
+    
+

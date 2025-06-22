@@ -1,0 +1,37 @@
+Scene graph:
+block: green, yellow, red, blue, purple, orange
+robot: robot1
+ontable (block): red
+clear (block): yellow
+handempty (robot): robot1
+handfull (robot): 
+holding (block): 
+on (block, block): (yellow, blue), (blue, purple), (purple, orange), (orange, green), (green, red)
+
+PDDL problem:
+(define (problem stack_yellow_over_blue_over_purple_over_orange_over_green_over_red)
+    (:domain blocksworld)
+    (:objects
+        green yellow red blue purple orange - block
+        robot1 - robot
+    )
+    (:init
+        (ontable red)
+        (clear yellow)
+        (clear red) ; red has green on top, so not clear - remove this line
+        (handempty robot1)
+        (on yellow blue)
+        (on blue purple)
+        (on purple orange)
+        (on orange green)
+        (on green red)
+    )
+    (:goal (and
+        (on yellow blue)
+        (on blue purple)
+        (on purple orange)
+        (on orange green)
+        (on green red)
+        (ontable red)
+    ))
+)

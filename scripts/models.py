@@ -146,3 +146,6 @@ class VLMClient:
             full_answer = response[0]["generated_text"][1]["content"]
 
         return full_answer
+
+if __name__ == "__main__":  # test any model on a prompt and a single image
+    pass 

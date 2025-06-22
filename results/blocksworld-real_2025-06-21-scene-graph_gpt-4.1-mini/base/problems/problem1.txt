@@ -1,0 +1,27 @@
+(define (problem blockstacking)
+    (:domain blocksworld)
+    (:objects
+        green blue purple orange red yellow - block
+        robot1 - robot
+    )
+    (:init
+        (ontable green)
+        (ontable blue)
+        (ontable purple)
+        (ontable orange)
+        (ontable red)
+        (ontable yellow)
+        (clear green)
+        (clear blue)
+        (clear red)
+        (clear yellow)
+        (clear orange)
+        (clear purple)
+        (handempty robot1)
+    )
+    (:goal (and
+        (on orange yellow)
+        (on green blue)
+        (on red purple)
+    ))
+)

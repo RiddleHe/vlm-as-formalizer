@@ -1,0 +1,37 @@
+Scene graph:  
+block: blue, orange1, red, purple, green, yellow  
+robot: robot1  
+ontable (block): orange1, red, purple, green, yellow  
+clear (block): blue, orange1, green, yellow  
+handempty (robot): robot1  
+handfull (robot):   
+holding (block):   
+on (block, block): (blue, orange1), (orange1, red), (red, purple), (purple, green), (green, yellow)  
+
+PDDL problem:
+(define (problem blockstack)
+    (:domain blocksworld)
+    (:objects
+        blue orange1 red purple green yellow
+        robot1 - robot
+    )
+    (:init
+        (ontable orange1)
+        (ontable red)
+        (ontable purple)
+        (ontable green)
+        (ontable yellow)
+        (clear blue)
+        (clear orange1)
+        (clear green)
+        (clear yellow)
+        (handempty robot1)
+    )
+    (:goal (and 
+        (on blue orange1)
+        (on orange1 red)
+        (on red purple)
+        (on purple green)
+        (on green yellow)
+    ))
+)
