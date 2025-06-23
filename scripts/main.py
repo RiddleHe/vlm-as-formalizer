@@ -16,27 +16,27 @@ import shutil
 from PIL import Image
 import torch
 
-from prompts import (
+from utils.prompts import (
     build_problem_prompt, 
     build_refine_problem_prompt, 
     build_domain_prompt, 
     build_refine_domain_prompt, 
     build_plan_prompt,
 )
-from utils import (
+from utils.helpers import (
     seed_everything, 
     parse_args,
     format_command,
     create_file_paths,
 )
-from parsers import (
+from utils.parsers import (
     parse_pddl,
     parse_plan,
     check_pddl,
     compare_plans,
 )
 
-from models import VLMClient
+from utils.models import VLMClient
 
 from dotenv import load_dotenv
 load_dotenv('.env')
