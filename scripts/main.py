@@ -32,178 +32,13 @@ from utils.helpers import (
 from utils.parsers import (
     parse_pddl,
     parse_plan,
-    check_pddl,
-    compare_plans,
 )
-
+from utils.checkers import find_plan, compare_plans
+from utils.generate import generate_pddl_end_to_end
 from utils.models import VLMClient
 
 from dotenv import load_dotenv
 load_dotenv('.env')
-
-def generate_answers(
-        target, 
-        config, 
-        domain_name, 
-        model, 
-        generate_domain=False, 
-        generate_plan=False,
-        generate_caption=False,
-        generate_scene_graph=False,
-        num_tries=1,
-        downward_dir='../downward',
-        time_limit=30,
-    ):
-    observations = target["observations"]
-
-    success = False
-
-    if generate_plan:
-        res = {
-            "plan": None,
-            "response": None,
-            "prompt": None,
-        }
-
-        plan_prompt = build_plan_prompt(
-            target, 
-            domain_name, 
-            config, 
-            generate_caption=generate_caption, 
-            generate_scene_graph=generate_scene_graph,
-        )
-        response = model.generate(plan_prompt, observations)
-
-        plan_file = parse_plan(response)
-        res["plan"] = plan_file
-        res["response"] = response
-        res["prompt"] = plan_prompt
-
-    else:
-        res = {
-            "problem": {
-                "file": [],
-                "response": [],
-                "prompt": []
-            },
-            "domain": {
-                "file": [],
-                "response": [],
-                "prompt": [],
-            }
-        }
-
-        msg = None
-        for retry_idx in range(num_tries):
-            if generate_domain:
-                pass
-
-            if retry_idx > 0:
-                problem_prompt = build_refine_problem_prompt(
-                    target, 
-                    domain_name, 
-                    config, 
-                    generate_caption=generate_caption, 
-                    generate_scene_graph=generate_scene_graph
-                )
-            else:
-                problem_prompt = build_problem_prompt(
-                    target, 
-                    domain_name, 
-                    config, 
-                    generate_caption=generate_caption, 
-                    generate_scene_graph=generate_scene_graph
-                )
-            
-            response = model.generate(problem_prompt, observations)
-
-            # Match the PDDL file in the response by header and footer
-            problem_file = parse_pddl(response)
-            if problem_file is None:
-                problem_file = ""
-
-            success, msg = check_error(problem_file, target["domain"], downward_dir, time_limit)
-
-            if not success:
-                print(f"Attempt {retry_idx+1} failed: \n{msg}")
-
-                target["response"] = response
-                target["error"] = msg
-
-
-            res["problem"]["file"].append(problem_file)
-            res["problem"]["response"].append(response)
-            res["problem"]["prompt"].append(problem_prompt)
-
-            if success:
-                break
-
-    return res, success
-
-def check_error(problem_file, domain_file, downward_dir, time_limit):
-    ret, msg = False, None
-    
-    ret, msg = check_pddl(problem_file, domain_file)
-    if ret:
-        with tempfile.TemporaryDirectory() as temp_dir_path:
-            domain_path, problem_path, plan_path = create_file_paths(domain_file, problem_file, temp_dir_path)
-            command = format_command(domain_path, problem_path, plan_path, downward_dir, time_limit)
-            ret, msg = find_plan(command, plan_path)
-
-        if not ret:
-            if "Search stopped without finding a solution" in msg:
-                msg = "Search stopped without finding a solution"
-            elif "Driver aborting after search" in msg:
-                msg = "Search stopped early due to time limit"
-            else:
-                msg = "..." + msg[-300:]
-
-    return ret, msg
-
-def find_plan(command, plan_path):
-    def get_cost(line: str):
-        # ; cost = COST *
-        if line.startswith("; cost = "):
-            cost = float(line.split()[3])
-        else:
-            cost = 1e5
-
-        return cost
-
-    try:
-        output = subprocess.check_output(
-            command,
-            shell=True,
-            stderr=subprocess.STDOUT,
-        )
-
-        best_cost = 1e10
-        best_plan = None
-
-        plan_files = glob.glob(f"{plan_path}.*")
-
-        for fname in plan_files:
-            with open(fname, "r") as fr:
-                plans = fr.readlines()
-                cost = get_cost(plans[-1]) # the cost is written in the last line
-
-            if cost < best_cost:
-                best_cost = cost
-                best_plan = "\n".join([p.strip() for p in plans[:-1]])
-
-        if best_plan is not None:
-            for fname in plan_files:
-                os.remove(fname)
-
-            with open(f"{plan_path}", "w") as fw:
-                fw.write(best_plan)
-
-            return True, None
-
-        return False, "No plan found"
-
-    except Exception as e:
-        return False, e.output.decode().strip()
 
 # Main
 
@@ -219,8 +54,6 @@ def main():
         result_dir += f"_{args.result_dir}"
     if args.model is not None:
         result_dir += f"_{args.model.replace('/', '-')}"
-    if args.generate_domain:
-        result_dir += "_domain"
     if args.generate_plan:
         result_dir += "_plan"
 
@@ -242,8 +75,6 @@ def main():
             folders += ["plans"]
         else:
             folders += ["problems"]
-            if args.generate_domain:
-                folders += ["domains"]
 
         for dname in folders:
             os.makedirs(
@@ -300,13 +131,10 @@ def main():
                 continue
 
             # generate PDDL objects, initial state, and goal specification
-            res, success = generate_answers(
+            res, success = generate_pddl_end_to_end(
                 target,
                 config,
-                domain_name=args.domain,
                 model=model,
-                generate_domain=args.generate_domain,
-                generate_plan=args.generate_plan,
                 generate_caption=args.generate_caption,
                 generate_scene_graph=args.generate_scene_graph,
                 num_tries=args.num_tries,
@@ -330,9 +158,6 @@ def main():
                         for dir_name, file_name, file_ext in dir_pairs:
                             with open(f"{result_dir}/{save_step}/{dir_name}/{problem_name}.{file_ext}", "w") as fw:
                                 fw.write(res["problem"][file_name][retry_idx])
-
-                    if args.generate_domain:
-                        pass
                 
                 elif args.generate_plan:
                     dir_pairs = [
@@ -371,8 +196,6 @@ def main():
         ):
             idx = os.path.basename(problem).split("problem")[1].split(".pddl")[0]
             domain_path = f"{data_dir}/domain.pddl"
-            if args.generate_domain:
-                domain_path = f"{result_dir}/{args.gen_step}/domains/domain{idx}.pddl"
 
             plan_path = problem.replace("problems", "plans").replace(".pddl", ".txt")
 

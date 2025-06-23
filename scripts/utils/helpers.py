@@ -34,7 +34,6 @@ def parse_args():
     parser.add_argument("--find_plan", action="store_true", default=True, help="refine generated problems by corrective reprompting")
 
     # End-goal generation choices
-    parser.add_argument("--generate_domain", action="store_true", help="generate PDDL domain")
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
 
     # Intermediate generation choices

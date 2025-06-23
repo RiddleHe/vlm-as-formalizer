@@ -1,5 +1,5 @@
 import re
-from collections import defaultdict, Counter
+from collections import defaultdict
 
 def parse_actions_from_domain(domain_file):
     regex_patern = r'\(:action\s+(\w+).*?:parameters\s*\((.*?)\)'
@@ -111,36 +111,48 @@ def parse_types(domain_file):
 
 def parse_predicates(domain_file) -> dict[str, list[str]]:
     predicates_raw = []
+    comments = []
     full_predicate_str = parse_block(domain_file, "(:predicates")
 
     if full_predicate_str:
-        cleaned_predicate_str = re.sub(r";[^\n]*", "", full_predicate_str)
         idx = 0
-        while idx < len(cleaned_predicate_str):
-            start_char = cleaned_predicate_str[idx]
+        while idx < len(full_predicate_str):
+            start_char = full_predicate_str[idx]
             if start_char == '(':
                 balance = 1
-                for jdx in range(idx + 1, len(cleaned_predicate_str)):
-                    if cleaned_predicate_str[jdx] == '(':
+                for jdx in range(idx + 1, len(full_predicate_str)):
+                    if full_predicate_str[jdx] == '(':
                         balance += 1
-                    elif cleaned_predicate_str[jdx] == ')':
+                    elif full_predicate_str[jdx] == ')':
                         balance -= 1
                     if balance == 0:
-                        signature = cleaned_predicate_str[idx: jdx + 1].strip()
+                        signature = full_predicate_str[idx: jdx + 1].strip()
                         signature = re.sub(r"\s+", " ", signature)
                         if signature:
                             predicates_raw.append(signature)
+
+                        next_paren_idx = full_predicate_str.find('(', jdx + 1)
+                        if next_paren_idx == -1:
+                            next_paren_idx = len(full_predicate_str)
+
+                        comment_part = full_predicate_str[jdx + 1: next_paren_idx]
+                        comment_match = re.search(r";([^\n]*)", comment_part)
+                        if comment_match:
+                            comments.append(comment_match.group(1).strip())
+                        else:
+                            comments.append("")
+
                         idx = jdx
                         break
                 if balance != 0:
-                    print(f"Unbalanced parentheses in predicate: {cleaned_predicate_str}")
+                    print(f"Unbalanced parentheses in predicate: {full_predicate_str}")
                     break
             idx += 1
 
-    predicates = {}
+    predicates = defaultdict(dict)
 
     predicate_pattern = re.compile(r"\s*\?([\w-]*)\s*-\s*([\w-]*)\s*")
-    for predicate_str in predicates_raw:
+    for predicate_str, comment in zip(predicates_raw, comments):
         content = predicate_str.strip()[1:-1]
         parts = content.split(None, 1)
         name = parts[0]
@@ -157,8 +169,8 @@ def parse_predicates(domain_file) -> dict[str, list[str]]:
             else:
                 break
 
-        if name not in predicates:
-            predicates[name] = args
+        predicates[name]["args"] = args
+        predicates[name]["comment"] = comment
 
     return predicates
 
@@ -211,180 +223,3 @@ def parse_conditions(pddl_file):
             idx += 1
 
     return conditions
-
-def check_pddl(pddl_file: str, domain_file: str) -> tuple[bool, str]:
-    errors = defaultdict(set)
-
-    # From domain: Extract all object types
-    types_raw = parse_types(domain_file)
-    type_hierarchy = {}
-    types = set()
-    
-    type_pattern = re.compile(r"([^\s(]+)\s*\((.*?)\)") # type (supertype)
-    for type_entry in types_raw:
-        match = type_pattern.match(type_entry)
-        if match:
-            subtype, supertype = match.groups()
-            type_hierarchy[subtype] = supertype
-            types.add(subtype)
-            types.add(supertype)
-        else:  # basic type
-            type_hierarchy[type_entry] = None
-            types.add(type_entry)
-
-    for parent_type in list(type_hierarchy.values()):
-        if parent_type and parent_type not in type_hierarchy:
-            type_hierarchy[parent_type] = None
-
-    # From problem: Map all objects to their types, check for missing types
-    objects = {}
-    objects_block = parse_block(pddl_file, "(:objects")
-
-    if objects_block:
-        cleaned_objects_block = re.sub(r";[^\n]*", "", objects_block)
-        object_lines = cleaned_objects_block.strip().split("\n")
-
-        for line in object_lines:
-            line = line.strip()
-            if not line: continue
-
-            parts = line.strip().split()
-            type_name = None
-            obj_names = []
-
-            if '-' in parts:
-                dash_index = parts.index('-')
-                obj_names = parts[:dash_index]
-                if dash_index + 1 < len(parts):
-                    type_name = parts[dash_index + 1]
-
-            else:
-                errors["Objects missing '- type' definition"].add(line)
-                continue
-
-            if type_name:
-                if type_name not in types:
-                    errors["Problem object type not defined in domain"].add(type_name)
-                    continue
-
-                for obj_name in obj_names:
-                    if obj_name in objects:
-                        errors["Problem object redefined"].add(f"{obj_name} ({objects[obj_name]} -> {type_name})")
-                    else:
-                        objects[obj_name] = type_name
-
-    # From domain: Extract all predicates
-    predicates = parse_predicates(domain_file)
-
-    # From problem: Extract all predicates in init and goal
-    conditions = parse_conditions(pddl_file)
-
-    # From problem: Check if predicate args have the correct types
-    for condition in conditions:
-        condition_name = condition["name"]
-        condition_args = condition["args"]
-
-        if condition_name not in predicates:
-            errors["Predicate not defined in domain"].add(condition_name)
-            continue
-
-        expected_args = predicates[condition_name]
-
-        if len(condition_args) != len(expected_args):
-            errors["Predicate expects wrong number of arguments"].add(f"{condition_name} ({len(expected_args)} -> {len(condition_args)})")
-            continue
-
-        for i, arg_object_name in enumerate(condition_args):
-            object_type = objects.get(arg_object_name)
-            if object_type is None:
-                errors["Object does not have a type"].add(f"{arg_object_name}")
-                continue
-
-            expected_type = expected_args[i]
-            # Exact match
-            if object_type == expected_type:
-                continue
-            # Match generic object type
-            if expected_type == "object":
-                if object_type in types:
-                    continue
-            current_type = object_type
-            while True:
-                if current_type not in type_hierarchy:
-                    errors["Predicate argument has wrong type"].add(f"{condition} ({arg_object_name}: {object_type} -> {expected_type})")
-                    break
-                
-                parent = type_hierarchy.get(current_type)
-                if parent is None:
-                    errors["Predicate argument has wrong type"].add(f"{condition} ({arg_object_name}: {object_type} -> {expected_type})")
-                    break
-                
-                current_type = parent
-                if current_type == expected_type:
-                    break
-                
-    if not errors:
-        return True, None
-    
-    else:
-        error_msg = ""
-        for error_type, error_list in errors.items():
-            error_msg += f"{error_type}:\n"
-            for error in error_list: 
-                error_msg += f"  {error}\n"
-            error_msg += "\n"
-
-        return False, error_msg
-
-def find_mapping_recursive(gt_actions, pred_actions, mapping):
-    if not gt_actions:  # all gt_actions have been mapped
-        return mapping 
-
-    current_gt_action = gt_actions[0]
-    remaining_gt_actions = gt_actions[1:]
-
-    for i, current_pred_action in enumerate(pred_actions):
-        if current_gt_action["name"] == current_pred_action["name"]:
-            temp_mapping = mapping.copy()
-            is_consistent = True
-
-            for gt_arg, pred_arg in zip(current_gt_action["args"], current_pred_action["args"]):
-                if gt_arg in temp_mapping:
-                    if temp_mapping[gt_arg] != pred_arg:  # gt_arg mapped to a different pred_arg
-                        is_consistent = False
-                        break
-                elif pred_arg in temp_mapping.values():  # pred_arg mapped to a different gt_arg
-                    is_consistent = False
-                    break 
-                else:
-                    temp_mapping[gt_arg] = pred_arg
-
-            if is_consistent: # mapping is consistent up to current pair, continue without backtracking
-                remaining_pred_actions = pred_actions[:i] + pred_actions[i+1:]
-                solution = find_mapping_recursive(remaining_gt_actions, remaining_pred_actions, temp_mapping)
-                if solution:
-                    return solution
-
-    return {}  # no consistent mapping found, backtrack
-
-def compare_plans(gt_plan: list[str], pred_plan: list[str]) -> bool:
-    msg = ""
-    success = True
-
-    gt_actions = parse_actions_from_plan(gt_plan)
-    pred_actions = parse_actions_from_plan(pred_plan)
-
-    if not len(gt_actions) == len(pred_actions):
-        return False, f"Plan length mismatch.\nGround truth has {len(gt_actions)} steps.\nPredicted has {len(pred_actions)} steps.\n\n"
-
-    gt_actions_counts = Counter(action["name"] for action in gt_actions)
-    pred_actions_counts = Counter(action["name"] for action in pred_actions)
-
-    if not gt_actions_counts == pred_actions_counts:
-        return False, f"Plan action counts mismatch.\nGround truth has {gt_actions_counts}.\nPredicted has {pred_actions_counts}.\n\n"
-
-    mapping = find_mapping_recursive(gt_actions, pred_actions, {})
-    if not mapping:
-        return False, "No consistent mapping found between ground truth and predicted plan.\n\n"
-
-    return True, None

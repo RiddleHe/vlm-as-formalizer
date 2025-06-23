@@ -2,9 +2,9 @@
     (:requirements :strips :typing)
     (:types block robot)
     (:predicates 
-        (on ?x - block ?y - block)
-        (ontable ?x - block)
-        (clear ?x - block)
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
         (handempty ?x - robot)
         (handfull ?x - robot)
         (holding ?x - block)
