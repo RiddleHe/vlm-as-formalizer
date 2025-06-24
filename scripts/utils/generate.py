@@ -4,8 +4,9 @@ from .prompts import (
     build_plan_prompt,
     build_object_prompt,
 )
-from .parsers import parse_pddl, parse_plan, parse_objects, parse_types
+from .parsers import parse_pddl, parse_plan, parse_objects, parse_types, parse_predicates
 from .checkers import check_error
+from .sgclip import predict_all_relations
 
 def generate_pddl(
         target, 
@@ -113,16 +114,26 @@ def generate_scene_graph_then_pddl(
     
     else:
         prompt = build_object_prompt(target, config)
-        print(prompt)
 
     response = model.generate(prompt, observations)
-    print(response)
 
     objects = parse_objects(response, parse_types(target["domain"]))
-    
 
-    print(objects)
-    import sys; sys.exit()
+    predicates = parse_predicates(target["domain"])
+    unary_predicates = [f"{predicate}" for predicate, predicate_dict in predicates.items() if len(predicate_dict['args']) == 1]
+    binary_predicates = [f"{predicate}" for predicate, predicate_dict in predicates.items() if len(predicate_dict['args']) == 2]
+
+    models = {}
+
+    relations = predict_all_relations(
+        observations,
+        objects,
+        unary_predicates,
+        binary_predicates,
+        models,
+    )
+
+    
 
     return "", "", ""
 

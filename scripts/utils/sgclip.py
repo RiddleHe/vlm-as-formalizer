@@ -253,7 +253,7 @@ def predict_all_relations(
     object_classes: List[str],
     unary_relations: List[str],
     binary_relations: List[str],
-    models,
+    models: dict,
 ):
     from mask_generation_grounding_dino import generate_masks_grounding_dino
 

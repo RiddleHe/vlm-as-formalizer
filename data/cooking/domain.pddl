@@ -1,9 +1,6 @@
 (define (domain cooking)
 
-    ;remove requirements that are not needed
-    (:requirements :typing :adl)
-
-    (:types ;todo: enumerate types and their hierarchy here, e.g. car truck bus - vehicle
+    (:types
         location ; objects can be in a location
         vegetable tool - object ; objects that can be manipulated (pick/place/...)
         robot ; we have two robot arms, so we can define each robot's action and states
