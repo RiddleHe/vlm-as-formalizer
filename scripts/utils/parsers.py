@@ -223,3 +223,15 @@ def parse_conditions(pddl_file):
             idx += 1
 
     return conditions
+
+def parse_objects(response, object_types):
+    objects = defaultdict(list)
+    for line in response.split("\n"):
+        if ":" in line:
+            object_type, object_names = line.split(":")
+            for object_name in object_names.split(","):
+                object_name = object_name.split("(")[0].strip()
+                objects[object_type].append(object_name)
+
+    return objects
+

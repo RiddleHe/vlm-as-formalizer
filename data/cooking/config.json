@@ -4,5 +4,5 @@
         "place (?robot - robot ?obj - object ?place_loc - location)",
         "slice (?robot - robot ?veg - vegetable ?tool - tool ?loc - location)"
     ],
-    "text": "There are 2 robots. One of them is free and the other is holding a knife. To slice a vegetable, the vegetable must be put on the cutting board. If a vegetable has more than one piece, you can assume it is already sliced."
+    "text": "There are a robot arm robot1 and another robot arm robot2. One of them is free and the other is holding a knife. To slice a vegetable, the vegetable must be put on the cutting board. If a vegetable has more than one piece, you can assume it is already sliced."
 }

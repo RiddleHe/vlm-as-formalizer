@@ -1,0 +1,62 @@
+Plan length mismatch.
+Ground truth has 10 steps.
+Predicted has 11 steps.
+
+Problem:
+(:init
+
+    ; Tool capabilities
+    (can-cut knife)
+
+    ; Robots state
+    (carry robot2 knife)
+    (free robot1)
+
+    ; Locations workspace setup
+    (is-workspace cutting_board)
+
+    ; Vegetables state and location
+    (is-whole tomato)
+    (available tomato)
+    (is-whole cucumber)
+    (available cucumber)
+
+    ; Locations of objects
+    (at tomato table)
+    (at cucumber table)
+    (at bowl table)
+  )
+  (:goal (and
+    (is-sliced tomato)
+    (is-sliced cucumber)
+    (at tomato bowl)
+    (at cucumber bowl)
+    (free robot1)
+    (free robot2)
+  ))
+)
+
+Ground truth problem:
+(:init
+
+        (available cucumber)
+        (available tomato)
+        (is-whole cucumber)
+        (is-whole tomato)
+        (is-workspace cutting_board)
+        (free a_bot)
+        (carry b_bot knife)
+        (can-cut knife)
+        (at cucumber counter)
+        (at tomato counter)
+    )
+    (:goal
+        (and
+            (at cucumber bowl)
+            (at tomato bowl)
+            (is-sliced cucumber)
+            (is-sliced tomato)
+        )
+    )
+)
+

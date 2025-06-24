@@ -1,6 +1,6 @@
 """Build prompts for different tasks."""
 
-from parsers import parse_types, parse_predicates
+from .parsers import parse_types, parse_predicates
 
 def build_problem_prompt(target, config, add_examples=True, generate_caption=False, generate_scene_graph=False):
     prompt = f"""
@@ -111,6 +111,28 @@ def build_refine_problem_prompt(target, config, generate_caption=False, generate
     After analyzing the error, generate all the output again.
     """
     
+    return prompt
+
+def build_object_prompt(target, config):
+    prompt = f"""You are given some images which contain various objects of interests for a given task.
+
+    The following domain file specifies all possible states and actions for the task:
+    {target["domain"]}
+
+    Given the name of an object type, identify all objects with an appropriate name in the images that belong to this type.
+    Follow this exact format:
+    <type1>: <object1>, <object2>,...
+    <type2>: ...
+
+    The images have been provided. {config.get("text", "")}
+    The task instruction is: {target["instruction"]}
+    Now identify all the objects for the following types relevant to the task instruction:
+    """
+
+    types = parse_types(target["domain"])
+    for obj_type in types:
+        prompt += f"{obj_type}: \n"
+
     return prompt
 
 def build_plan_prompt(target, config, generate_caption=False, generate_scene_graph=False):

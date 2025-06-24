@@ -1,11 +1,18 @@
-from prompts import build_problem_prompt, build_refine_problem_prompt, build_plan_prompt
-from parsers import parse_pddl, parse_plan
-from checkers import check_error
+from .prompts import (
+    build_problem_prompt, 
+    build_refine_problem_prompt, 
+    build_plan_prompt,
+    build_object_prompt,
+)
+from .parsers import parse_pddl, parse_plan, parse_objects, parse_types
+from .checkers import check_error
 
 def generate_pddl(
         target, 
         config, 
         model, 
+        generate_end_to_end=True,
+        generate_scene_graph_first=False,
         generate_caption=False,
         generate_scene_graph=False,
         num_tries=1,
@@ -24,15 +31,24 @@ def generate_pddl(
     msg = None
 
     for retry_idx in range(num_tries):
-        problem_file, response, problem_prompt = generate_pddl_end_to_end(
-            target,
-            config,
-            model,
-            observations,
-            retry_idx,
-            generate_caption=generate_caption,
-            generate_scene_graph=generate_scene_graph,
-        )
+        if generate_end_to_end:
+            problem_file, response, problem_prompt = generate_pddl_end_to_end(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+                generate_caption=generate_caption,
+                generate_scene_graph=generate_scene_graph,
+            )
+        elif generate_scene_graph_first:
+            problem_file, response, problem_prompt = generate_scene_graph_then_pddl(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+            )
 
         success, msg = check_error(problem_file, target["domain"], downward_dir, time_limit)
 
@@ -92,4 +108,21 @@ def generate_scene_graph_then_pddl(
     observations,
     retry_idx,
 ):
-    pass
+    if retry_idx > 0:
+        pass
+    
+    else:
+        prompt = build_object_prompt(target, config)
+        print(prompt)
+
+    response = model.generate(prompt, observations)
+    print(response)
+
+    objects = parse_objects(response, parse_types(target["domain"]))
+    
+
+    print(objects)
+    import sys; sys.exit()
+
+    return "", "", ""
+

@@ -1,4 +1,11 @@
-(define (domain cooking)
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    
+    For the current domain, this is the domain file:
+    (define (domain cooking)
 
     ;remove requirements that are not needed
     (:requirements :typing :adl)
@@ -94,3 +101,56 @@
         )
     )
 )
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    There are a robot arm robot1 and another robot arm robot2. One of them is free and the other is holding a knife. To slice a vegetable, the vegetable must be put on the cutting board. If a vegetable has more than one piece, you can assume it is already sliced.
+    Instruction: Slice the cucumber and tomato and place the sliced cucumbers and tomatoes in a bowl.
+
+    
+    **********
+
+    The following is the response you generated last time:
+    (define (problem slice-vegetables)
+    (:domain cooking)
+    (:objects
+        robot1 robot2 - robot
+        knife - tool
+        bowl cutting_board - location
+        tomato cucumber - vegetable
+    )
+    (:init
+        (can-cut knife)
+        (is-whole tomato)
+        (is-whole cucumber)
+        (available bowl)
+        (available tomato)
+        (available cucumber)
+        (at tomato bowl)
+        (at cucumber bowl)
+        (at knife robot2)
+        (carry robot2 knife)
+        (free robot1)
+        (is-workspace cutting_board)
+    )
+    (:goal (and
+        (is-sliced tomato)
+        (is-sliced cucumber)
+        (at tomato bowl)
+        (at cucumber bowl)
+        (free robot1)
+        (free robot2)
+    ))
+)
+
+    The following is the error in the PDDL file you made last time:
+    Predicate argument has wrong type:
+  {'name': 'at', 'args': ['knife', 'robot2']} (robot2: robot -> location)
+
+
+
+    Please first analyze where the error is, ie. is it a PDDL semantic error, or an error in the caption or scene graph?
+    After analyzing the error, generate all the output again.
+    

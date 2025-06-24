@@ -1,4 +1,30 @@
-(define (domain cooking)
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain cooking)
 
     ;remove requirements that are not needed
     (:requirements :typing :adl)
@@ -94,3 +120,12 @@
         )
     )
 )
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    There are a robot arm robot1 and another robot arm robot2. One of them is free and the other is holding a knife. To slice a vegetable, the vegetable must be put on the cutting board. If a vegetable has more than one piece, you can assume it is already sliced.
+    Instruction: Slice the carrot and place the sliced carrots and cucumbers in a bowl.
+
+    

@@ -1,4 +1,11 @@
-(define (domain cooking)
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    
+    For the current domain, this is the domain file:
+    (define (domain cooking)
 
     ;remove requirements that are not needed
     (:requirements :typing :adl)
@@ -94,3 +101,66 @@
         )
     )
 )
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    There are a robot arm robot1 and another robot arm robot2. One of them is free and the other is holding a knife. To slice a vegetable, the vegetable must be put on the cutting board. If a vegetable has more than one piece, you can assume it is already sliced.
+    Instruction: Slice the carrot and place the sliced carrots and cucumbers in a bowl.
+
+    
+    **********
+
+    The following is the response you generated last time:
+    (define (problem slice-and-place-carrot-and-cucumber)
+    (:domain cooking)
+    (:objects
+        robot1 robot2 - robot
+        carrot cucumber - vegetable
+        knife - tool
+        cutting_board workspace - location
+        bowl - location
+    )
+    (:init
+        ; robot states
+        (free robot1)
+        (carry robot2 knife)
+
+        ; tool properties
+        (can-cut knife)
+
+        ; vegetable initial states
+        (is-whole carrot)
+        (not (is-sliced carrot))
+        (is-whole cucumber)
+        (not (is-sliced cucumber))
+
+        ; locations
+        (is-workspace cutting_board)
+
+        (at carrot cutting_board)
+        (at cucumber cutting_board)
+        (at bowl workspace)
+
+        (available carrot)
+        (available cucumber)
+        (available bowl)
+    )
+    (:goal (and
+        (is-sliced carrot)
+        (not (is-whole carrot))
+        (at carrot bowl)
+        (at cucumber bowl)
+    ))
+)
+
+    The following is the error in the PDDL file you made last time:
+    Predicate not defined in domain:
+  not
+
+
+
+    Please first analyze where the error is, ie. is it a PDDL semantic error, or an error in the caption or scene graph?
+    After analyzing the error, generate all the output again.
+    

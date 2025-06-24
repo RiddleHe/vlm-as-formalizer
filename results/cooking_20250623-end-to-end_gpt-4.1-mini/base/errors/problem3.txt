@@ -1,0 +1,43 @@
+Plan length mismatch.
+Ground truth has 5 steps.
+Predicted has 2 steps.
+
+Problem:
+(:init
+
+    (free robot1)
+    (carry robot2 knife)
+    (can-cut knife)
+    (is-whole carrot)
+    (available carrot)
+    (at carrot workspace)
+    (at bowl workspace)
+    (is-workspace workspace)
+  )
+  (:goal (and
+    (is-sliced carrot)
+    (at carrot workspace)
+    (free robot1)
+    (free robot2)
+  ))
+)
+
+Ground truth problem:
+(:init
+
+        (available carrot)
+        (is-whole carrot)
+        (is-workspace cutting_board)
+        (free a_bot)
+        (carry b_bot knife)
+        (can-cut knife)
+        (at carrot counter)
+    )
+    (:goal
+        (and
+            (at carrot bowl)
+            (is-sliced carrot)
+        )
+    )
+)
+

@@ -30,7 +30,8 @@ def parse_args():
     parser.add_argument("--device", type=str, default="cuda:0", help="device")
 
     # Main generation stages
-    parser.add_argument("--generate_problem", action="store_true", help="generate PDDL problems")
+    parser.add_argument("--generate_scene_graph_first", action="store_true", help="generate scene graph first")
+    parser.add_argument("--generate_end_to_end", action="store_true", help="generate PDDL end-to-end")
     parser.add_argument("--find_plan", action="store_true", default=True, help="refine generated problems by corrective reprompting")
 
     # End-goal generation choices

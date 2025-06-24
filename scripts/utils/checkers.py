@@ -5,8 +5,8 @@ import os
 import glob
 import tempfile
 
-from parsers import parse_types, parse_predicates, parse_conditions, parse_block, parse_actions_from_plan
-from helpers import create_file_paths, format_command
+from .parsers import parse_types, parse_predicates, parse_conditions, parse_block, parse_actions_from_plan
+from .helpers import create_file_paths, format_command
 
 def check_pddl(pddl_file: str, domain_file: str) -> tuple[bool, str]:
     errors = defaultdict(set)

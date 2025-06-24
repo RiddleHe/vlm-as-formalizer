@@ -16,25 +16,14 @@ import shutil
 from PIL import Image
 import torch
 
-from utils.prompts import (
-    build_problem_prompt, 
-    build_refine_problem_prompt, 
-    build_domain_prompt, 
-    build_refine_domain_prompt, 
-    build_plan_prompt,
-)
 from utils.helpers import (
     seed_everything, 
     parse_args,
     format_command,
     create_file_paths,
 )
-from utils.parsers import (
-    parse_pddl,
-    parse_plan,
-)
 from utils.checkers import find_plan, compare_plans
-from utils.generate import generate_pddl_end_to_end
+from utils.generate import generate_pddl
 from utils.models import VLMClient
 
 from dotenv import load_dotenv
@@ -44,9 +33,6 @@ load_dotenv('.env')
 
 def main():
     args = parse_args()
-    # Args check
-    assert not (args.generate_plan and args.generate_problem), \
-        "generate_plan is not compatible with generate_problem"
 
     data_dir = f"../data/{args.domain}"
     result_dir = f"../results/{args.domain}"
@@ -68,7 +54,7 @@ def main():
         domain_file = f.read()
 
     # Generate / refine PDDL problems
-    if args.generate_problem or args.generate_plan:
+    if args.generate_end_to_end or args.generate_scene_graph_first or args.generate_plan:
         # Create folders
         folders = ["responses", "instructions"]
         if args.generate_plan:
@@ -131,10 +117,12 @@ def main():
                 continue
 
             # generate PDDL objects, initial state, and goal specification
-            res, success = generate_pddl_end_to_end(
+            res, success = generate_pddl(
                 target,
                 config,
                 model=model,
+                generate_end_to_end=args.generate_end_to_end,
+                generate_scene_graph_first=args.generate_scene_graph_first,
                 generate_caption=args.generate_caption,
                 generate_scene_graph=args.generate_scene_graph,
                 num_tries=args.num_tries,
@@ -144,7 +132,7 @@ def main():
             save_step = args.gen_step
 
             try:
-                if args.generate_problem:
+                if args.generate_end_to_end or args.generate_scene_graph_first:
                     dir_pairs = [
                         ("problems", "file", "pddl"),
                         ("instructions", "prompt", "txt"),
