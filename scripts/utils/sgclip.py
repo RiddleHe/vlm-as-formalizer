@@ -16,7 +16,7 @@
 |   |   |   |-- sam2.1_hiera_b+.yaml
 |   |-- (and other files from the "patched" SAM2 repo)
 |
-|-- LASER-unified/src/visualization/
+|-- LASER/src/visualization/
 |   |-- mask_generation_grounding_dino.py
 |   |-- utils.py
 |   |-- vis_utils.py
@@ -262,7 +262,7 @@ def setup_and_load_models(
         device="cuda:0", 
         dino_path="GroundingDINO", 
         sam_path="sam2", 
-        inference_path="LASER-unified/src/visualization",
+        inference_path="LASER/src/visualization",
         pred_model_path="data/LLaVA-Video-178K-v2/models/ensemble-02-10",
         pred_model_name="ensemble-2025-02-10-14-57-22",
         pred_model_epoch=0
