@@ -209,7 +209,7 @@ def get_binary_relations(
 # Pipeline
 
 def setup_and_load_models(base_dir, device):
-    sys.path.append(os.path.join(base_dir, "grounding_dino"))
+    sys.path.append(os.path.join(base_dir, "GroundingDINO"))
     sys.path.append(os.path.join(base_dir, "sam2"))
 
     from groundingdino.util.inference import Model as gd_Model
@@ -217,8 +217,8 @@ def setup_and_load_models(base_dir, device):
     from sam2.automatic_mask_generator import SAM2AutomaticMaskGenerator
 
     # DINO
-    gd_config = os.path.join(base_dir, "grounding_dino/groundingdino/config/GroundingDINO_SwinT_OGC.py")
-    gd_checkpoint = os.path.join(base_dir, "grounding_dino/checkpoints/groundingdino_swint_ogc.pth")
+    gd_config = os.path.join(base_dir, "GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py")
+    gd_checkpoint = os.path.join(base_dir, "GroundingDINO/weights/groundingdino_swint_ogc.pth")
     grounding_model = gd_Model(model_config_path=gd_config, model_checkpoint_path=gd_checkpoint, device=device)
 
     # SAM2
