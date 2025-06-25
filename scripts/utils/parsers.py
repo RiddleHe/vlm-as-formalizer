@@ -109,7 +109,7 @@ def parse_types(domain_file):
 
     return types
 
-def parse_predicates(domain_file) -> dict[str, list[str]]:
+def parse_predicates(domain_file) -> dict[str, dict]:
     predicates_raw = []
     comments = []
     full_predicate_str = parse_block(domain_file, "(:predicates")
@@ -169,8 +169,10 @@ def parse_predicates(domain_file) -> dict[str, list[str]]:
             else:
                 break
 
-        predicates[name]["args"] = args
-        predicates[name]["comment"] = comment
+        predicates[name] = {
+            "args": args,
+            "comment": comment,
+        }
 
     return predicates
 

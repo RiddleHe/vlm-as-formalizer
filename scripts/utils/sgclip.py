@@ -180,12 +180,21 @@ def get_batched_objects(
                 classes_ls=classes_ls,
                 visualize=False,
             )
+            # oid_class_pred = {
+            #    1: "red cube",
+            #    2: "red cube",
+            #    3: "green cube",
+            # }
     finally:
         if os.path.exists(new_video_path):
             os.remove(new_video_path)
 
     batched_object_ids, batched_pred_masks, batched_pred_bboxes, batched_object_pairs = \
         reformat_video_segments(0, video_segments)
+    # batched_object_ids = [(video_id, frame_id, object_id), ...]
+    # batched_pred_masks = [mask, ...]  # (batch_size, height, width)
+    # batched_pred_bboxes = [bbox, ...]  # (batch_size, 4)
+    # batched_object_pairs = [(video_id, frame_id, (object_id1, object_id2)), ...]
     
     if not batched_object_ids:
         print("No object ids found")
@@ -242,7 +251,7 @@ def get_binary_relations(
         batched_object_ids=batch["batched_object_ids"],
         batched_unary_kws=[[]],
         batched_binary_kws=[binary_relations],
-        batched_obj_pairs=batch["batched_object_pairs"],
+        batched_obj_pairs=batch["batched_object_pairs"], # this guides the search of all binary relations
         batched_video_splits=[0],
         batched_binary_predicates=[None],
     )

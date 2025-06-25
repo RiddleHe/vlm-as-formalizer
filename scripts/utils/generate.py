@@ -102,6 +102,7 @@ def generate_pddl_end_to_end(
 
     return problem_file, response, problem_prompt
 
+# TODO: load models in main
 def generate_scene_graph_then_pddl(
     target,
     config,
@@ -117,11 +118,13 @@ def generate_scene_graph_then_pddl(
 
     response = model.generate(prompt, observations)
 
-    objects = parse_objects(response, parse_types(target["domain"]))
+    objects = parse_objects(response, parse_types(target["domain"]))  # {object_type: [object_name, ...]}
 
     predicates = parse_predicates(target["domain"])
     unary_predicates = [f"{predicate}" for predicate, predicate_dict in predicates.items() if len(predicate_dict['args']) == 1]
     binary_predicates = [f"{predicate}" for predicate, predicate_dict in predicates.items() if len(predicate_dict['args']) == 2]
+
+    batches = []  # []    
 
     models = {}
 
@@ -132,8 +135,6 @@ def generate_scene_graph_then_pddl(
         binary_predicates,
         models,
     )
-
-    
 
     return "", "", ""
 
