@@ -63,8 +63,7 @@ def run_internvl_test():
             tokenizer,
             image,
             prompt,
-            history=None,  # No previous conversation history
-            stream=False
+            history=None
         )
         print("\n--- Model Response ---")
         print(response)

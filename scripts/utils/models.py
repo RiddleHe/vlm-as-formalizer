@@ -137,8 +137,7 @@ class InternVLClient(VLMClient):
             self.client["tokenizer"],
             image_arg,
             prompt,
-            history=None,
-            stream=False
+            history=None
         )
         return response
 
