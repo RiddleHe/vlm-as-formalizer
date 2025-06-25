@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from abc import ABC, abstractmethod
 import requests
 from PIL import Image
+import importlib
 
 # Load environment variables
 load_dotenv()
@@ -111,12 +112,19 @@ class InternVLClient(VLMClient):
     def load_client(self, **kwargs):
         from transformers import AutoModel, AutoTokenizer
 
+        # Check for Flash Attention 2 and set implementation accordingly
+        is_flash_attn_available = importlib.util.find_spec("flash_attn") is not None
+        attn_implementation = "flash_attention_2" if is_flash_attn_available else "eager"
+        print(f"Using attention implementation: {attn_implementation}")
+        if not is_flash_attn_available:
+            print("-> flash-attn is not installed. For faster inference, consider installing it.")
+
         model = AutoModel.from_pretrained(
             self.client_name,
             torch_dtype=torch.bfloat16,
             low_cpu_mem_usage=True,
             trust_remote_code=True,
-            attn_implementation="auto",
+            attn_implementation=attn_implementation,
         ).eval().to(kwargs.get("device"))
         
         tokenizer = AutoTokenizer.from_pretrained(
