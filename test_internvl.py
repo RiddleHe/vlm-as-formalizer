@@ -60,9 +60,9 @@ def run_internvl_test():
         print("Running inference...")
         # The model.chat method is specific to InternVL and handles the conversation logic
         response, history = model.chat(
-            tokenizer=tokenizer,
-            image=image,
-            question=prompt,
+            tokenizer,
+            image,
+            prompt,
             history=None,  # No previous conversation history
             stream=False
         )

@@ -116,7 +116,8 @@ class InternVLClient(VLMClient):
             torch_dtype=torch.bfloat16,
             low_cpu_mem_usage=True,
             trust_remote_code=True,
-        ).to(kwargs.get("device"))
+            attn_implementation="flash_attention_2",
+        ).eval().to(kwargs.get("device"))
         
         tokenizer = AutoTokenizer.from_pretrained(
             self.client_name, 
@@ -133,9 +134,9 @@ class InternVLClient(VLMClient):
         
         # The model.chat method takes tokenizer, image, question, and history
         response, _ = self.client["model"].chat(
-            tokenizer=self.client["tokenizer"],
-            image=image_arg,
-            question=prompt,
+            self.client["tokenizer"],
+            image_arg,
+            prompt,
             history=None,
             stream=False
         )
