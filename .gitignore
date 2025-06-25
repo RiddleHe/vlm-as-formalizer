@@ -2,6 +2,7 @@
 __pycache__/
 
 test.py
+test*/
 
 # C extensions
 *.so

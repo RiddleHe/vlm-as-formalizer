@@ -107,6 +107,38 @@ def reformat_video_segments(
             
     return batched_object_ids, batched_pred_masks, batched_pred_bboxes, frame_object_pairs
 
+def format_class_probs(
+        batched_cate_probs: dict,
+        threshold: float,
+    ) -> tuple[dict, set]:
+    oid_to_class = {}
+    oids_to_remove = set()
+    if not batched_cate_probs:
+        return oid_to_class, oids_to_remove
+
+    # Assuming a single video was processed, so we look at index 0
+    vid_pred = batched_cate_probs.get(0, {})
+    
+    grouped_by_oid = defaultdict(list)
+    for (oid, cate), prob in vid_pred.items():
+        grouped_by_oid[oid].append((prob, cate))
+
+    for oid, preds in grouped_by_oid.items():
+        if preds:
+            # Sort by probability (desc) and get the top prediction
+            sorted_preds = sorted(preds, key=lambda x: x[0], reverse=True)
+            top_pred_prob, top_pred_class = sorted_preds[0]
+            print(f"Object {oid} predicted as {top_pred_class} with probability {top_pred_prob}")
+            print(f"Object {oid} predicted as {sorted_preds[1][1]} with probability {sorted_preds[1][0]}")
+            if top_pred_prob >= threshold:
+                oid_to_class[oid] = top_pred_class
+            else:
+                oids_to_remove.add(oid)
+        else:
+             oids_to_remove.add(oid)
+    
+    return oid_to_class, oids_to_remove
+
 def format_unary_probs(
         batched_unary_probs: dict,
         video_ids: list[str],
@@ -181,8 +213,8 @@ def get_batched_objects(
         with tempfile.TemporaryDirectory() as tmp_out_dir:
             video_segments, oid_class_pred, _ = generate_masks_grounding_dino(
                 grounding_model=grounding_model,
-                box_threshold=0.35,
-                text_threshold=0.4,
+                box_threshold=0.20,
+                text_threshold=0.15,
                 predictor=sam_video_predictor,
                 mask_generator=mask_generator,
                 video_tensor=video_tensor,
@@ -221,6 +253,61 @@ def get_batched_objects(
         "object_ids_to_classes": oid_class_pred,
         "video_segments": video_segments,
     }
+
+def filter_batch_by_oids(batch: dict, oids_to_remove: set) -> dict:
+    if not oids_to_remove:
+        return batch
+
+    new_batch = {}
+    
+    indices_to_keep = [
+        i for i, (_, _, oid) in enumerate(batch["batched_object_ids"]) if oid not in oids_to_remove
+    ]
+    
+    new_batch["batched_object_ids"] = [batch["batched_object_ids"][i] for i in indices_to_keep]
+    new_batch["batched_pred_masks"] = [batch["batched_pred_masks"][i] for i in indices_to_keep]
+    new_batch["batched_pred_bboxes"] = [batch["batched_pred_bboxes"][i] for i in indices_to_keep]
+
+    new_batch["batched_object_pairs"] = [
+        pair for pair in batch["batched_object_pairs"]
+        if pair[2][0] not in oids_to_remove and pair[2][1] not in oids_to_remove
+    ]
+    
+    new_video_segments = {}
+    for fid, frame_segments in batch["video_segments"].items():
+        new_frame_segments = {
+            oid: mask for oid, mask in frame_segments.items() if oid not in oids_to_remove
+        }
+        if new_frame_segments:
+            new_video_segments[fid] = new_frame_segments
+    new_batch["video_segments"] = new_video_segments
+    
+    new_batch["object_ids_to_classes"] = batch["object_ids_to_classes"]
+
+    return new_batch
+
+def get_object_classes(
+    batch,
+    images,
+    object_classes,
+    predicate_model,
+    threshold: float,
+):
+    batched_image_cate_probs, _, _, _ = predicate_model(
+        batched_video_ids=["tmp_video"],
+        batched_videos=images,
+        batched_masks=batch["batched_pred_masks"],
+        batched_bboxes=batch["batched_pred_bboxes"],
+        batched_names=[object_classes],
+        batched_object_ids=batch["batched_object_ids"],
+        batched_unary_kws=[[]],
+        batched_binary_kws=[[]],
+        batched_obj_pairs=[],
+        batched_video_splits=[0],
+        batched_binary_predicates=[None],
+    )
+
+    return format_class_probs(batched_image_cate_probs, threshold=threshold)
 
 def get_unary_relations(
     batch,
@@ -359,15 +446,43 @@ def predict_all_relations(
         print("No objects were detected, cannot predict relations.")
         return {"unary": {}, "binary": {}}
 
-    print(f"Batch successfully generated.")
+    print(f"Batch successfully generated with {len(batch.get('batched_object_ids', []))} object instances.")
+    print(f"Original object classes from DINO: {batch['object_ids_to_classes']}")
+
+    predicate_model_object_classes = object_classes + [f"not {', '.join(object_classes)}"]
+    print(f"Predicate model object classes: {predicate_model_object_classes}")
+    refined_oid_to_class, oids_to_remove = get_object_classes(
+        batch=batch,
+        images=images,
+        object_classes=predicate_model_object_classes,
+        predicate_model=models["predicate_model"],
+        threshold=0.60,
+    )
+    
+    if oids_to_remove:
+        print(f"Removing {len(oids_to_remove)} objects below threshold: {oids_to_remove}")
+        batch = filter_batch_by_oids(batch, oids_to_remove)
+        print(f"Batch size after filtering: {len(batch.get('batched_object_ids', []))} object instances.")
+
+    if refined_oid_to_class:
+        print(f"Refined object classes from Predicate Model: {refined_oid_to_class}")
+        batch["object_ids_to_classes"] = refined_oid_to_class
+    else:
+        print("Could not refine object classes. Using original DINO classes.")
+        batch["object_ids_to_classes"] = {
+            oid: cls for oid, cls in batch.get("object_ids_to_classes", {}).items() 
+            if oid not in oids_to_remove
+        }
 
     visualize_predictions(
         images,
         batch["video_segments"],
         batch["object_ids_to_classes"],
-        os.path.join(os.path.dirname(__file__), "output"),
+        ".",
         show_masks=False
     )
+
+    sys.exit()
 
     unary_results = {}
     if unary_relations:
@@ -404,7 +519,7 @@ if __name__ == "__main__":
     images = [imageio.imread(p) for p in image_paths]
 
     object_classes = ["cutting_board", "counter", "knife", "bowl"]
-    # object_classes = ["red cube", "green cube", "blue cube", "yellow cube"]
+    # object_classes = ["red", "green", "blue", "yellow", "orange", "purple"]  # removing "cube" improves results
     unary_relations = ["is_empty"]
     binary_relations = ["on"]
 
@@ -413,5 +528,5 @@ if __name__ == "__main__":
         object_classes=object_classes,
         unary_relations=unary_relations,
         binary_relations=binary_relations,
-        models=models
+        models=models,
     )
