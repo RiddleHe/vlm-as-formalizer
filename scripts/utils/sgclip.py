@@ -19,6 +19,8 @@
 |
 |-- LASER/
 |   |-- src/
+|   |   |-- models/
+|   |   |   |-- ensemble-2025-02-10-14-57-22.0.checkpoint
 |   |   |-- visualization/
 |   |   |   |-- mask_generation_grounding_dino.py
 |   |   |   |-- utils.py
@@ -40,6 +42,8 @@ import os
 import sys
 import imageio
 from typing import List
+
+from helpers import visualize_predictions
 
 # Utils
 
@@ -105,21 +109,25 @@ def reformat_video_segments(
 
 def format_unary_probs(
         batched_unary_probs: dict,
+        video_ids: list[str],
         oid_to_class: dict,
         topk: int = 3
     ) -> dict:
     new_batched_unary_probs = {}
-    for vid, vid_pred in batched_unary_probs.items():
-        new_batched_unary_probs[vid] = defaultdict(list)
+    for idx, vid_pred in batched_unary_probs.items():
+        video_id = video_ids[idx]
+        new_batched_unary_probs[video_id] = defaultdict(lambda: defaultdict(list))
         
-        sorted_obj_preds = defaultdict(list)
-        for (oid, predicate), prob in vid_pred.items():
-            sorted_obj_preds[oid].append((prob, predicate))
+        grouped_preds = defaultdict(lambda: defaultdict(list))
+        for (fid, oid, predicate), prob in vid_pred.items():
+            grouped_preds[fid][oid].append((prob, predicate))
 
-        for oid, preds in sorted_obj_preds.items():
-            top_preds = sorted(preds, key=lambda x: x[0], reverse=True)[:topk]
-            class_name = oid_to_class.get(oid, f"obj_{oid}")
-            new_batched_unary_probs[vid][class_name].extend(top_preds)
+        for fid, frame_preds in grouped_preds.items():
+            for oid, preds in frame_preds.items():
+                top_preds = sorted(preds, key=lambda x: x[0], reverse=True)[:topk]
+                class_name = oid_to_class.get(oid, f"obj_{oid}")
+                obj_key = f"{oid} ({class_name})"
+                new_batched_unary_probs[video_id][fid][obj_key].extend(top_preds)
             
     return new_batched_unary_probs
 
@@ -145,8 +153,9 @@ def format_binary_probs(
                 oid1, oid2 = obj_tp
                 name1 = oid_to_class.get(oid1, f"obj_{oid1}")
                 name2 = oid_to_class.get(oid2, f"obj_{oid2}")
+                obj_key = (f"{oid1} ({name1})", f"{oid2} ({name2})")
                 
-                new_batched_binary_probs[video_id][fid][(name1, name2)] = top_preds
+                new_batched_binary_probs[video_id][fid][obj_key] = top_preds
 
     return new_batched_binary_probs
 
@@ -173,14 +182,15 @@ def get_batched_objects(
             video_segments, oid_class_pred, _ = generate_masks_grounding_dino(
                 grounding_model=grounding_model,
                 box_threshold=0.35,
-                text_threshold=0.25,
+                text_threshold=0.4,
                 predictor=sam_video_predictor,
                 mask_generator=mask_generator,
                 video_tensor=video_tensor,
-                new_video_path=new_video_path,
+                video_path=new_video_path,
                 video_id="tmp_video",
                 out_dir=tmp_out_dir,
                 classes_ls=classes_ls,
+                target_fps=None,
                 visualize=False,
             )
             # oid_class_pred = {
@@ -209,6 +219,7 @@ def get_batched_objects(
         "batched_pred_bboxes": batched_pred_bboxes,
         "batched_object_pairs": batched_object_pairs,
         "object_ids_to_classes": oid_class_pred,
+        "video_segments": video_segments,
     }
 
 def get_unary_relations(
@@ -231,12 +242,14 @@ def get_unary_relations(
         batched_binary_predicates=[None],
     )
 
+    video_ids = ["tmp_video"]
     formatted_probs = format_unary_probs(
         batched_image_unary_probs,
+        video_ids=video_ids,
         oid_to_class=batch["object_ids_to_classes"],
         topk=len(unary_relations)
     )
-    return formatted_probs.get("tmp_video", {})
+    return formatted_probs.get(video_ids[0], {})
 
 
 def get_binary_relations(
@@ -245,16 +258,17 @@ def get_binary_relations(
     binary_relations,
     predicate_model,
 ):
+    batched_pred_bboxes = [mask_to_bbox(mask) for mask in batch["batched_pred_masks"]]
     _, _, batched_image_binary_probs, _ = predicate_model(
         batched_video_ids=["tmp_video"],
         batched_videos=images,
         batched_masks=batch["batched_pred_masks"],
-        batched_bboxes=batch["batched_pred_bboxes"],
+        batched_bboxes=batched_pred_bboxes,
         batched_names=[["object"]],
         batched_object_ids=batch["batched_object_ids"],
         batched_unary_kws=[[]],
         batched_binary_kws=[binary_relations],
-        batched_obj_pairs=batch["batched_object_pairs"], # this guides the search of all binary relations
+        batched_obj_pairs=batch["batched_object_pairs"],
         batched_video_splits=[0],
         batched_binary_predicates=[None],
     )
@@ -271,22 +285,22 @@ def get_binary_relations(
 
 def setup_and_load_models(
         base_dir, 
-        device="cuda:0", 
+        device="cuda", 
         dino_path="GroundingDINO", 
         sam_path="sam2", 
         inference_path="LASER/src/visualization",
-        pred_model_path="data/LLaVA-Video-178K-v2/models/ensemble-02-10",
-        pred_model_name="ensemble-2025-02-10-14-57-22",
-        pred_model_epoch=0
+        pred_model_path="LASER/src/models",
+        pred_model_name="ensemble-2025-02-10-14-57-22.0.checkpoint",
     ):
     sys.path.append(os.path.join(base_dir, dino_path))
     sys.path.append(os.path.join(base_dir, sam_path))
     sys.path.append(os.path.join(base_dir, inference_path))
-
+    sys.path.append(os.path.join(base_dir, pred_model_path))
 
     from groundingdino.util.inference import Model as gd_Model
     from sam2.build_sam import build_sam2, build_sam2_video_predictor
     from sam2.automatic_mask_generator import SAM2AutomaticMaskGenerator
+    from llava_clip_model_v3 import PredicateModel as PredicateModel_v3
 
     # DINO
     gd_config = os.path.join(base_dir, dino_path, "groundingdino/config/GroundingDINO_SwinT_OGC.py")
@@ -301,18 +315,15 @@ def setup_and_load_models(
     sam_video_predictor = build_sam2_video_predictor(sam_config, sam_checkpoint, device=device)
     mask_generator = SAM2AutomaticMaskGenerator(model=sam2_model, use_m2m=True)
     print("SAM2 model loaded successfully.")
-
-    sys.exit()
     
     # Predicate Model
     pred_model_dir = os.path.join(base_dir, pred_model_path)
-    pred_model_name = pred_model_name
-    pred_model_epoch = pred_model_epoch
-    model_path = os.path.join(pred_model_dir, f'{pred_model_name}.{pred_model_epoch}.model')
+    model_path = os.path.join(pred_model_dir, pred_model_name)
     assert os.path.exists(model_path), f"Predicate model not found at: {model_path}"
     predicate_model = torch.load(model_path, map_location=device, weights_only=False)
     predicate_model.clip_tokenizer.pad_token_id = 0
     predicate_model.clip_tokenizer.pad_token = "<|endoftext|>"
+    print("Predicate model loaded successfully.")
 
     print("All models loaded successfully.")
     
@@ -348,6 +359,16 @@ def predict_all_relations(
         print("No objects were detected, cannot predict relations.")
         return {"unary": {}, "binary": {}}
 
+    print(f"Batch successfully generated.")
+
+    visualize_predictions(
+        images,
+        batch["video_segments"],
+        batch["object_ids_to_classes"],
+        os.path.join(os.path.dirname(__file__), "output"),
+        show_masks=False
+    )
+
     unary_results = {}
     if unary_relations:
         unary_results = get_unary_relations(
@@ -356,6 +377,8 @@ def predict_all_relations(
             unary_relations=unary_relations,
             predicate_model=models["predicate_model"]
         )
+
+    print(unary_results)
 
     binary_results = {}
     if binary_relations:
@@ -366,6 +389,8 @@ def predict_all_relations(
             predicate_model=models["predicate_model"]
         )
 
+    print(binary_results)
+
     return {"unary": unary_results, "binary": binary_results}
 
 if __name__ == "__main__":
@@ -374,12 +399,14 @@ if __name__ == "__main__":
 
     models = setup_and_load_models(BASE_DIR, DEVICE)
 
-    image_paths = ["scene1_view1.jpg", "scene1_view2.jpg", "scene1_view3.jpg"]
+    image_paths = [os.path.join(BASE_DIR, "data/cooking/observations", f"problem4.jpg")]
+    # image_paths = [os.path.join(BASE_DIR, "data/blocksworld-real/observations", f"problem22-1.jpg")]
     images = [imageio.imread(p) for p in image_paths]
 
-    object_classes = ["person", "sofa", "remote control", "television"]
-    unary_relations = ["smiling", "sitting"]
-    binary_relations = ["holding", "on", "in front of"]
+    object_classes = ["cutting_board", "counter", "knife", "bowl"]
+    # object_classes = ["red cube", "green cube", "blue cube", "yellow cube"]
+    unary_relations = ["is_empty"]
+    binary_relations = ["on"]
 
     results = predict_all_relations(
         images=images,

@@ -6,7 +6,7 @@ import argparse
 
 import numpy as np
 import torch
-
+import matplotlib.pyplot as plt
 
 def seed_everything(seed: int=42):
     random.seed(seed)
@@ -87,3 +87,81 @@ def create_file_paths(domain_str, problem_str, temp_dir_path):
     plan_path = f"{temp_dir_path}/{plan_base_name}"
 
     return domain_path, problem_path, plan_path
+
+# Visualization
+
+def get_color(obj_id, cmap_name="gist_rainbow", alpha=0.5):
+    cmap = plt.get_cmap(cmap_name)
+    color = list(cmap((obj_id * 47) % 256))
+    color[3] = alpha
+    return np.array(color)
+
+def highlight(mask, ax, obj_id=None, det_class=None, random_color=False, show_bbox=False, show_masks=True):
+    if random_color:
+        color = np.concatenate([np.random.random(3), np.array([0.8])], axis=0)
+    else:
+        color = get_color(obj_id)
+
+    if show_masks:
+        mask_image = np.zeros((mask.shape[0], mask.shape[1], 4), dtype=float)
+        mask_image[mask[..., 0] > 0] = color
+
+    y_indices, x_indices = np.where(mask[..., 0] > 0)
+    if y_indices.size == 0 or x_indices.size == 0:
+        if show_masks:
+            ax.imshow(mask_image, alpha=0.5)
+        return
+
+    x_min, x_max = x_indices.min(), x_indices.max()
+    y_min, y_max = y_indices.min(), y_indices.max()
+
+    if det_class:
+        show_bbox = True
+
+    if show_bbox:
+        rect = plt.Rectangle(
+            (x_min, y_min),
+            x_max - x_min,
+            y_max - y_min,
+            linewidth=1.5,
+            edgecolor=color[:3],
+            facecolor="none",
+        )
+        ax.add_patch(rect)
+
+    if det_class is not None:
+        label = f"{det_class} ({obj_id})"
+        ax.text(
+            x_min,
+            y_min - 5,
+            label,
+            color="white",
+            fontsize=8,
+            backgroundcolor=color,
+        )
+    
+    if show_masks:
+        ax.imshow(mask_image, alpha=0.5)
+
+def visualize_predictions(images, video_segments, oid_to_class, save_dir, show_masks=True):
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+
+    for frame_id, image in enumerate(images):
+        if frame_id not in video_segments:
+            continue
+
+        fig, ax = plt.subplots(1, figsize=(10, 10))
+        ax.imshow(image)
+        ax.axis("off")
+
+        frame_masks = video_segments[frame_id]
+        for obj_id, mask_tensor in sorted(frame_masks.items()):
+            mask_np = mask_tensor.permute(1, 2, 0).cpu().numpy()
+            class_name = oid_to_class.get(obj_id, f"obj_{obj_id}")
+            highlight(mask_np, ax, obj_id=obj_id, det_class=class_name, show_masks=show_masks)
+
+        save_path = os.path.join(save_dir, f"frame_{frame_id}.png")
+        plt.savefig(save_path, bbox_inches="tight")
+        plt.close(fig)
+        print(f"Saved visualization for frame {frame_id} to {save_path}")
