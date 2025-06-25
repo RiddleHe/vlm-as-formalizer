@@ -11,15 +11,18 @@
 |-- sam2/
 |   |-- checkpoints/
 |   |   |-- sam2.1_hiera_base_plus.pt
-|   |-- configs/
-|   |   |-- sam2.1/
-|   |   |   |-- sam2.1_hiera_b+.yaml
+|   |-- sam2/
+|   |   |-- configs/
+|   |   |   |-- sam2.1/
+|   |   |   |   |-- sam2.1_hiera_b+.yaml
 |   |-- (and other files from the "patched" SAM2 repo)
 |
-|-- LASER/src/visualization/
-|   |-- mask_generation_grounding_dino.py
-|   |-- utils.py
-|   |-- vis_utils.py
+|-- LASER/
+|   |-- src/
+|   |   |-- visualization/
+|   |   |   |-- mask_generation_grounding_dino.py
+|   |   |   |-- utils.py
+|   |   |   |-- vis_utils.py
 |
 |-- data/
 |   |-- LLaVA-Video-178K-v2/
@@ -289,13 +292,17 @@ def setup_and_load_models(
     gd_config = os.path.join(base_dir, dino_path, "groundingdino/config/GroundingDINO_SwinT_OGC.py")
     gd_checkpoint = os.path.join(base_dir, dino_path, "weights/groundingdino_swint_ogc.pth")
     grounding_model = gd_Model(model_config_path=gd_config, model_checkpoint_path=gd_checkpoint, device=device)
+    print("GroundingDINO model loaded successfully.")
 
     # SAM2
     sam_checkpoint = os.path.join(base_dir, sam_path, "checkpoints/sam2.1_hiera_base_plus.pt")
-    sam_config = os.path.join(base_dir, sam_path, "configs/sam2.1/sam2.1_hiera_b+.yaml")
+    sam_config = "configs/sam2.1/sam2.1_hiera_b+.yaml"  # expect relative path
     sam2_model = build_sam2(sam_config, sam_checkpoint, device=device, apply_postprocessing=False)
     sam_video_predictor = build_sam2_video_predictor(sam_config, sam_checkpoint, device=device)
     mask_generator = SAM2AutomaticMaskGenerator(model=sam2_model, use_m2m=True)
+    print("SAM2 model loaded successfully.")
+
+    sys.exit()
     
     # Predicate Model
     pred_model_dir = os.path.join(base_dir, pred_model_path)
@@ -362,8 +369,8 @@ def predict_all_relations(
     return {"unary": unary_results, "binary": binary_results}
 
 if __name__ == "__main__":
-    BASE_DIR = ""
-    DEVICE = "cuda:0"
+    BASE_DIR = os.path.join(os.path.dirname(__file__), "..", "..")
+    DEVICE = "cuda"
 
     models = setup_and_load_models(BASE_DIR, DEVICE)
 
