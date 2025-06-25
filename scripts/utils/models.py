@@ -116,7 +116,7 @@ class InternVLClient(VLMClient):
             torch_dtype=torch.bfloat16,
             low_cpu_mem_usage=True,
             trust_remote_code=True,
-            attn_implementation="flash_attention_2",
+            attn_implementation="auto",
         ).eval().to(kwargs.get("device"))
         
         tokenizer = AutoTokenizer.from_pretrained(

@@ -32,7 +32,7 @@ def run_internvl_cache_test():
             torch_dtype=torch.bfloat16,
             low_cpu_mem_usage=True,
             trust_remote_code=True,
-            attn_implementation="flash_attention_2"
+            attn_implementation="auto"
         ).eval().to(device)
         tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
         print("Model loaded.")
