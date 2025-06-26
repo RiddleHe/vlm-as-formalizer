@@ -36,7 +36,7 @@ def run_internvl_cache_test():
             attn_implementation="eager"  # Use the standard attention mechanism
         ).eval().to(device)
         tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
-        processor = AutoProcessor.from_pretrained(model_path)
+        processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
         print("Model loaded.")
     except Exception as e:
         print(f"Failed to load model. Error: {e}")
@@ -45,18 +45,15 @@ def run_internvl_cache_test():
     # 3. Initial Generation (Build Shared Context)
     image_path = create_dummy_image()
     image = Image.open(image_path).convert("RGB")
-    initial_prompt = "Describe this image in one short sentence."
+    messages = [{"role": "user", "content": "Describe this image in one short sentence."}]
 
-    # For InternVL, the chat template expects an <image> placeholder.
-    # We manually construct the conversation history.
-    messages = [{"role": "user", "content": f"<image>\n{initial_prompt}"}]
-    
-    # Process the image and tokenize the text prompt
-    inputs = processor.apply_chat_template(  
-    messages,   
-    add_generation_prompt=True,   
-    return_tensors="pt"  
-    ).to(model.device)  
+    # Use the processor to prepare the inputs for the model
+    inputs = processor(
+        text=messages,
+        images=[image],
+        return_tensors="pt",
+        add_generation_prompt=True,
+    ).to(device)
 
     print("\n--- Generating initial response (shared context) ---")
     try:
@@ -69,7 +66,7 @@ def run_internvl_cache_test():
         )
         # This cache is the "same vector". It holds the model's state.
         shared_cache = outputs.past_key_values
-        initial_response_text = tokenizer.decode(outputs.sequences[0][inputs.shape[1]:], skip_special_tokens=True)
+        initial_response_text = tokenizer.decode(outputs.sequences[0][inputs.input_ids.shape[1]:], skip_special_tokens=True)
 
         print(f"Initial Response: {initial_response_text}")
         print("--------------------------------------------------\n")
