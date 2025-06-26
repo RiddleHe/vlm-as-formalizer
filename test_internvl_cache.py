@@ -1,51 +1,48 @@
 import os
+import sys
 import torch
 from PIL import Image
 from transformers import AutoModel, AutoTokenizer, AutoProcessor
 import importlib
 
-def create_dummy_image(path="dummy_image.jpg"):
-    """Creates a simple red image for testing if it doesn't exist."""
-    if not os.path.exists(path):
-        print(f"Creating a dummy image at: {path}")
-        img = Image.new('RGB', (224, 224), color='red')
-        img.save(path)
-    return path
+from vlm_utils import load_image, split_internvl_model
 
 def run_internvl_cache_test():
     """
     Demonstrates branching from a shared conversational context (cache)
     with the InternVL model.
     """
-    # 1. Setup
     model_path = "OpenGVLab/InternVL3-14B"
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"Using device: {device}")
+    device = "cuda"
+    device_map = split_internvl_model(model_path)
 
-    if device == "cpu":
-        print("Warning: Running this large model on a CPU is not recommended.")
+    print(f"Loading model: {model_path}...")
+    model = AutoModel.from_pretrained(
+        model_path,
+        torch_dtype=torch.bfloat16,
+        low_cpu_mem_usage=True,
+        trust_remote_code=True,
+        # use_flash_attn=True,
+        device_map=device_map,
+    ).eval().to(device)
+    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
+    print("Model loaded.")
 
-    # 2. Load Model
-    try:
-        print(f"Loading model: {model_path}...")
-        model = AutoModel.from_pretrained(
-            model_path,
-            torch_dtype=torch.bfloat16,
-            low_cpu_mem_usage=True,
-            trust_remote_code=True,
-            attn_implementation="eager"  # Use the standard attention mechanism
-        ).eval().to(device)
-        tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
-        processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
-        print("Model loaded.")
-    except Exception as e:
-        print(f"Failed to load model. Error: {e}")
-        return
+    sys.exit()
 
-    # 3. Initial Generation (Build Shared Context)
-    image_path = create_dummy_image()
+    image_path = "data/blocksworld-real/observations/problem1-1.jpg"
     image = Image.open(image_path).convert("RGB")
-    messages = [{"role": "user", "content": "Describe this image in one short sentence."}]
+    generation_config = dict(max_new_tokens=1024, do_sample=True)
+    prompt = "Please describe the image explicitly."
+    text = f(
+        "<|im_start|>user\n<IMG_CONTEXT>\n{prompt}.<|im_end|>\n<|im_start|>assistant\n"
+    )
+    inputs = processor(
+        images=image, 
+        text=text, 
+        return_tensors="pt"
+    ).to(device, dtype=torch.float16)
 
     # Use the processor to prepare the inputs for the model.
     # This is the correct way to handle multimodal inputs, as the processor
