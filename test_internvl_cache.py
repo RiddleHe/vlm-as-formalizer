@@ -1,7 +1,7 @@
 import os
 import torch
 from PIL import Image
-from transformers import AutoModel, AutoTokenizer
+from transformers import AutoModel, AutoTokenizer, AutoProcessor
 import importlib
 
 def create_dummy_image(path="dummy_image.jpg"):
@@ -36,6 +36,7 @@ def run_internvl_cache_test():
             attn_implementation="eager"  # Use the standard attention mechanism
         ).eval().to(device)
         tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+        processor = AutoProcessor.from_pretrained(model_path)
         print("Model loaded.")
     except Exception as e:
         print(f"Failed to load model. Error: {e}")
@@ -51,15 +52,17 @@ def run_internvl_cache_test():
     messages = [{"role": "user", "content": f"<image>\n{initial_prompt}"}]
     
     # Process the image and tokenize the text prompt
-    pixel_values = model.image_processor(images=[image], return_tensors='pt')['pixel_values'].to(torch.bfloat16).to(device)
-    inputs = tokenizer.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt").to(device)
+    inputs = processor.apply_chat_template(  
+    messages,   
+    add_generation_prompt=True,   
+    return_tensors="pt"  
+    ).to(model.device)  
 
     print("\n--- Generating initial response (shared context) ---")
     try:
         # Generate the first part and explicitly request the cache
         outputs = model.generate(
-            input_ids=inputs,
-            pixel_values=pixel_values,
+            **inputs,
             max_new_tokens=50,
             return_dict_in_generate=True,
             do_sample=False
@@ -74,41 +77,64 @@ def run_internvl_cache_test():
         print(f"Failed during initial generation: {e}")
         return
 
-    # 4. Branch into Parallel Generations from the SAME Shared History
+    # 4. Branch into Parallel Generations using BATCHING
     prompt_variations = [
         "What is the primary color?",
         "Are there any objects in the image?",
         "What could this image be used for?"
     ]
 
-    all_branch_inputs = []  
-    for prompt in prompt_variations:  
-        new_messages = messages + [  
-            {"role": "assistant", "content": tokenizer.decode(outputs.sequences[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)},  
-            {"role": "user", "content": prompt}  
-        ]  
-        branch_inputs = tokenizer.apply_chat_template(new_messages, add_generation_prompt=True, return_tensors="pt", return_dict=True)  
-        all_branch_inputs.append(branch_inputs["input_ids"])  
+    print("--- Branching from shared context with different prompts (in a batch) ---\n")
+    
+    # Create a list of all conversation branches
+    all_new_messages = []
+    for prompt in prompt_variations:
+        all_new_messages.append(
+            messages + [
+                {"role": "assistant", "content": initial_response_text},
+                {"role": "user", "content": prompt}
+            ]
+        )
 
-    # Replicate the shared cache for batch processing  
-    batch_size = len(prompt_variations)  
-    batched_cache = shared_cache.batch_repeat_interleave(batch_size)  
-    # Batch all inputs together  
-    parallel_outputs = model.generate(  
-        input_ids=batched_inputs,  
-        pixel_values=batched_pixel_values,  
-        past_key_values=batched_cache,  
-        max_new_tokens=100,  
-        return_dict_in_generate=True,  
-        do_sample=True,  
-        temperature=0.7  
+    # Tokenize all branches at once with padding
+    tokenizer.padding_side = 'left' # For generation, use left padding
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    
+    batched_inputs = tokenizer.apply_chat_template(
+        all_new_messages, 
+        add_generation_prompt=True, 
+        return_tensors="pt",
+        padding=True
+    ).to(device)
+
+    # Replicate the image and cache for each item in the batch
+    batch_size = len(prompt_variations)
+    batched_pixel_values = pixel_values.expand(batch_size, -1, -1, -1)
+    expanded_cache = tuple(
+        (
+            k.expand(batch_size, -1, -1, -1),
+            v.expand(batch_size, -1, -1, -1)
+        ) for k, v in shared_cache
     )
-    # Decode the outputs  
-    for i, output in enumerate(parallel_outputs):  
-        response_text = tokenizer.decode(output.sequences[0][batched_inputs.shape[1]:], skip_special_tokens=True)  
-        print(f"Response {i}: {response_text}")  
-        print("--------------------------------------------------\n")  
-    return
+    
+    # Generate all responses in a single batch
+    parallel_outputs = model.generate(
+        **batched_inputs,
+        pixel_values=batched_pixel_values,
+        past_key_values=expanded_cache,
+        max_new_tokens=100,
+        return_dict_in_generate=True,
+        do_sample=True,
+        temperature=0.7,
+        pad_token_id=tokenizer.eos_token_id # Important for batch generation with padding
+    )
+
+    # Decode the outputs
+    for i in range(batch_size):
+        prompt_len = batched_inputs.input_ids[i].shape[0]
+        response_text = tokenizer.decode(parallel_outputs.sequences[i][prompt_len:], skip_special_tokens=True)
+        print(f"Branch {i+1} Response for \"{prompt_variations[i]}\":\n{response_text}\n")
 
 if __name__ == "__main__":
     run_internvl_cache_test() 
