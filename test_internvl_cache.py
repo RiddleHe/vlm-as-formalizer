@@ -87,54 +87,38 @@ def run_internvl_cache_test():
     print("--- Branching from shared context with different prompts (in a batch) ---\n")
     
     # Create a list of all conversation branches
-    all_new_messages = []
-    for prompt in prompt_variations:
-        all_new_messages.append(
-            messages + [
-                {"role": "assistant", "content": initial_response_text},
-                {"role": "user", "content": prompt}
-            ]
-        )
-
-    # Tokenize all branches at once with padding
-    tokenizer.padding_side = 'left' # For generation, use left padding
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-    
-    batched_inputs = tokenizer.apply_chat_template(
-        all_new_messages, 
-        add_generation_prompt=True, 
-        return_tensors="pt",
-        padding=True
-    ).to(device)
-
-    # Replicate the image and cache for each item in the batch
-    batch_size = len(prompt_variations)
-    batched_pixel_values = pixel_values.expand(batch_size, -1, -1, -1)
-    expanded_cache = tuple(
-        (
-            k.expand(batch_size, -1, -1, -1),
-            v.expand(batch_size, -1, -1, -1)
-        ) for k, v in shared_cache
+    # Prepare all branch inputs at once  
+    all_branch_inputs = []  
+    for prompt in prompt_variations:  
+        new_messages = messages + [  
+            {"role": "assistant", "content": tokenizer.decode(outputs.sequences[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)},  
+            {"role": "user", "content": prompt}  
+        ]  
+        branch_inputs = processor.apply_chat_template(new_messages, add_generation_prompt=True, return_tensors="pt", return_dict=True)  
+        all_branch_inputs.append(branch_inputs["input_ids"])  
+  
+    # Batch all inputs together  
+    batched_inputs = torch.cat(all_branch_inputs, dim=0)  
+  
+    # Replicate the shared cache for batch processing  
+    batch_size = len(prompt_variations)  
+    batched_cache = shared_cache.batch_repeat_interleave(batch_size)  
+  
+    # Generate all variations in parallel  
+    parallel_outputs = model.generate(  
+        **batched_inputs,  
+        past_key_values=batched_cache,  
+        max_new_tokens=100,  
+        return_dict_in_generate=True,  
+        do_sample=True,  
+        temperature=0.7  
     )
-    
-    # Generate all responses in a single batch
-    parallel_outputs = model.generate(
-        **batched_inputs,
-        pixel_values=batched_pixel_values,
-        past_key_values=expanded_cache,
-        max_new_tokens=100,
-        return_dict_in_generate=True,
-        do_sample=True,
-        temperature=0.7,
-        pad_token_id=tokenizer.eos_token_id # Important for batch generation with padding
-    )
-
-    # Decode the outputs
-    for i in range(batch_size):
-        prompt_len = batched_inputs.input_ids[i].shape[0]
-        response_text = tokenizer.decode(parallel_outputs.sequences[i][prompt_len:], skip_special_tokens=True)
-        print(f"Branch {i+1} Response for \"{prompt_variations[i]}\":\n{response_text}\n")
+    # Decode the outputs  
+    for i, output in enumerate(parallel_outputs):  
+        response_text = tokenizer.decode(output.sequences[0][batched_inputs.shape[1]:], skip_special_tokens=True)  
+        print(f"Response {i}: {response_text}")  
+        print("--------------------------------------------------\n")  
+    return
 
 if __name__ == "__main__":
     run_internvl_cache_test() 
