@@ -81,37 +81,34 @@ def run_internvl_cache_test():
         "What could this image be used for?"
     ]
 
-    print("--- Branching from shared context with different prompts ---\n")
-    for i, prompt in enumerate(prompt_variations):
-        print(f"Branch {i+1}: \"{prompt}\"")
-        try:
-            # Each branch uses the SAME shared_cache.
-            # We build the full conversation history for this branch.
-            new_messages = messages + [
-                {"role": "assistant", "content": initial_response_text},
-                {"role": "user", "content": prompt}
-            ]
-            branch_inputs = tokenizer.apply_chat_template(new_messages, add_generation_prompt=True, return_tensors="pt").to(device)
-            
-            # Continue generation from the shared cache state.
-            # Note: We pass the image (pixel_values) again, but provide the cache.
-            # The model is smart enough to use the cache and not re-process the initial context.
-            branch_outputs = model.generate(
-                input_ids=branch_inputs,
-                pixel_values=pixel_values,
-                past_key_values=shared_cache, # <<< Reusing the "same vector" state
-                max_new_tokens=100,
-                return_dict_in_generate=True,
-                do_sample=True,
-                temperature=0.7,
-                pad_token_id=tokenizer.eos_token_id
-            )
-            
-            # Decode only the newly generated part for this branch
-            response_text = tokenizer.decode(branch_outputs.sequences[0][branch_inputs.shape[1]:], skip_special_tokens=True)
-            print(f"Response: {response_text}\n")
-        except Exception as e:
-            print(f"Failed during branch generation: {e}\n")
+    all_branch_inputs = []  
+    for prompt in prompt_variations:  
+        new_messages = messages + [  
+            {"role": "assistant", "content": tokenizer.decode(outputs.sequences[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)},  
+            {"role": "user", "content": prompt}  
+        ]  
+        branch_inputs = tokenizer.apply_chat_template(new_messages, add_generation_prompt=True, return_tensors="pt", return_dict=True)  
+        all_branch_inputs.append(branch_inputs["input_ids"])  
+
+    # Replicate the shared cache for batch processing  
+    batch_size = len(prompt_variations)  
+    batched_cache = shared_cache.batch_repeat_interleave(batch_size)  
+    # Batch all inputs together  
+    parallel_outputs = model.generate(  
+        input_ids=batched_inputs,  
+        pixel_values=batched_pixel_values,  
+        past_key_values=batched_cache,  
+        max_new_tokens=100,  
+        return_dict_in_generate=True,  
+        do_sample=True,  
+        temperature=0.7  
+    )
+    # Decode the outputs  
+    for i, output in enumerate(parallel_outputs):  
+        response_text = tokenizer.decode(output.sequences[0][batched_inputs.shape[1]:], skip_special_tokens=True)  
+        print(f"Response {i}: {response_text}")  
+        print("--------------------------------------------------\n")  
+    return
 
 if __name__ == "__main__":
     run_internvl_cache_test() 
