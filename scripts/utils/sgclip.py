@@ -294,7 +294,7 @@ def get_object_classes(
                 logits_pair = torch.stack([logit_pos, logit_neg])
                 probs_pair = torch.nn.functional.softmax(logits_pair, dim=0)
 
-                if probs_pair[0] > probs_pair[1] + 0.10:
+                if probs_pair[0] > probs_pair[1] + 0.20:
                     candidate_logits[pos_class] = logit_pos
 
         if candidate_logits:
@@ -504,12 +504,12 @@ if __name__ == "__main__":
 
     models = setup_and_load_models(BASE_DIR, DEVICE)
 
-    image_paths = [os.path.join(BASE_DIR, "data/cooking/observations", f"problem4.jpg")]
-    # image_paths = [os.path.join(BASE_DIR, "data/blocksworld-real/observations", f"problem22-1.jpg")]
+    # image_paths = [os.path.join(BASE_DIR, "data/cooking/observations", f"problem4.jpg")]
+    image_paths = [os.path.join(BASE_DIR, "data/blocksworld-real/observations", f"problem30-3.jpg")]
     images = [imageio.imread(p) for p in image_paths]
 
-    object_classes = ["cutting_board", "counter", "knife", "bowl"]
-    # object_classes = ["red", "green", "blue", "yellow", "orange", "purple"]  # removing "cube" improves results
+    # object_classes = ["cutting_board", "counter", "knife", "bowl"]
+    object_classes = ["red cube", "green cube", "blue cube", "yellow cube", "orange cube", "purple cube"]  # removing "cube" improves results
     unary_relations = ["is_empty"]
     binary_relations = ["on"]
 
