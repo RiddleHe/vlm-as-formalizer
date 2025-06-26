@@ -2,6 +2,7 @@ import os
 import torch
 from PIL import Image
 from transformers import AutoModel, AutoTokenizer
+import importlib
 
 def create_dummy_image(path="dummy_image.jpg"):
     """Creates a simple red image for testing if it doesn't exist."""
@@ -32,7 +33,7 @@ def run_internvl_cache_test():
             torch_dtype=torch.bfloat16,
             low_cpu_mem_usage=True,
             trust_remote_code=True,
-            attn_implementation="auto"
+            attn_implementation="eager"  # Use the standard attention mechanism
         ).eval().to(device)
         tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
         print("Model loaded.")
