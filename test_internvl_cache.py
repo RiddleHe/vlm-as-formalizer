@@ -46,12 +46,29 @@ def run_internvl_cache_test():
     image = Image.open(image_path).convert("RGB")
     initial_prompt = "Describe this image in one short sentence."
 
+    # For InternVL, the chat template expects an <image> placeholder.
+    # We manually construct the conversation history.
+    messages = [{"role": "user", "content": f"<image>\n{initial_prompt}"}]
+    
+    # Process the image and tokenize the text prompt
+    pixel_values = model.image_processor(images=[image], return_tensors='pt')['pixel_values'].to(torch.bfloat16).to(device)
+    inputs = tokenizer.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt").to(device)
+
     print("\n--- Generating initial response (shared context) ---")
     try:
-        initial_response, shared_history = model.chat(
-            tokenizer, image, initial_prompt, history=None, stream=False
+        # Generate the first part and explicitly request the cache
+        outputs = model.generate(
+            input_ids=inputs,
+            pixel_values=pixel_values,
+            max_new_tokens=50,
+            return_dict_in_generate=True,
+            do_sample=False
         )
-        print(f"Initial Response: {initial_response}")
+        # This cache is the "same vector". It holds the model's state.
+        shared_cache = outputs.past_key_values
+        initial_response_text = tokenizer.decode(outputs.sequences[0][inputs.shape[1]:], skip_special_tokens=True)
+
+        print(f"Initial Response: {initial_response_text}")
         print("--------------------------------------------------\n")
     except Exception as e:
         print(f"Failed during initial generation: {e}")
@@ -68,15 +85,31 @@ def run_internvl_cache_test():
     for i, prompt in enumerate(prompt_variations):
         print(f"Branch {i+1}: \"{prompt}\"")
         try:
-            # Each branch uses the SAME `shared_history` from the initial call
-            branch_response, _ = model.chat(
-                tokenizer,
-                image, # Image still needs to be passed for multimodal context
-                prompt,
-                history=shared_history,
-                stream=False
+            # Each branch uses the SAME shared_cache.
+            # We build the full conversation history for this branch.
+            new_messages = messages + [
+                {"role": "assistant", "content": initial_response_text},
+                {"role": "user", "content": prompt}
+            ]
+            branch_inputs = tokenizer.apply_chat_template(new_messages, add_generation_prompt=True, return_tensors="pt").to(device)
+            
+            # Continue generation from the shared cache state.
+            # Note: We pass the image (pixel_values) again, but provide the cache.
+            # The model is smart enough to use the cache and not re-process the initial context.
+            branch_outputs = model.generate(
+                input_ids=branch_inputs,
+                pixel_values=pixel_values,
+                past_key_values=shared_cache, # <<< Reusing the "same vector" state
+                max_new_tokens=100,
+                return_dict_in_generate=True,
+                do_sample=True,
+                temperature=0.7,
+                pad_token_id=tokenizer.eos_token_id
             )
-            print(f"Response: {branch_response}\n")
+            
+            # Decode only the newly generated part for this branch
+            response_text = tokenizer.decode(branch_outputs.sequences[0][branch_inputs.shape[1]:], skip_special_tokens=True)
+            print(f"Response: {response_text}\n")
         except Exception as e:
             print(f"Failed during branch generation: {e}\n")
 
