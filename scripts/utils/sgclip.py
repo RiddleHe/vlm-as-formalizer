@@ -26,12 +26,6 @@
 |   |   |   |-- utils.py
 |   |   |   |-- vis_utils.py
 |
-|-- data/
-|   |-- LLaVA-Video-178K-v2/
-|   |   |-- models/
-|   |   |   |-- ensemble-02-10/
-|   |   |   |   |-- ensemble-2025-02-10-14-57-22.0.model
-|
 """
 
 import torch
@@ -104,40 +98,10 @@ def reformat_video_segments(
             for j in valid_objs:
                 if i != j:
                     frame_object_pairs.append((vid, fid, (i, j)))
+
+    batched_pred_bboxes = [mask_to_bbox(mask) for mask in batched_pred_masks]
             
     return batched_object_ids, batched_pred_masks, batched_pred_bboxes, frame_object_pairs
-
-def format_class_probs(
-        batched_cate_probs: dict,
-        threshold: float,
-    ) -> tuple[dict, set]:
-    oid_to_class = {}
-    oids_to_remove = set()
-    if not batched_cate_probs:
-        return oid_to_class, oids_to_remove
-
-    # Assuming a single video was processed, so we look at index 0
-    vid_pred = batched_cate_probs.get(0, {})
-    
-    grouped_by_oid = defaultdict(list)
-    for (oid, cate), prob in vid_pred.items():
-        grouped_by_oid[oid].append((prob, cate))
-
-    for oid, preds in grouped_by_oid.items():
-        if preds:
-            # Sort by probability (desc) and get the top prediction
-            sorted_preds = sorted(preds, key=lambda x: x[0], reverse=True)
-            top_pred_prob, top_pred_class = sorted_preds[0]
-            print(f"Object {oid} predicted as {top_pred_class} with probability {top_pred_prob}")
-            print(f"Object {oid} predicted as {sorted_preds[1][1]} with probability {sorted_preds[1][0]}")
-            if top_pred_prob >= threshold:
-                oid_to_class[oid] = top_pred_class
-            else:
-                oids_to_remove.add(oid)
-        else:
-             oids_to_remove.add(oid)
-    
-    return oid_to_class, oids_to_remove
 
 def format_unary_probs(
         batched_unary_probs: dict,
@@ -240,7 +204,7 @@ def get_batched_objects(
     # batched_pred_masks = [mask, ...]  # (batch_size, height, width)
     # batched_pred_bboxes = [bbox, ...]  # (batch_size, 4)
     # batched_object_pairs = [(video_id, frame_id, (object_id1, object_id2)), ...]
-    
+
     if not batched_object_ids:
         print("No object ids found")
         return {}
@@ -293,21 +257,57 @@ def get_object_classes(
     predicate_model,
     threshold: float,
 ):
-    batched_image_cate_probs, _, _, _ = predicate_model(
+    binary_object_classes = object_classes + [f"not {obj}" for obj in object_classes]
+    batched_image_cate_logits, _, _, _ = predicate_model(
         batched_video_ids=["tmp_video"],
         batched_videos=images,
         batched_masks=batch["batched_pred_masks"],
         batched_bboxes=batch["batched_pred_bboxes"],
-        batched_names=[object_classes],
+        batched_names=[binary_object_classes],
         batched_object_ids=batch["batched_object_ids"],
         batched_unary_kws=[[]],
         batched_binary_kws=[[]],
         batched_obj_pairs=[],
         batched_video_splits=[0],
         batched_binary_predicates=[None],
+        output_logit=True,  # output logits to customize probs
     )
 
-    return format_class_probs(batched_image_cate_probs, threshold=threshold)
+    vid_logits = batched_image_cate_logits.get(0, {})
+    if not vid_logits:
+        return {}, set()
+
+    grouped_by_oid = defaultdict(dict)
+    for (oid, cate), logit in vid_logits.items():
+        grouped_by_oid[oid][cate] = logit
+
+    oid_to_class = {}
+    oids_to_remove = set(grouped_by_oid.keys())
+    for oid, class_logits in grouped_by_oid.items():
+        candidate_logits = {}
+        for pos_class in object_classes:
+            neg_class = f"not {pos_class}"
+            if pos_class in class_logits and neg_class in class_logits:
+                logit_pos = class_logits[pos_class]
+                logit_neg = class_logits[neg_class]
+
+                logits_pair = torch.stack([logit_pos, logit_neg])
+                probs_pair = torch.nn.functional.softmax(logits_pair, dim=0)
+
+                if probs_pair[0] > probs_pair[1] + 0.10:
+                    candidate_logits[pos_class] = logit_pos
+
+        if candidate_logits:
+            candidate_names = list(candidate_logits.keys())
+            logits_tensor = torch.stack(list(candidate_logits.values()))
+            final_probs = torch.nn.functional.softmax(logits_tensor, dim=0)
+            top_prob, top_idx = torch.max(final_probs, dim=0)
+
+            if top_prob >= threshold:
+                oid_to_class[oid] = candidate_names[top_idx]
+                oids_to_remove.remove(oid)
+
+    return oid_to_class, oids_to_remove
 
 def get_unary_relations(
     batch,
@@ -345,7 +345,6 @@ def get_binary_relations(
     binary_relations,
     predicate_model,
 ):
-    batched_pred_bboxes = [mask_to_bbox(mask) for mask in batch["batched_pred_masks"]]
     _, _, batched_image_binary_probs, _ = predicate_model(
         batched_video_ids=["tmp_video"],
         batched_videos=images,
@@ -355,7 +354,7 @@ def get_binary_relations(
         batched_object_ids=batch["batched_object_ids"],
         batched_unary_kws=[[]],
         batched_binary_kws=[binary_relations],
-        batched_obj_pairs=batch["batched_object_pairs"],
+        batched_obj_pairs=[batch["batched_object_pairs"]],
         batched_video_splits=[0],
         batched_binary_predicates=[None],
     )
@@ -447,28 +446,21 @@ def predict_all_relations(
         return {"unary": {}, "binary": {}}
 
     print(f"Batch successfully generated with {len(batch.get('batched_object_ids', []))} object instances.")
-    print(f"Original object classes from DINO: {batch['object_ids_to_classes']}")
-
-    predicate_model_object_classes = object_classes + [f"not {', '.join(object_classes)}"]
-    print(f"Predicate model object classes: {predicate_model_object_classes}")
+    
     refined_oid_to_class, oids_to_remove = get_object_classes(
         batch=batch,
         images=images,
-        object_classes=predicate_model_object_classes,
+        object_classes=object_classes,
         predicate_model=models["predicate_model"],
         threshold=0.60,
     )
     
     if oids_to_remove:
-        print(f"Removing {len(oids_to_remove)} objects below threshold: {oids_to_remove}")
         batch = filter_batch_by_oids(batch, oids_to_remove)
-        print(f"Batch size after filtering: {len(batch.get('batched_object_ids', []))} object instances.")
 
     if refined_oid_to_class:
-        print(f"Refined object classes from Predicate Model: {refined_oid_to_class}")
         batch["object_ids_to_classes"] = refined_oid_to_class
     else:
-        print("Could not refine object classes. Using original DINO classes.")
         batch["object_ids_to_classes"] = {
             oid: cls for oid, cls in batch.get("object_ids_to_classes", {}).items() 
             if oid not in oids_to_remove
@@ -481,8 +473,6 @@ def predict_all_relations(
         ".",
         show_masks=False
     )
-
-    sys.exit()
 
     unary_results = {}
     if unary_relations:
