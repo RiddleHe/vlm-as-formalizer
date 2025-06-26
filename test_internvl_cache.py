@@ -48,12 +48,12 @@ def run_internvl_cache_test():
     messages = [{"role": "user", "content": "Describe this image in one short sentence."}]
 
     # Use the processor to prepare the inputs for the model
-    inputs = processor(
-        text=messages,
-        images=[image],
-        return_tensors="pt",
-        add_generation_prompt=True,
-    ).to(device)
+    inputs = processor.apply_chat_template(  
+        messages,   
+        add_generation_prompt=True,   
+        return_tensors="pt",  
+        return_dict=True  # This is the key addition  
+    ).to(device)    
 
     print("\n--- Generating initial response (shared context) ---")
     try:
