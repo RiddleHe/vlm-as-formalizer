@@ -47,13 +47,15 @@ def run_internvl_cache_test():
     image = Image.open(image_path).convert("RGB")
     messages = [{"role": "user", "content": "Describe this image in one short sentence."}]
 
-    # Use the processor to prepare the inputs for the model
-    inputs = processor.apply_chat_template(  
-        messages,   
-        add_generation_prompt=True,   
-        return_tensors="pt",  
-        return_dict=True  # This is the key addition  
-    ).to(device)    
+    # Use the processor to prepare the inputs for the model.
+    # This is the correct way to handle multimodal inputs, as the processor
+    # coordinates both the image processor and the tokenizer.
+    inputs = processor(
+        text=messages,
+        images=[image],
+        return_tensors="pt",
+        add_generation_prompt=True,
+    ).to(device)
 
     print("\n--- Generating initial response (shared context) ---")
     try:
