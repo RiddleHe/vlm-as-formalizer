@@ -219,8 +219,7 @@ if shared_cache and template:
     follow_up_outputs = model.generate(
         pixel_values=pixel_values,
         input_ids=new_input_ids,
-        attention_mask=new_attention_mask,
-        num_patches_list=[pixel_values.shape[0]],  # Add num_patches_list here too
+        attention_mask=new_attention_mask,  # Add num_patches_list here too
         past_key_values=shared_cache,  # Reuse the cache
         max_new_tokens=50,
         do_sample=False,
