@@ -93,10 +93,15 @@ def main():
     ).eval().cuda()  
       
     tokenizer = AutoTokenizer.from_pretrained(  
-        path,   
-        trust_remote_code=True,   
-        use_fast=False  
-    )  
+    path,   
+    trust_remote_code=True,   
+    use_fast=False,  
+    padding_side='left'  # Add this  
+)  
+  
+    # Ensure pad token is set  
+    if tokenizer.pad_token is None:  
+            tokenizer.pad_token = tokenizer.eos_token
   
     # Load and process image  
     image_path = "data/blocksworld-real/observations/problem1-1.jpg"  
