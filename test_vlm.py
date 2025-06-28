@@ -163,10 +163,22 @@ num_patches = pixel_values.shape[0]
 image_tokens = IMG_START_TOKEN + IMG_CONTEXT_TOKEN * model.num_image_token * num_patches + IMG_END_TOKEN  
 query = query.replace('<image>', image_tokens, 1)  
 
+# Debug: Let's see what the query looks like
+print(f"\n[Debug] Query being sent to model:")
+print(f"Query: {query[:200]}..." if len(query) > 200 else f"Query: {query}")
+print(f"[Debug] Number of image patches: {num_patches}")
+print(f"[Debug] Image tokens per patch: {model.num_image_token}")
+
 # Tokenize and generate  
 model_inputs = tokenizer(query, return_tensors='pt')  
 input_ids = model_inputs['input_ids'].cuda()  
 attention_mask = model_inputs['attention_mask'].cuda()  
+
+print(f"[Debug] Input shape: {input_ids.shape}")
+print(f"[Debug] First few tokens: {input_ids[0][:20].tolist()}")
+
+eos_token_id = tokenizer.convert_tokens_to_ids(template.sep.strip())  
+      
 
 # Generation config for getting cache
 generation_config_with_cache = dict(
@@ -175,7 +187,9 @@ generation_config_with_cache = dict(
     do_sample=False,
     return_dict_in_generate=True,  # Return full output dict
     output_hidden_states=False,
-    output_attentions=False
+    output_attentions=False,
+    eos_token_id=eos_token_id,  # Add this!  
+    pad_token_id=tokenizer.pad_token_id  
 )
   
 # Generate with cache extraction  
@@ -192,6 +206,10 @@ response = tokenizer.decode(outputs.sequences[0][input_ids.shape[1]:], skip_spec
 print(f'\nManual generation with cache:')
 print(f'User: {question}\nAssistant: {response}')
 print(f'Cache shape: {len(shared_cache)} layers' if shared_cache else 'No cache returned')
+
+# Debug: Check if there's any output at all
+print(f"[Debug] Full output sequence length: {outputs.sequences[0].shape}")
+print(f"[Debug] Generated tokens: {outputs.sequences[0][input_ids.shape[1]:].tolist()}")
 
 # Example of how to use the cache for follow-up questions
 if shared_cache and template:
