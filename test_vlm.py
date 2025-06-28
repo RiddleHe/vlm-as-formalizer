@@ -221,8 +221,7 @@ if shared_cache and template:
         attention_mask=new_attention_mask,  # Add num_patches_list here too
         past_key_values=shared_cache,  # Reuse the cache
         max_new_tokens=50,
-        do_sample=False,
-        use_cache=True
+        do_sample=False
     )
     
     follow_up_response = tokenizer.decode(
