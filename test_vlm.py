@@ -181,8 +181,7 @@ generation_config_with_cache = dict(
 outputs = model.generate(  
     input_ids=input_ids,  
     attention_mask=attention_mask,
-    pixel_values=pixel_values,  # Pass pixel_values as keyword arg
-    num_patches_list=[pixel_values.shape[0]],  # Add num_patches_list for proper image handling
+    pixel_values=pixel_values,  # Pass pixel_values as keyword arg  # Add num_patches_list for proper image handling
     **generation_config_with_cache  
 )  
   
