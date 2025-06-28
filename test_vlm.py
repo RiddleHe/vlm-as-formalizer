@@ -172,7 +172,8 @@ print(f"[Debug] Image tokens per patch: {model.num_image_token}")
 # Tokenize and generate  
 model_inputs = tokenizer(query, return_tensors='pt')  
 input_ids = model_inputs['input_ids'].cuda()  
-attention_mask = model_inputs['attention_mask'].cuda()  
+attention_mask = model_inputs['attention_mask'].cuda() 
+eos_token_id = tokenizer.eos_token_id
 
 print(f"[Debug] Input shape: {input_ids.shape}")
 print(f"[Debug] First few tokens: {input_ids[0][:20].tolist()}")
