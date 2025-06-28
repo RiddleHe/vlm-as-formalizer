@@ -249,27 +249,38 @@ if shared_cache and template:
     # Prepare a text-only follow-up question (no image tokens needed)  
     follow_up = "What is the primary color in the image?"  
       
-    # Create conversation template for text-only follow-up  
-    new_template = get_conv_template(model.template)  
-    new_template.system_message = model.system_message  
-    new_template.append_message(new_template.roles[0], follow_up)  
-    new_template.append_message(new_template.roles[1], None)  
-    new_query = new_template.get_prompt()  
-      
-    # Tokenize the new query (no image token replacement needed)  
-    new_inputs = tokenizer(new_query, return_tensors='pt')  
-    new_input_ids = new_inputs['input_ids'].cuda()  
-    new_attention_mask = new_inputs['attention_mask'].cuda()  
-      
-    # Combine attention masks (original + new)  
-    combined_attention_mask = torch.cat([attention_mask, new_attention_mask], dim=1)  
+    # For cache reuse, we need to append to the existing conversation
+    # The cache already contains the processed initial conversation
+    
+    # Get the cached sequence length from the cache shape
+    # Each cache layer has (batch_size, num_heads, sequence_length, head_dim)
+    cached_sequence_length = shared_cache[0][0].shape[2] if shared_cache and shared_cache[0] else 0
+    print(f"[Debug] Cached sequence length: {cached_sequence_length}")
+    
+    # Append the response and new question to the template
+    template.messages[-1][1] = response  # Set the assistant's response
+    template.append_message(template.roles[0], follow_up)
+    template.append_message(template.roles[1], None)
+    full_conversation = template.get_prompt()
+    
+    # Tokenize the full conversation
+    full_tokens = tokenizer(full_conversation, return_tensors='pt')
+    full_input_ids = full_tokens['input_ids'].cuda()
+    
+    # Extract only the new tokens (after the cached portion)
+    new_input_ids = full_input_ids[:, cached_sequence_length:]
+    print(f"[Debug] New input shape: {new_input_ids.shape}")
+    
+    # Create attention mask for the full sequence (cached + new)
+    full_length = cached_sequence_length + new_input_ids.shape[1]
+    full_attention_mask = torch.ones((1, full_length), dtype=torch.long, device='cuda')
       
     # Generate using cached state via language model directly  
     try:  
         with torch.no_grad():  
             follow_up_outputs = model.language_model.generate(  
                 input_ids=new_input_ids,  
-                attention_mask=combined_attention_mask,  
+                attention_mask=full_attention_mask,  
                 past_key_values=shared_cache,  
                 max_new_tokens=50,  
                 do_sample=False,  
@@ -278,13 +289,15 @@ if shared_cache and template:
             )  
           
         follow_up_response = tokenizer.decode(  
-            follow_up_outputs[0][new_input_ids.shape[1]:],   
+            follow_up_outputs[0],   
             skip_special_tokens=True  
         )  
         print(f'Follow-up: {follow_up}\nAssistant: {follow_up_response}')  
           
     except Exception as e:  
         print(f"Cache reuse failed: {e}")  
+        import traceback
+        traceback.print_exc()
         # Fallback to standard chat without cache  
         fallback_response = model.chat(tokenizer, None, follow_up, {"max_new_tokens": 50})  
         print(f'Fallback response: {fallback_response}')
