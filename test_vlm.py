@@ -137,10 +137,11 @@ print(f'User: {question}\nAssistant: {response}')
 
 # Now, for cache extraction, we'll use the generate method directly
 # Manually prepare inputs like chat() does  
-sys.path.append('InternVL')
+import sys
+sys.path.append('InternVL/internvl_chat')
 template = None
 try:
-    from InternVL.internvl_chat.conversation import get_conv_template
+    from internvl.conversation import get_conv_template
     
     template = get_conv_template(model.template)  
     template.system_message = model.system_message  
