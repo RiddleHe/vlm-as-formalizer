@@ -236,52 +236,55 @@ if outputs.sequences.shape[1] <= input_ids.shape[1]:
     full_output = tokenizer.decode(outputs.sequences[0], skip_special_tokens=False)
     print(f"[Debug] Full output (with special tokens): {full_output[-200:]}")
 
-response = tokenizer.decode(outputs.sequences[0][input_ids.shape[1]:], skip_special_tokens=True)  
+response = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)  
 print(f'\nManual generation with cache:')
 print(f'User: {question}\nAssistant: {response}')
 print(f'Cache shape: {len(shared_cache)} layers' if shared_cache else 'No cache returned')
 
-# Debug: Check if there's any output at all
-print(f"[Debug] Full output sequence length: {outputs.sequences[0].shape}")
-print(f"[Debug] Generated tokens: {outputs.sequences[0][input_ids.shape[1]:].tolist()}")
-
-# Example of how to use the cache for follow-up questions
-if shared_cache and template:
-    print("\n--- Testing cache reuse for follow-up questions ---")
-    
-    # Prepare a follow-up question, including the <image> tag.
-    # The model's generate() method expects the image tokens to be in the prompt.
-    follow_up = "<image>\nWhat is the primary color in the image?"
-    
-    # Create new input with the previous response and new question
-    template.messages[-1][1] = response
-    template.append_message(template.roles[0], follow_up)
-    template.append_message(template.roles[1], None)
-    new_query = template.get_prompt()
-    
-    # We must replace the placeholder again for the follow-up question.
-    new_query = new_query.replace('<image>', image_tokens, 1)
-
-    # Tokenize the new query
-    new_inputs = tokenizer(new_query, return_tensors='pt')
-    new_input_ids = new_inputs['input_ids'].cuda()
-    new_attention_mask = new_inputs['attention_mask'].cuda()
-    
-    # Generate using the cached key-values
-    follow_up_outputs = model.generate(
-        pixel_values=pixel_values,
-        input_ids=new_input_ids,
-        attention_mask=new_attention_mask,  # Add num_patches_list here too
-        past_key_values=shared_cache,  # Reuse the cache
-        max_new_tokens=50,
-        do_sample=False
-    )
-    
-    follow_up_response = tokenizer.decode(
-        follow_up_outputs[0][new_input_ids.shape[1]:], 
-        skip_special_tokens=True
-    )
-    print(f'Follow-up: {follow_up}\nAssistant: {follow_up_response}')
-else:
-    print("\nSkipping cache reuse test: conversation template not available.")
-
+# Instead of using model.generate() with pixel_values and cache  
+# Use the language model directly for text-only follow-ups  
+if shared_cache and template:  
+    print("\n--- Testing cache reuse for follow-up questions ---")  
+      
+    # Prepare a text-only follow-up question (no image tokens needed)  
+    follow_up = "What is the primary color in the image?"  
+      
+    # Create conversation template for text-only follow-up  
+    new_template = get_conv_template(model.template)  
+    new_template.system_message = model.system_message  
+    new_template.append_message(new_template.roles[0], follow_up)  
+    new_template.append_message(new_template.roles[1], None)  
+    new_query = new_template.get_prompt()  
+      
+    # Tokenize the new query (no image token replacement needed)  
+    new_inputs = tokenizer(new_query, return_tensors='pt')  
+    new_input_ids = new_inputs['input_ids'].cuda()  
+    new_attention_mask = new_inputs['attention_mask'].cuda()  
+      
+    # Combine attention masks (original + new)  
+    combined_attention_mask = torch.cat([attention_mask, new_attention_mask], dim=1)  
+      
+    # Generate using cached state via language model directly  
+    try:  
+        with torch.no_grad():  
+            follow_up_outputs = model.language_model.generate(  
+                input_ids=new_input_ids,  
+                attention_mask=combined_attention_mask,  
+                past_key_values=shared_cache,  
+                max_new_tokens=50,  
+                do_sample=False,  
+                pad_token_id=tokenizer.pad_token_id,  
+                eos_token_id=eos_token_id  
+            )  
+          
+        follow_up_response = tokenizer.decode(  
+            follow_up_outputs[0][new_input_ids.shape[1]:],   
+            skip_special_tokens=True  
+        )  
+        print(f'Follow-up: {follow_up}\nAssistant: {follow_up_response}')  
+          
+    except Exception as e:  
+        print(f"Cache reuse failed: {e}")  
+        # Fallback to standard chat without cache  
+        fallback_response = model.chat(tokenizer, None, follow_up, {"max_new_tokens": 50})  
+        print(f'Fallback response: {fallback_response}')
