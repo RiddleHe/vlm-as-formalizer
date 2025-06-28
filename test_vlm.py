@@ -84,7 +84,7 @@ def load_image(image_file, input_size=448, max_num=12):
 def split_model(model_name):
     device_map = {}
     world_size = torch.cuda.device_count()
-    config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
+    config = AutoConfig.from_pretrained(model_name, trust_remote_code=True)
     num_layers = config.llm_config.num_hidden_layers
     # Since the first GPU will be used for ViT, treat it as half a GPU.
     num_layers_per_gpu = math.ceil(num_layers / (world_size - 0.5))
