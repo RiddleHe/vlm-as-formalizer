@@ -2,7 +2,7 @@ import math
 import numpy as np
 import torch
 import torchvision.transforms as T
-from decord import VideoReader, cpu
+# from decord import VideoReader, cpu  # Removed - not needed for image processing
 from PIL import Image
 from torchvision.transforms.functional import InterpolationMode
 from transformers import AutoModel, AutoTokenizer, AutoConfig
@@ -117,7 +117,7 @@ model = AutoModel.from_pretrained(
     torch_dtype=torch.bfloat16,
     load_in_8bit=False,
     low_cpu_mem_usage=True,
-    use_flash_attn=True,
+    use_flash_attn=False,  # Set to False since FlashAttention2 is not installed
     trust_remote_code=True,
     device_map=device_map).eval()
 tokenizer = AutoTokenizer.from_pretrained(path, trust_remote_code=True, use_fast=False)
@@ -126,22 +126,29 @@ tokenizer = AutoTokenizer.from_pretrained(path, trust_remote_code=True, use_fast
 
 image_path = "data/blocksworld-real/observations/problem1-1.jpg"
 pixel_values = load_image(image_path, max_num=12).to(torch.bfloat16).cuda()
-generation_config = dict(max_new_tokens=1024, do_sample=True, return_dict_in_generate=True)
+
+# First, do a simple chat without return_dict_in_generate for the initial response
+generation_config = dict(max_new_tokens=1024, do_sample=True)
 
 # single-image single-round conversation (单图单轮对话)
 question = '<image>\nPlease describe the image shortly.'
 response = model.chat(tokenizer, pixel_values, question, generation_config)
 print(f'User: {question}\nAssistant: {response}')
 
+# Now, for cache extraction, we'll use the generate method directly
 # Manually prepare inputs like chat() does  
 sys.path.append('InternVL')
-from internvl_chat.conversation import get_conv_template
-
-template = get_conv_template(model.template)  
-template.system_message = model.system_message  
-template.append_message(template.roles[0], question)  
-template.append_message(template.roles[1], None)  
-query = template.get_prompt()  
+try:
+    from internvl_chat.conversation import get_conv_template
+    
+    template = get_conv_template(model.template)  
+    template.system_message = model.system_message  
+    template.append_message(template.roles[0], question)  
+    template.append_message(template.roles[1], None)  
+    query = template.get_prompt()  
+except ImportError:
+    # Fallback if InternVL is not cloned
+    query = f"{model.system_message}\nUser: {question}\nAssistant:"
   
 # Replace image tokens  
 IMG_START_TOKEN = '<img>'  
@@ -155,17 +162,64 @@ query = query.replace('<image>', image_tokens, 1)
 model_inputs = tokenizer(query, return_tensors='pt')  
 input_ids = model_inputs['input_ids'].cuda()  
 attention_mask = model_inputs['attention_mask'].cuda()  
+
+# Generation config for getting cache
+generation_config_with_cache = dict(
+    max_new_tokens=50,
+    do_sample=False,
+    use_cache=True,  # Enable cache
+    return_dict_in_generate=True,  # Return full output dict
+    output_hidden_states=False,
+    output_attentions=False
+)
   
 # Generate with cache extraction  
 outputs = model.generate(  
     pixel_values=pixel_values,  
     input_ids=input_ids,  
     attention_mask=attention_mask,  
-    **generation_config  
+    **generation_config_with_cache  
 )  
   
 # Extract both response and cache  
 shared_cache = outputs.past_key_values  
 response = tokenizer.decode(outputs.sequences[0][input_ids.shape[1]:], skip_special_tokens=True)  
+print(f'\nManual generation with cache:')
 print(f'User: {question}\nAssistant: {response}')
+print(f'Cache shape: {len(shared_cache)} layers' if shared_cache else 'No cache returned')
+
+# Example of how to use the cache for follow-up questions
+if shared_cache:
+    print("\n--- Testing cache reuse for follow-up questions ---")
+    
+    # Prepare a follow-up question
+    follow_up = "What is the primary color in the image?"
+    
+    # Create new input with the previous response and new question
+    template.append_message(template.roles[1], response)
+    template.append_message(template.roles[0], follow_up)
+    template.append_message(template.roles[1], None)
+    new_query = template.get_prompt()
+    
+    # Tokenize the new query
+    new_inputs = tokenizer(new_query, return_tensors='pt')
+    new_input_ids = new_inputs['input_ids'].cuda()
+    new_attention_mask = new_inputs['attention_mask'].cuda()
+    
+    # Generate using the cached key-values
+    follow_up_outputs = model.generate(
+        pixel_values=pixel_values,
+        input_ids=new_input_ids,
+        attention_mask=new_attention_mask,
+        past_key_values=shared_cache,  # Reuse the cache
+        max_new_tokens=50,
+        do_sample=False,
+        use_cache=True
+    )
+    
+    follow_up_response = tokenizer.decode(
+        follow_up_outputs[0][new_input_ids.shape[1]:], 
+        skip_special_tokens=True
+    )
+    print(f'Follow-up: {follow_up}\nAssistant: {follow_up_response}')
 
