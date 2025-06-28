@@ -171,6 +171,7 @@ attention_mask = model_inputs['attention_mask'].cuda()
 # Generation config for getting cache
 generation_config_with_cache = dict(
     max_new_tokens=50,
+    min_new_tokens=5, 
     do_sample=False,
     return_dict_in_generate=True,  # Return full output dict
     output_hidden_states=False,
