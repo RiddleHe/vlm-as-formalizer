@@ -179,9 +179,10 @@ generation_config_with_cache = dict(
   
 # Generate with cache extraction  
 outputs = model.generate(  
-    pixel_values=pixel_values,  
     input_ids=input_ids,  
-    attention_mask=attention_mask,  
+    attention_mask=attention_mask,
+    pixel_values=pixel_values,  # Pass pixel_values as keyword arg
+    num_patches_list=[pixel_values.shape[0]],  # Add num_patches_list for proper image handling
     **generation_config_with_cache  
 )  
   
@@ -196,8 +197,9 @@ print(f'Cache shape: {len(shared_cache)} layers' if shared_cache else 'No cache 
 if shared_cache and template:
     print("\n--- Testing cache reuse for follow-up questions ---")
     
-    # Prepare a follow-up question
-    follow_up = "What is the primary color in the image?"
+    # Prepare a follow-up question, including the <image> tag.
+    # The model's generate() method expects the image tokens to be in the prompt.
+    follow_up = "<image>\nWhat is the primary color in the image?"
     
     # Create new input with the previous response and new question
     template.messages[-1][1] = response
@@ -205,6 +207,9 @@ if shared_cache and template:
     template.append_message(template.roles[1], None)
     new_query = template.get_prompt()
     
+    # We must replace the placeholder again for the follow-up question.
+    new_query = new_query.replace('<image>', image_tokens, 1)
+
     # Tokenize the new query
     new_inputs = tokenizer(new_query, return_tensors='pt')
     new_input_ids = new_inputs['input_ids'].cuda()
@@ -215,6 +220,7 @@ if shared_cache and template:
         pixel_values=pixel_values,
         input_ids=new_input_ids,
         attention_mask=new_attention_mask,
+        num_patches_list=[pixel_values.shape[0]],  # Add num_patches_list here too
         past_key_values=shared_cache,  # Reuse the cache
         max_new_tokens=50,
         do_sample=False,
