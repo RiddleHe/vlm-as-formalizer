@@ -107,11 +107,12 @@ def main():
       
     # Generation config with cache enabled  
     generation_config = dict(  
-        max_new_tokens=50,  
-        do_sample=False,  
-        return_dict_in_generate=True  
-    )  
-      
+    max_new_tokens=50,  
+    do_sample=False,  
+    return_dict_in_generate=True,  
+    pad_token_id=tokenizer.pad_token_id,  
+    eos_token_id=tokenizer.eos_token_id  
+)
     # Method 1: Using the chat interface (recommended)  
     print("=== Using chat interface ===")  
     response = model.chat(  
