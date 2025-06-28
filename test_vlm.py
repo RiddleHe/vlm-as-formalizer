@@ -140,15 +140,17 @@ print(f'User: {question}\nAssistant: {response}')
 sys.path.append('InternVL')
 template = None
 try:
-    from internvl_chat.conversation import get_conv_template
+    from InternVL.internvl_chat.conversation import get_conv_template
     
     template = get_conv_template(model.template)  
     template.system_message = model.system_message  
     template.append_message(template.roles[0], question)  
     template.append_message(template.roles[1], None)  
     query = template.get_prompt()  
-except (ImportError, AttributeError):
+except (ImportError, AttributeError) as e:
     # Fallback if InternVL is not cloned
+    print("\n[Debug] Failed to load conversation template with error:")
+    print(e)
     print("\n[Notice] Could not load conversation template. Using basic prompt format for cache generation.")
     query = f"User: {question}\nAssistant:"
   
