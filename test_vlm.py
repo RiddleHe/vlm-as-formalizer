@@ -138,6 +138,7 @@ print(f'User: {question}\nAssistant: {response}')
 # Now, for cache extraction, we'll use the generate method directly
 # Manually prepare inputs like chat() does  
 sys.path.append('InternVL')
+template = None
 try:
     from internvl_chat.conversation import get_conv_template
     
@@ -146,9 +147,10 @@ try:
     template.append_message(template.roles[0], question)  
     template.append_message(template.roles[1], None)  
     query = template.get_prompt()  
-except ImportError:
+except (ImportError, AttributeError):
     # Fallback if InternVL is not cloned
-    query = f"{model.system_message}\nUser: {question}\nAssistant:"
+    print("\n[Notice] Could not load conversation template. Using basic prompt format for cache generation.")
+    query = f"User: {question}\nAssistant:"
   
 # Replace image tokens  
 IMG_START_TOKEN = '<img>'  
@@ -188,14 +190,14 @@ print(f'User: {question}\nAssistant: {response}')
 print(f'Cache shape: {len(shared_cache)} layers' if shared_cache else 'No cache returned')
 
 # Example of how to use the cache for follow-up questions
-if shared_cache:
+if shared_cache and template:
     print("\n--- Testing cache reuse for follow-up questions ---")
     
     # Prepare a follow-up question
     follow_up = "What is the primary color in the image?"
     
     # Create new input with the previous response and new question
-    template.append_message(template.roles[1], response)
+    template.messages[-1][1] = response
     template.append_message(template.roles[0], follow_up)
     template.append_message(template.roles[1], None)
     new_query = template.get_prompt()
@@ -221,4 +223,6 @@ if shared_cache:
         skip_special_tokens=True
     )
     print(f'Follow-up: {follow_up}\nAssistant: {follow_up_response}')
+else:
+    print("\nSkipping cache reuse test: conversation template not available.")
 
