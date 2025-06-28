@@ -6,6 +6,7 @@ from decord import VideoReader, cpu
 from PIL import Image
 from torchvision.transforms.functional import InterpolationMode
 from transformers import AutoModel, AutoTokenizer, AutoConfig
+import sys
 
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
@@ -125,10 +126,46 @@ tokenizer = AutoTokenizer.from_pretrained(path, trust_remote_code=True, use_fast
 
 image_path = "data/blocksworld-real/observations/problem1-1.jpg"
 pixel_values = load_image(image_path, max_num=12).to(torch.bfloat16).cuda()
-generation_config = dict(max_new_tokens=1024, do_sample=True)
+generation_config = dict(max_new_tokens=1024, do_sample=True, return_dict_in_generate=True)
 
 # single-image single-round conversation (单图单轮对话)
 question = '<image>\nPlease describe the image shortly.'
 response = model.chat(tokenizer, pixel_values, question, generation_config)
+print(f'User: {question}\nAssistant: {response}')
+
+# Manually prepare inputs like chat() does  
+sys.path.append('InternVL')
+from internvl_chat.conversation import get_conv_template
+
+template = get_conv_template(model.template)  
+template.system_message = model.system_message  
+template.append_message(template.roles[0], question)  
+template.append_message(template.roles[1], None)  
+query = template.get_prompt()  
+  
+# Replace image tokens  
+IMG_START_TOKEN = '<img>'  
+IMG_END_TOKEN = '</img>'  
+IMG_CONTEXT_TOKEN = '<IMG_CONTEXT>'  
+num_patches = pixel_values.shape[0]  
+image_tokens = IMG_START_TOKEN + IMG_CONTEXT_TOKEN * model.num_image_token * num_patches + IMG_END_TOKEN  
+query = query.replace('<image>', image_tokens, 1)  
+
+# Tokenize and generate  
+model_inputs = tokenizer(query, return_tensors='pt')  
+input_ids = model_inputs['input_ids'].cuda()  
+attention_mask = model_inputs['attention_mask'].cuda()  
+  
+# Generate with cache extraction  
+outputs = model.generate(  
+    pixel_values=pixel_values,  
+    input_ids=input_ids,  
+    attention_mask=attention_mask,  
+    **generation_config  
+)  
+  
+# Extract both response and cache  
+shared_cache = outputs.past_key_values  
+response = tokenizer.decode(outputs.sequences[0][input_ids.shape[1]:], skip_special_tokens=True)  
 print(f'User: {question}\nAssistant: {response}')
 
