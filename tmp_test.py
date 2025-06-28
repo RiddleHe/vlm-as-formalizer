@@ -109,8 +109,7 @@ def main():
     generation_config = dict(  
         max_new_tokens=50,  
         do_sample=False,  
-        use_cache=True,  
-        return_dict_in_generate=True  
+        use_cache=True
     )  
       
     # Method 1: Using the chat interface (recommended)  
