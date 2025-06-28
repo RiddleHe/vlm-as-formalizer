@@ -177,8 +177,24 @@ attention_mask = model_inputs['attention_mask'].cuda()
 print(f"[Debug] Input shape: {input_ids.shape}")
 print(f"[Debug] First few tokens: {input_ids[0][:20].tolist()}")
 
-eos_token_id = tokenizer.convert_tokens_to_ids(template.sep.strip())  
-      
+# Check if template was loaded successfully
+if template:
+    eos_token_id = tokenizer.convert_tokens_to_ids(template.sep.strip())
+    print(f"\n[Debug] Template loaded successfully")
+    print(f"[Debug] Template separator: '{template.sep}'")
+    print(f"[Debug] Template separator stripped: '{template.sep.strip()}'")
+    print(f"[Debug] EOS token ID from template: {eos_token_id}")
+    print(f"[Debug] Tokenizer's default EOS token ID: {tokenizer.eos_token_id}")
+    print(f"[Debug] Tokenizer's pad token ID: {tokenizer.pad_token_id}")
+    
+    # Let's also check what token this ID corresponds to
+    if eos_token_id is not None:
+        eos_token = tokenizer.convert_ids_to_tokens([eos_token_id])
+        print(f"[Debug] EOS token string: {eos_token}")
+else:
+    # Fallback EOS token ID
+    eos_token_id = tokenizer.eos_token_id
+    print(f"[Debug] Template not loaded, using fallback eos_token_id: {eos_token_id}")
 
 # Generation config for getting cache
 generation_config_with_cache = dict(
@@ -191,6 +207,8 @@ generation_config_with_cache = dict(
     eos_token_id=eos_token_id,  # Add this!  
     pad_token_id=tokenizer.pad_token_id  
 )
+
+print(f"\n[Debug] Generation config: {generation_config_with_cache}")
   
 # Generate with cache extraction  
 outputs = model.generate(  
@@ -202,6 +220,21 @@ outputs = model.generate(
   
 # Extract both response and cache  
 shared_cache = outputs.past_key_values  
+
+# Debug: Let's see what actually got generated
+print(f"\n[Debug] Output sequence shape: {outputs.sequences.shape}")
+print(f"[Debug] Input length: {input_ids.shape[1]}")
+print(f"[Debug] Output length: {outputs.sequences.shape[1]}")
+print(f"[Debug] New tokens generated: {outputs.sequences.shape[1] - input_ids.shape[1]}")
+
+# Check if the output is shorter than input (which would be wrong)
+if outputs.sequences.shape[1] <= input_ids.shape[1]:
+    print(f"[Debug] WARNING: Output is not longer than input!")
+    print(f"[Debug] Last few output tokens: {outputs.sequences[0][-10:].tolist()}")
+    # Try decoding the entire output to see what we got
+    full_output = tokenizer.decode(outputs.sequences[0], skip_special_tokens=False)
+    print(f"[Debug] Full output (with special tokens): {full_output[-200:]}")
+
 response = tokenizer.decode(outputs.sequences[0][input_ids.shape[1]:], skip_special_tokens=True)  
 print(f'\nManual generation with cache:')
 print(f'User: {question}\nAssistant: {response}')
