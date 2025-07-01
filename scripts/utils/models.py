@@ -72,7 +72,7 @@ class OpenAIClient(VLMClient):
 class HuggingFaceClient(VLMClient):
     """Client for Hugging Face open source models (Qwen2.5VL and InternVL)."""
     def load_client(self, **kwargs):
-        device = kwargs.get("device", "cuda" if torch.cuda.is_available() else "cpu")
+        device = kwargs.pop("device", "cuda" if torch.cuda.is_available() else "cpu")
         
         if "qwen2.5-vl" in self.client_name.lower() or "qwen2_5" in self.client_name.lower():
             return self._load_qwen2_5_vl(device)
