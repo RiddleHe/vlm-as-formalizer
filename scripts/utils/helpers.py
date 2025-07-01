@@ -48,7 +48,7 @@ def parse_args():
     parser.add_argument("--num_tries", type=int, default=2, help="the number of tries for each generation stage")
 
     # Downward solver
-    parser.add_argument("--downward_dir", type=str, default="../downward", help="")
+    parser.add_argument("--downward_dir", type=str, default="/home/mh3897/pddl/villain/downward", help="")
     parser.add_argument("--time_limit", type=int, default=30, help="")
 
     # related to problem generation and refinement
