@@ -1,0 +1,148 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block)
+        (ontable ?x - block)
+        (clear ?x - block)
+        (handempty ?x - robot)
+        (handfull ?x - robot)
+        (holding ?x - block)
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    
+    Instruction: Create two stacks of blocks: pink over purple, and yellow over orange.
+
+    
+    **********
+
+    The following is the response you generated last time:
+    First, let's analyze the image:
+
+The image shows four blocks:
+1. Purple block
+2. Pink block (on the floor in front of the purple block)
+3. Orange block
+4. Yellow block (on top of the orange block)
+
+The task is to create two stacks:
+1. One stack should have the pink block over the purple block.
+2. The other stack should have the yellow block over the orange block.
+
+Now, let's generate the PDDL problem:
+
+```pddl
+(define (problem stack_blocks)
+    (:domain blocksworld)
+    (:objects
+        robot
+        purple_block - block
+        pink_block - block
+        orange_block - block
+        yellow_block - block
+    )
+    (:init
+        (ontable purple_block)
+        (clear purple_block)
+        (ontable pink_block)
+        (clear pink_block)
+        (ontable orange_block)
+        (clear orange_block)
+        (holding yellow_block)
+        (on yellow_block orange_block)
+        (clear yellow_block)
+        (handfull robot)
+    )
+    (:goal (and
+        (on pink_block purple_block)
+        (on yellow_block orange_block)
+    ))
+)
+```
+
+This PDDL problem defines the objects (four blocks and a robot), initial state, and goal state to achieve the desired stacks.
+
+    The following is the error in the PDDL file you made last time:
+    Objects missing '- type' definition:
+  robot
+
+Object does not have a type:
+  robot
+
+
+
+    Please first analyze where the error is, ie. is it a PDDL semantic error, or an error in the caption or scene graph?
+    After analyzing the error, generate all the output again.
+    
