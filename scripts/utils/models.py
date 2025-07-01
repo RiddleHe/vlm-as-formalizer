@@ -303,39 +303,65 @@ def VLMClientFactory(client_name: str, device=None) -> VLMClient:
 
 
 if __name__ == "__main__":  # test any model on a prompt and a single image
-    # Example usage:
-    # Create a dummy image file for testing
-    if not os.path.exists("dummy_image.jpg"):
+    import argparse
+    
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description="Test VLM models with images")
+    parser.add_argument("--model", type=str, required=True, 
+                       help="Model to test. Options: qwen2.5vl, internvl, gemma3, or full model name")
+    parser.add_argument("--image", type=str, default="dummy_image.jpg",
+                       help="Path to image file (default: dummy_image.jpg)")
+    parser.add_argument("--prompt", type=str, default="Describe the image.",
+                       help="Prompt to send to the model")
+    parser.add_argument("--device", type=str, default="cuda",
+                       help="Device to use (default: cuda)")
+    
+    args = parser.parse_args()
+    
+    # Model name mapping
+    model_mapping = {
+        "qwen2.5vl": "Qwen/Qwen2.5-VL-7B-Instruct",
+        "internvl": "OpenGVLab/InternVL3-14B", 
+        "gemma3": "google/gemma-3-12b-it"
+    }
+    
+    # Determine model name
+    if args.model in model_mapping:
+        model_name = model_mapping[args.model]
+        model_type = args.model
+    else:
+        model_name = args.model
+        model_type = "custom"
+    
+    # Create dummy image if it doesn't exist and no custom image provided
+    if args.image == "dummy_image.jpg" and not os.path.exists("dummy_image.jpg"):
         try:
             from PIL import Image
-            img = Image.new('RGB', (100, 100), color = 'red')
+            img = Image.new('RGB', (100, 100), color='red')
             img.save('dummy_image.jpg')
             print("Created dummy_image.jpg for testing.")
         except ImportError:
             print("PIL/Pillow is not installed. Cannot create a dummy image.")
             print("Please create a file named 'dummy_image.jpg' to run the test.")
-
-    if os.path.exists("dummy_image.jpg"):
-        # Test Qwen2.5VL
-        try:
-            client = VLMClientFactory("Qwen/Qwen2.5-VL-7B-Instruct", device="cuda")
-            response = client.generate("Describe the image.", ["dummy_image.jpg"])
-            print(f"Qwen2.5VL response: {response}")
-        except Exception as e:
-            print(f"Skipping Qwen2.5VL test: {e}")
-
-        # Test InternVL
-        try:
-            client = VLMClientFactory("OpenGVLab/InternVL3-14B", device="cuda")
-            response = client.generate("Describe the image.", ["dummy_image.jpg"])
-            print(f"InternVL response: {response}")
-        except Exception as e:
-            print(f"Skipping InternVL test: {e}")
-
-        # Test Gemma3
-        try:
-            client = VLMClientFactory("google/gemma-3-12b-it", device="cuda")
-            response = client.generate("Describe the image.", ["dummy_image.jpg"])
-            print(f"Gemma3 response: {response}")
-        except Exception as e:
-            print(f"Skipping Gemma3 test: {e}") 
+            exit(1)
+    
+    # Check if image file exists
+    if not os.path.exists(args.image):
+        print(f"Error: Image file '{args.image}' not found.")
+        exit(1)
+    
+    # Test the specified model
+    print(f"Testing {model_type} model: {model_name}")
+    print(f"Image: {args.image}")
+    print(f"Prompt: {args.prompt}")
+    print(f"Device: {args.device}")
+    print("-" * 50)
+    
+    try:
+        client = VLMClientFactory(model_name, device=args.device)
+        response = client.generate(args.prompt, [args.image])
+        print(f"Response: {response}")
+    except Exception as e:
+        print(f"Error testing {model_type}: {e}")
+        import traceback
+        traceback.print_exc() 
