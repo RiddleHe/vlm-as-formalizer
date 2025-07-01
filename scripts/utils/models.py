@@ -3,9 +3,7 @@ import base64
 import torch
 from dotenv import load_dotenv
 from abc import ABC, abstractmethod
-import requests
 from PIL import Image
-import importlib
 
 # Load environment variables
 load_dotenv()
@@ -71,76 +69,225 @@ class OpenAIClient(VLMClient):
         )
         return response.choices[0].message.content
 
-class OpenRouterClient(VLMClient):
-    """Client for OpenRouter models."""
+class HuggingFaceClient(VLMClient):
+    """Client for Hugging Face open source models (Qwen2.5VL and InternVL)."""
     def load_client(self, **kwargs):
-        from openai import OpenAI
-        api_key = os.getenv("OPENROUTER_API_KEY")
-        if not api_key:
-            raise ValueError("OPENROUTER_API_KEY environment variable not set")
-        return OpenAI(
-            base_url="https://openrouter.ai/api/v1",
-            api_key=api_key,
+        device = kwargs.get("device", "cuda" if torch.cuda.is_available() else "cpu")
+        
+        if "qwen2.5-vl" in self.client_name.lower() or "qwen2_5" in self.client_name.lower():
+            return self._load_qwen2_5_vl(device)
+        elif "internvl" in self.client_name.lower():
+            return self._load_internvl(device, **kwargs)
+        elif "gemma" in self.client_name.lower():
+            return self._load_gemma3(device)
+        else:
+            raise ValueError(f"Unsupported HuggingFace model: {self.client_name}")
+    
+    def _load_qwen2_5_vl(self, device):
+        """Load Qwen2.5VL model and processor."""
+        from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
+        
+        model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            self.client_name,
+            torch_dtype=torch.float16,
+            device_map="auto",
+            attn_implementation="sdpa"
         )
-
-    def generate(self, prompt: str, observations: list[str]) -> str:
-        base64_images = self._encode_images(observations)
-        content = [{"type": "text", "text": prompt}]
-        for base64_image in base64_images:
-            content.append({
-                "type": "image_url",
-                "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
-            })
-
-        try:
-            completion = self.client.chat.completions.create(
-                extra_headers={
-                    "HTTP-Referer": "https://github.com/your-repo/roboplan",
-                    "X-Title": "RoboPlan VLM Testing"
-                },
-                model=self.client_name,
-                messages=[{"role": "user", "content": content}],
-                max_tokens=1024,
-                temperature=0.7,
-            )
-            return completion.choices[0].message.content
-        except Exception as e:
-            raise RuntimeError(f"OpenRouter API request failed: {str(e)}")
-
-class InternVLClient(VLMClient):
-    """Client for InternVL models from Hugging Face, which require custom code."""
-    def load_client(self, **kwargs):
+        processor = AutoProcessor.from_pretrained(self.client_name)
+        
+        return {"model": model, "processor": processor, "type": "qwen2.5vl"}
+    
+    def _load_internvl(self, device, **kwargs):
+        """Load InternVL model using vlm_utils."""
         from transformers import AutoModel, AutoTokenizer
-
+        # Import vlm_utils functions
+        import sys
+        import os
+        sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+        from vlm_utils import split_internvl_model
+        
+        # Use device mapping for multi-GPU setups if available
+        if torch.cuda.device_count() > 1:
+            device_map = split_internvl_model(self.client_name)
+        else:
+            device_map = device
+        
         model = AutoModel.from_pretrained(
             self.client_name,
             torch_dtype=torch.bfloat16,
             low_cpu_mem_usage=True,
+            use_flash_attn=kwargs.get("use_flash_attn", False),
             trust_remote_code=True,
-            attn_implementation="eager",
-        ).eval().to(kwargs.get("device"))
+            device_map=device_map
+        ).eval()
         
         tokenizer = AutoTokenizer.from_pretrained(
-            self.client_name, 
-            trust_remote_code=True
+            self.client_name,
+            trust_remote_code=True,
+            use_fast=False
         )
-        return {"model": model, "tokenizer": tokenizer}
+        
+        return {"model": model, "tokenizer": tokenizer, "type": "internvl"}
+    
+    def _load_gemma3(self, device):
+        """Load Gemma3 model and processor."""
+        from transformers import AutoProcessor, Gemma3ForConditionalGeneration
+        
+        model = Gemma3ForConditionalGeneration.from_pretrained(
+            self.client_name,
+            device_map="auto"
+        ).eval()
+        
+        processor = AutoProcessor.from_pretrained(self.client_name)
+        
+        return {"model": model, "processor": processor, "type": "gemma3"}
 
     def generate(self, prompt: str, observations: list[str]) -> str:
+        """Generate response based on model type."""
         if not observations:
-            raise ValueError("InternVLClient requires at least one image.")
+            raise ValueError("HuggingFaceClient requires at least one image.")
         
-        images = [Image.open(obs).convert("RGB") for obs in observations]
-        image_arg = images[0] if len(images) == 1 else images
+        model_type = self.client["type"]
         
-        # The model.chat method takes tokenizer, image, question, and history
-        response, _ = self.client["model"].chat(
-            self.client["tokenizer"],
-            image_arg,
-            prompt,
-            history=None
+        if model_type == "qwen2.5vl":
+            return self._generate_qwen2_5_vl(prompt, observations)
+        elif model_type == "internvl":
+            return self._generate_internvl(prompt, observations)
+        elif model_type == "gemma3":
+            return self._generate_gemma3(prompt, observations)
+        else:
+            raise ValueError(f"Unknown model type: {model_type}")
+    
+    def _generate_qwen2_5_vl(self, prompt: str, observations: list[str]) -> str:
+        """Generate response using Qwen2.5VL."""
+        model = self.client["model"]
+        processor = self.client["processor"]
+        
+        # Prepare messages with images
+        content = []
+        for obs_path in observations:
+            content.append({
+                "type": "image",
+                "url": obs_path  # For local images, this will be handled by the processor
+            })
+        content.append({
+            "type": "text", 
+            "text": prompt
+        })
+        
+        messages = [{
+            "role": "user",
+            "content": content
+        }]
+        
+        # Process the conversation
+        inputs = processor.apply_chat_template(
+            messages,
+            add_generation_prompt=True,
+            tokenize=True,
+            return_dict=True,
+            return_tensors="pt"
+        ).to(model.device)
+        
+        # Generate response
+        with torch.no_grad():
+            generated_ids = model.generate(**inputs, max_new_tokens=1024)
+        
+        # Decode only the new tokens
+        generated_ids_trimmed = [
+            out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
+        ]
+        output_text = processor.batch_decode(
+            generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
         )
-        return response
+        
+        return output_text[0] if output_text else ""
+    
+    def _generate_internvl(self, prompt: str, observations: list[str]) -> str:
+        """Generate response using InternVL with vlm_utils."""
+        import sys
+        import os
+        sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+        from vlm_utils import load_image
+        
+        model = self.client["model"]
+        tokenizer = self.client["tokenizer"]
+        
+        # Load and preprocess images using vlm_utils
+        if len(observations) == 1:
+            # Single image case
+            pixel_values = load_image(observations[0], max_num=12).to(torch.bfloat16)
+            if torch.cuda.is_available():
+                pixel_values = pixel_values.cuda()
+            
+            # Format prompt with image token
+            image_prompt = f"<image>\n{prompt}"
+            
+            # Generate response using the model's chat method
+            generation_config = dict(max_new_tokens=1024, do_sample=True)
+            response = model.chat(tokenizer, pixel_values, image_prompt, generation_config)
+            
+            return response
+        else:
+            # Multi-image case - process first image for now
+            # TODO: Implement proper multi-image support
+            pixel_values = load_image(observations[0], max_num=12).to(torch.bfloat16)
+            if torch.cuda.is_available():
+                pixel_values = pixel_values.cuda()
+            
+            image_prompt = f"<image>\n{prompt}"
+            generation_config = dict(max_new_tokens=1024, do_sample=True)
+            response = model.chat(tokenizer, pixel_values, image_prompt, generation_config)
+            
+            return response
+    
+    def _generate_gemma3(self, prompt: str, observations: list[str]) -> str:
+        """Generate response using Gemma3."""
+        model = self.client["model"]
+        processor = self.client["processor"]
+        
+        # Prepare messages with system prompt and user content
+        content = []
+        for obs_path in observations:
+            content.append({
+                "type": "image", 
+                "image": obs_path
+            })
+        content.append({
+            "type": "text", 
+            "text": prompt
+        })
+        
+        messages = [
+            {
+                "role": "system",
+                "content": [{"type": "text", "text": "You are a helpful assistant."}]
+            },
+            {
+                "role": "user",
+                "content": content
+            }
+        ]
+        
+        # Process the conversation
+        inputs = processor.apply_chat_template(
+            messages,
+            add_generation_prompt=True,
+            tokenize=True,
+            return_dict=True,
+            return_tensors="pt"
+        ).to(model.device, dtype=torch.bfloat16)
+        
+        input_len = inputs["input_ids"].shape[-1]
+        
+        # Generate response
+        with torch.inference_mode():
+            generation = model.generate(**inputs, max_new_tokens=1024, do_sample=False)
+            generation = generation[0][input_len:]
+        
+        # Decode the response
+        decoded = processor.decode(generation, skip_special_tokens=True)
+        return decoded
 
 def VLMClientFactory(client_name: str, device=None) -> VLMClient:
     """Factory function to create a VLM client."""
@@ -148,12 +295,9 @@ def VLMClientFactory(client_name: str, device=None) -> VLMClient:
         gpt_client_name = get_gpt_client_name(client_name)
         return OpenAIClient(gpt_client_name)
     
-    if client_name.startswith("openrouter/"):
-        openrouter_client_name = client_name.replace("openrouter/", "")
-        return OpenRouterClient(openrouter_client_name)
-    
-    if "InternVL" in client_name:
-        return InternVLClient(client_name, device=device)
+    # Check for Hugging Face models
+    if any(name in client_name.lower() for name in ["qwen2.5-vl", "qwen2_5", "internvl", "gemma"]):
+        return HuggingFaceClient(client_name, device=device)
 
     raise ValueError(f"Unknown client type: {client_name}")
 
@@ -172,22 +316,26 @@ if __name__ == "__main__":  # test any model on a prompt and a single image
             print("Please create a file named 'dummy_image.jpg' to run the test.")
 
     if os.path.exists("dummy_image.jpg"):
-        # Test OpenAI (requires OPENAI_API_KEY)
-        # try:
-        #     client = VLMClientFactory("gpt-4o-mini")
-        #     response = client.generate("What color is this image?", ["dummy_image.jpg"])
-        #     print(f"OpenAI response: {response}")
-        # except Exception as e:
-        #     print(f"Skipping OpenAI test: {e}")
+        # Test Qwen2.5VL
+        try:
+            client = VLMClientFactory("Qwen/Qwen2.5-VL-7B-Instruct", device="cuda")
+            response = client.generate("Describe the image.", ["dummy_image.jpg"])
+            print(f"Qwen2.5VL response: {response}")
+        except Exception as e:
+            print(f"Skipping Qwen2.5VL test: {e}")
 
         # Test InternVL
         try:
-            # Make sure you have enough RAM/VRAM. This is a large model.
-            # You might need to specify the device, e.g., device="cuda"
-            client = VLMClientFactory("OpenGVLab/InternVL3-14B", device="cpu") 
+            client = VLMClientFactory("OpenGVLab/InternVL3-14B", device="cuda")
             response = client.generate("Describe the image.", ["dummy_image.jpg"])
             print(f"InternVL response: {response}")
         except Exception as e:
             print(f"Skipping InternVL test: {e}")
 
-        pass 
+        # Test Gemma3
+        try:
+            client = VLMClientFactory("google/gemma-3-12b-it", device="cuda")
+            response = client.generate("Describe the image.", ["dummy_image.jpg"])
+            print(f"Gemma3 response: {response}")
+        except Exception as e:
+            print(f"Skipping Gemma3 test: {e}") 
