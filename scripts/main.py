@@ -126,6 +126,8 @@ def main():
                 generate_caption=args.generate_caption,
                 generate_scene_graph=args.generate_scene_graph,
                 num_tries=args.num_tries,
+                downward_dir=args.downward_dir,
+                time_limit=args.time_limit,
             )
             
             # save PDDL objects
