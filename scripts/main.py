@@ -24,7 +24,7 @@ from utils.helpers import (
 )
 from utils.checkers import find_plan, compare_plans
 from utils.generate import generate_pddl
-from utils.models import VLMClient
+from utils.models import VLMClientFactory
 
 from dotenv import load_dotenv
 load_dotenv('.env')
@@ -69,7 +69,7 @@ def main():
             )
 
          # Load model
-        model = VLMClient(args.model, args.device)
+        model = VLMClientFactory(args.model, args.device)
 
         # Load config
         if os.path.exists(f"{data_dir}/config.json"):

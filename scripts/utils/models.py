@@ -19,8 +19,9 @@ def get_gpt_client_name(client_name):
 
 class VLMClient(ABC):
     """Abstract Base Class for Vision-Language Model Clients."""
-    def __init__(self, client_name, **kwargs):
+    def __init__(self, client_name, device=None, **kwargs):
         self.client_name = client_name
+        self.device = device
         self.client = self.load_client(**kwargs)
         print(f"Loaded client for: {self.client_name}")
 
@@ -45,6 +46,9 @@ class VLMClient(ABC):
 
 class OpenAIClient(VLMClient):
     """Client for OpenAI models."""
+    def __init__(self, client_name, **kwargs):
+        super().__init__(client_name, **kwargs)
+        
     def load_client(self, **kwargs):
         from openai import OpenAI
         return OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -71,15 +75,16 @@ class OpenAIClient(VLMClient):
 
 class HuggingFaceClient(VLMClient):
     """Client for Hugging Face open source models (Qwen2.5VL and InternVL)."""
+    def __init__(self, client_name, device, **kwargs):
+        super().__init__(client_name, device=device, **kwargs)
+
     def load_client(self, **kwargs):
-        device = kwargs.pop("device", "cuda" if torch.cuda.is_available() else "cpu")
-        
         if "qwen2.5-vl" in self.client_name.lower() or "qwen2_5" in self.client_name.lower():
-            return self._load_qwen2_5_vl(device)
+            return self._load_qwen2_5_vl(self.device)
         elif "internvl" in self.client_name.lower():
-            return self._load_internvl(device, **kwargs)
+            return self._load_internvl(self.device, **kwargs)
         elif "gemma" in self.client_name.lower():
-            return self._load_gemma3(device)
+            return self._load_gemma3(self.device)
         else:
             raise ValueError(f"Unsupported HuggingFace model: {self.client_name}")
     
@@ -291,15 +296,12 @@ class HuggingFaceClient(VLMClient):
 
 def VLMClientFactory(client_name: str, device=None) -> VLMClient:
     """Factory function to create a VLM client."""
-    if any(name in client_name for name in ["gpt", "o3", "o4"]):
-        gpt_client_name = get_gpt_client_name(client_name)
-        return OpenAIClient(gpt_client_name)
-    
-    # Check for Hugging Face models
-    if any(name in client_name.lower() for name in ["qwen2.5-vl", "qwen2_5", "internvl", "gemma"]):
+    if "gpt" in client_name.lower() or "o3" in client_name.lower() or "o4" in client_name.lower():
+        return OpenAIClient(client_name)
+    elif "internvl" in client_name.lower() or "qwen" in client_name.lower() or "gemma" in client_name.lower():
         return HuggingFaceClient(client_name, device=device)
-
-    raise ValueError(f"Unknown client type: {client_name}")
+    else:
+        raise ValueError(f"Unknown model name: {client_name}")
 
 
 if __name__ == "__main__":  # test any model on a prompt and a single image
