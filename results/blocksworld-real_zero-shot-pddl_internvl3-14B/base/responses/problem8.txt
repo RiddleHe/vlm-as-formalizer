@@ -1,0 +1,51 @@
+Based on the instruction and the given image, we need to create two stacks as described: one with yellow on blue on purple, and another with red on orange on green. Given the domain constraints and the scenario with blocks and a robot, here's the PDDL problem specification:
+
+```pddl
+(define (problem blocksworld-problem)
+    (:domain blocksworld)
+    (:objects
+        yellow blue purple red orange green - block
+        robot1 - robot
+    )
+    (:init 
+        (handempty robot1)
+        (clear yellow)
+        (on yellow blue)
+        (clear blue)
+        (ontable blue)
+        (clear purple)
+        (ontable purple)
+        (clear red)
+        (ontable red)
+        (clear orange)
+        (ontable orange)
+        (clear green)
+        (ontable green)
+    )
+    (:goal 
+        (and 
+            (on yellow blue)
+            (on blue purple)
+            (clear yellow)
+            (on red orange)
+            (on orange green)
+            (clear red)
+        )
+    )
+)
+```
+
+### Explanation:
+
+- **Objects**: We define six blocks (`yellow`, `blue`, `purple`, `red`, `orange`, `green`) and one robot (`robot1`).
+  
+- **Initial State**:
+  - All blocks are on the table, and they are clear.
+  - `yellow` is on top of `blue`, and `blue` is on top of `purple`. Similarly, `red` is on top of `orange`, and `orange` is on top of `green`.
+  
+- **Goal State**:
+  - The goal is to form two stacks as specified:
+    - The stack with `yellow` on `blue` on `purple`, where each block in the stack is clear.
+    - The stack with `red` on `orange` on `green`, where each block in the stack is clear.
+
+Given the initial setup, the robot will need to pick up blocks from the table, stack them according to the instructions, ensuring that each block becomes clear as it is moved onto another block in the stack. This problem adheres to the actions and preconditions defined in the `blocksworld` domain.

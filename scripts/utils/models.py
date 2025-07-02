@@ -154,7 +154,8 @@ class HuggingFaceClient(VLMClient):
         model = Gemma3ForConditionalGeneration.from_pretrained(
             self.client_name,
             torch_dtype=torch.bfloat16,
-            device_map="auto"
+            device_map="auto",
+            attn_implementation="eager"  # Use eager attention to avoid SDPA alignment issues
         ).eval()
         
         processor = AutoProcessor.from_pretrained(self.client_name)

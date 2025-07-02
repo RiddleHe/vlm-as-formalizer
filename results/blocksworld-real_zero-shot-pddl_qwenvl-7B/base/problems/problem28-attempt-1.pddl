@@ -1,0 +1,30 @@
+(define (problem blocksworld)
+(:domain blocksworld)
+(:requirements :strips :typing)
+(:objects
+    orange_block
+    yellow_block
+    green_block
+    purple_block
+    red_block
+    blue_block
+    robot1
+)
+(:init
+    (ontable orange_block)
+    (ontable yellow_block)
+    (ontable green_block)
+    (ontable purple_block)
+    (ontable red_block)
+    (ontable blue_block)
+    (handempty robot1)
+)
+(:goal (and
+    (on orange_block yellow_block)
+    (on yellow_block green_block)
+    (on green_block purple_block)
+    (on purple_block red_block)
+    (on red_block blue_block)
+    (handempty robot1)
+))
+)

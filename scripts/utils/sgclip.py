@@ -372,16 +372,16 @@ def get_binary_relations(
 def setup_and_load_models(
         base_dir, 
         device="cuda", 
-        dino_path="GroundingDINO", 
+        dino_path="/local-ssd/custom_models/Grounded-SAM-2/groundingdino", 
         sam_path="sam2", 
         inference_path="LASER/src/visualization",
-        pred_model_path="LASER/src/models",
+        pred_model_path="/local-ssd/custom_models/sgclip",
         pred_model_name="ensemble-2025-02-10-14-57-22.0.checkpoint",
     ):
-    sys.path.append(os.path.join(base_dir, dino_path))
+    sys.path.append(dino_path)
     sys.path.append(os.path.join(base_dir, sam_path))
     sys.path.append(os.path.join(base_dir, inference_path))
-    sys.path.append(os.path.join(base_dir, pred_model_path))
+    sys.path.append(pred_model_path)
 
     from groundingdino.util.inference import Model as gd_Model
     from sam2.build_sam import build_sam2, build_sam2_video_predictor
@@ -474,6 +474,8 @@ def predict_all_relations(
         show_masks=False
     )
 
+    sys.exit()
+
     unary_results = {}
     if unary_relations:
         unary_results = get_unary_relations(
@@ -504,12 +506,12 @@ if __name__ == "__main__":
 
     models = setup_and_load_models(BASE_DIR, DEVICE)
 
-    # image_paths = [os.path.join(BASE_DIR, "data/cooking/observations", f"problem4.jpg")]
-    image_paths = [os.path.join(BASE_DIR, "data/blocksworld-real/observations", f"problem30-3.jpg")]
+    image_paths = [os.path.join(BASE_DIR, "data/cooking/observations", f"problem4.jpg")]
+    # image_paths = [os.path.join(BASE_DIR, "data/blocksworld-real/observations", f"problem30-3.jpg")]
     images = [imageio.imread(p) for p in image_paths]
 
-    # object_classes = ["cutting_board", "counter", "knife", "bowl"]
-    object_classes = ["red cube", "green cube", "blue cube", "yellow cube", "orange cube", "purple cube"]  # removing "cube" improves results
+    object_classes = ["cutting_board", "counter", "knife", "bowl", "vegetable"]
+    # object_classes = ["red cube", "green cube", "blue cube", "yellow cube", "orange cube", "purple cube"]  # removing "cube" improves results
     unary_relations = ["is_empty"]
     binary_relations = ["on"]
 

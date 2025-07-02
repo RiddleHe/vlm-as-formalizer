@@ -1,0 +1,141 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot)
+        (handfull ?x - robot)
+        (holding ?x - block)
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    There is one robot arm robot1 on the table. It is empty-handed.
+    Instruction: Create 3 stacks: green over blue, purple over orange, red over yellow
+    
+    **********
+
+    The following is the response you generated last time:
+    Okay, let's analyze the previous attempt and then generate a corrected PDDL problem file.
+
+**Analysis of the Error**
+
+The error "Search stopped without finding a solution" indicates that the initial state described in the PDDL file is incompatible with the goal state. The previous PDDL assumed all blocks were initially on the table and clear. However, the image shows a stack of blocks (yellow, orange, green, purple) and a robot arm. The robot arm is empty, but the blocks are not all on the table. The initial state needs to reflect the actual arrangement of blocks in the image.
+
+**Corrected PDDL Problem File**
+
+Here's the corrected PDDL problem file, taking into account the image and the instruction:
+
+```pddl
+(define (problem blocksworld3)
+    (:domain blocksworld)
+    (:objects
+        green blue purple orange red yellow - block
+        robot1 - robot
+    )
+    (:init
+        (ontable yellow)
+        (on yellow orange)
+        (on orange green)
+        (on green purple)
+        (clear purple)
+        (handempty robot1)
+    )
+    (:goal (and
+        (on green blue)
+        (on purple orange)
+        (on red yellow)
+    ))
+)
+```
+
+**Explanation of Changes:**
+
+*   **Initial State:** The initial state now reflects the blocks' arrangement in the image:
+    *   `yellow` is on the table.
+    *   `orange` is on `yellow`.
+    *   `green` is on `orange`.
+    *   `purple` is on `green`.
+    *   `purple` is clear.
+*   **Goal State:** The goal state remains the same, specifying the desired stacks.
+
+This revised PDDL file should provide a more accurate representation of the initial state, allowing the planner to find a solution to achieve the goal.
+
+    The following is the error in the PDDL file you made last time:
+    Search stopped without finding a solution
+
+    Please first analyze where the error is, ie. is it a PDDL semantic error, or an error in the caption or scene graph?
+    After analyzing the error, generate all the output again.
+    

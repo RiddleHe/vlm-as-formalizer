@@ -1,0 +1,52 @@
+Plan length mismatch.
+Ground truth has 16 steps.
+Predicted has 6 steps.
+
+Problem:
+(:init
+
+        (ontable green_block)
+        (ontable blue_block)
+        (ontable purple_block)
+        (ontable orange_block)
+        (ontable red_block)
+        (ontable yellow_block)
+        
+        (clear green_block)
+        (clear blue_block)
+        (clear purple_block)
+        (clear orange_block)
+        (clear red_block)
+        (clear yellow_block)
+        
+        (handempty robot1)
+    )
+    
+    (:goal
+        (and
+            (on green_block blue_block)
+            (on red_block yellow_block)
+            (on purple_block orange_block)
+        )
+    )
+)
+
+Ground truth problem:
+(:init
+
+        (ontable purple)
+        (on blue purple)
+        (on green blue)
+        (on yellow green)
+        (on red yellow)
+        (on orange red)
+        (clear orange)
+        (handempty robot)
+        ; purple -> blue -> green -> yellow -> red -> orange
+    )
+    (:goal (and (on green blue)
+        (on purple orange)
+        (on red yellow)))
+)
+    
+

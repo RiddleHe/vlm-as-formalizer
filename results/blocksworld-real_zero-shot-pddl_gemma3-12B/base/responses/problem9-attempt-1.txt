@@ -1,0 +1,28 @@
+```pddl
+(define (problem blocksworld3)
+    (:domain blocksworld)
+    (:objects
+        orange red yellow green blue purple robot1 - robot
+    )
+    (:init
+        (ontable orange)
+        (ontable red)
+        (ontable yellow)
+        (ontable green)
+        (ontable blue)
+        (ontable purple)
+        (clear orange)
+        (clear red)
+        (clear yellow)
+        (clear green)
+        (clear blue)
+        (clear purple)
+        (handempty robot1)
+    )
+    (:goal (and
+        (on orange blue)
+        (on red green)
+        (on yellow purple)
+    ))
+)
+```

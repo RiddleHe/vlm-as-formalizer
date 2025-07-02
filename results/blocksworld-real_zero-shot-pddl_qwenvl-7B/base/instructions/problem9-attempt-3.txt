@@ -1,0 +1,256 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot)
+        (handfull ?x - robot)
+        (holding ?x - block)
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    There is one robot arm robot1 on the table. It is empty-handed.
+    Instruction: Create 3 stacks: orange over blue, red over green, yellow over purple
+    
+    **********
+
+    The following is the response you generated last time:
+    ```pddl
+(define (problem blocksworld)
+(:domain blocksworld)
+(:objects
+    orange1 orange2 orange3 orange4 orange5 orange6
+    blue1 blue2 blue3 blue4 blue5 blue6
+    red1 red2 red3 red4 red5 red6
+    green1 green2 green3 green4 green5 green6
+    yellow1 yellow2 yellow3 yellow4 yellow5 yellow6
+    purple1 purple2 purple3 purple4 purple5 purple6
+    robot1
+)
+(:init
+    (clear orange1)
+    (clear orange2)
+    (clear orange3)
+    (clear orange4)
+    (clear orange5)
+    (clear orange6)
+    (clear blue1)
+    (clear blue2)
+    (clear blue3)
+    (clear blue4)
+    (clear blue5)
+    (clear blue6)
+    (clear red1)
+    (clear red2)
+    (clear red3)
+    (clear red4)
+    (clear red5)
+    (clear red6)
+    (clear green1)
+    (clear green2)
+    (clear green3)
+    (clear green4)
+    (clear green5)
+    (clear green6)
+    (clear yellow1)
+    (clear yellow2)
+    (clear yellow3)
+    (clear yellow4)
+    (clear yellow5)
+    (clear yellow6)
+    (clear purple1)
+    (clear purple2)
+    (clear purple3)
+    (clear purple4)
+    (clear purple5)
+    (clear purple6)
+    (ontable orange1)
+    (ontable orange2)
+    (ontable orange3)
+    (ontable orange4)
+    (ontable orange5)
+    (ontable orange6)
+    (ontable blue1)
+    (ontable blue2)
+    (ontable blue3)
+    (ontable blue4)
+    (ontable blue5)
+    (ontable blue6)
+    (ontable red1)
+    (ontable red2)
+    (ontable red3)
+    (ontable red4)
+    (ontable red5)
+    (ontable red6)
+    (ontable green1)
+    (ontable green2)
+    (ontable green3)
+    (ontable green4)
+    (ontable green5)
+    (ontable green6)
+    (ontable yellow1)
+    (ontable yellow2)
+    (ontable yellow3)
+    (ontable yellow4)
+    (ontable yellow5)
+    (ontable yellow6)
+    (ontable purple1)
+    (ontable purple2)
+    (ontable purple3)
+    (ontable purple4)
+    (ontable purple5)
+    (ontable purple6)
+    (handempty robot1)
+)
+(:goal
+    (and
+        (on orange1 blue1)
+        (on orange2 blue2)
+        (on orange3 blue3)
+        (on orange4 blue4)
+        (on orange5 blue5)
+        (on orange6 blue6)
+        (on red1 green1)
+        (on red2 green2)
+        (on red3 green3)
+        (on red4 green4)
+        (on red5 green5)
+        (on red6 green6)
+        (on yellow1 purple1)
+        (on yellow2 purple2)
+        (on yellow3 purple3)
+        (on yellow4 purple4)
+        (on yellow5 purple5)
+        (on yellow6 purple6)
+    )
+)
+)
+```
+
+    The following is the error in the PDDL file you made last time:
+    Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  orange1 orange2 orange3 orange4 orange5 orange6
+  green1 green2 green3 green4 green5 green6
+  purple1 purple2 purple3 purple4 purple5 purple6
+  robot1
+  yellow1 yellow2 yellow3 yellow4 yellow5 yellow6
+  red1 red2 red3 red4 red5 red6
+  blue1 blue2 blue3 blue4 blue5 blue6
+
+Object does not have a type:
+  yellow1
+  orange2
+  yellow3
+  purple1
+  purple5
+  blue1
+  red5
+  red1
+  red4
+  green5
+  green3
+  orange6
+  yellow2
+  blue4
+  robot1
+  orange4
+  red6
+  blue2
+  orange5
+  blue3
+  purple2
+  yellow5
+  green4
+  orange1
+  orange3
+  blue6
+  green1
+  red2
+  purple6
+  purple4
+  yellow4
+  red3
+  green2
+  green6
+  purple3
+  yellow6
+  blue5
+
+
+
+    Please first analyze where the error is, ie. is it a PDDL semantic error, or an error in the caption or scene graph?
+    After analyzing the error, generate all the output again.
+    
