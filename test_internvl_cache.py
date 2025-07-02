@@ -29,14 +29,12 @@ def run_internvl_cache_test():
     processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
     print("Model loaded.")
 
-    sys.exit()
-
     image_path = "data/blocksworld-real/observations/problem1-1.jpg"
     image = Image.open(image_path).convert("RGB")
     generation_config = dict(max_new_tokens=1024, do_sample=True)
     prompt = "Please describe the image explicitly."
-    text = f(
-        "<|im_start|>user\n<IMG_CONTEXT>\n{prompt}.<|im_end|>\n<|im_start|>assistant\n"
+    text = (
+        f"<|im_start|>user\n<IMG_CONTEXT>\n{prompt}.<|im_end|>\n<|im_start|>assistant\n"
     )
     inputs = processor(
         images=image, 

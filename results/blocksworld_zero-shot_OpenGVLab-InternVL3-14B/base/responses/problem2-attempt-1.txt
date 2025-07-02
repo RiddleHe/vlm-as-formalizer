@@ -1,0 +1,60 @@
+To generate the PDDL problem file for the given instruction, we first analyze the provided image and identify the objects and their initial states:
+
+1. Identify the blocks:
+    - Pink (on top of the stack)
+    - Purple
+    - Blue
+    - Red (on the ground)
+
+2. Establish initial states:
+    - Pink: on top of Purple
+    - Purple: on top of Blue
+    - Blue: on the table
+    - Red: on the table and clear
+
+Here's the PDDL problem file:
+
+```pddl
+(define (problem stack_blocks)
+    (:domain blocksworld)
+    (:objects
+        pink - block
+        purple - block
+        blue - block
+        red - block
+        robot - robot
+    )
+    (:init
+        (on pink purple)
+        (on purple blue)
+        (ontable blue)
+        (clear red)
+        (ontable red)
+        (handempty robot)
+        (clear pink)
+        (clear blue)
+        (not (handfull robot))
+        (not (holding pink))
+        (not (holding red))
+        (not (holding purple))
+        (not (holding blue))
+    )
+    (:goal 
+        (and
+            (on red blue)
+            (on blue purple)
+            (on purple pink)
+        )
+    )
+)
+```
+
+### Analysis
+
+The initial state description sets the configuration of the blocks as they appear in the image:
+- `pink` is on top of `purple`.
+- `purple` is on top of `blue`.
+- `red` is on the table.
+- All blocks on the table are clear, and `robot` starts with an empty hand.
+
+The goal is to stack the blocks such that `red` is on top of `blue`, `blue` is on top of `purple`, and `purple` is on top of `pink`.

@@ -1,0 +1,44 @@
+First, let's analyze the image:
+
+The image shows four blocks:
+1. Purple block
+2. Pink block (on the floor in front of the purple block)
+3. Orange block
+4. Yellow block (on top of the orange block)
+
+The task is to create two stacks:
+1. One stack should have the pink block over the purple block.
+2. The other stack should have the yellow block over the orange block.
+
+Now, let's generate the PDDL problem:
+
+```pddl
+(define (problem stack_blocks)
+    (:domain blocksworld)
+    (:objects
+        robot
+        purple_block - block
+        pink_block - block
+        orange_block - block
+        yellow_block - block
+    )
+    (:init
+        (ontable purple_block)
+        (clear purple_block)
+        (ontable pink_block)
+        (clear pink_block)
+        (ontable orange_block)
+        (clear orange_block)
+        (holding yellow_block)
+        (on yellow_block orange_block)
+        (clear yellow_block)
+        (handfull robot)
+    )
+    (:goal (and
+        (on pink_block purple_block)
+        (on yellow_block orange_block)
+    ))
+)
+```
+
+This PDDL problem defines the objects (four blocks and a robot), initial state, and goal state to achieve the desired stacks.

@@ -1,0 +1,146 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block)
+        (ontable ?x - block)
+        (clear ?x - block)
+        (handempty ?x - robot)
+        (handfull ?x - robot)
+        (holding ?x - block)
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    
+    Instruction: Create a stack of block: pink over red over yellow over green.
+
+    
+    **********
+
+    The following is the response you generated last time:
+    First, let's analyze the scene and the instruction. The image shows four blocks on a dark plain surface in the following colors from left to right: green, yellow, pink, and red. 
+
+According to the instruction, we need to create a stack with the pink block on top, followed by the red block, then the yellow block, and the green block at the bottom. This means the initial state has all blocks on the table and clear, and the goal state has them stacked in the specific order.
+
+Now, here's the PDDL problem file that adheres to the constraints in the domain file:
+
+```lisp
+(define (problem stack_blocks)
+    (:domain blocksworld)
+    (:objects
+        green_block yellow_block pink_block red_block robot
+        - block
+        r - robot)
+    (:init
+        (clear green_block)
+        (ontable green_block)
+        (clear yellow_block)
+        (ontable yellow_block)
+        (clear pink_block)
+        (ontable pink_block)
+        (clear red_block)
+        (ontable red_block)
+        (handempty r)
+    )
+    (:goal
+        (and
+            (on pink_block red_block)
+            (on red_block yellow_block)
+            (on yellow_block green_block)
+        )
+    )
+)
+```
+
+Explanation:
+- The objects include the four blocks (green_block, yellow_block, pink_block, red_block) and a robot (r).
+- In the initial state, each block is on the table (`ontable`) and each is clear (`clear`).
+- The robot starts off empty-handed (`handempty`).
+- The goal state specifies that the blocks should be stacked in the order pink on red, red on yellow, and yellow on green (`on`).
+
+    The following is the error in the PDDL file you made last time:
+    Objects missing '- type' definition:
+  green_block yellow_block pink_block red_block robot
+
+Object does not have a type:
+  red_block
+  green_block
+  yellow_block
+  pink_block
+
+
+
+    Please first analyze where the error is, ie. is it a PDDL semantic error, or an error in the caption or scene graph?
+    After analyzing the error, generate all the output again.
+    

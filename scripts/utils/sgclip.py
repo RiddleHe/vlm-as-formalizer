@@ -37,7 +37,7 @@ import sys
 import imageio
 from typing import List
 
-from helpers import visualize_predictions
+from .helpers import visualize_predictions
 
 # Utils
 

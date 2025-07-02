@@ -24,7 +24,7 @@ from utils.helpers import (
 )
 from utils.checkers import find_plan, compare_plans
 from utils.generate import generate_pddl
-from utils.models import VLMClient
+from utils.models import VLMClientFactory
 
 from dotenv import load_dotenv
 load_dotenv('.env')
@@ -69,7 +69,7 @@ def main():
             )
 
          # Load model
-        model = VLMClient(args.model, args.device)
+        model = VLMClientFactory(args.model, args.device)
 
         # Load config
         if os.path.exists(f"{data_dir}/config.json"):
@@ -126,6 +126,8 @@ def main():
                 generate_caption=args.generate_caption,
                 generate_scene_graph=args.generate_scene_graph,
                 num_tries=args.num_tries,
+                downward_dir=args.downward_dir,
+                time_limit=args.time_limit,
             )
             
             # save PDDL objects
