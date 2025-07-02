@@ -23,7 +23,10 @@
         ; yellow -> purple -> orange -> blue
     )
     (:goal (and (on green red)
+        (clear green)
         (on orange purple)
-        (on blue yellow)))
+        (clear orange)
+        (on blue yellow)
+        (clear blue)))
 )
     

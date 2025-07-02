@@ -30,6 +30,7 @@
         (on purple red)
         (on green purple)
         (on yellow green)
-        (on orange yellow)))
+        (on orange yellow)
+        (clear orange)))
 )
     

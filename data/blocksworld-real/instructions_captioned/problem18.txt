@@ -1,0 +1,5 @@
+There are 3 stacks of blocks.
+Stack 1 has purple over red.
+Stack 2 has green.
+Stack 3 has yellow over orange over blue.
+Your goal: Create 1 stacks: green over purple over orange over yellow over blue over red

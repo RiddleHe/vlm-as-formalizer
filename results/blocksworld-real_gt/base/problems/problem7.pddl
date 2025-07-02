@@ -24,6 +24,7 @@
         (on purple yellow)
         (on green purple)
         (on orange green)
-        (on blue orange)))
+        (on blue orange)
+        (clear blue)))
 )
     

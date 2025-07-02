@@ -32,6 +32,7 @@
         (on purple green)
         (on red purple)
         (on orange red)
-        (on blue orange)))
+        (on blue orange)
+        (clear blue)))
 )
     

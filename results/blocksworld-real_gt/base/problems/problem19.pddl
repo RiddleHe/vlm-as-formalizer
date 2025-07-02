@@ -27,8 +27,10 @@
         ; purple
     )
     (:goal (and (on blue orange)
+        (clear blue)
         (on red purple)
         (on green red)
-        (on yellow green)))
+        (on yellow green)
+        (clear yellow)))
 )
     
