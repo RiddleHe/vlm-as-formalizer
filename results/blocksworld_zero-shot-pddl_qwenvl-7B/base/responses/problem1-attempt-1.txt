@@ -1,0 +1,44 @@
+To create a PDDL problem based on the given instruction and the provided domain file, we need to define the blocks as objects, set up their initial positions, and specify the goal of stacking them in the desired order.
+
+Here's the PDDL file for the specified task:
+
+```pddl
+(define (problem block_stack)
+  (:domain blocksworld)
+  (:objects
+    green_block - block
+    yellow_block - block
+    pink_block - block
+    red_block - block
+  )
+  (:init
+    (ontable green_block)
+    (ontable yellow_block)
+    (ontable pink_block)
+    (ontable red_block)
+    (clear green_block)
+    (clear yellow_block)
+    (clear pink_block)
+    (clear red_block)
+    (handempty robot)
+  )
+  (:goal
+    (and
+      (on pink_block red_block)
+      (on red_block yellow_block)
+      (on yellow_block green_block)
+    )
+  )
+)
+```
+
+### Explanation:
+- **Objects**: We define four blocks (`green_block`, `yellow_block`, `pink_block`, `red_block`) as objects.
+- **Initial State**:
+  - All blocks are initially on the table (`ontable`).
+  - Each block is clear (`clear`), meaning they can be picked up.
+  - The robot's hand is empty (`handempty`).
+- **Goal**:
+  - The goal is to have the pink block on top of the red block, which is on top of the yellow block, which is on top of the green block.
+
+This setup ensures that the blocks are stacked in the desired order according to the instruction.

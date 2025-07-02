@@ -1,0 +1,33 @@
+Okay, I will analyze the image and generate the PDDL problem based on the provided domain and instruction.
+
+**Image Analysis:**
+
+The image shows four blocks: green, yellow, pink, and red. They are arranged in a line on a table.
+
+**PDDL Problem:**
+
+```pddl
+(define (problem blocksworld-problem)
+    (:domain blocksworld)
+    (:objects
+        green yellow pink red - block
+        robot1 - robot
+    )
+    (:init
+        (ontable green)
+        (ontable yellow)
+        (ontable pink)
+        (ontable red)
+        (clear green)
+        (clear yellow)
+        (clear pink)
+        (clear red)
+        (handempty robot1)
+    )
+    (:goal (and
+        (on pink red)
+        (on red yellow)
+        (on yellow green)
+    ))
+)
+```

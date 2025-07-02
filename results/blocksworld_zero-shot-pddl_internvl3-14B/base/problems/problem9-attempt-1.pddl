@@ -1,0 +1,31 @@
+(define (problem blocksworld-stacking-tower)
+    (:domain blocksworld)
+    (:objects
+        red_block blue_block green_block yellow_block orange_block purple_block - block
+        robot1 - robot
+    )
+    (:init
+        (on red_block blue_block)
+        (on green_block red_block)
+        (on yellow_block green_block)
+        (on purple_block yellow_block)
+        (ontable orange_block)
+        (clear orange_block)
+        (handempty robot1)
+        (clear blue_block)
+        (clear red_block)
+        (clear green_block)
+        (clear yellow_block)
+        (clear orange_block)
+        (not (holding orange_block))
+        (not (handfull robot1))
+    )
+    (:goal
+        (and (on red_block blue_block)
+            (on green_block red_block)
+            (on yellow_block green_block)
+            (on purple_block yellow_block)
+            (on orange_block red_block)
+            (not (clear orange_block)))
+    )
+)

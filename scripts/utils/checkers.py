@@ -55,7 +55,7 @@ def check_pddl(pddl_file: str, domain_file: str) -> tuple[bool, str]:
                     type_name = parts[dash_index + 1]
 
             else:
-                errors["Objects missing '- type' definition"].add(line)
+                errors["Objects missing '- type' definition. Every line should be of the form 'object1 - type'"].add(line)
                 continue
 
             if type_name:
@@ -65,7 +65,7 @@ def check_pddl(pddl_file: str, domain_file: str) -> tuple[bool, str]:
 
                 for obj_name in obj_names:
                     if obj_name in objects:
-                        errors["Problem object redefined"].add(f"{obj_name} ({objects[obj_name]} -> {type_name})")
+                        errors["Problem object redefined"].add(f"{obj_name} was {objects[obj_name]} but is now {type_name}")
                     else:
                         objects[obj_name] = type_name
 
@@ -87,7 +87,7 @@ def check_pddl(pddl_file: str, domain_file: str) -> tuple[bool, str]:
         expected_args = predicates[condition_name]["args"]
 
         if len(condition_args) != len(expected_args):
-            errors["Predicate expects wrong number of arguments"].add(f"{condition_name} ({len(expected_args)} -> {len(condition_args)})")
+            errors["Predicate expects wrong number of arguments"].add(f"{condition_name} {' '.join(condition_args)}: should have {len(expected_args)} arguments")
             continue
 
         for i, arg_object_name in enumerate(condition_args):
@@ -107,12 +107,12 @@ def check_pddl(pddl_file: str, domain_file: str) -> tuple[bool, str]:
             current_type = object_type
             while True:
                 if current_type not in type_hierarchy:
-                    errors["Predicate argument has wrong type"].add(f"{condition} ({arg_object_name}: {object_type} -> {expected_type})")
+                    errors["Predicate argument has wrong type"].add(f"{condition['name']} {' '.join(condition['args'])}: {arg_object_name} is not a {expected_type}")
                     break
                 
                 parent = type_hierarchy.get(current_type)
                 if parent is None:
-                    errors["Predicate argument has wrong type"].add(f"{condition} ({arg_object_name}: {object_type} -> {expected_type})")
+                    errors["Predicate argument has wrong type"].add(f"{condition['name']} {' '.join(condition['args'])}: {arg_object_name} is not a {expected_type}")
                     break
                 
                 current_type = parent

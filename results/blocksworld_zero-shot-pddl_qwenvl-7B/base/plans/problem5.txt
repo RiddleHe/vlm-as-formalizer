@@ -1,0 +1,8 @@
+(pick-up o robot)
+(stack o y robot)
+(pick-up b robot)
+(stack b o robot)
+(pick-up r robot)
+(stack r b robot)
+(pick-up g robot)
+(stack g r robot)

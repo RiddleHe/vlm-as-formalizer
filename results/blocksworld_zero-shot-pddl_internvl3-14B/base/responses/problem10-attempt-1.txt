@@ -1,0 +1,51 @@
+Based on the instruction to create two stacks of blocks: blue over pink over red, and yellow over orange over green, we will write a PDDL problem file that specifies these objectives.
+
+### PDDL Problem File:
+
+```pddl
+(define (problem blocksworld-problem)
+    (:domain blocksworld)
+    (:objects
+        blue - block
+        pink - block
+        red - block
+        yellow - block
+        orange - block
+        green - block
+        robot - robot
+    )
+    (:init
+        (ontable blue)
+        (ontable pink)
+        (ontable red)
+        (ontable yellow)
+        (ontable orange)
+        (ontable green)
+        (clear blue)
+        (clear pink)
+        (clear red)
+        (clear yellow)
+        (clear orange)
+        (clear green)
+        (handempty robot)
+    )
+    (:goal (and 
+        (on blue pink)
+        (on pink red)
+        (on yellow orange)
+        (on orange green)
+        (clear red)  ;; Red should be clear as top of stack
+        (clear pink) ;; Pink should be clear when blue is on it
+        (clear green)  ;; Green should be clear as top of stack
+        (handempty robot)
+    ))
+)
+```
+
+### Explanation:
+- **Objects Defined**: The PDDL file starts by defining all the blocks (blue, pink, red, yellow, orange, green) and the robot.
+- **Initial State**: All blocks start on the table and are clear (nothing is above them). The robot starts with an empty hand (`handempty robot`).
+- **Goal State**: The goal specifies the two stacks as instructed. Each block in a stack is positioned on the correct block. For example, `blue` is on `pink`, which is on `red`. Similarly, `yellow` is on `orange`, which is on `green`.
+- The conditions for `clear` are important for the `handempty robot` condition in the goal and to ensure no unintended stacking occurs.
+
+This problem setup aligns with the constraints and capabilities defined in the domain file and encapsulates the required task of creating the specified stacks of blocks.

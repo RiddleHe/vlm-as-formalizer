@@ -4,18 +4,31 @@ import torch
 from dotenv import load_dotenv
 from abc import ABC, abstractmethod
 from PIL import Image
+import sys
 
 # Load environment variables
 load_dotenv()
 
 def get_gpt_client_name(client_name):
-    if "gpt" in client_name:
-        return client_name + "-2025-04-14"
-    elif "o3-mini" in client_name:
-        return client_name + "-2025-01-31"
-    elif "o4-mini" in client_name:
-        return client_name + "-2025-04-16"
-    return client_name
+    model_mapping = {
+        "gpt-4.1": "gpt-4.1-2025-04-14",
+        "gpt-4.1-mini": "gpt-4.1-mini-2025-04-14",
+        "o3-mini": "o3-mini-2025-01-31",
+        "o4-mini": "o4-mini-2025-04-16"
+    }
+    if client_name in model_mapping:
+        return model_mapping[client_name]
+    return None
+
+def get_hf_client_name(client_name):
+    model_mapping = {
+        "qwenvl-7B": "Qwen/Qwen2.5-VL-7B-Instruct",
+        "internvl3-14B": "OpenGVLab/InternVL3-14B", 
+        "gemma3-12B": "google/gemma-3-12b-it"
+    }
+    if client_name in model_mapping:
+        return model_mapping[client_name]
+    return None
 
 class VLMClient(ABC):
     """Abstract Base Class for Vision-Language Model Clients."""
@@ -94,7 +107,7 @@ class HuggingFaceClient(VLMClient):
         
         model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             self.client_name,
-            torch_dtype=torch.float16,
+            torch_dtype=torch.bfloat16,
             device_map="auto",
             attn_implementation="sdpa"
         )
@@ -140,6 +153,7 @@ class HuggingFaceClient(VLMClient):
         
         model = Gemma3ForConditionalGeneration.from_pretrained(
             self.client_name,
+            torch_dtype=torch.bfloat16,
             device_map="auto"
         ).eval()
         
@@ -210,41 +224,25 @@ class HuggingFaceClient(VLMClient):
     
     def _generate_internvl(self, prompt: str, observations: list[str]) -> str:
         """Generate response using InternVL with vlm_utils."""
-        import sys
-        import os
         sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
         from vlm_utils import load_image
         
         model = self.client["model"]
         tokenizer = self.client["tokenizer"]
         
-        # Load and preprocess images using vlm_utils
-        if len(observations) == 1:
-            # Single image case
-            pixel_values = load_image(observations[0], max_num=12).to(torch.bfloat16)
-            if torch.cuda.is_available():
-                pixel_values = pixel_values.cuda()
+        pixel_values_list = []
+        for obs in observations:
+            cur_pixel_values = load_image(obs, max_num=12).to(torch.bfloat16)
+            pixel_values_list.append(cur_pixel_values)
+        pixel_values = torch.cat(pixel_values_list, dim=0)
+        if torch.cuda.is_available():
+            pixel_values = pixel_values.cuda()
             
-            # Format prompt with image token
-            image_prompt = f"<image>\n{prompt}"
+        image_prompt = f"{prompt}\n<image>"
+        generation_config = dict(max_new_tokens=1024, do_sample=True)
+        response = model.chat(tokenizer, pixel_values, image_prompt, generation_config)
             
-            # Generate response using the model's chat method
-            generation_config = dict(max_new_tokens=1024, do_sample=True)
-            response = model.chat(tokenizer, pixel_values, image_prompt, generation_config)
-            
-            return response
-        else:
-            # Multi-image case - process first image for now
-            # TODO: Implement proper multi-image support
-            pixel_values = load_image(observations[0], max_num=12).to(torch.bfloat16)
-            if torch.cuda.is_available():
-                pixel_values = pixel_values.cuda()
-            
-            image_prompt = f"<image>\n{prompt}"
-            generation_config = dict(max_new_tokens=1024, do_sample=True)
-            response = model.chat(tokenizer, pixel_values, image_prompt, generation_config)
-            
-            return response
+        return response
     
     def _generate_gemma3(self, prompt: str, observations: list[str]) -> str:
         """Generate response using Gemma3."""
@@ -296,10 +294,15 @@ class HuggingFaceClient(VLMClient):
 
 def VLMClientFactory(client_name: str, device=None) -> VLMClient:
     """Factory function to create a VLM client."""
-    if "gpt" in client_name.lower() or "o3" in client_name.lower() or "o4" in client_name.lower():
-        return OpenAIClient(client_name)
-    elif "internvl" in client_name.lower() or "qwen" in client_name.lower() or "gemma" in client_name.lower():
-        return HuggingFaceClient(client_name, device=device)
+    if get_gpt_client_name(client_name):
+        return OpenAIClient(get_gpt_client_name(client_name), device=device)
+    elif get_hf_client_name(client_name):
+        return HuggingFaceClient(get_hf_client_name(client_name), device=device)
+    elif "/" in client_name:
+        try:
+            return HuggingFaceClient(client_name, device=device)
+        except Exception as e:
+            raise ValueError(f"Error loading HuggingFace model for name: {client_name}")
     else:
         raise ValueError(f"Unknown model name: {client_name}")
 

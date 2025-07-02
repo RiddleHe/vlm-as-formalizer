@@ -1,0 +1,2 @@
+(pick-up red robot1)
+(stack red pink robot1)

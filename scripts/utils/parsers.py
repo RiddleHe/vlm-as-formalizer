@@ -208,15 +208,36 @@ def parse_conditions(pddl_file):
                         balance -= 1
                     if balance == 0:
                         signature = block[idx + 1: jdx].strip()
-                        signature = re.sub(r"\s+", " ", signature)
                         if signature:
                             parts = signature.split()
                             name = parts[0]
-                            args = parts[1:]
-                            conditions.append({
-                                "name": name,
-                                "args": args,
-                            })
+                            if name == "not":
+                                inner_bracket_start = signature.find("(")
+                                balance = 1
+                                inner_bracket_end = -1
+                                for kdx in range(inner_bracket_start + 1, len(signature)):
+                                    if signature[kdx] == '(':
+                                        balance += 1
+                                    elif signature[kdx] == ')':
+                                        balance -= 1
+                                    if balance == 0:
+                                        inner_bracket_end = kdx
+                                        break
+                                inner_signature = signature[inner_bracket_start + 1: inner_bracket_end].strip()
+                                inner_parts = inner_signature.split()
+                                name, args = inner_parts[0], inner_parts[1:]
+                                conditions.append({
+                                    "name": name,
+                                    "args": args,
+                                    "negated": True,
+                                })
+                            else:
+                                args = parts[1:]
+                                conditions.append({
+                                    "name": name,
+                                    "args": args,
+                                    "negated": False,
+                                })
                         idx = jdx
                         break
                 if balance != 0:

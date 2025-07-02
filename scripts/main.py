@@ -116,6 +116,9 @@ def main():
                 print(f"{task_name} already exists, skipping...")
                 continue
 
+            print(f"Observations: {target['observations']}\n")
+            print(f"Instruction: {target['instruction'][:100]}\n")
+
             # generate PDDL objects, initial state, and goal specification
             res, success = generate_pddl(
                 target,
@@ -202,6 +205,7 @@ def main():
                 plan_path,
             )
 
+            plan_success = False
             if solver_success:  # check plan
                 with open(f"{plan_path}", "r") as fr:
                     plan = fr.readlines()

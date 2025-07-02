@@ -1,0 +1,46 @@
+To generate the PDDL problem file based on the given domain, instruction, and the description of the scene, we first analyze the positions and relations of blocks:
+
+1. orange is on the floor.
+2. blue is on the floor.
+3. yellow is on the floor.
+4. purple is on the floor.
+5. red is on the floor.
+
+The goal is to stack the blocks such that:
+- orange is on top of yellow.
+- yellow is on top of blue.
+- blue is on top of purple.
+- purple is on top of red.
+
+Given the domain, let's create the PDDL problem statement:
+
+```pddl
+(define (problem blocksworld_problem)
+    (:domain blocksworld)
+    (:objects
+        yellow_block blue_block orange_block purple_block red_block robot1
+    )
+    (:init
+        (clear yellow_block)
+        (clear blue_block)
+        (clear orange_block)
+        (clear purple_block)
+        (on-table yellow_block)
+        (on-table blue_block)
+        (on-table orange_block)
+        (on-table purple_block)
+        (on-table red_block)
+        (handempty robot1)
+    )
+    (:goal
+        (and 
+            (on orange_block yellow_block)
+            (on yellow_block blue_block)
+            (on blue_block purple_block)
+            (on purple_block red_block)
+        )
+    )
+)
+```
+
+This problem describes how the blocks should be stacked, given the initial state where all blocks are on the table and no blocks are being held by the robot. The goal is to stack the blocks from red at the bottom to orange at the top in the specified order.

@@ -1,0 +1,37 @@
+(define (problem blocksworld_stack)
+  (:domain blocksworld)
+  (:objects
+    red-block - block
+    blue-block - block
+    purple-block - block
+    pink-block - block
+    robot - robot
+  )
+  (:init
+    (clear red-block)
+    (clear blue-block)
+    (clear purple-block)
+    (clear pink-block)
+    (ontable red-block)
+    (ontable blue-block)
+    (ontable purple-block)
+    (ontable pink-block)
+    (handempty robot)
+  )
+  (:goal (and
+          (on pink-block purple-block)
+          (on purple-block blue-block)
+          (on blue-block red-block)
+          (handempty robot)
+          (not (holding robot))
+          (not (ontable red-block))
+          (not (ontable blue-block))
+          (not (ontable purple-block))
+          (not (ontable pink-block))
+          (not (clear red-block))
+          (not (clear blue-block))
+          (not (clear purple-block))
+          (not (clear pink-block))
+        )
+  )
+)
