@@ -1,0 +1,138 @@
+To generate the PDDL problem based on the given instruction and domain, we need to define the objects, their initial states, and the goal specifications.
+
+### Step-by-Step Breakdown:
+
+1. **Objects**: We have 5 stacks of blocks, each containing a specific color. Additionally, we have a robot arm (`robot1`), which is initially empty-handed.
+2. **Initial State**:
+   - The robot arm `robot1` is on the table and empty-handed.
+   - Each stack is composed of blocks of a specific color, stacked on top of each other.
+3. **Goal**:
+   - Create three stacks: orange over yellow, green over blue, and red over purple.
+
+### PDDL Problem Definition:
+
+```pddl
+(define (problem blocksworld)
+    (:domain blocksworld)
+    (:objects
+        robot1 - robot
+        table - table
+        orange_block1 - block
+        orange_block2 - block
+        orange_block3 - block
+        orange_block4 - block
+        orange_block5 - block
+        yellow_block1 - block
+        yellow_block2 - block
+        yellow_block3 - block
+        yellow_block4 - block
+        yellow_block5 - block
+        green_block1 - block
+        green_block2 - block
+        green_block3 - block
+        green_block4 - block
+        green_block5 - block
+        blue_block1 - block
+        blue_block2 - block
+        blue_block3 - block
+        blue_block4 - block
+        blue_block5 - block
+        purple_block1 - block
+        purple_block2 - block
+        purple_block3 - block
+        purple_block4 - block
+        purple_block5 - block
+        red_block1 - block
+        red_block2 - block
+        red_block3 - block
+        red_block4 - block
+        red_block5 - block
+    )
+    (:init
+        (clear orange_block1)
+        (clear orange_block2)
+        (clear orange_block3)
+        (clear orange_block4)
+        (clear orange_block5)
+        (clear yellow_block1)
+        (clear yellow_block2)
+        (clear yellow_block3)
+        (clear yellow_block4)
+        (clear yellow_block5)
+        (clear green_block1)
+        (clear green_block2)
+        (clear green_block3)
+        (clear green_block4)
+        (clear green_block5)
+        (clear blue_block1)
+        (clear blue_block2)
+        (clear blue_block3)
+        (clear blue_block4)
+        (clear blue_block5)
+        (clear purple_block1)
+        (clear purple_block2)
+        (clear purple_block3)
+        (clear purple_block4)
+        (clear purple_block5)
+        (clear red_block1)
+        (clear red_block2)
+        (clear red_block3)
+        (clear red_block4)
+        (clear red_block5)
+        (ontable orange_block1)
+        (ontable orange_block2)
+        (ontable orange_block3)
+        (ontable orange_block4)
+        (ontable orange_block5)
+        (ontable yellow_block1)
+        (ontable yellow_block2)
+        (ontable yellow_block3)
+        (ontable yellow_block4)
+        (ontable yellow_block5)
+        (ontable green_block1)
+        (ontable green_block2)
+        (ontable green_block3)
+        (ontable green_block4)
+        (ontable green_block5)
+        (ontable blue_block1)
+        (ontable blue_block2)
+        (ontable blue_block3)
+        (ontable blue_block4)
+        (ontable blue_block5)
+        (ontable purple_block1)
+        (ontable purple_block2)
+        (ontable purple_block3)
+        (ontable purple_block4)
+        (ontable purple_block5)
+        (ontable red_block1)
+        (ontable red_block2)
+        (ontable red_block3)
+        (ontable red_block4)
+        (ontable red_block5)
+        (handempty robot1)
+        (on table robot1)
+    )
+    (:goal
+        (and
+            (on orange_block1 yellow_block1)
+            (on orange_block2 yellow_block2)
+            (on orange_block3 yellow_block3)
+            (on green_block1 blue_block1)
+            (on green_block2 blue_block2)
+            (on green_block3 blue_block3)
+            (on red_block1 purple_block1)
+            (on red_block2 purple_block2)
+            (on red_block3 purple_block3)
+        )
+    )
+)
+```
+
+### Explanation:
+
+1. **Objects**:
+   - We define 5 blocks for each color (orange, yellow, green, blue, purple, red).
+   
+2. **Initial State**:
+   - Each block is clear (`clear` predicate).
+   - Each

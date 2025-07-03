@@ -1,0 +1,58 @@
+No consistent mapping found between ground truth and predicted plan.
+
+Problem:
+(:init
+
+        (handempty robot1)
+        (ontable purple)
+        (clear purple)
+        (ontable yellow)
+        (clear yellow)
+        (on blue yellow)
+        (clear blue)
+        (ontable red)
+        (clear red)
+        (ontable green)
+        (clear green)
+        (ontable orange)
+        (clear orange)
+    )
+    (:goal (and
+        (on blue green)
+        (on green red)
+        (on red yellow)
+        (on yellow orange)
+        (on orange purple)
+    ))
+)
+
+Ground truth problem:
+(:init
+
+        (ontable purple)
+        (clear purple)
+        (ontable blue)
+        (on yellow blue)
+        (clear yellow)
+        (ontable red)
+        (clear red)
+        (ontable green)
+        (clear green)
+        (ontable orange)
+        (clear orange)
+        (handempty robot)
+        ; purple
+        ; blue -> yellow
+        ; red
+        ; green
+        ; orange
+    )
+    (:goal (and (on orange purple)
+        (on yellow orange)
+        (on red yellow)
+        (on green red)
+        (on blue green)
+        (clear blue)))
+)
+    
+

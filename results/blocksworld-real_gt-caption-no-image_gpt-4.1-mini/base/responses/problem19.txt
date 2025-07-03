@@ -1,0 +1,113 @@
+Let's analyze the task carefully:
+
+**Initial state:**
+
+- One robot (robot1), empty-handed.
+
+- Four stacks:
+
+  1. Stack 1: yellow  
+  2. Stack 2: red  
+  3. Stack 3: orange over blue over green (top to bottom: orange on blue, blue on green, green on table)  
+  4. Stack 4: purple  
+
+So the initial "on" relationships:
+
+- on orange blue  
+- on blue green  
+- ontable green  
+- ontable yellow  
+- ontable red  
+- ontable purple  
+
+All blocks except the bottom ones are not ontable.
+
+Clear blocks initially are the top ones:
+
+- orange (top of stack 3)  
+- yellow (top of stack 1)  
+- red (top of stack 2)  
+- purple (top of stack 4)  
+
+**Goal:**
+
+Two stacks:
+
+- blue over orange  
+- yellow over green over red over purple  
+
+Translating stacks bottom to top:
+
+Stack A: blue ontable, orange on blue (orange top)  
+Stack B: yellow on green, green on red, red on purple, purple ontable (yellow top)  
+
+Note: Because "ontable" can only be for bottom blocks as per domain, so blue and purple are on the table in goal.
+
+Goal predicates will be the on and ontable relations as above.
+
+---
+
+**Objects**:
+
+Blocks: yellow, red, orange, blue, green, purple  
+Robot: robot1
+
+---
+
+**Initial state predicates:**
+
+- ontables: green, yellow, red, purple  
+- on orange blue  
+- on blue green  
+- clear orange  
+- clear yellow  
+- clear red  
+- clear purple  
+- handempty robot1  
+
+---
+
+**Goal predicates:**
+
+- on orange blue  
+- on blue (ontable)  
+- yellow on green  
+- green on red  
+- red on purple  
+- purple (ontable)  
+
+---
+
+Here is the full PDDL problem:
+
+```lisp
+(define (problem blocks_problem)
+  (:domain blocksworld)
+  (:objects
+    yellow red orange blue green purple - block
+    robot1 - robot
+  )
+  (:init
+    (ontable green)
+    (ontable yellow)
+    (ontable red)
+    (ontable purple)
+    (on orange blue)
+    (on blue green)
+    (clear orange)
+    (clear yellow)
+    (clear red)
+    (clear purple)
+    (handempty robot1)
+  )
+  (:goal (and
+    (on orange blue)
+    (ontable blue)
+    (on yellow green)
+    (on green red)
+    (on red purple)
+    (ontable purple)
+  ))
+)
+```
+This problem reflects the initial arrangement and targets the desired stacks in the goal.

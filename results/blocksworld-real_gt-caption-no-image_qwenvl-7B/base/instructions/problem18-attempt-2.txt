@@ -1,0 +1,178 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot)
+        (handfull ?x - robot)
+        (holding ?x - block)
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The caption of the image has been provided along with the instruction below.
+        Please first analyze the caption and then generate the PDDL problem.
+        
+    There is one robot arm robot1 on the table. It is empty-handed.
+    Instruction: There are 3 stacks of blocks.
+Stack 1 has purple over red.
+Stack 2 has green.
+Stack 3 has yellow over orange over blue.
+Your goal: Create 1 stacks: green over purple over orange over yellow over blue over red
+    
+    **********
+
+    The following is the response you generated last time:
+    To solve the given problem using the `blocksworld` domain, we need to define the initial state, the goal state, and the actions that can be performed by the robot arm.
+
+### Step-by-Step Solution:
+
+1. **Define Objects**: Identify the blocks and their colors.
+2. **Initial State**: Describe the initial arrangement of the blocks.
+3. **Goal State**: Define the desired arrangement of the blocks.
+4. **Actions**: Use the available actions (`pick-up`, `put-down`, `stack`, `unstack`) to move the blocks from one place to another.
+
+### PDDL Problem Definition:
+
+```pddl
+(define (problem blocksworld)
+    (:domain blocksworld)
+    (:objects
+        robot1 - robot
+        table - table
+        purple - block
+        red - block
+        green - block
+        yellow - block
+        orange - block
+        blue - block
+    )
+    (:init
+        (clear purple)
+        (clear red)
+        (clear green)
+        (clear yellow)
+        (clear orange)
+        (clear blue)
+        (ontable purple)
+        (ontable red)
+        (ontable green)
+        (ontable yellow)
+        (ontable orange)
+        (ontable blue)
+        (handempty robot1)
+    )
+    (:goal
+        (and
+            (on blue red)
+            (on orange blue)
+            (on yellow orange)
+            (on green yellow)
+            (on purple green)
+            (clear blue)
+            (clear orange)
+            (clear yellow)
+            (clear green)
+            (clear purple)
+            (handempty robot1)
+        )
+    )
+)
+```
+
+### Explanation:
+
+1. **Objects**:
+   - `robot1`: The robot arm.
+   - `table`: The surface where the blocks are initially placed.
+   - `purple`, `red`, `green`, `yellow`, `orange`, `blue`: The blocks with their respective colors.
+
+2. **Initial State**:
+   - All blocks (`purple`, `red`, `green`, `yellow`, `orange`, `blue`) are on the table.
+   - The robot arm (`robot1`) is empty-handed (`handempty`).
+
+3. **Goal State**:
+   - The blocks are arranged in the desired order: `green` on top of `purple`, which is on top of `orange`, which is on top of `yellow`, which is on top of `blue`, which is on top of `red`.
+   - Each block except the top one is clear (`clear`).
+   - The robot arm is empty-handed (`handempty`).
+
+This PDDL problem defines the initial state, the goal state, and adheres to the constraints of the `blocksworld` domain. The robot arm can perform the necessary actions to achieve the goal by picking up, putting down, stacking, and unstacking blocks as required.
+
+    The following is the error in the PDDL file you made last time:
+    Problem object type not defined in domain:
+  table
+
+
+
+    Please first analyze where the error is, ie. is it a PDDL semantic error, or an error in the caption or scene graph?
+    After analyzing the error, generate all the output again.
+    

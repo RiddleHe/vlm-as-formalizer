@@ -1,0 +1,49 @@
+```lisp
+(define (problem rearrange_blocks)
+    (:domain blocksworld)
+    (:objects
+        robot1 - robot
+        orange red yellow purple green blue - block
+    )
+    (:init
+        ; initial configuration: orange over red
+        (on orange red)
+        ; red over yellow
+        (on red yellow)
+        ; yellow over purple
+        (on yellow purple)
+        ; purple over green
+        (on purple green)
+        ; green over blue
+        (on green blue)
+        ; blue on table
+        (ontable blue)
+
+        ; clear top block
+        (clear orange)
+        ; blocks with something on top are not clear, only blue is covered by green, so clear blocks except those covered:
+        ; red, yellow, purple, green are covered, only orange and blue are clear, but orange is on red, so orange is top and clear
+        ; blue is at bottom but green is on top, so blue not clear
+        (clear orange)
+
+        ; actually,
+        ; blue is covered by green => not clear
+        ; green is covered by purple => not clear
+        ; purple is covered by yellow => not clear
+        ; yellow is covered by red => not clear
+        ; red is covered by orange => not clear
+        ; orange is top => clear
+
+        ; so only orange is clear
+
+        (handempty robot1)
+    )
+    (:goal (and
+        (on orange purple)
+        (on purple green)
+        (on green blue)
+        (on blue yellow)
+        (on yellow red)
+    ))
+)
+```

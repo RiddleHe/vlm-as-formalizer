@@ -1,0 +1,8 @@
+(pick-up green robot1)
+(stack green purple robot1)
+(pick-up yellow robot1)
+(stack yellow blue robot1)
+(pick-up orange robot1)
+(stack orange green robot1)
+(pick-up red robot1)
+(stack red orange robot1)

@@ -1,0 +1,6 @@
+(pick-up p robot1)
+(stack p b robot1)
+(pick-up r robot1)
+(stack r g robot1)
+(pick-up y robot1)
+(stack y o robot1)

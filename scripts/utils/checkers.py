@@ -201,7 +201,7 @@ def check_error(problem_file, domain_file, downward_dir, time_limit):
             elif "Driver aborting after search" in msg:
                 msg = "Search stopped early due to time limit"
             else:
-                msg = "..." + msg[-300:]
+                msg = "..." + msg[-500:]
 
     return ret, msg
 
