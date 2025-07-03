@@ -16,6 +16,7 @@ def generate_pddl(
         generate_scene_graph_first=False,
         generate_caption=False,
         generate_scene_graph=False,
+        enable_caption=False,
         num_tries=1,
         downward_dir='../downward',
         time_limit=30,
@@ -41,6 +42,7 @@ def generate_pddl(
                 retry_idx,
                 generate_caption=generate_caption,
                 generate_scene_graph=generate_scene_graph,
+                enable_caption=enable_caption,
             )
         elif generate_scene_graph_first:
             problem_file, response, problem_prompt = generate_scene_graph_then_pddl(
@@ -77,23 +79,29 @@ def generate_pddl_end_to_end(
     retry_idx,
     generate_caption=False,
     generate_scene_graph=False,
+    enable_caption=False,
 ):
     if retry_idx > 0:
         problem_prompt = build_refine_problem_prompt(
             target, 
             config, 
             generate_caption=generate_caption, 
-            generate_scene_graph=generate_scene_graph
+            generate_scene_graph=generate_scene_graph,
+            enable_caption=enable_caption,
         )
     else:
         problem_prompt = build_problem_prompt(
             target, 
             config, 
             generate_caption=generate_caption, 
-            generate_scene_graph=generate_scene_graph
+            generate_scene_graph=generate_scene_graph,
+            enable_caption=enable_caption,
         )
     
-    response = model.generate(problem_prompt, observations)
+    if enable_caption:
+        response = model.generate(problem_prompt) # No observations
+    else:
+        response = model.generate(problem_prompt, observations)
 
     # Match the PDDL file in the response by header and footer
     problem_file = parse_pddl(response)

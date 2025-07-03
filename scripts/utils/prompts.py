@@ -2,7 +2,7 @@
 
 from .parsers import parse_types, parse_predicates
 
-def build_problem_prompt(target, config, add_examples=True, generate_caption=False, generate_scene_graph=False):
+def build_problem_prompt(target, config, add_examples=True, generate_caption=False, generate_scene_graph=False, enable_caption=False):
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
@@ -51,6 +51,11 @@ def build_problem_prompt(target, config, add_examples=True, generate_caption=Fal
         """
     elif generate_scene_graph:
         prompt += build_scene_graph_template(target["domain"])
+    elif enable_caption:
+        prompt += f"""
+        The caption of the image has been provided along with the instruction below.
+        Please first analyze the caption and then generate the PDDL problem.
+        """
     else:
         prompt += f"""
         The image of the scene has been provided.
@@ -95,8 +100,8 @@ def build_scene_graph_template(domain_file):
 
     return prompt
 
-def build_refine_problem_prompt(target, config, generate_caption=False, generate_scene_graph=False):
-    prompt = build_problem_prompt(target, config, add_examples=False, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph)
+def build_refine_problem_prompt(target, config, generate_caption=False, generate_scene_graph=False, enable_caption=False):
+    prompt = build_problem_prompt(target, config, add_examples=False, generate_caption=generate_caption, generate_scene_graph=generate_scene_graph, enable_caption=enable_caption)
 
     prompt += f"""
     **********

@@ -66,14 +66,15 @@ class OpenAIClient(VLMClient):
         from openai import OpenAI
         return OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    def generate(self, prompt: str, observations: list[str]) -> str:
-        base64_images = self._encode_images(observations)
+    def generate(self, prompt: str, observations: list[str] = []) -> str:
         content = []
-        for base64_image in base64_images:
-            content.append({
-                "type": "image_url",
-                "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
-            })
+        if observations:
+            base64_images = self._encode_images(observations)
+            for base64_image in base64_images:
+                content.append({
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
+                })
         content.append({"type": "text", "text": prompt})
 
         response = self.client.chat.completions.create(
@@ -162,11 +163,8 @@ class HuggingFaceClient(VLMClient):
         
         return {"model": model, "processor": processor, "type": "gemma3"}
 
-    def generate(self, prompt: str, observations: list[str]) -> str:
+    def generate(self, prompt: str, observations: list[str] = []) -> str:
         """Generate response based on model type."""
-        if not observations:
-            raise ValueError("HuggingFaceClient requires at least one image.")
-        
         model_type = self.client["type"]
         
         if model_type == "qwen2.5vl":

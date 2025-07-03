@@ -83,17 +83,21 @@ def main():
         for i, task_name in enumerate(task_names):
             task_idx = task_name.split("problem")[1]
             # Load the instruction
-            with open(f"{data_dir}/instructions/{task_name}.txt", "r") as f:
-                instruction = f.read()
-            # Load the observations
             observations = []
-            for img_name in os.listdir(f"{data_dir}/observations"):
-                if args.clean_image:
-                    if img_name == f"{task_name}-clean.jpg":
-                        observations.append(f"{data_dir}/observations/{img_name}")
-                else:
-                    if img_name.startswith(f"{task_name}.jpg") or (img_name.startswith(f"{task_name}-") and "clean" not in img_name):
-                        observations.append(f"{data_dir}/observations/{img_name}")
+            if args.enable_caption:
+                with open(f"{data_dir}/instructions_captioned/{task_name}.txt", "r") as f:
+                    instruction = f.read()
+            else:
+                with open(f"{data_dir}/instructions/{task_name}.txt", "r") as f:
+                    instruction = f.read()
+                # Load the observations
+                for img_name in os.listdir(f"{data_dir}/observations"):
+                    if args.clean_image:
+                        if img_name == f"{task_name}-clean.jpg":
+                            observations.append(f"{data_dir}/observations/{img_name}")
+                    else:
+                        if img_name.startswith(f"{task_name}.jpg") or (img_name.startswith(f"{task_name}-") and "clean" not in img_name):
+                            observations.append(f"{data_dir}/observations/{img_name}")
 
             targets += [{
                 "problem": None,    
@@ -128,6 +132,7 @@ def main():
                 generate_scene_graph_first=args.generate_scene_graph_first,
                 generate_caption=args.generate_caption,
                 generate_scene_graph=args.generate_scene_graph,
+                enable_caption=args.enable_caption,
                 num_tries=args.num_tries,
                 downward_dir=args.downward_dir,
                 time_limit=args.time_limit,

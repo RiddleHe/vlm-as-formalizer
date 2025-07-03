@@ -42,6 +42,7 @@ def parse_args():
     parser.add_argument("--generate_scene_graph", action="store_true", help="generate scene graph for observation")
 
     # Data config
+    parser.add_argument("--enable_caption", action="store_true", default=False, help="Enable captioning for the observation")
     parser.add_argument("--clean_image", action="store_true", default=False, help="Present a clean image to the model")
 
     # Runtime config
