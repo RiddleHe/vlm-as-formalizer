@@ -37,7 +37,7 @@ import sys
 import imageio
 from typing import List
 
-from .helpers import visualize_predictions
+from helpers import visualize_predictions
 
 # Utils
 
@@ -372,7 +372,7 @@ def get_binary_relations(
 def setup_and_load_models(
         base_dir, 
         device="cuda", 
-        dino_path="/local-ssd/custom_models/Grounded-SAM-2/groundingdino", 
+        dino_path="/local-ssd/custom_models/GroundingDINO/", 
         sam_path="sam2", 
         inference_path="LASER/src/visualization",
         pred_model_path="/local-ssd/custom_models/sgclip",
