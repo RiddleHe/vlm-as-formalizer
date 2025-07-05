@@ -54,7 +54,7 @@ def main():
         domain_file = f.read()
 
     # Generate / refine PDDL problems
-    if args.generate_end_to_end or args.generate_scene_graph_first or args.generate_plan:
+    if args.generate_end_to_end or args.generate_multi_step or args.generate_plan:
         # Create folders
         folders = ["responses", "instructions"]
         if args.generate_plan:
@@ -124,25 +124,22 @@ def main():
             print(f"Instruction: {target['instruction'][:100]}\n")
 
             # generate PDDL objects, initial state, and goal specification
-            res, success = generate_pddl(
-                target,
-                config,
-                model=model,
-                generate_end_to_end=args.generate_end_to_end,
-                generate_scene_graph_first=args.generate_scene_graph_first,
-                generate_caption=args.generate_caption,
-                generate_scene_graph=args.generate_scene_graph,
-                enable_caption=args.enable_caption,
-                num_tries=args.num_tries,
-                downward_dir=args.downward_dir,
-                time_limit=args.time_limit,
-            )
-            
+            if args.generate_plan:
+                pass
+
+            else:
+                res, success = generate_pddl(
+                    target,
+                    config,
+                    model=model,
+                    args=args,
+                )
+                
             # save PDDL objects
             save_step = args.gen_step
 
             try:
-                if args.generate_end_to_end or args.generate_scene_graph_first:
+                if args.generate_end_to_end or args.generate_multi_step:
                     dir_pairs = [
                         ("problems", "file", "pddl"),
                         ("instructions", "prompt", "txt"),

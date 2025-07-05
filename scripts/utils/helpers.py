@@ -29,20 +29,24 @@ def parse_args():
     parser.add_argument("--model", type=str, default=None, help="model name")
     parser.add_argument("--device", type=str, default="cuda:0", help="device")
 
-    # Main generation stages
-    parser.add_argument("--generate_scene_graph_first", action="store_true", help="generate scene graph first")
-    parser.add_argument("--generate_end_to_end", action="store_true", help="generate PDDL end-to-end")
     parser.add_argument("--find_plan", action="store_true", default=True, help="refine generated problems by corrective reprompting")
 
-    # End-goal generation choices
+    # Main generation choices
+    parser.add_argument("--generate_end_to_end", action="store_true", help="generate PDDL end-to-end")
+    parser.add_argument("--generate_multi_step", action="store_true", help="generate scene graph first")
+
+    # Planning baseline
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
 
-    # Intermediate generation choices
+    # If choose generate_end_to_end
     parser.add_argument("--generate_caption", action="store_true", help="generate caption for observation")
     parser.add_argument("--generate_scene_graph", action="store_true", help="generate scene graph for observation")
-
-    # Data config
     parser.add_argument("--enable_caption", action="store_true", default=False, help="Enable captioning for the observation")
+
+    # If choose generate_multi_step
+    parser.add_argument("--generate_from_vlm", action="store_true", help="generate from VLM")
+    parser.add_argument("--generate_from_cv_model", action="store_true", help="generate from CV model")
+
     parser.add_argument("--clean_image", action="store_true", default=False, help="Present a clean image to the model")
 
     # Runtime config

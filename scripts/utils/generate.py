@@ -12,14 +12,7 @@ def generate_pddl(
         target, 
         config, 
         model, 
-        generate_end_to_end=True,
-        generate_scene_graph_first=False,
-        generate_caption=False,
-        generate_scene_graph=False,
-        enable_caption=False,
-        num_tries=1,
-        downward_dir='../downward',
-        time_limit=30,
+        args,
     ):
     observations = target["observations"]
     success = False
@@ -32,28 +25,30 @@ def generate_pddl(
     }
     msg = None
 
-    for retry_idx in range(num_tries):
-        if generate_end_to_end:
+    for retry_idx in range(args.num_tries):
+        if args.generate_end_to_end:
             problem_file, response, problem_prompt = generate_pddl_end_to_end(
                 target,
                 config,
                 model,
                 observations,
                 retry_idx,
-                generate_caption=generate_caption,
-                generate_scene_graph=generate_scene_graph,
-                enable_caption=enable_caption,
+                generate_caption=args.generate_caption,
+                generate_scene_graph=args.generate_scene_graph,
+                enable_caption=args.enable_caption,
             )
-        elif generate_scene_graph_first:
-            problem_file, response, problem_prompt = generate_scene_graph_then_pddl(
+        elif args.generate_multi_step:
+            problem_file, response, problem_prompt = generate_multi_step(
                 target,
                 config,
                 model,
                 observations,
                 retry_idx,
+                generate_from_vlm=args.generate_from_vlm,
+                generate_from_cv_model=args.generate_from_cv_model,
             )
 
-        success, msg = check_error(problem_file, target["domain"], downward_dir, time_limit)
+        success, msg = check_error(problem_file, target["domain"], args.downward_dir, args.time_limit)
 
         if not success:
             print(f"Attempt {retry_idx+1} failed: \n{msg}")
@@ -111,38 +106,18 @@ def generate_pddl_end_to_end(
     return problem_file, response, problem_prompt
 
 # TODO: load models in main
-def generate_scene_graph_then_pddl(
+def generate_multi_step(
     target,
     config,
     model,
     observations,
     retry_idx,
+    generate_from_vlm=True,
+    generate_from_cv_model=False,
 ):
     if retry_idx > 0:
         pass
     
     else:
-        prompt = build_object_prompt(target, config)
-
-    response = model.generate(prompt, observations)
-
-    objects = parse_objects(response, parse_types(target["domain"]))  # {object_type: [object_name, ...]}
-
-    predicates = parse_predicates(target["domain"])
-    unary_predicates = [f"{predicate}" for predicate, predicate_dict in predicates.items() if len(predicate_dict['args']) == 1]
-    binary_predicates = [f"{predicate}" for predicate, predicate_dict in predicates.items() if len(predicate_dict['args']) == 2]
-
-    batches = []  # []    
-
-    models = {}
-
-    relations = predict_all_relations(
-        observations,
-        objects,
-        unary_predicates,
-        binary_predicates,
-        models,
-    )
-
-    return "", "", ""
+        pass
 
