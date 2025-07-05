@@ -35,7 +35,8 @@ from collections import defaultdict
 import os
 import sys
 import imageio
-from typing import List
+from typing import List, Literal
+
 
 from helpers import visualize_predictions
 
@@ -163,7 +164,8 @@ def get_batched_objects(
     grounding_model,
     sam_video_predictor,
     mask_generator,
-    generate_masks_grounding_dino,
+    generate_masks,
+    detector_type: Literal["dino", "yoloe", "both"] = "both",
     device = "cuda:0",
 ):
     video_tensor = torch.from_numpy(np.stack(images)).to(device)
@@ -175,20 +177,42 @@ def get_batched_objects(
         vidwrite(new_video_path, images, framerate=1, vcodec="libx264")
         
         with tempfile.TemporaryDirectory() as tmp_out_dir:
-            video_segments, oid_class_pred, _ = generate_masks_grounding_dino(
-                grounding_model=grounding_model,
-                box_threshold=0.20,
-                text_threshold=0.15,
-                predictor=sam_video_predictor,
-                mask_generator=mask_generator,
-                video_tensor=video_tensor,
-                video_path=new_video_path,
-                video_id="tmp_video",
-                out_dir=tmp_out_dir,
-                classes_ls=classes_ls,
-                target_fps=None,
-                visualize=False,
-            )
+            if detector_type in ["dino"]:
+                video_segments, oid_class_pred, _ = generate_masks(
+                    grounding_model=grounding_model,
+                    box_threshold=0.20,
+                    text_threshold=0.15,
+                    predictor=sam_video_predictor,
+                    mask_generator=mask_generator,
+                    video_tensor=video_tensor,
+                    video_path=new_video_path,
+                    video_id="tmp_video",
+                    out_dir=tmp_out_dir,
+                    classes_ls=classes_ls,
+                    target_fps=None,
+                    visualize=False,
+                )
+            elif detector_type in ["yoloe"]:
+                video_segments, oid_class_pred, success = generate_masks(
+                    yoloe_model=grounding_model,
+                    conf_threshold=0.3,  # Confidence threshold (equivalent to box_threshold)
+                    predictor=sam_video_predictor,
+                    mask_generator=mask_generator,
+                    video_tensor=video_tensor,
+                    video_path=new_video_path,
+                    video_id="tmp_video",
+                    out_dir=tmp_out_dir,
+                    classes_ls=classes_ls,
+                    target_fps=None,
+                    visualize=False,
+                    max_prop_time=3,
+                    iou_thr=0.6,
+                    score_thr=0.7,
+                    inner_thr=0.5,
+                    frames=None,
+                    min_mask_size=30,
+                    device="cuda:0"
+                )
             # oid_class_pred = {
             #    1: "red cube",
             #    2: "red cube",
@@ -372,11 +396,14 @@ def get_binary_relations(
 def setup_and_load_models(
         base_dir, 
         device="cuda", 
+        detector_type: Literal["dino", "yoloe", "both"] = "both",  # NEW PARAMETER
         dino_path="/local-ssd/custom_models/GroundingDINO/", 
-        sam_path="sam2", 
-        inference_path="LASER/src/visualization",
+        sam_path="/home/mh3897/pddl/villain/sam2", 
+        inference_path="/home/mh3897/pddl/villain/LASER/src/visualization",
         pred_model_path="/local-ssd/custom_models/sgclip",
         pred_model_name="ensemble-2025-02-10-14-57-22.0.checkpoint",
+        yoloe_path="/local-ssd/yoloe/pretrain",
+        yoloe_model_name="yoloe-v8l-seg.pt",
     ):
     sys.path.append(dino_path)
     sys.path.append(os.path.join(base_dir, sam_path))
@@ -387,12 +414,27 @@ def setup_and_load_models(
     from sam2.build_sam import build_sam2, build_sam2_video_predictor
     from sam2.automatic_mask_generator import SAM2AutomaticMaskGenerator
     from llava_clip_model_v3 import PredicateModel as PredicateModel_v3
+    from ultralytics import YOLOE
 
-    # DINO
-    gd_config = os.path.join(base_dir, dino_path, "groundingdino/config/GroundingDINO_SwinT_OGC.py")
-    gd_checkpoint = os.path.join(base_dir, dino_path, "weights/groundingdino_swint_ogc.pth")
-    grounding_model = gd_Model(model_config_path=gd_config, model_checkpoint_path=gd_checkpoint, device=device)
-    print("GroundingDINO model loaded successfully.")
+    # Load GroundingDINO if requested
+    if detector_type in ["dino"]:
+        sys.path.append(dino_path)
+        from groundingdino.util.inference import Model as gd_Model
+        
+        gd_config = os.path.join(base_dir, dino_path, "groundingdino/config/GroundingDINO_SwinT_OGC.py")
+        gd_checkpoint = os.path.join(base_dir, dino_path, "weights/groundingdino_swint_ogc.pth")
+        grounding_model = gd_Model(model_config_path=gd_config, model_checkpoint_path=gd_checkpoint, device=device)
+        print("GroundingDINO model loaded successfully.")
+    
+    # Load YOLOE if requested
+    if detector_type in ["yoloe"]:
+        from ultralytics import YOLOE
+        yoloe_model_path = os.path.join(yoloe_path, yoloe_model_name)
+        yoloe_model = YOLOE(yoloe_model_path)
+        yoloe_model.to(device)
+        grounding_model = yoloe_model
+        print("YOLOE model loaded successfully.")
+
 
     # SAM2
     sam_checkpoint = os.path.join(base_dir, sam_path, "checkpoints/sam2.1_hiera_base_plus.pt")
@@ -401,7 +443,7 @@ def setup_and_load_models(
     sam_video_predictor = build_sam2_video_predictor(sam_config, sam_checkpoint, device=device)
     mask_generator = SAM2AutomaticMaskGenerator(model=sam2_model, use_m2m=True)
     print("SAM2 model loaded successfully.")
-    
+
     # Predicate Model
     pred_model_dir = os.path.join(base_dir, pred_model_path)
     model_path = os.path.join(pred_model_dir, pred_model_name)
@@ -427,19 +469,33 @@ def predict_all_relations(
     unary_relations: List[str],
     binary_relations: List[str],
     models: dict,
+    detector_type: Literal["dino", "yoloe", "both"] = "both",
 ):
-    from mask_generation_grounding_dino import generate_masks_grounding_dino
+    from mask_generation_grounding_dino import generate_masks_grounding_dino, generate_masks_yoloe
 
     classes_ls = get_classes_ls(object_classes)
-    batch = get_batched_objects(
-        images=images,
-        classes_ls=classes_ls,
-        grounding_model=models["grounding_model"],
-        sam_video_predictor=models["sam_video_predictor"],
-        mask_generator=models["mask_generator"],
-        generate_masks_grounding_dino=generate_masks_grounding_dino,
-        device=models["device"]
-    )
+    if detector_type in ["dino"]:
+        batch = get_batched_objects(
+            images=images,
+            classes_ls=classes_ls,
+            grounding_model=models["grounding_model"],
+            sam_video_predictor=models["sam_video_predictor"],
+            mask_generator=models["mask_generator"],
+            generate_masks=generate_masks_grounding_dino,
+            detector_type=detector_type,
+            device=models["device"]
+        )
+    elif detector_type in ["yoloe"]:
+        batch = get_batched_objects(
+            images=images,
+            classes_ls=classes_ls,
+            grounding_model=models["grounding_model"],
+            sam_video_predictor=models["sam_video_predictor"],
+            mask_generator=models["mask_generator"],
+            generate_masks=generate_masks_yoloe,
+            detector_type=detector_type,
+            device=models["device"]
+        )
 
     if not batch:
         print("No objects were detected, cannot predict relations.")
@@ -504,7 +560,7 @@ if __name__ == "__main__":
     BASE_DIR = os.path.join(os.path.dirname(__file__), "..", "..")
     DEVICE = "cuda"
 
-    models = setup_and_load_models(BASE_DIR, DEVICE)
+    models = setup_and_load_models(BASE_DIR, DEVICE, detector_type="yoloe")
 
     image_paths = [os.path.join(BASE_DIR, "data/cooking/observations", f"problem4.jpg")]
     # image_paths = [os.path.join(BASE_DIR, "data/blocksworld-real/observations", f"problem30-3.jpg")]
@@ -521,4 +577,5 @@ if __name__ == "__main__":
         unary_relations=unary_relations,
         binary_relations=binary_relations,
         models=models,
+        detector_type="yoloe",
     )
