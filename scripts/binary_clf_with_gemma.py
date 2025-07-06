@@ -40,16 +40,22 @@ model.get_image_features = cached_get_img_feat
 
 image = Image.open("/home/mh3897/pddl/villain/data/blocksworld/observations/problem4.jpg")
 prompts = [
-    "In the image, we have red, purple, yellow, blue, and orange block. Look at each's position, and answer: is purple block on top of red block? (Answer only yes/no)", # yes
-    "In the image, we have red, purple, yellow, blue, and orange block. Look at each's position, and answer: is red block on top of purple block? (Answer only yes/no)", # no
-    "In the image, we have red, purple, yellow, blue, and orange block. Look at each's position, and answer: is yellow block next to blue block? (Answer only yes/no)", # yes
-    "In the image, we have red, purple, yellow, blue, and orange block. Look at each's position, and answer: is orange block on top of blue block? (Answer only yes/no)", # no
+    "Is purple block on top of red block? (Answer only yes/no)", # yes
+    "Is red block on top of purple block? (Answer only yes/no)", # no
+    "Is yellow block to the right of blue block? (Answer only yes/no)", # yes
+    "Is yellow block to the left of blue block? (Answer only yes/no)", # no
+    "Is there an orange block? (Answer only yes/no)", # yes
+    "Is orange block on top of blue block? (Answer only yes/no)", # no
 ]
-
-# TODO: 1. single step decoding for true/false, 2. patch for img_embeds, 3. prefix common prompt, 4. cot
+template = (
+    "<bos><start_of_turn>user\n"
+    "<start_of_image> {question}<end_of_turn>\n"
+    "<start_of_turn>model\n"
+    "Yes. Wait, let me double-check. Looking again,"
+)
 
 # Prepare prompts and image
-full_prompts = []
+chat_prompts = []
 for prompt in prompts:
     messages = [
         {
@@ -58,15 +64,31 @@ for prompt in prompts:
                 {"type": "image", "image": image},
                 {"type": "text", "text": prompt}
             ]
+        },
+        {
+            "role": "assistant",
+            "content": [
+                {"type": "text", "text": "Based on the image, the answer is: Yes."}
+            ]
+        },
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Check again."}
+            ]
         }
     ]
-    full_prompt = processor.apply_chat_template(
+    chat_prompt = processor.apply_chat_template(
         messages,
         return_tensors="pt",
         padding=True,
         add_generation_prompt=True,
     )
-    full_prompts.append(full_prompt)
+    chat_prompts.append(chat_prompt)
+
+template = "{chat_prompt} You are right to ask me to double-check! My apologies. Looking again, the answer is: "
+full_prompts = [template.format(chat_prompt=chat_prompt) for chat_prompt in chat_prompts]
+print(full_prompts[0])
 
 batch = processor(
     images=[[image] for _ in prompts],  # preprocess image and text jointly to trigger <image_soft_tokens>
@@ -84,10 +106,10 @@ assert false_tok != processor.tokenizer.unk_token_id
 candidate = torch.tensor([true_tok, false_tok], device=model.device)
 
 start_time = time.time()
-# Precompute image embeddings
+temperature = 0.5
 with torch.no_grad():
     logits = model(**batch).logits[:, -1]
-probs = F.softmax(logits[:, candidate], dim=-1)
+probs = F.softmax(logits[:, candidate] / temperature, dim=-1)
 
 torch.cuda.synchronize()
 end_time = time.time()
