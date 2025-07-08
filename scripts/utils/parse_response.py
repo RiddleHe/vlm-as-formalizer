@@ -247,14 +247,17 @@ def parse_conditions(pddl_file):
 
     return conditions
 
-def parse_objects(response, object_types):
+def parse_objects(response, object_types = []):
     objects = defaultdict(list)
     for line in response.split("\n"):
-        if ":" in line:
-            object_type, object_names = line.split(":")
-            for object_name in object_names.split(","):
-                object_name = object_name.split("(")[0].strip()
-                objects[object_type].append(object_name)
+        if "-" in line:
+            name_and_type = line.split("-")
+            if len(name_and_type) == 2:
+                name, object_type = name_and_type
+                name, object_type = name.strip(), object_type.strip()
+                if object_types and object_type not in object_types:
+                    continue
+                objects[object_type].append(name)
 
     return objects
 
