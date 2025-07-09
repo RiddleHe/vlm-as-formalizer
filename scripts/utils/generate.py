@@ -16,6 +16,7 @@ from .parse_response import (
     parse_block,
     assemble_object_states,
     assemble_grounded_predicates,
+    assemble_pddl,
 )
 from .checkers import check_error
 from .models import predict_relation_probs
@@ -118,7 +119,6 @@ def generate_pddl_end_to_end(
 
     return problem_file, response, problem_prompt
 
-# TODO: load models in main
 def generate_multi_step(
     target,
     config,
@@ -129,19 +129,19 @@ def generate_multi_step(
     generate_from_cv_model=False,
 ):
     observation_prompt = build_observation_prompt(target, config)
-    print(observation_prompt)
-    object_response = model.generate(observation_prompt, observations)
+    # print(observation_prompt)
+    object_response, past_key_values = model.generate(observation_prompt, observations, return_cache=True)
 
-    print("--------------------------------")
-    print(object_response)
+    # print("--------------------------------")
+    # print(object_response)
 
     object_types = parse_types(target["domain"])
     objects = parse_objects(object_response, object_types)
 
     object_states = assemble_object_states(objects)
 
-    print("--------------------------------")
-    print(objects)
+    # print("--------------------------------")
+    # print(objects)
 
     predicates = parse_predicates(target["domain"])
 
@@ -183,19 +183,19 @@ def generate_multi_step(
         else:
             raise NotImplementedError("Only unary and binary relations are supported")
 
-    print("--------------------------------")
-    print(all_grounded_predicates)
+    # print("--------------------------------")
+    # print(all_grounded_predicates)
 
-    print("--------------------------------")
-    print(all_predicate_strs)
+    # print("--------------------------------")
+    # print(all_predicate_strs)
         
     relation_prompt_template = "Is {relation} (Answer only yes/no)"
     relation_prompts = list(map(
         lambda x: relation_prompt_template.format(relation=x), all_predicate_strs
     ))
 
-    print("--------------------------------")
-    print(relation_prompts)
+    # print("--------------------------------")
+    # print(relation_prompts)
 
     # batch the prompts
     batch_size = 8
@@ -206,10 +206,10 @@ def generate_multi_step(
 
     relation_preds = []
     for batch in relation_prompts_batched:
-        relation_preds.extend(predict_relation_probs(model, batch, observations))
+        relation_preds.extend(predict_relation_probs(model, batch, observations, past_key_values))
 
-    print("--------------------------------")
-    print(relation_preds)
+    # print("--------------------------------")
+    # print(relation_preds)
 
     true_grounded_predicates = [
         pred for pred, is_true in zip(all_grounded_predicates, relation_preds) if is_true
@@ -220,30 +220,33 @@ def generate_multi_step(
 
     init_states = assemble_grounded_predicates(true_grounded_predicates)
 
-    print("--------------------------------")
-    print(object_states)
-    print(init_states)
+    # print("--------------------------------")
+    # print(object_states)
+    # print(init_states)
 
     goal_prompt = build_goal_prompt(target, config, object_states, init_states)
 
-    print("--------------------------------")
-    print(goal_prompt)
+    # print("--------------------------------")
+    # print(goal_prompt)
 
     goal_response = model.generate(goal_prompt, observations)
 
-    print("--------------------------------")
-    print(goal_response)    
+    # print("--------------------------------")
+    # print(goal_response)    
 
     goal_states = "    " + parse_block(goal_response, "(:goal", save_header=True)
 
-    print("--------------------------------")
-    print(goal_states)
+    # print("--------------------------------")
+    # print(goal_states)
 
-    pddl_file = object_states + init_states + goal_states
+    pddl_file = assemble_pddl(object_states, init_states, goal_states, target["domain"])
 
-    print("--------------------------------")
-    print(pddl_file)
+    # print("--------------------------------")
+    # print(pddl_file)
+
+    all_responses = object_response + "\n\n" + goal_response
+    all_prompts = observation_prompt + "\n\n" + goal_prompt
             
-    import sys; sys.exit()
+    return pddl_file, pddl_file, all_prompts
         
 

@@ -1,0 +1,12 @@
+green - block
+yellow - block
+pink - block
+red - block
+robot - robot
+
+(:goal (and
+        (on pink red)
+        (on red yellow)
+        (on yellow green)
+      )
+    )

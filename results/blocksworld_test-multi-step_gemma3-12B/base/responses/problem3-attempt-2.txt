@@ -1,0 +1,14 @@
+yellow - block
+green - block
+pink - block
+red - block
+purple - block
+
+```pddl
+(:goal (and 
+        (on yellow green)
+        (on green pink)
+        (on red purple)
+      )
+    )
+```

@@ -258,6 +258,7 @@ def parse_objects(response, object_types = []):
             if len(name_and_type) == 2:
                 name, object_type = name_and_type
                 name, object_type = name.strip(), object_type.strip()
+                name = "_".join(name.split())
                 if object_types and object_type not in object_types:
                     continue
                 objects[object_type].append(name)
@@ -267,7 +268,7 @@ def parse_objects(response, object_types = []):
 def assemble_grounded_predicates(predicates):
     init_states = "    (:init\n"
     for predicate in predicates:
-        init_states += f"        {predicate['name']} {' '.join(predicate['args'])}\n"
+        init_states += f"        ({predicate['name']} {' '.join(predicate['args'])})\n"
     init_states += "    )\n"
 
     return init_states
@@ -281,3 +282,11 @@ def assemble_object_states(objects):
 
     return object_states
     
+def assemble_pddl(object_states, init_states, goal_states, domain_file):
+    domain_name = domain_file.split('(domain ')[1].split(')')[0].strip()
+    pddl_file = f"(define (problem {domain_name})"
+    pddl_file += f"    (:domain {domain_name})"
+    pddl_file += object_states + init_states + goal_states
+    pddl_file += ")\n"
+
+    return pddl_file

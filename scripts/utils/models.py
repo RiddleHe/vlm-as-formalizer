@@ -26,7 +26,8 @@ def get_hf_client_name(client_name):
     model_mapping = {
         "qwenvl-7B": "Qwen/Qwen2.5-VL-7B-Instruct",
         "internvl3-14B": "OpenGVLab/InternVL3-14B", 
-        "gemma3-12B": "google/gemma-3-12b-it"
+        "gemma3-12B": "google/gemma-3-12b-it",
+        "gemma3-27B": "google/gemma-3-27b-it"
     }
     if client_name in model_mapping:
         return model_mapping[client_name]
