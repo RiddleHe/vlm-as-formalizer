@@ -8,7 +8,7 @@ import time
 
 torch.cuda.empty_cache()
 
-model_id = "google/gemma-3-27b-it"
+model_id = "google/gemma-3-12b-it"
 processor = AutoProcessor.from_pretrained(model_id, padding_side="left")
 
 torch.set_float32_matmul_precision('high')
@@ -47,12 +47,6 @@ prompts = [
     "Is there an orange block? (Answer only yes/no)", # yes
     "Is orange block on top of blue block? (Answer only yes/no)", # no
 ]
-template = (
-    "<bos><start_of_turn>user\n"
-    "<start_of_image> {question}<end_of_turn>\n"
-    "<start_of_turn>model\n"
-    "Yes. Wait, let me double-check. Looking again,"
-)
 
 # Prepare prompts and image
 chat_prompts = []
@@ -116,3 +110,4 @@ end_time = time.time()
 print("pred (yes) = ", probs[:, 0].float().cpu().numpy().round(2))
 print("pred (no) = ", probs[:, 1].float().cpu().numpy().round(2))
 print(f"Time taken: {end_time - start_time} seconds")
+

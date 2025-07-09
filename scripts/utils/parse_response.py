@@ -60,7 +60,7 @@ def parse_plan(response):
         plan.append(match.strip())
     return "\n".join(plan)
 
-def parse_block(pddl, keyword):
+def parse_block(pddl, keyword, save_header=False):
     match = re.search(rf"{re.escape(keyword)}\s+", pddl)
 
     if match:
@@ -73,7 +73,10 @@ def parse_block(pddl, keyword):
             elif pddl[i] == ')':
                 balance -= 1
             if balance == 0:
-                return pddl[content_start_index: i].strip()
+                if save_header:
+                    return pddl[outer_block_start_index: i+1].strip()
+                else:
+                    return pddl[content_start_index: i].strip()
 
     return None
 
@@ -261,3 +264,20 @@ def parse_objects(response, object_types = []):
 
     return objects
 
+def assemble_grounded_predicates(predicates):
+    init_states = "    (:init\n"
+    for predicate in predicates:
+        init_states += f"        {predicate['name']} {' '.join(predicate['args'])}\n"
+    init_states += "    )\n"
+
+    return init_states
+
+def assemble_object_states(objects):
+    object_states = "    (:objects\n"
+    for object_type, objects in objects.items():
+        for obj in objects:
+            object_states += f"        {obj} - {object_type}\n"
+    object_states += "    )\n"
+
+    return object_states
+    

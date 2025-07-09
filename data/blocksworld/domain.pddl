@@ -2,12 +2,12 @@
     (:requirements :strips :typing)
     (:types block robot)
     (:predicates 
-        (on ?x - block ?y - block)
-        (ontable ?x - block)
-        (clear ?x - block)
-        (handempty ?x - robot)
-        (handfull ?x - robot)
-        (holding ?x - block)
+        (on ?x - block ?y - block) ; {x} on {y}
+        (ontable ?x - block) ; {x} on table
+        (clear ?x - block) ; {x}'s surface clear and not under any other block
+        (handempty ?x - robot) ; there no {x} in sight holding anything
+        (handfull ?x - robot) ; {x}'s hand full
+        (holding ?x - block) ; robot holding {x}
     )
     (:action pick-up
         :parameters (?x - block ?robot - robot)
