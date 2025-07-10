@@ -1,33 +1,3 @@
-"""
-<base_dir>/
-|-- GroundingDINO/
-|   |-- groundingdino/
-|   |   |-- config/
-|   |   |   |-- GroundingDINO_SwinT_OGC.py
-|   |-- weights/
-|   |   |-- groundingdino_swint_ogc.pth
-|   |-- (and other files from the GroundingDINO repo)
-|
-|-- sam2/
-|   |-- checkpoints/
-|   |   |-- sam2.1_hiera_base_plus.pt
-|   |-- sam2/
-|   |   |-- configs/
-|   |   |   |-- sam2.1/
-|   |   |   |   |-- sam2.1_hiera_b+.yaml
-|   |-- (and other files from the "patched" SAM2 repo)
-|
-|-- LASER/
-|   |-- src/
-|   |   |-- models/
-|   |   |   |-- ensemble-2025-02-10-14-57-22.0.checkpoint
-|   |   |-- visualization/
-|   |   |   |-- mask_generation_grounding_dino.py
-|   |   |   |-- utils.py
-|   |   |   |-- vis_utils.py
-|
-"""
-
 import torch
 import numpy as np
 import tempfile
@@ -38,7 +8,10 @@ import imageio
 from typing import List, Literal
 
 
-from helpers import visualize_predictions
+try:
+    from .helpers import visualize_predictions
+except ImportError:
+    from helpers import visualize_predictions
 
 # Utils
 
@@ -243,7 +216,11 @@ def get_batched_objects(
     }
 
 def filter_batch_by_oids(batch: dict, oids_to_remove: set) -> dict:
+    print(f"DEBUG: filter_batch_by_oids input oids_to_remove: {oids_to_remove}")
+    print(f"DEBUG: filter_batch_by_oids input batch['batched_object_ids']: {batch['batched_object_ids']}")
+    
     if not oids_to_remove:
+        print(f"DEBUG: filter_batch_by_oids no oids to remove, returning original batch")
         return batch
 
     new_batch = {}
@@ -251,6 +228,8 @@ def filter_batch_by_oids(batch: dict, oids_to_remove: set) -> dict:
     indices_to_keep = [
         i for i, (_, _, oid) in enumerate(batch["batched_object_ids"]) if oid not in oids_to_remove
     ]
+    
+    print(f"DEBUG: filter_batch_by_oids indices_to_keep: {indices_to_keep}")
     
     new_batch["batched_object_ids"] = [batch["batched_object_ids"][i] for i in indices_to_keep]
     new_batch["batched_pred_masks"] = [batch["batched_pred_masks"][i] for i in indices_to_keep]
@@ -272,6 +251,8 @@ def filter_batch_by_oids(batch: dict, oids_to_remove: set) -> dict:
     
     new_batch["object_ids_to_classes"] = batch["object_ids_to_classes"]
 
+    print(f"DEBUG: filter_batch_by_oids output batch['batched_object_ids']: {new_batch['batched_object_ids']}")
+    
     return new_batch
 
 def get_object_classes(
@@ -281,7 +262,12 @@ def get_object_classes(
     predicate_model,
     threshold: float,
 ):
+    print(f"DEBUG: get_object_classes input batch['batched_object_ids']: {batch['batched_object_ids']}")
+    print(f"DEBUG: get_object_classes input object_classes: {object_classes}")
+    
     binary_object_classes = object_classes + [f"not {obj}" for obj in object_classes]
+    print(f"DEBUG: get_object_classes binary_object_classes: {binary_object_classes}")
+    
     batched_image_cate_logits, _, _, _ = predicate_model(
         batched_video_ids=["tmp_video"],
         batched_videos=images,
@@ -331,6 +317,9 @@ def get_object_classes(
                 oid_to_class[oid] = candidate_names[top_idx]
                 oids_to_remove.remove(oid)
 
+    print(f"DEBUG: get_object_classes output oid_to_class: {oid_to_class}")
+    print(f"DEBUG: get_object_classes output oids_to_remove: {oids_to_remove}")
+    
     return oid_to_class, oids_to_remove
 
 def get_unary_relations(
@@ -363,22 +352,100 @@ def get_unary_relations(
     return formatted_probs.get(video_ids[0], {})
 
 
+def compute_spatial_relations(batch, binary_relations):
+    """
+    Compute spatial relations based on bounding box positions.
+    This is a fallback when sgclip gives unreliable predictions.
+    """
+    spatial_relations = {}
+    
+    if "on" in binary_relations:
+        # Extract object positions from bounding boxes
+        object_positions = {}
+        for i, (vid, fid, oid) in enumerate(batch["batched_object_ids"]):
+            bbox = batch["batched_pred_bboxes"][i]
+            # bbox format: (x_min, y_min, x_max, y_max)
+            center_x = (bbox[0] + bbox[2]) / 2
+            center_y = (bbox[1] + bbox[3]) / 2
+            bottom_y = bbox[3]  # Bottom edge of object
+            top_y = bbox[1]     # Top edge of object
+            
+            if fid not in object_positions:
+                object_positions[fid] = {}
+            object_positions[fid][oid] = {
+                'center': (center_x, center_y),
+                'bottom': bottom_y,
+                'top': top_y,
+                'bbox': bbox
+            }
+        
+        print("🔍 DEBUG: Object positions:")
+        for fid, positions in object_positions.items():
+            print(f"  Frame {fid}:")
+            for oid, pos in positions.items():
+                print(f"    Object {oid}: bbox={pos['bbox']}, center={pos['center']}, top={pos['top']}, bottom={pos['bottom']}")
+        
+        # Compute "on" relations based on spatial positions
+        for fid, positions in object_positions.items():
+            if fid not in spatial_relations:
+                spatial_relations[fid] = {}
+                
+            for oid1, pos1 in positions.items():
+                for oid2, pos2 in positions.items():
+                    if oid1 != oid2:
+                        # Check if oid1 is on oid2
+                        # Conditions:
+                        # 1. oid1's bottom is close to oid2's top
+                        # 2. oid1's center x is within oid2's x range
+                        # 3. oid1 is above oid2
+                        
+                        vertical_distance = abs(pos1['bottom'] - pos2['top'])
+                        horizontal_overlap = (
+                            pos1['center'][0] >= pos2['bbox'][0] and 
+                            pos1['center'][0] <= pos2['bbox'][2]
+                        )
+                        is_above = pos1['bottom'] < pos2['bottom']
+                        
+                        # Threshold for "touching" (in pixels)
+                        touch_threshold = 20
+                        
+                        print(f"    Checking {oid1} on {oid2}: vert_dist={vertical_distance:.1f}, horiz_overlap={horizontal_overlap}, is_above={is_above}")
+                        
+                        if (vertical_distance < touch_threshold and 
+                            horizontal_overlap and 
+                            is_above):
+                            # High confidence for spatial "on" relation
+                            confidence = 0.9
+                            print(f"      ✅ DETECTED: {oid1} is on {oid2}")
+                        else:
+                            # Low confidence
+                            confidence = 0.1
+                        
+                        obj_key = (oid1, oid2)
+                        if obj_key not in spatial_relations[fid]:
+                            spatial_relations[fid][obj_key] = []
+                        spatial_relations[fid][obj_key].append((confidence, "on"))
+    
+    return spatial_relations
+
+
 def get_binary_relations(
     batch,
     images,
     binary_relations,
     predicate_model,
 ):
+
     _, _, batched_image_binary_probs, _ = predicate_model(
         batched_video_ids=["tmp_video"],
         batched_videos=images,
         batched_masks=batch["batched_pred_masks"],
-        batched_bboxes=batched_pred_bboxes,
+        batched_bboxes=batch["batched_pred_bboxes"],
         batched_names=[["object"]],
         batched_object_ids=batch["batched_object_ids"],
         batched_unary_kws=[[]],
         batched_binary_kws=[binary_relations],
-        batched_obj_pairs=[batch["batched_object_pairs"]],
+        batched_obj_pairs=batch["batched_object_pairs"],
         batched_video_splits=[0],
         batched_binary_predicates=[None],
     )
@@ -389,10 +456,44 @@ def get_binary_relations(
         oid_to_class=batch["object_ids_to_classes"],
         topk=len(binary_relations)
     )
+    
+    # Check if sgclip is giving unreliable predictions (all 100%)
+    all_100_percent = True
+    for frame_data in formatted_probs.values():
+        for predictions in frame_data.values():
+            for conf, rel in predictions:
+                if rel == "on" and float(conf) < 0.99:
+                    all_100_percent = False
+                    break
+    
+    if all_100_percent and "on" in binary_relations:
+        print("⚠️  Warning: sgclip giving 100% confidence for all 'on' relations.")
+        print("🔧 Using spatial reasoning as fallback...")
+        
+        # Compute spatial relations
+        spatial_relations = compute_spatial_relations(batch, binary_relations)
+        
+        # Format spatial relations to match expected output
+        formatted_spatial = {}
+        for fid, frame_relations in spatial_relations.items():
+            formatted_spatial[fid] = {}
+            for (oid1, oid2), predictions in frame_relations.items():
+                # Convert to tensor format
+                tensor_predictions = [(torch.tensor(conf), rel) for conf, rel in predictions]
+                
+                # Get object class names
+                class1 = batch["object_ids_to_classes"].get(oid1, f"obj_{oid1}")
+                class2 = batch["object_ids_to_classes"].get(oid2, f"obj_{oid2}")
+                obj_key = (f"{oid1} ({class1})", f"{oid2} ({class2})")
+                
+                formatted_spatial[fid][obj_key] = tensor_predictions
+        
+        print(f"🔧 DEBUG: Formatted spatial relations: {formatted_spatial}")
+        return formatted_spatial
+    
     return formatted_probs.get("tmp_video", {})
 
 # Pipeline
-
 def setup_and_load_models(
         base_dir, 
         device="cuda", 
@@ -405,16 +506,47 @@ def setup_and_load_models(
         yoloe_path="/local-ssd/yoloe/pretrain",
         yoloe_model_name="yoloe-v8l-seg.pt",
     ):
-    sys.path.append(dino_path)
-    sys.path.append(os.path.join(base_dir, sam_path))
-    sys.path.append(os.path.join(base_dir, inference_path))
-    sys.path.append(pred_model_path)
+    # Import necessary modules first
+    import sys
+    from transformers.models.clip.modeling_clip import CLIPAttention
+    from transformers.models.clip.configuration_clip import CLIPConfig  # THIS WAS MISSING!
+    
+    # Create a dummy CLIPSdpaAttention class
+    class CLIPSdpaAttention(CLIPAttention):
+        """Dummy class to handle missing CLIPSdpaAttention in older transformers versions"""
+        is_causal = False  # Set as class attribute
+        
+        def __init__(self, config):
+            super().__init__(config)
+            self.is_causal = False  # Add missing attribute as instance attribute
+            
+        def __getattr__(self, name):
+            # Fallback for any missing attributes
+            if name == 'is_causal':
+                return False
+            return super().__getattr__(name)
 
-    from groundingdino.util.inference import Model as gd_Model
+    # Inject it into the transformers module
+    setattr(sys.modules['transformers.models.clip.modeling_clip'], 'CLIPSdpaAttention', CLIPSdpaAttention)
+
+    # Fix 2: Try to set the missing attributes directly on CLIPConfig
+    try:
+        if not hasattr(CLIPConfig, '_output_attentions'):
+            CLIPConfig._output_attentions = False
+        if not hasattr(CLIPConfig, '_output_hidden_states'):
+            CLIPConfig._output_hidden_states = False
+        if not hasattr(CLIPConfig, '_return_dict'):
+            CLIPConfig._return_dict = True
+    except:
+        pass  # If this fails, continue without the patch
+
+    # Import SAM2 and predicate model (always needed)
     from sam2.build_sam import build_sam2, build_sam2_video_predictor
     from sam2.automatic_mask_generator import SAM2AutomaticMaskGenerator
+    
+    # Add the predicate model path to sys.path
+    sys.path.append(os.path.join(base_dir, pred_model_path))
     from llava_clip_model_v3 import PredicateModel as PredicateModel_v3
-    from ultralytics import YOLOE
 
     # Load GroundingDINO if requested
     if detector_type in ["dino"]:
@@ -434,7 +566,6 @@ def setup_and_load_models(
         yoloe_model.to(device)
         grounding_model = yoloe_model
         print("YOLOE model loaded successfully.")
-
 
     # SAM2
     sam_checkpoint = os.path.join(base_dir, sam_path, "checkpoints/sam2.1_hiera_base_plus.pt")
@@ -462,7 +593,7 @@ def setup_and_load_models(
         "predicate_model": predicate_model,
         "device": device
     }
-
+    
 def predict_all_relations(
     images: List[np.ndarray],
     object_classes: List[str],
@@ -471,31 +602,123 @@ def predict_all_relations(
     models: dict,
     detector_type: Literal["dino", "yoloe", "both"] = "both",
 ):
-    from mask_generation_grounding_dino import generate_masks_grounding_dino, generate_masks_yoloe
+    # Use importlib to import directly from specific paths
+    import importlib.util
+    import importlib.machinery
+    
+    # Path to the mask generation module
+    inference_path = "/home/mh3897/pddl/villain/LASER/src/visualization"
+    mask_gen_path = os.path.join(inference_path, "mask_generation_grounding_dino.py")
+    
+    # Save original sys.path
+    original_path = sys.path[:]
+    
+    try:
+        # First, import the correct utils module from LASER
+        laser_utils_path = os.path.join(inference_path, "utils.py")
+        laser_utils_spec = importlib.util.spec_from_file_location("laser_utils", laser_utils_path)
+        laser_utils = importlib.util.module_from_spec(laser_utils_spec)
+        laser_utils_spec.loader.exec_module(laser_utils)
+        
+        # Monkey patch: temporarily replace utils in sys.modules
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        scripts_dir = os.path.dirname(current_dir)
+        
+        # Store original modules that might conflict
+        original_utils = sys.modules.get('utils', None)
+        original_scripts_utils = sys.modules.get('scripts.utils', None)
+        
+        # Temporarily replace utils with the LASER utils
+        sys.modules['utils'] = laser_utils
+        
+        # Clean sys.path and add necessary paths
+        minimal_path = [
+            inference_path,
+            "/local-ssd/custom_models/GroundingDINO/",
+        ]
+        # Add back essential system paths but not our local scripts
+        for path in original_path:
+            if path != scripts_dir and path != current_dir and path not in minimal_path:
+                if ('site-packages' in path or 'conda' in path or 'python' in path or 
+                    'lib' in path or not path or path.startswith('/usr')):
+                    minimal_path.append(path)
+        
+        sys.path = minimal_path
+        
+        try:
+            # Import the module directly
+            spec = importlib.util.spec_from_file_location("mask_generation_grounding_dino", mask_gen_path)
+            mask_gen_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mask_gen_module)
+            
+            # Get the functions we need
+            generate_masks_yoloe = mask_gen_module.generate_masks_yoloe
+            try:
+                generate_masks_grounding_dino = mask_gen_module.generate_masks_grounding_dino
+            except AttributeError:
+                print("Warning: generate_masks_grounding_dino not found, using YOLOE only")
+                generate_masks_grounding_dino = None
+                
+        finally:
+            # Restore original utils modules
+            if original_utils is not None:
+                sys.modules['utils'] = original_utils
+            elif 'utils' in sys.modules:
+                del sys.modules['utils']
+                
+            if original_scripts_utils is not None:
+                sys.modules['scripts.utils'] = original_scripts_utils
+            
+    except Exception as e:
+        print(f"Warning: Failed to import mask generation module: {e}")
+        print(f"Returning empty results")
+        return {"unary": {}, "binary": {}}
+    finally:
+        # Always restore original sys.path
+        sys.path = original_path
 
     classes_ls = get_classes_ls(object_classes)
     if detector_type in ["dino"]:
-        batch = get_batched_objects(
-            images=images,
-            classes_ls=classes_ls,
-            grounding_model=models["grounding_model"],
-            sam_video_predictor=models["sam_video_predictor"],
-            mask_generator=models["mask_generator"],
-            generate_masks=generate_masks_grounding_dino,
-            detector_type=detector_type,
-            device=models["device"]
-        )
-    elif detector_type in ["yoloe"]:
-        batch = get_batched_objects(
-            images=images,
-            classes_ls=classes_ls,
-            grounding_model=models["grounding_model"],
-            sam_video_predictor=models["sam_video_predictor"],
-            mask_generator=models["mask_generator"],
-            generate_masks=generate_masks_yoloe,
-            detector_type=detector_type,
-            device=models["device"]
-        )
+        if generate_masks_grounding_dino is None:
+            print("Error: GroundingDINO not available, switching to YOLOE")
+            detector_type = "yoloe"
+        else:
+            try:
+                batch = get_batched_objects(
+                    images=images,
+                    classes_ls=classes_ls,
+                    grounding_model=models["grounding_model"],
+                    sam_video_predictor=models["sam_video_predictor"],
+                    mask_generator=models["mask_generator"],
+                    generate_masks=generate_masks_grounding_dino,
+                    detector_type=detector_type,
+                    device=models["device"]
+                )
+            except AssertionError as e:
+                print(f"Object detection failed (no objects detected): {e}")
+                return {"unary": {}, "binary": {}}
+            except Exception as e:
+                print(f"Object detection failed with error: {e}")
+                return {"unary": {}, "binary": {}}
+    
+    if detector_type in ["yoloe"]:
+        try:
+            batch = get_batched_objects(
+                images=images,
+                classes_ls=classes_ls,
+                grounding_model=models["grounding_model"],
+                sam_video_predictor=models["sam_video_predictor"],
+                mask_generator=models["mask_generator"],
+                generate_masks=generate_masks_yoloe,
+                detector_type=detector_type,
+                device=models["device"]
+            )
+        except AssertionError as e:
+            print(f"Object detection failed (no objects detected): {e}")
+            return {"unary": {}, "binary": {}}
+        except Exception as e:
+            print(f"Object detection failed with error: {e}")
+            return {"unary": {}, "binary": {}}
 
     if not batch:
         print("No objects were detected, cannot predict relations.")
@@ -503,24 +726,9 @@ def predict_all_relations(
 
     print(f"Batch successfully generated with {len(batch.get('batched_object_ids', []))} object instances.")
     
-    refined_oid_to_class, oids_to_remove = get_object_classes(
-        batch=batch,
-        images=images,
-        object_classes=object_classes,
-        predicate_model=models["predicate_model"],
-        threshold=0.60,
-    )
-    
-    if oids_to_remove:
-        batch = filter_batch_by_oids(batch, oids_to_remove)
-
-    if refined_oid_to_class:
-        batch["object_ids_to_classes"] = refined_oid_to_class
-    else:
-        batch["object_ids_to_classes"] = {
-            oid: cls for oid, cls in batch.get("object_ids_to_classes", {}).items() 
-            if oid not in oids_to_remove
-        }
+    # Skip object reclassification - use the original YOLOE classifications directly
+    # No objects to remove - keep all detected objects
+    # batch["object_ids_to_classes"] is already set from the detection stage
 
     visualize_predictions(
         images,
@@ -529,8 +737,6 @@ def predict_all_relations(
         ".",
         show_masks=False
     )
-
-    sys.exit()
 
     unary_results = {}
     if unary_relations:
@@ -562,12 +768,12 @@ if __name__ == "__main__":
 
     models = setup_and_load_models(BASE_DIR, DEVICE, detector_type="yoloe")
 
-    image_paths = [os.path.join(BASE_DIR, "data/cooking/observations", f"problem4.jpg")]
-    # image_paths = [os.path.join(BASE_DIR, "data/blocksworld-real/observations", f"problem30-3.jpg")]
+    # image_paths = [os.path.join(BASE_DIR, "data/cooking/observations", f"problem4.jpg")]
+    image_paths = [os.path.join(BASE_DIR, "data/blocksworld/observations", f"problem2.jpg")]
     images = [imageio.imread(p) for p in image_paths]
 
-    object_classes = ["cutting_board", "counter", "knife", "bowl", "vegetable"]
-    # object_classes = ["red cube", "green cube", "blue cube", "yellow cube", "orange cube", "purple cube"]  # removing "cube" improves results
+    # object_classes = ["cutting_board", "counter", "knife", "bowl", "vegetable"]
+    object_classes = ["block", "cube", "toy", "brick", "object", "box"]  # Try different block-related terms
     unary_relations = ["is_empty"]
     binary_relations = ["on"]
 
@@ -579,3 +785,4 @@ if __name__ == "__main__":
         models=models,
         detector_type="yoloe",
     )
+    print(results)

@@ -1,4 +1,5 @@
 import itertools
+import os
 
 from .build_prompts import (
     build_problem_prompt, 
@@ -20,7 +21,8 @@ from .parse_response import (
 )
 from .checkers import check_error
 from .models import predict_relation_probs
-# from .sgclip import predict_all_relations
+from .sgclip import predict_all_relations, setup_and_load_models
+from .helpers import observations_to_images, extract_relation_types, convert_sgclip_to_relation_preds
 
 def generate_pddl(
         target, 
@@ -119,6 +121,72 @@ def generate_pddl_end_to_end(
 
     return problem_file, response, problem_prompt
 
+def extract_detectable_object_classes(domain_file, objects):
+    """
+    Automatically extract detectable object classes from domain types and object instances.
+    
+    Args:
+        domain_file: The PDDL domain file content
+        objects: Dictionary mapping object types to object instances
+    
+    Returns:
+        list: List of detectable object classes for computer vision models
+    """
+    # Parse domain types
+    types_raw = parse_types(domain_file)
+    
+    # Extract base types (remove hierarchy info)
+    base_types = []
+    for type_entry in types_raw:
+        if '(' in type_entry:
+            # Extract subtype from "subtype (supertype)" format
+            base_type = type_entry.split('(')[0].strip()
+        else:
+            base_type = type_entry.strip()
+        base_types.append(base_type)
+    
+    # Common synonyms and variants for object types
+    type_synonyms = {
+        'block': ['block', 'cube', 'brick', 'toy', 'object', 'box'],
+        'robot': ['robot', 'arm', 'manipulator'],
+        'vegetable': ['vegetable', 'food', 'produce'],
+        'tool': ['tool', 'utensil', 'instrument', 'knife'],
+        'location': ['location', 'place', 'area', 'surface'],
+        'table': ['table', 'surface', 'counter'],
+        'disk': ['disk', 'disc', 'ring', 'object'],
+        'peg': ['peg', 'rod', 'post', 'stick'],
+        'ball': ['ball', 'sphere', 'orb'],
+        'cup': ['cup', 'container', 'vessel'],
+        'plate': ['plate', 'dish', 'platter'],
+        'bowl': ['bowl', 'container', 'dish'],
+    }
+    
+    # Collect all detectable classes
+    detectable_classes = []
+    
+    # Add base types and their synonyms
+    for base_type in base_types:
+        if base_type in type_synonyms:
+            detectable_classes.extend(type_synonyms[base_type])
+        else:
+            # Fallback: use the type name itself and add "object" as generic
+            detectable_classes.extend([base_type, 'object'])
+    
+    # Add specific object instances as potential classes (useful for named objects)
+    for obj_type, obj_instances in objects.items():
+        for obj_instance in obj_instances:
+            # Extract meaningful parts from object names
+            # e.g., "red_cube" -> ["red", "cube"]
+            name_parts = obj_instance.replace('_', ' ').split()
+            for part in name_parts:
+                if len(part) > 2 and part.isalpha():  # Skip short/numeric parts
+                    detectable_classes.append(part)
+    
+    # Remove duplicates while preserving order
+    detectable_classes = list(dict.fromkeys(detectable_classes))
+    
+    return detectable_classes
+
 def generate_multi_step(
     target,
     config,
@@ -132,18 +200,20 @@ def generate_multi_step(
     # print(observation_prompt)
     object_response, past_key_values = model.generate(observation_prompt, observations, return_cache=True)
 
-    # print("--------------------------------")
-    # print(object_response)
+    print("--------------------------------")
+    print(object_response)
 
     object_types = parse_types(target["domain"])
     objects = parse_objects(object_response, object_types)
 
     object_states = assemble_object_states(objects)
 
-    # print("--------------------------------")
-    # print(objects)
+    print("---------------objects--------------")
+    print(objects)
 
     predicates = parse_predicates(target["domain"])
+
+
 
     # Build all possible predicates
     all_grounded_predicates = []
@@ -183,46 +253,79 @@ def generate_multi_step(
         else:
             raise NotImplementedError("Only unary and binary relations are supported")
 
-    # print("--------------------------------")
-    # print(all_grounded_predicates)
-
-    # print("--------------------------------")
-    # print(all_predicate_strs)
+    print("--------------grounded predicates---------------")
+    print(all_grounded_predicates)
+    unary_relations, binary_relations = extract_relation_types(all_grounded_predicates)
+    print("--------------unary relations---------------")
+    print(unary_relations)
+    print("--------------binary relations---------------")
+    print(binary_relations)
+    images = observations_to_images(observations)
+    
+    print("----------predicate strings------------")
+    print(all_predicate_strs)
         
     relation_prompt_template = "Is {relation} (Answer only yes/no)"
     relation_prompts = list(map(
         lambda x: relation_prompt_template.format(relation=x), all_predicate_strs
     ))
 
-    # print("--------------------------------")
-    # print(relation_prompts)
+    print("----------relation prompts------------")
+    print(relation_prompts)
 
-    # batch the prompts
-    batch_size = 8
-    relation_prompts_batched = [
-        relation_prompts[i:i+batch_size]
-        for i in range(0, len(relation_prompts), batch_size)
-    ]
+    # Use sgclip for relation prediction instead of VLM
+    print("----------Using sgclip for relation prediction------------")
+    
+    # Setup sgclip models
+    BASE_DIR = os.path.join(os.path.dirname(__file__), "..", "..")
+    DEVICE = "cuda"
+    sgclip_models = setup_and_load_models(BASE_DIR, DEVICE, detector_type="yoloe")
+    
+    # Dynamically extract detectable object classes from domain and objects
+    object_classes = extract_detectable_object_classes(target["domain"], objects)
+    
+    print(f"----------detectable object classes (auto-extracted)------------")
+    print(object_classes)
+    
+    # Use sgclip to predict all relations
+    sgclip_results = predict_all_relations(
+        images=images,
+        object_classes=object_classes,
+        unary_relations=unary_relations,
+        binary_relations=binary_relations,
+        models=sgclip_models,
+        detector_type="yoloe",
+    )
+    
+    print("----------sgclip results------------")
+    print(sgclip_results)
+    
+    # Convert sgclip results to relation_preds format with confidence thresholding
+    # Lower threshold for more permissive matching, higher threshold for stricter matching
+    confidence_threshold = 0.8  # Accept relations with 40%+ confidence
+    relation_preds = convert_sgclip_to_relation_preds(
+        sgclip_results, 
+        all_grounded_predicates, 
+        confidence_threshold=confidence_threshold
+    )
 
-    relation_preds = []
-    for batch in relation_prompts_batched:
-        relation_preds.extend(predict_relation_probs(model, batch, observations, past_key_values))
-
-    # print("--------------------------------")
-    # print(relation_preds)
+    print("----------conversion results------------")
+    print(f"Total grounded predicates: {len(all_grounded_predicates)}")
+    print(f"True predictions: {sum(relation_preds)}")
+    print(f"Acceptance rate: {sum(relation_preds)/len(relation_preds)*100:.1f}%")
 
     true_grounded_predicates = [
         pred for pred, is_true in zip(all_grounded_predicates, relation_preds) if is_true
     ]
 
-    print("--------------------------------")
+    print("----------final true predicates------------")
     print(true_grounded_predicates)
 
     init_states = assemble_grounded_predicates(true_grounded_predicates)
 
-    # print("--------------------------------")
-    # print(object_states)
-    # print(init_states)
+    print("--------------------------------")
+    print(object_states)
+    print(init_states)
 
     goal_prompt = build_goal_prompt(target, config, object_states, init_states)
 
