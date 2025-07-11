@@ -168,7 +168,7 @@ def get_batched_objects(
             elif detector_type in ["yoloe"]:
                 video_segments, oid_class_pred, success = generate_masks(
                     yoloe_model=grounding_model,
-                    conf_threshold=0.3,  # Confidence threshold (equivalent to box_threshold)
+                    conf_threshold=0.05,  # Very low confidence threshold to detect more objects
                     predictor=sam_video_predictor,
                     mask_generator=mask_generator,
                     video_tensor=video_tensor,
@@ -179,11 +179,11 @@ def get_batched_objects(
                     target_fps=None,
                     visualize=False,
                     max_prop_time=3,
-                    iou_thr=0.6,
-                    score_thr=0.7,
-                    inner_thr=0.5,
+                    iou_thr=0.3,  # Lower IoU threshold to allow more overlapping detections
+                    score_thr=0.2,  # Lower score threshold for more detections
+                    inner_thr=0.1,  # Lower inner threshold
                     frames=None,
-                    min_mask_size=30,
+                    min_mask_size=10,  # Smaller minimum mask size
                     device="cuda:0"
                 )
             # oid_class_pred = {
@@ -369,6 +369,8 @@ def compute_spatial_relations(batch, binary_relations):
             center_y = (bbox[1] + bbox[3]) / 2
             bottom_y = bbox[3]  # Bottom edge of object
             top_y = bbox[1]     # Top edge of object
+            width = bbox[2] - bbox[0]
+            height = bbox[3] - bbox[1]
             
             if fid not in object_positions:
                 object_positions[fid] = {}
@@ -376,16 +378,18 @@ def compute_spatial_relations(batch, binary_relations):
                 'center': (center_x, center_y),
                 'bottom': bottom_y,
                 'top': top_y,
-                'bbox': bbox
+                'bbox': bbox,
+                'width': width,
+                'height': height
             }
         
         print("🔍 DEBUG: Object positions:")
         for fid, positions in object_positions.items():
             print(f"  Frame {fid}:")
             for oid, pos in positions.items():
-                print(f"    Object {oid}: bbox={pos['bbox']}, center={pos['center']}, top={pos['top']}, bottom={pos['bottom']}")
+                print(f"    Object {oid}: bbox={pos['bbox']}, center={pos['center']}, size=({pos['width']:.1f}x{pos['height']:.1f})")
         
-        # Compute "on" relations based on spatial positions
+        # Compute "on" relations with IMPROVED physics constraints
         for fid, positions in object_positions.items():
             if fid not in spatial_relations:
                 spatial_relations[fid] = {}
@@ -393,33 +397,42 @@ def compute_spatial_relations(batch, binary_relations):
             for oid1, pos1 in positions.items():
                 for oid2, pos2 in positions.items():
                     if oid1 != oid2:
-                        # Check if oid1 is on oid2
-                        # Conditions:
-                        # 1. oid1's bottom is close to oid2's top
-                        # 2. oid1's center x is within oid2's x range
-                        # 3. oid1 is above oid2
+                        # FIXED "on" relation conditions:
+                        # 1. oid1 must be above oid2 (oid1's bottom near oid2's top)
+                        # 2. Reasonable horizontal overlap (not necessarily perfect alignment)
                         
-                        vertical_distance = abs(pos1['bottom'] - pos2['top'])
-                        horizontal_overlap = (
-                            pos1['center'][0] >= pos2['bbox'][0] and 
-                            pos1['center'][0] <= pos2['bbox'][2]
-                        )
-                        is_above = pos1['bottom'] < pos2['bottom']
+                        # Check if oid1 is above oid2 - CORRECTED LOGIC
+                        # For stacking: oid1's bottom should be near oid2's top
+                        vertical_gap = pos1['bottom'] - pos2['top']  # Small positive means oid1 is directly above oid2
+                        horizontal_overlap = min(pos1['bbox'][2], pos2['bbox'][2]) - max(pos1['bbox'][0], pos2['bbox'][0])
                         
-                        # Threshold for "touching" (in pixels)
-                        touch_threshold = 20
+                        # Calculate horizontal centers distance
+                        horizontal_center_distance = abs(pos1['center'][0] - pos2['center'][0])
                         
-                        print(f"    Checking {oid1} on {oid2}: vert_dist={vertical_distance:.1f}, horiz_overlap={horizontal_overlap}, is_above={is_above}")
+                        # More lenient thresholds:
+                        contact_threshold = 25  # pixels - allow some gap for imperfect detection
+                        min_overlap = 10  # pixels - require some horizontal overlap
+                        max_center_distance = 50  # pixels - allow reasonable center distance
                         
-                        if (vertical_distance < touch_threshold and 
-                            horizontal_overlap and 
-                            is_above):
-                            # High confidence for spatial "on" relation
-                            confidence = 0.9
-                            print(f"      ✅ DETECTED: {oid1} is on {oid2}")
+                        print(f"    Checking {oid1} on {oid2}:")
+                        print(f"      Vertical gap (oid1_bottom - oid2_top): {vertical_gap:.1f}px (threshold: {contact_threshold}px)")
+                        print(f"      Horizontal overlap: {horizontal_overlap:.1f}px (min: {min_overlap}px)")
+                        print(f"      Horizontal center distance: {horizontal_center_distance:.1f}px (max: {max_center_distance}px)")
+                        
+                        # Check if this could be a valid "on" relation
+                        # oid1 is on oid2 if oid1's bottom is close to oid2's top (small positive gap)
+                        is_stacked_on = vertical_gap >= -contact_threshold and vertical_gap <= contact_threshold
+                        has_overlap = horizontal_overlap >= min_overlap
+                        reasonable_alignment = horizontal_center_distance <= max_center_distance
+                        
+                        if is_stacked_on and (has_overlap or reasonable_alignment):
+                            # High confidence for valid "on" relation
+                            confidence = 0.90
+                            print(f"      ✅ DETECTED ON RELATION: {oid1} is on {oid2}")
                         else:
-                            # Low confidence
-                            confidence = 0.1
+                            # Low confidence for invalid relation
+                            confidence = 0.05
+                            print(f"      ❌ NOT ON: is_stacked_on={is_stacked_on}, has_overlap={has_overlap}, reasonable_alignment={reasonable_alignment}")
                         
                         obj_key = (oid1, oid2)
                         if obj_key not in spatial_relations[fid]:
@@ -492,6 +505,98 @@ def get_binary_relations(
         return formatted_spatial
     
     return formatted_probs.get("tmp_video", {})
+
+def calculate_iou(bbox1, bbox2):
+    """Calculate Intersection over Union (IoU) of two bounding boxes."""
+    x1_min, y1_min, x1_max, y1_max = bbox1
+    x2_min, y2_min, x2_max, y2_max = bbox2
+    
+    # Calculate intersection
+    intersection_x_min = max(x1_min, x2_min)
+    intersection_y_min = max(y1_min, y2_min)
+    intersection_x_max = min(x1_max, x2_max)
+    intersection_y_max = min(y1_max, y2_max)
+    
+    if intersection_x_max <= intersection_x_min or intersection_y_max <= intersection_y_min:
+        return 0.0
+    
+    intersection_area = (intersection_x_max - intersection_x_min) * (intersection_y_max - intersection_y_min)
+    
+    # Calculate union
+    area1 = (x1_max - x1_min) * (y1_max - y1_min)
+    area2 = (x2_max - x2_min) * (y2_max - y2_min)
+    union_area = area1 + area2 - intersection_area
+    
+    return intersection_area / union_area if union_area > 0 else 0.0
+
+def filter_overlapping_detections(batch, iou_threshold=0.5):
+    """
+    Filter out overlapping detections based on IoU threshold.
+    Keep the detection with higher confidence/larger area.
+    """
+    if not batch or not batch.get("batched_object_ids"):
+        return batch
+    
+    object_ids = batch["batched_object_ids"]
+    bboxes = batch["batched_pred_bboxes"]
+    masks = batch["batched_pred_masks"]
+    
+    print(f"🔍 Filtering overlapping detections (IoU threshold: {iou_threshold})...")
+    print(f"  Input: {len(object_ids)} detections")
+    
+    # Calculate areas for each detection
+    areas = []
+    for bbox in bboxes:
+        area = (bbox[2] - bbox[0]) * (bbox[3] - bbox[1])
+        areas.append(area)
+    
+    # Find overlapping pairs and mark for removal
+    to_remove = set()
+    
+    for i in range(len(object_ids)):
+        if i in to_remove:
+            continue
+            
+        for j in range(i + 1, len(object_ids)):
+            if j in to_remove:
+                continue
+                
+            iou = calculate_iou(bboxes[i], bboxes[j])
+            
+            if iou > iou_threshold:
+                # Remove the one with smaller area (keep larger detection)
+                if areas[i] >= areas[j]:
+                    to_remove.add(j)
+                    print(f"  Removing detection {j} (IoU: {iou:.3f} with {i}, smaller area: {areas[j]} < {areas[i]})")
+                else:
+                    to_remove.add(i)
+                    print(f"  Removing detection {i} (IoU: {iou:.3f} with {j}, smaller area: {areas[i]} < {areas[j]})")
+                    break  # Don't check further pairs for this detection
+    
+    # Create filtered batch
+    filtered_indices = [i for i in range(len(object_ids)) if i not in to_remove]
+    
+    filtered_batch = {
+        "batched_object_ids": [object_ids[i] for i in filtered_indices],
+        "batched_pred_masks": [masks[i] for i in filtered_indices],
+        "batched_pred_bboxes": [bboxes[i] for i in filtered_indices],
+        "object_ids_to_classes": batch["object_ids_to_classes"],
+        "video_segments": batch["video_segments"]
+    }
+    
+    # Update object pairs (remove pairs involving removed objects)
+    removed_oids = {object_ids[i][2] for i in to_remove}  # Extract object IDs
+    filtered_pairs = []
+    for pair in batch.get("batched_object_pairs", []):
+        vid, fid, (oid1, oid2) = pair
+        if oid1 not in removed_oids and oid2 not in removed_oids:
+            filtered_pairs.append(pair)
+    
+    filtered_batch["batched_object_pairs"] = filtered_pairs
+    
+    print(f"  Output: {len(filtered_batch['batched_object_ids'])} detections (removed {len(to_remove)})")
+    
+    return filtered_batch
 
 # Pipeline
 def setup_and_load_models(
@@ -726,6 +831,13 @@ def predict_all_relations(
 
     print(f"Batch successfully generated with {len(batch.get('batched_object_ids', []))} object instances.")
     
+    # Filter out overlapping detections
+    batch = filter_overlapping_detections(batch, iou_threshold=0.7)
+    
+    if not batch or not batch.get('batched_object_ids'):
+        print("No objects remaining after filtering overlapping detections.")
+        return {"unary": {}, "binary": {}}
+    
     # Skip object reclassification - use the original YOLOE classifications directly
     # No objects to remove - keep all detected objects
     # batch["object_ids_to_classes"] is already set from the detection stage
@@ -769,11 +881,11 @@ if __name__ == "__main__":
     models = setup_and_load_models(BASE_DIR, DEVICE, detector_type="yoloe")
 
     # image_paths = [os.path.join(BASE_DIR, "data/cooking/observations", f"problem4.jpg")]
-    image_paths = [os.path.join(BASE_DIR, "data/blocksworld/observations", f"problem2.jpg")]
+    image_paths = [os.path.join(BASE_DIR, "data/blocksworld/observations", f"problem4.jpg")]
     images = [imageio.imread(p) for p in image_paths]
 
     # object_classes = ["cutting_board", "counter", "knife", "bowl", "vegetable"]
-    object_classes = ["block", "cube", "toy", "brick", "object", "box"]  # Try different block-related terms
+    object_classes = ["block", "cube", "toy", "brick", "object"]  # Removed "box" to avoid duplicates
     unary_relations = ["is_empty"]
     binary_relations = ["on"]
 

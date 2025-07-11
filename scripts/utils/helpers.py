@@ -10,6 +10,19 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from typing import List
 
+import itertools
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.spatial.distance import cdist
+try:
+    from sklearn.cluster import KMeans
+    SKLEARN_AVAILABLE = True
+except ImportError:
+    SKLEARN_AVAILABLE = False
+    print("⚠️ sklearn not available, using fallback color analysis")
+from collections import Counter
+import cv2
+
 def observations_to_images(observations: List[str]) -> List[np.ndarray]:
     """
     Convert a list of image file paths to a list of numpy arrays.
@@ -63,7 +76,53 @@ def extract_relation_types(grounded_predicates):
     # Convert sets to sorted lists for consistent output
     return sorted(list(unary_relations)), sorted(list(binary_relations))
 
-def convert_sgclip_to_relation_preds(sgclip_results, all_grounded_predicates, confidence_threshold=0.5):
+def try_color_mapping(detected_list, expected_list):
+    """
+    Try to map objects based on color names in expected object names (heuristic fallback).
+    """
+    colors = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'black', 'white', 'brown']
+    
+    # Extract colors from expected object names
+    object_colors = {}
+    for obj in expected_list:
+        obj_lower = obj.lower()
+        for color in colors:
+            if color in obj_lower:
+                object_colors[color] = obj
+                break
+    
+    if len(object_colors) >= len(detected_list):
+        # We have enough color-identified objects
+        color_order = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'black', 'white', 'brown']
+        available_colors = [c for c in color_order if c in object_colors]
+        
+        mapping = {}
+        for i, detected_id in enumerate(detected_list):
+            if i < len(available_colors):
+                color = available_colors[i]
+                mapping[detected_id] = object_colors[color]
+        
+        return mapping if len(mapping) == len(detected_list) else None
+    
+    return None
+
+def try_alphabetical_mapping(detected_list, expected_list):
+    """
+    Try to map objects alphabetically - good for systematic naming.
+    """
+    # Sort both lists to ensure consistent mapping
+    sorted_detected = sorted(detected_list, key=lambda x: int(x) if x.isdigit() else 0)
+    sorted_expected = sorted(expected_list)
+    
+    if len(sorted_detected) <= len(sorted_expected):
+        mapping = {}
+        for i, detected_id in enumerate(sorted_detected):
+            mapping[detected_id] = sorted_expected[i]
+        return mapping
+    
+    return None
+
+def convert_sgclip_to_relation_preds(sgclip_results, all_grounded_predicates, confidence_threshold=0.5, images=None, batch=None):
     """
     Convert sgclip results to relation_preds format with object mapping and confidence thresholding.
     
@@ -71,6 +130,8 @@ def convert_sgclip_to_relation_preds(sgclip_results, all_grounded_predicates, co
         sgclip_results: Results from predict_all_relations (sgclip)
         all_grounded_predicates: List of all possible grounded predicates
         confidence_threshold: Minimum confidence to accept a prediction (default: 0.5)
+        images: List of images for color analysis (optional)
+        batch: Object detection batch for color analysis (optional)
         
     Returns:
         List of boolean values indicating which predicates are true
@@ -81,7 +142,8 @@ def convert_sgclip_to_relation_preds(sgclip_results, all_grounded_predicates, co
     # Step 1: Extract detected relations with confidence filtering
     detected_relations = set()
     
-    # Process unary relations
+    # Process unary relations (temporarily store them)
+    unary_candidates = {}  # Track all unary relations with confidence
     unary_data = sgclip_results.get('unary', {})
     if unary_data:
         for frame_id, frame_data in unary_data.items():
@@ -92,8 +154,9 @@ def convert_sgclip_to_relation_preds(sgclip_results, all_grounded_predicates, co
                 for confidence_tensor, relation_name in predictions:
                     confidence = float(confidence_tensor)
                     if confidence >= confidence_threshold:
-                        detected_relations.add((relation_name, obj_id))
-                        print(f"✅ Unary: {relation_name}({obj_id}) - confidence: {confidence:.3f}")
+                        relation_tuple = (relation_name, obj_id)
+                        unary_candidates[relation_tuple] = confidence
+                        print(f"🤔 Unary candidate: {relation_name}({obj_id}) - confidence: {confidence:.3f}")
     
     # Process binary relations with confidence tracking
     binary_candidates = {}  # Track all binary relations with confidence
@@ -118,11 +181,23 @@ def convert_sgclip_to_relation_preds(sgclip_results, all_grounded_predicates, co
     filtered_binary_relations = apply_physics_constraints(binary_candidates)
     detected_relations.update(filtered_binary_relations)
     
+    # Step 1.6: Apply physics constraints to unary relations
+    print("🔬 Applying physics constraints to unary relations...")
+    filtered_unary_relations = apply_unary_physics_constraints(unary_candidates, filtered_binary_relations)
+    detected_relations.update(filtered_unary_relations)
+    
     print(f"🎯 Total detected relations after filtering: {len(detected_relations)}")
     
     # Step 2: Create object mapping (CV IDs to expected names)
     # We need to map detected object IDs (0, 1, 2, 3, 4) to expected object names
     detected_object_ids = set()
+    
+    # First, get all object IDs from the batch (regardless of relations)
+    if batch and "batched_object_ids" in batch:
+        for vid, fid, oid in batch["batched_object_ids"]:
+            detected_object_ids.add(str(oid))  # Ensure string format
+    
+    # Also add object IDs from detected relations (if any)
     for relation in detected_relations:
         if len(relation) == 2:  # Unary relation
             detected_object_ids.add(relation[1])
@@ -138,8 +213,16 @@ def convert_sgclip_to_relation_preds(sgclip_results, all_grounded_predicates, co
     print(f"🔍 Detected object IDs: {sorted(detected_object_ids)}")
     print(f"🎯 Expected object names: {sorted(expected_objects)}")
     
+    # Analyze object colors if images and batch are provided
+    object_colors = None
+    if images and batch:
+        try:
+            object_colors = analyze_object_colors(images, batch)
+        except Exception as e:
+            print(f"⚠️ Color analysis failed: {e}")
+    
     # Create object mapping: detected_id -> expected_name
-    object_mapping = create_object_mapping(detected_object_ids, expected_objects)
+    object_mapping = create_object_mapping(detected_object_ids, expected_objects, object_colors)
     print(f"🗺️ Object mapping: {object_mapping}")
     
     # Step 3: Check each grounded predicate against detected relations
@@ -216,6 +299,50 @@ def apply_physics_constraints(binary_candidates):
     
     return final_relations
 
+def apply_unary_physics_constraints(unary_candidates, accepted_binary_relations):
+    """
+    Apply physics constraints to unary relations based on accepted binary relations.
+    
+    Physics rules:
+    1. If an object is "on" another object, it should NOT be "ontable"
+    2. Only objects that are not stacked on anything should be "ontable"
+    
+    Args:
+        unary_candidates: Dict mapping (relation, obj) -> confidence for unary relations
+        accepted_binary_relations: Set of accepted binary relations from apply_physics_constraints
+        
+    Returns:
+        Set of valid unary relations after constraint resolution
+    """
+    print("⚖️ Filtering unary relations based on binary relations...")
+    
+    # Find objects that are "on" something else
+    objects_with_support = set()
+    for relation_tuple in accepted_binary_relations:
+        if len(relation_tuple) == 3 and relation_tuple[0] == 'on':
+            # relation_tuple format: ('on', obj1, obj2) means obj1 is on obj2
+            obj1 = relation_tuple[1]
+            objects_with_support.add(obj1)
+    
+    print(f"📋 Objects with support (should NOT be ontable): {sorted(objects_with_support)}")
+    
+    # Filter unary relations
+    filtered_unary_relations = set()
+    
+    for (relation_name, obj), confidence in unary_candidates.items():
+        can_accept = True
+        
+        # Physics rule: objects that are "on" something else cannot be "ontable"
+        if relation_name == 'ontable' and obj in objects_with_support:
+            print(f"❌ Rejected: ontable({obj}) - object is already on something else")
+            can_accept = False
+        
+        if can_accept:
+            filtered_unary_relations.add((relation_name, obj))
+            print(f"✅ Accepted: {relation_name}({obj}) - confidence: {confidence:.3f}")
+    
+    return filtered_unary_relations
+
 def resolve_on_relation_conflicts(on_relations):
     """
     Resolve conflicts in "on" relations using physics constraints.
@@ -289,7 +416,166 @@ def would_create_cycle(existing_relations, new_obj1, new_obj2):
     # Check if new_obj2 transitively supports new_obj1
     return new_obj2 in supports and new_obj1 in supports[new_obj2]
 
-def create_object_mapping(detected_ids, expected_objects):
+def extract_dominant_color(image, mask):
+    """
+    Extract the dominant color from a masked region of an image.
+    Enhanced version that filters out background pixels and uses better color analysis.
+    
+    Args:
+        image: RGB image array (H, W, 3)
+        mask: Binary mask array (H, W, 1) or (H, W, 3)
+    
+    Returns:
+        tuple: (dominant_color_rgb, color_name)
+    """
+    # Handle different mask formats
+    if len(mask.shape) == 3:
+        mask = mask[:, :, 0]  # Take first channel if 3D
+    
+    # Get pixels where mask is True
+    masked_pixels = image[mask > 0]
+    
+    if len(masked_pixels) == 0:
+        return (0, 0, 0), "unknown"
+    
+    # Filter out very dark pixels (likely background/shadows)
+    # In blocksworld dataset, actual objects have some color, background is very dark
+    brightness_threshold = 60  # Pixels with all RGB values < 60 are likely background
+    bright_pixels = masked_pixels[np.sum(masked_pixels, axis=1) > brightness_threshold]
+    
+    if len(bright_pixels) == 0:
+        # If no bright pixels, use the brightest pixels available
+        brightness_scores = np.sum(masked_pixels, axis=1)
+        top_20_percent = int(len(masked_pixels) * 0.2)
+        brightest_indices = np.argsort(brightness_scores)[-top_20_percent:]
+        bright_pixels = masked_pixels[brightest_indices]
+    
+    # Use K-means to find dominant color if sklearn is available
+    if SKLEARN_AVAILABLE and len(bright_pixels) > 5:
+        try:
+            # Use more clusters to better capture the object color
+            n_clusters = min(3, len(bright_pixels))
+            kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+            kmeans.fit(bright_pixels)
+            
+            # Get the cluster with the most pixels (dominant color)
+            cluster_labels = kmeans.labels_
+            cluster_counts = np.bincount(cluster_labels)
+            dominant_cluster = np.argmax(cluster_counts)
+            dominant_color = kmeans.cluster_centers_[dominant_cluster]
+            
+            dominant_color = tuple(map(int, dominant_color))
+        except:
+            # Fallback to median color (more robust than mean for outliers)
+            dominant_color = tuple(map(int, np.median(bright_pixels, axis=0)))
+    else:
+        # Fallback to median color (more robust than mean for outliers)
+        dominant_color = tuple(map(int, np.median(bright_pixels, axis=0)))
+    
+    # Convert RGB to color name
+    color_name = rgb_to_color_name(dominant_color)
+    
+    return dominant_color, color_name
+
+def rgb_to_color_name(rgb):
+    """
+    Convert RGB values to human-readable color names.
+    Blocksworld-specific color ranges based on actual dataset analysis.
+    
+    Args:
+        rgb: Tuple of (R, G, B) values
+    
+    Returns:
+        str: Color name
+    """
+    # Define color ranges based on actual blocksworld dataset analysis
+    # Updated with real RGB values from log analysis
+    color_ranges = {
+        'red': [(100, 10, 0), (200, 50, 30)],       # Covers (130, 15, 8), (141, 22, 6), (124, 21, 8)
+        'green': [(0, 15, 0), (40, 80, 30)],        # Covers (0, 20, 4), (1, 23, 0) but excludes purple
+        'yellow': [(140, 100, 0), (255, 220, 100)], # Bright yellow blocks
+        'orange': [(140, 70, 10), (200, 120, 50)],  # Orange blocks
+        'purple': [(40, 15, 20), (120, 80, 100)],   # Covers (59, 27, 43), (68, 31, 49) - EXPANDED
+        'pink': [(160, 70, 80), (255, 180, 200)],   # Covers (181, 76, 99), (170, 73, 94)
+        'blue': [(0, 40, 100), (50, 80, 150)],      # Dark blue blocks
+        'brown': [(80, 40, 20), (140, 80, 60)],     # Brown blocks (but map to purple if needed)
+        'black': [(0, 0, 0), (50, 50, 50)],         # Very dark blocks
+        'white': [(200, 200, 200), (255, 255, 255)], # Light blocks
+    }
+    
+    # Check each color range
+    for color, (min_rgb, max_rgb) in color_ranges.items():
+        if all(min_rgb[i] <= rgb[i] <= max_rgb[i] for i in range(3)):
+            # Special case: if detected as brown but could be purple, prefer purple
+            if color == 'brown':
+                # Check if it's closer to purple range
+                purple_min, purple_max = color_ranges['purple']
+                if all(purple_min[i] <= rgb[i] <= purple_max[i] for i in range(3)):
+                    return 'purple'
+            return color
+    
+    # Fallback for unmapped colors - use similarity
+    distances = {}
+    for color, (min_rgb, max_rgb) in color_ranges.items():
+        # Calculate distance to center of range
+        center_rgb = [(min_rgb[i] + max_rgb[i]) / 2 for i in range(3)]
+        distance = sum((rgb[i] - center_rgb[i])**2 for i in range(3)) ** 0.5
+        distances[color] = distance
+    
+    # Return closest color
+    closest_color = min(distances, key=distances.get)
+    
+    # Special logic for dark colors that might be purple
+    if sum(rgb) < 150 and rgb[0] >= rgb[1] and rgb[2] >= rgb[1]:  # Dark with red/blue > green
+        return 'purple'
+    
+    return closest_color
+
+def analyze_object_colors(images, batch):
+    """
+    Analyze the actual colors of detected objects using computer vision.
+    
+    Args:
+        images: List of RGB images
+        batch: Object detection batch with masks and bounding boxes
+    
+    Returns:
+        dict: Mapping from object_id to detected color name
+    """
+    object_colors = {}
+    
+    print("🎨 Analyzing object colors using computer vision...")
+    
+    for i, (vid, fid, oid) in enumerate(batch["batched_object_ids"]):
+        if fid < len(images):
+            image = images[fid]
+            mask = batch["batched_pred_masks"][i]
+            
+            # Extract dominant color
+            dominant_rgb, color_name = extract_dominant_color(image, mask)
+            object_colors[oid] = color_name
+            
+            # Debug: show mask statistics
+            mask_2d = mask[:, :, 0] if len(mask.shape) == 3 else mask
+            total_pixels = np.sum(mask_2d > 0)
+            if total_pixels > 0:
+                all_pixels = image[mask_2d > 0]
+                min_rgb = np.min(all_pixels, axis=0)
+                max_rgb = np.max(all_pixels, axis=0)
+                avg_rgb = np.mean(all_pixels, axis=0)
+                
+                print(f"  Object {oid}: ")
+                print(f"    Mask pixels: {total_pixels}")
+                print(f"    RGB range: min={tuple(min_rgb)}, max={tuple(max_rgb)}")
+                print(f"    Average RGB: {tuple(map(int, avg_rgb))}")
+                print(f"    Dominant RGB: {dominant_rgb}")
+                print(f"    Detected color: {color_name}")
+            else:
+                print(f"  Object {oid}: No mask pixels found")
+    
+    return object_colors
+
+def create_object_mapping(detected_ids, expected_objects, object_colors=None):
     """
     Create mapping from detected object IDs to expected object names.
     Uses sophisticated heuristics based on colors, positions, and object names.
@@ -300,20 +586,29 @@ def create_object_mapping(detected_ids, expected_objects):
     print(f"🔍 Creating object mapping...")
     print(f"   Detected IDs: {detected_list}")
     print(f"   Expected objects: {expected_list}")
+    if object_colors:
+        print(f"   Detected colors: {object_colors}")
     
-    # Strategy 1: Color-based mapping
+    # Strategy 1: Computer vision-based color mapping
+    if object_colors:
+        cv_color_mapping = try_cv_color_mapping(detected_list, expected_list, object_colors)
+        if cv_color_mapping:
+            print(f"✅ Using CV-based color mapping: {cv_color_mapping}")
+            return cv_color_mapping
+    
+    # Strategy 2: Heuristic color-based mapping (fallback)
     color_mapping = try_color_mapping(detected_list, expected_list)
     if color_mapping:
-        print(f"✅ Using color-based mapping: {color_mapping}")
+        print(f"⚠️  Using heuristic color mapping: {color_mapping}")
         return color_mapping
     
-    # Strategy 2: Alphabetical mapping (common for blocksworld)
+    # Strategy 3: Alphabetical mapping (common for blocksworld)
     alpha_mapping = try_alphabetical_mapping(detected_list, expected_list)
     if alpha_mapping:
         print(f"✅ Using alphabetical mapping: {alpha_mapping}")
         return alpha_mapping
     
-    # Strategy 3: Simple index-based mapping (fallback)
+    # Strategy 4: Simple index-based mapping (fallback)
     index_mapping = {}
     for i, detected_id in enumerate(detected_list):
         if i < len(expected_list):
@@ -322,49 +617,101 @@ def create_object_mapping(detected_ids, expected_objects):
     print(f"⚡ Using index-based mapping (fallback): {index_mapping}")
     return index_mapping
 
-def try_color_mapping(detected_list, expected_list):
+def try_cv_color_mapping(detected_list, expected_list, object_colors):
     """
-    Try to map objects based on color names in expected object names.
+    Try to map objects based on computer vision color analysis.
     """
-    colors = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'black', 'white', 'brown']
+    print("🎨 Attempting CV-based color mapping...")
     
     # Extract colors from expected object names
-    object_colors = {}
+    expected_colors = {}
+    colors = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'black', 'white', 'brown', 'gray']
+    
     for obj in expected_list:
         obj_lower = obj.lower()
         for color in colors:
             if color in obj_lower:
-                object_colors[color] = obj
+                expected_colors[color] = obj
                 break
     
-    if len(object_colors) >= len(detected_list):
-        # We have enough color-identified objects
-        color_order = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'black', 'white', 'brown']
-        available_colors = [c for c in color_order if c in object_colors]
-        
-        mapping = {}
-        for i, detected_id in enumerate(detected_list):
-            if i < len(available_colors):
-                color = available_colors[i]
-                mapping[detected_id] = object_colors[color]
-        
-        return mapping if len(mapping) == len(detected_list) else None
+    print(f"  Expected colors: {expected_colors}")
     
+    # Try to match detected colors to expected colors
+    mapping = {}
+    used_objects = set()
+    
+    for detected_id in detected_list:
+        # Fix type mismatch: convert detected_id to int for object_colors lookup
+        detected_id_int = int(detected_id) if detected_id.isdigit() else detected_id
+        
+        if detected_id_int in object_colors:
+            detected_color = object_colors[detected_id_int]
+            
+            print(f"  🔍 Checking object {detected_id} (color: {detected_color})")
+            
+            # Direct match
+            if detected_color in expected_colors and expected_colors[detected_color] not in used_objects:
+                mapping[detected_id] = expected_colors[detected_color]
+                used_objects.add(expected_colors[detected_color])
+                print(f"  ✅ Direct match: {detected_id} ({detected_color}) -> {expected_colors[detected_color]}")
+            else:
+                # Try color similarity mapping
+                best_match = find_similar_color_match(detected_color, expected_colors, used_objects)
+                if best_match:
+                    mapping[detected_id] = best_match
+                    used_objects.add(best_match)
+                    print(f"  🔄 Similar match: {detected_id} ({detected_color}) -> {best_match}")
+                else:
+                    print(f"  ❌ No match found for {detected_id} ({detected_color})")
+        else:
+            print(f"  ⚠️ Object {detected_id} not found in color analysis")
+    
+    # Check if we successfully mapped enough objects (partial success is OK)
+    if len(mapping) >= len(detected_list) * 0.5:  # Accept if we mapped at least 50% of objects
+        print(f"  ✅ CV color mapping successful: {len(mapping)}/{len(detected_list)} objects mapped")
+        
+        # For unmapped objects, try to assign remaining colors
+        remaining_objects = [obj for obj in expected_colors.values() if obj not in used_objects]
+        unmapped_ids = [detected_id for detected_id in detected_list if detected_id not in mapping]
+        
+        for i, detected_id in enumerate(unmapped_ids):
+            if i < len(remaining_objects):
+                mapping[detected_id] = remaining_objects[i]
+                print(f"  🔄 Fallback assignment: {detected_id} -> {remaining_objects[i]}")
+        
+        return mapping
+    
+    print(f"  ❌ CV color mapping incomplete: {len(mapping)}/{len(detected_list)} objects mapped")
     return None
 
-def try_alphabetical_mapping(detected_list, expected_list):
+def find_similar_color_match(detected_color, expected_colors, used_objects):
     """
-    Try to map objects alphabetically - good for systematic naming.
+    Find the most similar color match for a detected color.
+    Updated for blocksworld with better color similarity mappings.
     """
-    # Sort both lists to ensure consistent mapping
-    sorted_detected = sorted(detected_list, key=lambda x: int(x) if x.isdigit() else 0)
-    sorted_expected = sorted(expected_list)
+    color_similarity = {
+        'red': ['orange', 'pink', 'brown'],
+        'blue': ['purple'],
+        'green': ['yellow'],
+        'yellow': ['orange', 'green'],
+        'orange': ['red', 'yellow', 'brown'],
+        'purple': ['blue', 'pink', 'brown'],  # Purple similar to brown
+        'pink': ['red', 'purple'],
+        'brown': ['purple', 'red', 'orange'],   # Brown -> purple (common misclassification)
+        # Map problematic colors to blocksworld equivalents
+        'black': ['purple', 'red', 'green', 'blue'],  # Very dark colors
+        'gray': ['purple', 'blue'],                   # Gray -> cooler colors
+        'white': ['yellow', 'pink'],                  # Light colors
+    }
     
-    if len(sorted_detected) <= len(sorted_expected):
-        mapping = {}
-        for i, detected_id in enumerate(sorted_detected):
-            mapping[detected_id] = sorted_expected[i]
-        return mapping
+    # Try similar colors in order of preference
+    similar_colors = color_similarity.get(detected_color, [])
+    
+    for similar_color in similar_colors:
+        if similar_color in expected_colors:
+            candidate_obj = expected_colors[similar_color]
+            if candidate_obj not in used_objects:
+                return candidate_obj
     
     return None
 

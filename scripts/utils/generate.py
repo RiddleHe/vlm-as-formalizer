@@ -1,5 +1,6 @@
 import itertools
 import os
+import sys
 
 from .build_prompts import (
     build_problem_prompt, 
@@ -21,7 +22,7 @@ from .parse_response import (
 )
 from .checkers import check_error
 from .models import predict_relation_probs
-from .sgclip import predict_all_relations, setup_and_load_models
+from .sgclip import predict_all_relations, setup_and_load_models, get_classes_ls, get_batched_objects
 from .helpers import observations_to_images, extract_relation_types, convert_sgclip_to_relation_preds
 
 def generate_pddl(
@@ -147,7 +148,7 @@ def extract_detectable_object_classes(domain_file, objects):
     
     # Common synonyms and variants for object types
     type_synonyms = {
-        'block': ['block', 'cube', 'brick', 'toy', 'object', 'box'],
+        'block': ['block', 'cube', 'brick', 'toy', 'object'],  # Removed 'box' to avoid duplicates
         'robot': ['robot', 'arm', 'manipulator'],
         'vegetable': ['vegetable', 'food', 'produce'],
         'tool': ['tool', 'utensil', 'instrument', 'knife'],
@@ -277,6 +278,7 @@ def generate_multi_step(
     print("----------Using sgclip for relation prediction------------")
     
     # Setup sgclip models
+    import os
     BASE_DIR = os.path.join(os.path.dirname(__file__), "..", "..")
     DEVICE = "cuda"
     sgclip_models = setup_and_load_models(BASE_DIR, DEVICE, detector_type="yoloe")
@@ -300,13 +302,93 @@ def generate_multi_step(
     print("----------sgclip results------------")
     print(sgclip_results)
     
-    # Convert sgclip results to relation_preds format with confidence thresholding
+    # Save visualization images with bounding boxes to organized directory
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
     # Lower threshold for more permissive matching, higher threshold for stricter matching
-    confidence_threshold = 0.8  # Accept relations with 40%+ confidence
+    confidence_threshold = 0.3  # Accept relations with 30%+ confidence for more coverage
+    
+    # Get batch data from sgclip models for color analysis
+    batch_data = None
+    try:
+        # We need to run object detection again to get batch data for color analysis
+        # This is a bit inefficient but necessary for accurate color mapping
+        
+        # Import the mask generation function we need
+        import importlib.util
+        
+        # Path to the mask generation module
+        inference_path = "/home/mh3897/pddl/villain/LASER/src/visualization"
+        mask_gen_path = os.path.join(inference_path, "mask_generation_grounding_dino.py")
+        
+        # Save original sys.path
+        original_path = sys.path[:]
+        
+        try:
+            # Import the correct utils module from LASER
+            laser_utils_path = os.path.join(inference_path, "utils.py")
+            laser_utils_spec = importlib.util.spec_from_file_location("laser_utils", laser_utils_path)
+            laser_utils = importlib.util.module_from_spec(laser_utils_spec)
+            laser_utils_spec.loader.exec_module(laser_utils)
+            
+            # Temporarily replace utils in sys.modules
+            original_utils = sys.modules.get('utils', None)
+            sys.modules['utils'] = laser_utils
+            
+            # Clean sys.path and add necessary paths
+            minimal_path = [
+                inference_path,
+                "/local-ssd/custom_models/GroundingDINO/",
+            ]
+            # Add back essential system paths
+            for path in original_path:
+                if ('site-packages' in path or 'conda' in path or 'python' in path or 
+                    'lib' in path or not path or path.startswith('/usr')):
+                    minimal_path.append(path)
+            
+            sys.path = minimal_path
+            
+            # Import the module directly
+            spec = importlib.util.spec_from_file_location("mask_generation_grounding_dino", mask_gen_path)
+            mask_gen_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mask_gen_module)
+            
+            # Get the YOLOE function
+            generate_masks_yoloe = mask_gen_module.generate_masks_yoloe
+            
+            # Now get batch data
+            classes_ls = get_classes_ls(object_classes)
+            batch_data = get_batched_objects(
+                images=images,
+                classes_ls=classes_ls,
+                grounding_model=sgclip_models["grounding_model"],
+                sam_video_predictor=sgclip_models["sam_video_predictor"],
+                mask_generator=sgclip_models["mask_generator"],
+                generate_masks=generate_masks_yoloe,
+                detector_type="yoloe",
+                device=sgclip_models["device"]
+            )
+            
+        finally:
+            # Restore original utils modules
+            if original_utils is not None:
+                sys.modules['utils'] = original_utils
+            elif 'utils' in sys.modules:
+                del sys.modules['utils']
+            
+            # Restore original sys.path
+            sys.path = original_path
+            
+    except Exception as e:
+        print(f"⚠️ Failed to get batch data for color analysis: {e}")
+    
     relation_preds = convert_sgclip_to_relation_preds(
         sgclip_results, 
         all_grounded_predicates, 
-        confidence_threshold=confidence_threshold
+        confidence_threshold=confidence_threshold,
+        images=images,
+        batch=batch_data
     )
 
     print("----------conversion results------------")
