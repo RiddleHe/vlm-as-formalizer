@@ -141,20 +141,8 @@ def build_observation_prompt(target, config):
 
     return prompt
 
-def build_goal_prompt(target, config, object_states, init_states):
+def build_goal_prompt(target):
     prompt = f"""
-    You are given some images which contain various objects of interests for a given task.
-    The images have been provided. {config.get("text", "")}
-    The task instruction is: {target["instruction"]}
-
-    The following domain file specifies all possible states and actions for the task:
-    {target["domain"]}
-
-    The following are all the objects and their states:
-    {object_states}
-    The following are all the initial states:
-    {init_states}
-
     For the task instruction, {target["instruction"]}, generate the goal specification for the PDDL file.
     The goal specification should be in the following format:
     (:goal (and 

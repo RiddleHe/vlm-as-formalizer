@@ -44,8 +44,8 @@ def parse_args():
     parser.add_argument("--enable_caption", action="store_true", default=False, help="Enable captioning for the observation")
 
     # If choose generate_multi_step
-    parser.add_argument("--generate_from_vlm", action="store_true", help="generate from VLM")
-    parser.add_argument("--generate_from_cv_model", action="store_true", help="generate from CV model")
+    parser.add_argument("--generate_from_vlm", action="store_true", default=True, help="generate from VLM")
+    parser.add_argument("--generate_from_cv_model", action="store_true", default=False, help="generate from CV model")
 
     parser.add_argument("--clean_image", action="store_true", default=False, help="Present a clean image to the model")
 

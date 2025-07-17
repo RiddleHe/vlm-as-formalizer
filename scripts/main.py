@@ -29,6 +29,8 @@ from utils.models import VLMClientFactory
 from dotenv import load_dotenv
 load_dotenv('.env')
 
+torch.set_float32_matmul_precision('high')
+
 # Main
 
 def main():
