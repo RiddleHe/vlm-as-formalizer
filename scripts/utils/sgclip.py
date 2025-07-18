@@ -153,8 +153,8 @@ def get_batched_objects(
             if detector_type in ["dino"]:
                 video_segments, oid_class_pred, _ = generate_masks(
                     grounding_model=grounding_model,
-                    box_threshold=0.20,
-                    text_threshold=0.15,
+                    box_threshold=0.35,
+                    text_threshold=0.25,
                     predictor=sam_video_predictor,
                     mask_generator=mask_generator,
                     video_tensor=video_tensor,
@@ -609,7 +609,7 @@ def setup_and_load_models(
         pred_model_path="/local-ssd/custom_models/sgclip",
         pred_model_name="ensemble-2025-02-10-14-57-22.0.checkpoint",
         yoloe_path="/local-ssd/yoloe/pretrain",
-        yoloe_model_name="yoloe-v8l-seg.pt",
+        yoloe_model_name="yoloe-11l-seg.pt",
     ):
     # Import necessary modules first
     import sys
@@ -702,10 +702,11 @@ def setup_and_load_models(
 def predict_all_relations(
     images: List[np.ndarray],
     object_classes: List[str],
-    unary_relations: List[str],
-    binary_relations: List[str],
-    models: dict,
+    unary_relations: List[str] = None,
+    binary_relations: List[str] = None,
+    models: dict = None,
     detector_type: Literal["dino", "yoloe", "both"] = "both",
+    detection_only: bool = False,
 ):
     # Use importlib to import directly from specific paths
     import importlib.util
@@ -849,6 +850,16 @@ def predict_all_relations(
         ".",
         show_masks=False
     )
+
+    # If detection_only mode, return early with detection results
+    if detection_only:
+        return {
+            "batch": batch,
+            "object_detections": batch["object_ids_to_classes"],
+            "annotated_images_saved": True,
+            "unary": {},
+            "binary": {}
+        }
 
     unary_results = {}
     if unary_relations:

@@ -18,7 +18,6 @@ import torch
 
 from utils.helpers import (
     seed_everything, 
-    parse_args,
     format_command,
     create_file_paths,
 )
@@ -28,6 +27,59 @@ from utils.models import VLMClientFactory
 
 from dotenv import load_dotenv
 load_dotenv('.env')
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+
+    # Data dirs
+    parser.add_argument("--result_dir", type=str, default=None, help="direcotry for predicted bboxes, generated problems, and found plans")
+    parser.add_argument("--domain", type=str, default=None, help="domain name (cooking/blocksworld/hanoi)")
+
+    # Model args
+    parser.add_argument("--model", type=str, default=None, help="model name")
+    parser.add_argument("--device", type=str, default="cuda:0", help="device")
+
+    parser.add_argument("--find_plan", action="store_true", default=True, help="refine generated problems by corrective reprompting")
+
+    # Main generation choices
+    parser.add_argument("--generate_end_to_end", action="store_true", help="generate PDDL end-to-end")
+    parser.add_argument("--generate_multi_step", action="store_true", help="generate scene graph first")
+    parser.add_argument("--generate_multi_step_with_vlm", action="store_true", help="generate scene graph first with VLM")
+    parser.add_argument("--generate_multi_step_with_cv", action="store_true", help="generate scene graph first with CV model")
+
+
+    # Planning baseline
+    parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
+
+    # If choose generate_end_to_end
+    parser.add_argument("--generate_caption", action="store_true", help="generate caption for observation")
+    parser.add_argument("--generate_scene_graph", action="store_true", help="generate scene graph for observation")
+    parser.add_argument("--enable_caption", action="store_true", default=False, help="Enable captioning for the observation")
+
+    # If choose generate_multi_step
+    parser.add_argument("--generate_from_vlm", action="store_true", help="generate from VLM")
+    parser.add_argument("--generate_from_cv_model", action="store_true", help="generate from CV model")
+
+    parser.add_argument("--clean_image", action="store_true", default=False, help="Present a clean image to the model")
+
+    # Runtime config
+    parser.add_argument("--num_tries", type=int, default=3, help="the number of tries for each generation stage")
+
+    # Downward solver
+    parser.add_argument("--downward_dir", type=str, default="/home/mh3897/pddl/villain/downward", help="")
+    parser.add_argument("--time_limit", type=int, default=30, help="")
+
+    # related to problem generation and refinement
+    parser.add_argument("--seed", type=int, default=42, help="random seed")
+    parser.add_argument("--gen_step", type=str, default="base", help="PDDL generation step")
+    parser.add_argument("--prev_gen_step", type=str, default="base", help="Previous generation step, used for corrective reprompting")
+    parser.add_argument("--num_examples", type=int, default=1, help="the numebr of examples for few-shot prompting")
+    parser.add_argument("--num_repeat", type=int, default=1, help="the number of problems to generate per task")
+    parser.add_argument("--refine_all", action="store_true", help="refine all problems regardless of errors")
+    args = parser.parse_args()
+
+    return args
 
 # Main
 
