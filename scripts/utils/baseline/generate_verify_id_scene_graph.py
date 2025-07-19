@@ -1,6 +1,7 @@
 import os
 import sys
 import numpy as np
+import itertools
 
 from ..build_prompts import (
     build_problem_prompt, 
@@ -249,7 +250,7 @@ def generate_multi_step_with_cv(
     # Systematically query VLM for all relationship combinations
     print("----------Systematic VLM Relationship Querying------------")
     
-    # Define the relationships we want to check
+    # todo
     target_relations = {
         'on': 'Looking at the annotated image with bounding boxes, is {obj1} on top of {obj2}? (meaning {obj1} is physically above {obj2} and directly touching it)',
         'ontable': 'Looking at the annotated image with bounding boxes, is {obj} directly touching the table surface? (not stacked on another object)',
