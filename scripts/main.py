@@ -15,10 +15,10 @@ import tempfile
 import shutil
 from PIL import Image
 import torch
+import argparse
 
 from utils.helpers import (
     seed_everything, 
-    parse_args,
     format_command,
     create_file_paths,
 )
@@ -28,6 +28,60 @@ from utils.models import VLMClientFactory
 
 from dotenv import load_dotenv
 load_dotenv('.env')
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+
+    # Data dirs
+    parser.add_argument("--result_dir", type=str, default=None, help="direcotry for predicted bboxes, generated problems, and found plans")
+    parser.add_argument("--domain", type=str, default=None, help="domain name (cooking/blocksworld/hanoi)")
+
+    # Model args
+    parser.add_argument("--model", type=str, default=None, help="model name")
+    parser.add_argument("--device", type=str, default="cuda:0", help="device")
+
+    parser.add_argument("--find_plan", action="store_true", default=True, help="refine generated problems by corrective reprompting")
+
+    # Main generation choices
+    parser.add_argument("--generate_end_to_end", action="store_true", help="generate PDDL end-to-end")
+    parser.add_argument("--generate_multi_step", action="store_true", help="generate scene graph first")
+    parser.add_argument("--generate_multi_step_with_vlm", action="store_true", help="generate scene graph first with VLM")
+    parser.add_argument("--generate_multi_step_with_cv", action="store_true", help="generate scene graph first with CV model")
+    parser.add_argument("--generate_multi_step_with_sgclip_vlm", action="store_true", help="generate scene graph first with SGCLIP-VLM")
+
+
+    # Planning baseline
+    parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
+
+    # If choose generate_end_to_end
+    parser.add_argument("--generate_caption", action="store_true", help="generate caption for observation")
+    parser.add_argument("--generate_scene_graph", action="store_true", help="generate scene graph for observation")
+    parser.add_argument("--enable_caption", action="store_true", default=False, help="Enable captioning for the observation")
+
+    # If choose generate_multi_step
+    parser.add_argument("--generate_from_vlm", action="store_true", help="generate from VLM")
+    parser.add_argument("--generate_from_cv_model", action="store_true", help="generate from CV model")
+
+    parser.add_argument("--clean_image", action="store_true", default=False, help="Present a clean image to the model")
+
+    # Runtime config
+    parser.add_argument("--num_tries", type=int, default=3, help="the number of tries for each generation stage")
+
+    # Downward solver
+    parser.add_argument("--downward_dir", type=str, default="/home/mh3897/pddl/villain/downward", help="")
+    parser.add_argument("--time_limit", type=int, default=30, help="")
+
+    # related to problem generation and refinement
+    parser.add_argument("--seed", type=int, default=42, help="random seed")
+    parser.add_argument("--gen_step", type=str, default="base", help="PDDL generation step")
+    parser.add_argument("--prev_gen_step", type=str, default="base", help="Previous generation step, used for corrective reprompting")
+    parser.add_argument("--num_examples", type=int, default=1, help="the numebr of examples for few-shot prompting")
+    parser.add_argument("--num_repeat", type=int, default=1, help="the number of problems to generate per task")
+    parser.add_argument("--refine_all", action="store_true", help="refine all problems regardless of errors")
+    args = parser.parse_args()
+
+    return args
 
 # Main
 
@@ -54,7 +108,9 @@ def main():
         domain_file = f.read()
 
     # Generate / refine PDDL problems
-    if args.generate_end_to_end or args.generate_multi_step or args.generate_plan:
+    if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
+        args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
+        args.generate_multi_step_with_sgclip_vlm):
         # Create folders
         folders = ["responses", "instructions"]
         if args.generate_plan:
@@ -139,7 +195,9 @@ def main():
             save_step = args.gen_step
 
             try:
-                if args.generate_end_to_end or args.generate_multi_step:
+                if (args.generate_end_to_end or args.generate_multi_step or 
+                    args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
+                    args.generate_multi_step_with_sgclip_vlm):
                     dir_pairs = [
                         ("problems", "file", "pddl"),
                         ("instructions", "prompt", "txt"),
@@ -175,12 +233,16 @@ def main():
                 exist_ok=True,
             )
 
-        problems = sorted([
-            os.path.join(f"{result_dir}/{args.gen_step}/problems", f) 
-            for f 
-            in os.listdir(f"{result_dir}/{args.gen_step}/problems")
-            if "-" not in f
-        ])  # Need to sort
+        problems_dir = f"{result_dir}/{args.gen_step}/problems"
+        if not os.path.exists(problems_dir):
+            problems = []
+        else:
+            problems = sorted([
+                os.path.join(problems_dir, f) 
+                for f 
+                in os.listdir(problems_dir)
+                if "-" not in f
+            ])  # Need to sort
         num_problems = len(problems)
 
         success_count = 0        
