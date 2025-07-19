@@ -34,8 +34,9 @@ def parse_args():
     # Main generation choices
     parser.add_argument("--generate_end_to_end", action="store_true", help="generate PDDL end-to-end")
     parser.add_argument("--generate_multi_step", action="store_true", help="generate scene graph first")
-
-    # Planning baseline
+    parser.add_argument("--generate_zero_shot_planning", action="store_true", help="VLLM zero-shot planning (ViLA) - generate plan directly")
+    
+    # plan generation
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
 
     # If choose generate_end_to_end

@@ -42,6 +42,8 @@ def main():
         result_dir += f"_{args.model.replace('/', '-')}"
     if args.generate_plan:
         result_dir += "_plan"
+    if args.generate_zero_shot_planning:
+        result_dir += "_zero-shot-planning"
 
     seed_everything(args.seed) 
 
@@ -53,11 +55,11 @@ def main():
     with open(f"{data_dir}/domain.pddl", "r") as f:
         domain_file = f.read()
 
-    # Generate / refine PDDL problems
-    if args.generate_end_to_end or args.generate_multi_step or args.generate_plan:
+    # Generate / refine PDDL problems  
+    if args.generate_end_to_end or args.generate_multi_step or args.generate_plan or args.generate_zero_shot_planning:
         # Create folders
         folders = ["responses", "instructions"]
-        if args.generate_plan:
+        if args.generate_plan or args.generate_zero_shot_planning:
             folders += ["plans"]
         else:
             folders += ["problems"]
@@ -115,8 +117,13 @@ def main():
             desc="Generating PDDL problems"
         ):
 
-            target_problem_dir = f"{result_dir}/{args.gen_step}/problems"
-            if any(path.startswith(f"{task_name}") for path in os.listdir(target_problem_dir)):
+            # Check appropriate directory based on pipeline type
+            if args.generate_plan or args.generate_zero_shot_planning:
+                target_check_dir = f"{result_dir}/{args.gen_step}/plans"
+            else:
+                target_check_dir = f"{result_dir}/{args.gen_step}/problems"
+            
+            if os.path.exists(target_check_dir) and any(path.startswith(f"{task_name}") for path in os.listdir(target_check_dir)):
                 print(f"{task_name} already exists, skipping...")
                 continue
 
@@ -124,8 +131,28 @@ def main():
             print(f"Instruction: {target['instruction'][:100]}\n")
 
             # generate PDDL objects, initial state, and goal specification
-            if args.generate_plan:
-                pass
+            if args.generate_plan or args.generate_zero_shot_planning:
+                # Import generate functions here to avoid circular imports
+                from utils.generate import generate_zero_shot_planning
+                
+                if args.generate_zero_shot_planning:
+                    # Pipeline 1: ViLA zero-shot planning
+                    plan, response, prompt = generate_zero_shot_planning(
+                        target,
+                        config,
+                        model,
+                        target["observations"], 
+                        0  # retry_idx
+                    )
+                    
+                    res = {
+                        "plan": plan,
+                        "prompt": prompt,
+                        "response": response
+                    }
+                else:
+                    # Other generate_plan methods can be added here
+                    pass
 
             else:
                 res, success = generate_pddl(
@@ -154,7 +181,7 @@ def main():
                             with open(f"{result_dir}/{save_step}/{dir_name}/{problem_name}.{file_ext}", "w") as fw:
                                 fw.write(res["problem"][file_name][retry_idx])
                 
-                elif args.generate_plan:
+                elif args.generate_plan or args.generate_zero_shot_planning:
                     dir_pairs = [
                         ("plans", "plan"),
                         ("instructions", "prompt"),
