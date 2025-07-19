@@ -115,26 +115,3 @@ def generate_pddl(
             break
 
     return res, success
-
-def generate_zero_shot_planning(
-    target,
-    config, 
-    model,
-    observations,
-    retry_idx,
-):
-    """
-    Pipeline 1: ViLA - VLM zero-shot planning
-    Directly generate action plan without PDDL intermediate step
-    """
-    
-    # Build prompt for direct plan generation
-    plan_prompt = build_plan_prompt(target, config)
-    
-    # Direct VLM call to generate plan
-    plan_response = model.generate(plan_prompt, observations)
-    
-    # Parse the clean action sequence from VLM response
-    clean_plan = parse_plan(plan_response)
-    
-    return clean_plan, plan_response, plan_prompt
