@@ -2,6 +2,8 @@ import os
 import sys
 import numpy as np
 
+import itertools
+
 from ..build_prompts import (
     build_problem_prompt, 
     build_refine_problem_prompt, 
