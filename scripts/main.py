@@ -15,6 +15,7 @@ import tempfile
 import shutil
 from PIL import Image
 import torch
+import argparse
 
 from utils.helpers import (
     seed_everything, 
@@ -47,6 +48,7 @@ def parse_args():
     parser.add_argument("--generate_multi_step", action="store_true", help="generate scene graph first")
     parser.add_argument("--generate_multi_step_with_vlm", action="store_true", help="generate scene graph first with VLM")
     parser.add_argument("--generate_multi_step_with_cv", action="store_true", help="generate scene graph first with CV model")
+    parser.add_argument("--generate_multi_step_with_sgclip_vlm", action="store_true", help="generate scene graph first with SGCLIP-VLM")
 
 
     # Planning baseline
@@ -106,7 +108,9 @@ def main():
         domain_file = f.read()
 
     # Generate / refine PDDL problems
-    if args.generate_end_to_end or args.generate_multi_step or args.generate_plan:
+    if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
+        args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
+        args.generate_multi_step_with_sgclip_vlm):
         # Create folders
         folders = ["responses", "instructions"]
         if args.generate_plan:
@@ -191,7 +195,9 @@ def main():
             save_step = args.gen_step
 
             try:
-                if args.generate_end_to_end or args.generate_multi_step:
+                if (args.generate_end_to_end or args.generate_multi_step or 
+                    args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
+                    args.generate_multi_step_with_sgclip_vlm):
                     dir_pairs = [
                         ("problems", "file", "pddl"),
                         ("instructions", "prompt", "txt"),
@@ -227,12 +233,16 @@ def main():
                 exist_ok=True,
             )
 
-        problems = sorted([
-            os.path.join(f"{result_dir}/{args.gen_step}/problems", f) 
-            for f 
-            in os.listdir(f"{result_dir}/{args.gen_step}/problems")
-            if "-" not in f
-        ])  # Need to sort
+        problems_dir = f"{result_dir}/{args.gen_step}/problems"
+        if not os.path.exists(problems_dir):
+            problems = []
+        else:
+            problems = sorted([
+                os.path.join(problems_dir, f) 
+                for f 
+                in os.listdir(problems_dir)
+                if "-" not in f
+            ])  # Need to sort
         num_problems = len(problems)
 
         success_count = 0        

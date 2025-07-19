@@ -1,6 +1,5 @@
 import re
 from collections import defaultdict
-import numpy as np
 
 def parse_actions_from_domain(domain_file):
     regex_patern = r'\(:action\s+(\w+).*?:parameters\s*\((.*?)\)'

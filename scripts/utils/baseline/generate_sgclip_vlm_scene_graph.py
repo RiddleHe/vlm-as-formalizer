@@ -122,7 +122,10 @@ def generate_multi_step_with_sgclip_vlm(
     sgclip_models = setup_and_load_models(BASE_DIR, DEVICE, detector_type="yoloe")
 
     # Dynamically extract detectable object classes from domain and objects
-    object_classes = extract_detectable_object_classes(target["domain"], objects)
+    object_classes = []
+    for obj_class in objects.keys():
+        if objects[obj_class]:  # Only include classes that have instances
+            object_classes.append(obj_class)
 
     print(f"----------detectable object classes (auto-extracted)------------")
     print(object_classes)
