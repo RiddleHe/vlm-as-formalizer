@@ -28,7 +28,8 @@ from .baseline import (
     generate_multi_step_with_cv,
     generate_multi_step_with_vlm,
     generate_pddl_end_to_end,
-    generate_multi_step_with_sgclip_vlm
+    generate_multi_step_with_sgclip_vlm,
+    generate_zero_shot_planning
 )
 
 def generate_pddl(
@@ -94,6 +95,19 @@ def generate_pddl(
                 observations,
                 retry_idx,
             )
+        elif args.generate_zero_shot_planning:
+            plan, response, problem_prompt = generate_zero_shot_planning(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+            )
+            # For planning pipelines, we store plan instead of problem_file
+            res["plan"] = plan
+            res["response"] = response  
+            res["prompt"] = problem_prompt
+            return res, True
         else:
             raise ValueError(f"Invalid generation method: {args.generate_method}")
         

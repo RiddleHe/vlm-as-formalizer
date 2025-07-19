@@ -25,7 +25,6 @@ from utils.helpers import (
 from utils.checkers import find_plan, compare_plans
 from utils.generate import generate_pddl
 from utils.models import VLMClientFactory
-from utils.baseline.generate_zero_shot_planning import generate_zero_shot_planning
 
 from dotenv import load_dotenv
 load_dotenv('.env')
@@ -190,25 +189,13 @@ def main():
 
             # generate PDDL objects, initial state, and goal specification
             if args.generate_plan or args.generate_zero_shot_planning:
-                
-                if args.generate_zero_shot_planning:
-                    # Pipeline 1: ViLA zero-shot planning
-                    plan, response, prompt = generate_zero_shot_planning(
-                        target,
-                        config,
-                        model,
-                        target["observations"], 
-                        0  # retry_idx
-                    )
-                    
-                    res = {
-                        "plan": plan,
-                        "prompt": prompt,
-                        "response": response
-                    }
-                else:
-                    # Other generate_plan methods can be added here
-                    pass
+
+                res, success = generate_pddl(
+                    target,
+                    config,
+                    model=model,
+                    args=args,
+                )
 
             else:
                 res, success = generate_pddl(
