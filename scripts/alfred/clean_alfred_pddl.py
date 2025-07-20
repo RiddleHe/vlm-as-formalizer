@@ -28,10 +28,21 @@ def create_pddl(traj_data, problem):
 
         coordinateObjectId = planner_action.get("coordinateObjectId", None)
         coordinateReceptacleObjectId = planner_action.get("coordinateReceptacleObjectId", None)
+        action_object_id = planner_action.get("objectId", None) # this id is used in action to control env simulator
+        action_receptacle_object_id = planner_action.get("receptacleObjectId", None)
         for object_info, object_place in [(coordinateObjectId, "object"), (coordinateReceptacleObjectId, "receptacle")]:
             if object_info:
                 object_type, object_coords = object_info
-                object_id = object_type + "_" + convert_coord_to_loc(object_coords)
+                object_id = object_type + "_" + convert_coord_to_loc(object_coords) # this id is used in PDDL
+                object_env_id = None
+                if action_object_id and object_place == "object":
+                    action_object_type = action_object_id.split("|")[0]
+                    if action_object_type == object_type:  # match object type
+                        object_env_id = action_object_id
+                if action_receptacle_object_id and object_place == "receptacle":
+                    action_receptacle_type = action_receptacle_object_id.split("|")[0]
+                    if action_receptacle_type == object_type:
+                        object_env_id = action_receptacle_object_id
                 if object_id not in objects:
                     object_types[object_type] += 1
                     objects[object_id] = {
@@ -39,6 +50,7 @@ def create_pddl(traj_data, problem):
                         "coords": object_coords,
                         "is_receptacle": object_place == "receptacle",
                         "object_name": object_type + "_" + str(object_types[object_type]),
+                        "object_env_id": object_env_id,
                     }
 
     names_to_ids = {v["object_name"]: k for k, v in objects.items()}
@@ -102,7 +114,7 @@ def create_pddl(traj_data, problem):
                 stripped_line = line.split("(")[1].split(")")[0]
                 predicate, object_id, location = stripped_line.split(" ")
                 if object_id in objects:
-                    objects[object_id]["location"] = convert_loc_bar_to_loc_num(location)
+                    objects[object_id]["location"] = convert_loc_bar_to_loc_num(location)  # 4 coords: x, z, rotation, horizon
                     if agent_location and location == agent_location:
                         location_line = f"        (atLocation agent1 {objects[object_id]['object_name']})"
                         object_states["init"].append(location_line)
@@ -276,7 +288,10 @@ def process_alfred_dir(input_dir, output_dir):
 
 if __name__ == "__main__":
     if sys.argv[1] == "test":
-        input_dir = "/local-ssd/alfred/full_2.1.0/train/pick_cool_then_place_in_recep-Mug-None-SinkBasin-6/trial_T20190907_125559_972660"
+        input_root_dir = "/local-ssd/alfred/full_2.1.0/train/look_at_obj_in_light-AlarmClock-None-DeskLamp-301/"
+        input_dir_name = os.listdir(input_root_dir)[0]
+        input_dir = os.path.join(input_root_dir, input_dir_name)
+
         output_dir = f"test-{input_dir.split('/')[-2]}"
         os.makedirs(output_dir, exist_ok=True)
 
@@ -297,6 +312,9 @@ if __name__ == "__main__":
 
         with open(os.path.join(output_dir, "objects.json"), "w") as f:
             json.dump(objects, f)
+
+        with open(os.path.join(output_dir, "traj_data.json"), "w") as f:
+            json.dump(traj_data, f)
 
     elif sys.argv[1] == "dev":
         input_dir = "/local-ssd/alfred/full_2.1.0/train"
