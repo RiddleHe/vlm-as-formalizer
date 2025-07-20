@@ -107,7 +107,7 @@ def generate_pddl(
                 save_step=save_step,
                 task_name=task_name,
             )
-        elif args.generate_zero_shot_pddl:
+        elif args.generate_villain_pddl:
             problem_file, response, problem_prompt = generate_villain_pddl(
                 target,
                 config,
@@ -115,7 +115,7 @@ def generate_pddl(
                 observations,
                 retry_idx,
             )
-        elif args.generate_direct_pddl:
+        elif args.generate_villain_direct_pddl:
             problem_file, response, problem_prompt = generate_villain_direct_pddl(
                 target,
                 config,
@@ -123,7 +123,7 @@ def generate_pddl(
                 observations,
                 retry_idx,
             )
-        elif args.generate_vlm_captioning_pddl:
+        elif args.generate_villain_captioning_pddl:
             problem_file, response, problem_prompt = generate_villain_captioning_pddl(
                 target,
                 config,
@@ -131,7 +131,7 @@ def generate_pddl(
                 observations,
                 retry_idx,
             )
-        elif args.generate_zero_shot_planning:
+        elif args.generate_vila_planning:
             plan, response, problem_prompt = generate_vila_planning(
                 target,
                 config,

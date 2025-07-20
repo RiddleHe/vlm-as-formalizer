@@ -124,20 +124,27 @@ def build_observation_prompt(target, config):
     The following domain file specifies all possible states and actions for the task:
     {target["domain"]}
 
-    Given the name of an object type, identify all objects with an appropriate name in the images that belong to this type.
+    Identify all objects in the images and give each a specific, descriptive name that distinguishes it from others.
+    Use colors, numbers, or other distinguishing features in the object names.
+    
     Follow this exact format:
-    <object> - <type>
-    <object> - <type>
+    <specific_object_name> - <type>
+    <specific_object_name> - <type>
     ...
+
+    Examples:
+    red_block - block
+    blue_block - block  
+    robot1 - robot
 
     The images have been provided. {config.get("text", "")}
     The task instruction is: {target["instruction"]}
-    Now identify all the objects for the following types relevant to the task instruction:
+    
+    Now identify all objects in the images and list them using the exact format above.
+    Use only these object types from the domain: {', '.join(parse_types(target["domain"]))}
+    
+    List all objects you can see:
     """
-
-    types = parse_types(target["domain"])
-    for obj_type in types:
-        prompt += f"{obj_type}: \n"
 
     return prompt
 

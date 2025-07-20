@@ -53,10 +53,10 @@ def parse_args():
 
     # Planning baseline
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
-    parser.add_argument("--generate_zero_shot_planning", action="store_true", help="Pipeline 1: ViLA - VLLM zero-shot planning")
-    parser.add_argument("--generate_zero_shot_pddl", action="store_true", help="Pipeline 2: ViLain - VLLM zero-shot PDDL (Grounding DINO + VLM)")
-    parser.add_argument("--generate_direct_pddl", action="store_true", help="Pipeline 3: ViLain Direct PDDL Generation (no object detection)")
-    parser.add_argument("--generate_vlm_captioning_pddl", action="store_true", help="Pipeline 4a: ViLain Captioning → PDDL (without DINO)")
+    parser.add_argument("--generate_vila_planning", action="store_true", help="Pipeline 1: ViLA - VLM zero-shot planning")
+    parser.add_argument("--generate_villain_pddl", action="store_true", help="Pipeline 2: ViLain - VLM → DINO → VLM PDDL Generation")
+    parser.add_argument("--generate_villain_direct_pddl", action="store_true", help="Pipeline 3: ViLain Direct PDDL Generation (no object detection)")
+    parser.add_argument("--generate_villain_captioning_pddl", action="store_true", help="Pipeline 4a: ViLain Captioning → PDDL (without DINO)")
 
     # If choose generate_end_to_end
     parser.add_argument("--generate_caption", action="store_true", help="generate caption for observation")
@@ -100,13 +100,13 @@ def main():
         result_dir += f"_{args.model.replace('/', '-')}"
     if args.generate_plan:
         result_dir += "_plan"
-    if args.generate_zero_shot_planning:
+    if args.generate_vila_planning:
         result_dir += "_zero-shot-planning"
-    if args.generate_zero_shot_pddl:
+    if args.generate_villain_pddl:
         result_dir += "_pipeline2"
-    if args.generate_direct_pddl:
+    if args.generate_villain_direct_pddl:
         result_dir += "_pipeline3-direct-pddl"
-    if args.generate_vlm_captioning_pddl:
+    if args.generate_villain_captioning_pddl:
         result_dir += "_pipeline4a-vlm-captioning-pddl"
 
     seed_everything(args.seed) 
@@ -122,12 +122,12 @@ def main():
     # Generate / refine PDDL problems
     if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
         args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
-        args.generate_multi_step_with_sgclip_vlm or args.generate_zero_shot_planning or
-        args.generate_zero_shot_pddl or args.generate_direct_pddl or 
-        args.generate_vlm_captioning_pddl):
+        args.generate_multi_step_with_sgclip_vlm or args.generate_vila_planning or
+        args.generate_villain_pddl or args.generate_villain_direct_pddl or 
+        args.generate_villain_captioning_pddl):
         # Create folders
         folders = ["responses", "instructions"]
-        if args.generate_plan or args.generate_zero_shot_planning:
+        if args.generate_plan or args.generate_vila_planning:
             folders += ["plans"]
         else:
             folders += ["problems"]
@@ -193,7 +193,7 @@ def main():
         ):
 
             # Check appropriate directory based on pipeline type
-            if args.generate_plan or args.generate_zero_shot_planning:
+            if args.generate_plan or args.generate_vila_planning:
                 target_check_dir = f"{result_dir}/{args.gen_step}/plans"
             else:
                 target_check_dir = f"{result_dir}/{args.gen_step}/problems"
@@ -206,7 +206,7 @@ def main():
             print(f"Instruction: {target['instruction'][:100]}\n")
 
             # generate PDDL objects, initial state, and goal specification
-            if args.generate_plan or args.generate_zero_shot_planning:
+            if args.generate_plan or args.generate_vila_planning:
 
                 res, success = generate_pddl(
                     target,
@@ -232,8 +232,8 @@ def main():
             try:
                 if (args.generate_end_to_end or args.generate_multi_step or 
                     args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
-                    args.generate_multi_step_with_sgclip_vlm or args.generate_zero_shot_pddl or
-                    args.generate_direct_pddl or args.generate_vlm_captioning_pddl):
+                    args.generate_multi_step_with_sgclip_vlm or args.generate_villain_pddl or
+                    args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl):
                     dir_pairs = [
                         ("problems", "file", "pddl"),
                         ("instructions", "prompt", "txt"),
@@ -248,7 +248,7 @@ def main():
                             with open(f"{result_dir}/{save_step}/{dir_name}/{problem_name}.{file_ext}", "w") as fw:
                                 fw.write(res["problem"][file_name][retry_idx])
                 
-                elif args.generate_plan or args.generate_zero_shot_planning:
+                elif args.generate_plan or args.generate_vila_planning:
                     dir_pairs = [
                         ("plans", "plan"),
                         ("instructions", "prompt"),

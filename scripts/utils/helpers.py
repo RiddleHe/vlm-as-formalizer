@@ -379,29 +379,42 @@ def detect_objects_with_dino(image_path: str, search_terms: list, box_threshold:
         return text_query, phrase2object, token_spans
 
     def get_grounding_output(image, caption, token_spans, model, box_threshold=0.35):
-        """Execute Grounding DINO inference"""
+        """Execute Grounding DINO inference using proven working method"""
         caption = caption.lower().strip()
         image = image.to("cuda")
 
         with torch.no_grad():
             outputs = model(image[None], captions=[caption])
 
-        prediction_logits = outputs["pred_logits"].cpu().sigmoid()[0]  # prediction_logits.shape = (nq, 256)
-        prediction_boxes = outputs["pred_boxes"].cpu()[0]  # prediction_boxes.shape = (nq, 4)
+        logits = outputs["pred_logits"].sigmoid()[0]  
+        boxes = outputs["pred_boxes"][0] 
 
-        mask = prediction_logits.max(dim=1)[0] > box_threshold
-        logits = prediction_logits[mask]  # logits.shape = (n, 256)
-        boxes = prediction_boxes[mask]  # boxes.shape = (n, 4)
+        positive_maps = gdino_vl_utils.create_positive_map_from_span(
+            model.tokenizer(caption),
+            token_span=token_spans
+        ).to("cuda")
 
-        tokenlizer = model.tokenizer
-        tokenized = tokenlizer(caption)
+        logits_for_phrases = positive_maps @ logits.T 
+        all_logits = []
+        all_phrases = []
+        all_boxes = []
+        
+        for (token_span, logit_phr) in zip(token_spans, logits_for_phrases):
+            phrase = ' '.join([caption[_s:_e] for (_s, _e) in token_span])
+            filt_mask = logit_phr > box_threshold
+            all_boxes.append(boxes[filt_mask])
+            all_logits.append(logit_phr[filt_mask])
 
-        phrases = [
-            gdino_vl_utils.get_phrases_from_posmap(logits[i], tokenized, tokenlizer, token_spans).replace('.', '')
-            for i in range(len(logits))
-        ]
+            logit_phr_num = logit_phr[filt_mask]
+            all_phrases.extend([phrase for _ in logit_phr_num])
 
-        return boxes, logits, phrases
+        if len(all_boxes) == 0:
+            return torch.empty(0, 4), []
+            
+        boxes_filt = torch.cat(all_boxes, dim=0).cpu()
+        pred_phrases = all_phrases
+
+        return boxes_filt, pred_phrases
 
     def create_bbox_annotations_fair(boxes, detected_objects, phrases):
         """Create bbox annotations for fair detection"""
@@ -418,9 +431,9 @@ def detect_objects_with_dino(image_path: str, search_terms: list, box_threshold:
 
     try:
         # 1. Load model
-        model_path = "/local-ssd/custom_models/GroundingDINO/groundingdino_swinb_cogcoor.pth"
-        config_path = "/local-ssd/custom_models/GroundingDINO/groundingdino/config/GroundingDINO_SwinB_cfg.py"
-        model = gdino_inference.load_model(config_path, model_path)
+        model_path = "/local-ssd/custom_models/GroundingDINO/weights/groundingdino_swint_ogc.pth"
+        config_path = "/local-ssd/custom_models/GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py"
+        model = gdino_inference.load_model(config_path, model_path).to("cuda")
 
         # 2. Load and preprocess image
         image_source, image = gdino_inference.load_image(image_path)
@@ -433,7 +446,7 @@ def detect_objects_with_dino(image_path: str, search_terms: list, box_threshold:
             return {}
 
         # 4. Run DINO inference  
-        boxes, logits, phrases = get_grounding_output(
+        boxes, phrases = get_grounding_output(
             image, text_query, token_spans, model, box_threshold
         )
         
