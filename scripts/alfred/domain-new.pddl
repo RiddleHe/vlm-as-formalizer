@@ -84,6 +84,7 @@
     :effect (and
                 (holds ?a ?o)
                 (holdsAny ?a)
+                (not (inReceptacle ?o ?r))
             )
  )
 

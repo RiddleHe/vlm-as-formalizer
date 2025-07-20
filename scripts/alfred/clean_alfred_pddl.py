@@ -17,10 +17,32 @@ def convert_coord_to_loc(coords):
 def convert_loc_bar_to_loc_num(loc):
     return loc.replace("_bar_", "|").replace("_minus_", "-").replace("_dot_", ".")
 
+def find_paren_end_idx(lines, start_idx):
+    paren_count = 0
+    for i in range(len(lines)): # start from the opening paren
+        line = lines[i].strip()
+        for char in line:
+            if char == "(":
+                paren_count += 1
+            elif char == ")":
+                paren_count -= 1
+                if paren_count == 0:
+                    return start_idx + i # return the index of the closing parenthesis
+    raise ValueError("No closing parenthesis found")
+
 def create_pddl(traj_data, problem):
     high_pddl = traj_data["plan"]["high_pddl"]
     objects = {}
     object_types = defaultdict(int)
+
+    filter_keywords = [
+        "able", "is", "Type", # type def
+        "forall", "not", "exists" # quantifiers
+    ]
+
+    pred_sub_list = {
+        "inReceptacleObject": "inReceptacle"
+    }
 
     # Extract relevant objects with locations, discard objectId 
     for action in high_pddl:
@@ -92,14 +114,19 @@ def create_pddl(traj_data, problem):
                 idx += 1
                 continue
             for object_id in objects.keys(): 
-                if object_id in line:
+                if object_id in line: # object_id - object_type
+                    parts = line.strip().split(" ")
+                    assert object_id == parts[0].strip(), f"Object id {object_id} does not match {parts[0].strip()}"
+                    object_type = parts[2].strip()
                     simplified_line = line.replace(object_id, objects[object_id]["object_name"])
-                    if "Knife" in simplified_line:
+                    if object_type == "Knife":
                         simplified_line = simplified_line.replace("object", "knife")
-                    elif "Microwave" in simplified_line:
+                    elif object_type == "Microwave":
                         simplified_line = simplified_line.replace("receptacle", "microwave")
-                    elif "Fridge" in simplified_line:
+                    elif object_type == "Fridge":
                         simplified_line = simplified_line.replace("receptacle", "fridge")
+                    elif object_type == "object" and objects[object_id]["is_receptacle"]:
+                        simplified_line = simplified_line.replace("object", "receptacle")
                     object_states["objects"].append(simplified_line)
                     break
         elif idx < goal_idx: # we are collecting init
@@ -134,69 +161,64 @@ def create_pddl(traj_data, problem):
         idx += 1 # we do not collect goal
 
     # We collect goals separately
-    idx = goal_idx + 1
-    exist_indices = []
+    idx = goal_idx
+    exist_block_indices = [] # tuples of (start, end + 1)
     while idx < len(problem):
         line = problem[idx]
         if "(exists" in line:
-            exist_indices.append(idx)
+            end_idx = find_paren_end_idx(problem[idx:], idx)
+            exist_block_indices.append((idx, end_idx + 1))
+            idx = end_idx - 1 # stay on end_idx in case new exist block starts
         idx += 1
-    exist_indices.append(len(problem))
 
-    for i, j in zip(exist_indices[:-1], exist_indices[1:]):
-        object_in_question = None
-        object_short_name = None
-        receptacle_in_question = None
-        receptacle_short_name = None
-        object_var = None
-        receptacle_var = None
-        cur_idx = i + 1
-        # first pass to get object and receptacle
+    for i, j in exist_block_indices:
+        variables = {}
+        cur_idx = i
+        # first pass to get all variable through type declaration
         while cur_idx < j:
             cur_line = problem[cur_idx].strip()
-            if "(objectType" in cur_line or "(receptacleType" in cur_line: # extract object type
+            if "(objectType" in cur_line or "(receptacleType" in cur_line: # eg. (receptacleType ?r CounterTopType)
                 parts = cur_line.split("(")[1].split(")")[0].split(" ")
-                object_type = parts[2].strip()
-                object_type_raw = object_type.replace("Type", "")
-                if object_type_raw in object_by_type:
-                    if "(objectType" in cur_line:
-                        object_short_name = object_by_type[object_type_raw][0]
-                        object_in_question = names_to_ids[object_short_name]
-                        object_var = parts[1].strip()
-                    # TODO: add support for nested receptacle types
-                    elif "(receptacleType" in cur_line:
-                        receptacle_short_name = object_by_type[object_type_raw][0]
-                        receptacle_in_question = names_to_ids[receptacle_short_name]
-                        receptacle_var = parts[1].strip()
-                        assert object_in_question is not None, "Object should have been found if receptacle type is found"
-                        object_states["goal"].append(f"        (inReceptacle {object_short_name} {receptacle_short_name})")
+                variable_type = "receptacle" if parts[0] == "receptacleType" else "object"
+                object_type_prefix = parts[2].strip()
+                object_type_prefix = object_type_prefix.replace("Type", "")
+                assert object_type_prefix in object_by_type.keys(), f"Object {object_type_prefix} not found in existing object types"
+                object_name = object_by_type[object_type_prefix][0]  # Assume that we can use any object of this type, eg. CounterTop_1
+                object_id = names_to_ids[object_name]
+                object_var = parts[1].strip() # TODO: make sure to handle inReceptacle
+                variables[object_var] = {
+                    "object_id": object_id,
+                    "object_type": object_type_prefix,
+                    "object_name": object_name,
+                    "variable_type": variable_type,
+                }
             cur_idx += 1
 
-        # second pass to get goal
-        cur_idx = i + 1
+        cur_idx = i # reset for predicate parsing
         while cur_idx < j:
             cur_line = problem[cur_idx].strip()
-            if "objectAtLocation" in cur_line and cur_idx + 1 < j and "atLocation" in problem[cur_idx + 1]:
-                object_states["goal"].append("        (atLocation agent1 " + object_short_name + ")")
+            if "objectAtLocation" in cur_line and cur_idx + 1 < j and "atLocation" in problem[cur_idx + 1]: # TODO: more robust location parsing
+                cur_var = cur_line.split("(")[1].split(")")[0].split(" ")[1]  # the object at location
+                cur_object_name = variables[cur_var]["object_name"]
+                object_states["goal"].append("        (atLocation agent1 " + cur_object_name + ")")
                 cur_idx += 1
-            elif "(" in cur_line and ")" in cur_line: # single predicate
-                if "able" in cur_line or "forall" in cur_line or "not" in cur_line or "Type" in cur_line:
+            elif "(" in cur_line and ")" in cur_line: # filter logical connectives eg. (and, (or
+                if any(keyword in cur_line for keyword in filter_keywords):  # filter negation, type def, quantifiers
                     cur_idx += 1
                     continue  # discard redundant predicates
                 condition_args = cur_line.split("(")[1].split(")")[0].split(" ")
-                predicate_arg = condition_args[0]           
+                predicate_arg = condition_args[0]
+                predicate_arg = pred_sub_list.get(predicate_arg, predicate_arg)  
                 arg_list = []
-                is_valid_predicate = True
                 for arg in condition_args[1:]:
                     if arg == "?a":
                         arg_list.append("agent1")
-                    elif arg == object_var:
-                        arg_list.append(object_short_name)
+                    elif arg in variables.keys():
+                        arg_list.append(variables[arg]["object_name"])
                     else: # assume ?l will be filtered and other vars won't occur
-                        is_valid_predicate = False
-                if is_valid_predicate:
-                    arg_str = " ".join(arg_list)
-                    object_states["goal"].append(f"        ({predicate_arg} {arg_str})")
+                        raise ValueError(f"Invalid predicate argument in {cur_line}: {arg}")
+                arg_str = " ".join(arg_list)
+                object_states["goal"].append(f"        ({predicate_arg} {arg_str})")
             # we skip (and and we skip )
             cur_idx += 1
 
@@ -285,8 +307,8 @@ def process_alfred_dir(input_dir, output_dir):
 
 if __name__ == "__main__":
     if sys.argv[1] == "test":
-        input_root_dir = "/local-ssd/alfred/full_2.1.0/train/look_at_obj_in_light-AlarmClock-None-DeskLamp-314"
-        # input_root_dir = "/local-ssd/alfred/full_2.1.0/train/pick_and_place_with_movable_recep-ButterKnife-Cup-CounterTop-1"
+        # input_root_dir = "/local-ssd/alfred/full_2.1.0/train/look_at_obj_in_light-AlarmClock-None-DeskLamp-314"
+        input_root_dir = "/local-ssd/alfred/full_2.1.0/train/pick_and_place_with_movable_recep-ButterKnife-Cup-CounterTop-1"
         input_dir_name = os.listdir(input_root_dir)[0]
         input_dir = os.path.join(input_root_dir, input_dir_name)
 
