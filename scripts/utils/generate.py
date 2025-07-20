@@ -36,6 +36,9 @@ def generate_pddl(
         config, 
         model, 
         args,
+        result_dir=None,
+        save_step=None,
+        task_name=None,
     ):
     observations = target["observations"]
     success = False
@@ -85,6 +88,9 @@ def generate_pddl(
                 model,
                 observations,
                 retry_idx,
+                result_dir=result_dir,
+                save_step=save_step,
+                task_name=task_name,
             )
         elif args.generate_multi_step_with_sgclip_vlm:
             problem_file, response, problem_prompt = generate_multi_step_with_sgclip_vlm(
@@ -93,6 +99,9 @@ def generate_pddl(
                 model,
                 observations,
                 retry_idx,
+                result_dir=result_dir,
+                save_step=save_step,
+                task_name=task_name,
             )
         else:
             raise ValueError(f"Invalid generation method: {args.generate_method}")

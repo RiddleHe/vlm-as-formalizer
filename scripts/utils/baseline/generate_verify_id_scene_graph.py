@@ -26,21 +26,43 @@ from ..models import predict_relation_probs
 from ..sgclip import predict_all_relations, setup_and_load_models, get_classes_ls, get_batched_objects
 from ..helpers import observations_to_images, extract_relation_types
 
+def convert_numpy_types(obj):
+    """Recursively convert numpy and torch types to Python native types for JSON serialization"""
+    import torch
+    if isinstance(obj, dict):
+        return {key: convert_numpy_types(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_numpy_types(item) for item in obj]
+    elif isinstance(obj, tuple):
+        return tuple(convert_numpy_types(item) for item in obj)
+    elif isinstance(obj, (np.integer, np.int64, np.int32)):
+        return int(obj)
+    elif isinstance(obj, (np.floating, np.float64, np.float32)):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, torch.Tensor):
+        return float(obj.detach().cpu().numpy()) if obj.numel() == 1 else obj.detach().cpu().numpy().tolist()
+    else:
+        return obj
+
 def generate_multi_step_with_cv(
     target,
     config,
     model,
     observations,
     retry_idx,
+    result_dir=None,
+    save_step=None,
+    task_name=None,
 ):
     import time
     import os
     import shutil
     import json
     
-    # Extract task name from observations path
-    task_name = None
-    if observations and len(observations) > 0:
+    # Extract task name from observations path if not provided
+    if task_name is None and observations and len(observations) > 0:
         # Extract from path like "../data/blocksworld/observations/problem1.jpg"
         obs_path = observations[0]
         if isinstance(obs_path, str):
@@ -138,11 +160,20 @@ def generate_multi_step_with_cv(
     # Use sgclip's predict_all_relations to get detection results with prompts
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
-    # Create output directory for results organized by problem number
-    if task_name:
-        output_dir = f"detection_results/{task_name}"
+    # Create output directory for results
+    if result_dir and save_step:
+        # Use the same structure as main.py saves results
+        output_dir = os.path.join(result_dir, save_step, "intermediate_results")
+        if task_name:
+            output_dir = os.path.join(output_dir, task_name)
+        else:
+            output_dir = os.path.join(output_dir, f"unknown_problem_{timestamp}")
     else:
-        output_dir = f"detection_results/unknown_problem_{timestamp}"
+        # Fallback to original behavior
+        if task_name:
+            output_dir = f"detection_results/{task_name}"
+        else:
+            output_dir = f"detection_results/unknown_problem_{timestamp}"
     os.makedirs(output_dir, exist_ok=True)
     
     # Convert images to numpy arrays for sgclip
@@ -153,10 +184,20 @@ def generate_multi_step_with_cv(
         else:
             images_np.append(image)
     
+    object_classes = []
+    for obj_class in objects.keys():
+        if objects[obj_class]:  # Only include classes that have instances
+            for instance in objects[obj_class]:
+                # Remove underscores for DINO detection
+                detectable_name = instance.replace('_', ' ')
+                object_classes.append(detectable_name)
+
+    print(f"----------detectable object classes------------")
+    print(object_classes)  # Should be ['green block', 'yellow block', 'pink block', 'red block', 'robot']
     # Use sgclip's predict_all_relations in detection_only mode
     sgclip_results = predict_all_relations(
         images=images_np,
-        object_classes="block",  # This acts as prompts
+        object_classes=object_classes, 
         models=models,
         detector_type="dino",
         detection_only=True,  # Skip relationship prediction
@@ -166,12 +207,23 @@ def generate_multi_step_with_cv(
     print(f"Object detections: {sgclip_results['object_detections']}")
     print(f"Annotated images saved: {sgclip_results['annotated_images_saved']}")
     
-    # Move the annotated frame to our output directory
-    annotated_frame_path = None
-    if os.path.exists("frame_0.png"):
-        annotated_frame_path = os.path.join(output_dir, "annotated_frame.png")
-        shutil.move("frame_0.png", annotated_frame_path)
-        print(f"Moved annotated frame to: {annotated_frame_path}")
+    # Move all annotated frames to our output directory
+    annotated_frame_paths = []
+    frame_idx = 0
+    while True:
+        frame_file = f"frame_{frame_idx}.png"
+        if os.path.exists(frame_file):
+            annotated_frame_path = os.path.join(output_dir, f"annotated_frame_{frame_idx}.png")
+            shutil.move(frame_file, annotated_frame_path)
+            annotated_frame_paths.append(annotated_frame_path)
+            print(f"Moved annotated frame to: {annotated_frame_path}")
+            frame_idx += 1
+        else:
+            break
+    
+    # For backward compatibility, if there's only one frame, also save it as annotated_frame.png
+    if len(annotated_frame_paths) == 1:
+        shutil.copy(annotated_frame_paths[0], os.path.join(output_dir, "annotated_frame.png"))
     
     # Extract detection results with BBOX information from sgclip batch
     batch = sgclip_results['batch']
@@ -180,72 +232,104 @@ def generate_multi_step_with_cv(
     
     print("----------Extracting Objects with BBoxes and Actual Labels------------")
     detected_objects_with_bbox = []
-    frame_idx = 0  # Assuming single frame for now
 
     # Get the actual object labels from sgclip results
     object_detections = sgclip_results['object_detections']
+    
+    # Get number of frames from images
+    num_frames = len(images_np)
 
-    # Extract bboxes from batch data
+    # Extract bboxes from batch data for all frames
     for obj_id, obj_class in batch["object_ids_to_classes"].items():
-        # Check if this object appears in this frame
-        if any(obj_id_info[2] == obj_id for obj_id_info in batch["batched_object_ids"] 
-            if obj_id_info[1] == frame_idx):
+        # Check each frame for this object
+        for frame_idx in range(num_frames):
+            if any(obj_id_info[2] == obj_id for obj_id_info in batch["batched_object_ids"] 
+                if obj_id_info[1] == frame_idx):
+                
+                # Extract bbox from batched_pred_bboxes
+                bbox = [0, 0, 0, 0]  # Default
+                if "batched_pred_bboxes" in batch:
+                    for i, (vid, fid, oid) in enumerate(batch["batched_object_ids"]):
+                        if vid == 0 and fid == frame_idx and oid == obj_id:
+                            if i < len(batch["batched_pred_bboxes"]):
+                                bbox_data = batch["batched_pred_bboxes"][i]
+                                # Handle different formats: tensor, tuple, or list
+                                if hasattr(bbox_data, 'cpu'):
+                                    # It's a tensor
+                                    bbox = bbox_data.cpu().numpy().tolist()
+                                elif isinstance(bbox_data, tuple):
+                                    # It's already a tuple from sgclip's mask_to_bbox
+                                    bbox = list(bbox_data)
+                                elif hasattr(bbox_data, 'tolist'):
+                                    # It's a numpy array or other format with tolist
+                                    bbox = bbox_data.tolist()
+                                else:
+                                    # It's already a list or other format
+                                    bbox = list(bbox_data) if bbox_data else [0, 0, 0, 0]
+                            break
             
-            # Extract bbox from batched_pred_bboxes
-            bbox = [0, 0, 0, 0]  # Default
-            if "batched_pred_bboxes" in batch:
-                for i, (vid, fid, oid) in enumerate(batch["batched_object_ids"]):
-                    if vid == 0 and fid == frame_idx and oid == obj_id:
-                        if i < len(batch["batched_pred_bboxes"]):
-                            bbox_data = batch["batched_pred_bboxes"][i]
-                            # Handle different formats: tensor, tuple, or list
-                            if hasattr(bbox_data, 'cpu'):
-                                # It's a tensor
-                                bbox = bbox_data.cpu().numpy().tolist()
-                            elif isinstance(bbox_data, tuple):
-                                # It's already a tuple from sgclip's mask_to_bbox
-                                bbox = list(bbox_data)
-                            elif hasattr(bbox_data, 'tolist'):
-                                # It's a numpy array or other format with tolist
-                                bbox = bbox_data.tolist()
-                            else:
-                                # It's already a list or other format
-                                bbox = list(bbox_data) if bbox_data else [0, 0, 0, 0]
-                        break
-            
-            # USE THE ACTUAL LABEL FROM object_detections
-            # The annotated image shows labels in format "class (id)" or just "id"
-            actual_class = object_detections.get(obj_id, obj_class)  # Get class from detections
-            
-            # The label shown in the annotated image
-            if actual_class and actual_class != f"obj_{obj_id}":
-                # When class is detected, sgclip shows "class (id)"
-                actual_label = f"{actual_class} ({obj_id})"
-            else:
-                # When no class detected, just shows the ID
-                actual_label = str(obj_id)
-            
-            detected_objects_with_bbox.append({
-                'id': obj_id,
-                'name': actual_label,  # The actual label shown in the image (just the ID)
-                'label': actual_label,  # Keep this for compatibility
-                'class': actual_class,   # The class name (block, cube, etc.)
-                'bbox': bbox,
-                'frame_idx': frame_idx
-            })
+                # USE THE ACTUAL LABEL FROM object_detections
+                # The annotated image shows labels in format "class (id)" or just "id"
+                actual_class = object_detections.get(obj_id, obj_class)  # Get class from detections
+                
+                # The label shown in the annotated image
+                if actual_class and actual_class != f"obj_{obj_id}":
+                    # When class is detected, sgclip shows "class (id)"
+                    actual_label = f"{actual_class} ({obj_id})"
+                else:
+                    # When no class detected, just shows the ID
+                    actual_label = str(obj_id)
+                
+                detected_objects_with_bbox.append({
+                    'id': obj_id,
+                    'name': actual_label,  # The actual label shown in the image (just the ID)
+                    'label': actual_label,  # Keep this for compatibility
+                    'class': actual_class,   # The class name (block, cube, etc.)
+                    'bbox': bbox,
+                    'frame_idx': frame_idx
+                })
 
     # Sort by object ID to maintain consistent ordering
     detected_objects_with_bbox.sort(key=lambda x: x['id'])
     
-    # Create observations with the annotated frame for VLM queries
+    # Remove duplicates for VLM queries (keep only one instance per object ID)
+    # For VLM queries, we only need unique objects, not per-frame instances
+    unique_objects_for_vlm = {}
+    for obj in detected_objects_with_bbox:
+        obj_id = obj['id']
+        if obj_id not in unique_objects_for_vlm:
+            unique_objects_for_vlm[obj_id] = obj
+    
+    unique_detected_objects = list(unique_objects_for_vlm.values())
+    print(f"Total object instances across frames: {len(detected_objects_with_bbox)}")
+    print(f"Unique objects for VLM queries: {len(unique_detected_objects)}")
+    
+    # Save detection results
+    detection_results = {
+        'task_name': task_name,
+        'timestamp': timestamp,
+        'num_frames': num_frames,
+        'detected_objects': detected_objects_with_bbox,
+        'sgclip_results': {
+            'object_detections': sgclip_results['object_detections'],
+            'annotated_images_saved': sgclip_results['annotated_images_saved']
+        }
+    }
+    
+    with open(os.path.join(output_dir, 'detection_results.json'), 'w') as f:
+        json.dump(convert_numpy_types(detection_results), f, indent=2)
+    
+    # Create observations with the annotated frames for VLM queries
     annotated_observations = observations
-    if annotated_frame_path and os.path.exists(annotated_frame_path):
-        # Load the annotated frame
+    if annotated_frame_paths:
+        # Load all annotated frames
         from PIL import Image
-        annotated_frame = Image.open(annotated_frame_path)
-        # Replace the original observation with the annotated one
-        annotated_observations = [annotated_frame]
-        print("Using annotated frame for VLM queries")
+        annotated_observations = []
+        for path in annotated_frame_paths:
+            if os.path.exists(path):
+                annotated_frame = Image.open(path)
+                annotated_observations.append(annotated_frame)
+        print(f"Using {len(annotated_observations)} annotated frame(s) for VLM queries")
     
     # Systematically query VLM for all relationship combinations
     print("----------Systematic VLM Relationship Querying------------")
@@ -265,8 +349,8 @@ def generate_multi_step_with_cv(
     for rel_name, rel_template in target_relations.items():
         if rel_name in ['on']:  # Binary relations
             vlm_relationships[rel_name] = []
-            for obj1 in detected_objects_with_bbox:
-                for obj2 in detected_objects_with_bbox:
+            for obj1 in unique_detected_objects:
+                for obj2 in unique_detected_objects:
                     if obj1['id'] != obj2['id']:
                         query = rel_template.format(obj1=obj1['label'], obj2=obj2['label'])
                         vlm_response = model.generate(f"{query} Answer only yes or no.", annotated_observations)
@@ -293,7 +377,7 @@ def generate_multi_step_with_cv(
     for rel_name, rel_template in target_relations.items():
         if rel_name in ['ontable', 'clear']:  # Unary relations
             vlm_relationships[rel_name] = []
-            for obj in detected_objects_with_bbox:
+            for obj in unique_detected_objects:
                 query = rel_template.format(obj=obj['label'])
                 vlm_response = model.generate(f"{query} Answer only yes or no.", annotated_observations)
                 is_true = "yes" in vlm_response.lower() and "no" not in vlm_response.lower()
@@ -329,7 +413,7 @@ def generate_multi_step_with_cv(
     }
     
     with open(os.path.join(output_dir, 'relationship_results.json'), 'w') as f:
-        json.dump(relationship_results, f, indent=2)
+        json.dump(convert_numpy_types(relationship_results), f, indent=2)
     
     # Map generic object names (cube0, cube1, etc.) to domain-specific names
     print("----------Mapping Generic Names to Domain Objects------------")
@@ -341,7 +425,8 @@ def generate_multi_step_with_cv(
             domain_objects_list.append({'type': obj_type, 'name': instance})
     
     print(f"Domain objects: {[obj['name'] for obj in domain_objects_list]}")
-    print(f"Detected objects: {[obj['label'] for obj in detected_objects_with_bbox]}")
+    print(f"Detected objects (all instances): {[obj['label'] for obj in detected_objects_with_bbox]}")
+    print(f"Unique objects for VLM: {[obj['label'] for obj in unique_detected_objects]}")
     
     # Ask VLM to map each detected object to domain objects using annotated frame
     # Replace the existing for loop with this global approach
@@ -375,7 +460,7 @@ def generate_multi_step_with_cv(
                     label_num = label_num.group()
                     
                     # Find the detected object with this number
-                    for obj in detected_objects_with_bbox:
+                    for obj in unique_detected_objects:
                         # Check if this object has the same number
                         if f"({label_num})" in obj['label'] or obj['id'] == int(label_num):
                             if domain_block in [d['name'] for d in domain_objects_list]:
@@ -394,7 +479,7 @@ def generate_multi_step_with_cv(
     }
     
     with open(os.path.join(output_dir, 'object_mapping.json'), 'w') as f:
-        json.dump(mapping_results, f, indent=2)
+        json.dump(convert_numpy_types(mapping_results), f, indent=2)
     
     # Step 3: Convert VLM relationship results to domain predicates
     step3_start = time.time()
@@ -475,22 +560,27 @@ def generate_multi_step_with_cv(
         'domain_objects_count': len(domain_objects_list),
         'successful_mappings': len(object_name_mapping),
         'final_predicates_count': len(true_grounded_predicates),
-        'files_created': [
-            'annotated_frame.png',
+        'num_frames': num_frames,
+        'files_created': [f for f in [
+            *[f'annotated_frame_{i}.png' for i in range(len(annotated_frame_paths))],
+            'annotated_frame.png' if len(annotated_frame_paths) == 1 else None,
             'detection_results.json',
             'relationship_results.json',
             'object_mapping.json',
             f'{task_name}.pddl' if task_name else 'problem.pddl',
             'summary.json'
-        ],
+        ] if f is not None],
         'success': True
     }
     
     with open(os.path.join(output_dir, 'summary.json'), 'w') as f:
-        json.dump(summary_results, f, indent=2)
+        json.dump(convert_numpy_types(summary_results), f, indent=2)
     
     print(f"📁 All results saved to: {output_dir}")
-    print(f"   - Annotated image: annotated_frame.png")
+    if len(annotated_frame_paths) > 1:
+        print(f"   - Annotated frames: {', '.join([f'annotated_frame_{i}.png' for i in range(len(annotated_frame_paths))])}")
+    else:
+        print(f"   - Annotated image: annotated_frame.png")
     print(f"   - Detection results: detection_results.json")
     print(f"   - Relationship analysis: relationship_results.json")
     print(f"   - Object mapping: object_mapping.json")

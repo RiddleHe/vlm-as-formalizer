@@ -351,97 +351,6 @@ def get_unary_relations(
     )
     return formatted_probs.get(video_ids[0], {})
 
-
-def compute_spatial_relations(batch, binary_relations):
-    """
-    Compute spatial relations based on bounding box positions.
-    This is a fallback when sgclip gives unreliable predictions.
-    """
-    spatial_relations = {}
-    
-    if "on" in binary_relations:
-        # Extract object positions from bounding boxes
-        object_positions = {}
-        for i, (vid, fid, oid) in enumerate(batch["batched_object_ids"]):
-            bbox = batch["batched_pred_bboxes"][i]
-            # bbox format: (x_min, y_min, x_max, y_max)
-            center_x = (bbox[0] + bbox[2]) / 2
-            center_y = (bbox[1] + bbox[3]) / 2
-            bottom_y = bbox[3]  # Bottom edge of object
-            top_y = bbox[1]     # Top edge of object
-            width = bbox[2] - bbox[0]
-            height = bbox[3] - bbox[1]
-            
-            if fid not in object_positions:
-                object_positions[fid] = {}
-            object_positions[fid][oid] = {
-                'center': (center_x, center_y),
-                'bottom': bottom_y,
-                'top': top_y,
-                'bbox': bbox,
-                'width': width,
-                'height': height
-            }
-        
-        print("🔍 DEBUG: Object positions:")
-        for fid, positions in object_positions.items():
-            print(f"  Frame {fid}:")
-            for oid, pos in positions.items():
-                print(f"    Object {oid}: bbox={pos['bbox']}, center={pos['center']}, size=({pos['width']:.1f}x{pos['height']:.1f})")
-        
-        # Compute "on" relations with IMPROVED physics constraints
-        for fid, positions in object_positions.items():
-            if fid not in spatial_relations:
-                spatial_relations[fid] = {}
-                
-            for oid1, pos1 in positions.items():
-                for oid2, pos2 in positions.items():
-                    if oid1 != oid2:
-                        # FIXED "on" relation conditions:
-                        # 1. oid1 must be above oid2 (oid1's bottom near oid2's top)
-                        # 2. Reasonable horizontal overlap (not necessarily perfect alignment)
-                        
-                        # Check if oid1 is above oid2 - CORRECTED LOGIC
-                        # For stacking: oid1's bottom should be near oid2's top
-                        vertical_gap = pos1['bottom'] - pos2['top']  # Small positive means oid1 is directly above oid2
-                        horizontal_overlap = min(pos1['bbox'][2], pos2['bbox'][2]) - max(pos1['bbox'][0], pos2['bbox'][0])
-                        
-                        # Calculate horizontal centers distance
-                        horizontal_center_distance = abs(pos1['center'][0] - pos2['center'][0])
-                        
-                        # More lenient thresholds:
-                        contact_threshold = 25  # pixels - allow some gap for imperfect detection
-                        min_overlap = 10  # pixels - require some horizontal overlap
-                        max_center_distance = 50  # pixels - allow reasonable center distance
-                        
-                        print(f"    Checking {oid1} on {oid2}:")
-                        print(f"      Vertical gap (oid1_bottom - oid2_top): {vertical_gap:.1f}px (threshold: {contact_threshold}px)")
-                        print(f"      Horizontal overlap: {horizontal_overlap:.1f}px (min: {min_overlap}px)")
-                        print(f"      Horizontal center distance: {horizontal_center_distance:.1f}px (max: {max_center_distance}px)")
-                        
-                        # Check if this could be a valid "on" relation
-                        # oid1 is on oid2 if oid1's bottom is close to oid2's top (small positive gap)
-                        is_stacked_on = vertical_gap >= -contact_threshold and vertical_gap <= contact_threshold
-                        has_overlap = horizontal_overlap >= min_overlap
-                        reasonable_alignment = horizontal_center_distance <= max_center_distance
-                        
-                        if is_stacked_on and (has_overlap or reasonable_alignment):
-                            # High confidence for valid "on" relation
-                            confidence = 0.90
-                            print(f"      ✅ DETECTED ON RELATION: {oid1} is on {oid2}")
-                        else:
-                            # Low confidence for invalid relation
-                            confidence = 0.05
-                            print(f"      ❌ NOT ON: is_stacked_on={is_stacked_on}, has_overlap={has_overlap}, reasonable_alignment={reasonable_alignment}")
-                        
-                        obj_key = (oid1, oid2)
-                        if obj_key not in spatial_relations[fid]:
-                            spatial_relations[fid][obj_key] = []
-                        spatial_relations[fid][obj_key].append((confidence, "on"))
-    
-    return spatial_relations
-
-
 def get_binary_relations(
     batch,
     images,
@@ -469,41 +378,7 @@ def get_binary_relations(
         oid_to_class=batch["object_ids_to_classes"],
         topk=len(binary_relations)
     )
-    
-    # Check if sgclip is giving unreliable predictions (all 100%)
-    all_100_percent = True
-    for frame_data in formatted_probs.values():
-        for predictions in frame_data.values():
-            for conf, rel in predictions:
-                if rel == "on" and float(conf) < 0.99:
-                    all_100_percent = False
-                    break
-    
-    if all_100_percent and "on" in binary_relations:
-        print("⚠️  Warning: sgclip giving 100% confidence for all 'on' relations.")
-        print("🔧 Using spatial reasoning as fallback...")
         
-        # Compute spatial relations
-        spatial_relations = compute_spatial_relations(batch, binary_relations)
-        
-        # Format spatial relations to match expected output
-        formatted_spatial = {}
-        for fid, frame_relations in spatial_relations.items():
-            formatted_spatial[fid] = {}
-            for (oid1, oid2), predictions in frame_relations.items():
-                # Convert to tensor format
-                tensor_predictions = [(torch.tensor(conf), rel) for conf, rel in predictions]
-                
-                # Get object class names
-                class1 = batch["object_ids_to_classes"].get(oid1, f"obj_{oid1}")
-                class2 = batch["object_ids_to_classes"].get(oid2, f"obj_{oid2}")
-                obj_key = (f"{oid1} ({class1})", f"{oid2} ({class2})")
-                
-                formatted_spatial[fid][obj_key] = tensor_predictions
-        
-        print(f"🔧 DEBUG: Formatted spatial relations: {formatted_spatial}")
-        return formatted_spatial
-    
     return formatted_probs.get("tmp_video", {})
 
 def calculate_iou(bbox1, bbox2):
@@ -880,7 +755,7 @@ def predict_all_relations(
             binary_relations=binary_relations,
             predicate_model=models["predicate_model"]
         )
-
+    
     print(binary_results)
 
     return {"unary": unary_results, "binary": binary_results}
