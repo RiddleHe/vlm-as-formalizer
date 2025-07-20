@@ -76,16 +76,14 @@ def extract_relation_types(grounded_predicates):
     # Convert sets to sorted lists for consistent output
     return sorted(list(unary_relations)), sorted(list(binary_relations))
 
-def convert_sgclip_to_relation_preds(sgclip_results, all_grounded_predicates, confidence_threshold=0.5, images=None, batch=None):
+def convert_sgclip_to_relation_preds(sgclip_results, all_grounded_predicates, confidence_threshold=0.5):
     """
-    Convert sgclip results to relation_preds format with object mapping and confidence thresholding.
+    Convert sgclip results to relation_preds format with direct color-based object mapping.
     
     Args:
-        sgclip_results: Results from predict_all_relations (sgclip)
+        sgclip_results: Results from predict_all_relations (sgclip) with colored object detection
         all_grounded_predicates: List of all possible grounded predicates
         confidence_threshold: Minimum confidence to accept a prediction (default: 0.5)
-        images: List of images for color analysis (optional)
-        batch: Object detection batch for color analysis (optional)
         
     Returns:
         List of boolean values indicating which predicates are true
@@ -96,88 +94,82 @@ def convert_sgclip_to_relation_preds(sgclip_results, all_grounded_predicates, co
     # Step 1: Extract detected relations with confidence filtering
     detected_relations = set()
     
-    # Process unary relations (temporarily store them)
-    unary_candidates = {}  # Track all unary relations with confidence
-    unary_data = sgclip_results.get('unary', {})
-    if unary_data:
-        for frame_id, frame_data in unary_data.items():
-            for obj_key, predictions in frame_data.items():
-                # obj_key format: "0 (cube)", "1 (cube)", etc.
-                obj_id = obj_key.split(' ')[0]  # Extract "0" from "0 (cube)"
-                
-                for confidence_tensor, relation_name in predictions:
-                    confidence = float(confidence_tensor)
-                    if confidence >= confidence_threshold:
-                        relation_tuple = (relation_name, obj_id)
-                        unary_candidates[relation_tuple] = confidence
-                        print(f"🤔 Unary candidate: {relation_name}({obj_id}) - confidence: {confidence:.3f}")
-    
-    # Process binary relations with confidence tracking
-    binary_candidates = {}  # Track all binary relations with confidence
-    binary_data = sgclip_results.get('binary', {})
-    if binary_data:
-        for frame_id, frame_data in binary_data.items():
-            for obj_pair_key, predictions in frame_data.items():
-                # obj_pair_key format: ("0 (cube)", "1 (cube)")
-                obj1_key, obj2_key = obj_pair_key
-                obj1_id = obj1_key.split(' ')[0]  # Extract "0" from "0 (cube)"
-                obj2_id = obj2_key.split(' ')[0]  # Extract "1" from "1 (cube)"
-                
-                for confidence_tensor, relation_name in predictions:
-                    confidence = float(confidence_tensor)
-                    if confidence >= confidence_threshold:
-                        relation_tuple = (relation_name, obj1_id, obj2_id)
-                        binary_candidates[relation_tuple] = confidence
-                        print(f"🤔 Binary candidate: {relation_name}({obj1_id}, {obj2_id}) - confidence: {confidence:.3f}")
-    
-    # Step 1.5: Apply physics constraints to resolve conflicts
-    print("🔬 Applying physics constraints to resolve conflicts...")
-    filtered_binary_relations = apply_physics_constraints(binary_candidates)
-    detected_relations.update(filtered_binary_relations)
-    
-    # Step 1.6: Apply physics constraints to unary relations
-    print("🔬 Applying physics constraints to unary relations...")
-    filtered_unary_relations = apply_unary_physics_constraints(unary_candidates, filtered_binary_relations)
-    detected_relations.update(filtered_unary_relations)
-    
-    print(f"🎯 Total detected relations after filtering: {len(detected_relations)}")
-    
-    # Step 2: Create object mapping (CV IDs to expected names)
-    # We need to map detected object IDs (0, 1, 2, 3, 4) to expected object names
-    detected_object_ids = set()
-    
-    # First, get all object IDs from the batch (regardless of relations)
-    if batch and "batched_object_ids" in batch:
-        for vid, fid, oid in batch["batched_object_ids"]:
-            detected_object_ids.add(str(oid))  # Ensure string format
-    
-    # Also add object IDs from detected relations (if any)
-    for relation in detected_relations:
-        if len(relation) == 2:  # Unary relation
-            detected_object_ids.add(relation[1])
-        elif len(relation) == 3:  # Binary relation
-            detected_object_ids.add(relation[1])
-            detected_object_ids.add(relation[2])
+    # Step 2: Create object mapping directly from sgclip colored detections
+    object_mapping = {}  # Maps obj_id -> domain_object_name
     
     # Extract expected object names from grounded predicates
     expected_objects = set()
     for predicate in all_grounded_predicates:
         expected_objects.update(predicate['args'])
     
-    print(f"🔍 Detected object IDs: {sorted(detected_object_ids)}")
     print(f"🎯 Expected object names: {sorted(expected_objects)}")
     
-    # Analyze object colors if images and batch are provided
-    object_colors = None
-    if images and batch:
-        try:
-            object_colors = analyze_object_colors(images, batch)
-        except Exception as e:
-            print(f"⚠️ Color analysis failed: {e}")
+    # Process unary relations and build object mapping
+    unary_data = sgclip_results.get('unary', {})
+    if unary_data:
+        for frame_id, frame_data in unary_data.items():
+            for obj_key, predictions in frame_data.items():
+                # obj_key format: "0 (green block)", "1 (pink block)", etc.
+                if '(' in obj_key and ')' in obj_key:
+                    obj_id = obj_key.split(' (')[0]  # Extract "0" 
+                    color_class = obj_key.split(' (')[1].split(')')[0]  # Extract "green block"
+                    
+                    # Convert "green block" to "green_block" to match domain format
+                    domain_name = color_class.replace(' ', '_')
+                    if domain_name in expected_objects:
+                        object_mapping[obj_id] = domain_name
+                        print(f"🗺️ Mapped: {obj_id} ({color_class}) -> {domain_name}")
+                    else:
+                        # Try exact match without conversion
+                        if color_class in expected_objects:
+                            object_mapping[obj_id] = color_class
+                            print(f"🗺️ Mapped (exact): {obj_id} ({color_class}) -> {color_class}")
+                        else:
+                            print(f"⚠️ No match for {color_class} -> {domain_name} in {expected_objects}")
+                
+                # Process relation predictions
+                obj_id = obj_key.split(' ')[0] if '(' in obj_key else obj_key
+                for confidence_tensor, relation_name in predictions:
+                    confidence = float(confidence_tensor)
+                    if confidence >= confidence_threshold:
+                        relation_tuple = (relation_name, obj_id)
+                        detected_relations.add(relation_tuple)
+                        print(f"✅ Unary relation: {relation_name}({obj_id}) - confidence: {confidence:.3f}")
     
-    # Create object mapping: detected_id -> expected_name
-    object_mapping = create_object_mapping(detected_object_ids, expected_objects, object_colors)
-    print(f"🗺️ Object mapping: {object_mapping}")
+    # Process binary relations
+    binary_data = sgclip_results.get('binary', {})
+    if binary_data:
+        for frame_id, frame_data in binary_data.items():
+            for obj_pair_key, predictions in frame_data.items():
+                # obj_pair_key format: ("0 (green block)", "1 (pink block)")
+                obj1_key, obj2_key = obj_pair_key
+                
+                # Extract object IDs and update mapping
+                for obj_key in [obj1_key, obj2_key]:
+                    if '(' in obj_key and ')' in obj_key:
+                        obj_id = obj_key.split(' (')[0]  # Extract "0"
+                        color_class = obj_key.split(' (')[1].split(')')[0]  # Extract "green block"
+                        
+                        # Convert "green block" to "green_block" to match domain format
+                        domain_name = color_class.replace(' ', '_')
+                        if domain_name in expected_objects:
+                            object_mapping[obj_id] = domain_name
+                        elif color_class in expected_objects:
+                            object_mapping[obj_id] = color_class
+                
+                obj1_id = obj1_key.split(' ')[0] if '(' in obj1_key else obj1_key
+                obj2_id = obj2_key.split(' ')[0] if '(' in obj2_key else obj2_key
+                
+                # Process relation predictions
+                for confidence_tensor, relation_name in predictions:
+                    confidence = float(confidence_tensor)
+                    if confidence >= confidence_threshold:
+                        relation_tuple = (relation_name, obj1_id, obj2_id)
+                        detected_relations.add(relation_tuple)
+                        print(f"✅ Binary relation: {relation_name}({obj1_id}, {obj2_id}) - confidence: {confidence:.3f}")
+    
+    print(f"🗺️ Final object mapping: {object_mapping}")
+    print(f"🎯 Total detected relations: {len(detected_relations)}")
     
     # Step 3: Check each grounded predicate against detected relations
     relation_preds = []
@@ -190,19 +182,31 @@ def convert_sgclip_to_relation_preds(sgclip_results, all_grounded_predicates, co
         is_detected = False
         
         if len(args) == 1:
-            # Unary relation: map expected object name to detected ID
+            # Unary relation: find the object ID for this domain object
             expected_obj = args[0]
-            detected_id = reverse_lookup(object_mapping, expected_obj)
+            detected_id = None
+            for obj_id, domain_name in object_mapping.items():
+                if domain_name == expected_obj:
+                    detected_id = obj_id
+                    break
+            
             if detected_id and (name, detected_id) in detected_relations:
                 is_detected = True
                 matched_count += 1
                 print(f"✅ MATCH: {name}({expected_obj}) -> {name}({detected_id})")
                 
         elif len(args) == 2:
-            # Binary relation: map both expected object names to detected IDs
+            # Binary relation: find object IDs for both domain objects
             expected_obj1, expected_obj2 = args
-            detected_id1 = reverse_lookup(object_mapping, expected_obj1)
-            detected_id2 = reverse_lookup(object_mapping, expected_obj2)
+            detected_id1 = None
+            detected_id2 = None
+            
+            for obj_id, domain_name in object_mapping.items():
+                if domain_name == expected_obj1:
+                    detected_id1 = obj_id
+                if domain_name == expected_obj2:
+                    detected_id2 = obj_id
+            
             if detected_id1 and detected_id2 and (name, detected_id1, detected_id2) in detected_relations:
                 is_detected = True
                 matched_count += 1

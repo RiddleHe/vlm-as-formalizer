@@ -117,6 +117,10 @@ def main():
             folders += ["plans"]
         else:
             folders += ["problems"]
+        
+        # Add intermediate_results folder for CV detection results
+        if args.generate_multi_step_with_cv:
+            folders += ["intermediate_results"]
 
         for dname in folders:
             os.makedirs(
@@ -155,6 +159,9 @@ def main():
                         if img_name.startswith(f"{task_name}.jpg") or (img_name.startswith(f"{task_name}-") and "clean" not in img_name):
                             observations.append(f"{data_dir}/observations/{img_name}")
 
+                # Sort observations to ensure consistent ordering
+                observations.sort()
+
             targets += [{
                 "problem": None,    
                 "response": None,
@@ -189,6 +196,9 @@ def main():
                     config,
                     model=model,
                     args=args,
+                    result_dir=result_dir,
+                    save_step=args.gen_step,
+                    task_name=task_name,
                 )
                 
             # save PDDL objects
