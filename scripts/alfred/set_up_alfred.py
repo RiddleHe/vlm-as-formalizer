@@ -5,14 +5,13 @@
 3. agent control
 """
 
-import json
 import os
+import json
 import glob
 from typing import Dict, List, Optional, Tuple
 import numpy as np
 import cv2
 from pathlib import Path
-import numpy as np
 
 class ALFREDTaskManager:
     """
@@ -113,7 +112,10 @@ class ALFREDEnvironment:
         os.environ['DISPLAY'] = self.x_display
         
         # initialize environment
-        self.env = ThorEnv()
+        self.env = ThorEnv(
+            player_screen_width=512,
+            player_screen_height=512,
+        )
         print("✅ ALFRED environment initialized")
     
     def load_task_by_id(self, task_id: str) -> bool:
@@ -289,28 +291,30 @@ class SimplePDDLMapper:
         if action_name == "gotolocation":
             _, object_name = args
             x, _, z, _, y, _ = self.name_to_object[object_name]["coords"]
-            _, _, rotation, horizon = self.name_to_object[object_name]["location"].split("|")[1:]
-            agent_height = self.alfred_env.env.last_event.metadata["agent"]["position"]["y"]
+            loc_x, loc_z, rotation, horizon = self.name_to_object[object_name]["location"].split("|")[1:]
 
+            agent_height = self.alfred_env.get_current_observation()["agent"]["position"]["y"]
+            # Avoid object collision
             offsets = [(0, 0), (0.25, 0), (-0.25, 0), (0, 0.25), (0, -0.25)]
             success = False
             for off_x, off_z in offsets:
                 action = {
                     "action": "TeleportFull",
-                    "x": x * 0.25 + off_x,
+                    "x": int(loc_x) * 0.25 + off_x,
                     "y": agent_height,
-                    "z": z * 0.25 + off_z,
+                    "z": int(loc_z) * 0.25 + off_z,
                     "rotateOnTeleport": True,
                     "rotation": int(rotation) * 90,
                     "horizon": int(horizon),
                 }
+                print(f"Action: {action}\n")
                 result = self.alfred_env.execute_action(action)
                 if result["success"]:
-                    print(f"Teleported to {object_name} successfully")
+                    print(f"Teleported to {object_name} successfully\n")
                     success = True
                     break
                 else:
-                    print(f"Teleported to {object_name} failed, error: {result['errorMessage']}")
+                    print(f"Teleported to {object_name} failed, error: {result['errorMessage']}\n")
             
             if not success:
                 return {"success": False, "error": f"Failed to go to location {object_name}"}
@@ -360,7 +364,7 @@ class SimplePDDLMapper:
         elif action_name == "cleanobject":
             pass
 
-        print(f"Action: {action}")
+        print(f"Action: {action}\n")
 
         return self.alfred_env.execute_action(action)
 

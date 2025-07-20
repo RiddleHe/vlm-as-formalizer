@@ -58,15 +58,15 @@ if __name__ == "__main__":
     mapper = SimplePDDLMapper(env, object_mapping)
     for i, action in enumerate(action_sequence):
         try:
-            print(f"Action {i}: {action}")
+            print(f"Action {i}: {action}\n")
             result = mapper.execute_pddl_action(action)
-            if not result["success"]:
-                for obj in objects:
-                    if obj["objectId"].startswith("Bed"):
-                        print("\n\n")
-                        print(obj)
-                        print("\n\n")
-            print(f"Executed result {i}: {result}")
+            # if not result["success"]:
+            #     for obj in objects:
+            #         if obj["objectId"].startswith("Bed"):
+            #             print("\n\n")
+            #             print(obj)
+            #             print("\n\n")
+            print(f"Executed result {i}: {result}\n")
             observation = env.get_current_observation()
             objects = observation["objects"]
             save_image(observation["image"], f"{solution_dir}/images/image_action_{i}.png")

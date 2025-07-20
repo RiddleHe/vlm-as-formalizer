@@ -239,9 +239,6 @@ def find_files_from_alfred_dir(input_dir):
 
     return traj_data, problem
 
-def map_to_low_level_action(action_string, objects):
-    pass
-
 def process_alfred_dir(input_dir, output_dir):
     domain_path = "/home/mh3897/pddl/villain/scripts/alfred/domain-new.pddl"
     downward_dir = "/home/mh3897/pddl/villain/downward"
@@ -250,7 +247,7 @@ def process_alfred_dir(input_dir, output_dir):
     tasks = os.listdir(input_dir)
     tasks.sort()
     total_tasks = len(tasks)
-    desired_tasks = 250
+    desired_tasks = 100
     gap = max(1, total_tasks // desired_tasks)
     for i, task in tqdm(enumerate(tasks)):
         if task.startswith("alfred-cleaned"): # dev dir
@@ -288,7 +285,8 @@ def process_alfred_dir(input_dir, output_dir):
 
 if __name__ == "__main__":
     if sys.argv[1] == "test":
-        input_root_dir = "/local-ssd/alfred/full_2.1.0/train/look_at_obj_in_light-AlarmClock-None-DeskLamp-301/"
+        input_root_dir = "/local-ssd/alfred/full_2.1.0/train/look_at_obj_in_light-AlarmClock-None-DeskLamp-314"
+        # input_root_dir = "/local-ssd/alfred/full_2.1.0/train/pick_and_place_with_movable_recep-ButterKnife-Cup-CounterTop-1"
         input_dir_name = os.listdir(input_root_dir)[0]
         input_dir = os.path.join(input_root_dir, input_dir_name)
 
@@ -318,7 +316,7 @@ if __name__ == "__main__":
 
     elif sys.argv[1] == "dev":
         input_dir = "/local-ssd/alfred/full_2.1.0/train"
-        output_dir = "/local-ssd/alfred/full_2.1.0/train_cleaned"
+        output_dir = "/local-ssd/alfred/test_alfred_train_cleaned"
         os.makedirs(output_dir, exist_ok=True)
 
         process_alfred_dir(input_dir, output_dir)
