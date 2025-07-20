@@ -1,7 +1,7 @@
 from ..build_prompts import build_plan_prompt
 from ..parse_response import parse_plan
 
-def generate_zero_shot_planning(
+def generate_vila_planning(
     target,
     config, 
     model,

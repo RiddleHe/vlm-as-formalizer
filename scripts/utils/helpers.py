@@ -326,7 +326,18 @@ def visualize_predictions(images, video_segments, oid_to_class, save_dir, show_m
         plt.close(fig)
         print(f"Saved visualization for frame {frame_id} to {save_path}")
 
-def detect_objects_with_dino(image_path: str, domain_name: str = "blocksworld", box_threshold: float = 0.35):
+def detect_objects_with_dino(image_path: str, search_terms: list, box_threshold: float = 0.35):
+    """
+    DINO detection using VLM-identified search terms.
+    
+    Args:
+        image_path: Path to the image
+        search_terms: List of object names to search for (from VLM identification)
+        box_threshold: Detection confidence threshold
+        
+    Returns:
+        Dictionary of detected objects with bounding boxes
+    """
     import sys
     import torch
     from torchvision.ops import box_convert
@@ -342,21 +353,13 @@ def detect_objects_with_dino(image_path: str, domain_name: str = "blocksworld", 
     except ImportError:
         raise ImportError("Grounding DINO not found. Please check installation at /local-ssd/custom_models/GroundingDINO/")
 
-    def get_text_query_simple(domain_name: str):
-        if domain_name == "blocksworld":
-            text_phrases = [
-                "red block", 
-                "blue block", 
-                "green block", 
-                "yellow block", 
-                "purple block", 
-                "orange block", 
-                "pink block", 
-            ]
-            phrase2object = None
-        else:
-            text_phrases = ["block", "object", "cube", "item"]
-            phrase2object = None
+    def get_text_query_fair(search_terms: list):
+        """Create text query from VLM-identified search terms (no hardcoding)"""
+        if not search_terms:
+            return "", None, []
+            
+        text_phrases = search_terms
+        phrase2object = None
             
         text_query = "".join([phrase + " ." for phrase in text_phrases])
         
@@ -379,74 +382,55 @@ def detect_objects_with_dino(image_path: str, domain_name: str = "blocksworld", 
         with torch.no_grad():
             outputs = model(image[None], captions=[caption])
 
-        logits = outputs["pred_logits"].sigmoid()[0]  
-        boxes = outputs["pred_boxes"][0] 
+        prediction_logits = outputs["pred_logits"].cpu().sigmoid()[0]  # prediction_logits.shape = (nq, 256)
+        prediction_boxes = outputs["pred_boxes"].cpu()[0]  # prediction_boxes.shape = (nq, 4)
 
-        positive_maps = gdino_vl_utils.create_positive_map_from_span(
-            model.tokenizer(caption),
-            token_span=token_spans
-        ).to("cuda")
+        mask = prediction_logits.max(dim=1)[0] > box_threshold
+        logits = prediction_logits[mask]  # logits.shape = (n, 256)
+        boxes = prediction_boxes[mask]  # boxes.shape = (n, 4)
 
-        logits_for_phrases = positive_maps @ logits.T 
-        all_logits = []
-        all_phrases = []
-        all_boxes = []
+        tokenlizer = model.tokenizer
+        tokenized = tokenlizer(caption)
+
+        phrases = [
+            gdino_vl_utils.get_phrases_from_posmap(logits[i], tokenized, tokenlizer, token_spans).replace('.', '')
+            for i in range(len(logits))
+        ]
+
+        return boxes, logits, phrases
+
+    def create_bbox_annotations_fair(boxes, detected_objects, phrases):
+        """Create bbox annotations for fair detection"""
+        bbox_annotations = {}
         
-        for (token_span, logit_phr) in zip(token_spans, logits_for_phrases):
-            phrase = ' '.join([caption[_s:_e] for (_s, _e) in token_span])
-            filt_mask = logit_phr > box_threshold
-            all_boxes.append(boxes[filt_mask])
-            all_logits.append(logit_phr[filt_mask])
-
-            logit_phr_num = logit_phr[filt_mask]
-            all_phrases.extend([phrase for _ in logit_phr_num])
-
-        if len(all_boxes) == 0:
-            return torch.empty(0, 4), []
-            
-        boxes_filt = torch.cat(all_boxes, dim=0).cpu()
-        pred_phrases = all_phrases
-
-        return boxes_filt, pred_phrases
-
-    def create_bbox_annotations_simple(domain_name: str, boxes, objects, phrases):
-        """Simplified bounding box annotation creation"""
-        bbox_anns = {}
-        
-        if len(boxes) == 0:
-            return bbox_anns
-            
-        for i, (obj, box, phrase) in enumerate(zip(objects, boxes, phrases)):
-            # Generate unique ID for each object
-            obj_clean = phrase.replace(" ", "_").replace(".", "")
-            if obj_clean in bbox_anns:
-                obj_clean = f"{obj_clean}_{i}"
-                
-            bbox_anns[obj_clean] = {
-                "bbox": box.tolist(),
+        for i, (box, obj, phrase) in enumerate(zip(boxes, detected_objects, phrases)):
+            obj_key = f"{obj}_{i}"
+            bbox_annotations[obj_key] = {
                 "phrase": phrase,
+                "bbox": box.tolist()
             }
             
-        return bbox_anns
+        return bbox_annotations
 
-    # Main detection logic
     try:
-        # 1. Load Grounding DINO model
-        model = gdino_inference.load_model(
-            "/local-ssd/custom_models/GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py", 
-            "/local-ssd/custom_models/GroundingDINO/weights/groundingdino_swint_ogc.pth",
-        ).to("cuda")
-        
+        # 1. Load model
+        model_path = "/local-ssd/custom_models/GroundingDINO/groundingdino_swinb_cogcoor.pth"
+        config_path = "/local-ssd/custom_models/GroundingDINO/groundingdino/config/GroundingDINO_SwinB_cfg.py"
+        model = gdino_inference.load_model(config_path, model_path)
+
         # 2. Load and preprocess image
         image_source, image = gdino_inference.load_image(image_path)
-        src_w, src_h = image_source.shape[:2]
+        src_h, src_w = image_source.shape[:2]
+
+        # 3. Get text query from VLM-identified search terms
+        text_query, phrase2object, token_spans = get_text_query_fair(search_terms)
         
-        # 3. Build query text
-        text_query, phrase2object, token_spans = get_text_query_simple(domain_name)
-        
-        # 4. Execute object detection
-        boxes, phrases = get_grounding_output(
-            image, text_query, token_spans, model, box_threshold=box_threshold
+        if not text_query:
+            return {}
+
+        # 4. Run DINO inference  
+        boxes, logits, phrases = get_grounding_output(
+            image, text_query, token_spans, model, box_threshold
         )
         
         if len(boxes) == 0:
@@ -456,19 +440,14 @@ def detect_objects_with_dino(image_path: str, domain_name: str = "blocksworld", 
         detected_objects = []
         for phrase in phrases:
             phrase_clean = phrase.replace(" ", "_")
-            if phrase2object is not None and phrase_clean in phrase2object:
-                detected_objects.append(phrase2object[phrase_clean])
-            else:
-                detected_objects.append(phrase_clean)
+            detected_objects.append(phrase_clean)
 
         # 6. Convert coordinate format
         boxes = boxes * torch.Tensor([src_w, src_h, src_w, src_h])
         boxes = box_convert(boxes=boxes, in_fmt="cxcywh", out_fmt="xyxy")
         
         # 7. Create final annotation results
-        bbox_anns = create_bbox_annotations_simple(
-            domain_name, boxes, detected_objects, phrases
-        )
+        bbox_anns = create_bbox_annotations_fair(boxes, detected_objects, phrases)
         
         return bbox_anns
         

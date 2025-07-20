@@ -53,8 +53,10 @@ def parse_args():
 
     # Planning baseline
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
-    parser.add_argument("--generate_zero_shot_planning", action="store_true", help="VLLM zero-shot planning (ViLA) - generate plan directly")
-    parser.add_argument("--generate_zero_shot_pddl", action="store_true", help="Pipeline 2: ViLaIn-inspired zero-shot PDDL (Grounding DINO + VLM)")
+    parser.add_argument("--generate_zero_shot_planning", action="store_true", help="Pipeline 1: ViLA - VLLM zero-shot planning")
+    parser.add_argument("--generate_zero_shot_pddl", action="store_true", help="Pipeline 2: ViLain - VLLM zero-shot PDDL (Grounding DINO + VLM)")
+    parser.add_argument("--generate_direct_pddl", action="store_true", help="Pipeline 3: ViLain Direct PDDL Generation (no object detection)")
+    parser.add_argument("--generate_vlm_captioning_pddl", action="store_true", help="Pipeline 4a: ViLain Captioning → PDDL (without DINO)")
 
     # If choose generate_end_to_end
     parser.add_argument("--generate_caption", action="store_true", help="generate caption for observation")
@@ -100,6 +102,12 @@ def main():
         result_dir += "_plan"
     if args.generate_zero_shot_planning:
         result_dir += "_zero-shot-planning"
+    if args.generate_zero_shot_pddl:
+        result_dir += "_pipeline2"
+    if args.generate_direct_pddl:
+        result_dir += "_pipeline3-direct-pddl"
+    if args.generate_vlm_captioning_pddl:
+        result_dir += "_pipeline4a-vlm-captioning-pddl"
 
     seed_everything(args.seed) 
 
@@ -115,7 +123,8 @@ def main():
     if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
         args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
         args.generate_multi_step_with_sgclip_vlm or args.generate_zero_shot_planning or
-        args.generate_zero_shot_pddl):
+        args.generate_zero_shot_pddl or args.generate_direct_pddl or 
+        args.generate_vlm_captioning_pddl):
         # Create folders
         folders = ["responses", "instructions"]
         if args.generate_plan or args.generate_zero_shot_planning:
@@ -213,7 +222,8 @@ def main():
             try:
                 if (args.generate_end_to_end or args.generate_multi_step or 
                     args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
-                    args.generate_multi_step_with_sgclip_vlm or args.generate_zero_shot_pddl):
+                    args.generate_multi_step_with_sgclip_vlm or args.generate_zero_shot_pddl or
+                    args.generate_direct_pddl or args.generate_vlm_captioning_pddl):
                     dir_pairs = [
                         ("problems", "file", "pddl"),
                         ("instructions", "prompt", "txt"),
