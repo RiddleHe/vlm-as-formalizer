@@ -54,6 +54,7 @@ def parse_args():
     # Planning baseline
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
     parser.add_argument("--generate_zero_shot_planning", action="store_true", help="VLLM zero-shot planning (ViLA) - generate plan directly")
+    parser.add_argument("--generate_zero_shot_pddl", action="store_true", help="Pipeline 2: ViLaIn-inspired zero-shot PDDL (Grounding DINO + VLM)")
 
     # If choose generate_end_to_end
     parser.add_argument("--generate_caption", action="store_true", help="generate caption for observation")
@@ -113,7 +114,8 @@ def main():
     # Generate / refine PDDL problems
     if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
         args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
-        args.generate_multi_step_with_sgclip_vlm or args.generate_zero_shot_planning):
+        args.generate_multi_step_with_sgclip_vlm or args.generate_zero_shot_planning or
+        args.generate_zero_shot_pddl):
         # Create folders
         folders = ["responses", "instructions"]
         if args.generate_plan or args.generate_zero_shot_planning:
@@ -211,7 +213,7 @@ def main():
             try:
                 if (args.generate_end_to_end or args.generate_multi_step or 
                     args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
-                    args.generate_multi_step_with_sgclip_vlm):
+                    args.generate_multi_step_with_sgclip_vlm or args.generate_zero_shot_pddl):
                     dir_pairs = [
                         ("problems", "file", "pddl"),
                         ("instructions", "prompt", "txt"),

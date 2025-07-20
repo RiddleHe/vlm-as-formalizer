@@ -29,7 +29,8 @@ from .baseline import (
     generate_multi_step_with_vlm,
     generate_pddl_end_to_end,
     generate_multi_step_with_sgclip_vlm,
-    generate_zero_shot_planning
+    generate_zero_shot_planning,
+    generate_zero_shot_pddl
 )
 
 def generate_pddl(
@@ -89,6 +90,14 @@ def generate_pddl(
             )
         elif args.generate_multi_step_with_sgclip_vlm:
             problem_file, response, problem_prompt = generate_multi_step_with_sgclip_vlm(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+            )
+        elif args.generate_zero_shot_pddl:
+            problem_file, response, problem_prompt = generate_zero_shot_pddl(
                 target,
                 config,
                 model,

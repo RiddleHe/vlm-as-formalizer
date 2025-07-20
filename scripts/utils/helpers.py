@@ -325,3 +325,153 @@ def visualize_predictions(images, video_segments, oid_to_class, save_dir, show_m
         plt.savefig(save_path, bbox_inches="tight")
         plt.close(fig)
         print(f"Saved visualization for frame {frame_id} to {save_path}")
+
+def detect_objects_with_dino(image_path: str, domain_name: str = "blocksworld", box_threshold: float = 0.35):
+    import sys
+    import torch
+    from torchvision.ops import box_convert
+    from typing import List
+    from collections import defaultdict
+    
+    # Grounding DINO path
+    sys.path.append('/local-ssd/custom_models/GroundingDINO')
+    
+    try:
+        import groundingdino.util.inference as gdino_inference
+        import groundingdino.util.vl_utils as gdino_vl_utils
+    except ImportError:
+        raise ImportError("Grounding DINO not found. Please check installation at /local-ssd/custom_models/GroundingDINO/")
+
+    def get_text_query_simple(domain_name: str):
+        if domain_name == "blocksworld":
+            text_phrases = [
+                "red block", 
+                "blue block", 
+                "green block", 
+                "yellow block", 
+                "purple block", 
+                "orange block", 
+                "pink block", 
+            ]
+            phrase2object = None
+        else:
+            text_phrases = ["block", "object", "cube", "item"]
+            phrase2object = None
+            
+        text_query = "".join([phrase + " ." for phrase in text_phrases])
+        
+        token_spans = []
+        for phrase in text_phrases:
+            span_list = []
+            start = text_query.find(f"{phrase} .")
+            for word in phrase.split(" "):
+                span_list += [[start, start + len(word)]]
+                start += len(word) + 1
+            token_spans += [span_list]
+            
+        return text_query, phrase2object, token_spans
+
+    def get_grounding_output(image, caption, token_spans, model, box_threshold=0.35):
+        """Execute Grounding DINO inference"""
+        caption = caption.lower().strip()
+        image = image.to("cuda")
+
+        with torch.no_grad():
+            outputs = model(image[None], captions=[caption])
+
+        logits = outputs["pred_logits"].sigmoid()[0]  
+        boxes = outputs["pred_boxes"][0] 
+
+        positive_maps = gdino_vl_utils.create_positive_map_from_span(
+            model.tokenizer(caption),
+            token_span=token_spans
+        ).to("cuda")
+
+        logits_for_phrases = positive_maps @ logits.T 
+        all_logits = []
+        all_phrases = []
+        all_boxes = []
+        
+        for (token_span, logit_phr) in zip(token_spans, logits_for_phrases):
+            phrase = ' '.join([caption[_s:_e] for (_s, _e) in token_span])
+            filt_mask = logit_phr > box_threshold
+            all_boxes.append(boxes[filt_mask])
+            all_logits.append(logit_phr[filt_mask])
+
+            logit_phr_num = logit_phr[filt_mask]
+            all_phrases.extend([phrase for _ in logit_phr_num])
+
+        if len(all_boxes) == 0:
+            return torch.empty(0, 4), []
+            
+        boxes_filt = torch.cat(all_boxes, dim=0).cpu()
+        pred_phrases = all_phrases
+
+        return boxes_filt, pred_phrases
+
+    def create_bbox_annotations_simple(domain_name: str, boxes, objects, phrases):
+        """Simplified bounding box annotation creation"""
+        bbox_anns = {}
+        
+        if len(boxes) == 0:
+            return bbox_anns
+            
+        for i, (obj, box, phrase) in enumerate(zip(objects, boxes, phrases)):
+            # Generate unique ID for each object
+            obj_clean = phrase.replace(" ", "_").replace(".", "")
+            if obj_clean in bbox_anns:
+                obj_clean = f"{obj_clean}_{i}"
+                
+            bbox_anns[obj_clean] = {
+                "bbox": box.tolist(),
+                "phrase": phrase,
+            }
+            
+        return bbox_anns
+
+    # Main detection logic
+    try:
+        # 1. Load Grounding DINO model
+        model = gdino_inference.load_model(
+            "/local-ssd/custom_models/GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py", 
+            "/local-ssd/custom_models/GroundingDINO/weights/groundingdino_swint_ogc.pth",
+        ).to("cuda")
+        
+        # 2. Load and preprocess image
+        image_source, image = gdino_inference.load_image(image_path)
+        src_w, src_h = image_source.shape[:2]
+        
+        # 3. Build query text
+        text_query, phrase2object, token_spans = get_text_query_simple(domain_name)
+        
+        # 4. Execute object detection
+        boxes, phrases = get_grounding_output(
+            image, text_query, token_spans, model, box_threshold=box_threshold
+        )
+        
+        if len(boxes) == 0:
+            return {}
+        
+        # 5. Process detection results
+        detected_objects = []
+        for phrase in phrases:
+            phrase_clean = phrase.replace(" ", "_")
+            if phrase2object is not None and phrase_clean in phrase2object:
+                detected_objects.append(phrase2object[phrase_clean])
+            else:
+                detected_objects.append(phrase_clean)
+
+        # 6. Convert coordinate format
+        boxes = boxes * torch.Tensor([src_w, src_h, src_w, src_h])
+        boxes = box_convert(boxes=boxes, in_fmt="cxcywh", out_fmt="xyxy")
+        
+        # 7. Create final annotation results
+        bbox_anns = create_bbox_annotations_simple(
+            domain_name, boxes, detected_objects, phrases
+        )
+        
+        return bbox_anns
+        
+    except Exception as e:
+        print(f"Grounding DINO detection failed: {e}")
+        return {}
