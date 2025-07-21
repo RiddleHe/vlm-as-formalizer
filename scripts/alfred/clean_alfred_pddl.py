@@ -276,14 +276,14 @@ def find_files_from_alfred_dir(input_dir):
     return traj_data, problem
 
 def process_alfred_dir(input_dir, output_dir):
-    domain_path = "/home/mh3897/pddl/villain/scripts/alfred/domain-new.pddl"
+    domain_path = "/home/mh3897/pddl/villain/scripts/alfred/domain-alfred.pddl"
     downward_dir = "/home/mh3897/pddl/villain/downward"
     time_limit = 5
 
     tasks = os.listdir(input_dir)
     tasks.sort()
     total_tasks = len(tasks)
-    desired_tasks = 50
+    desired_tasks = 1023
     gap = max(1, total_tasks // desired_tasks)
     for i, task in tqdm(enumerate(tasks)):
         if task.startswith("alfred-cleaned"): # dev dir
@@ -291,71 +291,62 @@ def process_alfred_dir(input_dir, output_dir):
         if i % gap == 0:
             try:
                 task_dir = os.path.join(input_dir, task)
-                task_subdirs = os.listdir(task_dir)
+                task_subdirs = sorted(os.listdir(task_dir))
                 first_task_subdir = task_subdirs[0]
                 first_task_subdir_path = os.path.join(task_dir, first_task_subdir)
-                traj_data, problem = find_files_from_alfred_dir(first_task_subdir_path)
-                object_states, objects = create_pddl(traj_data, problem)
-                pddl_file = assemble_pddl_to_file(object_states)
-
-                output_task_dir = os.path.join(output_dir, task)
+                output_task_dir = os.path.join(output_dir, task + "_" + first_task_subdir)
                 os.makedirs(output_task_dir, exist_ok=True)
-                problem_path = os.path.join(output_task_dir, "problem.pddl")
-                with open(problem_path, "w") as f:
-                    f.write(pddl_file)
 
-                objects_path = os.path.join(output_task_dir, f"objects_{first_task_subdir}.json")
-                with open(objects_path, "w") as f:
-                    json.dump(objects, f, indent=4)
+                problem_path = process_alfred_example(first_task_subdir_path, output_task_dir)
 
                 plan_path = os.path.join(output_task_dir, "plan.txt")
                 command = format_command(domain_path, problem_path, plan_path, downward_dir, time_limit)
                 success, err = find_plan(command, plan_path)
                 if not success:
-                    print(f"Failed to find plan for {task}")
-                    # shutil.rmtree(output_task_dir)
+                    print(f"Failed to find plan for {task}, removing task...")
+                    shutil.rmtree(output_task_dir)
             except Exception as e:
                 print(f"Error processing {task}: {e}")
 
+def process_alfred_example(input_dir, output_dir):
+    traj_data, problem = find_files_from_alfred_dir(input_dir)
+
+    instruction = traj_data["turk_annotations"]["anns"][0]["task_desc"].strip()
+
+    object_states, objects = create_pddl(traj_data, problem)
+    pddl_file = assemble_pddl_to_file(object_states)
+
+    problem_path = os.path.join(output_dir, "problem.pddl")
+
+    with open(problem_path, "w") as f:
+        f.write(pddl_file)
+    with open(os.path.join(output_dir, "objects.json"), "w") as f:
+        json.dump(objects, f, indent=4)
+    with open(os.path.join(output_dir, "traj_data.json"), "w") as f:
+        json.dump(traj_data, f, indent=4)
+    with open(os.path.join(output_dir, "problem-orig.pddl"), "w") as f:
+        for line in problem:
+            f.write(line)
+    with open(os.path.join(output_dir, "instruction.txt"), "w") as f:
+        f.write(instruction)
+
+    return problem_path
 
 if __name__ == "__main__":
     if sys.argv[1] == "test":
         # input_root_dir = "/local-ssd/alfred/full_2.1.0/train/look_at_obj_in_light-AlarmClock-None-DeskLamp-314"
-        input_root_dir = "/local-ssd/alfred/full_2.1.0/train/pick_clean_then_place_in_recep-LettuceSliced-None-Fridge-11"
-        input_dir_name = os.listdir(input_root_dir)[0]
+        input_root_dir = "/local-ssd/alfred/full_2.1.0/train/pick_and_place_with_movable_recep-Apple-Pot-Fridge-26"
+        input_dir_name = sorted(os.listdir(input_root_dir))[0]
         input_dir = os.path.join(input_root_dir, input_dir_name)
 
         output_dir = f"test-{input_dir.split('/')[-2]}"
         os.makedirs(output_dir, exist_ok=True)
 
-        traj_data, problem = find_files_from_alfred_dir(input_dir)
-
-        object_states, objects = create_pddl(traj_data, problem)
-        pddl_file = assemble_pddl_to_file(object_states)
-
-        # for key, value in object_states.items():
-        #     print(key)
-        #     print(value)
-        #     print()
-
-        # print(pddl_file)
-
-        with open(os.path.join(output_dir, "problem.pddl"), "w") as f:
-            f.write(pddl_file)
-
-        with open(os.path.join(output_dir, "objects.json"), "w") as f:
-            json.dump(objects, f, indent=4)
-
-        with open(os.path.join(output_dir, "traj_data.json"), "w") as f:
-            json.dump(traj_data, f, indent=4)
-
-        with open(os.path.join(output_dir, "problem-orig.pddl"), "w") as f:
-            for line in problem:
-                f.write(line)
+        process_alfred_example(input_dir, output_dir)
 
     elif sys.argv[1] == "dev":
         input_dir = "/local-ssd/alfred/full_2.1.0/train"
-        output_dir = "/local-ssd/alfred/test_alfred_train_cleaned_fix_exist_block_fix_gotolocation"
+        output_dir = "/local-ssd/alfred/alfred_train_cleaned/"
         os.makedirs(output_dir, exist_ok=True)
 
         process_alfred_dir(input_dir, output_dir)

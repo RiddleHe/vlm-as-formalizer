@@ -321,12 +321,7 @@ class SimplePDDLMapper:
 
             return result
 
-        elif action_name == "pickupobjectinreceptacle":
-            _, object_name, _ = args
-            object_id = self.name_to_object[object_name]["object_env_id"] # no receptacle id needed
-            action = {"action": "PickupObject", "objectId": object_id, "forceAction": True} # force to be visible to agent
-
-        elif action_name == "pickupobjectnoreceptacle":
+        elif action_name == "pickupobject":
             _, object_name = args
             object_id = self.name_to_object[object_name]["object_env_id"]
             action = {"action": "PickupObject", "objectId": object_id, "forceAction": True}
