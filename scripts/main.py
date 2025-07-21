@@ -60,6 +60,7 @@ def parse_args():
     parser.add_argument("--generate_villain_pddl", action="store_true", help="Pipeline 2: ViLain - VLM → DINO → VLM PDDL Generation")
     parser.add_argument("--generate_villain_direct_pddl", action="store_true", help="Pipeline 3: ViLain Direct PDDL Generation (no object detection)")
     parser.add_argument("--generate_villain_captioning_pddl", action="store_true", help="Pipeline 4a: ViLain Captioning → PDDL (without DINO)")
+    parser.add_argument("--generate_villain_captioning_dino_pddl", action="store_true", help="Pipeline 4b: ViLain Captioning → DINO → PDDL (Enhanced)")
 
     # If choose generate_end_to_end
     parser.add_argument("--generate_caption", action="store_true", help="generate caption for observation")
@@ -111,6 +112,8 @@ def main():
         result_dir += "_pipeline3-direct-pddl"
     if args.generate_villain_captioning_pddl:
         result_dir += "_pipeline4a-vlm-captioning-pddl"
+    if args.generate_villain_captioning_dino_pddl:
+        result_dir += "_pipeline4b-vlm-captioning-dino-pddl"
 
     seed_everything(args.seed) 
 
@@ -128,7 +131,7 @@ def main():
         args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
         args.generate_multi_step_with_sgclip_vlm or args.generate_vila_planning or
         args.generate_villain_pddl or args.generate_villain_direct_pddl or 
-        args.generate_villain_captioning_pddl):
+        args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl):
         # Create folders
         folders = ["responses", "instructions"]
         if args.generate_plan or args.generate_vila_planning:
@@ -221,7 +224,8 @@ def main():
                 if (args.generate_end_to_end or args.generate_multi_step or 
                     args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
                     args.generate_multi_step_with_sgclip_vlm or args.generate_villain_pddl or
-                    args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl):
+                    args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or
+                    args.generate_villain_captioning_dino_pddl):
                     dir_pairs = [
                         ("problems", "file", "pddl"),
                         ("instructions", "prompt", "txt"),

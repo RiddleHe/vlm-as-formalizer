@@ -32,7 +32,8 @@ from .baseline import (
     generate_vila_planning,
     generate_villain_pddl,
     generate_villain_direct_pddl,
-    generate_villain_captioning_pddl
+    generate_villain_captioning_pddl,
+    generate_villain_captioning_dino_pddl
 )
 
 def generate_pddl(
@@ -125,6 +126,14 @@ def generate_pddl(
             )
         elif args.generate_villain_captioning_pddl:
             problem_file, response, problem_prompt = generate_villain_captioning_pddl(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+            )
+        elif args.generate_villain_captioning_dino_pddl:
+            problem_file, response, problem_prompt = generate_villain_captioning_dino_pddl(
                 target,
                 config,
                 model,
