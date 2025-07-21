@@ -36,13 +36,18 @@ def create_pddl(traj_data, problem):
     object_types = defaultdict(int)
 
     filter_keywords = [
-        "able", "is", "Type", # type def
-        "forall", "not", "exists" # quantifiers
+        "able", 
     ]
 
     pred_sub_list = {
         "inReceptacleObject": "inReceptacle"
     }
+
+    predicate_list = [
+        "opened", "inReceptacle", "holds", "holdsAny",
+        "isClean", "isHot", "isCool", 
+        "isOn", "isToggled", "isSliced", "atLocation"
+    ]
 
     # Extract relevant objects with locations, discard objectId 
     for action in high_pddl:
@@ -83,6 +88,7 @@ def create_pddl(traj_data, problem):
 
     # for object_id, object_info in objects.items():
     #     print(object_id, object_info)
+    #     print("\n")
 
     # Get all relevant object states from problem pddl
     object_states = {
@@ -117,24 +123,24 @@ def create_pddl(traj_data, problem):
                 if object_id in line: # object_id - object_type
                     parts = line.strip().split(" ")
                     assert object_id == parts[0].strip(), f"Object id {object_id} does not match {parts[0].strip()}"
-                    object_type = parts[2].strip()
+                    object_general_type = parts[2].strip() # object vs receptacle
+                    object_type = objects[object_id]["object_type"]
                     simplified_line = line.replace(object_id, objects[object_id]["object_name"])
-                    if object_type == "Knife":
-                        simplified_line = simplified_line.replace("object", "knife")
+                    if object_type == "Knife" or object_type == "ButterKnife":
+                        simplified_line = simplified_line.replace(object_general_type, "knife")
                     elif object_type == "Microwave":
-                        simplified_line = simplified_line.replace("receptacle", "microwave")
+                        simplified_line = simplified_line.replace(object_general_type, "microwave")
                     elif object_type == "Fridge":
-                        simplified_line = simplified_line.replace("receptacle", "fridge")
-                    elif object_type == "object" and objects[object_id]["is_receptacle"]:
-                        simplified_line = simplified_line.replace("object", "receptacle")
+                        simplified_line = simplified_line.replace(object_general_type, "fridge")
+                    elif object_type == "SinkBasin":
+                        simplified_line = simplified_line.replace(object_general_type, "sink")
+                    elif object_general_type == "object" and objects[object_id]["is_receptacle"]:
+                        simplified_line = simplified_line.replace(object_general_type, "receptacle")
                     object_states["objects"].append(simplified_line)
                     break
         elif idx < goal_idx: # we are collecting init
             if "(atLocation agent1" in line: # extract agent location
                 agent_location = line.split("(")[1].split(")")[0].split(" ")[2]
-                idx += 1
-                continue
-            if any(keyword in line for keyword in ["Type", "was", "distance", "isReceptacleObject"]):
                 idx += 1
                 continue
             if "AtLocation" in line: # document object location
@@ -147,8 +153,13 @@ def create_pddl(traj_data, problem):
                         object_states["init"].append(location_line)
                 idx += 1
                 continue
-            if "(" in line and ")" in line:
-                predicate_args = line.split("(")[1].split(")")[0].split(" ")[1:]
+            if "(" in line and ")" in line: 
+                parts = line.split("(")[1].split(")")[0].split(" ")
+                predicate_name = parts[0]
+                if predicate_name not in predicate_list:
+                    idx += 1
+                    continue
+                predicate_args = parts[1:]
                 n_pred_args = len(predicate_args)
                 n_processed_args = 0
                 for object_id in objects.keys():
@@ -203,12 +214,15 @@ def create_pddl(traj_data, problem):
                 object_states["goal"].append("        (atLocation agent1 " + cur_object_name + ")")
                 cur_idx += 1
             elif "(" in cur_line and ")" in cur_line: # filter logical connectives eg. (and, (or
-                if any(keyword in cur_line for keyword in filter_keywords):  # filter negation, type def, quantifiers
-                    cur_idx += 1
-                    continue  # discard redundant predicates
                 condition_args = cur_line.split("(")[1].split(")")[0].split(" ")
                 predicate_arg = condition_args[0]
                 predicate_arg = pred_sub_list.get(predicate_arg, predicate_arg)  
+                if predicate_arg not in predicate_list:
+                    cur_idx += 1
+                    continue
+                if any(keyword in cur_line for keyword in filter_keywords):  # filter -able predicates
+                    cur_idx += 1
+                    continue  # discard redundant predicates
                 arg_list = []
                 for arg in condition_args[1:]:
                     if arg == "?a":
@@ -269,7 +283,7 @@ def process_alfred_dir(input_dir, output_dir):
     tasks = os.listdir(input_dir)
     tasks.sort()
     total_tasks = len(tasks)
-    desired_tasks = 100
+    desired_tasks = 50
     gap = max(1, total_tasks // desired_tasks)
     for i, task in tqdm(enumerate(tasks)):
         if task.startswith("alfred-cleaned"): # dev dir
@@ -299,8 +313,7 @@ def process_alfred_dir(input_dir, output_dir):
                 success, err = find_plan(command, plan_path)
                 if not success:
                     print(f"Failed to find plan for {task}")
-                    shutil.rmtree(output_task_dir)
-                    continue
+                    # shutil.rmtree(output_task_dir)
             except Exception as e:
                 print(f"Error processing {task}: {e}")
 
@@ -308,7 +321,7 @@ def process_alfred_dir(input_dir, output_dir):
 if __name__ == "__main__":
     if sys.argv[1] == "test":
         # input_root_dir = "/local-ssd/alfred/full_2.1.0/train/look_at_obj_in_light-AlarmClock-None-DeskLamp-314"
-        input_root_dir = "/local-ssd/alfred/full_2.1.0/train/pick_and_place_with_movable_recep-ButterKnife-Cup-CounterTop-1"
+        input_root_dir = "/local-ssd/alfred/full_2.1.0/train/pick_clean_then_place_in_recep-LettuceSliced-None-Fridge-11"
         input_dir_name = os.listdir(input_root_dir)[0]
         input_dir = os.path.join(input_root_dir, input_dir_name)
 
@@ -331,14 +344,18 @@ if __name__ == "__main__":
             f.write(pddl_file)
 
         with open(os.path.join(output_dir, "objects.json"), "w") as f:
-            json.dump(objects, f)
+            json.dump(objects, f, indent=4)
 
         with open(os.path.join(output_dir, "traj_data.json"), "w") as f:
-            json.dump(traj_data, f)
+            json.dump(traj_data, f, indent=4)
+
+        with open(os.path.join(output_dir, "problem-orig.pddl"), "w") as f:
+            for line in problem:
+                f.write(line)
 
     elif sys.argv[1] == "dev":
         input_dir = "/local-ssd/alfred/full_2.1.0/train"
-        output_dir = "/local-ssd/alfred/test_alfred_train_cleaned"
+        output_dir = "/local-ssd/alfred/test_alfred_train_cleaned_fix_exist_block_fix_gotolocation"
         os.makedirs(output_dir, exist_ok=True)
 
         process_alfred_dir(input_dir, output_dir)

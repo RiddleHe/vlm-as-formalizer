@@ -6,7 +6,7 @@
  )
  (:types
   agent
-  microwave fridge - receptacle
+  microwave fridge sink - receptacle
   knife receptacle - object
   )
 
@@ -14,19 +14,14 @@
  (:predicates
     (openable ?r - receptacle)                                ; true if a receptacle is openable
     (opened ?r - receptacle)                                  ; true if a receptacle is opened
-    (inReceptacle ?o - object ?r - receptacle)                ; object ?o is in receptacle ?r
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
     (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
     (holdsAny ?a - agent)                                     ; agent ?a holds an object
     (isClean ?o - object)                                     ; true if the object has been clean in sink
-    (cleanable ?o - object)                                   ; true if the object can be placed in a sink
     (isHot ?o - object)                                       ; true if the object has been heated up
-    (heatable ?o - object)                                    ; true if the object can be heated up in a microwave
     (isCool ?o - object)                                      ; true if the object has been cooled
-    (coolable ?o - object)                                    ; true if the object can be cooled in the fridge
-    (toggleable ?o - object)                                  ; true if the object can be turned on/off
     (isOn ?o - object)                                        ; true if the object is on
     (isToggled ?o - object)                                   ; true if the object has been toggled
-    (sliceable ?o - object)                                   ; true if the object can be sliced
     (isSliced ?o - object)                                    ; true if the object is sliced
     (atLocation ?a - agent ?o - object)
  )
@@ -45,6 +40,8 @@
                 (forall (?l - object)
                     (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
                         (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
             )
  )
 
@@ -74,33 +71,18 @@
  )
 
 ;; agent picks up object
- (:action PickupObjectInReceptacle
-    :parameters (?a - agent ?o - object ?r - receptacle)
-    :precondition (and
-            (atLocation ?a ?r)
-            (inReceptacle ?o ?r)
-            (not (holdsAny ?a))
-            )
-    :effect (and
-                (holds ?a ?o)
-                (holdsAny ?a)
-                (not (inReceptacle ?o ?r))
-            )
- )
-
-;; agent picks up object not in a receptacle
- (:action PickupObjectNoReceptacle
+ (:action PickupObject
     :parameters (?a - agent ?o - object)
     :precondition (and
             (atLocation ?a ?o)
             (not (holdsAny ?a))
-            (forall (?r - receptacle)
-                (not (inReceptacle ?o ?r))
-            )
             )
     :effect (and
                 (holds ?a ?o)
                 (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
             )
  )
 
@@ -120,7 +102,7 @@
 
 ;; agent cleans some object
  (:action CleanObject
-    :parameters (?a - agent ?r - receptacle ?o - object)
+    :parameters (?a - agent ?r - sink ?o - object)
     :precondition (and
             (atLocation ?a ?r)
             (holds ?a ?o)
@@ -161,7 +143,6 @@
     :parameters (?a - agent ?o - object)
     :precondition (and
             (atLocation ?a ?o)
-            (toggleable ?o)
             )
     :effect (and
                 (when (isOn ?o)
@@ -179,7 +160,6 @@
     :precondition
             (and
                 (atLocation ?a ?co)
-                (sliceable ?co)
                 (holds ?a ?ko)
             )
     :effect (and
