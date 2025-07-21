@@ -252,6 +252,62 @@ def create_file_paths(domain_str, problem_str, temp_dir_path):
 
     return domain_path, problem_path, plan_path
 
+def load_problem_data(data_dir, task_name, enable_caption=False, clean_image=False):
+    """
+    Load problem data from the new reorganized structure.
+    
+    Args:
+        data_dir: Base data directory (e.g., "data/blocksworld")
+        task_name: Problem name (e.g., "problem1")
+        enable_caption: Whether to load captioned instruction
+        clean_image: Whether to load only clean images
+        
+    Returns:
+        dict: Contains instruction, observations, and other problem data
+    """
+    problem_dir = f"{data_dir}/{task_name}"
+    
+    # Load instruction
+    if enable_caption:
+        inst_file = f"{problem_dir}/instruction_captioned.txt"
+        if not os.path.exists(inst_file):
+            inst_file = f"{problem_dir}/instruction.txt"  # fallback
+    else:
+        inst_file = f"{problem_dir}/instruction.txt"
+    
+    with open(inst_file, "r") as f:
+        instruction = f.read()
+    
+    # Load observations
+    observations = []
+    if os.path.exists(problem_dir):
+        for filename in os.listdir(problem_dir):
+            if filename.startswith("observation") and filename.endswith((".jpg", ".png", ".jpeg")):
+                if clean_image:
+                    if "clean" in filename:
+                        observations.append(f"{problem_dir}/{filename}")
+                else:
+                    if "clean" not in filename:
+                        observations.append(f"{problem_dir}/{filename}")
+    
+    # Sort observations to ensure consistent ordering
+    observations.sort()
+    
+    return {
+        "instruction": instruction,
+        "observations": observations,
+        "problem_dir": problem_dir
+    }
+
+def get_problem_pddl_path(data_dir, task_name):
+    """Get the path to the problem PDDL file in the new structure."""
+    return f"{data_dir}/{task_name}/problem.pddl"
+
+def get_annotated_bbox_path(data_dir, task_name):
+    """Get the path to the annotated bbox file in the new structure."""
+    bbox_path = f"{data_dir}/{task_name}/annotated_bbox.json"
+    return bbox_path if os.path.exists(bbox_path) else None
+
 # Visualization
 
 def get_color(obj_id, cmap_name="gist_rainbow", alpha=0.5):

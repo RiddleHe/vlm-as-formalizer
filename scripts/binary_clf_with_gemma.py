@@ -38,7 +38,7 @@ def cached_get_img_feat(pixel_values):  # (batch_size, num_channels, height, wid
 
 model.get_image_features = cached_get_img_feat
 
-image = Image.open("/home/mh3897/pddl/villain/data/blocksworld/observations/problem4.jpg")
+image = Image.open("/home/mh3897/yuxi/villain/data/blocksworld/problem4/observation.jpg")
 prompts = [
     "Is purple block on top of red block? (Answer only yes/no)", # yes
     "Is red block on top of purple block? (Answer only yes/no)", # no

@@ -21,6 +21,9 @@ from utils.helpers import (
     seed_everything, 
     format_command,
     create_file_paths,
+    load_problem_data,
+    get_problem_pddl_path,
+    get_annotated_bbox_path,
 )
 from utils.checkers import find_plan, compare_plans
 from utils.generate import generate_pddl
@@ -111,9 +114,10 @@ def main():
 
     seed_everything(args.seed) 
 
+    # Get task names from the reorganized structure (problem directories)
     task_names = sorted([
-        fname.split(".")[0]
-        for fname in os.listdir(f"{data_dir}/problems")
+        dirname for dirname in os.listdir(data_dir)
+        if os.path.isdir(f"{data_dir}/{dirname}") and dirname.startswith("problem")
     ])  # problem1, problem2, ...
 
     with open(f"{data_dir}/domain.pddl", "r") as f:
@@ -156,31 +160,15 @@ def main():
         targets = []
         for i, task_name in enumerate(task_names):
             task_idx = task_name.split("problem")[1]
-            # Load the instruction
-            observations = []
-            if args.enable_caption:
-                with open(f"{data_dir}/instructions_captioned/{task_name}.txt", "r") as f:
-                    instruction = f.read()
-            else:
-                with open(f"{data_dir}/instructions/{task_name}.txt", "r") as f:
-                    instruction = f.read()
-                # Load the observations
-                for img_name in os.listdir(f"{data_dir}/observations"):
-                    if args.clean_image:
-                        if img_name == f"{task_name}-clean.jpg":
-                            observations.append(f"{data_dir}/observations/{img_name}")
-                    else:
-                        if img_name.startswith(f"{task_name}.jpg") or (img_name.startswith(f"{task_name}-") and "clean" not in img_name):
-                            observations.append(f"{data_dir}/observations/{img_name}")
-
-                # Sort observations to ensure consistent ordering
-                observations.sort()
-
+            
+            # Load problem data using new helper function
+            problem_data = load_problem_data(data_dir, task_name, args.enable_caption, args.clean_image)
+            
             targets += [{
                 "problem": None,    
                 "response": None,
-                "observations": observations,
-                "instruction": instruction,
+                "observations": problem_data["observations"],
+                "instruction": problem_data["instruction"],
                 "domain": domain_file,
                 "error": None,
             }]
