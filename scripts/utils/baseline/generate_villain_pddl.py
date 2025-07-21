@@ -22,17 +22,10 @@ def generate_villain_pddl(
     observation_prompt = build_observation_prompt(target, config)
     
     print(f"\n📸 Step 1: VLM Object Recognition")
-    print("-" * 60)
-    print("VLM Observation Prompt:")
-    print(observation_prompt)
-    print("-" * 60)
     
     try:
         object_response = model.generate(observation_prompt, observations)
-        
-        print("VLM Object Response:")
-        print(object_response)
-        print("-" * 60)
+        print(f"VLM Response: {object_response}")
         
     except Exception as e:
         print(f"VLM object recognition failed: {e}")
@@ -45,27 +38,34 @@ def generate_villain_pddl(
     print("Parsed Objects:")
     for obj_type, obj_list in objects.items():
         print(f"  {obj_type}: {obj_list}")
-    print("-" * 60)
     
     # =================================
-    # Step 2: Use DINO to detect objects based on VLM identification
+    # Step 2: Convert to DINO search terms
     # =================================
     
-    # Convert parsed objects to DINO search terms (without slashes)
+    # Convert parsed objects to DINO search terms
     dino_search_terms = []
+    
     for obj_type, obj_list in objects.items():
         for obj_name in obj_list:
-            # Remove underscores and create natural search terms for DINO
-            search_term = obj_name.replace("_", " ")
-            dino_search_terms.append(search_term)
+            if isinstance(obj_name, str):
+                # Clean the object name and convert to search term
+                cleaned_name = " ".join(obj_name.strip().split())
+                search_term = cleaned_name.replace("_", " ")
+                
+                if search_term and search_term not in dino_search_terms:
+                    dino_search_terms.append(search_term)
     
-    print(f"\n🎯 Step 2: DINO Object Detection")
-    print(f"Search terms: {dino_search_terms}")
-    print("-" * 60)
+    print(f"\n🎯 Step 2: DINO Search Terms: {dino_search_terms}")
+    
+    # =================================
+    # Step 3: DINO Detection
+    # =================================
+    
+    print(f"\n🔍 Step 3: DINO Object Detection")
     
     # Detect objects from all images using VLM-identified terms
     all_detected_objects = {}
-    detection_summary = []
     
     for i, image_path in enumerate(observations):
         try:
@@ -73,28 +73,31 @@ def generate_villain_pddl(
                 bbox_annotations = detect_objects_with_dino(image_path, dino_search_terms)
                 
                 if bbox_annotations:
+                    print(f"✅ DINO detected {len(bbox_annotations)} objects in image {i+1}")
                     for obj_name, obj_data in bbox_annotations.items():
                         # Add image index to make object names unique across images
                         unique_name = f"{obj_name}_img{i+1}"
                         all_detected_objects[unique_name] = obj_data
-                        detection_summary.append(f"{obj_data['phrase']} (img{i+1})")
+                else:
+                    print(f"❌ DINO found no objects in image {i+1}")
+            else:
+                print(f"⚠️ No search terms provided for image {i+1}")
                         
         except Exception as e:
-            print(f"DINO detection failed for {image_path}: {e}")
+            print(f"❌ DINO detection failed for {image_path}: {e}")
     
-    # DINO Detection Results
-    print(f"DINO Detection Results:")
+    # DINO Detection Results Summary
     if all_detected_objects:
+        print(f"✅ Total objects detected: {len(all_detected_objects)}")
         for obj_name, obj_data in all_detected_objects.items():
             bbox = obj_data["bbox"]
             phrase = obj_data["phrase"]
             print(f"  - {phrase}: bbox({int(bbox[0])}, {int(bbox[1])}, {int(bbox[2])}, {int(bbox[3])})")
     else:
-        print("  - No objects detected")
-    print("-" * 60)
+        print("❌ No objects detected across all images")
     
     # =================================
-    # Step 3: VLM generates PDDL with DINO detection results
+    # Step 4: VLM generates PDDL with DINO detection results
     # =================================
     
     base_prompt = build_problem_prompt(target, config)
@@ -121,20 +124,12 @@ Based on the above object detection results and the image(s), generate the PDDL 
 No objects were detected by Grounding DINO. Generate the PDDL problem based on visual analysis of the images.
 """
     
-    print(f"\n🔧 Step 3: VLM PDDL Generation")
-    print("Final VLM Prompt:")
-    print("-" * 60)
-    print(vilain_prompt)
-    print("-" * 60)
+    print(f"\n🔧 Step 4: VLM PDDL Generation")
 
     # VLM generates PDDL based on detection + images
     try:
         response = model.generate(vilain_prompt, observations)
-
-        print(f"VLM PDDL Response:")
-        print("-" * 60)
-        print(response)
-        print("-" * 60)
+        print(f"VLM PDDL Response: {response[:200]}..." if len(response) > 200 else f"VLM PDDL Response: {response}")
 
     except Exception as e:
         print(f"VLM PDDL generation failed: {e}")
@@ -143,12 +138,9 @@ No objects were detected by Grounding DINO. Generate the PDDL problem based on v
     # Parse PDDL response
     problem_file = parse_pddl(response)
     
-    print(f"Parsed PDDL:")
-    print("-" * 60)
     if problem_file and problem_file.strip():
-        print(problem_file)
+        print(f"✅ PDDL generation successful")
     else:
-        print("Failed to parse PDDL from response")
-    print("-" * 60)
+        print("❌ Failed to parse PDDL from response")
     
     return problem_file, response, vilain_prompt 
