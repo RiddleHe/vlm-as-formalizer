@@ -1,10 +1,3 @@
-"""
-Pipeline 4a: VLM Captioning → PDDL Generation (Without DINO)
-Two-step approach: 
-1. Generate detailed scene caption using VLM
-2. Use caption + images to generate PDDL
-"""
-
 from ..build_prompts import build_problem_prompt
 from ..parse_response import parse_pddl
 
