@@ -62,6 +62,7 @@ def parse_args():
     parser.add_argument("--generate_villain_captioning_pddl", action="store_true", help="Pipeline 4a: ViLain Captioning → PDDL (without DINO)")
     parser.add_argument("--generate_villain_captioning_dino_pddl", action="store_true", help="Pipeline 4b: ViLain Captioning → DINO → PDDL (Enhanced)")
     parser.add_argument("--generate_scene_graph_pddl", action="store_true", help="Pipeline 5a: Scene Graph → PDDL (without DINO)")
+    parser.add_argument("--generate_scene_graph_dino_pddl", action="store_true", help="Pipeline 5b: Scene Graph → DINO → PDDL (with bbox)")
     
     # Template constraint options
     parser.add_argument("--hard_template", action="store_true", default=True, help="Use hard domain template (strict predicate enforcement)")
@@ -122,6 +123,9 @@ def main():
     if args.generate_scene_graph_pddl:
         template_type = "hard" if args.hard_template else "soft"
         result_dir += f"_pipeline5a-scene-graph-{template_type}-pddl"
+    if args.generate_scene_graph_dino_pddl:
+        template_type = "hard" if args.hard_template else "soft"
+        result_dir += f"_pipeline5b-scene-graph-dino-{template_type}-pddl"
 
     seed_everything(args.seed) 
 
@@ -140,7 +144,7 @@ def main():
         args.generate_multi_step_with_sgclip_vlm or args.generate_vila_planning or
         args.generate_villain_pddl or args.generate_villain_direct_pddl or 
         args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl or
-        args.generate_scene_graph_pddl):
+        args.generate_scene_graph_pddl or args.generate_scene_graph_dino_pddl):
         # Create folders
         folders = ["responses", "instructions"]
         if args.generate_plan or args.generate_vila_planning:
@@ -175,7 +179,7 @@ def main():
             
             # Load problem data using new helper function
             problem_data = load_problem_data(data_dir, task_name, args.enable_caption, args.clean_image)
-            
+
             targets += [{
                 "problem": None,    
                 "response": None,

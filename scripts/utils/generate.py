@@ -34,7 +34,8 @@ from .baseline import (
     generate_villain_direct_pddl,
     generate_villain_captioning_pddl,
     generate_villain_captioning_dino_pddl,
-    generate_scene_graph_to_pddl
+    generate_scene_graph_to_pddl,
+    generate_scene_graph_dino_pddl
 )
 
 def generate_pddl(
@@ -144,6 +145,16 @@ def generate_pddl(
         elif args.generate_scene_graph_pddl:
             hard_template = getattr(args, 'hard_template', True)
             problem_file, response, problem_prompt = generate_scene_graph_to_pddl(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+                hard_template
+            )
+        elif args.generate_scene_graph_dino_pddl:
+            hard_template = getattr(args, 'hard_template', True)
+            problem_file, response, problem_prompt = generate_scene_graph_dino_pddl(
                 target,
                 config,
                 model,
