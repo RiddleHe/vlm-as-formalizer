@@ -18,15 +18,17 @@ class ALFREDTaskManager:
     ALFRED task manager, mapping task id to task path
     """
     
-    def __init__(self, data_path: str = "/local-ssd/alfred/full_2.1.0"):
+    def __init__(self, data_path: str = "/local-ssd/alfred/full_2.1.0", verbose=False):
         self.data_path = data_path
         self.json_feat_path = os.path.join(data_path, "json_feat_2.1.0")
+        self.verbose = verbose
         self.task_id_mapping = {}
         self.build_task_mapping()
-        
+
     def build_task_mapping(self):
         """build task id mapping"""
-        print("Building task ID mapping...")
+        if self.verbose:
+            print("Building task ID mapping...")
         
         # train, valid_seen, valid_unseen, tests_seen, tests_unseen
         for split in ["train", "valid_seen", "valid_unseen", "tests_seen", "tests_unseen"]:
@@ -69,7 +71,8 @@ class ALFREDTaskManager:
                             "trials": trials
                         }
         
-        print(f"Found {len(self.task_id_mapping)} tasks")
+        if self.verbose:
+            print(f"Found {len(self.task_id_mapping)} tasks")
     
     def get_task_path_from_id(self, task_id: str) -> Optional[str]:
         """get task path from task id"""
@@ -90,12 +93,13 @@ class ALFREDEnvironment:
     ALFRED environment interface, handle environment initialization and interaction
     """
     
-    def __init__(self, x_display=':0'):
+    def __init__(self, x_display=':0', verbose=False):
         self.x_display = x_display
         self.env = None
         self.task = None
         self.current_task_path = None
         self.task_manager = ALFREDTaskManager()
+        self.verbose = verbose
         
         # 初始化环境
         self.init_environment()
@@ -174,7 +178,9 @@ class ALFREDEnvironment:
             self.task = get_task(traj_data["task_type"], traj_data, self.env, args)
             
             self.current_task_path = task_path
-            print(f"✅ task loaded successfully: {task_path}")
+
+            if self.verbose:
+                print(f"✅ task loaded successfully: {task_path}")
             return True
             
         except Exception as e:
@@ -362,36 +368,6 @@ class SimplePDDLMapper:
         print(f"Action: {action}\n")
 
         return self.alfred_env.execute_action(action)
-
-# utility functions
-def get_full_observations(alfred_env: ALFREDEnvironment, num_images: int = 8, look_down_angle: int = 0):
-    observations = []
-    angle_steps = 360 // num_images
-
-    current_obseravtion = alfred_env.get_current_observation() # numpy.ndarray
-    current_position = current_obseravtion["agent"]["position"]
-    current_horizon = current_obseravtion["agent"]["cameraHorizon"]
-    agent_height = current_position["y"]
-
-    for i in range(num_images):
-        rotation_angle = i * angle_steps
-        action = {
-            "action": "TeleportFull",
-            "x": current_position["x"],
-            "y": agent_height,
-            "z": current_position["z"],
-            "rotateOnTeleport": True,
-            "rotation": rotation_angle,
-            "horizon": current_horizon + look_down_angle,
-        }
-        result = alfred_env.execute_action(action)
-
-        if result["success"]:
-            observation = alfred_env.get_current_observation()
-            observations.append(observation["image"])
-        objects = observation["objects"] # take objects from last observation
-
-    return observations, objects
 
 def save_image(image: np.ndarray, path: str):
     """save image to file"""

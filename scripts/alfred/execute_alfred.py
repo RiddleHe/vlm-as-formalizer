@@ -9,7 +9,6 @@ from set_up_alfred import (
     SimplePDDLMapper
 )
 
-
 def get_action_sequence(plan: str, object_mapping: dict) -> List[Dict]:
     object_names = [v["object_name"] for v in object_mapping.values()]
     object_names_lower_set = {name.lower(): name for name in object_names}
