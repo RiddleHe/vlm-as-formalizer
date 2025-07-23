@@ -56,6 +56,17 @@ def parse_args():
 
     # Planning baseline
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
+    parser.add_argument("--generate_vila_planning", action="store_true", help="Pipeline 1: ViLA - VLM zero-shot planning")
+    parser.add_argument("--generate_villain_pddl", action="store_true", help="Pipeline 2: ViLain - VLM → DINO → VLM PDDL Generation")
+    parser.add_argument("--generate_villain_direct_pddl", action="store_true", help="Pipeline 3: ViLain Direct PDDL Generation (no object detection)")
+    parser.add_argument("--generate_villain_captioning_pddl", action="store_true", help="Pipeline 4a: ViLain Captioning → PDDL (without DINO)")
+    parser.add_argument("--generate_villain_captioning_dino_pddl", action="store_true", help="Pipeline 4b: ViLain Captioning → DINO → PDDL (Enhanced)")
+    parser.add_argument("--generate_scene_graph_pddl", action="store_true", help="Pipeline 5a: Scene Graph → PDDL (without DINO)")
+    parser.add_argument("--generate_scene_graph_dino_pddl", action="store_true", help="Pipeline 5b: Scene Graph → DINO → PDDL (with bbox)")
+    
+    # Template constraint options
+    parser.add_argument("--hard_template", action="store_true", default=True, help="Use hard domain template (strict predicate enforcement)")
+    parser.add_argument("--soft_template", dest="hard_template", action="store_false", help="Use soft domain template (flexible predicate usage)")
 
     # If choose generate_end_to_end
     parser.add_argument("--generate_caption", action="store_true", help="generate caption for observation")
@@ -99,6 +110,22 @@ def main():
         result_dir += f"_{args.model.replace('/', '-')}"
     if args.generate_plan:
         result_dir += "_plan"
+    if args.generate_vila_planning:
+        result_dir += "_zero-shot-planning"
+    if args.generate_villain_pddl:
+        result_dir += "_pipeline2"
+    if args.generate_villain_direct_pddl:
+        result_dir += "_pipeline3-direct-pddl"
+    if args.generate_villain_captioning_pddl:
+        result_dir += "_pipeline4a-vlm-captioning-pddl"
+    if args.generate_villain_captioning_dino_pddl:
+        result_dir += "_pipeline4b-vlm-captioning-dino-pddl"
+    if args.generate_scene_graph_pddl:
+        template_type = "hard" if args.hard_template else "soft"
+        result_dir += f"_pipeline5a-scene-graph-{template_type}-pddl"
+    if args.generate_scene_graph_dino_pddl:
+        template_type = "hard" if args.hard_template else "soft"
+        result_dir += f"_pipeline5b-scene-graph-dino-{template_type}-pddl"
 
     seed_everything(args.seed) 
 
@@ -114,10 +141,13 @@ def main():
     # Generate / refine PDDL problems
     if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
         args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
-        args.generate_multi_step_with_sgclip_vlm):
+        args.generate_multi_step_with_sgclip_vlm or args.generate_vila_planning or
+        args.generate_villain_pddl or args.generate_villain_direct_pddl or 
+        args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl or
+        args.generate_scene_graph_pddl or args.generate_scene_graph_dino_pddl):
         # Create folders
         folders = ["responses", "instructions"]
-        if args.generate_plan:
+        if args.generate_plan or args.generate_vila_planning:
             folders += ["plans"]
         else:
             folders += ["problems"]
@@ -149,7 +179,7 @@ def main():
             
             # Load problem data using new helper function
             problem_data = load_problem_data(data_dir, task_name, args.enable_caption, args.clean_image)
-            
+
             targets += [{
                 "problem": None,    
                 "response": None,
@@ -166,8 +196,13 @@ def main():
             desc="Generating PDDL problems"
         ):
 
-            target_problem_dir = f"{result_dir}/{args.gen_step}/problems"
-            if any(path.startswith(f"{task_name}") for path in os.listdir(target_problem_dir)):
+            # Check appropriate directory based on pipeline type
+            if args.generate_plan or args.generate_vila_planning:
+                target_check_dir = f"{result_dir}/{args.gen_step}/plans"
+            else:
+                target_check_dir = f"{result_dir}/{args.gen_step}/problems"
+            
+            if os.path.exists(target_check_dir) and any(path.startswith(f"{task_name}") for path in os.listdir(target_check_dir)):
                 print(f"{task_name} already exists, skipping...")
                 continue
 
@@ -175,8 +210,14 @@ def main():
             print(f"Instruction: {target['instruction'][:100]}\n")
 
             # generate PDDL objects, initial state, and goal specification
-            if args.generate_plan:
-                pass
+            if args.generate_plan or args.generate_vila_planning:
+
+                res, success = generate_pddl(
+                    target,
+                    config,
+                    model=model,
+                    args=args,
+                )
 
             else:
                 res, success = generate_pddl(
@@ -195,7 +236,9 @@ def main():
             try:
                 if (args.generate_end_to_end or args.generate_multi_step or 
                     args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
-                    args.generate_multi_step_with_sgclip_vlm):
+                    args.generate_multi_step_with_sgclip_vlm or args.generate_villain_pddl or
+                    args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or
+                    args.generate_villain_captioning_dino_pddl):
                     dir_pairs = [
                         ("problems", "file", "pddl"),
                         ("instructions", "prompt", "txt"),
@@ -210,7 +253,7 @@ def main():
                             with open(f"{result_dir}/{save_step}/{dir_name}/{problem_name}.{file_ext}", "w") as fw:
                                 fw.write(res["problem"][file_name][retry_idx])
                 
-                elif args.generate_plan:
+                elif args.generate_plan or args.generate_vila_planning:
                     dir_pairs = [
                         ("plans", "plan"),
                         ("instructions", "prompt"),

@@ -28,7 +28,14 @@ from .baseline import (
     generate_multi_step_with_cv,
     generate_multi_step_with_vlm,
     generate_pddl_end_to_end,
-    generate_multi_step_with_sgclip_vlm
+    generate_multi_step_with_sgclip_vlm,
+    generate_vila_planning,
+    generate_villain_pddl,
+    generate_villain_direct_pddl,
+    generate_villain_captioning_pddl,
+    generate_villain_captioning_dino_pddl,
+    generate_scene_graph_to_pddl,
+    generate_scene_graph_dino_pddl
 )
 
 def generate_pddl(
@@ -103,6 +110,71 @@ def generate_pddl(
                 save_step=save_step,
                 task_name=task_name,
             )
+        elif args.generate_villain_pddl:
+            problem_file, response, problem_prompt = generate_villain_pddl(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+            )
+        elif args.generate_villain_direct_pddl:
+            problem_file, response, problem_prompt = generate_villain_direct_pddl(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+            )
+        elif args.generate_villain_captioning_pddl:
+            problem_file, response, problem_prompt = generate_villain_captioning_pddl(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+            )
+        elif args.generate_villain_captioning_dino_pddl:
+            problem_file, response, problem_prompt = generate_villain_captioning_dino_pddl(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+            )
+        elif args.generate_scene_graph_pddl:
+            hard_template = getattr(args, 'hard_template', True)
+            problem_file, response, problem_prompt = generate_scene_graph_to_pddl(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+                hard_template
+            )
+        elif args.generate_scene_graph_dino_pddl:
+            hard_template = getattr(args, 'hard_template', True)
+            problem_file, response, problem_prompt = generate_scene_graph_dino_pddl(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+                hard_template
+            )
+        elif args.generate_vila_planning:
+            plan, response, problem_prompt = generate_vila_planning(
+                target,
+                config,
+                model,
+                observations,
+                retry_idx,
+            )
+            # For planning pipelines, we store plan instead of problem_file
+            res["plan"] = plan
+            res["response"] = response  
+            res["prompt"] = problem_prompt
+            return res, True
         else:
             raise ValueError(f"Invalid generation method: {args.generate_method}")
         
@@ -124,4 +196,3 @@ def generate_pddl(
             break
 
     return res, success
-

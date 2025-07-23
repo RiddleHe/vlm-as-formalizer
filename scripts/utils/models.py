@@ -27,7 +27,9 @@ def get_hf_client_name(client_name):
         "qwenvl-7B": "Qwen/Qwen2.5-VL-7B-Instruct",
         "internvl3-14B": "OpenGVLab/InternVL3-14B", 
         "gemma3-12B": "google/gemma-3-12b-it",
-        "gemma3-27B": "google/gemma-3-27b-it"
+        "gemma3-27B": "google/gemma-3-27b-it",
+        "llama-3.2-11B": "meta-llama/Llama-3.2-11B-Vision-Instruct",
+        "llama-3.2-90B": "meta-llama/Llama-3.2-90B-Vision-Instruct"
     }
     if client_name in model_mapping:
         return model_mapping[client_name]
@@ -102,6 +104,8 @@ class HuggingFaceClient(VLMClient):
             return self._load_internvl(self.device, **kwargs)
         elif "gemma" in self.client_name.lower():
             return self._load_gemma3(self.device)
+        elif "llama" in self.client_name.lower():
+            return self._load_llama_vision(self.device)
         else:
             raise ValueError(f"Unsupported HuggingFace model: {self.client_name}")
     
@@ -166,6 +170,21 @@ class HuggingFaceClient(VLMClient):
         
         return {"model": model, "processor": processor, "type": "gemma3"}
 
+    def _load_llama_vision(self, device):
+        """Load Llama Vision model and processor."""
+        from transformers import LlavaForConditionalGeneration, AutoProcessor
+        
+        model = LlavaForConditionalGeneration.from_pretrained(
+            self.client_name,
+            torch_dtype=torch.bfloat16,
+            device_map="auto",
+            attn_implementation="sdpa"
+        ).eval()
+        
+        processor = AutoProcessor.from_pretrained(self.client_name)
+        
+        return {"model": model, "processor": processor, "type": "llama_vision"}
+
     def generate(self, prompt: str, observations: list[str] = [], return_cache=False, past_key_values=None) -> str:
         """Generate response based on model type."""
         model_type = self.client["type"]
@@ -176,6 +195,8 @@ class HuggingFaceClient(VLMClient):
             return self._generate_internvl(prompt, observations)
         elif model_type == "gemma3":
             return self._generate_gemma3(prompt, observations, return_cache=return_cache, past_key_values=past_key_values)
+        elif model_type == "llama_vision":
+            return self._generate_llama_vision(prompt, observations)
         else:
             raise ValueError(f"Unknown model type: {model_type}")
     
@@ -327,6 +348,49 @@ class HuggingFaceClient(VLMClient):
             generation = outputs[0][input_len:]
             decoded = processor.decode(generation, skip_special_tokens=True)
             return decoded
+
+    def _generate_llama_vision(self, prompt: str, observations: list[str]) -> str:
+        """Generate response using Llama Vision."""
+        model = self.client["model"]
+        processor = self.client["processor"]
+        
+        # Load images
+        images = []
+        for obs_path in observations:
+            image = Image.open(obs_path).convert("RGB")
+            images.append(image)
+        
+        # Prepare conversation
+        conversation = [
+            {
+                "role": "user", 
+                "content": [
+                    {"type": "image", "image": img} for img in images
+                ] + [{"type": "text", "text": prompt}]
+            }
+        ]
+        
+        # Apply chat template
+        prompt_text = processor.apply_chat_template(conversation, add_generation_prompt=True)
+        
+        # Process inputs
+        inputs = processor(images, prompt_text, return_tensors="pt").to(model.device)
+        
+        # Generate response
+        with torch.inference_mode():
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=1024,
+                do_sample=False,
+                temperature=0.0
+            )
+        
+        # Decode response
+        generated_text = processor.decode(outputs[0], skip_special_tokens=True)
+        
+        # Extract only the new generation (remove input prompt)
+        response = generated_text.split(prompt_text)[-1].strip()
+        return response
 
 def VLMClientFactory(client_name: str, device=None) -> VLMClient:
     """Factory function to create a VLM client."""

@@ -250,7 +250,37 @@ def parse_conditions(pddl_file):
 
     return conditions
 
+def parse_objects_from_categorized_response(response, object_types=[]):
+    objects = defaultdict(list)
+    current_type = None
+    
+    for line in response.split("\n"):
+        line = line.strip()
+        
+        # Check if this is a type header (e.g., "block:" or "robot:")
+        if line.endswith(':'):
+            potential_type = line[:-1].strip()
+            if not object_types or potential_type in object_types:
+                current_type = potential_type
+            else:
+                current_type = None
+        # Check if this is an object entry (starts with "- ")
+        elif line.startswith('- ') and current_type:
+            object_name = line[2:].strip()  # Remove "- " prefix
+            if object_name:
+                # Convert spaces to underscores for consistency
+                clean_name = "_".join(object_name.split())
+                objects[current_type].append(clean_name)
+    
+    return objects
+
 def parse_objects(response, object_types = []):
+    # First try the new categorized format (for VLM responses)
+    categorized_result = parse_objects_from_categorized_response(response, object_types)
+    if categorized_result and any(obj_list for obj_list in categorized_result.values()):
+        return categorized_result
+    
+    # Fallback to original format (name - type)
     objects = defaultdict(list)
     for line in response.split("\n"):
         if "-" in line:
