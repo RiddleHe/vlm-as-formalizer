@@ -290,10 +290,10 @@ def main():
         else:
             problems = sorted([
                 os.path.join(problems_dir, f) 
-                for f 
+            for f 
                 in os.listdir(problems_dir)
-                if "-" not in f
-            ])  # Need to sort
+            if "-" not in f
+        ])
         num_problems = len(problems)
 
         success_count = 0        
