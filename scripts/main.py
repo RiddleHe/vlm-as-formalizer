@@ -13,6 +13,9 @@ import subprocess
 import glob
 import tempfile
 import shutil
+
+from utils.experiment_logger import ExperimentLogger, create_experiment_log_path
+
 from PIL import Image
 import torch
 import argparse
@@ -118,31 +121,50 @@ def main():
     else:
         raise ValueError(f"Invalid domain: {args.domain}")
 
-    result_dir = f"../results/{args.domain}"
+    # build the result directory suffix, remove the pipeline number, use descriptive name
+    result_dir_suffix = ""
     if args.result_dir is not None:
-        result_dir += f"_{args.result_dir}"
+        result_dir_suffix += f"_{args.result_dir}"
     if args.model is not None:
-        result_dir += f"_{args.model.replace('/', '-')}"
+        result_dir_suffix += f"_{args.model.replace('/', '-')}"
+    
+    result_dir = f"/local-ssd/Muyu_experiment/results/{args.domain}"
     if args.generate_plan:
-        result_dir += "_plan"
+        result_dir_suffix += "_generate_plan"
     if args.generate_vila_planning:
-        result_dir += "_zero-shot-planning"
+        result_dir_suffix += "_generate_vila_planning"
     if args.generate_villain_pddl:
-        result_dir += "_pipeline2"
+        result_dir_suffix += "_generate_villain_pddl"
     if args.generate_villain_direct_pddl:
-        result_dir += "_pipeline3-direct-pddl"
+        result_dir_suffix += "_generate_villain_direct_pddl"
     if args.generate_villain_captioning_pddl:
-        result_dir += "_pipeline4a-vlm-captioning-pddl"
+        result_dir_suffix += "_generate_villain_captioning_pddl"
     if args.generate_villain_captioning_dino_pddl:
-        result_dir += "_pipeline4b-vlm-captioning-dino-pddl"
+        result_dir_suffix += "_generate_villain_captioning_dino_pddl"
     if args.generate_scene_graph_pddl:
         template_type = "hard" if args.hard_template else "soft"
-        result_dir += f"_pipeline5a-scene-graph-{template_type}-pddl"
+        result_dir_suffix += f"_generate_scene_graph_{template_type}_pddl"
     if args.generate_scene_graph_dino_pddl:
         template_type = "hard" if args.hard_template else "soft"
-        result_dir += f"_pipeline5b-scene-graph-dino-{template_type}-pddl"
+        result_dir_suffix += f"_generate_scene_graph_dino_{template_type}_pddl"
+    
+    # set the final path
+    result_dir = result_dir + result_dir_suffix
+    log_dir = f"/local-ssd/Muyu_experiment/intermediate_results"
 
     seed_everything(args.seed) 
+
+    # create the experiment log file path  
+    log_file_path = create_experiment_log_path(log_dir, args.domain, result_dir_suffix.lstrip('_'))
+    
+    # start the logging system
+    logger = ExperimentLogger(log_file_path, console_output=True)
+    logger.__enter__()
+    
+    print(f"🧪 Starting experiment: {args.domain}{result_dir_suffix}")
+    print(f"📁 Results will be saved to: {result_dir}")
+    print(f"📋 Log will be saved to: {log_file_path}")
+    print(f"{'='*80}")
 
     # Get task names from the reorganized structure (problem directories)
     task_names = sorted([
