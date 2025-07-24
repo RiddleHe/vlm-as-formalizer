@@ -22,14 +22,21 @@ def get_gpt_client_name(client_name):
         return model_mapping[client_name]
     return None
 
+def get_openrouter_client_name(client_name):
+    model_mapping = {
+        "llama-3.2-11B": "meta-llama/llama-3.2-11b-vision-instruct:free",
+        "llama-3.2-90B": "meta-llama/llama-3.2-90b-vision-instruct"
+    }
+    if client_name in model_mapping:
+        return model_mapping[client_name]
+    return None
+
 def get_hf_client_name(client_name):
     model_mapping = {
         "qwenvl-7B": "Qwen/Qwen2.5-VL-7B-Instruct",
         "internvl3-14B": "OpenGVLab/InternVL3-14B", 
         "gemma3-12B": "google/gemma-3-12b-it",
-        "gemma3-27B": "google/gemma-3-27b-it",
-        "llama-3.2-11B": "meta-llama/Llama-3.2-11B-Vision-Instruct",
-        "llama-3.2-90B": "meta-llama/Llama-3.2-90B-Vision-Instruct"
+        "gemma3-27B": "google/gemma-3-27b-it"
     }
     if client_name in model_mapping:
         return model_mapping[client_name]
@@ -69,7 +76,7 @@ class OpenAIClient(VLMClient):
         
     def load_client(self, **kwargs):
         from openai import OpenAI
-        return OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        return OpenAI(api_key="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")
 
     def generate(self, prompt: str, observations: list[str] = []) -> str:
         content = []
@@ -91,6 +98,100 @@ class OpenAIClient(VLMClient):
             max_tokens=1024,
         )
         return response.choices[0].message.content
+
+class OpenRouterClient(VLMClient):
+    """Client for OpenRouter models (Llama 3.2 Vision)."""
+    def __init__(self, client_name, **kwargs):
+        super().__init__(client_name, **kwargs)
+        
+    def load_client(self, **kwargs):
+        from openai import OpenAI
+        return OpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            api_key="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"
+        )
+
+    def generate(self, prompt: str, observations: list[str] = []) -> str:
+        if not observations:
+            # No images, just text
+            content = [{"type": "text", "text": prompt}]
+            
+        elif len(observations) == 1:
+            # Single image - use original format
+            content = []
+            base64_images = self._encode_images(observations)
+            content.append({
+                "type": "image_url",
+                "image_url": {"url": f"data:image/jpeg;base64,{base64_images[0]}"}
+            })
+            content.append({"type": "text", "text": prompt})
+            
+        else:
+            # Multiple images - OpenRouter doesn't support this directly
+            # So we'll process each image separately and combine results
+            print(f"🔄 Processing {len(observations)} images separately for OpenRouter...")
+            
+            individual_responses = []
+            for i, obs in enumerate(observations):
+                base64_image = self._encode_images([obs])[0]
+                individual_content = [
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
+                    },
+                    {"type": "text", "text": f"Image {i+1}: {prompt}"}
+                ]
+                
+                try:
+                    response = self.client.chat.completions.create(
+                        model=self.client_name,
+                        messages=[{
+                            "role": "user",
+                            "content": individual_content
+                        }],
+                        max_tokens=1024,
+                    )
+                    
+                    if response and response.choices and response.choices[0].message:
+                        individual_responses.append(f"Image {i+1}: {response.choices[0].message.content}")
+                    else:
+                        individual_responses.append(f"Image {i+1}: [No response]")
+                        
+                except Exception as e:
+                    print(f"❌ Failed to process image {i+1}: {str(e)}")
+                    individual_responses.append(f"Image {i+1}: [Error: {str(e)}]")
+            
+            # Combine all responses
+            return "\n\n".join(individual_responses)
+
+        # Single request for no images or single image
+        try:
+            response = self.client.chat.completions.create(
+                model=self.client_name,
+                messages=[{
+                    "role": "user",
+                    "content": content
+                }],
+                max_tokens=1024,
+            )
+            
+            if response is None:
+                print(f"⚠️ OpenRouter API returned None for model {self.client_name}")
+                return ""
+            
+            if not hasattr(response, 'choices') or not response.choices:
+                print(f"⚠️ OpenRouter API response has no choices: {response}")
+                return ""
+                
+            if not response.choices[0].message:
+                print(f"⚠️ OpenRouter API response has no message: {response.choices[0]}")
+                return ""
+                
+            return response.choices[0].message.content or ""
+            
+        except Exception as e:
+            print(f"❌ OpenRouter API Error: {str(e)}")
+            return ""
 
 class HuggingFaceClient(VLMClient):
     """Client for Hugging Face open source models (Qwen2.5VL and InternVL)."""
@@ -172,9 +273,9 @@ class HuggingFaceClient(VLMClient):
 
     def _load_llama_vision(self, device):
         """Load Llama Vision model and processor."""
-        from transformers import LlavaForConditionalGeneration, AutoProcessor
+        from transformers import MllamaForConditionalGeneration, AutoProcessor
         
-        model = LlavaForConditionalGeneration.from_pretrained(
+        model = MllamaForConditionalGeneration.from_pretrained(
             self.client_name,
             torch_dtype=torch.bfloat16,
             device_map="auto",
@@ -396,6 +497,8 @@ def VLMClientFactory(client_name: str, device=None) -> VLMClient:
     """Factory function to create a VLM client."""
     if get_gpt_client_name(client_name):
         return OpenAIClient(get_gpt_client_name(client_name), device=device)
+    elif get_openrouter_client_name(client_name):
+        return OpenRouterClient(get_openrouter_client_name(client_name), device=device)
     elif get_hf_client_name(client_name):
         return HuggingFaceClient(get_hf_client_name(client_name), device=device)
     elif "/" in client_name:

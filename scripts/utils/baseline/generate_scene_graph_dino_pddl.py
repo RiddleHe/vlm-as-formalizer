@@ -51,29 +51,47 @@ def truncate_at_repetition(response):
 
 
 def extract_objects_from_scene_graph(scene_graph_text, domain_types):
-    """
-    Extract object mentions from scene graph for DINO detection.
-    Parse structured scene graph format: "type: obj1, obj2, obj3"
-    """
+
     objects = []
     
-    for obj_type in domain_types:
-        # Look for structured format: "block: wrench, green_block, blue_block, ..."
-        # or "robot: robot1"
-        pattern = rf'{obj_type}:\s*([^\n]+)'
-        match = re.search(pattern, scene_graph_text, re.IGNORECASE)
+    for domain_type in domain_types:
+        # Look for lines like "block:" or "robot:"
+        type_pattern = rf'{re.escape(domain_type)}:\s*(.*)(?:\n|$)'
+        type_matches = re.findall(type_pattern, scene_graph_text, re.IGNORECASE | re.MULTILINE)
         
-        if match:
-            # Parse comma-separated object list
-            obj_list_text = match.group(1).strip()
+        for match in type_matches:
+            match = match.strip()
             
-            # Skip if explicitly "none" or empty
-            if obj_list_text and obj_list_text.lower() not in ['none', '']:
-                # Split by comma and clean up object names
-                for obj in obj_list_text.split(','):
-                    obj_name = obj.strip()
-                    if obj_name and obj_name.lower() != 'none':
+            # Format 1: comma-separated on same line
+            if ',' in match and not match.startswith('-'):
+                obj_names = [obj.strip() for obj in match.split(',')]
+                for obj_name in obj_names:
+                    obj_name = obj_name.strip()
+                    if obj_name and obj_name.lower() not in ['none', ''] and obj_name not in objects:
                         objects.append(obj_name)
+            
+            # Format 2: list format with "-" bullets (most common)
+            elif not match or match.startswith('-'):
+                # Find all bullet points after this type declaration
+                lines = scene_graph_text.split('\n')
+                found_type_line = False
+                for line in lines:
+                    line = line.strip()
+                    if f'{domain_type}:' in line.lower():
+                        found_type_line = True
+                        continue
+                    elif found_type_line:
+                        if line.startswith('-'):
+                            # Extract object name from "- object_name"
+                            obj_name = line[1:].strip()
+                            # Remove any parenthetical descriptions
+                            if '(' in obj_name:
+                                obj_name = obj_name.split('(')[0].strip()
+                            if obj_name and obj_name.lower() not in ['none', ''] and obj_name not in objects:
+                                objects.append(obj_name)
+                        elif line and not line.startswith(' ') and ':' in line:
+                            # New section started, stop parsing this type
+                            break
     
     return objects
 
