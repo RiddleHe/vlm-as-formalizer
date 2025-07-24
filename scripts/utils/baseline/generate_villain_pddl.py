@@ -64,20 +64,26 @@ def generate_villain_pddl(
     
     print(f"\n🔍 Step 3: DINO Object Detection")
     
-    # Detect objects from all images using VLM-identified terms
-    all_detected_objects = {}
+    # Detect objects from all images using VLM-identified terms - 按图片分组存储
+    detection_by_image = {}
+    total_objects_detected = 0
     
     for i, image_path in enumerate(observations):
+        image_key = f"observation{i+1}"
+        detection_by_image[image_key] = []
+        
         try:
             if dino_search_terms:
                 bbox_annotations = detect_objects_with_dino(image_path, dino_search_terms)
-            
-            if bbox_annotations:
-                print(f"✅ DINO detected {len(bbox_annotations)} objects in image {i+1}")
-                for obj_name, obj_data in bbox_annotations.items():
-                    # Add image index to make object names unique across images
-                    unique_name = f"{obj_name}_img{i+1}"
-                    all_detected_objects[unique_name] = obj_data
+                
+                if bbox_annotations:
+                    print(f"✅ DINO detected {len(bbox_annotations)} objects in image {i+1}")
+                    for obj_name, obj_data in bbox_annotations.items():
+                        detection_by_image[image_key].append({
+                            "object": obj_data["phrase"],
+                            "bbox": obj_data["bbox"]
+                        })
+                        total_objects_detected += 1
                 else:
                     print(f"❌ DINO found no objects in image {i+1}")
             else:
@@ -86,36 +92,43 @@ def generate_villain_pddl(
         except Exception as e:
             print(f"❌ DINO detection failed for {image_path}: {e}")
     
-    # DINO Detection Results Summary
-    if all_detected_objects:
-        print(f"✅ Total objects detected: {len(all_detected_objects)}")
-        for obj_name, obj_data in all_detected_objects.items():
-            bbox = obj_data["bbox"]
-            phrase = obj_data["phrase"]
-            print(f"  - {phrase}: bbox({int(bbox[0])}, {int(bbox[1])}, {int(bbox[2])}, {int(bbox[3])})")
-    else:
-        print("❌ No objects detected across all images")
-    
+    # DINO Detection Results Summary - 按图片分组显示
+    print(f"✅ Total objects detected: {total_objects_detected}")
+    for image_key, detections in detection_by_image.items():
+        if detections:
+            objects_str = ", ".join([
+                f"{det['object']}: bbox({int(det['bbox'][0])}, {int(det['bbox'][1])}, {int(det['bbox'][2])}, {int(det['bbox'][3])})"
+                for det in detections
+            ])
+            print(f"  📸 {image_key.capitalize()}: {objects_str}")
+        else:
+            print(f"  📸 {image_key.capitalize()}: No objects detected")
+
     # =================================
     # Step 4: VLM generates PDDL with DINO detection results
     # =================================
     
     base_prompt = build_problem_prompt(target, config)
     
-    # Add DINO detection results to prompt
-    if all_detected_objects:
+    # Add DINO detection results to prompt - 按观察顺序组织
+    if total_objects_detected > 0:
         detection_info = "Object detection results from Grounding DINO:\n"
-        for obj_name, obj_data in all_detected_objects.items():
-            bbox = obj_data["bbox"]
-            phrase = obj_data["phrase"]
-            detection_info += f"- Detected: {phrase} at coordinates ({int(bbox[0])}, {int(bbox[1])}, {int(bbox[2])}, {int(bbox[3])})\n"
+        for image_key, detections in detection_by_image.items():
+            if detections:
+                objects_str = ", ".join([
+                    f"{det['object']} at bbox({int(det['bbox'][0])}, {int(det['bbox'][1])}, {int(det['bbox'][2])}, {int(det['bbox'][3])})"
+                    for det in detections
+                ])
+                detection_info += f"{image_key.capitalize()}: {objects_str}\n"
+            else:
+                detection_info += f"{image_key.capitalize()}: No objects detected\n"
         
         # Combine base prompt with detection results
         vilain_prompt = base_prompt + f"""
 
 {detection_info}
 
-Based on the above object detection results and the image(s), generate the PDDL problem.
+Based on the above object detection results organized by observation sequence and the image(s), generate the PDDL problem.
 """
     else:
         # Fallback when no objects detected
@@ -129,7 +142,10 @@ No objects were detected by Grounding DINO. Generate the PDDL problem based on v
     # VLM generates PDDL based on detection + images
     try:
         response = model.generate(vilain_prompt, observations)
-        print(f"VLM PDDL Response: {response[:200]}..." if len(response) > 200 else f"VLM PDDL Response: {response}")
+        print(f"📄 VLM PDDL Response:")
+        print("=" * 80)
+        print(response)
+        print("=" * 80)
 
     except Exception as e:
         print(f"VLM PDDL generation failed: {e}")
