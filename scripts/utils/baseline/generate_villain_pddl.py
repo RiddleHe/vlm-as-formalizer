@@ -73,7 +73,7 @@ def generate_villain_pddl(
                 bbox_annotations = detect_objects_with_dino(image_path, dino_search_terms)
             
             if bbox_annotations:
-                    print(f"✅ DINO detected {len(bbox_annotations)} objects in image {i+1}")
+                print(f"✅ DINO detected {len(bbox_annotations)} objects in image {i+1}")
                 for obj_name, obj_data in bbox_annotations.items():
                     # Add image index to make object names unique across images
                     unique_name = f"{obj_name}_img{i+1}"

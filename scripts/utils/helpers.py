@@ -277,18 +277,22 @@ def load_problem_data(data_dir, task_name, enable_caption=False, clean_image=Fal
     
     with open(inst_file, "r") as f:
         instruction = f.read()
+
+    with open(f"{problem_dir}/domain.pddl", "r") as f:
+        domain_file = f.read()
     
     # Load observations
     observations = []
     if os.path.exists(problem_dir):
-        for filename in os.listdir(problem_dir):
-            if filename.startswith("observation") and filename.endswith((".jpg", ".png", ".jpeg")):
+        observations_dir = f"{problem_dir}/observations"
+        for filename in os.listdir(observations_dir):
+            if filename.endswith((".jpg", ".png", ".jpeg")):
                 if clean_image:
                     if "clean" in filename:
-                        observations.append(f"{problem_dir}/{filename}")
+                        observations.append(f"{observations_dir}/{filename}")
                 else:
                     if "clean" not in filename:
-                        observations.append(f"{problem_dir}/{filename}")
+                        observations.append(f"{observations_dir}/{filename}")
     
     # Sort observations to ensure consistent ordering
     observations.sort()
@@ -296,7 +300,8 @@ def load_problem_data(data_dir, task_name, enable_caption=False, clean_image=Fal
     return {
         "instruction": instruction,
         "observations": observations,
-        "problem_dir": problem_dir
+        "problem_dir": problem_dir,
+        "domain_file": domain_file
     }
 
 def get_problem_pddl_path(data_dir, task_name):

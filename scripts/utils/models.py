@@ -234,7 +234,7 @@ class HuggingFaceClient(VLMClient):
         
         # Generate response
         with torch.no_grad():
-            generated_ids = model.generate(**inputs, max_new_tokens=1024)
+            generated_ids = model.generate(**inputs, max_new_tokens=4096) # use a higher number
         
         # Decode only the new tokens
         generated_ids_trimmed = [
@@ -263,7 +263,7 @@ class HuggingFaceClient(VLMClient):
             pixel_values = pixel_values.cuda()
             
         image_prompt = f"{prompt}\n<image>"
-        generation_config = dict(max_new_tokens=1024, do_sample=True)
+        generation_config = dict(max_new_tokens=4096, do_sample=True)
         response = model.chat(tokenizer, pixel_values, image_prompt, generation_config)
             
         return response
@@ -318,7 +318,7 @@ class HuggingFaceClient(VLMClient):
         with torch.inference_mode():
             outputs = model.generate(
                 **inputs, 
-                max_new_tokens=128, 
+                max_new_tokens=4096, 
                 do_sample=False, 
                 top_p=None, 
                 top_k=None,
@@ -373,7 +373,7 @@ class HuggingFaceClient(VLMClient):
         with torch.inference_mode():
             outputs = model.generate(
                 **inputs,
-                max_new_tokens=1024,
+                max_new_tokens=4096,
                 do_sample=False,
                 temperature=0.0
             )

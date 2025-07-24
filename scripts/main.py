@@ -104,7 +104,18 @@ def parse_args():
 def main():
     args = parse_args()
 
-    data_dir = f"../data/{args.domain}"
+    # Parse domain
+    if args.domain == "cooking": # TODO: clean upon submission
+        data_dir = f"../data/cooking" 
+    elif args.domain == "blocksworld":
+        data_dir = f"../data/blocksworld"
+    elif args.domain == "blocksworld-real":
+        data_dir = "/local-ssd/alfred/blocksworld-real"
+    elif args.domain == "alfred":
+        data_dir = "/local-ssd/alfred/alfred_train_cleaned"
+    else:
+        raise ValueError(f"Invalid domain: {args.domain}")
+
     result_dir = f"../results/{args.domain}"
     if args.result_dir is not None:
         result_dir += f"_{args.result_dir}"
@@ -136,9 +147,6 @@ def main():
         dirname for dirname in os.listdir(data_dir)
         if os.path.isdir(f"{data_dir}/{dirname}") and dirname.startswith("problem")
     ])  # problem1, problem2, ...
-
-    with open(f"{data_dir}/domain.pddl", "r") as f:
-        domain_file = f.read()
 
     # Generate / refine PDDL problems
     if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
@@ -177,7 +185,7 @@ def main():
         # Set up problem tasks: instructions, observations...
         targets = []
         for i, task_name in enumerate(task_names):
-            task_idx = task_name.split("problem")[1]
+            # task_idx = task_name.split("problem")[1] # problem might not have a number, eg. Alfred
             
             # Load problem data using new helper function
             problem_data = load_problem_data(data_dir, task_name, args.enable_caption, args.clean_image)
@@ -187,7 +195,7 @@ def main():
                 "response": None,
                 "observations": problem_data["observations"],
                 "instruction": problem_data["instruction"],
-                "domain": domain_file,
+                "domain": problem_data["domain_file"],
                 "error": None,
             }]
 
