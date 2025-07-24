@@ -151,9 +151,13 @@ IMPORTANT:
         scene_graph_objects = domain_types  # Use domain types as fallback
     
     # Use DINO to detect objects from scene graph
-    all_detected_objects = {}
+    detection_by_image = {}
+    total_objects_detected = 0
     
     for i, image_path in enumerate(observations):
+        image_key = f"observation{i+1}"
+        detection_by_image[image_key] = []
+        
         try:
             if scene_graph_objects:
                 bbox_annotations = detect_objects_with_dino(image_path, scene_graph_objects)
@@ -161,9 +165,11 @@ IMPORTANT:
                 if bbox_annotations:
                     print(f"✅ DINO detected {len(bbox_annotations)} objects in image {i+1}")
                     for obj_name, obj_data in bbox_annotations.items():
-                        # Add image index to make object names unique across images
-                        unique_name = f"{obj_name}_img{i+1}"
-                        all_detected_objects[unique_name] = obj_data
+                        detection_by_image[image_key].append({
+                            "object": obj_data["phrase"],
+                            "bbox": obj_data["bbox"]
+                        })
+                        total_objects_detected += 1
                 else:
                     print(f"❌ DINO found no objects in image {i+1}")
             else:
@@ -173,17 +179,15 @@ IMPORTANT:
             print(f"❌ DINO detection failed for {image_path}: {e}")
     
     # Display results summary
-    if all_detected_objects:
-        print(f"✅ Total objects detected: {len(all_detected_objects)}")
-        for obj_name, obj_data in list(all_detected_objects.items())[:5]:  # Show first 5
-            bbox = obj_data["bbox"]
-            phrase = obj_data["phrase"]
-            print(f"  - {phrase}: bbox({int(bbox[0])}, {int(bbox[1])}, {int(bbox[2])}, {int(bbox[3])})")
-        if len(all_detected_objects) > 5:
-            print(f"  ... and {len(all_detected_objects) - 5} more")
-    else:
-        print("❌ No objects detected across all images")
-    
+    print(f"✅ Total objects detected: {total_objects_detected}")
+    for image_key, detections in detection_by_image.items():
+        if detections:
+            print(f"  📸 {image_key.capitalize()}:")
+            for det in detections:
+                print(f"    - {det['object']}: bbox({int(det['bbox'][0])}, {int(det['bbox'][1])}, {int(det['bbox'][2])}, {int(det['bbox'][3])})")
+        else:
+            print(f"  📸 {image_key.capitalize()}: No objects detected")
+
     # ============================
     # Step 4: Enhanced PDDL Generation
     # ============================
@@ -199,18 +203,32 @@ IMPORTANT:
     
     # Create DINO detection summary
     dino_summary = ""
-    if all_detected_objects:
-        dino_summary = f"""
+    if total_objects_detected > 0:
+        dino_summary = "OBJECT DETECTION RESULTS:\n\n"
+        
 
-OBJECT DETECTION RESULTS:
-The following objects were detected in the images with their locations:
-"""
-        for obj_name, obj_data in all_detected_objects.items():
-            bbox = obj_data["bbox"]
-            phrase = obj_data["phrase"]
-            dino_summary += f"- {phrase}: located at position ({int(bbox[0])}, {int(bbox[1])}, {int(bbox[2])}, {int(bbox[3])})\n"
+        observation_keys = sorted(detection_by_image.keys())
+        for i, image_key in enumerate(observation_keys):
+            detections = detection_by_image[image_key]
+            
+            if i == 0:
+                dino_summary += f"In the first observation image, the following objects were detected:\n"
+            elif i == len(observation_keys) - 1:
+                dino_summary += f"In the final observation image, the objects are at these positions:\n"
+            else:
+                dino_summary += f"In the {['second', 'third', 'fourth'][i-1]} observation image, the objects have moved to new positions:\n"
+            
+            if detections:
+                for det in detections:
+                    dino_summary += f"- {det['object']} at position ({int(det['bbox'][0])}, {int(det['bbox'][1])}, {int(det['bbox'][2])}, {int(det['bbox'][3])})\n"
+            else:
+                dino_summary += "- No objects detected\n"
+            
+            dino_summary += "\n"
+        
+        dino_summary += "This sequence shows the temporal progression of object positions as the robot performs manipulations.\n"
     else:
-        dino_summary = "\nNo objects were successfully detected by the vision system."
+        dino_summary = "No objects were successfully detected by the vision system.\n"
     
     # Enhanced prompt with scene graph and DINO results
     enhanced_pddl_prompt = pddl_prompt + f"""
@@ -222,19 +240,14 @@ The following scene graph has been generated from the image analysis:
 
 {dino_summary}
 
-Based on this structured scene graph, object detection results, the images, and the instruction, generate the PDDL problem file.
+Based on this structured scene graph, detailed object detection sequence organized by observation timeline, the images, and the instruction, generate the PDDL problem file.
+The detection results show how objects move through space over time, which reflects the robot's manipulation actions.
 
 Requirements:
 1. Use the scene graph to understand the scene structure and relationships
-2. Use the detection results to identify which objects are actually present and their locations
-3. All objects mentioned in the PDDL must exist in either the scene graph or detection results
-4. All predicates used must be consistent with the scene graph analysis
-5. The initial state must reflect the current scene as described in the scene graph
-6. The goal state must align with the given instruction
-7. Generate a complete and properly formatted PDDL problem file
-8. Avoid repetitive or contradictory statements
-
-Generate the PDDL problem:
+2. Use the detection results to identify which objects are actually present and their positions
+3. Consider the temporal progression shown in the detection sequence
+4. All objects mentioned in the PDDL must exist in either the scene graph or detection results
 """
     
     if hard_template:
@@ -266,8 +279,34 @@ PDDL problem: {pddl_response}"""
     if problem_file:
         print(f"✅ PDDL parsing successful ({len(problem_file)} chars)")
     else:
-        print("❌ PDDL parsing failed, returning empty string")
-        problem_file = ""
+        print("❌ PDDL parsing failed")
+        print("🔍 This is likely due to unbalanced parentheses")
+        
+        # Auto-fix unbalanced parentheses
+        if "(define" in pddl_response:
+            start_idx = pddl_response.find("(define")
+            pddl_content = pddl_response[start_idx:].strip()
+            
+            open_count = pddl_content.count('(')
+            close_count = pddl_content.count(')')
+            
+            if open_count > close_count:
+                missing_brackets = open_count - close_count
+                pddl_content += ')' * missing_brackets
+                print(f"🔧 Auto-fixed: Added {missing_brackets} missing parentheses")
+                
+                problem_file = parse_pddl(pddl_content)
+                if problem_file:
+                    print(f"✅ PDDL parsing successful after auto-fix")
+                else:
+                    print("❌ PDDL parsing failed even after auto-fix")
+                    problem_file = ""
+            else:
+                print("❌ PDDL parsing failed: Cannot auto-fix")
+                problem_file = ""
+        else:
+            print("❌ PDDL parsing failed: No '(define' found")
+            problem_file = ""
     
     print(f"\n✅ Pipeline 5b completed successfully!")
     
