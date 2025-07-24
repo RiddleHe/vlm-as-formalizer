@@ -178,7 +178,7 @@ IMPORTANT:
         except Exception as e:
             print(f"❌ DINO detection failed for {image_path}: {e}")
     
-    # Display results summary
+    # Display results summary - 完整显示DINO检测结果
     print(f"✅ Total objects detected: {total_objects_detected}")
     for image_key, detections in detection_by_image.items():
         if detections:
