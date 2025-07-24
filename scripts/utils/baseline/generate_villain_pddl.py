@@ -79,11 +79,9 @@ def generate_villain_pddl(
                 if bbox_annotations:
                     print(f"✅ DINO detected {len(bbox_annotations)} objects in image {i+1}")
                     for obj_name, obj_data in bbox_annotations.items():
-                        detection_by_image[image_key].append({
-                            "object": obj_data["phrase"],
-                            "bbox": obj_data["bbox"]
-                        })
-                        total_objects_detected += 1
+                        # Add image index to make object names unique across images
+                        unique_name = f"{obj_name}_img{i+1}"
+                        all_detected_objects[unique_name] = obj_data
                 else:
                     print(f"❌ DINO found no objects in image {i+1}")
             else:

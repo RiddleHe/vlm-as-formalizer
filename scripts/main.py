@@ -55,7 +55,6 @@ def parse_args():
     parser.add_argument("--generate_multi_step_with_cv", action="store_true", help="generate scene graph first with CV model")
     parser.add_argument("--generate_multi_step_with_sgclip_vlm", action="store_true", help="generate scene graph first with SGCLIP-VLM")
 
-
     # Planning baseline
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
     parser.add_argument("--generate_vila_planning", action="store_true", help="Pipeline 1: ViLA - VLM zero-shot planning")
@@ -248,7 +247,8 @@ def main():
                     args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
                     args.generate_multi_step_with_sgclip_vlm or args.generate_villain_pddl or
                     args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or
-                    args.generate_villain_captioning_dino_pddl):
+                    args.generate_villain_captioning_dino_pddl or args.generate_scene_graph_pddl or
+                    args.generate_scene_graph_dino_pddl):
                     dir_pairs = [
                         ("problems", "file", "pddl"),
                         ("instructions", "prompt", "txt"),
