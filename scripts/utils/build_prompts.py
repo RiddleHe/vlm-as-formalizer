@@ -63,7 +63,7 @@ def build_problem_prompt(target, config, add_examples=True, generate_caption=Fal
         """
 
     prompt += f"""
-    {config.get("text", "")}
+    {config.get("text", "") if config else ""}
     Instruction: {target["instruction"]}
     """
     
@@ -133,7 +133,7 @@ def build_observation_prompt(target, config):
     <object> - <type>
     ...
 
-    The images have been provided. {config.get("text", "")}
+    The images have been provided. {config.get("text", "") if config else ""}
     The task instruction is: {target["instruction"]}
     Now identify all the objects for the following types relevant to the task instruction:
     """
