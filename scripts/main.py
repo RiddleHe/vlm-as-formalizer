@@ -57,11 +57,14 @@ def parse_args():
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
     parser.add_argument("--generate_vila_planning", action="store_true", help="Pipeline 1: ViLA - VLM zero-shot planning")
     parser.add_argument("--generate_villain_pddl", action="store_true", help="Pipeline 2: ViLain - VLM → DINO → VLM PDDL Generation")
+    parser.add_argument("--generate_villain_gpt41_pddl", action="store_true", help="Pipeline 2-GPT: ViLain - VLM → GPT-4.1 → VLM PDDL Generation (Control)")
     parser.add_argument("--generate_villain_direct_pddl", action="store_true", help="Pipeline 3: ViLain Direct PDDL Generation (no object detection)")
     parser.add_argument("--generate_villain_captioning_pddl", action="store_true", help="Pipeline 4a: ViLain Captioning → PDDL (without DINO)")
     parser.add_argument("--generate_villain_captioning_dino_pddl", action="store_true", help="Pipeline 4b: ViLain Captioning → DINO → PDDL (Enhanced)")
+    parser.add_argument("--generate_villain_captioning_gpt41_pddl", action="store_true", help="Pipeline 4b-GPT: ViLain Captioning → GPT-4.1 → PDDL (Control)")
     parser.add_argument("--generate_scene_graph_pddl", action="store_true", help="Pipeline 5a: Scene Graph → PDDL (without DINO)")
     parser.add_argument("--generate_scene_graph_dino_pddl", action="store_true", help="Pipeline 5b: Scene Graph → DINO → PDDL (with bbox)")
+    parser.add_argument("--generate_scene_graph_gpt41_pddl", action="store_true", help="Pipeline 5b-GPT: Scene Graph → GPT-4.1 → PDDL (Control)")
     
     # Template constraint options
     parser.add_argument("--hard_template", action="store_true", default=True, help="Use hard domain template (strict predicate enforcement)")
@@ -143,7 +146,7 @@ def main():
         args.generate_multi_step_with_sgclip_vlm or args.generate_vila_planning or
         args.generate_villain_pddl or args.generate_villain_direct_pddl or 
         args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl or
-        args.generate_scene_graph_pddl or args.generate_scene_graph_dino_pddl):
+        args.generate_scene_graph_pddl or args.generate_scene_graph_dino_pddl) or (args.generate_villain_gpt41_pddl or args.generate_villain_captioning_gpt41_pddl or args.generate_scene_graph_gpt41_pddl):
         # Create folders
         folders = ["responses", "instructions"]
         if args.generate_plan or args.generate_vila_planning:
@@ -236,9 +239,10 @@ def main():
                 if (args.generate_end_to_end or args.generate_multi_step or 
                     args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
                     args.generate_multi_step_with_sgclip_vlm or args.generate_villain_pddl or
-                    args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or
-                    args.generate_villain_captioning_dino_pddl or args.generate_scene_graph_pddl or
-                    args.generate_scene_graph_dino_pddl):
+                    args.generate_villain_gpt41_pddl or args.generate_villain_direct_pddl or 
+                    args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl or
+                    args.generate_villain_captioning_gpt41_pddl or args.generate_scene_graph_pddl or
+                    args.generate_scene_graph_dino_pddl or args.generate_scene_graph_gpt41_pddl):
                     dir_pairs = [
                         ("problems", "file", "pddl"),
                         ("instructions", "prompt", "txt"),
