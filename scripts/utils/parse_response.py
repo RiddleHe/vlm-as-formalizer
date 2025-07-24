@@ -293,6 +293,30 @@ def parse_objects(response, object_types = []):
                     continue
                 objects[object_type].append(name)
 
+    # Additional fallback for comma-separated format (e.g., "block: green, blue, red")
+    if not objects or not any(obj_list for obj_list in objects.values()):
+        for line in response.split("\n"):
+            line = line.strip()
+            if ":" in line:
+                parts = line.split(":", 1)
+                if len(parts) == 2:
+                    object_type = parts[0].strip()
+                    objects_str = parts[1].strip()
+                    
+                    # Check if this type is valid
+                    if not object_types or object_type in object_types:
+                        # Split by comma and clean up
+                        if "," in objects_str:
+                            object_names = [name.strip() for name in objects_str.split(",")]
+                        else:
+                            # Single object or space-separated
+                            object_names = objects_str.split()
+                        
+                        for name in object_names:
+                            if name:
+                                clean_name = "_".join(name.split())
+                                objects[object_type].append(clean_name)
+
     return objects
 
 def assemble_grounded_predicates(predicates):

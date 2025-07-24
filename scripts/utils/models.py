@@ -24,7 +24,6 @@ def get_gpt_client_name(client_name):
 
 def get_openrouter_client_name(client_name):
     model_mapping = {
-        "llama-3.2-11B": "meta-llama/llama-3.2-11b-vision-instruct:free",
         "llama-3.2-90B": "meta-llama/llama-3.2-90b-vision-instruct"
     }
     if client_name in model_mapping:
@@ -36,7 +35,8 @@ def get_hf_client_name(client_name):
         "qwenvl-7B": "Qwen/Qwen2.5-VL-7B-Instruct",
         "internvl3-14B": "OpenGVLab/InternVL3-14B", 
         "gemma3-12B": "google/gemma-3-12b-it",
-        "gemma3-27B": "google/gemma-3-27b-it"
+        "gemma3-27B": "google/gemma-3-27b-it",
+        "llama-3.2-11B": "meta-llama/Llama-3.2-11B-Vision-Instruct"
     }
     if client_name in model_mapping:
         return model_mapping[client_name]
@@ -89,14 +89,27 @@ class OpenAIClient(VLMClient):
                 })
         content.append({"type": "text", "text": prompt})
 
-        response = self.client.chat.completions.create(
-            model=self.client_name,
-            messages=[{
-                "role": "user",
-                "content": content
-            }],
-            max_tokens=1024,
-        )
+        # Handle different parameter names for different models
+        if self.client_name.startswith(('o3', 'o4')):
+            # O3 and O4 models use max_completion_tokens instead of max_tokens
+            response = self.client.chat.completions.create(
+                model=self.client_name,
+                messages=[{
+                    "role": "user",
+                    "content": content
+                }],
+                max_completion_tokens=1024,
+            )
+        else:
+            # Other models use max_tokens
+            response = self.client.chat.completions.create(
+                model=self.client_name,
+                messages=[{
+                    "role": "user",
+                    "content": content
+                }],
+                max_tokens=1024,
+            )
         return response.choices[0].message.content
 
 class OpenRouterClient(VLMClient):
@@ -275,14 +288,18 @@ class HuggingFaceClient(VLMClient):
         """Load Llama Vision model and processor."""
         from transformers import MllamaForConditionalGeneration, AutoProcessor
         
+        # Hardcoded HuggingFace token
+        hf_token = "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"
+        
         model = MllamaForConditionalGeneration.from_pretrained(
             self.client_name,
             torch_dtype=torch.bfloat16,
             device_map="auto",
-            attn_implementation="sdpa"
+            attn_implementation="sdpa",
+            token=hf_token
         ).eval()
         
-        processor = AutoProcessor.from_pretrained(self.client_name)
+        processor = AutoProcessor.from_pretrained(self.client_name, token=hf_token)
         
         return {"model": model, "processor": processor, "type": "llama_vision"}
 
