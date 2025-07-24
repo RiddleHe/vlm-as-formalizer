@@ -64,7 +64,7 @@ def generate_villain_pddl(
     
     print(f"\n🔍 Step 3: DINO Object Detection")
     
-    # Detect objects from all images using VLM-identified terms - 按图片分组存储
+    # Detect objects from all images using VLM-identified terms
     detection_by_image = {}
     total_objects_detected = 0
     
@@ -90,7 +90,7 @@ def generate_villain_pddl(
         except Exception as e:
             print(f"❌ DINO detection failed for {image_path}: {e}")
     
-    # DINO Detection Results Summary - 按图片分组显示
+    # DINO Detection Results Summary
     print(f"✅ Total objects detected: {total_objects_detected}")
     for image_key, detections in detection_by_image.items():
         if detections:

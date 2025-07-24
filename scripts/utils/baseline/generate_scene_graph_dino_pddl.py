@@ -179,15 +179,15 @@ IMPORTANT:
             print(f"❌ DINO detection failed for {image_path}: {e}")
     
     # Display results summary
-    if all_detected_objects:
-        print(f"✅ Total objects detected: {len(all_detected_objects)}")
-        for obj_name, obj_data in all_detected_objects.items():  # Show all objects
-            bbox = obj_data["bbox"]
-            phrase = obj_data["phrase"]
-            print(f"  - {phrase}: bbox({int(bbox[0])}, {int(bbox[1])}, {int(bbox[2])}, {int(bbox[3])})")
-    else:
-        print("❌ No objects detected across all images")
-    
+    print(f"✅ Total objects detected: {total_objects_detected}")
+    for image_key, detections in detection_by_image.items():
+        if detections:
+            print(f"  📸 {image_key.capitalize()}:")
+            for det in detections:
+                print(f"    - {det['object']}: bbox({int(det['bbox'][0])}, {int(det['bbox'][1])}, {int(det['bbox'][2])}, {int(det['bbox'][3])})")
+        else:
+            print(f"  📸 {image_key.capitalize()}: No objects detected")
+
     # ============================
     # Step 4: Enhanced PDDL Generation
     # ============================
