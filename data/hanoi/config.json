@@ -1,6 +1,0 @@
-{
-    "actions": [
-        "move (?disc ?from ?to)"
-    ],
-    "text": "There are three pegs and multiple disks of different sizes. The goal is to move all disks to the rightmost peg while keeping larger disks below smaller ones."
-}

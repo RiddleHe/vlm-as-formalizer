@@ -1,9 +1,0 @@
-{
-    "actions": [
-        "pick-up (?x - block ?robot - robot)",
-        "put-down (?x - block ?robot - robot)",
-        "stack (?x - block ?y - block ?robot - robot)",
-        "unstack (?x - block ?y - block ?robot - robot)"
-    ],
-    "text": "There is one robot arm robot1 on the table. It is empty-handed."
-}

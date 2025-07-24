@@ -7,6 +7,7 @@ from PIL import Image
 import sys
 import hashlib
 import torch.nn.functional as F
+import time
 
 # Load environment variables
 load_dotenv()
@@ -277,7 +278,7 @@ class HuggingFaceClient(VLMClient):
             self.client_name,
             torch_dtype=torch.bfloat16,
             device_map="auto",
-            attn_implementation="eager"  # Use eager attention to avoid SDPA alignment issues
+            attn_implementation="sdpa" 
         ).eval()
         
         processor = AutoProcessor.from_pretrained(self.client_name, padding_side="left")
@@ -351,7 +352,7 @@ class HuggingFaceClient(VLMClient):
         
         # Generate response
         with torch.no_grad():
-            generated_ids = model.generate(**inputs, max_new_tokens=1024)
+            generated_ids = model.generate(**inputs, max_new_tokens=4096) # use a higher number
         
         # Decode only the new tokens
         generated_ids_trimmed = [
@@ -380,7 +381,7 @@ class HuggingFaceClient(VLMClient):
             pixel_values = pixel_values.cuda()
             
         image_prompt = f"{prompt}\n<image>"
-        generation_config = dict(max_new_tokens=1024, do_sample=True)
+        generation_config = dict(max_new_tokens=4096, do_sample=True)
         response = model.chat(tokenizer, pixel_values, image_prompt, generation_config)
             
         return response
@@ -389,36 +390,25 @@ class HuggingFaceClient(VLMClient):
         """Generate response using Gemma3."""
         model = self.client["model"]
         processor = self.client["processor"]
+
+        content = []
+        for obs_path in observations:
+            content.append({
+                "type": "image", 
+                "image": obs_path
+            })
+        content.append({
+            "type": "text", 
+            "text": prompt
+        })
         
         if past_key_values is not None:
             messages = [{
                 "role": "user",
-                "content": [{"type": "text", "text": prompt}]
+                "content": content
             }]
             
-            # Process only the new text
-            inputs = processor.apply_chat_template(
-                messages,
-                add_generation_prompt=True,
-                tokenize=True,
-                return_dict=True,
-                return_tensors="pt",
-            ).to(model.device, dtype=torch.bfloat16)
-            
-            input_len = inputs["input_ids"].shape[-1]
-            
-        else:
-            content = []
-            for obs_path in observations:
-                content.append({
-                    "type": "image", 
-                    "image": obs_path
-                })
-            content.append({
-                "type": "text", 
-                "text": prompt
-            })
-            
+        else:    
             messages = [
                 {
                     "role": "system",
@@ -430,22 +420,23 @@ class HuggingFaceClient(VLMClient):
                 }
             ]
             
-            # Process the conversation
-            inputs = processor.apply_chat_template(
-                messages,
-                add_generation_prompt=True,
-                tokenize=True,
-                return_dict=True,
-                return_tensors="pt",
-            ).to(model.device, dtype=torch.bfloat16)
-            
-            input_len = inputs["input_ids"].shape[-1]
+        # Process the conversation
+        inputs = processor.apply_chat_template(
+            messages,
+            add_generation_prompt=True,
+            tokenize=True,
+            return_dict=True,
+            return_tensors="pt",
+        ).to(model.device, dtype=torch.bfloat16)
+        
+        input_len = inputs["input_ids"].shape[-1]
         
         # Generate response
+        time_start = time.time()
         with torch.inference_mode():
             outputs = model.generate(
                 **inputs, 
-                max_new_tokens=1024, 
+                max_new_tokens=4096, 
                 do_sample=False, 
                 top_p=None, 
                 top_k=None,
@@ -455,6 +446,8 @@ class HuggingFaceClient(VLMClient):
                 output_hidden_states=False,
                 past_key_values=past_key_values,
             )
+        time_end = time.time()
+        print(f"Time taken to generate response: {time_end - time_start} seconds")
 
         if return_cache:
             generation = outputs.sequences[0][input_len:]
@@ -498,7 +491,7 @@ class HuggingFaceClient(VLMClient):
         with torch.inference_mode():
             outputs = model.generate(
                 **inputs,
-                max_new_tokens=1024,
+                max_new_tokens=4096,
                 do_sample=False,
                 temperature=0.0
             )
@@ -526,23 +519,12 @@ def VLMClientFactory(client_name: str, device=None) -> VLMClient:
     else:
         raise ValueError(f"Unknown model name: {client_name}")
 
-def predict_relation_probs(model, prompts, observations):
+def predict_relation_probs(model, prompts, observations, past_key_values=None):
     raw_model = model.client["model"]
     raw_model.eval()
     processor = model.client["processor"]
 
-    images_content = []
-    images_list = []
-    for obs_path in observations:
-        img = Image.open(obs_path)
-        images_content.append({
-            "type": "image", 
-            "image": img
-        })
-        images_list.append(img)
-
-    print("--------------------------------")
-    print(images_content)
+    use_kv_cache = past_key_values is not None
 
     if model.client["type"] == "gemma3":
         # monkey patch
@@ -559,40 +541,58 @@ def predict_relation_probs(model, prompts, observations):
             return torch.cat(outs, dim=0)
         raw_model.get_image_features = cached_get_img_feat
 
-        chat_prompts = []
-        for prompt in prompts:
-            content = images_content + [
-                {"type": "text", "text": prompt}
-            ]
-            messages = [
-                {
-                    "role": "user",
-                    "content": content
-                },
-                {
-                    "role": "assistant",
-                    "content": [
-                        {"type": "text", "text": "Based on the image, the answer is: Yes."}
-                    ]
-                },
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": "To ensure nothing is missing, check again."}
-                    ]
-                }
-            ]
-            chat_prompt = processor.apply_chat_template(
-                messages,
-                return_tensors="pt",
-                padding=True,
-                add_generation_prompt=True,
-            )
-            chat_prompts.append(chat_prompt)
+    chat_prompts = []
+    for prompt in prompts:
+        content = [
+            {"type": "text", "text": prompt}
+        ]
+        if not use_kv_cache:
+            images_content = []
+            images_list = []
+            for obs_path in observations:
+                img = Image.open(obs_path)
+                images_content.append({
+                    "type": "image", 
+                    "image": img
+                })
+                images_list.append(img)
+            content += images_content
 
-        template = "{chat_prompt} You are right to ask me to double-check! My apologies. Looking again, the answer is: "
-        full_prompts = [template.format(chat_prompt=chat_prompt) for chat_prompt in chat_prompts]
+        messages = [
+            {
+                "role": "user",
+                "content": content
+            },
+            {
+                "role": "assistant",
+                "content": [
+                    {"type": "text", "text": "Based on the image, the answer is: Yes."}
+                ]
+            },
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": "To ensure nothing is missing, check again."}
+                ]
+            }
+        ]
+        chat_prompt = processor.apply_chat_template(
+            messages,
+            add_generation_prompt=True,
+        )
+        chat_prompts.append(chat_prompt)
 
+    template = "{chat_prompt} You are right to ask me to double-check! My apologies. Looking again, the answer is: "
+    full_prompts = [template.format(chat_prompt=chat_prompt) for chat_prompt in chat_prompts]
+
+    if use_kv_cache:
+        batch = processor.tokenizer(
+            full_prompts,
+            return_tensors="pt",
+            padding=True,
+        ).to(model.device)
+    
+    else:
         batch = processor(
             images=[images_list for _ in prompts],  # preprocess image and text jointly to trigger <image_soft_tokens>
             text=full_prompts,
@@ -601,28 +601,49 @@ def predict_relation_probs(model, prompts, observations):
             images_kwargs={"do_pan_and_scan": False},  # disable cropping
         ).to(model.device, dtype=torch.bfloat16)
 
-        # Prepare binary classes
-        true_tok = processor.tokenizer.convert_tokens_to_ids("yes") # 11262
-        false_tok = processor.tokenizer.convert_tokens_to_ids("no") # 951
-        assert true_tok != processor.tokenizer.unk_token_id  # unknown token is 3
-        assert false_tok != processor.tokenizer.unk_token_id
-        candidate = torch.tensor([true_tok, false_tok], device=model.device)
+    # Prepare binary classes
+    true_tok = processor.tokenizer.convert_tokens_to_ids("yes") # 11262
+    false_tok = processor.tokenizer.convert_tokens_to_ids("no") # 951
+    assert true_tok != processor.tokenizer.unk_token_id  # unknown token is 3
+    assert false_tok != processor.tokenizer.unk_token_id
+    candidate = torch.tensor([true_tok, false_tok], device=model.device)
 
-        temperature = 0.5
-        with torch.no_grad():
+    temperature = 0.5
+    with torch.no_grad():
+        if use_kv_cache:
+            batch_size = batch["input_ids"].shape[0]
+            if past_key_values[0][0].shape[0] != batch_size:
+                if model.client["type"] == "gemma3":
+                    new_key_cache = [k.expand(batch_size, -1, -1, -1) for k in past_key_values.key_cache]
+                    new_value_cache = [v.expand(batch_size, -1, -1, -1) for v in past_key_values.value_cache]
+                    past_key_values = HybridCache(key_cache=new_key_cache, value_cache=new_value_cache)
+                else:
+                    past_key_values = tuple(
+                        (
+                            layer_past[0].expand(batch_size, -1, -1, -1),
+                            layer_past[1].expand(batch_size, -1, -1, -1),
+                        )
+                        for layer_past in past_key_values
+                    )
+            logits = raw_model(
+                input_ids=batch["input_ids"],
+                attention_mask=batch["attention_mask"],
+                past_key_values=past_key_values,
+            ).logits[:, -1]
+        else:
             logits = raw_model(**batch).logits[:, -1]
-        probs = F.softmax(logits[:, candidate] / temperature, dim=-1)
+    probs = F.softmax(logits[:, candidate] / temperature, dim=-1)
 
-        torch.cuda.synchronize()
+    torch.cuda.synchronize()
 
-        predictions = probs[:, 0] > probs[:, 1]
-        predictions = predictions.cpu().numpy().tolist()
+    predictions = probs[:, 0] > probs[:, 1]
+    predictions = predictions.cpu().numpy().tolist()
 
-        print("--------------------------------")
-        print("pred (yes) = ", probs[:, 0].float().cpu().numpy().round(2))
-        print("pred (no) = ", probs[:, 1].float().cpu().numpy().round(2))
+    print("--------------------------------")
+    print("pred (yes) = ", probs[:, 0].float().cpu().numpy().round(2))
+    print("pred (no) = ", probs[:, 1].float().cpu().numpy().round(2))
 
-        return predictions
+    return predictions
 
 if __name__ == "__main__":  # test any model on a prompt and a single image
     import argparse
