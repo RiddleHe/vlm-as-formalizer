@@ -532,3 +532,72 @@ def detect_objects_with_dino(image_path: str, search_terms: list, box_threshold:
     except Exception as e:
         print(f"Grounding DINO detection failed: {e}")
         return {}
+
+def detect_objects_with_gpt41(image_path: str, search_terms: list, box_threshold: float = 0.35):
+    from .models import VLMClientFactory
+    
+    if not search_terms:
+        return {}
+    
+    # Create GPT-4.1 client
+    try:
+        gpt_client = VLMClientFactory("gpt-4.1")
+    except Exception as e:
+        print(f"Failed to initialize GPT-4.1 client: {e}")
+        return {}
+    
+    # Create detection prompt
+    search_terms_str = ", ".join(search_terms)
+    prompt = f"""Locate the following objects in this image and provide EXACT bounding box coordinates.
+
+Objects to find: {search_terms_str}
+
+For each object you can identify in the image, provide the response in this format:
+object_name: bbox(x1, y1, x2, y2)
+
+Where coordinates are pixel positions (integers representing top-left and bottom-right corners).
+
+Example format:
+item1: bbox(100, 150, 200, 250)
+item2: bbox(300, 100, 400, 200)
+
+Only include objects you can clearly see in the image. Do not include explanations or other text."""
+
+    try:
+        response = gpt_client.generate(prompt, [image_path])
+        
+        # Parse GPT-4.1 response to match DINO format
+        bbox_annotations = {}
+        
+        lines = response.strip().split('\n')
+        for i, line in enumerate(lines):
+            line = line.strip()
+            if ':' in line and 'bbox(' in line:
+                try:
+                    # Parse format: "object_name: bbox(x1, y1, x2, y2)"
+                    obj_name, bbox_part = line.split(':', 1)
+                    obj_name = obj_name.strip()
+                    
+                    # Extract coordinates
+                    bbox_str = bbox_part.strip()
+                    if bbox_str.startswith('bbox(') and bbox_str.endswith(')'):
+                        coords_str = bbox_str[5:-1]  # Remove 'bbox(' and ')'
+                        coords = [float(x.strip()) for x in coords_str.split(',')]
+                        
+                        if len(coords) == 4:
+                            # Create annotation in DINO format
+                            obj_key = f"{obj_name}_{i}"
+                            bbox_annotations[obj_key] = {
+                                "phrase": obj_name.replace('_', ' '),
+                                "bbox": coords
+                            }
+                            
+                except Exception as e:
+                    print(f"Failed to parse line '{line}': {e}")
+                    continue
+        
+        return bbox_annotations
+        
+    except Exception as e:
+        print(f"GPT-4.1 object detection failed: {e}")
+        return {}
