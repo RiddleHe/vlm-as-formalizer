@@ -175,12 +175,10 @@ IMPORTANT:
     # Display results summary
     if all_detected_objects:
         print(f"✅ Total objects detected: {len(all_detected_objects)}")
-        for obj_name, obj_data in list(all_detected_objects.items())[:5]:  # Show first 5
+        for obj_name, obj_data in all_detected_objects.items():  # Show all objects
             bbox = obj_data["bbox"]
             phrase = obj_data["phrase"]
             print(f"  - {phrase}: bbox({int(bbox[0])}, {int(bbox[1])}, {int(bbox[2])}, {int(bbox[3])})")
-        if len(all_detected_objects) > 5:
-            print(f"  ... and {len(all_detected_objects) - 5} more")
     else:
         print("❌ No objects detected across all images")
     
