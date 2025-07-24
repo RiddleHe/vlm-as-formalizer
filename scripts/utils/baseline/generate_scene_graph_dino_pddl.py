@@ -201,12 +201,12 @@ IMPORTANT:
         generate_scene_graph=False
     )
     
-    # Create DINO detection summary - 用自然语言描述观察序列
+    # Create DINO detection summary
     dino_summary = ""
     if total_objects_detected > 0:
         dino_summary = "OBJECT DETECTION RESULTS:\n\n"
         
-        # 按观察序列用自然语言描述
+
         observation_keys = sorted(detection_by_image.keys())
         for i, image_key in enumerate(observation_keys):
             detections = detection_by_image[image_key]
