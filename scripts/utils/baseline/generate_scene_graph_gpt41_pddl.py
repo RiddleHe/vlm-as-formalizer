@@ -125,8 +125,8 @@ def truncate_at_repetition(text, min_repeat_length=20):
 
 
 def generate_scene_graph_gpt41_pddl(
-    target,
-    config, 
+        target, 
+        config, 
     model,
     observations,
     retry_idx,
@@ -152,7 +152,7 @@ def generate_scene_graph_gpt41_pddl(
         print(f"📊 SCENE GRAPH RESPONSE:")
         print(scene_graph_response)
         print("=" * 80)
-        
+    
     except Exception as e:
         print(f"Scene graph generation failed: {e}")
         return "", f"Scene graph generation failed: {e}", scene_graph_prompt
@@ -201,7 +201,7 @@ def generate_scene_graph_gpt41_pddl(
                     print(f"❌ GPT-4.1 found no objects in image {i+1}")
             else:
                 print(f"⚠️ No objects found in scene graph for image {i+1}")
-                    
+                        
         except Exception as e:
             print(f"❌ GPT-4.1 detection failed for {image_path}: {e}")
     
@@ -229,7 +229,7 @@ def generate_scene_graph_gpt41_pddl(
     # Organize GPT-4.1 detection results by observation
     if total_objects_detected > 0:
         detection_info = "\nOBJECT DETECTION RESULTS:\n\n"
-        
+
         observation_keys = sorted(detection_by_image.keys())
         for i, image_key in enumerate(observation_keys):
             detections = detection_by_image[image_key]
@@ -250,7 +250,7 @@ def generate_scene_graph_gpt41_pddl(
             detection_info += "\n"
         
         detection_info += "This sequence shows the temporal progression of object positions as the robot performs manipulations.\n"
-        
+    
         enhanced_prompt = base_prompt + f"""
 
 SCENE GRAPH:
@@ -279,7 +279,7 @@ No objects were detected by GPT-4.1. Generate the PDDL problem based on the scen
 
 Generate the PDDL problem:
 """
-
+    
     # VLM generates enhanced PDDL
     try:
         response = model.generate(enhanced_prompt, observations)
@@ -288,13 +288,13 @@ Generate the PDDL problem:
         response_text = response.strip()
         if detect_repetition(response_text):
             response_text = truncate_at_repetition(response_text)
-        
+    
         print(f"📄 ENHANCED PDDL RESPONSE:")
         print(response_text)
         print("=" * 80)
-
+    
     except Exception as e:
-        print(f"Enhanced PDDL generation failed: {e}")
+        print(f"❌ Enhanced PDDL generation failed: {e}")
         return "", f"Enhanced PDDL generation failed: {e}", enhanced_prompt
     
     # Parse PDDL response
@@ -308,7 +308,7 @@ Generate the PDDL problem:
         # Count parentheses
         open_count = response_text.count('(')
         close_count = response_text.count(')')
-        
+            
         if open_count > close_count:
             missing_close = open_count - close_count
             fixed_response = response_text + ')' * missing_close
@@ -324,7 +324,7 @@ Generate the PDDL problem:
             problem_file = ""  # Return empty string instead of None
     else:
         print(f"✅ PDDL parsing successful ({len(problem_file)} chars)")
-
+    
     print(f"\n✅ Pipeline 5b completed successfully!")
     
     return problem_file, response_text, enhanced_prompt 
