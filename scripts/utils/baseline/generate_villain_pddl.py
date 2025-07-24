@@ -110,25 +110,39 @@ def generate_villain_pddl(
     
     base_prompt = build_problem_prompt(target, config)
     
-    # Add DINO detection results to prompt - 按观察顺序组织
+    # Add DINO detection results to prompt
     if total_objects_detected > 0:
-        detection_info = "Object detection results from Grounding DINO:\n"
-        for image_key, detections in detection_by_image.items():
-            if detections:
-                objects_str = ", ".join([
-                    f"{det['object']} at bbox({int(det['bbox'][0])}, {int(det['bbox'][1])}, {int(det['bbox'][2])}, {int(det['bbox'][3])})"
-                    for det in detections
-                ])
-                detection_info += f"{image_key.capitalize()}: {objects_str}\n"
+        detection_info = "Object detection results from Grounding DINO:\n\n"
+        
+        observation_keys = sorted(detection_by_image.keys())
+        for i, image_key in enumerate(observation_keys):
+            detections = detection_by_image[image_key]
+            obs_num = image_key.replace("observation", "")
+            
+            if i == 0:
+                detection_info += f"In the first observation image, the following objects were detected:\n"
+            elif i == len(observation_keys) - 1:
+                detection_info += f"In the final observation image, the objects are at these positions:\n"
             else:
-                detection_info += f"{image_key.capitalize()}: No objects detected\n"
+                detection_info += f"In the {['second', 'third', 'fourth'][i-1]} observation image, the objects have moved to new positions:\n"
+            
+            if detections:
+                for det in detections:
+                    detection_info += f"- {det['object']} at position ({int(det['bbox'][0])}, {int(det['bbox'][1])}, {int(det['bbox'][2])}, {int(det['bbox'][3])})\n"
+            else:
+                detection_info += "- No objects detected\n"
+            
+            detection_info += "\n"
+        
+        detection_info += "This sequence shows the temporal progression of object positions as the robot performs manipulations.\n"
         
         # Combine base prompt with detection results
         vilain_prompt = base_prompt + f"""
 
 {detection_info}
 
-Based on the above object detection results organized by observation sequence and the image(s), generate the PDDL problem.
+Based on this detailed object detection sequence organized by observation timeline and the image(s), generate the PDDL problem. 
+The detection results show how objects move through space over time, which reflects the robot's manipulation actions.
 """
     else:
         # Fallback when no objects detected
@@ -138,6 +152,13 @@ No objects were detected by Grounding DINO. Generate the PDDL problem based on v
 """
     
     print(f"\n🔧 Step 4: VLM PDDL Generation")
+    
+    # display the detection info that VLM actually received
+    if total_objects_detected > 0:
+        print("📋 VLM Received Detection Info:")
+        print("=" * 60)
+        print(detection_info)
+        print("=" * 60)
 
     # VLM generates PDDL based on detection + images
     try:
