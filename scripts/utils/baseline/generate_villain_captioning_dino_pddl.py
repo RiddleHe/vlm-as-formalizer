@@ -75,7 +75,7 @@ Describe what you see in the images in detail, focusing on objects that might be
     try:
         caption = model.generate(captioning_prompt, observations)
         print(f"Generated Caption:")
-        print(caption[:200] + "..." if len(caption) > 200 else caption)
+        print(caption)
         
     except Exception as e:
         print(f"❌ Captioning failed: {e}")
@@ -99,10 +99,14 @@ Describe what you see in the images in detail, focusing on objects that might be
         print("⚠️ No objects found in caption, falling back to basic detection")
         caption_objects = ["block", "robot"]  # fallback
     
-    # Use DINO to detect objects from caption (following Pipeline 2 approach)
-    all_detected_objects = {}
+    # Use DINO to detect objects from caption
+    detection_by_image = {}
+    total_objects_detected = 0
     
     for i, image_path in enumerate(observations):
+        image_key = f"observation{i+1}"
+        detection_by_image[image_key] = []
+        
         try:
             if caption_objects:
                 bbox_annotations = detect_objects_with_dino(image_path, caption_objects)
@@ -110,9 +114,11 @@ Describe what you see in the images in detail, focusing on objects that might be
                 if bbox_annotations:
                     print(f"✅ DINO detected {len(bbox_annotations)} objects in image {i+1}")
                     for obj_name, obj_data in bbox_annotations.items():
-                        # Add image index to make object names unique across images
-                        unique_name = f"{obj_name}_img{i+1}"
-                        all_detected_objects[unique_name] = obj_data
+                        detection_by_image[image_key].append({
+                            "object": obj_data["phrase"],
+                            "bbox": obj_data["bbox"]
+                        })
+                        total_objects_detected += 1
                 else:
                     print(f"❌ DINO found no objects in image {i+1}")
             else:
@@ -122,17 +128,15 @@ Describe what you see in the images in detail, focusing on objects that might be
             print(f"❌ DINO detection failed for {image_path}: {e}")
     
     # Display results summary
-    if all_detected_objects:
-        print(f"✅ Total objects detected: {len(all_detected_objects)}")
-        for obj_name, obj_data in list(all_detected_objects.items())[:5]:  # Show first 5
-            bbox = obj_data["bbox"]
-            phrase = obj_data["phrase"]
-            print(f"  - {phrase}: bbox({int(bbox[0])}, {int(bbox[1])}, {int(bbox[2])}, {int(bbox[3])})")
-        if len(all_detected_objects) > 5:
-            print(f"  ... and {len(all_detected_objects) - 5} more")
-    else:
-        print("❌ No objects detected across all images")
-    
+    print(f"✅ Total objects detected: {total_objects_detected}")
+    for image_key, detections in detection_by_image.items():
+        if detections:
+            print(f"  📸 {image_key.capitalize()}:")
+            for det in detections:
+                print(f"    - {det['object']}: bbox({int(det['bbox'][0])}, {int(det['bbox'][1])}, {int(det['bbox'][2])}, {int(det['bbox'][3])})")
+        else:
+            print(f"  📸 {image_key.capitalize()}: No objects detected")
+
     # ============================
     # Step 3: Enhanced PDDL Generation (modified)
     # ============================
@@ -142,19 +146,33 @@ Describe what you see in the images in detail, focusing on objects that might be
     # Build base PDDL prompt
     base_prompt = build_problem_prompt(target, config, add_examples=True)
     
-    # Create enhanced prompt with both caption and DINO results
+    # Create enhanced prompt with caption and organized DINO results
     dino_summary = ""
-    if all_detected_objects:
-        dino_summary = f"""
-OBJECT DETECTION RESULTS:
-The following objects were detected in the images with their locations:
-"""
-        for obj_name, obj_data in all_detected_objects.items():
-            bbox = obj_data["bbox"]
-            phrase = obj_data["phrase"]
-            dino_summary += f"- {phrase}: located at position ({int(bbox[0])}, {int(bbox[1])}, {int(bbox[2])}, {int(bbox[3])})\n"
+    if total_objects_detected > 0:
+        dino_summary = "OBJECT DETECTION RESULTS:\n\n"
+        
+        observation_keys = sorted(detection_by_image.keys())
+        for i, image_key in enumerate(observation_keys):
+            detections = detection_by_image[image_key]
+            
+            if i == 0:
+                dino_summary += f"In the first observation image, the following objects were detected:\n"
+            elif i == len(observation_keys) - 1:
+                dino_summary += f"In the final observation image, the objects are at these positions:\n"
+            else:
+                dino_summary += f"In the {['second', 'third', 'fourth'][i-1]} observation image, the objects have moved to new positions:\n"
+            
+            if detections:
+                for det in detections:
+                    dino_summary += f"- {det['object']} at position ({int(det['bbox'][0])}, {int(det['bbox'][1])}, {int(det['bbox'][2])}, {int(det['bbox'][3])})\n"
+            else:
+                dino_summary += "- No objects detected\n"
+            
+            dino_summary += "\n"
+        
+        dino_summary += "This sequence shows the temporal progression of object positions as the robot performs manipulations.\n"
     else:
-        dino_summary = "No objects were successfully detected by the vision system."
+        dino_summary = "No objects were successfully detected by the vision system.\n"
     
     enhanced_prompt = base_prompt + f"""
 
@@ -163,23 +181,29 @@ SCENE CAPTION:
 
 {dino_summary}
 
-Based on the above scene caption, object detection results, the images, and the instruction, generate the PDDL problem file.
+Based on the above scene caption, detailed object detection sequence organized by observation timeline, the images, and the instruction, generate the PDDL problem file.
+The detection results show how objects move through space over time, which reflects the robot's manipulation actions.
 
 Guidelines:
 1. Use the caption to understand the scene context
-2. Use the detection results to identify which objects are actually present
-3. Focus only on objects that are relevant to the domain types: {', '.join(domain_types)}
-4. Make sure all objects in the PDDL exist in the detection results
-5. Include proper spatial relationships based on the detection positions
+2. Use the detection results to identify which objects are actually present and their positions
+3. Consider the temporal progression shown in the detection sequence
 
 Generate the PDDL problem:
 """
     
+    print(f"\n📋 VLM Received Enhanced Prompt:")
+    print("=" * 80)
+    print(enhanced_prompt)
+    print("=" * 80)
+    
     try:
         response = model.generate(enhanced_prompt, observations)
         
-        print(f"🤖 Enhanced VLM PDDL Response:")
-        print(response[:300] + "..." if len(response) > 300 else response)
+        print(f"\n🤖 VLM Complete PDDL Response ({len(response)} characters):")
+        print("=" * 80)
+        print(response)
+        print("=" * 80)
         
     except Exception as e:
         error_msg = f"Enhanced PDDL generation failed: {e}"
@@ -188,6 +212,43 @@ Generate the PDDL problem:
     
     # Parse PDDL response
     problem_file = parse_pddl(response)
+    
+    if problem_file is None:
+        # Auto-fix unbalanced parentheses
+        if "(define" in response:
+            start_idx = response.find("(define")
+            pddl_content = response[start_idx:].strip()
+            
+            open_count = pddl_content.count('(')
+            close_count = pddl_content.count(')')
+            
+            if open_count > close_count:
+                missing_brackets = open_count - close_count
+                pddl_content += ')' * missing_brackets
+                print(f"🔧 Auto-fixed: Added {missing_brackets} missing parentheses")
+                
+                problem_file = parse_pddl(pddl_content)
+                if problem_file:
+                    print(f"✅ PDDL parsing successful after auto-fix")
+                    print(f"\n📄 Final Parsed PDDL:")
+                    print("=" * 80)
+                    print(problem_file)
+                    print("=" * 80)
+                else:
+                    print("❌ PDDL parsing failed even after auto-fix")
+                    problem_file = ""
+            else:
+                print("❌ PDDL parsing failed: Cannot auto-fix")
+                problem_file = ""
+        else:
+            print("❌ PDDL parsing failed: No '(define' found")
+            problem_file = ""
+    else:
+        print(f"✅ PDDL parsing successful")
+        print(f"\n📄 Final Parsed PDDL:")
+        print("=" * 80)
+        print(problem_file)
+        print("=" * 80)
     
     print(f"\n✅ Pipeline 4b completed successfully!")
     
