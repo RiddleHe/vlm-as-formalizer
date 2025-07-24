@@ -1,13 +1,11 @@
-;; Specification in PDDL1 of the Extended Task domain
-
 (define (domain put_task)
  (:requirements
   :adl
  )
  (:types
   agent
-  microwave fridge sink - receptacle
-  knife receptacle - object
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
   )
 
 
@@ -25,9 +23,6 @@
     (isSliced ?o - object)                                    ; true if the object is sliced
     (atLocation ?a - agent ?o - object)
  )
-
-;; All actions are specified such that the final arguments are the ones used
-;; for performing actions in Unity.
 
 ;; agent goes to receptacle
  (:action GotoLocation
