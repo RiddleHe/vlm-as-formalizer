@@ -83,6 +83,9 @@ def build_scene_graph_template(domain_file):
     You must first generate a scene graph for the image, using the types and predicates in the domain file.
     Then use the scene graph to generate the PDDL problem.
     Do not generate anything after the PDDL problem.
+    
+    Important: When listing objects, provide descriptive names that include relevant visual characteristics that would help identify them in the image. Use specific, descriptive object names rather than abstract or generic terms.
+    
     Format:
     Scene graph:
     """
