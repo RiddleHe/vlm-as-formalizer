@@ -105,9 +105,9 @@ def main():
 
     # Parse domain
     if args.domain == "cooking": # TODO: clean upon submission
-        data_dir = f"../data/cooking" 
+        data_dir = f"/local-ssd/alfred/cooking" 
     elif args.domain == "blocksworld":
-        data_dir = f"../data/blocksworld"
+        data_dir = f"/local-ssd/alfred/blocksworld"
     elif args.domain == "blocksworld-real":
         data_dir = "/local-ssd/alfred/blocksworld-real"
     elif args.domain == "alfred":
