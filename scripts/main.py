@@ -233,7 +233,7 @@ def main():
             if any(path.startswith(f"{task_name}") for path in os.listdir(target_check_dir)):
                 print(f"👀 {task_name} already exists, checking if has plan.")
                 if args.find_plan:
-                continue
+                    continue
 
             print(f"Observations: {target['observations']}\n")
             print(f"Instruction: {target['instruction'][:100]}\n")
