@@ -249,7 +249,13 @@ def main():
             else:
                 print(f"Problem file not found for {task_name}")
 
-        else: # generate pddl
+        if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
+            args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
+            args.generate_multi_step_with_sgclip_vlm or args.generate_vila_planning or
+            args.generate_villain_pddl or args.generate_villain_direct_pddl or 
+            args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl or
+            args.generate_scene_graph_pddl or args.generate_scene_graph_dino_pddl or
+            args.generate_villain_gpt41_pddl or args.generate_villain_captioning_gpt41_pddl or args.generate_scene_graph_gpt41_pddl): # generate pddl
             if "problem.pddl" in os.listdir(task_dir) or "problem-try-0.pddl" in os.listdir(task_dir):
                 print(f"👀 {task_name} already exists, skipping...")
                 continue
