@@ -283,7 +283,9 @@ def load_problem_data(data_dir, task_name, enable_caption=False, clean_image=Fal
     
     # Load observations
     observations = []
-    if os.path.exists(problem_dir):
+    
+    # When enable_caption is True, skip image loading to test caption-only mode
+    if not enable_caption and os.path.exists(problem_dir):
         observations_dir = f"{problem_dir}/observations"
         for filename in os.listdir(observations_dir):
             if filename.endswith((".jpg", ".png", ".jpeg")):

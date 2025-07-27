@@ -152,7 +152,7 @@ def generate_scene_graph_gpt41_pddl(
         print(f"📊 SCENE GRAPH RESPONSE:")
         print(scene_graph_response)
         print("=" * 80)
-    
+        
     except Exception as e:
         print(f"Scene graph generation failed: {e}")
         return "", f"Scene graph generation failed: {e}", scene_graph_prompt
@@ -318,7 +318,7 @@ Generate the PDDL problem:
                 print(f"✅ PDDL parsing successful after auto-fix")
             else:
                 print("❌ PDDL parsing still failed after auto-fix")
-                problem_file = ""  # Return empty string instead of None
+                problem_file = ""
         else:
             print("❌ PDDL parsing failed")
             problem_file = ""  # Return empty string instead of None

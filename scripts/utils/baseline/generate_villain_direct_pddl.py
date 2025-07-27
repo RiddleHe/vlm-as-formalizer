@@ -11,8 +11,9 @@ def generate_villain_direct_pddl(
 
     print(f"\n🔍 Pipeline 3: VLM Direct PDDL Generation - Attempt {retry_idx+1}")
     
+    # Allow caption-only mode when observations are empty
     if len(observations) == 0:
-        return "", "No observations provided", ""
+        print("Caption-only mode: No images provided, using text description only")
     
     # Step 1: Build base prompt for direct PDDL generation
     base_prompt = build_problem_prompt(target, config)
