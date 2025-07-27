@@ -90,6 +90,8 @@ def generate_multi_step_with_vlm(
         # TODO: add support for arbitrary num of args
         else:
             raise NotImplementedError("Only unary and binary relations are supported")
+    step2_time = time.time() - step2_start
+    print(f"⏱️  Step 2 (Grounded Predicates): {step2_time:.2f}s")
 
     print("--------------grounded predicates---------------")
     print(all_grounded_predicates)

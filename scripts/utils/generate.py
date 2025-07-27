@@ -90,6 +90,7 @@ def generate_pddl(
                 model,
                 observations,
                 retry_idx,
+                batch_relations=args.batch_relations,
             )
         elif args.generate_multi_step_with_cv:
             problem_file, response, problem_prompt = generate_multi_step_with_cv(
