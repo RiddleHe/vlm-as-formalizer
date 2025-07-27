@@ -279,7 +279,8 @@ def load_problem_data(data_dir, task_name, enable_caption=False, clean_image=Fal
         instruction = f.read()
 
     # Load domain file
-    with open(f"{problem_dir}/domain.pddl", "r") as f:
+    domain_path = f"{problem_dir}/domain.pddl"
+    with open(domain_path, "r") as f:
         domain_file = f.read()
 
     # Load plan
@@ -309,6 +310,7 @@ def load_problem_data(data_dir, task_name, enable_caption=False, clean_image=Fal
         "observations": observations,
         "problem_dir": problem_dir,
         "domain_file": domain_file,
+        "domain_path": domain_path,
         "plan": plan
     }
 
