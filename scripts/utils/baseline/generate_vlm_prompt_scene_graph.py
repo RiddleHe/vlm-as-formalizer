@@ -5,15 +5,10 @@ import numpy as np
 import itertools
 
 from ..build_prompts import (
-    build_problem_prompt, 
-    build_refine_problem_prompt, 
     build_goal_prompt,
-    build_plan_prompt,
     build_observation_prompt,
 )
 from ..parse_response import (
-    parse_pddl, 
-    parse_plan, 
     parse_objects, 
     parse_types, 
     parse_predicates, 
@@ -22,10 +17,6 @@ from ..parse_response import (
     assemble_grounded_predicates,
     assemble_pddl,
 )
-from ..checkers import check_error
-from ..models import predict_relation_probs
-from ..sgclip import predict_all_relations, setup_and_load_models, get_classes_ls, get_batched_objects
-from ..helpers import observations_to_images, extract_relation_types
 
 def generate_multi_step_with_vlm(
     target,
@@ -33,6 +24,7 @@ def generate_multi_step_with_vlm(
     model,
     observations,
     retry_idx,
+    batch_relations=True,  # New parameter: True = all at once, False = one by one
 ):
     import time
     
@@ -43,7 +35,7 @@ def generate_multi_step_with_vlm(
     step1_start = time.time()
     observation_prompt = build_observation_prompt(target, config)
     # print(observation_prompt)
-    object_response, past_key_values = model.generate(observation_prompt, observations, return_cache=True)
+    object_response= model.generate(observation_prompt, observations)
     step1_time = time.time() - step1_start
     print(f"⏱️  Step 1 (Object Detection): {step1_time:.2f}s")
 
@@ -98,111 +90,44 @@ def generate_multi_step_with_vlm(
         # TODO: add support for arbitrary num of args
         else:
             raise NotImplementedError("Only unary and binary relations are supported")
+    step2_time = time.time() - step2_start
+    print(f"⏱️  Step 2 (Grounded Predicates): {step2_time:.2f}s")
 
     print("--------------grounded predicates---------------")
     print(all_grounded_predicates)
     
-    step2_time = time.time() - step2_start
-    print(f"⏱️  Step 2 (Parsing & Building Predicates): {step2_time:.2f}s")
+    relation_prompt_template = "Is {relation} "
+    relation_prompts = list(map(
+        lambda x: relation_prompt_template.format(relation=x), all_predicate_strs
+    ))
+
+    print("----------relation prompts------------")
+    print(relation_prompts)
     
-    # Step 3: Use Moondream for relationship prediction
+    # Step 3: Verify relationships with VLM
     step3_start = time.time()
-    print("----------Using Moondream for relationship prediction------------")
-    
-    # Initialize Moondream
-    import moondream as md
-    from PIL import Image
-    
-    # Initialize Moondream Cloud (replace with your API key)
-    moondream_model = md.vl(api_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlfaWQiOiJjMjczYmFiZS02NjY2LTQwOTktOTM2My1jZTdlY2RiY2M5YWMiLCJvcmdfaWQiOiJRaWxrSHhONUxhZ0N4N3lTUWdJTU5TeG1NOWVDdmFUUyIsImlhdCI6MTc1MjQ0NzA0MywidmVyIjoxfQ.YcYPiPVaullvInexObYKCyc1sO-57YLvy9SjSTTbfhY")  # Replace with your actual API key
-    
-    # Convert observations to PIL Images for Moondream
-    moondream_images = []
-    for obs_path in observations:
-        if isinstance(obs_path, str):
-            # If it's a file path
-            img = Image.open(obs_path)
-        else:
-            # If it's already an image object
-            img = obs_path
-        moondream_images.append(img)
-    
     relation_preds = []
-    for idx, predicate in enumerate(all_grounded_predicates):
-        predicate_start = time.time()
-        
-        # Create VLM prompt for this specific relationship with explicit spatial descriptions
-        if len(predicate["args"]) == 1:
-            # Unary relation
-            obj_name = predicate["args"][0]
-            predicate_name = predicate["name"]
-            
-            # Use explicit spatial descriptions for better VLM understanding
-            if predicate_name == "ontable":
-                relation_query = f"Is {obj_name} directly touching the table surface? Answer only yes or no."
-            elif predicate_name == "clear":
-                relation_query = f"Is {obj_name} clear? nothing is stacked on it. Answer only yes or no."
-            elif predicate_name == "handempty":
-                relation_query = f"Is {obj_name} holding nothing? Answer only yes or no."
-            elif predicate_name == "handfull":
-                relation_query = f"Is {obj_name} holding something? Answer only yes or no."
-            elif predicate_name == "holding":
-                relation_query = f"Is {obj_name} being held by a robot?  Answer only yes or no."
-            else:
-                # Find corresponding comment/description for other predicates
-                predicate_info = predicates[predicate_name]
-                comment = predicate_info.get("comment", "")
-                
-                if comment:
-                    obj_str = f"{predicate_info['args'][0]} {obj_name}"
-                    relation_query = comment.format(x=obj_str) + " Answer only yes or no."
-                else:
-                    relation_query = f"Is {obj_name} {predicate_name}? Answer only yes or no."
-                
-        elif len(predicate["args"]) == 2:
-            # Binary relation
-            obj1, obj2 = predicate["args"]
-            predicate_name = predicate["name"]
-            
-            # Use explicit spatial descriptions for better VLM understanding
-            if predicate_name == "on":
-                relation_query = f"Is {obj1}  on top of {obj2}? Answer only yes or no."
-            else:
-                # Find corresponding comment/description for other predicates
-                predicate_info = predicates[predicate_name]
-                comment = predicate_info.get("comment", "")
-                
-                if comment:
-                    type_1, type_2 = predicate_info["args"]
-                    obj1_str = f"{type_1} {obj1}"
-                    obj2_str = f"{type_2} {obj2}"
-                    relation_query = comment.format(x=obj1_str, y=obj2_str) + " Answer only yes or no."
-                else:
-                    relation_query = f"Is {obj1} {predicate_name} {obj2}? Answer only yes or no."
-        
-        # Query Moondream for this relationship (use first image for now)
-        try:
-            moondream_response = moondream_model.query(moondream_images[0], relation_query)["answer"]
-        except Exception as e:
-            print(f"Error querying Moondream: {e}")
-            moondream_response = "no"  # Default to no on error
-        
-        # Parse Moondream response
-        is_true = "yes" in moondream_response.lower() and "no" not in moondream_response.lower()
-        relation_preds.append(is_true)
-        
-        predicate_time = time.time() - predicate_start
-        print(f"Query [{idx+1}/{len(all_grounded_predicates)}]: {relation_query}")
-        print(f"Moondream Response: {moondream_response}")
-        print(f"Parsed as: {is_true} (⏱️ {predicate_time:.2f}s)")
-        print("---")
-    
+
+    if len(relation_prompts) > 0:
+        if batch_relations:
+            # Process all relations at once
+            relation_preds = _process_batch_relations(
+                model, relation_prompts, observations
+            )
+        else:
+            # Process relations one by one
+            relation_preds = _process_individual_relations(
+                model, relation_prompts, observations
+            )
+
     step3_time = time.time() - step3_start
     print("----------VLM relationship results------------")
     print(f"Total grounded predicates: {len(all_grounded_predicates)}")
     print(f"True predictions: {sum(relation_preds)}")
-    print(f"Acceptance rate: {sum(relation_preds)/len(relation_preds)*100:.1f}%")
+    if len(relation_preds) > 0:
+        print(f"Acceptance rate: {sum(relation_preds)/len(relation_preds)*100:.1f}%")
     print(f"⏱️  Step 3 (VLM Relationship Prediction): {step3_time:.2f}s")
+    print(f"Processing mode: {'Batch (all at once)' if batch_relations else 'Individual (one by one)'}")
 
     true_grounded_predicates = [
         pred for pred, is_true in zip(all_grounded_predicates, relation_preds) if is_true
@@ -247,10 +172,84 @@ def generate_multi_step_with_vlm(
     step5_time = time.time() - step5_start
     print(f"⏱️  Step 5 (PDDL Assembly): {step5_time:.2f}s")
 
-   
-    all_responses = object_response + "\n\n" + goal_response
+    # Print total time
+    total_time = time.time() - start_time
+    print(f"⏱️  Total execution time: {total_time:.2f}s")
+
     all_prompts = observation_prompt + "\n\n" + goal_prompt
             
     return pddl_file, pddl_file, all_prompts
-        
 
+
+def _process_batch_relations(model, relation_prompts, observations):
+    """Process all relations at once in a single VLM call."""
+    # Create a single prompt with all relationships
+    combined_prompt = "Answer 'yes' or 'no' for each of the following statements:\n\n"
+    for i, prompt in enumerate(relation_prompts):
+        combined_prompt += f"{i+1}. {prompt}\n"
+    
+    combined_prompt += "\nProvide your answers in order, one per line, using only 'yes' or 'no'."
+    
+    # Send all relationships to VLM at once
+    relation_response = model.generate(combined_prompt, observations)
+    
+    print("----------VLM batch response------------")
+    print(relation_response)
+    
+    # Parse the response to extract yes/no for each relationship
+    relation_preds = []
+    
+    # Split response into lines and process each
+    response_lines = relation_response.strip().split('\n')
+    
+    for line in response_lines:
+        line = line.strip().lower()
+        # Skip empty lines
+        if not line:
+            continue
+            
+        # Extract yes/no from various possible formats
+        # Handle formats like "1. yes", "yes", "Yes", "1: no", etc.
+        if 'yes' in line:
+            relation_preds.append(True)
+        elif 'no' in line:
+            relation_preds.append(False)
+    
+    # Validate we got the right number of predictions
+    if len(relation_preds) != len(relation_prompts):
+        print(f"Warning: Expected {len(relation_prompts)} predictions, got {len(relation_preds)}")
+        # If we got fewer predictions, pad with False
+        while len(relation_preds) < len(relation_prompts):
+            relation_preds.append(False)
+        # If we got too many, truncate
+        relation_preds = relation_preds[:len(relation_prompts)]
+    
+    return relation_preds
+
+
+def _process_individual_relations(model, relation_prompts, observations):
+    """Process each relation individually with separate VLM calls."""
+    relation_preds = []
+    
+    print("----------Processing relations individually------------")
+    for i, prompt in enumerate(relation_prompts):
+        # Create individual prompt
+        individual_prompt = f"{prompt}\nAnswer with only 'yes' or 'no'."
+        
+        # Get response for this single relation
+        response = model.generate(individual_prompt, observations)
+        
+        # Parse individual response
+        response_lower = response.strip().lower()
+        if 'yes' in response_lower:
+            relation_preds.append(True)
+            print(f"  {i+1}/{len(relation_prompts)}: {prompt} -> YES")
+        elif 'no' in response_lower:
+            relation_preds.append(False)
+            print(f"  {i+1}/{len(relation_prompts)}: {prompt} -> NO")
+        else:
+            # Default to False if unclear
+            relation_preds.append(False)
+            print(f"  {i+1}/{len(relation_prompts)}: {prompt} -> NO (unclear response: {response})")
+    
+    return relation_preds

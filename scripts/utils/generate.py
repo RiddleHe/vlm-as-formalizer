@@ -1,31 +1,6 @@
-import itertools
-import os
-import sys
-
-from .build_prompts import (
-    build_problem_prompt, 
-    build_refine_problem_prompt, 
-    build_goal_prompt,
-    build_plan_prompt,
-    build_observation_prompt,
-)
-from .parse_response import (
-    parse_pddl, 
-    parse_plan, 
-    parse_objects, 
-    parse_types, 
-    parse_predicates, 
-    parse_block,
-    assemble_object_states,
-    assemble_grounded_predicates,
-    assemble_pddl,
-)
 from .checkers import check_error
-from .models import predict_relation_probs
-from .sgclip import predict_all_relations, setup_and_load_models, get_classes_ls, get_batched_objects
-from .helpers import observations_to_images, extract_relation_types, convert_sgclip_to_relation_preds
 from .baseline import (
-    generate_multi_step_with_cv,
+    generate_multi_step,
     generate_multi_step_with_vlm,
     generate_pddl_end_to_end,
     generate_multi_step_with_sgclip_vlm,
@@ -90,17 +65,7 @@ def generate_pddl(
                 model,
                 observations,
                 retry_idx,
-            )
-        elif args.generate_multi_step_with_cv:
-            problem_file, response, problem_prompt = generate_multi_step_with_cv(
-                target,
-                config,
-                model,
-                observations,
-                retry_idx,
-                result_dir=result_dir,
-                save_step=save_step,
-                task_name=task_name,
+                batch_relations=args.batch_relations,
             )
         elif args.generate_multi_step_with_sgclip_vlm:
             problem_file, response, problem_prompt = generate_multi_step_with_sgclip_vlm(

@@ -83,6 +83,8 @@ def parse_args():
     # If choose generate_multi_step
     parser.add_argument("--generate_from_vlm", action="store_true", help="generate from VLM")
     parser.add_argument("--generate_from_cv_model", action="store_true", help="generate from CV model")
+    parser.add_argument("--batch_relations", action="store_true", default=True, help="Generate all relations at once (default: True). Set --no-batch_relations for one-by-one")
+    parser.add_argument("--no-batch_relations", dest="batch_relations", action="store_false", help="Generate relations one by one instead of all at once")
 
     parser.add_argument("--clean_image", action="store_true", default=False, help="Present a clean image to the model")
 
@@ -166,7 +168,7 @@ def main():
 
     # Generate / refine PDDL problems
     if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
-        args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
+        args.generate_multi_step_with_vlm or 
         args.generate_multi_step_with_sgclip_vlm or args.generate_vila_planning or
         args.generate_villain_pddl or args.generate_villain_direct_pddl or 
         args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl or
