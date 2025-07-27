@@ -165,15 +165,13 @@ def main():
     plan_success_count = 0
 
     # Generate / refine PDDL problems
-    if not args.find_plan:
-        assert (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
-            args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
-            args.generate_multi_step_with_sgclip_vlm or args.generate_vila_planning or
-            args.generate_villain_pddl or args.generate_villain_direct_pddl or 
-            args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl or
-            args.generate_scene_graph_pddl or args.generate_scene_graph_dino_pddl or
-            args.generate_villain_gpt41_pddl or args.generate_villain_captioning_gpt41_pddl or args.generate_scene_graph_gpt41_pddl), \
-            "Please specify a valid generation pipeline."
+    if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
+        args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
+        args.generate_multi_step_with_sgclip_vlm or args.generate_vila_planning or
+        args.generate_villain_pddl or args.generate_villain_direct_pddl or 
+        args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl or
+        args.generate_scene_graph_pddl or args.generate_scene_graph_dino_pddl or
+        args.generate_villain_gpt41_pddl or args.generate_villain_captioning_gpt41_pddl or args.generate_scene_graph_gpt41_pddl):
         
         log_file_path = create_experiment_log_path(result_dir, args.domain, result_dir_suffix.lstrip('_'))
         logger = ExperimentLogger(log_file_path, console_output=True)
@@ -187,7 +185,12 @@ def main():
          # Load model
         model = VLMClientFactory(args.model, args.device)
 
-        config = None # TODO: remove support for config
+        # Load config (TODO: remove this)
+        if os.path.exists(f"{data_dir}/config.json"):
+            with open(f"{data_dir}/config.json", "r") as f:
+                config = json.load(f)
+        else:
+            config = None
 
     # Set up problem tasks: instructions, observations...
     targets = []
@@ -203,6 +206,7 @@ def main():
             "observations": problem_data["observations"],
             "instruction": problem_data["instruction"],
             "domain": problem_data["domain_file"],
+            "domain_path": problem_data["domain_path"],
             "plan": problem_data["plan"],
             "error": None,
         }]
@@ -216,38 +220,6 @@ def main():
 
         task_dir = f"{result_dir}/{task_name}"
         os.makedirs(task_dir, exist_ok=True)
-
-        if args.find_plan:
-            problem_path = f"{task_dir}/problem.pddl"
-            plan_path = f"{task_dir}/plan.txt" 
-            if os.path.exists(problem_path):
-                command = format_command(
-                    target["domain_path"],  # pass in domain path, not file
-                    problem_path,
-                    plan_path,
-                    args.downward_dir,
-                    args.time_limit,
-                )
-                success, err = find_plan(command, plan_path)
-
-                if success:
-                    with open(f"{task_dir}/plan.txt", "r") as fw:
-                        pred_plan = fw.readlines()
-                    gt_plan = target["plan"].split("\n")
-                    plan_success, err = compare_plans(gt_plan, pred_plan)
-                    if plan_success:
-                        plan_success_count += 1
-                    if not plan_success:
-                        print(f"Failed to find plan for {task_name}")
-                        with open(f"{task_dir}/error.txt", "w") as fw:
-                            fw.write(err)
-
-                else:
-                    print(f"Failed to find plan for {task_name}")
-                    with open(f"{task_dir}/error.txt", "w") as fw:
-                        fw.write(err)
-            else:
-                print(f"Problem file not found for {task_name}")
 
         if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
             args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
@@ -297,18 +269,18 @@ def main():
                     args.generate_scene_graph_dino_pddl or args.generate_scene_graph_gpt41_pddl):
                     
                     for retry_idx in range(len(res["problem"]["file"])):
-                        file_idx = f"try-{retry_idx}"
+                        file_idx = f"-try-{retry_idx}"
                         if success and retry_idx == len(res["problem"]["file"]) - 1:
                             file_idx = ""
                         
-                        with open(f"{task_dir}/problem-{file_idx}.pddl", "w") as fw:
+                        with open(f"{task_dir}/problem{file_idx}.pddl", "w") as fw:
                             fw.write(res["problem"]["file"][retry_idx])
 
-                        with open(f"{task_dir}/prompt-{file_idx}.txt", "w") as fw:
-                            fw.write(res["problem"]["instructions"][retry_idx])
+                        with open(f"{task_dir}/prompt{file_idx}.txt", "w") as fw:
+                            fw.write(res["problem"]["prompt"][retry_idx])
 
-                        with open(f"{task_dir}/response-{file_idx}.txt", "w") as fw:
-                            fw.write(res["problem"]["responses"][retry_idx])
+                        with open(f"{task_dir}/response{file_idx}.txt", "w") as fw:
+                            fw.write(res["problem"]["response"][retry_idx])
                 
                 elif args.generate_plan or args.generate_vila_planning:
                     with open(f"{task_dir}/plan.txt", "w") as fw:
@@ -323,16 +295,49 @@ def main():
             except Exception as e:
                 print(f"Error saving PDDL: {traceback.format_exc()}")
 
-    # Close logger
-    if logger is not None:
-        logger.log_metrics({
-            "solver_success_count": solver_success_count,
-            "plan_success_count": plan_success_count,
-            "plan_success_rate": plan_success_count / len(task_names),
-            "solver_success_rate": solver_success_count / len(task_names),
-        })
+        if args.find_plan:
+            problem_path = f"{task_dir}/problem.pddl"
+            plan_path = f"{task_dir}/plan.txt" 
+            if os.path.exists(problem_path):
+                command = format_command(
+                    target["domain_path"],  # pass in domain path, not file
+                    problem_path,
+                    plan_path,
+                    args.downward_dir,
+                    args.time_limit,
+                )
+                success, err = find_plan(command, plan_path)
 
-        logger.__exit__()
+                with open(f"{task_dir}/plan_gt.txt", "w") as fw:
+                    fw.write(target["plan"])
+
+                if success:
+                    with open(f"{task_dir}/plan.txt", "r") as fw:
+                        pred_plan = fw.readlines()
+                    gt_plan = target["plan"].split("\n")
+                    plan_success, err = compare_plans(gt_plan, pred_plan)
+                    if plan_success:
+                        plan_success_count += 1
+                    if not plan_success:
+                        print(f"Failed to find plan for {task_name}")
+                        with open(f"{task_dir}/error.txt", "w") as fw:
+                            fw.write(err)
+
+                else:
+                    print(f"Failed to find plan for {task_name}")
+                    with open(f"{task_dir}/error.txt", "w") as fw:
+                        fw.write(err)
+            else:
+                print(f"Problem file not found for {task_name}")
+
+    print(f"\n{'='*80}")
+    print(f"📊 FINAL EXPERIMENT METRICS")
+    print(f"{'='*80}")
+    print(f"🔧 Solver Success Count: {solver_success_count}")
+    print(f"📋 Plan Success Count: {plan_success_count}")
+    print(f"📈 Plan Success Rate: {plan_success_count / len(task_names):.2%}")
+    print(f"📈 Solver Success Rate: {solver_success_count / len(task_names):.2%}")
+    print(f"{'='*80}")
 
 if __name__ == "__main__":
     main()
