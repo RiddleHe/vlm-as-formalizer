@@ -152,7 +152,7 @@ def generate_scene_graph_gpt41_pddl(
         print(f"📊 SCENE GRAPH RESPONSE:")
         print(scene_graph_response)
         print("=" * 80)
-    
+        
     except Exception as e:
         print(f"Scene graph generation failed: {e}")
         return "", f"Scene graph generation failed: {e}", scene_graph_prompt
