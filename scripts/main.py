@@ -128,7 +128,7 @@ def main():
     if args.model is not None:
         result_dir_suffix += f"_{args.model.replace('/', '-')}"
     
-    result_dir = f"/local-ssd/Muyu_experiment/results/{args.domain}"
+    result_dir = f"/local-ssd/villain/results/{args.domain}"
     if args.generate_plan:
         result_dir_suffix += "_generate_plan"
     if args.generate_vila_planning:
@@ -150,27 +150,15 @@ def main():
     
     # set the final path
     result_dir = result_dir + result_dir_suffix
-    log_dir = f"/local-ssd/Muyu_experiment/intermediate_results"
 
     seed_everything(args.seed) 
-
-    # create the experiment log file path  
-    log_file_path = create_experiment_log_path(log_dir, args.domain, result_dir_suffix.lstrip('_'))
-    
-    # start the logging system
-    logger = ExperimentLogger(log_file_path, console_output=True)
-    logger.__enter__()
-    
-    print(f"🧪 Starting experiment: {args.domain}{result_dir_suffix}")
-    print(f"📁 Results will be saved to: {result_dir}")
-    print(f"📋 Log will be saved to: {log_file_path}")
-    print(f"{'='*80}")
 
     # Get task names from the reorganized structure (problem directories)
     task_names = sorted([
         dirname for dirname in os.listdir(data_dir)
-        if os.path.isdir(f"{data_dir}/{dirname}") and dirname.startswith("problem")
-    ])  # problem1, problem2, ...
+        if os.path.isdir(f"{data_dir}/{dirname}")
+        # and dirname.startswith("problem")
+    ])
 
     # Generate / refine PDDL problems
     if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
@@ -180,15 +168,11 @@ def main():
         args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl or
         args.generate_scene_graph_pddl or args.generate_scene_graph_dino_pddl) or (args.generate_villain_gpt41_pddl or args.generate_villain_captioning_gpt41_pddl or args.generate_scene_graph_gpt41_pddl):
         # Create folders
-        folders = ["responses", "instructions"]
+        folders = ["responses", "instructions", "logs"]
         if args.generate_plan or args.generate_vila_planning:
             folders += ["plans"]
         else:
             folders += ["problems"]
-        
-        # Add intermediate_results folder for CV detection results
-        if args.generate_multi_step_with_cv:
-            folders += ["intermediate_results"]
 
         for dname in folders:
             os.makedirs(
@@ -196,10 +180,19 @@ def main():
                 exist_ok=True,
             )
 
+        log_file_path = create_experiment_log_path(result_dir, args.domain, result_dir_suffix.lstrip('_'))
+        logger = ExperimentLogger(log_file_path, console_output=True)
+        logger.__enter__()
+        
+        print(f"🧪 Starting experiment: {args.domain}{result_dir_suffix}")
+        print(f"📁 Results will be saved to: {result_dir}")
+        print(f"📋 Log will be saved to: {log_file_path}")
+        print(f"{'='*80}")
+
          # Load model
         model = VLMClientFactory(args.model, args.device)
 
-        # Load config
+        # Load config (TODO: remove this)
         if os.path.exists(f"{data_dir}/config.json"):
             with open(f"{data_dir}/config.json", "r") as f:
                 config = json.load(f)
@@ -220,6 +213,7 @@ def main():
                 "observations": problem_data["observations"],
                 "instruction": problem_data["instruction"],
                 "domain": problem_data["domain_file"],
+                "plan": problem_data["plan"],
                 "error": None,
             }]
 
@@ -236,9 +230,10 @@ def main():
             else:
                 target_check_dir = f"{result_dir}/{args.gen_step}/problems"
             
-            if os.path.exists(target_check_dir) and any(path.startswith(f"{task_name}") for path in os.listdir(target_check_dir)):
-                print(f"{task_name} already exists, skipping...")
-                continue
+            if any(path.startswith(f"{task_name}") for path in os.listdir(target_check_dir)):
+                print(f"👀 {task_name} already exists, checking if has plan.")
+                if args.find_plan:
+                    continue
 
             print(f"Observations: {target['observations']}\n")
             print(f"Instruction: {target['instruction'][:100]}\n")
@@ -318,7 +313,7 @@ def main():
                 os.path.join(problems_dir, f) 
             for f 
                 in os.listdir(problems_dir)
-            if "-" not in f
+            if "-attempt-" not in f
         ])
         num_problems = len(problems)
 

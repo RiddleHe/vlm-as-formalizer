@@ -278,8 +278,13 @@ def load_problem_data(data_dir, task_name, enable_caption=False, clean_image=Fal
     with open(inst_file, "r") as f:
         instruction = f.read()
 
+    # Load domain file
     with open(f"{problem_dir}/domain.pddl", "r") as f:
         domain_file = f.read()
+
+    # Load plan
+    with open(f"{problem_dir}/plan.txt", "r") as f:
+        plan = f.read()
     
     # Load observations
     observations = []
@@ -303,7 +308,8 @@ def load_problem_data(data_dir, task_name, enable_caption=False, clean_image=Fal
         "instruction": instruction,
         "observations": observations,
         "problem_dir": problem_dir,
-        "domain_file": domain_file
+        "domain_file": domain_file,
+        "plan": plan
     }
 
 def get_problem_pddl_path(data_dir, task_name):

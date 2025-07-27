@@ -318,7 +318,7 @@ Generate the PDDL problem:
                 print(f"✅ PDDL parsing successful after auto-fix")
             else:
                 print("❌ PDDL parsing still failed after auto-fix")
-                problem_file = ""
+                problem_file = ""  # Return empty string instead of None
         else:
             print("❌ PDDL parsing failed")
             problem_file = ""  # Return empty string instead of None
