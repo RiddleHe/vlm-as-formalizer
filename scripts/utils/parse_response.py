@@ -82,34 +82,42 @@ def parse_block(pddl, keyword, save_header=False):
 
 def parse_types(domain_file):
     types = []
+    supertypes_seen = set()
+    base_types = set()
+    
     types_block = parse_block(domain_file, "(:types")
 
     if types_block:
         cleaned_types = re.sub(r";[^\n]*", "", types_block)  # Remove comments
         types_str = cleaned_types.strip()
         if types_str:
-            tokens = types_str.split() # Subtypes, supertypes, delimiter -
-            idx = 0
-            while idx < len(tokens):
-                lhs_types = []
-                while idx < len(tokens) and tokens[idx] != '-':
-                    if tokens[idx].strip():
-                        lhs_types.append(tokens[idx].strip())
-                    idx += 1
-                if idx < len(tokens) and tokens[idx] == '-':
-                    idx += 1
-                    if idx < len(tokens) and tokens[idx].strip():  # Assume always have rhs
-                        supertype = tokens[idx].strip()
-                        for sub_type in lhs_types:
-                            types.append(f"{sub_type} ({supertype})")
-                        idx += 1
-                    else:
-                        types.extend(lhs_types)
-                        if idx < len(tokens):
-                            idx += 1
+            lines = types_str.splitlines()
+            for line in lines:
+                line = line.strip()
+                if not line:
+                    continue
+                if "-" in line:
+                    parts = line.split("-")
+                    subtypes = parts[0].strip().split()
+                    supertype = parts[1].strip()
+                    supertypes_seen.add(supertype)
+                    for subtype in subtypes:
+                        if subtype:
+                            types.append(f"{subtype} ({supertype})")
+                            base_types.add(subtype)
+                            
                 else:
-                    types.extend(lhs_types)
+                    standalone_types = line.split()
+                    for standalone_type in standalone_types:
+                        if standalone_type:
+                            types.append(standalone_type)
+                            base_types.add(standalone_type)
 
+            for supertype in supertypes_seen:
+                if supertype not in base_types:
+                    types.append(supertype)
+
+    print(f"Types: {types}")
     return types
 
 def parse_predicates(domain_file) -> dict[str, dict]:
