@@ -117,7 +117,6 @@ def parse_types(domain_file):
                 if supertype not in base_types:
                     types.append(supertype)
 
-    print(f"Types: {types}")
     return types
 
 def parse_predicates(domain_file) -> dict[str, dict]:
