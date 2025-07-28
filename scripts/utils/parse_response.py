@@ -15,9 +15,14 @@ def parse_actions_from_domain(domain_file):
 def parse_actions_from_plan(plan_file):
     actions = []
     for line in plan_file:
-        line = line.strip()[1:-1].split()
-        action_name = line[0]
-        args = line[1:]
+        line = line.strip()
+        if not line or not line.startswith("(") or not line.endswith(")"):
+            continue
+        tokens = line[1:-1].split()
+        if not tokens:
+            continue
+        action_name = tokens[0]
+        args = tokens[1:]
         actions.append({
             "name": action_name,
             "args": args,
