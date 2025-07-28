@@ -68,6 +68,12 @@ class ExperimentLogger:
             self.original_stdout.flush()
         if self.log_file:
             self.log_file.flush()
+    
+    def isatty(self):
+        """Return whether this is an 'interactive' stream"""
+        if self.console_output and self.original_stdout:
+            return self.original_stdout.isatty()
+        return False
             
     def _write_log_header(self):
         """write the log file header"""
