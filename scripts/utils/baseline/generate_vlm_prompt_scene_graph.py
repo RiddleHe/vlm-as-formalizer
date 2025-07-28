@@ -202,8 +202,6 @@ def generate_multi_step_with_vlm(
     print(f"⏱️  Total execution time: {total_time:.2f}s")
 
     all_prompts = observation_prompt + "\n\n" + goal_prompt
-
-    import sys; sys.exit()
             
     return pddl_file, pddl_file, all_prompts
 
