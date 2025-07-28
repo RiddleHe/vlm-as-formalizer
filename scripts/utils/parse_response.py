@@ -91,10 +91,7 @@ def parse_block(pddl, keyword, save_header=False):
     return None
 
 def parse_types(domain_file):
-    types = []
-    supertypes_seen = set()
-    base_types = set()
-    
+    types_to_supertypes = {}
     types_block = parse_block(domain_file, "(:types")
 
     if types_block:
@@ -102,32 +99,59 @@ def parse_types(domain_file):
         types_str = cleaned_types.strip()
         if types_str:
             lines = types_str.splitlines()
+            all_supertypes = set()
             for line in lines:
                 line = line.strip()
                 if not line:
                     continue
                 if "-" in line:
                     parts = line.split("-")
-                    subtypes = parts[0].strip().split()
+                    subtypes = parts[0].strip().split(" ")
                     supertype = parts[1].strip()
-                    supertypes_seen.add(supertype)
+                    all_supertypes.add(supertype)
                     for subtype in subtypes:
-                        if subtype:
-                            types.append(f"{subtype} ({supertype})")
-                            base_types.add(subtype)
-                            
+                        if subtype.strip():
+                            types_to_supertypes[subtype.strip()] = supertype
                 else:
                     standalone_types = line.split()
                     for standalone_type in standalone_types:
-                        if standalone_type:
-                            types.append(standalone_type)
-                            base_types.add(standalone_type)
+                        if standalone_type.strip():
+                            types_to_supertypes[standalone_type.strip()] = None
+            for supertype in all_supertypes:
+                if supertype not in types_to_supertypes:
+                    types_to_supertypes[supertype] = None
 
-            for supertype in supertypes_seen:
-                if supertype not in base_types:
-                    types.append(supertype)
+    def get_type_chain(node_type, types_dict, memo=None):
+        if memo is None:
+            memo = {}
 
-    return types
+        if node_type in memo:
+            return memo[node_type]
+
+        if node_type not in types_dict or types_dict[node_type] is None:
+            memo[node_type] = node_type
+            return node_type
+
+        supertype = types_dict[node_type]
+        supertype_chain = get_type_chain(supertype, types_dict, memo)
+        chain = f"{node_type} -> subtype of {supertype_chain}"
+        memo[node_type] = chain
+        return chain
+
+    types_dict = {}
+
+    all_types = set(types_to_supertypes.keys())
+    for supertype in types_to_supertypes.values():
+        if supertype is not None:
+            all_types.add(supertype)
+
+    for type_name in all_types:
+        types_dict[type_name] = get_type_chain(type_name, types_to_supertypes)
+
+    print(f"Types dict: {types_dict}\n")
+    print(f"Types to supertypes: {types_to_supertypes}\n")
+    
+    return types_dict, types_to_supertypes 
 
 def parse_predicates(domain_file) -> dict[str, dict]:
     predicates_raw = []
@@ -271,68 +295,113 @@ def parse_objects_from_categorized_response(response, object_types=[]):
     objects = defaultdict(list)
     current_type = None
     
+    # Phrases that indicate no object is present
+    no_object_phrases = [
+        "no", "none", "not visible", "no .* visible", "no .* is visible", 
+        "not present", "cannot see", "don't see", "absent"
+    ]
+    
+    # Create type mapping
+    type_mapping = {}
+    for obj_type in object_types:
+        type_mapping[obj_type] = obj_type
+        base_type = obj_type.split('(')[0].strip()
+        type_mapping[base_type] = obj_type
+    
     for line in response.split("\n"):
         line = line.strip()
         
-        # Check if this is a type header (e.g., "block:" or "robot:")
+        # Check if this is a type header
         if line.endswith(':'):
-            potential_type = line[:-1].strip()
-            if not object_types or potential_type in object_types:
-                current_type = potential_type
+            header = line[:-1].strip()
+            
+            # Match with known types
+            matched_type = None
+            if not object_types:
+                matched_type = header
             else:
-                current_type = None
-        # Check if this is an object entry (starts with "- ")
-        elif line.startswith('- ') and current_type:
-            object_name = line[2:].strip()  # Remove "- " prefix
-            if object_name:
-                # Convert spaces to underscores for consistency
-                clean_name = "_".join(object_name.split())
-                objects[current_type].append(clean_name)
+                if header in type_mapping:
+                    matched_type = type_mapping[header]
+                else:
+                    for base, full in type_mapping.items():
+                        if base in header:
+                            matched_type = full
+                            break
+            
+            current_type = matched_type
+            
+        elif current_type and line:
+            # Skip lines that indicate no object
+            line_lower = line.lower()
+            if any(re.search(phrase, line_lower) for phrase in no_object_phrases):
+                continue
+            
+            # Skip explanatory text (usually long sentences)
+            if len(line.split()) > 10:  # Skip long explanatory sentences
+                continue
+            
+            # Parse object entries
+            if line.startswith(('- ', '• ', '* ')):
+                line = line[2:].strip()
+            
+            # Extract object name
+            if ' - ' in line:
+                object_name = line.split(' - ')[0].strip()
+            else:
+                object_name = line.strip()
+            
+            # Clean and validate object name
+            if object_name and not object_name.startswith('('):
+                clean_name = re.sub(r'[^\w]+', '_', object_name).strip('_')
+                
+                # Additional validation - skip if too long or contains certain patterns
+                if clean_name and len(clean_name) < 50 and not clean_name.lower().startswith('no_'):
+                    objects[current_type].append(clean_name)
     
     return objects
 
-def parse_objects(response, object_types = []):
-    # First try the new categorized format (for VLM responses)
-    categorized_result = parse_objects_from_categorized_response(response, object_types)
-    if categorized_result and any(obj_list for obj_list in categorized_result.values()):
-        return categorized_result
+def parse_objects(response, object_types={}):
+    # Debug output
+    print(f"DEBUG: parse_objects called with types: {object_types}")
+    
+    # # First try the new categorized format (for VLM responses)
+    # categorized_result = parse_objects_from_categorized_response(response, object_types)
+    # if categorized_result and any(obj_list for obj_list in categorized_result.values()):
+    #     print(f"DEBUG: Categorized parsing successful: {dict(categorized_result)}")
+    #     return categorized_result
     
     # Fallback to original format (name - type)
     objects = defaultdict(list)
     for line in response.split("\n"):
-        if "-" in line:
-            name_and_type = line.split("-")
-            if len(name_and_type) == 2:
-                name, object_type = name_and_type
-                name, object_type = name.strip(), object_type.strip()
-                name = "_".join(name.split())
-                if object_types and object_type not in object_types:
-                    continue
-                objects[object_type].append(name)
+        line = line.strip()
+        if not line:
+            continue
+            
+        # Look for "name - type" pattern
+        line = re.sub(r'^[-•*]\s*', '', line)
+        match = re.match(r'^(.+?)\s*-\s*(.+)$', line)
+        if match:
+            name, object_type = match.groups()
+            name = name.strip()
+            object_type = object_type.strip()
+            
+            # Clean the name
+            clean_name = re.sub(r'[^\w]+', '_', name).strip('_')
+            
+            # Check if this type matches any of our expected types
+            if not object_types:
+                objects[object_type].append(clean_name)
+            else:
+                if object_type in object_types:
+                    processed_types = set()
+                    current_type = object_type
+                    while current_type and current_type not in processed_types:
+                        processed_types.add(current_type)
+                        objects[current_type].append(clean_name)
+                        current_type = object_types.get(current_type)
 
-    # Additional fallback for comma-separated format (e.g., "block: green, blue, red")
-    if not objects or not any(obj_list for obj_list in objects.values()):
-        for line in response.split("\n"):
-            line = line.strip()
-            if ":" in line:
-                parts = line.split(":", 1)
-                if len(parts) == 2:
-                    object_type = parts[0].strip()
-                    objects_str = parts[1].strip()
-                    
-                    # Check if this type is valid
-                    if not object_types or object_type in object_types:
-                        # Split by comma and clean up
-                        if "," in objects_str:
-                            object_names = [name.strip() for name in objects_str.split(",")]
-                        else:
-                            # Single object or space-separated
-                            object_names = objects_str.split()
-                        
-                        for name in object_names:
-                            if name:
-                                clean_name = "_".join(name.split())
-                                objects[object_type].append(clean_name)
+
+    print(f"DEBUG: Final parsed objects: {dict(objects)}")
 
     return objects
 
@@ -346,9 +415,12 @@ def assemble_grounded_predicates(predicates):
 
 def assemble_object_states(objects):
     object_states = "    (:objects\n"
-    for object_type, objects in objects.items():
-        for obj in objects:
-            object_states += f"        {obj} - {object_type}\n"
+    for object_type, objects_list in objects.items():
+        # Clean the type name for PDDL compatibility
+        clean_type = object_type.split('(')[0].strip()
+        
+        for obj in objects_list:
+            object_states += f"        {obj} - {clean_type}\n"
     object_states += "    )\n"
 
     return object_states

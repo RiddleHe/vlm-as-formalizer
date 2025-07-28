@@ -29,7 +29,7 @@ def generate_pddl(
     msg = None
 
     for retry_idx in range(args.num_tries):
-        if args.generate_multi_step_with_vlm:
+        if  args.generate_multi_step_with_vlm:
             problem_file, response, problem_prompt = generate_multi_step_with_vlm(
                 target,
                 config,

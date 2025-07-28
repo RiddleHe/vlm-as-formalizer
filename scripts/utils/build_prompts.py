@@ -122,26 +122,35 @@ def build_refine_problem_prompt(target, config, generate_caption=False, generate
     return prompt
 
 def build_observation_prompt(target, config):
+    new_line = '\n'
+    type_dict, _ = parse_types(target['domain'])
+    types_list = list(type_dict.keys())
+    
     prompt = f"""You are given some images which contain various objects of interests for a given task.
 
     The following domain file specifies all possible states and actions for the task:
     {target["domain"]}
 
-    Given the name of an object type, identify all objects with an appropriate name in the images that belong to this type.
-    Follow this exact format:
-    <object> - <type>
-    <object> - <type>
-    ...
-
+    Identify all objects relevant to the task instruction in the images that belong to a certain type in the domain file.
+    The types are listed below:
+    {new_line.join(types_list)}
+    
+    IMPORTANT INSTRUCTIONS:
+    - Only list objects that are visible in the images
+    - Only list objects that are relevant to the task instruction
+    - If no objects of a type are visible, leave it empty
+    - Do NOT write explanations like "no agent is visible in the provided images"
+    - Use this exact format for each object: 
+        <object_name> - <type>
+        <object_name> - <type>
+        ...
+    - The type should be the most specific subtype that the object belongs to.
+  
     The images have been provided. {config.get("text", "") if config else ""}
     The task instruction is: {target["instruction"]}
-    Now identify all the objects for the following types relevant to the task instruction:
+    
+    Now identify all the objects and their respective types:
     """
-
-    types = parse_types(target["domain"])
-    for obj_type in types:
-        prompt += f"{obj_type}: \n"
-
     return prompt
 
 def build_goal_prompt(target, config, object_states, init_states):

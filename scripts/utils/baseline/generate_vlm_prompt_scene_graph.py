@@ -1,5 +1,3 @@
-import os
-import sys
 import numpy as np
 
 import itertools
@@ -44,15 +42,20 @@ def generate_multi_step_with_vlm(
 
     # Step 2: Parse objects and build grounded predicates
     step2_start = time.time()
-    object_types = parse_types(target["domain"])
-    objects = parse_objects(object_response, object_types)
+    object_types, type_to_supertypes = parse_types(target["domain"])
+    print(f"Object types: {object_types}\n")
+
+    objects = parse_objects(object_response, type_to_supertypes)
+    print(f"Objects: {objects}\n")
 
     object_states = assemble_object_states(objects)
+    print(f"Object states: {object_states}\n")
 
     print("---------------objects--------------")
-    print(objects)
 
     predicates = parse_predicates(target["domain"])
+    print(f"Predicates: {predicates}\n")
+
     # Build all possible predicates
     all_grounded_predicates = []
     all_predicate_strs = []
@@ -62,6 +65,7 @@ def generate_multi_step_with_vlm(
 
         if len(predicate_args) == 1:  # unary relation
             typed_objects = objects[predicate_args[0]]
+            print(f"Predicate: {predicate_name}- Predicate args: {predicate_args} - Typed objects: {typed_objects}\n")
             all_grounded_predicates.extend([
                 {"name": predicate_name, "args": [obj]} for obj in typed_objects
             ])
@@ -75,6 +79,7 @@ def generate_multi_step_with_vlm(
         elif len(predicate_args) == 2:  # binary relation
             type_1, type_2 = predicate_args
             type_1_objects, type_2_objects = objects[type_1], objects[type_2]
+            print(f"Predicate: {predicate_name}- Predicate args: {predicate_args} - Type 1 objects: {type_1_objects} - Type 2 objects: {type_2_objects}\n")
             for obj1, obj2 in itertools.product(type_1_objects, type_2_objects):
                 if obj1 != obj2:
                     all_grounded_predicates.append({
@@ -95,11 +100,30 @@ def generate_multi_step_with_vlm(
 
     print("--------------grounded predicates---------------")
     print(all_grounded_predicates)
-    
-    relation_prompt_template = "Is {relation} "
-    relation_prompts = list(map(
-        lambda x: relation_prompt_template.format(relation=x), all_predicate_strs
-    ))
+
+    # Generate prompts directly from grounded predicates
+    relation_prompts = []
+    for pred in all_grounded_predicates:
+        predicate_name = pred['name']
+        args = pred['args']
+        
+        # Get the predicate info to know the types
+        predicate_info = predicates[predicate_name]
+        arg_types = predicate_info['args']
+        comment = predicate_info.get("comment", "")
+        comment = f"({comment})"
+        
+        # Build a natural language question
+        if len(args) == 1:
+            prompt = f"Is the predicate ({predicate_name} {args[0]}) true of {arg_types[0]} {args[0]} {comment}?"
+        elif len(args) == 2:
+            prompt = f"Is the predicate ({predicate_name} {args[0]} {args[1]}) true of {arg_types[0]} {args[0]} and {arg_types[1]} {args[1]} {comment}?"
+        else:
+            # Fallback for more arguments
+            arg_strs = [f"{t} {a}" for t, a in zip(arg_types, args)]
+            prompt = f"Is {predicate_name} " + " ".join(arg_strs) + "?"
+        
+        relation_prompts.append(prompt)
 
     print("----------relation prompts------------")
     print(relation_prompts)
@@ -112,12 +136,12 @@ def generate_multi_step_with_vlm(
         if batch_relations:
             # Process all relations at once
             relation_preds = _process_batch_relations(
-                model, relation_prompts, observations
+                model, relation_prompts, observations, config
             )
         else:
             # Process relations one by one
             relation_preds = _process_individual_relations(
-                model, relation_prompts, observations
+                model, relation_prompts, observations, config
             )
 
     step3_time = time.time() - step3_start
@@ -161,6 +185,7 @@ def generate_multi_step_with_vlm(
     
     step4_time = time.time() - step4_start
     print(f"⏱️  Step 4 (Goal Generation): {step4_time:.2f}s")
+    print(f"Goal states: \n{goal_states}\n")
 
     # Step 5: Assemble final PDDL file
     step5_start = time.time()
@@ -177,18 +202,23 @@ def generate_multi_step_with_vlm(
     print(f"⏱️  Total execution time: {total_time:.2f}s")
 
     all_prompts = observation_prompt + "\n\n" + goal_prompt
+
+    import sys; sys.exit()
             
     return pddl_file, pddl_file, all_prompts
 
 
-def _process_batch_relations(model, relation_prompts, observations):
+def _process_batch_relations(model, relation_prompts, observations, config):
     """Process all relations at once in a single VLM call."""
     # Create a single prompt with all relationships
-    combined_prompt = "Answer 'yes' or 'no' for each of the following statements:\n\n"
+    combined_prompt = f"{config.get('text', '')}Answer 'yes' or 'no' for each of the following statements:\n\n"
     for i, prompt in enumerate(relation_prompts):
         combined_prompt += f"{i+1}. {prompt}\n"
     
     combined_prompt += "\nProvide your answers in order, one per line, using only 'yes' or 'no'."
+
+    print("----------VLM batch prompt------------")
+    print(combined_prompt)
     
     # Send all relationships to VLM at once
     relation_response = model.generate(combined_prompt, observations)
@@ -227,14 +257,14 @@ def _process_batch_relations(model, relation_prompts, observations):
     return relation_preds
 
 
-def _process_individual_relations(model, relation_prompts, observations):
+def _process_individual_relations(model, relation_prompts, observations, config):
     """Process each relation individually with separate VLM calls."""
     relation_preds = []
     
     print("----------Processing relations individually------------")
     for i, prompt in enumerate(relation_prompts):
         # Create individual prompt
-        individual_prompt = f"{prompt}\nAnswer with only 'yes' or 'no'."
+        individual_prompt = f"{config.get('text', '')}{prompt}\nAnswer with only 'yes' or 'no'."
         
         # Get response for this single relation
         response = model.generate(individual_prompt, observations)

@@ -1,0 +1,475 @@
+ck', 'red_block', 'robot', 'yellow_block']
+🔍 Creating object mapping...
+   Detected IDs: ['0', '1', '2', '3', '4']
+   Expected objects: ['green_block', 'orange_block', 'pink_block', 'purple_block', 'red_block', 'robot', 'yellow_block']
+✅ Using color-based mapping: {'0': 'red_block', '1': 'green_block', '2': 'yellow_block', '3': 'orange_block', '4': 'purple_block'}
+🗺️ Object mapping: {'0': 'red_block', '1': 'green_block', '2': 'yellow_block', '3': 'orange_block', '4': 'purple_block'}
+✅ MATCH: on(green_block, yellow_block) -> on(1, 2)
+✅ MATCH: on(green_block, purple_block) -> on(1, 4)
+✅ MATCH: on(green_block, orange_block) -> on(1, 3)
+✅ MATCH: on(green_block, red_block) -> on(1, 0)
+✅ MATCH: on(yellow_block, green_block) -> on(2, 1)
+✅ MATCH: on(yellow_block, purple_block) -> on(2, 4)
+✅ MATCH: on(yellow_block, orange_block) -> on(2, 3)
+✅ MATCH: on(yellow_block, red_block) -> on(2, 0)
+✅ MATCH: on(purple_block, green_block) -> on(4, 1)
+✅ MATCH: on(purple_block, yellow_block) -> on(4, 2)
+✅ MATCH: on(purple_block, orange_block) -> on(4, 3)
+✅ MATCH: on(purple_block, red_block) -> on(4, 0)
+✅ MATCH: on(orange_block, green_block) -> on(3, 1)
+✅ MATCH: on(orange_block, yellow_block) -> on(3, 2)
+✅ MATCH: on(orange_block, purple_block) -> on(3, 4)
+✅ MATCH: on(orange_block, red_block) -> on(3, 0)
+✅ MATCH: on(red_block, green_block) -> on(0, 1)
+✅ MATCH: on(red_block, yellow_block) -> on(0, 2)
+✅ MATCH: on(red_block, purple_block) -> on(0, 4)
+✅ MATCH: on(red_block, orange_block) -> on(0, 3)
+✅ MATCH: ontable(yellow_block) -> ontable(2)
+✅ MATCH: ontable(purple_block) -> ontable(4)
+✅ MATCH: ontable(orange_block) -> ontable(3)
+✅ MATCH: clear(green_block) -> clear(1)
+🎯 Successfully matched 24/50 predicates
+----------conversion results------------
+Total grounded predicates: 50
+True predictions: 24
+Acceptance rate: 48.0%
+----------final true predicates------------
+[{'name': 'on', 'args': ['green_block', 'yellow_block']}, {'name': 'on', 'args': ['green_block', 'purple_block']}, {'name': 'on', 'args': ['green_block', 'orange_block']}, {'name': 'on', 'args': ['green_block', 'red_block']}, {'name': 'on', 'args': ['yellow_block', 'green_block']}, {'name': 'on', 'args': ['yellow_block', 'purple_block']}, {'name': 'on', 'args': ['yellow_block', 'orange_block']}, {'name': 'on', 'args': ['yellow_block', 'red_block']}, {'name': 'on', 'args': ['purple_block', 'green_block']}, {'name': 'on', 'args': ['purple_block', 'yellow_block']}, {'name': 'on', 'args': ['purple_block', 'orange_block']}, {'name': 'on', 'args': ['purple_block', 'red_block']}, {'name': 'on', 'args': ['orange_block', 'green_block']}, {'name': 'on', 'args': ['orange_block', 'yellow_block']}, {'name': 'on', 'args': ['orange_block', 'purple_block']}, {'name': 'on', 'args': ['orange_block', 'red_block']}, {'name': 'on', 'args': ['red_block', 'green_block']}, {'name': 'on', 'args': ['red_block', 'yellow_block']}, {'name': 'on', 'args': ['red_block', 'purple_block']}, {'name': 'on', 'args': ['red_block', 'orange_block']}, {'name': 'ontable', 'args': ['yellow_block']}, {'name': 'ontable', 'args': ['purple_block']}, {'name': 'ontable', 'args': ['orange_block']}, {'name': 'clear', 'args': ['green_block']}]
+--------------------------------
+    (:objects
+        green_block - block
+        yellow_block - block
+        pink_block - block
+        purple_block - block
+        orange_block - block
+        red_block - block
+        robot - robot
+    )
+
+    (:init
+        (on green_block yellow_block)
+        (on green_block purple_block)
+        (on green_block orange_block)
+        (on green_block red_block)
+        (on yellow_block green_block)
+        (on yellow_block purple_block)
+        (on yellow_block orange_block)
+        (on yellow_block red_block)
+        (on purple_block green_block)
+        (on purple_block yellow_block)
+        (on purple_block orange_block)
+        (on purple_block red_block)
+        (on orange_block green_block)
+        (on orange_block yellow_block)
+        (on orange_block purple_block)
+        (on orange_block red_block)
+        (on red_block green_block)
+        (on red_block yellow_block)
+        (on red_block purple_block)
+        (on red_block orange_block)
+        (ontable yellow_block)
+        (ontable purple_block)
+        (ontable orange_block)
+        (clear green_block)
+    )
+
+Attempt 3 failed: 
+Search stopped without finding a solution
+Generating PDDL problems:  90%|██████████████████▉  | 9/10 [05:42<00:34, 34.59s/it]Observations: ['../data/blocksworld/observations/problem9.jpg']
+
+Instruction: Create a stack of blocks: purple over blue over green over yellow over red over orange.
+
+
+--------------------------------
+orange block - block
+red block - block
+yellow block - block
+green block - block
+blue block - block
+purple block - block
+robot - robot
+---------------objects--------------
+defaultdict(<class 'list'>, {'block': ['orange_block', 'red_block', 'yellow_block', 'green_block', 'blue_block', 'purple_block'], 'robot': ['robot']})
+--------------grounded predicates---------------
+[{'name': 'on', 'args': ['orange_block', 'red_block']}, {'name': 'on', 'args': ['orange_block', 'yellow_block']}, {'name': 'on', 'args': ['orange_block', 'green_block']}, {'name': 'on', 'args': ['orange_block', 'blue_block']}, {'name': 'on', 'args': ['orange_block', 'purple_block']}, {'name': 'on', 'args': ['red_block', 'orange_block']}, {'name': 'on', 'args': ['red_block', 'yellow_block']}, {'name': 'on', 'args': ['red_block', 'green_block']}, {'name': 'on', 'args': ['red_block', 'blue_block']}, {'name': 'on', 'args': ['red_block', 'purple_block']}, {'name': 'on', 'args': ['yellow_block', 'orange_block']}, {'name': 'on', 'args': ['yellow_block', 'red_block']}, {'name': 'on', 'args': ['yellow_block', 'green_block']}, {'name': 'on', 'args': ['yellow_block', 'blue_block']}, {'name': 'on', 'args': ['yellow_block', 'purple_block']}, {'name': 'on', 'args': ['green_block', 'orange_block']}, {'name': 'on', 'args': ['green_block', 'red_block']}, {'name': 'on', 'args': ['green_block', 'yellow_block']}, {'name': 'on', 'args': ['green_block', 'blue_block']}, {'name': 'on', 'args': ['green_block', 'purple_block']}, {'name': 'on', 'args': ['blue_block', 'orange_block']}, {'name': 'on', 'args': ['blue_block', 'red_block']}, {'name': 'on', 'args': ['blue_block', 'yellow_block']}, {'name': 'on', 'args': ['blue_block', 'green_block']}, {'name': 'on', 'args': ['blue_block', 'purple_block']}, {'name': 'on', 'args': ['purple_block', 'orange_block']}, {'name': 'on', 'args': ['purple_block', 'red_block']}, {'name': 'on', 'args': ['purple_block', 'yellow_block']}, {'name': 'on', 'args': ['purple_block', 'green_block']}, {'name': 'on', 'args': ['purple_block', 'blue_block']}, {'name': 'ontable', 'args': ['orange_block']}, {'name': 'ontable', 'args': ['red_block']}, {'name': 'ontable', 'args': ['yellow_block']}, {'name': 'ontable', 'args': ['green_block']}, {'name': 'ontable', 'args': ['blue_block']}, {'name': 'ontable', 'args': ['purple_block']}, {'name': 'clear', 'args': ['orange_block']}, {'name': 'clear', 'args': ['red_block']}, {'name': 'clear', 'args': ['yellow_block']}, {'name': 'clear', 'args': ['green_block']}, {'name': 'clear', 'args': ['blue_block']}, {'name': 'clear', 'args': ['purple_block']}, {'name': 'handempty', 'args': ['robot']}, {'name': 'handfull', 'args': ['robot']}, {'name': 'holding', 'args': ['orange_block']}, {'name': 'holding', 'args': ['red_block']}, {'name': 'holding', 'args': ['yellow_block']}, {'name': 'holding', 'args': ['green_block']}, {'name': 'holding', 'args': ['blue_block']}, {'name': 'holding', 'args': ['purple_block']}]
+--------------unary relations---------------
+['clear', 'handempty', 'handfull', 'holding', 'ontable']
+--------------binary relations---------------
+['on']
+----------predicate strings------------
+['block orange_block on block red_block', 'block orange_block on block yellow_block', 'block orange_block on block green_block', 'block orange_block on block blue_block', 'block orange_block on block purple_block', 'block red_block on block orange_block', 'block red_block on block yellow_block', 'block red_block on block green_block', 'block red_block on block blue_block', 'block red_block on block purple_block', 'block yellow_block on block orange_block', 'block yellow_block on block red_block', 'block yellow_block on block green_block', 'block yellow_block on block blue_block', 'block yellow_block on block purple_block', 'block green_block on block orange_block', 'block green_block on block red_block', 'block green_block on block yellow_block', 'block green_block on block blue_block', 'block green_block on block purple_block', 'block blue_block on block orange_block', 'block blue_block on block red_block', 'block blue_block on block yellow_block', 'block blue_block on block green_block', 'block blue_block on block purple_block', 'block purple_block on block orange_block', 'block purple_block on block red_block', 'block purple_block on block yellow_block', 'block purple_block on block green_block', 'block purple_block on block blue_block', 'block orange_block on table', 'block red_block on table', 'block yellow_block on table', 'block green_block on table', 'block blue_block on table', 'block purple_block on table', "block orange_block's surface clear and not under any other block", "block red_block's surface clear and not under any other block", "block yellow_block's surface clear and not under any other block", "block green_block's surface clear and not under any other block", "block blue_block's surface clear and not under any other block", "block purple_block's surface clear and not under any other block", 'there no robot robot in sight holding anything', "robot robot's hand full", 'robot holding block orange_block', 'robot holding block red_block', 'robot holding block yellow_block', 'robot holding block green_block', 'robot holding block blue_block', 'robot holding block purple_block']
+----------relation prompts------------
+['Is block orange_block on block red_block (Answer only yes/no)', 'Is block orange_block on block yellow_block (Answer only yes/no)', 'Is block orange_block on block green_block (Answer only yes/no)', 'Is block orange_block on block blue_block (Answer only yes/no)', 'Is block orange_block on block purple_block (Answer only yes/no)', 'Is block red_block on block orange_block (Answer only yes/no)', 'Is block red_block on block yellow_block (Answer only yes/no)', 'Is block red_block on block green_block (Answer only yes/no)', 'Is block red_block on block blue_block (Answer only yes/no)', 'Is block red_block on block purple_block (Answer only yes/no)', 'Is block yellow_block on block orange_block (Answer only yes/no)', 'Is block yellow_block on block red_block (Answer only yes/no)', 'Is block yellow_block on block green_block (Answer only yes/no)', 'Is block yellow_block on block blue_block (Answer only yes/no)', 'Is block yellow_block on block purple_block (Answer only yes/no)', 'Is block green_block on block orange_block (Answer only yes/no)', 'Is block green_block on block red_block (Answer only yes/no)', 'Is block green_block on block yellow_block (Answer only yes/no)', 'Is block green_block on block blue_block (Answer only yes/no)', 'Is block green_block on block purple_block (Answer only yes/no)', 'Is block blue_block on block orange_block (Answer only yes/no)', 'Is block blue_block on block red_block (Answer only yes/no)', 'Is block blue_block on block yellow_block (Answer only yes/no)', 'Is block blue_block on block green_block (Answer only yes/no)', 'Is block blue_block on block purple_block (Answer only yes/no)', 'Is block purple_block on block orange_block (Answer only yes/no)', 'Is block purple_block on block red_block (Answer only yes/no)', 'Is block purple_block on block yellow_block (Answer only yes/no)', 'Is block purple_block on block green_block (Answer only yes/no)', 'Is block purple_block on block blue_block (Answer only yes/no)', 'Is block orange_block on table (Answer only yes/no)', 'Is block red_block on table (Answer only yes/no)', 'Is block yellow_block on table (Answer only yes/no)', 'Is block green_block on table (Answer only yes/no)', 'Is block blue_block on table (Answer only yes/no)', 'Is block purple_block on table (Answer only yes/no)', "Is block orange_block's surface clear and not under any other block (Answer only yes/no)", "Is block red_block's surface clear and not under any other block (Answer only yes/no)", "Is block yellow_block's surface clear and not under any other block (Answer only yes/no)", "Is block green_block's surface clear and not under any other block (Answer only yes/no)", "Is block blue_block's surface clear and not under any other block (Answer only yes/no)", "Is block purple_block's surface clear and not under any other block (Answer only yes/no)", 'Is there no robot robot in sight holding anything (Answer only yes/no)', "Is robot robot's hand full (Answer only yes/no)", 'Is robot holding block orange_block (Answer only yes/no)', 'Is robot holding block red_block (Answer only yes/no)', 'Is robot holding block yellow_block (Answer only yes/no)', 'Is robot holding block green_block (Answer only yes/no)', 'Is robot holding block blue_block (Answer only yes/no)', 'Is robot holding block purple_block (Answer only yes/no)']
+----------Using sgclip for relation prediction------------
+YOLOE model loaded successfully.
+SAM2 model loaded successfully.
+Predicate model loaded successfully.
+All models loaded successfully.
+----------detectable object classes (auto-extracted)------------
+['block', 'cube', 'brick', 'toy', 'object', 'box', 'robot', 'arm', 'manipulator', 'orange', 'red', 'yellow', 'green', 'blue', 'purple']
+Build text model mobileclip:blt
+Start detecting objects at time  22:09:25.473680
+
+0: 640x640 4 cubes, 5.7ms                                    | 0/1 [00:00<?, ?it/s]
+Speed: 1.5ms preprocess, 5.7ms inference, 1.4ms postprocess per image at shape (1, 3, 640, 640)
+Detecting objects: 100%|█████████████████████████████| 1/1 [00:00<00:00,  3.75it/s]
+Finished detecting objects at time  22:09:25.740493██| 1/1 [00:00<00:00,  3.76it/s]
+Loading inference state at time  22:09:25.740505
+Processing frames: 100%|█████████████████████████████| 1/1 [00:00<00:00, 20.54it/s]
+Find the most dense prompt at time  22:09:25.822639          | 0/1 [00:00<?, ?it/s]
+Most dense frame:  0
+Start propagating objects at time  22:09:25.823064
+Pass count:  0
+propagate in video: 100%|██████████████████████████| 1/1 [00:00<00:00, 1136.98it/s]
+propagate in video: 0it [00:00, ?it/s]                       | 0/1 [00:00<?, ?it/s]
+Most dense frame:  -1it [00:00, ?it/s]
+Batch successfully generated with 4 object instances.
+Saved visualization for frame 0 to ./frame_0.png
+defaultdict(<function format_unary_probs.<locals>.<lambda> at 0x73b7783a0d30>, {0: defaultdict(<class 'list'>, {'0 (cube)': [(tensor(0.7973, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.1232, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0457, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0254, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0085, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '1 (cube)': [(tensor(0.7405, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.2106, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0255, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0180, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0054, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '2 (cube)': [(tensor(0.5040, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.3554, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0742, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0601, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0063, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '3 (cube)': [(tensor(0.4906, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.3845, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0823, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0313, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0112, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')]})})
+defaultdict(<class 'dict'>, {0: {('0 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('0 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('0 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')]}})
+----------sgclip results------------
+{'unary': defaultdict(<function format_unary_probs.<locals>.<lambda> at 0x73b7783a0d30>, {0: defaultdict(<class 'list'>, {'0 (cube)': [(tensor(0.7973, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.1232, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0457, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0254, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0085, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '1 (cube)': [(tensor(0.7405, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.2106, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0255, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0180, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0054, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '2 (cube)': [(tensor(0.5040, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.3554, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0742, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0601, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0063, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '3 (cube)': [(tensor(0.4906, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.3845, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0823, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0313, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0112, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')]})}), 'binary': defaultdict(<class 'dict'>, {0: {('0 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('0 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('0 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')]}})}
+🔧 DEBUG: Converting sgclip results to relation predictions...
+📊 Confidence threshold: 0.4
+✅ Unary: ontable(0) - confidence: 0.797
+✅ Unary: ontable(1) - confidence: 0.740
+✅ Unary: ontable(2) - confidence: 0.504
+✅ Unary: ontable(3) - confidence: 0.491
+✅ Binary: on(0, 1) - confidence: 1.000
+✅ Binary: on(0, 2) - confidence: 1.000
+✅ Binary: on(0, 3) - confidence: 1.000
+✅ Binary: on(1, 0) - confidence: 1.000
+✅ Binary: on(1, 2) - confidence: 1.000
+✅ Binary: on(1, 3) - confidence: 1.000
+✅ Binary: on(2, 0) - confidence: 1.000
+✅ Binary: on(2, 1) - confidence: 1.000
+✅ Binary: on(2, 3) - confidence: 1.000
+✅ Binary: on(3, 0) - confidence: 1.000
+✅ Binary: on(3, 1) - confidence: 1.000
+✅ Binary: on(3, 2) - confidence: 1.000
+🎯 Total detected relations: 16
+🔍 Detected object IDs: ['0', '1', '2', '3']
+🎯 Expected object names: ['blue_block', 'green_block', 'orange_block', 'purple_block', 'red_block', 'robot', 'yellow_block']
+🔍 Creating object mapping...
+   Detected IDs: ['0', '1', '2', '3']
+   Expected objects: ['blue_block', 'green_block', 'orange_block', 'purple_block', 'red_block', 'robot', 'yellow_block']
+✅ Using color-based mapping: {'0': 'red_block', '1': 'blue_block', '2': 'green_block', '3': 'yellow_block'}
+🗺️ Object mapping: {'0': 'red_block', '1': 'blue_block', '2': 'green_block', '3': 'yellow_block'}
+✅ MATCH: on(red_block, yellow_block) -> on(0, 3)
+✅ MATCH: on(red_block, green_block) -> on(0, 2)
+✅ MATCH: on(red_block, blue_block) -> on(0, 1)
+✅ MATCH: on(yellow_block, red_block) -> on(3, 0)
+✅ MATCH: on(yellow_block, green_block) -> on(3, 2)
+✅ MATCH: on(yellow_block, blue_block) -> on(3, 1)
+✅ MATCH: on(green_block, red_block) -> on(2, 0)
+✅ MATCH: on(green_block, yellow_block) -> on(2, 3)
+✅ MATCH: on(green_block, blue_block) -> on(2, 1)
+✅ MATCH: on(blue_block, red_block) -> on(1, 0)
+✅ MATCH: on(blue_block, yellow_block) -> on(1, 3)
+✅ MATCH: on(blue_block, green_block) -> on(1, 2)
+✅ MATCH: ontable(red_block) -> ontable(0)
+✅ MATCH: ontable(yellow_block) -> ontable(3)
+✅ MATCH: ontable(green_block) -> ontable(2)
+✅ MATCH: ontable(blue_block) -> ontable(1)
+🎯 Successfully matched 16/50 predicates
+----------conversion results------------
+Total grounded predicates: 50
+True predictions: 16
+Acceptance rate: 32.0%
+----------final true predicates------------
+[{'name': 'on', 'args': ['red_block', 'yellow_block']}, {'name': 'on', 'args': ['red_block', 'green_block']}, {'name': 'on', 'args': ['red_block', 'blue_block']}, {'name': 'on', 'args': ['yellow_block', 'red_block']}, {'name': 'on', 'args': ['yellow_block', 'green_block']}, {'name': 'on', 'args': ['yellow_block', 'blue_block']}, {'name': 'on', 'args': ['green_block', 'red_block']}, {'name': 'on', 'args': ['green_block', 'yellow_block']}, {'name': 'on', 'args': ['green_block', 'blue_block']}, {'name': 'on', 'args': ['blue_block', 'red_block']}, {'name': 'on', 'args': ['blue_block', 'yellow_block']}, {'name': 'on', 'args': ['blue_block', 'green_block']}, {'name': 'ontable', 'args': ['red_block']}, {'name': 'ontable', 'args': ['yellow_block']}, {'name': 'ontable', 'args': ['green_block']}, {'name': 'ontable', 'args': ['blue_block']}]
+--------------------------------
+    (:objects
+        orange_block - block
+        red_block - block
+        yellow_block - block
+        green_block - block
+        blue_block - block
+        purple_block - block
+        robot - robot
+    )
+
+    (:init
+        (on red_block yellow_block)
+        (on red_block green_block)
+        (on red_block blue_block)
+        (on yellow_block red_block)
+        (on yellow_block green_block)
+        (on yellow_block blue_block)
+        (on green_block red_block)
+        (on green_block yellow_block)
+        (on green_block blue_block)
+        (on blue_block red_block)
+        (on blue_block yellow_block)
+        (on blue_block green_block)
+        (ontable red_block)
+        (ontable yellow_block)
+        (ontable green_block)
+        (ontable blue_block)
+    )
+
+Attempt 1 failed: 
+Search stopped without finding a solution
+--------------------------------
+orange block - block
+red block - block
+yellow block - block
+green block - block
+blue block - block
+purple block - block
+robot - robot
+---------------objects--------------
+defaultdict(<class 'list'>, {'block': ['orange_block', 'red_block', 'yellow_block', 'green_block', 'blue_block', 'purple_block'], 'robot': ['robot']})
+--------------grounded predicates---------------
+[{'name': 'on', 'args': ['orange_block', 'red_block']}, {'name': 'on', 'args': ['orange_block', 'yellow_block']}, {'name': 'on', 'args': ['orange_block', 'green_block']}, {'name': 'on', 'args': ['orange_block', 'blue_block']}, {'name': 'on', 'args': ['orange_block', 'purple_block']}, {'name': 'on', 'args': ['red_block', 'orange_block']}, {'name': 'on', 'args': ['red_block', 'yellow_block']}, {'name': 'on', 'args': ['red_block', 'green_block']}, {'name': 'on', 'args': ['red_block', 'blue_block']}, {'name': 'on', 'args': ['red_block', 'purple_block']}, {'name': 'on', 'args': ['yellow_block', 'orange_block']}, {'name': 'on', 'args': ['yellow_block', 'red_block']}, {'name': 'on', 'args': ['yellow_block', 'green_block']}, {'name': 'on', 'args': ['yellow_block', 'blue_block']}, {'name': 'on', 'args': ['yellow_block', 'purple_block']}, {'name': 'on', 'args': ['green_block', 'orange_block']}, {'name': 'on', 'args': ['green_block', 'red_block']}, {'name': 'on', 'args': ['green_block', 'yellow_block']}, {'name': 'on', 'args': ['green_block', 'blue_block']}, {'name': 'on', 'args': ['green_block', 'purple_block']}, {'name': 'on', 'args': ['blue_block', 'orange_block']}, {'name': 'on', 'args': ['blue_block', 'red_block']}, {'name': 'on', 'args': ['blue_block', 'yellow_block']}, {'name': 'on', 'args': ['blue_block', 'green_block']}, {'name': 'on', 'args': ['blue_block', 'purple_block']}, {'name': 'on', 'args': ['purple_block', 'orange_block']}, {'name': 'on', 'args': ['purple_block', 'red_block']}, {'name': 'on', 'args': ['purple_block', 'yellow_block']}, {'name': 'on', 'args': ['purple_block', 'green_block']}, {'name': 'on', 'args': ['purple_block', 'blue_block']}, {'name': 'ontable', 'args': ['orange_block']}, {'name': 'ontable', 'args': ['red_block']}, {'name': 'ontable', 'args': ['yellow_block']}, {'name': 'ontable', 'args': ['green_block']}, {'name': 'ontable', 'args': ['blue_block']}, {'name': 'ontable', 'args': ['purple_block']}, {'name': 'clear', 'args': ['orange_block']}, {'name': 'clear', 'args': ['red_block']}, {'name': 'clear', 'args': ['yellow_block']}, {'name': 'clear', 'args': ['green_block']}, {'name': 'clear', 'args': ['blue_block']}, {'name': 'clear', 'args': ['purple_block']}, {'name': 'handempty', 'args': ['robot']}, {'name': 'handfull', 'args': ['robot']}, {'name': 'holding', 'args': ['orange_block']}, {'name': 'holding', 'args': ['red_block']}, {'name': 'holding', 'args': ['yellow_block']}, {'name': 'holding', 'args': ['green_block']}, {'name': 'holding', 'args': ['blue_block']}, {'name': 'holding', 'args': ['purple_block']}]
+--------------unary relations---------------
+['clear', 'handempty', 'handfull', 'holding', 'ontable']
+--------------binary relations---------------
+['on']
+----------predicate strings------------
+['block orange_block on block red_block', 'block orange_block on block yellow_block', 'block orange_block on block green_block', 'block orange_block on block blue_block', 'block orange_block on block purple_block', 'block red_block on block orange_block', 'block red_block on block yellow_block', 'block red_block on block green_block', 'block red_block on block blue_block', 'block red_block on block purple_block', 'block yellow_block on block orange_block', 'block yellow_block on block red_block', 'block yellow_block on block green_block', 'block yellow_block on block blue_block', 'block yellow_block on block purple_block', 'block green_block on block orange_block', 'block green_block on block red_block', 'block green_block on block yellow_block', 'block green_block on block blue_block', 'block green_block on block purple_block', 'block blue_block on block orange_block', 'block blue_block on block red_block', 'block blue_block on block yellow_block', 'block blue_block on block green_block', 'block blue_block on block purple_block', 'block purple_block on block orange_block', 'block purple_block on block red_block', 'block purple_block on block yellow_block', 'block purple_block on block green_block', 'block purple_block on block blue_block', 'block orange_block on table', 'block red_block on table', 'block yellow_block on table', 'block green_block on table', 'block blue_block on table', 'block purple_block on table', "block orange_block's surface clear and not under any other block", "block red_block's surface clear and not under any other block", "block yellow_block's surface clear and not under any other block", "block green_block's surface clear and not under any other block", "block blue_block's surface clear and not under any other block", "block purple_block's surface clear and not under any other block", 'there no robot robot in sight holding anything', "robot robot's hand full", 'robot holding block orange_block', 'robot holding block red_block', 'robot holding block yellow_block', 'robot holding block green_block', 'robot holding block blue_block', 'robot holding block purple_block']
+----------relation prompts------------
+['Is block orange_block on block red_block (Answer only yes/no)', 'Is block orange_block on block yellow_block (Answer only yes/no)', 'Is block orange_block on block green_block (Answer only yes/no)', 'Is block orange_block on block blue_block (Answer only yes/no)', 'Is block orange_block on block purple_block (Answer only yes/no)', 'Is block red_block on block orange_block (Answer only yes/no)', 'Is block red_block on block yellow_block (Answer only yes/no)', 'Is block red_block on block green_block (Answer only yes/no)', 'Is block red_block on block blue_block (Answer only yes/no)', 'Is block red_block on block purple_block (Answer only yes/no)', 'Is block yellow_block on block orange_block (Answer only yes/no)', 'Is block yellow_block on block red_block (Answer only yes/no)', 'Is block yellow_block on block green_block (Answer only yes/no)', 'Is block yellow_block on block blue_block (Answer only yes/no)', 'Is block yellow_block on block purple_block (Answer only yes/no)', 'Is block green_block on block orange_block (Answer only yes/no)', 'Is block green_block on block red_block (Answer only yes/no)', 'Is block green_block on block yellow_block (Answer only yes/no)', 'Is block green_block on block blue_block (Answer only yes/no)', 'Is block green_block on block purple_block (Answer only yes/no)', 'Is block blue_block on block orange_block (Answer only yes/no)', 'Is block blue_block on block red_block (Answer only yes/no)', 'Is block blue_block on block yellow_block (Answer only yes/no)', 'Is block blue_block on block green_block (Answer only yes/no)', 'Is block blue_block on block purple_block (Answer only yes/no)', 'Is block purple_block on block orange_block (Answer only yes/no)', 'Is block purple_block on block red_block (Answer only yes/no)', 'Is block purple_block on block yellow_block (Answer only yes/no)', 'Is block purple_block on block green_block (Answer only yes/no)', 'Is block purple_block on block blue_block (Answer only yes/no)', 'Is block orange_block on table (Answer only yes/no)', 'Is block red_block on table (Answer only yes/no)', 'Is block yellow_block on table (Answer only yes/no)', 'Is block green_block on table (Answer only yes/no)', 'Is block blue_block on table (Answer only yes/no)', 'Is block purple_block on table (Answer only yes/no)', "Is block orange_block's surface clear and not under any other block (Answer only yes/no)", "Is block red_block's surface clear and not under any other block (Answer only yes/no)", "Is block yellow_block's surface clear and not under any other block (Answer only yes/no)", "Is block green_block's surface clear and not under any other block (Answer only yes/no)", "Is block blue_block's surface clear and not under any other block (Answer only yes/no)", "Is block purple_block's surface clear and not under any other block (Answer only yes/no)", 'Is there no robot robot in sight holding anything (Answer only yes/no)', "Is robot robot's hand full (Answer only yes/no)", 'Is robot holding block orange_block (Answer only yes/no)', 'Is robot holding block red_block (Answer only yes/no)', 'Is robot holding block yellow_block (Answer only yes/no)', 'Is robot holding block green_block (Answer only yes/no)', 'Is robot holding block blue_block (Answer only yes/no)', 'Is robot holding block purple_block (Answer only yes/no)']
+----------Using sgclip for relation prediction------------
+YOLOE model loaded successfully.
+SAM2 model loaded successfully.
+Predicate model loaded successfully.
+All models loaded successfully.
+----------detectable object classes (auto-extracted)------------
+['block', 'cube', 'brick', 'toy', 'object', 'box', 'robot', 'arm', 'manipulator', 'orange', 'red', 'yellow', 'green', 'blue', 'purple']
+Build text model mobileclip:blt
+Start detecting objects at time  22:09:32.989038
+
+0: 640x640 4 cubes, 5.3ms                                    | 0/1 [00:00<?, ?it/s]
+Speed: 1.2ms preprocess, 5.3ms inference, 1.3ms postprocess per image at shape (1, 3, 640, 640)
+Detecting objects: 100%|█████████████████████████████| 1/1 [00:00<00:00,  3.77it/s]
+Finished detecting objects at time  22:09:33.254727██| 1/1 [00:00<00:00,  3.77it/s]
+Loading inference state at time  22:09:33.254740
+Processing frames: 100%|█████████████████████████████| 1/1 [00:00<00:00, 21.74it/s]
+Find the most dense prompt at time  22:09:33.331297          | 0/1 [00:00<?, ?it/s]
+Most dense frame:  0
+Start propagating objects at time  22:09:33.331817
+Pass count:  0
+propagate in video: 100%|██████████████████████████| 1/1 [00:00<00:00, 1188.19it/s]
+propagate in video: 0it [00:00, ?it/s]                       | 0/1 [00:00<?, ?it/s]
+Most dense frame:  -1it [00:00, ?it/s]
+Batch successfully generated with 4 object instances.
+Saved visualization for frame 0 to ./frame_0.png
+defaultdict(<function format_unary_probs.<locals>.<lambda> at 0x73b7a813a950>, {0: defaultdict(<class 'list'>, {'0 (cube)': [(tensor(0.7973, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.1232, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0457, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0254, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0085, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '1 (cube)': [(tensor(0.7405, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.2106, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0255, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0180, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0054, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '2 (cube)': [(tensor(0.5040, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.3554, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0742, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0601, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0063, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '3 (cube)': [(tensor(0.4906, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.3845, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0823, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0313, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0112, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')]})})
+defaultdict(<class 'dict'>, {0: {('0 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('0 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('0 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')]}})
+----------sgclip results------------
+{'unary': defaultdict(<function format_unary_probs.<locals>.<lambda> at 0x73b7a813a950>, {0: defaultdict(<class 'list'>, {'0 (cube)': [(tensor(0.7973, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.1232, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0457, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0254, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0085, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '1 (cube)': [(tensor(0.7405, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.2106, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0255, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0180, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0054, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '2 (cube)': [(tensor(0.5040, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.3554, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0742, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0601, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0063, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '3 (cube)': [(tensor(0.4906, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.3845, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0823, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0313, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0112, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')]})}), 'binary': defaultdict(<class 'dict'>, {0: {('0 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('0 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('0 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')]}})}
+🔧 DEBUG: Converting sgclip results to relation predictions...
+📊 Confidence threshold: 0.4
+✅ Unary: ontable(0) - confidence: 0.797
+✅ Unary: ontable(1) - confidence: 0.740
+✅ Unary: ontable(2) - confidence: 0.504
+✅ Unary: ontable(3) - confidence: 0.491
+✅ Binary: on(0, 1) - confidence: 1.000
+✅ Binary: on(0, 2) - confidence: 1.000
+✅ Binary: on(0, 3) - confidence: 1.000
+✅ Binary: on(1, 0) - confidence: 1.000
+✅ Binary: on(1, 2) - confidence: 1.000
+✅ Binary: on(1, 3) - confidence: 1.000
+✅ Binary: on(2, 0) - confidence: 1.000
+✅ Binary: on(2, 1) - confidence: 1.000
+✅ Binary: on(2, 3) - confidence: 1.000
+✅ Binary: on(3, 0) - confidence: 1.000
+✅ Binary: on(3, 1) - confidence: 1.000
+✅ Binary: on(3, 2) - confidence: 1.000
+🎯 Total detected relations: 16
+🔍 Detected object IDs: ['0', '1', '2', '3']
+🎯 Expected object names: ['blue_block', 'green_block', 'orange_block', 'purple_block', 'red_block', 'robot', 'yellow_block']
+🔍 Creating object mapping...
+   Detected IDs: ['0', '1', '2', '3']
+   Expected objects: ['blue_block', 'green_block', 'orange_block', 'purple_block', 'red_block', 'robot', 'yellow_block']
+✅ Using color-based mapping: {'0': 'red_block', '1': 'blue_block', '2': 'green_block', '3': 'yellow_block'}
+🗺️ Object mapping: {'0': 'red_block', '1': 'blue_block', '2': 'green_block', '3': 'yellow_block'}
+✅ MATCH: on(red_block, yellow_block) -> on(0, 3)
+✅ MATCH: on(red_block, green_block) -> on(0, 2)
+✅ MATCH: on(red_block, blue_block) -> on(0, 1)
+✅ MATCH: on(yellow_block, red_block) -> on(3, 0)
+✅ MATCH: on(yellow_block, green_block) -> on(3, 2)
+✅ MATCH: on(yellow_block, blue_block) -> on(3, 1)
+✅ MATCH: on(green_block, red_block) -> on(2, 0)
+✅ MATCH: on(green_block, yellow_block) -> on(2, 3)
+✅ MATCH: on(green_block, blue_block) -> on(2, 1)
+✅ MATCH: on(blue_block, red_block) -> on(1, 0)
+✅ MATCH: on(blue_block, yellow_block) -> on(1, 3)
+✅ MATCH: on(blue_block, green_block) -> on(1, 2)
+✅ MATCH: ontable(red_block) -> ontable(0)
+✅ MATCH: ontable(yellow_block) -> ontable(3)
+✅ MATCH: ontable(green_block) -> ontable(2)
+✅ MATCH: ontable(blue_block) -> ontable(1)
+🎯 Successfully matched 16/50 predicates
+----------conversion results------------
+Total grounded predicates: 50
+True predictions: 16
+Acceptance rate: 32.0%
+----------final true predicates------------
+[{'name': 'on', 'args': ['red_block', 'yellow_block']}, {'name': 'on', 'args': ['red_block', 'green_block']}, {'name': 'on', 'args': ['red_block', 'blue_block']}, {'name': 'on', 'args': ['yellow_block', 'red_block']}, {'name': 'on', 'args': ['yellow_block', 'green_block']}, {'name': 'on', 'args': ['yellow_block', 'blue_block']}, {'name': 'on', 'args': ['green_block', 'red_block']}, {'name': 'on', 'args': ['green_block', 'yellow_block']}, {'name': 'on', 'args': ['green_block', 'blue_block']}, {'name': 'on', 'args': ['blue_block', 'red_block']}, {'name': 'on', 'args': ['blue_block', 'yellow_block']}, {'name': 'on', 'args': ['blue_block', 'green_block']}, {'name': 'ontable', 'args': ['red_block']}, {'name': 'ontable', 'args': ['yellow_block']}, {'name': 'ontable', 'args': ['green_block']}, {'name': 'ontable', 'args': ['blue_block']}]
+--------------------------------
+    (:objects
+        orange_block - block
+        red_block - block
+        yellow_block - block
+        green_block - block
+        blue_block - block
+        purple_block - block
+        robot - robot
+    )
+
+    (:init
+        (on red_block yellow_block)
+        (on red_block green_block)
+        (on red_block blue_block)
+        (on yellow_block red_block)
+        (on yellow_block green_block)
+        (on yellow_block blue_block)
+        (on green_block red_block)
+        (on green_block yellow_block)
+        (on green_block blue_block)
+        (on blue_block red_block)
+        (on blue_block yellow_block)
+        (on blue_block green_block)
+        (ontable red_block)
+        (ontable yellow_block)
+        (ontable green_block)
+        (ontable blue_block)
+    )
+
+Attempt 2 failed: 
+Search stopped without finding a solution
+--------------------------------
+orange block - block
+red block - block
+yellow block - block
+green block - block
+blue block - block
+purple block - block
+robot - robot
+---------------objects--------------
+defaultdict(<class 'list'>, {'block': ['orange_block', 'red_block', 'yellow_block', 'green_block', 'blue_block', 'purple_block'], 'robot': ['robot']})
+--------------grounded predicates---------------
+[{'name': 'on', 'args': ['orange_block', 'red_block']}, {'name': 'on', 'args': ['orange_block', 'yellow_block']}, {'name': 'on', 'args': ['orange_block', 'green_block']}, {'name': 'on', 'args': ['orange_block', 'blue_block']}, {'name': 'on', 'args': ['orange_block', 'purple_block']}, {'name': 'on', 'args': ['red_block', 'orange_block']}, {'name': 'on', 'args': ['red_block', 'yellow_block']}, {'name': 'on', 'args': ['red_block', 'green_block']}, {'name': 'on', 'args': ['red_block', 'blue_block']}, {'name': 'on', 'args': ['red_block', 'purple_block']}, {'name': 'on', 'args': ['yellow_block', 'orange_block']}, {'name': 'on', 'args': ['yellow_block', 'red_block']}, {'name': 'on', 'args': ['yellow_block', 'green_block']}, {'name': 'on', 'args': ['yellow_block', 'blue_block']}, {'name': 'on', 'args': ['yellow_block', 'purple_block']}, {'name': 'on', 'args': ['green_block', 'orange_block']}, {'name': 'on', 'args': ['green_block', 'red_block']}, {'name': 'on', 'args': ['green_block', 'yellow_block']}, {'name': 'on', 'args': ['green_block', 'blue_block']}, {'name': 'on', 'args': ['green_block', 'purple_block']}, {'name': 'on', 'args': ['blue_block', 'orange_block']}, {'name': 'on', 'args': ['blue_block', 'red_block']}, {'name': 'on', 'args': ['blue_block', 'yellow_block']}, {'name': 'on', 'args': ['blue_block', 'green_block']}, {'name': 'on', 'args': ['blue_block', 'purple_block']}, {'name': 'on', 'args': ['purple_block', 'orange_block']}, {'name': 'on', 'args': ['purple_block', 'red_block']}, {'name': 'on', 'args': ['purple_block', 'yellow_block']}, {'name': 'on', 'args': ['purple_block', 'green_block']}, {'name': 'on', 'args': ['purple_block', 'blue_block']}, {'name': 'ontable', 'args': ['orange_block']}, {'name': 'ontable', 'args': ['red_block']}, {'name': 'ontable', 'args': ['yellow_block']}, {'name': 'ontable', 'args': ['green_block']}, {'name': 'ontable', 'args': ['blue_block']}, {'name': 'ontable', 'args': ['purple_block']}, {'name': 'clear', 'args': ['orange_block']}, {'name': 'clear', 'args': ['red_block']}, {'name': 'clear', 'args': ['yellow_block']}, {'name': 'clear', 'args': ['green_block']}, {'name': 'clear', 'args': ['blue_block']}, {'name': 'clear', 'args': ['purple_block']}, {'name': 'handempty', 'args': ['robot']}, {'name': 'handfull', 'args': ['robot']}, {'name': 'holding', 'args': ['orange_block']}, {'name': 'holding', 'args': ['red_block']}, {'name': 'holding', 'args': ['yellow_block']}, {'name': 'holding', 'args': ['green_block']}, {'name': 'holding', 'args': ['blue_block']}, {'name': 'holding', 'args': ['purple_block']}]
+--------------unary relations---------------
+['clear', 'handempty', 'handfull', 'holding', 'ontable']
+--------------binary relations---------------
+['on']
+----------predicate strings------------
+['block orange_block on block red_block', 'block orange_block on block yellow_block', 'block orange_block on block green_block', 'block orange_block on block blue_block', 'block orange_block on block purple_block', 'block red_block on block orange_block', 'block red_block on block yellow_block', 'block red_block on block green_block', 'block red_block on block blue_block', 'block red_block on block purple_block', 'block yellow_block on block orange_block', 'block yellow_block on block red_block', 'block yellow_block on block green_block', 'block yellow_block on block blue_block', 'block yellow_block on block purple_block', 'block green_block on block orange_block', 'block green_block on block red_block', 'block green_block on block yellow_block', 'block green_block on block blue_block', 'block green_block on block purple_block', 'block blue_block on block orange_block', 'block blue_block on block red_block', 'block blue_block on block yellow_block', 'block blue_block on block green_block', 'block blue_block on block purple_block', 'block purple_block on block orange_block', 'block purple_block on block red_block', 'block purple_block on block yellow_block', 'block purple_block on block green_block', 'block purple_block on block blue_block', 'block orange_block on table', 'block red_block on table', 'block yellow_block on table', 'block green_block on table', 'block blue_block on table', 'block purple_block on table', "block orange_block's surface clear and not under any other block", "block red_block's surface clear and not under any other block", "block yellow_block's surface clear and not under any other block", "block green_block's surface clear and not under any other block", "block blue_block's surface clear and not under any other block", "block purple_block's surface clear and not under any other block", 'there no robot robot in sight holding anything', "robot robot's hand full", 'robot holding block orange_block', 'robot holding block red_block', 'robot holding block yellow_block', 'robot holding block green_block', 'robot holding block blue_block', 'robot holding block purple_block']
+----------relation prompts------------
+['Is block orange_block on block red_block (Answer only yes/no)', 'Is block orange_block on block yellow_block (Answer only yes/no)', 'Is block orange_block on block green_block (Answer only yes/no)', 'Is block orange_block on block blue_block (Answer only yes/no)', 'Is block orange_block on block purple_block (Answer only yes/no)', 'Is block red_block on block orange_block (Answer only yes/no)', 'Is block red_block on block yellow_block (Answer only yes/no)', 'Is block red_block on block green_block (Answer only yes/no)', 'Is block red_block on block blue_block (Answer only yes/no)', 'Is block red_block on block purple_block (Answer only yes/no)', 'Is block yellow_block on block orange_block (Answer only yes/no)', 'Is block yellow_block on block red_block (Answer only yes/no)', 'Is block yellow_block on block green_block (Answer only yes/no)', 'Is block yellow_block on block blue_block (Answer only yes/no)', 'Is block yellow_block on block purple_block (Answer only yes/no)', 'Is block green_block on block orange_block (Answer only yes/no)', 'Is block green_block on block red_block (Answer only yes/no)', 'Is block green_block on block yellow_block (Answer only yes/no)', 'Is block green_block on block blue_block (Answer only yes/no)', 'Is block green_block on block purple_block (Answer only yes/no)', 'Is block blue_block on block orange_block (Answer only yes/no)', 'Is block blue_block on block red_block (Answer only yes/no)', 'Is block blue_block on block yellow_block (Answer only yes/no)', 'Is block blue_block on block green_block (Answer only yes/no)', 'Is block blue_block on block purple_block (Answer only yes/no)', 'Is block purple_block on block orange_block (Answer only yes/no)', 'Is block purple_block on block red_block (Answer only yes/no)', 'Is block purple_block on block yellow_block (Answer only yes/no)', 'Is block purple_block on block green_block (Answer only yes/no)', 'Is block purple_block on block blue_block (Answer only yes/no)', 'Is block orange_block on table (Answer only yes/no)', 'Is block red_block on table (Answer only yes/no)', 'Is block yellow_block on table (Answer only yes/no)', 'Is block green_block on table (Answer only yes/no)', 'Is block blue_block on table (Answer only yes/no)', 'Is block purple_block on table (Answer only yes/no)', "Is block orange_block's surface clear and not under any other block (Answer only yes/no)", "Is block red_block's surface clear and not under any other block (Answer only yes/no)", "Is block yellow_block's surface clear and not under any other block (Answer only yes/no)", "Is block green_block's surface clear and not under any other block (Answer only yes/no)", "Is block blue_block's surface clear and not under any other block (Answer only yes/no)", "Is block purple_block's surface clear and not under any other block (Answer only yes/no)", 'Is there no robot robot in sight holding anything (Answer only yes/no)', "Is robot robot's hand full (Answer only yes/no)", 'Is robot holding block orange_block (Answer only yes/no)', 'Is robot holding block red_block (Answer only yes/no)', 'Is robot holding block yellow_block (Answer only yes/no)', 'Is robot holding block green_block (Answer only yes/no)', 'Is robot holding block blue_block (Answer only yes/no)', 'Is robot holding block purple_block (Answer only yes/no)']
+----------Using sgclip for relation prediction------------
+YOLOE model loaded successfully.
+SAM2 model loaded successfully.
+Predicate model loaded successfully.
+All models loaded successfully.
+----------detectable object classes (auto-extracted)------------
+['block', 'cube', 'brick', 'toy', 'object', 'box', 'robot', 'arm', 'manipulator', 'orange', 'red', 'yellow', 'green', 'blue', 'purple']
+Build text model mobileclip:blt
+Start detecting objects at time  22:09:40.464755
+
+0: 640x640 4 cubes, 6.3ms                                    | 0/1 [00:00<?, ?it/s]
+Speed: 1.3ms preprocess, 6.3ms inference, 1.5ms postprocess per image at shape (1, 3, 640, 640)
+Detecting objects: 100%|█████████████████████████████| 1/1 [00:00<00:00,  3.68it/s]
+Finished detecting objects at time  22:09:40.736927██| 1/1 [00:00<00:00,  3.68it/s]
+Loading inference state at time  22:09:40.736940
+Processing frames: 100%|█████████████████████████████| 1/1 [00:00<00:00, 21.27it/s]
+Find the most dense prompt at time  22:09:40.815987          | 0/1 [00:00<?, ?it/s]
+Most dense frame:  0
+Start propagating objects at time  22:09:40.816383
+Pass count:  0
+propagate in video: 100%|██████████████████████████| 1/1 [00:00<00:00, 1145.67it/s]
+propagate in video: 0it [00:00, ?it/s]                       | 0/1 [00:00<?, ?it/s]
+Most dense frame:  -1it [00:00, ?it/s]
+Batch successfully generated with 4 object instances.
+Saved visualization for frame 0 to ./frame_0.png
+defaultdict(<function format_unary_probs.<locals>.<lambda> at 0x73b768f77c70>, {0: defaultdict(<class 'list'>, {'0 (cube)': [(tensor(0.7973, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.1232, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0457, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0254, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0085, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '1 (cube)': [(tensor(0.7405, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.2106, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0255, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0180, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0054, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '2 (cube)': [(tensor(0.5040, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.3554, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0742, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0601, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0063, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '3 (cube)': [(tensor(0.4906, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.3845, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0823, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0313, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0112, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')]})})
+defaultdict(<class 'dict'>, {0: {('0 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('0 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('0 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')]}})
+----------sgclip results------------
+{'unary': defaultdict(<function format_unary_probs.<locals>.<lambda> at 0x73b768f77c70>, {0: defaultdict(<class 'list'>, {'0 (cube)': [(tensor(0.7973, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.1232, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0457, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0254, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0085, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '1 (cube)': [(tensor(0.7405, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.2106, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0255, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0180, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0054, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '2 (cube)': [(tensor(0.5040, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.3554, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0742, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0601, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0063, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')], '3 (cube)': [(tensor(0.4906, device='cuda:0', grad_fn=<UnbindBackward0>), 'ontable'), (tensor(0.3845, device='cuda:0', grad_fn=<UnbindBackward0>), 'clear'), (tensor(0.0823, device='cuda:0', grad_fn=<UnbindBackward0>), 'holding'), (tensor(0.0313, device='cuda:0', grad_fn=<UnbindBackward0>), 'handfull'), (tensor(0.0112, device='cuda:0', grad_fn=<UnbindBackward0>), 'handempty')]})}), 'binary': defaultdict(<class 'dict'>, {0: {('0 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('0 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('0 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('1 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('2 (cube)', '3 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '0 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '1 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')], ('3 (cube)', '2 (cube)'): [(tensor(1., device='cuda:0', grad_fn=<UnbindBackward0>), 'on')]}})}
+🔧 DEBUG: Converting sgclip results to relation predictions...
+📊 Confidence threshold: 0.4
+✅ Unary: ontable(0) - confidence: 0.797
+✅ Unary: ontable(1) - confidence: 0.740
+✅ Unary: ontable(2) - confidence: 0.504
+✅ Unary: ontable(3) - confidence: 0.491
+✅ Binary: on(0, 1) - confidence: 1.000
+✅ Binary: on(0, 2) - confidence: 1.000
+✅ Binary: on(0, 3) - confidence: 1.000
+✅ Binary: on(1, 0) - confidence: 1.000
+✅ Binary: on(1, 2) - confidence: 1.000
+✅ Binary: on(1, 3) - confidence: 1.000
+✅ Binary: on(2, 0) - confidence: 1.000
+✅ Binary: on(2, 1) - confidence: 1.000
+✅ Binary: on(2, 3) - confidence: 1.000
+✅ Binary: on(3, 0) - confidence: 1.000
+✅ Binary: on(3, 1) - confidence: 1.000
+✅ Binary: on(3, 2) - confidence: 1.000
+🎯 Total detected relations: 16
+🔍 Detected object IDs: ['0', '1', '2', '3']
+🎯 Expected object names: ['blue_block', 'green_block', 'orange_block', 'purple_block', 'red_block', 'robot', 'yellow_block']
+🔍 Creating object mapping...
+   Detected IDs: ['0', '1', '2', '3']
+   Expected objects: ['blue_block', 'green_block', 'orange_block', 'purple_block', 'red_block', 'robot', 'yellow_block']
+✅ Using color-based mapping: {'0': 'red_block', '1': 'blue_block', '2': 'green_block', '3': 'yellow_block'}
+🗺️ Object mapping: {'0': 'red_block', '1': 'blue_block', '2': 'green_block', '3': 'yellow_block'}
+✅ MATCH: on(red_block, yellow_block) -> on(0, 3)
+✅ MATCH: on(red_block, green_block) -> on(0, 2)
+✅ MATCH: on(red_block, blue_block) -> on(0, 1)
+✅ MATCH: on(yellow_block, red_block) -> on(3, 0)
+✅ MATCH: on(yellow_block, green_block) -> on(3, 2)
+✅ MATCH: on(yellow_block, blue_block) -> on(3, 1)
+✅ MATCH: on(green_block, red_block) -> on(2, 0)
+✅ MATCH: on(green_block, yellow_block) -> on(2, 3)
+✅ MATCH: on(green_block, blue_block) -> on(2, 1)
+✅ MATCH: on(blue_block, red_block) -> on(1, 0)
+✅ MATCH: on(blue_block, yellow_block) -> on(1, 3)
+✅ MATCH: on(blue_block, green_block) -> on(1, 2)
+✅ MATCH: ontable(red_block) -> ontable(0)
+✅ MATCH: ontable(yellow_block) -> ontable(3)
+✅ MATCH: ontable(green_block) -> ontable(2)
+✅ MATCH: ontable(blue_block) -> ontable(1)
+🎯 Successfully matched 16/50 predicates
+----------conversion results------------
+Total grounded predicates: 50
+True predictions: 16
+Acceptance rate: 32.0%
+----------final true predicates------------
+[{'name': 'on', 'args': ['red_block', 'yellow_block']}, {'name': 'on', 'args': ['red_block', 'green_block']}, {'name': 'on', 'args': ['red_block', 'blue_block']}, {'name': 'on', 'args': ['yellow_block', 'red_block']}, {'name': 'on', 'args': ['yellow_block', 'green_block']}, {'name': 'on', 'args': ['yellow_block', 'blue_block']}, {'name': 'on', 'args': ['green_block', 'red_block']}, {'name': 'on', 'args': ['green_block', 'yellow_block']}, {'name': 'on', 'args': ['green_block', 'blue_block']}, {'name': 'on', 'args': ['blue_block', 'red_block']}, {'name': 'on', 'args': ['blue_block', 'yellow_block']}, {'name': 'on', 'args': ['blue_block', 'green_block']}, {'name': 'ontable', 'args': ['red_block']}, {'name': 'ontable', 'args': ['yellow_block']}, {'name': 'ontable', 'args': ['green_block']}, {'name': 'ontable', 'args': ['blue_block']}]
+--------------------------------
+    (:objects
+        orange_block - block
+        red_block - block
+        yellow_block - block
+        green_block - block
+        blue_block - block
+        purple_block - block
+        robot - robot
+    )
+
+    (:init
+        (on red_block yellow_block)
+        (on red_block green_block)
+        (on red_block blue_block)
+        (on yellow_block red_block)
+        (on yellow_block green_block)
+        (on yellow_block blue_block)
+        (on green_block red_block)
+        (on green_block yellow_block)
+        (on green_block blue_block)
+        (on blue_block red_block)
+        (on blue_block yellow_block)
+        (on blue_block green_block)
+        (ontable red_block)
+        (ontable yellow_block)
+        (ontable green_block)
+        (ontable blue_block)
+    )
+
+Attempt 3 failed: 
+Search stopped without finding a solution
+Generating PDDL problems: 100%|████████████████████| 10/10 [06:06<00:00, 36.61s/it]
+Finding plans: 0it [00:00, ?it/s]
+Plan success rate 0 / 0
