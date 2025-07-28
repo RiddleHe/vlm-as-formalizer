@@ -48,29 +48,17 @@ def parse_args():
     # Model args
     parser.add_argument("--model", type=str, default=None, help="model name")
     parser.add_argument("--device", type=str, default="cuda:0", help="device")
-
     parser.add_argument("--find_plan", action="store_true", default=True, help="refine generated problems by corrective reprompting")
-
-    # Main generation choices
-    parser.add_argument("--generate_end_to_end", action="store_true", help="generate PDDL end-to-end")
-    parser.add_argument("--generate_multi_step", action="store_true", help="generate scene graph first")
-    parser.add_argument("--generate_multi_step_with_vlm", action="store_true", help="generate scene graph first with VLM")
-    parser.add_argument("--generate_multi_step_with_cv", action="store_true", help="generate scene graph first with CV model")
-    parser.add_argument("--generate_multi_step_with_sgclip_vlm", action="store_true", help="generate scene graph first with SGCLIP-VLM")
 
     # Planning baseline
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
     parser.add_argument("--generate_vila_planning", action="store_true", help="Pipeline 1: ViLA - VLM zero-shot planning")
     parser.add_argument("--generate_villain_pddl", action="store_true", help="Pipeline 2: ViLain - VLM → DINO → VLM PDDL Generation")
-    parser.add_argument("--generate_villain_gpt41_pddl", action="store_true", help="Pipeline 2-GPT: ViLain - VLM → GPT-4.1 → VLM PDDL Generation (Control)")
     parser.add_argument("--generate_villain_direct_pddl", action="store_true", help="Pipeline 3: ViLain Direct PDDL Generation (no object detection)")
     parser.add_argument("--generate_villain_captioning_pddl", action="store_true", help="Pipeline 4a: ViLain Captioning → PDDL (without DINO)")
-    parser.add_argument("--generate_villain_captioning_dino_pddl", action="store_true", help="Pipeline 4b: ViLain Captioning → DINO → PDDL (Enhanced)")
-    parser.add_argument("--generate_villain_captioning_gpt41_pddl", action="store_true", help="Pipeline 4b-GPT: ViLain Captioning → GPT-4.1 → PDDL (Control)")
     parser.add_argument("--generate_scene_graph_pddl", action="store_true", help="Pipeline 5a: Scene Graph → PDDL (without DINO)")
-    parser.add_argument("--generate_scene_graph_dino_pddl", action="store_true", help="Pipeline 5b: Scene Graph → DINO → PDDL (with bbox)")
-    parser.add_argument("--generate_scene_graph_gpt41_pddl", action="store_true", help="Pipeline 5b-GPT: Scene Graph → GPT-4.1 → PDDL (Control)")
-    
+    parser.add_argument("--generate_multi_step_with_vlm", action="store_true", help="generate scene graph first with VLM")
+
     # Template constraint options
     parser.add_argument("--hard_template", action="store_true", default=True, help="Use hard domain template (strict predicate enforcement)")
     parser.add_argument("--soft_template", dest="hard_template", action="store_false", help="Use soft domain template (flexible predicate usage)")
@@ -80,9 +68,7 @@ def parse_args():
     parser.add_argument("--generate_scene_graph", action="store_true", help="generate scene graph for observation")
     parser.add_argument("--enable_caption", action="store_true", default=False, help="Enable captioning for the observation")
 
-    # If choose generate_multi_step
-    parser.add_argument("--generate_from_vlm", action="store_true", help="generate from VLM")
-    parser.add_argument("--generate_from_cv_model", action="store_true", help="generate from CV model")
+    # If choose generate_multi_step with VLM SCENE GRAPH
     parser.add_argument("--batch_relations", action="store_true", default=True, help="Generate all relations at once (default: True). Set --no-batch_relations for one-by-one")
     parser.add_argument("--no-batch_relations", dest="batch_relations", action="store_false", help="Generate relations one by one instead of all at once")
 
@@ -119,7 +105,7 @@ def main():
     elif args.domain == "blocksworld-real":
         data_dir = "/local-ssd/alfred/blocksworld-real"
     elif args.domain == "alfred":
-        data_dir = "/local-ssd/alfred/alfred_train_cleaned"
+        data_dir = "/local-ssd/alfred/alfred_137"
     else:
         raise ValueError(f"Invalid domain: {args.domain}")
 

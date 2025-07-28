@@ -1,19 +1,11 @@
 from .checkers import check_error
 from .baseline import (
-    generate_multi_step,
     generate_multi_step_with_vlm,
-    generate_pddl_end_to_end,
-    generate_multi_step_with_sgclip_vlm,
     generate_vila_planning,
     generate_villain_pddl,
-    generate_villain_gpt41_pddl,
     generate_villain_direct_pddl,
     generate_villain_captioning_pddl,
-    generate_villain_captioning_dino_pddl,
-    generate_villain_captioning_gpt41_pddl,
     generate_scene_graph_to_pddl,
-    generate_scene_graph_dino_pddl,
-    generate_scene_graph_gpt41_pddl
 )
 
 def generate_pddl(
@@ -37,28 +29,7 @@ def generate_pddl(
     msg = None
 
     for retry_idx in range(args.num_tries):
-        if args.generate_end_to_end:
-            problem_file, response, problem_prompt = generate_pddl_end_to_end(
-                target,
-                config,
-                model,
-                observations,
-                retry_idx,
-                generate_caption=args.generate_caption,
-                generate_scene_graph=args.generate_scene_graph,
-                enable_caption=args.enable_caption,
-            )
-        elif args.generate_multi_step:
-            problem_file, response, problem_prompt = generate_multi_step(
-                target,
-                config,
-                model,
-                observations,
-                retry_idx,
-                generate_from_vlm=args.generate_from_vlm,
-                generate_from_cv_model=args.generate_from_cv_model,
-            )
-        elif args.generate_multi_step_with_vlm:
+        if args.generate_multi_step_with_vlm:
             problem_file, response, problem_prompt = generate_multi_step_with_vlm(
                 target,
                 config,
@@ -67,27 +38,8 @@ def generate_pddl(
                 retry_idx,
                 batch_relations=args.batch_relations,
             )
-        elif args.generate_multi_step_with_sgclip_vlm:
-            problem_file, response, problem_prompt = generate_multi_step_with_sgclip_vlm(
-                target,
-                config,
-                model,
-                observations,
-                retry_idx,
-                result_dir=result_dir,
-                save_step=save_step,
-                task_name=task_name,
-            )
         elif args.generate_villain_pddl:
             problem_file, response, problem_prompt = generate_villain_pddl(
-                target,
-                config,
-                model,
-                observations,
-                retry_idx,
-            )
-        elif args.generate_villain_gpt41_pddl:
-            problem_file, response, problem_prompt = generate_villain_gpt41_pddl(
                 target,
                 config,
                 model,
@@ -110,45 +62,9 @@ def generate_pddl(
                 observations,
                 retry_idx,
             )
-        elif args.generate_villain_captioning_dino_pddl:
-            problem_file, response, problem_prompt = generate_villain_captioning_dino_pddl(
-                target,
-                config,
-                model,
-                observations,
-                retry_idx,
-            )
-        elif args.generate_villain_captioning_gpt41_pddl:
-            problem_file, response, problem_prompt = generate_villain_captioning_gpt41_pddl(
-                target,
-                config,
-                model,
-                observations,
-                retry_idx,
-            )
         elif args.generate_scene_graph_pddl:
             hard_template = getattr(args, 'hard_template', True)
             problem_file, response, problem_prompt = generate_scene_graph_to_pddl(
-                target,
-                config,
-                model,
-                observations,
-                retry_idx,
-                hard_template
-            )
-        elif args.generate_scene_graph_dino_pddl:
-            hard_template = getattr(args, 'hard_template', True)
-            problem_file, response, problem_prompt = generate_scene_graph_dino_pddl(
-                target,
-                config,
-                model,
-                observations,
-                retry_idx,
-                hard_template
-            )
-        elif args.generate_scene_graph_gpt41_pddl:
-            hard_template = getattr(args, 'hard_template', True)
-            problem_file, response, problem_prompt = generate_scene_graph_gpt41_pddl(
                 target,
                 config,
                 model,

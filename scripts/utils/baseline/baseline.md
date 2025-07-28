@@ -1,5 +1,6 @@
 # Baseline Methods Implementation Table
 
+
 | Baseline | Function Name | Annotation |
 |----------|---------------|------------|
 | **VLLM zero-shot planning (ViLA)** | `generate_vila_planning` | Replicate prompt |
