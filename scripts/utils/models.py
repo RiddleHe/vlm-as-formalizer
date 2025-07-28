@@ -36,6 +36,7 @@ def get_hf_client_name(client_name):
         "qwenvl-7B": "Qwen/Qwen2.5-VL-7B-Instruct",
         "qwenvl-72B": "Qwen/Qwen2.5-VL-72B-Instruct",
         "internvl3-14B": "OpenGVLab/InternVL3-14B", 
+        "internvl3-78B": "OpenGVLab/InternVL3-78B",
         "gemma3-12B": "google/gemma-3-12b-it",
         "gemma3-27B": "google/gemma-3-27b-it",
         "llama-3.2-11B": "meta-llama/Llama-3.2-11B-Vision-Instruct"
