@@ -127,14 +127,12 @@ def main():
         result_dir_suffix += "_generate_villain_direct_pddl"
     if args.generate_villain_captioning_pddl:
         result_dir_suffix += "_generate_villain_captioning_pddl"
-    if args.generate_villain_captioning_dino_pddl:
-        result_dir_suffix += "_generate_villain_captioning_dino_pddl"
     if args.generate_scene_graph_pddl:
         template_type = "hard" if args.hard_template else "soft"
         result_dir_suffix += f"_generate_scene_graph_{template_type}_pddl"
-    if args.generate_scene_graph_dino_pddl:
-        template_type = "hard" if args.hard_template else "soft"
-        result_dir_suffix += f"_generate_scene_graph_dino_{template_type}_pddl"
+        if args.generate_scene_graph_dino_pddl:
+            template_type = "hard" if args.hard_template else "soft"
+            result_dir_suffix += f"_generate_scene_graph_dino_{template_type}_pddl"
     
     # set the final path
     result_dir = result_dir + result_dir_suffix
