@@ -130,9 +130,6 @@ def main():
     if args.generate_scene_graph_pddl:
         template_type = "hard" if args.hard_template else "soft"
         result_dir_suffix += f"_generate_scene_graph_{template_type}_pddl"
-        if args.generate_scene_graph_dino_pddl:
-            template_type = "hard" if args.hard_template else "soft"
-            result_dir_suffix += f"_generate_scene_graph_dino_{template_type}_pddl"
     
     # set the final path
     result_dir = result_dir + result_dir_suffix
@@ -151,13 +148,7 @@ def main():
     plan_success_count = 0
 
     # Generate / refine PDDL problems
-    if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
-        args.generate_multi_step_with_vlm or 
-        args.generate_multi_step_with_sgclip_vlm or args.generate_vila_planning or
-        args.generate_villain_pddl or args.generate_villain_direct_pddl or 
-        args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl or
-        args.generate_scene_graph_pddl or args.generate_scene_graph_dino_pddl or
-        args.generate_villain_gpt41_pddl or args.generate_villain_captioning_gpt41_pddl or args.generate_scene_graph_gpt41_pddl):
+    if args.generate_plan or args.generate_vila_planning or args.generate_villain_pddl or args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or args.generate_scene_graph_pddl:
         
         log_file_path = create_experiment_log_path(result_dir, args.domain, result_dir_suffix.lstrip('_'))
         logger = ExperimentLogger(log_file_path, console_output=True)
@@ -207,13 +198,7 @@ def main():
         task_dir = f"{result_dir}/{task_name}"
         os.makedirs(task_dir, exist_ok=True)
 
-        if (args.generate_end_to_end or args.generate_multi_step or args.generate_plan or 
-            args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
-            args.generate_multi_step_with_sgclip_vlm or args.generate_vila_planning or
-            args.generate_villain_pddl or args.generate_villain_direct_pddl or 
-            args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl or
-            args.generate_scene_graph_pddl or args.generate_scene_graph_dino_pddl or
-            args.generate_villain_gpt41_pddl or args.generate_villain_captioning_gpt41_pddl or args.generate_scene_graph_gpt41_pddl): # generate pddl
+        if args.generate_plan or args.generate_vila_planning or args.generate_villain_pddl or args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or args.generate_scene_graph_pddl:
             if "problem.pddl" in os.listdir(task_dir) or "problem-try-0.pddl" in os.listdir(task_dir):
                 print(f"👀 {task_name} already exists, skipping...")
                 continue
