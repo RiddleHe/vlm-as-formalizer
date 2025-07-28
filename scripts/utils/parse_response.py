@@ -52,13 +52,18 @@ def parse_pddl(response):  # Use parentheses matching to find the PDDL file
     else:
         return None
 
-def parse_plan(response):
-    regex_pattern = r'(\(.*?\))'
-    matches = re.findall(regex_pattern, response)
-    plan = []
-    for match in matches:
-        plan.append(match.strip())
-    return "\n".join(plan)
+def parse_plan(response: str) -> str:
+    # isolate segment after "Plan:" / "Steps:" if present
+    m = re.search(r"(Plan|Steps)\s*:", response, re.IGNORECASE)
+    sub = response[m.end():] if m else response
+
+    # capture parenthesised expressions
+    items = re.findall(r"\(([^)]+)\)", sub)
+
+    # keep only those that contain at least one space (i.e. more than one token)
+    actions = [f"({it.strip()})" for it in items if " " in it.strip()]
+
+    return "\n".join(actions)
 
 def parse_block(pddl, keyword, save_header=False):
     match = re.search(rf"{re.escape(keyword)}\s+", pddl)

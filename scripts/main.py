@@ -260,7 +260,22 @@ def main():
             except Exception as e:
                 print(f"Error saving PDDL: {traceback.format_exc()}")
 
-        if args.find_plan:
+        if args.generate_vila_planning and args.find_plan:
+            with open(f"{task_dir}/plan_gt.txt", "w") as fw:
+                fw.write(target["plan"])
+
+            pred_plan = res["plan"].split("\n") if isinstance(res["plan"], str) else res["plan"]
+            gt_plan = target["plan"].split("\n")
+
+            plan_success, err = compare_plans(gt_plan, pred_plan)
+
+            if plan_success:
+                plan_success_count += 1
+            elif err:
+                with open(f"{task_dir}/error.txt", "w") as fw:
+                    fw.write(err)
+
+        elif args.find_plan:
             problem_path = f"{task_dir}/problem.pddl"
             plan_path = f"{task_dir}/plan.txt" 
             if os.path.exists(problem_path):
