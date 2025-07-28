@@ -231,13 +231,7 @@ def main():
                 solver_success_count += 1
 
             try:
-                if (args.generate_end_to_end or args.generate_multi_step or 
-                    args.generate_multi_step_with_vlm or args.generate_multi_step_with_cv or 
-                    args.generate_multi_step_with_sgclip_vlm or args.generate_villain_pddl or
-                    args.generate_villain_gpt41_pddl or args.generate_villain_direct_pddl or 
-                    args.generate_villain_captioning_pddl or args.generate_villain_captioning_dino_pddl or
-                    args.generate_villain_captioning_gpt41_pddl or args.generate_scene_graph_pddl or
-                    args.generate_scene_graph_dino_pddl or args.generate_scene_graph_gpt41_pddl):
+                if args.generate_multi_step_with_vlm or args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or args.generate_scene_graph_pddl:
                     
                     for retry_idx in range(len(res["problem"]["file"])):
                         file_idx = f"-try-{retry_idx}"
