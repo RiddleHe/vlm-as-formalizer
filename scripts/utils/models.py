@@ -12,6 +12,8 @@ import time
 # Load environment variables
 load_dotenv()
 
+VLLM_BASE_URL = os.getenv("VLLM_BASE_URL", "http://localhost:15100/v1")
+
 def get_gpt_client_name(client_name):
     model_mapping = {
         "gpt-4.1": "gpt-4.1-2025-04-14",
@@ -112,7 +114,7 @@ class OpenAIClient(VLMClient):
                     "content": content
                 }],
                 max_tokens=1024,
-            )
+        )
         return response.choices[0].message.content
 
 class OpenRouterClient(VLMClient):
@@ -307,73 +309,37 @@ class HuggingFaceClient(VLMClient):
         return {"model": model, "processor": processor, "type": "llama_vision"}
 
     def generate(self, prompt: str, observations: list[str] = [], return_cache=False, past_key_values=None) -> str:
-        """Generate response based on model type."""
         model_type = self.client["type"]
-        
         if model_type == "qwen2.5vl":
             return self._generate_qwen2_5_vl(prompt, observations)
-        elif model_type == "internvl":
+        if model_type == "internvl":
             return self._generate_internvl(prompt, observations)
-        elif model_type == "gemma3":
+        if model_type == "gemma3":
             return self._generate_gemma3(prompt, observations, return_cache=return_cache, past_key_values=past_key_values)
-        elif model_type == "llama_vision":
+        if model_type == "llama_vision":
             return self._generate_llama_vision(prompt, observations)
-        else:
             raise ValueError(f"Unknown model type: {model_type}")
     
-    def _generate_qwen2_5_vl(self, prompt: str, observations: list[str]) -> str:
-        """Generate response using Qwen2.5VL."""
+    def _generate_qwen2_5_vl(self, prompt: str, observations: list[str]):
         model = self.client["model"]
         processor = self.client["processor"]
-        
-        # Prepare messages with images
         content = []
         for obs_path in observations:
-            content.append({
-                "type": "image",
-                "url": obs_path  # For local images, this will be handled by the processor
-            })
-        content.append({
-            "type": "text", 
-            "text": prompt
-        })
-        
-        messages = [{
-            "role": "user",
-            "content": content
-        }]
-        
-        # Process the conversation
-        inputs = processor.apply_chat_template(
-            messages,
-            add_generation_prompt=True,
-            tokenize=True,
-            return_dict=True,
-            return_tensors="pt"
-        ).to(model.device)
-        
-        # Generate response
+            content.append({"type": "image", "url": obs_path})
+        content.append({"type": "text", "text": prompt})
+        messages = [{"role": "user", "content": content}]
+        inputs = processor.apply_chat_template(messages, add_generation_prompt=True, tokenize=True, return_dict=True, return_tensors="pt").to(model.device)
         with torch.no_grad():
-            generated_ids = model.generate(**inputs, max_new_tokens=4096) # use a higher number
-        
-        # Decode only the new tokens
-        generated_ids_trimmed = [
-            out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
-        ]
-        output_text = processor.batch_decode(
-            generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
-        )
-        
+            generated_ids = model.generate(**inputs, max_new_tokens=4096)
+        generated_ids_trimmed = [out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)]
+        output_text = processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
         return output_text[0] if output_text else ""
     
-    def _generate_internvl(self, prompt: str, observations: list[str]) -> str:
-        """Generate response using InternVL with vlm_utils."""
+    def _generate_internvl(self, prompt: str, observations: list[str]):
         sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
         from vlm_utils import load_image
-        
         model = self.client["model"]
         tokenizer = self.client["tokenizer"]
-        
         pixel_values_list = []
         for obs in observations:
             cur_pixel_values = load_image(obs, max_num=12).to(torch.bfloat16)
@@ -381,129 +347,60 @@ class HuggingFaceClient(VLMClient):
         pixel_values = torch.cat(pixel_values_list, dim=0)
         if torch.cuda.is_available():
             pixel_values = pixel_values.cuda()
-            
         image_prompt = f"{prompt}\n<image>"
         generation_config = dict(max_new_tokens=4096, do_sample=True)
         response = model.chat(tokenizer, pixel_values, image_prompt, generation_config)
-            
         return response
     
-    def _generate_gemma3(self, prompt: str, observations: list[str], return_cache=False, past_key_values=None) -> str:
-        """Generate response using Gemma3."""
+    def _generate_gemma3(self, prompt: str, observations: list[str], return_cache=False, past_key_values=None):
         model = self.client["model"]
         processor = self.client["processor"]
-
         content = []
         for obs_path in observations:
-            content.append({
-                "type": "image", 
-                "image": obs_path
-            })
-        content.append({
-            "type": "text", 
-            "text": prompt
-        })
-        
+            content.append({"type": "image", "image": obs_path})
+        content.append({"type": "text", "text": prompt})
         if past_key_values is not None:
-            messages = [{
-                "role": "user",
-                "content": content
-            }]
-            
-        else:    
-            messages = [
-                {
-                    "role": "system",
-                    "content": [{"type": "text", "text": "You are a helpful assistant."}]
-                },
-                {
-                    "role": "user",
-                    "content": content
-                }
-            ]
-            
-        # Process the conversation
-        inputs = processor.apply_chat_template(
-            messages,
-            add_generation_prompt=True,
-            tokenize=True,
-            return_dict=True,
-            return_tensors="pt",
-        ).to(model.device, dtype=torch.bfloat16)
-        
-        input_len = inputs["input_ids"].shape[-1]
-        
-        # Generate response
-        time_start = time.time()
+            messages = [{"role": "user", "content": content}]
+        else:
+            messages = [{"role": "system", "content": [{"type": "text", "text": "You are a helpful assistant."}]}, {"role": "user", "content": content}]
+            inputs = processor.apply_chat_template(messages, add_generation_prompt=True, tokenize=True, return_dict=True, return_tensors="pt").to(model.device, dtype=torch.bfloat16)
+            input_len = inputs["input_ids"].shape[-1]
         with torch.inference_mode():
-            outputs = model.generate(
-                **inputs, 
-                max_new_tokens=4096, 
-                do_sample=False, 
-                top_p=None, 
-                top_k=None,
-                use_cache=True,
-                return_dict_in_generate=return_cache,
-                output_attentions=False,
-                output_hidden_states=False,
-                past_key_values=past_key_values,
-            )
-        time_end = time.time()
-        print(f"Time taken to generate response: {time_end - time_start} seconds")
-
+            outputs = model.generate(**inputs, max_new_tokens=4096, do_sample=False, top_p=None, top_k=None, use_cache=True, return_dict_in_generate=return_cache, output_attentions=False, output_hidden_states=False, past_key_values=past_key_values)
         if return_cache:
             generation = outputs.sequences[0][input_len:]
             past_key_values = outputs.past_key_values
             decoded = processor.decode(generation, skip_special_tokens=True)
             return decoded, past_key_values
-
-        else:
             generation = outputs[0][input_len:]
             decoded = processor.decode(generation, skip_special_tokens=True)
             return decoded
 
-    def _generate_llama_vision(self, prompt: str, observations: list[str]) -> str:
-        """Generate response using Llama Vision."""
+    def _generate_llama_vision(self, prompt: str, observations: list[str]):
         model = self.client["model"]
         processor = self.client["processor"]
-        
-        # Load images
-        images = []
-        for obs_path in observations:
-            image = Image.open(obs_path).convert("RGB")
-            images.append(image)
-        
-        # Prepare conversation
-        conversation = [
-            {
-                "role": "user", 
-                "content": [
-                    {"type": "image", "image": img} for img in images
-                ] + [{"type": "text", "text": prompt}]
-            }
-        ]
-        
-        # Apply chat template
+        images = [Image.open(obs_path).convert("RGB") for obs_path in observations]
+        conversation = [{"role": "user", "content": [{"type": "image", "image": img} for img in images] + [{"type": "text", "text": prompt}]}]
         prompt_text = processor.apply_chat_template(conversation, add_generation_prompt=True)
-        
-        # Process inputs
         inputs = processor(images, prompt_text, return_tensors="pt").to(model.device)
-        
-        # Generate response
         with torch.inference_mode():
-            outputs = model.generate(
-                **inputs,
-                max_new_tokens=4096,
-                do_sample=False,
-                temperature=0.0
-            )
-        
-        # Decode response
+            outputs = model.generate(**inputs, max_new_tokens=4096, do_sample=False, temperature=0.0)
         generated_text = processor.decode(outputs[0], skip_special_tokens=True)
-        
-        # Extract only the new generation (remove input prompt)
         response = generated_text.split(prompt_text)[-1].strip()
         return response
+
+class VLLMOpenAIClient(OpenAIClient):
+    def __init__(self, client_name, base_url=VLLM_BASE_URL, **kwargs):
+        self.base_url = base_url
+        # Map simplified model names to full HuggingFace model names for vLLM
+        mapped_name = get_hf_client_name(client_name)
+        if mapped_name:
+            client_name = mapped_name
+        super().__init__(client_name, **kwargs)
+
+    def load_client(self, **kwargs):
+        from openai import OpenAI
+        return OpenAI(base_url=self.base_url, api_key="EMPTY")
 
 def VLMClientFactory(client_name: str, device=None) -> VLMClient:
     """Factory function to create a VLM client."""
@@ -513,6 +410,9 @@ def VLMClientFactory(client_name: str, device=None) -> VLMClient:
         return OpenRouterClient(get_openrouter_client_name(client_name), device=device)
     elif get_hf_client_name(client_name):
         return HuggingFaceClient(get_hf_client_name(client_name), device=device)
+    elif client_name.endswith("-vllm"):
+        base_model = client_name[:-5]
+        return VLLMOpenAIClient(base_model)
     elif "/" in client_name:
         try:
             return HuggingFaceClient(client_name, device=device)
@@ -543,11 +443,11 @@ def predict_relation_probs(model, prompts, observations, past_key_values=None):
             return torch.cat(outs, dim=0)
         raw_model.get_image_features = cached_get_img_feat
 
-    chat_prompts = []
-    for prompt in prompts:
-        content = [
-            {"type": "text", "text": prompt}
-        ]
+        chat_prompts = []
+        for prompt in prompts:
+            content = [
+                    {"type": "text", "text": prompt}
+                ]
         if not use_kv_cache:
             images_content = []
             images_list = []
@@ -560,32 +460,32 @@ def predict_relation_probs(model, prompts, observations, past_key_values=None):
                 images_list.append(img)
             content += images_content
 
-        messages = [
-            {
-                "role": "user",
-                "content": content
-            },
-            {
-                "role": "assistant",
-                "content": [
-                    {"type": "text", "text": "Based on the image, the answer is: Yes."}
-                ]
-            },
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": "To ensure nothing is missing, check again."}
-                ]
-            }
-        ]
-        chat_prompt = processor.apply_chat_template(
-            messages,
-            add_generation_prompt=True,
-        )
-        chat_prompts.append(chat_prompt)
+            messages = [
+                {
+                    "role": "user",
+                    "content": content
+                },
+                {
+                    "role": "assistant",
+                    "content": [
+                        {"type": "text", "text": "Based on the image, the answer is: Yes."}
+                    ]
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "To ensure nothing is missing, check again."}
+                    ]
+                }
+            ]
+            chat_prompt = processor.apply_chat_template(
+                messages,
+                add_generation_prompt=True,
+            )
+            chat_prompts.append(chat_prompt)
 
-    template = "{chat_prompt} You are right to ask me to double-check! My apologies. Looking again, the answer is: "
-    full_prompts = [template.format(chat_prompt=chat_prompt) for chat_prompt in chat_prompts]
+        template = "{chat_prompt} You are right to ask me to double-check! My apologies. Looking again, the answer is: "
+        full_prompts = [template.format(chat_prompt=chat_prompt) for chat_prompt in chat_prompts]
 
     if use_kv_cache:
         batch = processor.tokenizer(
@@ -603,49 +503,49 @@ def predict_relation_probs(model, prompts, observations, past_key_values=None):
             images_kwargs={"do_pan_and_scan": False},  # disable cropping
         ).to(model.device, dtype=torch.bfloat16)
 
-    # Prepare binary classes
-    true_tok = processor.tokenizer.convert_tokens_to_ids("yes") # 11262
-    false_tok = processor.tokenizer.convert_tokens_to_ids("no") # 951
-    assert true_tok != processor.tokenizer.unk_token_id  # unknown token is 3
-    assert false_tok != processor.tokenizer.unk_token_id
-    candidate = torch.tensor([true_tok, false_tok], device=model.device)
+        # Prepare binary classes
+        true_tok = processor.tokenizer.convert_tokens_to_ids("yes") # 11262
+        false_tok = processor.tokenizer.convert_tokens_to_ids("no") # 951
+        assert true_tok != processor.tokenizer.unk_token_id  # unknown token is 3
+        assert false_tok != processor.tokenizer.unk_token_id
+        candidate = torch.tensor([true_tok, false_tok], device=model.device)
 
-    temperature = 0.5
-    with torch.no_grad():
-        if use_kv_cache:
-            batch_size = batch["input_ids"].shape[0]
-            if past_key_values[0][0].shape[0] != batch_size:
-                if model.client["type"] == "gemma3":
-                    new_key_cache = [k.expand(batch_size, -1, -1, -1) for k in past_key_values.key_cache]
-                    new_value_cache = [v.expand(batch_size, -1, -1, -1) for v in past_key_values.value_cache]
-                    past_key_values = HybridCache(key_cache=new_key_cache, value_cache=new_value_cache)
-                else:
-                    past_key_values = tuple(
-                        (
-                            layer_past[0].expand(batch_size, -1, -1, -1),
-                            layer_past[1].expand(batch_size, -1, -1, -1),
+        temperature = 0.5
+        with torch.no_grad():
+            if use_kv_cache:
+                batch_size = batch["input_ids"].shape[0]
+                if past_key_values[0][0].shape[0] != batch_size:
+                    if model.client["type"] == "gemma3":
+                        new_key_cache = [k.expand(batch_size, -1, -1, -1) for k in past_key_values.key_cache]
+                        new_value_cache = [v.expand(batch_size, -1, -1, -1) for v in past_key_values.value_cache]
+                        past_key_values = HybridCache(key_cache=new_key_cache, value_cache=new_value_cache)
+                    else:
+                        past_key_values = tuple(
+                            (
+                                layer_past[0].expand(batch_size, -1, -1, -1),
+                                layer_past[1].expand(batch_size, -1, -1, -1),
+                            )
+                            for layer_past in past_key_values
                         )
-                        for layer_past in past_key_values
-                    )
-            logits = raw_model(
-                input_ids=batch["input_ids"],
-                attention_mask=batch["attention_mask"],
-                past_key_values=past_key_values,
-            ).logits[:, -1]
-        else:
-            logits = raw_model(**batch).logits[:, -1]
-    probs = F.softmax(logits[:, candidate] / temperature, dim=-1)
+                logits = raw_model(
+                    input_ids=batch["input_ids"],
+                    attention_mask=batch["attention_mask"],
+                    past_key_values=past_key_values,
+                ).logits[:, -1]
+            else:
+                logits = raw_model(**batch).logits[:, -1]
+            probs = F.softmax(logits[:, candidate] / temperature, dim=-1)
 
-    torch.cuda.synchronize()
+        torch.cuda.synchronize()
 
-    predictions = probs[:, 0] > probs[:, 1]
-    predictions = predictions.cpu().numpy().tolist()
+        predictions = probs[:, 0] > probs[:, 1]
+        predictions = predictions.cpu().numpy().tolist()
 
-    print("--------------------------------")
-    print("pred (yes) = ", probs[:, 0].float().cpu().numpy().round(2))
-    print("pred (no) = ", probs[:, 1].float().cpu().numpy().round(2))
+        print("--------------------------------")
+        print("pred (yes) = ", probs[:, 0].float().cpu().numpy().round(2))
+        print("pred (no) = ", probs[:, 1].float().cpu().numpy().round(2))
 
-    return predictions
+        return predictions
 
 if __name__ == "__main__":  # test any model on a prompt and a single image
     import argparse
