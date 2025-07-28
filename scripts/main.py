@@ -116,7 +116,7 @@ def main():
     if args.model is not None:
         result_dir_suffix += f"_{args.model.replace('/', '-')}"
     
-    result_dir = f"/local-ssd/villain/results/{args.domain}"
+    result_dir = f"/local-ssd/villain/results/formal_experiments/{args.domain}"
     if args.generate_plan:
         result_dir_suffix += "_generate_plan"
     if args.generate_vila_planning:
@@ -275,10 +275,10 @@ def main():
                         fw.write(res["plan"])
 
                     with open(f"{task_dir}/prompt.txt", "w") as fw:
-                        fw.write(res["instructions"])
+                        fw.write(res["prompt"])
 
                     with open(f"{task_dir}/response.txt", "w") as fw:
-                        fw.write(res["responses"])
+                        fw.write(res["response"])
         
             except Exception as e:
                 print(f"Error saving PDDL: {traceback.format_exc()}")

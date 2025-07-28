@@ -16,23 +16,37 @@ def generate_villain_captioning_pddl(
         return "", "No observations provided", ""
     
     # ============================
-    # Step 1: Generate Scene Caption
+    # Step 1: Generate Domain-Aware Scene Caption
     # ============================
     
+    # Build domain-aware captioning prompt
     captioning_prompt = f"""
-Analyze the provided images and generate a detailed scene description.
-Focus on:
-1. Objects and their colors/types
-2. Quantities of each object
-3. Spatial relationships between objects  
-4. Current state of each object
+You are helping a robotic planning task.
+Given the image of a scene and an instruction, generate a detailed scene description.
 
-Describe what you see in the images in detail, focusing on objects that might be relevant to planning tasks.
+For the current domain, this is the domain file:
+{target["domain"]}
+
+{config.get("text", "") if config else ""}
+Instruction: {target["instruction"]}
+
+Analyze the provided images and generate a detailed scene description that focuses on:
+1. Objects and their types (especially those defined in the domain above)
+2. Quantities of each object type
+3. Spatial relationships between objects (particularly those matching domain predicates)
+4. Current state of each object relevant to the planning task
+5. Colors, positions, and other visual properties that help distinguish objects
+
+IMPORTANT: 
+- Focus on objects that are relevant to the domain types and the given instruction
+- Describe relationships that match the predicates defined in the domain
+- Be specific about object names and their distinguishing features
+- Only generate a scene description, do NOT generate any PDDL
 
 Provide a comprehensive scene description:
 """
     
-    print(f"\n📸 Step 1: Generating Scene Caption")
+    print(f"\n📸 Step 1: Generating Domain-Aware Scene Caption")
     print("-" * 60)
     
     try:
