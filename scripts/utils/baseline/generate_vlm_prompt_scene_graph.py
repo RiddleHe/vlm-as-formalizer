@@ -14,6 +14,7 @@ from ..parse_response import (
     assemble_object_states,
     assemble_grounded_predicates,
     assemble_pddl,
+    parse_pddl,
 )
 
 def generate_multi_step_with_vlm(
@@ -173,23 +174,23 @@ def generate_multi_step_with_vlm(
     # print("--------------------------------")
     # print(goal_prompt)
 
-    goal_response = model.generate(goal_prompt, observations)
+    pddl_response = model.generate(goal_prompt, observations)
 
-    # print("--------------------------------")
-    # print(goal_response)    
+    print("--------------------------------")
+    print(pddl_response)    
 
-    goal_states = "    " + parse_block(goal_response, "(:goal", save_header=True)
+    pddl_file = parse_pddl(pddl_response)
 
-    # print("--------------------------------")
-    # print(goal_states)
+    print("--------------------------------")
+    print(pddl_file)
     
     step4_time = time.time() - step4_start
     print(f"⏱️  Step 4 (Goal Generation): {step4_time:.2f}s")
-    print(f"Goal states: \n{goal_states}\n")
+    # print(f"Goal states: \n{goal_states}\n")
 
-    # Step 5: Assemble final PDDL file
+    # # Step 5: Assemble final PDDL file
     step5_start = time.time()
-    pddl_file = assemble_pddl(object_states, init_states, goal_states, target["domain"])
+    # pddl_file = assemble_pddl(object_states, init_states, goal_states, target["domain"])
 
     # print("--------------------------------")
     # print(pddl_file)

@@ -155,26 +155,42 @@ def build_observation_prompt(target, config):
 
 def build_goal_prompt(target, config, object_states, init_states):
     prompt = f"""
-    You are given some images which contain various objects of interests for a given task.
-    The images have been provided. {config.get("text", "")}
-    The task instruction is: {target["instruction"]}
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
 
-    The following domain file specifies all possible states and actions for the task:
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+
+    For the current domain, this is the domain file:
     {target["domain"]}
 
-    The following are all the objects and their states:
+    The following are some and (maybe) all the objects and their states:
     {object_states}
-    The following are all the initial states:
+    The following are some and (maybe) all the initial states:
     {init_states}
 
-    For the task instruction, {target["instruction"]}, generate the goal specification for the PDDL file.
-    The goal specification should be in the following format:
-    (:goal (and 
-        (predicate arg1 arg2)
-        (predicate arg)
-        ...
-      )
-    )
+    For the task instruction, {target["instruction"]}, generate the complete PDDL file that includes the goal states as well as your updated objects and initial states.
+    {config.get("text", "") if config else ""}
+    Instruction: {target["instruction"]}
     """
 
     return prompt

@@ -12,25 +12,26 @@ def check_pddl(pddl_file: str, domain_file: str) -> tuple[bool, str]:
     errors = defaultdict(set)
 
     # From domain: Extract all object types
-    types_raw = parse_types(domain_file)
-    type_hierarchy = {}
-    types = set()
+    _, type_hierarchy = parse_types(domain_file)
+    types = set(type_hierarchy.keys())
+    # type_hierarchy = {}
+    # types = set()
     
-    type_pattern = re.compile(r"([^\s(]+)\s*\((.*?)\)") # type (supertype)
-    for type_entry in types_raw:
-        match = type_pattern.match(type_entry)
-        if match:
-            subtype, supertype = match.groups()
-            type_hierarchy[subtype] = supertype
-            types.add(subtype)
-            types.add(supertype)
-        else:  # basic type
-            type_hierarchy[type_entry] = None
-            types.add(type_entry)
+    # type_pattern = re.compile(r"([^\s(]+)\s*\((.*?)\)") # type (supertype)
+    # for type_entry in types_raw:
+    #     match = type_pattern.match(type_entry)
+    #     if match:
+    #         subtype, supertype = match.groups()
+    #         type_hierarchy[subtype] = supertype
+    #         types.add(subtype)
+    #         types.add(supertype)
+    #     else:  # basic type
+    #         type_hierarchy[type_entry] = None
+    #         types.add(type_entry)
 
-    for parent_type in list(type_hierarchy.values()):
-        if parent_type and parent_type not in type_hierarchy:
-            type_hierarchy[parent_type] = None
+    # for parent_type in list(type_hierarchy.values()):
+    #     if parent_type and parent_type not in type_hierarchy:
+    #         type_hierarchy[parent_type] = None
 
     # From problem: Map all objects to their types, check for missing types
     objects = {}

@@ -70,7 +70,7 @@ def parse_args():
 
     # If choose generate_multi_step with VLM SCENE GRAPH
     parser.add_argument("--batch_relations", action="store_true", default=True, help="Generate all relations at once (default: True). Set --no-batch_relations for one-by-one")
-    parser.add_argument("--no-batch_relations", dest="batch_relations", action="store_false", help="Generate relations one by one instead of all at once")
+    parser.add_argument("--no_batch_relations", dest="batch_relations", action="store_false", help="Generate relations one by one instead of all at once")
 
     parser.add_argument("--clean_image", action="store_true", default=False, help="Present a clean image to the model")
 
@@ -127,6 +127,12 @@ def main():
         result_dir_suffix += "_generate_villain_direct_pddl"
     if args.generate_villain_captioning_pddl:
         result_dir_suffix += "_generate_villain_captioning_pddl"
+    if args.generate_villain_captioning_dino_pddl:
+        result_dir_suffix += "_generate_villain_captioning_dino_pddl"
+    if args.generate_multi_step_with_vlm:
+        result_dir_suffix += "_generate_multi_step_with_vlm"
+        if not args.batch_relations:
+            result_dir_suffix += "_no_batch_relations"
     if args.generate_scene_graph_pddl:
         template_type = "hard" if args.hard_template else "soft"
         result_dir_suffix += f"_generate_scene_graph_{template_type}_pddl"
