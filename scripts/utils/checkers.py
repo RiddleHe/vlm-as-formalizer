@@ -100,10 +100,10 @@ def check_pddl(pddl_file: str, domain_file: str) -> tuple[bool, str]:
             # Exact match
             if object_type == expected_type:
                 continue
-            # Match generic object type
-            if expected_type == "object":
-                if object_type in types:
-                    continue
+            # # Match generic object type
+            # if expected_type == "object":
+            #     if object_type in types:
+            #         continue
             current_type = object_type
             while True:
                 if current_type not in type_hierarchy:

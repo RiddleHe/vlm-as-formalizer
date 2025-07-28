@@ -284,12 +284,12 @@ def main():
                     if plan_success:
                         plan_success_count += 1
                     if not plan_success:
-                        print(f"Failed to find plan for {task_name}")
+                        print(f"Failed to verify the plan for {task_name}\n{err}")
                         with open(f"{task_dir}/error.txt", "w") as fw:
                             fw.write(err)
 
                 else:
-                    print(f"Failed to find plan for {task_name}")
+                    print(f"Failed to find plan for {task_name}\n{err}")
                     with open(f"{task_dir}/error.txt", "w") as fw:
                         fw.write(err)
             else:
