@@ -265,20 +265,30 @@ def _process_individual_relations(model, relation_prompts, observations, config)
         # Create individual prompt
         individual_prompt = f"{config.get('text', '')}{prompt}\nAnswer with only 'yes' or 'no'."
         
-        # Get response for this single relation
-        response = model.generate(individual_prompt, observations)
-        
-        # Parse individual response
-        response_lower = response.strip().lower()
-        if 'yes' in response_lower:
-            relation_preds.append(True)
-            print(f"  {i+1}/{len(relation_prompts)}: {prompt} -> YES")
-        elif 'no' in response_lower:
+        try:
+            # Get response for this single relation
+            response = model.generate(individual_prompt, observations)
+            
+            # Check for error response
+            if response.startswith("Error:"):
+                print(f"  {i+1}/{len(relation_prompts)}: {prompt} -> ERROR (defaulting to NO)")
+                relation_preds.append(False)
+                continue
+            
+            # Parse individual response
+            response_lower = response.strip().lower()
+            if 'yes' in response_lower:
+                relation_preds.append(True)
+                print(f"  {i+1}/{len(relation_prompts)}: {prompt} -> YES")
+            elif 'no' in response_lower:
+                relation_preds.append(False)
+                print(f"  {i+1}/{len(relation_prompts)}: {prompt} -> NO")
+            else:
+                # Default to False if unclear
+                relation_preds.append(False)
+                print(f"  {i+1}/{len(relation_prompts)}: {prompt} -> NO (unclear response: {response})")
+        except Exception as e:
+            print(f"  {i+1}/{len(relation_prompts)}: {prompt} -> EXCEPTION: {type(e).__name__}: {str(e)} (defaulting to NO)")
             relation_preds.append(False)
-            print(f"  {i+1}/{len(relation_prompts)}: {prompt} -> NO")
-        else:
-            # Default to False if unclear
-            relation_preds.append(False)
-            print(f"  {i+1}/{len(relation_prompts)}: {prompt} -> NO (unclear response: {response})")
     
     return relation_preds

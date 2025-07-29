@@ -94,28 +94,44 @@ class OpenAIClient(VLMClient):
                 })
         content.append({"type": "text", "text": prompt})
 
-        # Handle different parameter names for different models
-        if self.client_name.startswith(('o3', 'o4')):
-            # O3 and O4 models use max_completion_tokens instead of max_tokens
-            response = self.client.chat.completions.create(
-                model=self.client_name,
-                messages=[{
-                    "role": "user",
-                    "content": content
-                }],
-                max_completion_tokens=1024,
-            )
-        else:
-            # Other models use max_tokens
-            response = self.client.chat.completions.create(
-                model=self.client_name,
-                messages=[{
-                    "role": "user",
-                    "content": content
-                }],
-                max_tokens=1024,
-        )
-        return response.choices[0].message.content
+        # Retry logic for transient errors
+        max_retries = 3
+        retry_delay = 1  # seconds
+        
+        for attempt in range(max_retries):
+            try:
+                # Handle different parameter names for different models
+                if self.client_name.startswith(('o3', 'o4')):
+                    # O3 and O4 models use max_completion_tokens instead of max_tokens
+                    response = self.client.chat.completions.create(
+                        model=self.client_name,
+                        messages=[{
+                            "role": "user",
+                            "content": content
+                        }],
+                        max_completion_tokens=1024,
+                    )
+                else:
+                    # Other models use max_tokens
+                    response = self.client.chat.completions.create(
+                        model=self.client_name,
+                        messages=[{
+                            "role": "user",
+                            "content": content
+                        }],
+                        max_tokens=1024,
+                )
+                return response.choices[0].message.content
+            except Exception as e:
+                print(f"Error calling OpenAI API (attempt {attempt + 1}/{max_retries}): {type(e).__name__}: {str(e)}")
+                if attempt < max_retries - 1:
+                    print(f"Retrying in {retry_delay} seconds...")
+                    import time
+                    time.sleep(retry_delay)
+                    retry_delay *= 2  # Exponential backoff
+                else:
+                    # Return a default response for error cases after all retries
+                    return "Error: Unable to generate response due to API error"
 
 class OpenRouterClient(VLMClient):
     """Client for OpenRouter models (Llama 3.2 Vision)."""

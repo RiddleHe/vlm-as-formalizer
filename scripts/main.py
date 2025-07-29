@@ -127,8 +127,6 @@ def main():
         result_dir_suffix += "_generate_villain_direct_pddl"
     if args.generate_villain_captioning_pddl:
         result_dir_suffix += "_generate_villain_captioning_pddl"
-    if args.generate_villain_captioning_dino_pddl:
-        result_dir_suffix += "_generate_villain_captioning_dino_pddl"
     if args.generate_multi_step_with_vlm:
         result_dir_suffix += "_generate_multi_step_with_vlm"
         if not args.batch_relations:
@@ -154,7 +152,7 @@ def main():
     plan_success_count = 0
 
     # Generate / refine PDDL problems
-    if args.generate_plan or args.generate_vila_planning or args.generate_villain_pddl or args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or args.generate_scene_graph_pddl:
+    if args.generate_plan or args.generate_vila_planning or args.generate_villain_pddl or args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or args.generate_scene_graph_pddl or args.generate_multi_step_with_vlm:
         
         log_file_path = create_experiment_log_path(result_dir, args.domain, result_dir_suffix.lstrip('_'))
         logger = ExperimentLogger(log_file_path, console_output=True)
@@ -204,7 +202,7 @@ def main():
         task_dir = f"{result_dir}/{task_name}"
         os.makedirs(task_dir, exist_ok=True)
 
-        if args.generate_plan or args.generate_vila_planning or args.generate_villain_pddl or args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or args.generate_scene_graph_pddl:
+        if args.generate_plan or args.generate_vila_planning or args.generate_villain_pddl or args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or args.generate_scene_graph_pddl or args.generate_multi_step_with_vlm:
             if "problem.pddl" in os.listdir(task_dir) or "problem-try-0.pddl" in os.listdir(task_dir):
                 print(f"👀 {task_name} already exists, skipping...")
                 continue
