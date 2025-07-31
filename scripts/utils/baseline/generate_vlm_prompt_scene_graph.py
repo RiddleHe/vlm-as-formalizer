@@ -1,5 +1,5 @@
 import numpy as np
-
+import concurrent.futures
 import itertools
 
 from ..build_prompts import (
@@ -16,6 +16,8 @@ from ..parse_response import (
     assemble_pddl,
     parse_pddl,
 )
+
+import openai
 
 def generate_multi_step_with_vlm(
     target,
@@ -136,14 +138,30 @@ def generate_multi_step_with_vlm(
     if len(relation_prompts) > 0:
         if batch_relations:
             # Process all relations at once
-            relation_preds = _process_batch_relations(
-                model, relation_prompts, observations, config
-            )
+            try:
+                relation_preds = _process_batch_relations(
+                    model, relation_prompts, observations, config
+                )
+            except openai.BadRequestError as e: # Context too long
+                print(f"🚨 Error: {e}")
+                return " ", " ", observation_prompt + "\n\n" + "\n".join(relation_prompts)
+
         else:
             # Process relations one by one
-            relation_preds = _process_individual_relations(
-                model, relation_prompts, observations, config
-            )
+            timeout_seconds = 200
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(
+                    _process_individual_relations,
+                    model, relation_prompts, observations, config
+                )
+            try:
+                relation_preds = future.result(timeout=timeout_seconds)
+            except concurrent.futures.TimeoutError:
+                print(f"🚨 Timeout: {e}")
+                future.cancel()
+                executor.shutdown(wait=False)
+                return " ", " ", observation_prompt + "\n\n" + "\n".join(relation_prompts)
+            
 
     step3_time = time.time() - step3_start
     print("----------VLM relationship results------------")

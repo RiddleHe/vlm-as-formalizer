@@ -20,3 +20,5 @@ GroundingDINO/
 InternVL/
 
 results/
+
+*.sh
