@@ -24,25 +24,53 @@ def get_objects(pf):
         
     return object_set
 
-def get_init_state(pf):
+def get_init_state(pf, is_pred=False):
     init_states = []
 
-    init_match = re.search(r':init\s*(.*?)\)\s*(?=\(:goal)', pf, re.DOTALL)
-    init_content = init_match.group(1)
+    init_start = pf.find(':init')
+    if init_start == -1:
+        return []
 
-    condition_pattern = r'\(([^)]+)\)'
-    for match in re.finditer(condition_pattern, init_content):
-        condition_text = match.group(1).strip()
-        if not condition_text or condition_text.startswith(';'):
-            continue
-        parts = condition_text.split()
-        if parts:
-            condition_string = "_".join(parts)
-            init_states.append(condition_string)
+    i = init_start + 5 # skip ":init"
+
+    while i < len(pf) and pf[i] in ' \n\t':
+        i += 1
+    
+    goal_start = pf.find(':goal')
+    init_end = goal_start
+
+    while i < init_end:
+        while i < init_end and pf[i] in ' \n\t':
+            i += 1
+
+        if i >= init_end:
+            break
+
+        if pf[i] == '(':
+            condition_start = i
+            paren_count = 1
+            i += 1
+
+            while i < init_end and paren_count > 0:
+                if pf[i] == '(':
+                    paren_count += 1
+                elif pf[i] == ')':
+                    paren_count -= 1
+                i += 1
+
+                if paren_count == 0:
+                    condition_text = pf[condition_start + 1:i - 1].strip()
+                    if condition_text and not condition_text.startswith(';'):
+                        parts = condition_text.split()
+                        if is_pred:
+                            parts = [normalize_object_name(p, is_gt=True) for p in parts]
+                        init_states.append("*".join(parts))
+        else:
+            i += 1
 
     return init_states
 
-def get_goal_state(pf):
+def get_goal_state(pf, is_pred=False):
     goal_start = pf.find(':goal')
     if goal_start == -1:
         return []
@@ -51,30 +79,38 @@ def get_goal_state(pf):
     if and_start == -1:
         return []
 
-    paren_count = 1
-    i = and_start + 1
-
-    while i < len(pf) and paren_count > 0:
-        if pf[i] == "(":
-            paren_count += 1
-        elif pf[i] == ")":
-            paren_count -= 1
-        i += 1
-    
-    if paren_count != 0:
-        return []
-    
-    and_content = pf[and_start:i]
-    inner_content = and_content[4:-1]
-
+    i = and_start + 4 # skip "(and"
     conditions = []
-    condition_pattern = r'\(([^()]+)\)'
 
-    for match in re.finditer(condition_pattern, inner_content):
-        condition_text = match.group(1).strip()
-        if condition_text:
-            parts = condition_text.split()
-            conditions.append("_".join(parts))
+    while i < len(pf):
+        while i < len(pf) and pf[i] in ' \n\t':
+            i += 1
+
+        if i >= len(pf) or pf[i] == ')':
+            break
+
+        if pf[i] == '(':
+            condition_start = i
+            paren_count = 1
+            i += 1
+
+            while i < len(pf) and paren_count > 0:
+                if pf[i] == '(':
+                    paren_count += 1
+                elif pf[i] == ')':
+                    paren_count -= 1
+                i += 1
+                
+                if paren_count == 0:
+                    condition_text = pf[condition_start + 1:i - 1].strip()
+                    if condition_text:
+                        parts = condition_text.split()
+                        if is_pred:
+                            parts = [normalize_object_name(p, is_gt=True) for p in parts]
+                        conditions.append("*".join(parts))
+
+        else:
+            i += 1
 
     return conditions
     
@@ -87,6 +123,141 @@ def get_pddl(path):
             pf = f.read()
 
     return pf
+
+def calculate_indel_distance(s1, s2):
+    """
+    Calculate edit distance allowing only insertions and deletions (no substitutions).
+    This is useful for matching "lamp" with "desklamp" or "pen" with "pencil".
+    """
+    m, n = len(s1), len(s2)
+    
+    # Create DP table
+    dp = [[float('inf')] * (n + 1) for _ in range(m + 1)]
+    
+    # Base cases
+    for i in range(m + 1):
+        dp[i][0] = i  # Delete all characters from s1
+    for j in range(n + 1):
+        dp[0][j] = j  # Insert all characters to get s2
+    
+    # Fill DP table
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if s1[i-1] == s2[j-1]:
+                # Characters match, no operation needed
+                dp[i][j] = dp[i-1][j-1]
+            else:
+                # Only allow insertions and deletions
+                dp[i][j] = min(
+                    dp[i-1][j] + 1,    # Delete from s1
+                    dp[i][j-1] + 1     # Insert into s1
+                )
+    
+    return dp[m][n]
+
+
+def normalize_object_name(name, is_gt=False):
+    normalized = re.sub(r'[_\d]', '', name)
+
+    if is_gt:
+        pass
+        # spaced = ''
+        # for i, char in enumerate(normalized):
+        #     if char.isupper() and i > 0:
+        #         spaced += ' ' + char
+        #     else:
+        #         spaced += char
+
+        # words = spaced.split()
+        # normalized = words[-1]
+
+    normalized = normalized.lower()
+    
+    return normalized
+
+def find_equiv_substr(term, equivalence_map):
+    for i in range(len(term)):
+        for j in range(i + 1, len(term) + 1):
+            substr = term[i:j]
+            if substr in equivalence_map:
+                return equivalence_map[substr]
+    return None
+
+def are_equivalent_terms(term1, term2):
+    equivalence_pairs = {
+        ('agent', 'robot'),
+        ('stand', 'table'),
+    }
+    
+    if (term1, term2) in equivalence_pairs or (term2, term1) in equivalence_pairs:
+        return True
+
+    equivalence_map = {}
+    for a, b in equivalence_pairs:
+        equivalence_map[a] = b
+        equivalence_map[b] = a
+    
+    term1_equiv = find_equiv_substr(term1, equivalence_map)
+    if term1_equiv:
+        return term1_equiv in term2
+
+    term2_equiv = find_equiv_substr(term2, equivalence_map)
+    if term2_equiv:
+        return term2_equiv in term1
+
+    return False
+
+def get_object_mapping_relaxed(gt_objects, pred_objects, max_distance_ratio):
+    pred_objects = set(sorted(list(pred_objects)))  # prioritize based on name
+    gt_objects = set(sorted(list(gt_objects)))
+    
+    gt_object_to_pred_object = {}
+    used_pred_objects = set()
+    
+    for gt_obj in gt_objects:
+        gt_normalized = normalize_object_name(gt_obj, is_gt=True)
+        best_match = None
+        best_distance = float('inf')
+        
+        for pred_obj in pred_objects:
+            if pred_obj in used_pred_objects:
+                continue
+                
+            pred_normalized = normalize_object_name(pred_obj)
+            
+            distance = calculate_indel_distance(gt_normalized, pred_normalized)
+            
+            # Calculate distance ratio (relative to longer string)
+            max_len = max(len(gt_normalized), len(pred_normalized))
+            if max_len > 0:
+                distance_ratio = distance / max_len
+            else:
+                distance_ratio = 0
+            
+            # Check if this is a valid match
+            if distance_ratio <= max_distance_ratio and distance < best_distance:
+                best_distance = distance
+                best_match = pred_obj
+        
+        if best_match:
+            gt_object_to_pred_object[gt_obj] = best_match
+            used_pred_objects.add(best_match)
+        else:
+            for pred_obj in pred_objects:
+                if pred_obj in used_pred_objects:
+                    continue
+
+                pred_normalized = normalize_object_name(pred_obj)
+                if are_equivalent_terms(gt_normalized, pred_normalized):
+                    best_match = pred_obj
+                    gt_object_to_pred_object[gt_obj] = pred_obj
+                    used_pred_objects.add(best_match)
+                    break
+
+            if not best_match:
+                gt_object_to_pred_object[gt_obj] = "None"
+    
+    return gt_object_to_pred_object
 
 def get_object_mapping(gt_objects, pred_objects):
     gt_object_to_pred_object = {}
@@ -107,16 +278,16 @@ def get_mapped_gt_states(gt_object_to_pred_object, gt_states):
     mapped_gt_states = set()
 
     for gt_state in gt_states:
-        parts = gt_state.split("_")
+        parts = gt_state.split("*")
         predicate = parts[0]
         objects = parts[1:]
 
         mapped_objects = []
 
         for obj in objects:
-            mapped_objects.append(gt_object_to_pred_object[obj])
+            mapped_objects.append(normalize_object_name(gt_object_to_pred_object[obj]))
 
-        mapped_state = "_".join([predicate] + mapped_objects)
+        mapped_state = "*".join([normalize_object_name(predicate)] + mapped_objects)
         mapped_gt_states.add(mapped_state)
 
     return mapped_gt_states
@@ -131,7 +302,7 @@ def division(a, b):
         return 0
     return a / b
 
-def process_task(task_path, data_path, task):
+def process_task(task_path, data_path, task, data_type):
     stats = {}
 
     gt_task = os.path.join(data_path, task)
@@ -146,9 +317,11 @@ def process_task(task_path, data_path, task):
     # print(f"pred_objects: {pred_objects}")
     # print(f"gt_objects: {gt_objects}")
 
-    gt_object_to_pred_object = get_object_mapping(gt_objects, pred_objects)
+    gt_object_to_pred_object = get_object_mapping_relaxed(
+        gt_objects, pred_objects, max_distance_ratio=0.8
+    )
     
-    # print(f"gt_object_to_pred_object: {gt_object_to_pred_object}")
+    # print(f"gt_object_to_pred_object: {gt_object_to_pred_object}\n")
     
     non_none_count = sum(
         1 for obj 
@@ -176,20 +349,22 @@ def process_task(task_path, data_path, task):
     stats["pred_true_positives"] = non_none_count
     stats["gt_false_negatives"] = len(unmatched_gt_objects)
     stats["pred_false_positives"] = len(unmatched_pred_objects)
-    if len(unmatched_gt_objects) > 0:
-        print(f"Task {task} has unmatched gt object: {unmatched_gt_objects}")
-        print(f"pred_objects: {pred_objects}")
-    if len(unmatched_pred_objects) > 0:
-        print(f"Task {task} has unmatched pred object: {unmatched_pred_objects}")
-        print(f"gt_objects: {gt_objects}")
+    # if len(unmatched_gt_objects) == 0 and len(unmatched_pred_objects) == 0:
+    #     print(f"✨ Objects mapped successfully.\n")
+    # if len(unmatched_gt_objects) > 0:
+    #     print(f"🚨 Task {task} has unmatched gt object: {unmatched_gt_objects}\n")
+    #     print(f"pred_objects: {pred_objects}\n")
+    # if len(unmatched_pred_objects) > 0:
+    #     print(f"🚨 Task {task} has unmatched pred object: {unmatched_pred_objects}\n")
+    #     print(f"gt_objects: {gt_objects}\n")
 
     # print(f"stats: {stats}")
 
-    pred_init_states = get_init_state(pred_pf)
+    pred_init_states = get_init_state(pred_pf, is_pred=True)
     gt_init_states = get_init_state(gt_pf)
 
-    # print(f"pred_init_states: {pred_init_states}")
-    # print(f"gt_init_states: {gt_init_states}")
+    # print(f"pred_init_states: {pred_init_states}\n")
+    # print(f"gt_init_states: {gt_init_states}\n")
 
     mapped_gt_states = get_mapped_gt_states(gt_object_to_pred_object, gt_init_states)
 
@@ -207,19 +382,20 @@ def process_task(task_path, data_path, task):
     stats["init_true_positives"] = len(matched_states)
     stats["init_false_positives"] = len(unmatched_pred)
     stats["init_false_negatives"] = len(unmatched_gt)
+    # if len(unmatched_gt) == 0 and len(unmatched_pred) == 0:
+    #     print(f"✨ Init states mapped successfully.\n")
     # if len(unmatched_gt) > 0:
-    #     print(f"Task {task} has unmatched gt init: {unmatched_gt}")
+    #     print(f"🚨 Task {task} has unmatched gt init: {unmatched_gt}")
     #     # print(f"gt_init_states: {gt_init_states}")
-    #     print(f"pred_init_states: {pred_init_states}")
-
-    # print(f"Goal states: {pred_pf[pred_pf.find(':goal'):]}")
+    #     print(f"pred_init_states: {pred_init_states}\n")
+    # if len(unmatched_pred) > 0:
+    #     print(f"🚨 Task {task} has unmatched pred init: {unmatched_pred}")
+    #     print(f"gt_init_states: {gt_init_states}\n")
 
     gt_goal_states = get_goal_state(gt_pf)
-    pred_goal_states = get_goal_state(pred_pf)
-    pred_goal_states = [state for state in pred_goal_states if "on_" in state]
-
-    # print(f"gt_goal_states: {gt_goal_states}")
-    # print(f"pred_goal_states: {pred_goal_states}")
+    pred_goal_states = get_goal_state(pred_pf, is_pred=True)
+    if data_type == "blocksworld-real":
+        pred_goal_states = [state for state in pred_goal_states if "on*" in state]
 
     mapped_goal_state = get_mapped_gt_states(gt_object_to_pred_object, gt_goal_states)
 
@@ -239,20 +415,32 @@ def process_task(task_path, data_path, task):
     stats["goal_true_positives"] = len(matched_goal_states)
     stats["goal_false_positives"] = len(unmatched_pred_goal)
     stats["goal_false_negatives"] = len(unmatched_gt_goal)
+    # if len(unmatched_gt_goal) == 0 and len(unmatched_pred_goal) == 0:
+    #     print(f"✨ Goal states mapped successfully.\n")
     # if len(unmatched_gt_goal) > 0:
-    #     print(f"Task {task} has unmatched gt goal: {unmatched_gt_goal}")
-    #     # print(f"gt goal states: {gt_goal_states}")
-    #     print(f"pred goal states: {pred_goal_states}")
-    
+    #     print(f"🚨 Task {task} has unmatched gt goal: {unmatched_gt_goal}")
+    #     print(f"pred goal states: {pred_goal_states}\n")
+    # if len(unmatched_pred_goal) > 0:
+    #     print(f"🚨 Task {task} has unmatched pred goal: {unmatched_pred_goal}")
+    #     print(f"gt goal states: {gt_goal_states}\n")
 
-    # print(f"stats: {stats}")
+    # newline = '\n'
+    # stats_str = [f"{k}: {v}" for k, v in stats.items()]
+    # print(f"stats: {newline.join(stats_str)}\n")
 
-    print(f"-" * 100)
+    # print(f"-" * 100)
 
     return stats
 
 def iterate_dir(full_dir_path):
-    data_path = "/local-ssd/alfred/blocksworld-real"
+    dir_path = os.path.basename(full_dir_path)
+    if dir_path.startswith("blocksworld-real"):
+        data_path = "/local-ssd/alfred/blocksworld-real"
+        data_type = "blocksworld-real"
+    elif dir_path.startswith("alfred"):
+        data_path = "/local-ssd/alfred/alfred_137"
+        data_type = "alfred"
+
     stats = {
         "object_average_precision": 0,
         "object_average_recall": 0,
@@ -271,10 +459,10 @@ def iterate_dir(full_dir_path):
         if not os.path.isdir(task_path):
             continue
 
-        task_stats = process_task(task_path, data_path, task)
+        task_stats = process_task(task_path, data_path, task, data_type)
         stats["tasks"].append(task_stats)
 
-        # if i > 16:
+        # if i > 10:
         #     break
 
         object_f1 = f1(task_stats["object_precision"], task_stats["object_recall"])
@@ -318,5 +506,21 @@ def iterate_dir(full_dir_path):
 
     # with open("stats.json", "w") as f:
     #     json.dump(stats, f)
+lists_to_test = [
+    # "/local-ssd/villain/results/formal_experiments/alfred_gpt41_gpt-4.1_generate_villain_direct_pddl",
+    # "/local-ssd/villain/results/formal_experiments/alfred_gpt41_gpt-4.1_generate_villain_captioning_pddl",
+    # "/local-ssd/villain/results/formal_experiments/alfred_gpt41_gpt-4.1_generate_scene_graph_hard_pddl",
+    # "/local-ssd/villain/results/formal_experiments/alfred_gpt41_gpt-4.1_generate_multi_step_with_vlm",
+    # "/local-ssd/villain/results/formal_experiments/alfred_gpt41_gpt-4.1_generate_multi_step_with_vlm_no_batch_relations",
+    # "/local-ssd/villain/results/formal_experiments/alfred_qwen72B_vllm_direct_pddl_alfred_qwenvl-72B-vllm_generate_villain_direct_pddl",
+    # "/local-ssd/villain/results/formal_experiments/alfred_qwen72B_vllm_captioning_pddl_alfred_qwenvl-72B-vllm_generate_villain_captioning_pddl",
+    # "/local-ssd/villain/results/formal_experiments/alfred_qwen72B_scene_graph_pddl_alfred_qwenvl-72B-vllm_generate_scene_graph_hard_pddl",
+    # "/local-ssd/villain/results/formal_experiments/alfred_qwen72B_multi_step_vlm_alfred_fixed_qwenvl-72B-vllm_generate_multi_step_with_vlm",
+    # "/local-ssd/villain/results/formal_experiments/alfred_qwen72B_multi_step_vlm_alfred_fixed_qwenvl-72B-vllm_generate_multi_step_with_vlm_no_batch_relations",
+    "/local-ssd/villain/results/formal_experiments/blocksworld-real_qwen72B_rerun2_qwenvl-72B-vllm_generate_multi_step_with_vlm_no_batch_relations"
+]
 
-iterate_dir("/local-ssd/villain/results/formal_experiments/blocksworld-real_qwen72B_multi_step_vlm_blocksreal_qwenvl-72B-vllm_generate_multi_step_with_vlm_no_batch_relations")
+for dir_path in lists_to_test:
+    # print(f"Full path: {dir_path}")
+    iterate_dir(dir_path)
+    print(f"-" * 100)
