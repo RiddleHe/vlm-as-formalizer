@@ -98,14 +98,15 @@ def main():
     args = parse_args()
 
     # Parse domain
+    data_root = "/local-ssd/mh3897/alfred"
     if args.domain == "cooking": # TODO: clean upon submission
-        data_dir = f"/local-ssd/alfred/cooking" 
+        data_dir = f"{data_root}/cooking" 
     elif args.domain == "blocksworld":
-        data_dir = f"/local-ssd/alfred/blocksworld"
+        data_dir = f"{data_root}/blocksworld"
     elif args.domain == "blocksworld-real":
-        data_dir = "/local-ssd/alfred/blocksworld-real"
+        data_dir = f"{data_root}/blocksworld-real"
     elif args.domain == "alfred":
-        data_dir = "/local-ssd/alfred/alfred_137"
+        data_dir = f"{data_root}/alfred_137"
     else:
         raise ValueError(f"Invalid domain: {args.domain}")
 
@@ -116,7 +117,7 @@ def main():
     if args.model is not None:
         result_dir_suffix += f"_{args.model.replace('/', '-')}"
     
-    result_dir = f"/local-ssd/villain/results/formal_experiments/{args.domain}"
+    result_dir = f"/local-ssd/mh3897/villain/results/formal_experiments/{args.domain}"
     if args.generate_plan:
         result_dir_suffix += "_generate_plan"
     if args.generate_vila_planning:
@@ -127,12 +128,15 @@ def main():
         result_dir_suffix += "_generate_villain_direct_pddl"
     if args.generate_villain_captioning_pddl:
         result_dir_suffix += "_generate_villain_captioning_pddl"
+    if args.generate_multi_step_with_vlm:
+        result_dir_suffix += "_generate_multi_step_with_vlm"
     if args.generate_scene_graph_pddl:
         template_type = "hard" if args.hard_template else "soft"
         result_dir_suffix += f"_generate_scene_graph_{template_type}_pddl"
     
     # set the final path
     result_dir = result_dir + result_dir_suffix
+    print(f"Result dir: {result_dir}")
 
     seed_everything(args.seed) 
 
@@ -267,7 +271,7 @@ def main():
             pred_plan = res["plan"].split("\n") if isinstance(res["plan"], str) else res["plan"]
             gt_plan = target["plan"].split("\n")
 
-            plan_success, err = compare_plans(gt_plan, pred_plan)
+            plan_success, err = compare_plans(gt_plan, pred_plan, args.domain)
 
             if plan_success:
                 plan_success_count += 1
@@ -295,20 +299,20 @@ def main():
                     with open(f"{task_dir}/plan.txt", "r") as fw:
                         pred_plan = fw.readlines()
                     gt_plan = target["plan"].split("\n")
-                    plan_success, err = compare_plans(gt_plan, pred_plan)
+                    plan_success, err = compare_plans(gt_plan, pred_plan, args.domain)
                     if plan_success:
                         plan_success_count += 1
                     if not plan_success:
-                        print(f"Failed to verify the plan for {task_name}\n{err}")
+                        print(f"Failed to verify the plan for {os.path.join(data_dir, task_name)}\n{err}")
                         with open(f"{task_dir}/error.txt", "w") as fw:
                             fw.write(err)
 
                 else:
-                    print(f"Failed to find plan for {task_name}\n{err}")
+                    print(f"Failed to solve for a plan for {os.path.join(data_dir, task_name)}\n{err}")
                     with open(f"{task_dir}/error.txt", "w") as fw:
                         fw.write(err)
             else:
-                print(f"Problem file not found for {task_name}")
+                print(f"Problem file not found for {os.path.join(data_dir, task_name)}")
 
     print(f"\n{'='*80}")
     print(f"📊 FINAL EXPERIMENT METRICS")
