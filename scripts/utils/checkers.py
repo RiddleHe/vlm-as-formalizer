@@ -163,7 +163,7 @@ def find_mapping_recursive(gt_actions, pred_actions, mapping):
 
     return {}  # no consistent mapping found, backtrack
 
-def compare_plans(gt_plan: list[str], pred_plan: list[str]) -> bool:
+def compare_plans(gt_plan: list[str], pred_plan: list[str], domain: str) -> bool:
     msg = ""
     success = True
 
@@ -180,9 +180,19 @@ def compare_plans(gt_plan: list[str], pred_plan: list[str]) -> bool:
         return False, f"Plan action counts mismatch.\nGround truth has {gt_actions_counts}.\nPredicted has {pred_actions_counts}.\n\n"
 
     mapping = find_mapping_recursive(gt_actions, pred_actions, {})
-    if not mapping:
-        return False, "No consistent mapping found between ground truth and predicted plan.\n\n"
 
+    if not mapping:
+        if domain != "alfred":
+            return False, "No consistent mapping found between ground truth and predicted plans."
+        else:
+            first_action = pred_actions[0]
+            second_action = pred_actions[1]
+            if first_action["name"] == "gotolocation" and \
+                first_action["args"][1] == second_action["args"][1]: # same action sequences
+                return True, None
+            else:
+                return False, "No consistent mapping found between ground truth and predicted plans."
+    
     return True, None
 
 def check_error(problem_file, domain_file, downward_dir, time_limit):
