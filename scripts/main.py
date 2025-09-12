@@ -43,12 +43,14 @@ def parse_args():
 
     # Data dirs
     parser.add_argument("--result_dir", type=str, default=None, help="direcotry for predicted bboxes, generated problems, and found plans")
+    parser.add_argument("--result_dir_full", type=str, default=None)
     parser.add_argument("--domain", type=str, default=None, help="domain name (cooking/blocksworld/hanoi)")
 
     # Model args
     parser.add_argument("--model", type=str, default=None, help="model name")
     parser.add_argument("--device", type=str, default="cuda:0", help="device")
     parser.add_argument("--find_plan", action="store_true", default=True, help="refine generated problems by corrective reprompting")
+    parser.add_argument("--find_vila_plan", action="store_true", default=False)
 
     # Planning baseline
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
@@ -111,31 +113,35 @@ def main():
         raise ValueError(f"Invalid domain: {args.domain}")
 
     # build the result directory suffix, remove the pipeline number, use descriptive name
-    result_dir_suffix = ""
-    if args.result_dir is not None:
-        result_dir_suffix += f"_{args.result_dir}"
-    if args.model is not None:
-        result_dir_suffix += f"_{args.model.replace('/', '-')}"
+    if args.result_dir_full is not None:
+        result_dir = f"/local-ssd/mh3897/villain/results/formal_experiments/{args.result_dir_full}"
     
-    result_dir = f"/local-ssd/mh3897/villain/results/formal_experiments/{args.domain}"
-    if args.generate_plan:
-        result_dir_suffix += "_generate_plan"
-    if args.generate_vila_planning:
-        result_dir_suffix += "_generate_vila_planning"
-    if args.generate_villain_pddl:
-        result_dir_suffix += "_generate_villain_pddl"
-    if args.generate_villain_direct_pddl:
-        result_dir_suffix += "_generate_villain_direct_pddl"
-    if args.generate_villain_captioning_pddl:
-        result_dir_suffix += "_generate_villain_captioning_pddl"
-    if args.generate_multi_step_with_vlm:
-        result_dir_suffix += "_generate_multi_step_with_vlm"
-    if args.generate_scene_graph_pddl:
-        template_type = "hard" if args.hard_template else "soft"
-        result_dir_suffix += f"_generate_scene_graph_{template_type}_pddl"
-    
-    # set the final path
-    result_dir = result_dir + result_dir_suffix
+    else:
+        result_dir_suffix = ""
+        if args.result_dir is not None:
+            result_dir_suffix += f"_{args.result_dir}"
+        if args.model is not None:
+            result_dir_suffix += f"_{args.model.replace('/', '-')}"
+        
+        result_dir = f"/local-ssd/mh3897/villain/results/formal_experiments/{args.domain}"
+        if args.generate_plan:
+            result_dir_suffix += "_generate_plan"
+        if args.generate_vila_planning:
+            result_dir_suffix += "_generate_vila_planning"
+        if args.generate_villain_pddl:
+            result_dir_suffix += "_generate_villain_pddl"
+        if args.generate_villain_direct_pddl:
+            result_dir_suffix += "_generate_villain_direct_pddl"
+        if args.generate_villain_captioning_pddl:
+            result_dir_suffix += "_generate_villain_captioning_pddl"
+        if args.generate_multi_step_with_vlm:
+            result_dir_suffix += "_generate_multi_step_with_vlm"
+        if args.generate_scene_graph_pddl:
+            template_type = "hard" if args.hard_template else "soft"
+            result_dir_suffix += f"_generate_scene_graph_{template_type}_pddl"
+        
+        # set the final path
+        result_dir = result_dir + result_dir_suffix
     print(f"Result dir: {result_dir}")
 
     seed_everything(args.seed) 
@@ -264,12 +270,12 @@ def main():
             except Exception as e:
                 print(f"Error saving PDDL: {traceback.format_exc()}")
 
-        if args.generate_vila_planning and args.find_plan:
-            with open(f"{task_dir}/plan_gt.txt", "w") as fw:
-                fw.write(target["plan"])
+        if args.find_vila_plan:
+            with open(f"{task_dir}/plan.txt", "r") as fw:
+                pred_plan = fw.readlines()
 
-            pred_plan = res["plan"].split("\n") if isinstance(res["plan"], str) else res["plan"]
-            gt_plan = target["plan"].split("\n")
+            with open(f"{task_dir}/plan_gt.txt", "r") as fw:
+                gt_plan = fw.readlines()
 
             plan_success, err = compare_plans(gt_plan, pred_plan, args.domain)
 
