@@ -1,6 +1,8 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
+Dockerfile
+
 test.py
 test*/
 
@@ -20,4 +22,4 @@ GroundingDINO/
 InternVL/
 
 results/
-downward/
+downward
