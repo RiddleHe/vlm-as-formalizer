@@ -1,0 +1,62 @@
+{
+    "Tomato_4_dot_09999228_comma_4_dot_09999228_comma_10_dot_52786_comma_10_dot_52786_comma_3_dot_566694_comma_3_dot_566694": {
+        "object_type": "Tomato",
+        "coords": [
+            4.09999228,
+            4.09999228,
+            10.52786,
+            10.52786,
+            3.566694,
+            3.566694
+        ],
+        "is_receptacle": false,
+        "object_name": "Tomato_1",
+        "object_env_id": "Tomato|+01.02|+00.89|+02.63",
+        "location": "loc|1|11|1|45"
+    },
+    "CounterTop_3_dot_4584_comma_3_dot_4584_comma_9_dot_4872_comma_9_dot_4872_comma_3_dot_4344_comma_3_dot_4344": {
+        "object_type": "CounterTop",
+        "coords": [
+            3.4584,
+            3.4584,
+            9.4872,
+            9.4872,
+            3.4344,
+            3.4344
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|1|10|1|45"
+    },
+    "Microwave__minus_6_dot_116_comma__minus_6_dot_116_comma_15_dot_5288_comma_15_dot_5288_comma_5_dot_00112532_comma_5_dot_00112532": {
+        "object_type": "Microwave",
+        "coords": [
+            -6.116,
+            -6.116,
+            15.5288,
+            15.5288,
+            5.00112532,
+            5.00112532
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": null,
+        "location": "loc|-6|13|0|30"
+    },
+    "DiningTable__minus_3_dot_5_comma__minus_3_dot_5_comma_5_dot_296_comma_5_dot_296_comma_0_dot_024_comma_0_dot_024": {
+        "object_type": "DiningTable",
+        "coords": [
+            -3.5,
+            -3.5,
+            5.296,
+            5.296,
+            0.024,
+            0.024
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": "DiningTable|-00.88|+00.01|+01.32",
+        "location": "loc|-4|8|2|60"
+    }
+}

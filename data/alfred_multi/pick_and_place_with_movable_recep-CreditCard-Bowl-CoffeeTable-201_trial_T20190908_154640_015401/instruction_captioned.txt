@@ -1,0 +1,7 @@
+There is a Bowl in the room.
+There is a CreditCard in the room.
+There is a CoffeeTable in the room.
+There is a DiningTable in the room.
+Bowl_1 is on DiningTable_1.
+CreditCard_1 is on CoffeeTable_1.
+The instruction is: Putting a bowl with a credit card in it on the glass table

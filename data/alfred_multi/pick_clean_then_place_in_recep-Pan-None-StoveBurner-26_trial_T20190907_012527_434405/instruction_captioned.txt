@@ -1,0 +1,5 @@
+There is a Pan in the room.
+There is a StoveBurner in the room.
+There is a SinkBasin in the room.
+Pan_1 is on StoveBurner_1.
+The instruction is: Rinse off the pan.

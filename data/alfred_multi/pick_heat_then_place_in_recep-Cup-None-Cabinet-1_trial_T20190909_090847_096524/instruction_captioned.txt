@@ -1,0 +1,5 @@
+There is a Cup in the room.
+There are 2 Cabinets in the room.
+There is a Microwave in the room.
+Cup_1 is on Cabinet_1.
+The instruction is: Put a hot glass inside a cabinet.

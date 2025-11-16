@@ -1,0 +1,77 @@
+{
+    "KeyChain__minus_7_dot_87625884_comma__minus_7_dot_87625884_comma_11_dot_94719696_comma_11_dot_94719696_comma_0_dot_782988308_comma_0_dot_782988308": {
+        "object_type": "KeyChain",
+        "coords": [
+            -7.87625884,
+            -7.87625884,
+            11.94719696,
+            11.94719696,
+            0.782988308,
+            0.782988308
+        ],
+        "is_receptacle": false,
+        "object_name": "KeyChain_1",
+        "object_env_id": "KeyChain|-01.97|+00.20|+02.99",
+        "location": "loc|-8|14|2|60"
+    },
+    "CoffeeTable__minus_7_dot_892_comma__minus_7_dot_892_comma_10_dot_4616_comma_10_dot_4616_comma_0_dot_0084_comma_0_dot_0084": {
+        "object_type": "CoffeeTable",
+        "coords": [
+            -7.892,
+            -7.892,
+            10.4616,
+            10.4616,
+            0.0084,
+            0.0084
+        ],
+        "is_receptacle": true,
+        "object_name": "CoffeeTable_1",
+        "object_env_id": null,
+        "location": "loc|-4|11|3|60"
+    },
+    "Sofa__minus_18_dot_28_comma__minus_18_dot_28_comma_7_dot_6_comma_7_dot_6_comma__minus_0_dot_016_comma__minus_0_dot_016": {
+        "object_type": "Sofa",
+        "coords": [
+            -18.28,
+            -18.28,
+            7.6,
+            7.6,
+            -0.016,
+            -0.016
+        ],
+        "is_receptacle": true,
+        "object_name": "Sofa_1",
+        "object_env_id": "Sofa|-04.57|00.00|+01.90",
+        "location": "loc|-13|8|3|45"
+    },
+    "KeyChain__minus_18_dot_09074976_comma__minus_18_dot_09074976_comma_13_dot_55533884_comma_13_dot_55533884_comma_2_dot_0240484_comma_2_dot_0240484": {
+        "object_type": "KeyChain",
+        "coords": [
+            -18.09074976,
+            -18.09074976,
+            13.55533884,
+            13.55533884,
+            2.0240484,
+            2.0240484
+        ],
+        "is_receptacle": false,
+        "object_name": "KeyChain_2",
+        "object_env_id": "KeyChain|-04.52|+00.51|+03.39",
+        "location": "loc|-16|14|3|60"
+    },
+    "SideTable__minus_18_dot_452_comma__minus_18_dot_452_comma_13_dot_3852_comma_13_dot_3852_comma_0_dot_024_comma_0_dot_024": {
+        "object_type": "SideTable",
+        "coords": [
+            -18.452,
+            -18.452,
+            13.3852,
+            13.3852,
+            0.024,
+            0.024
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": null,
+        "location": "loc|-17|17|2|60"
+    }
+}

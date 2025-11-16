@@ -1,0 +1,62 @@
+{
+    "SoapBottle__minus_0_dot_2079869508_comma__minus_0_dot_2079869508_comma_8_dot_89476584_comma_8_dot_89476584_comma_3_dot_904571056_comma_3_dot_904571056": {
+        "object_type": "SoapBottle",
+        "coords": [
+            -0.2079869508,
+            -0.2079869508,
+            8.89476584,
+            8.89476584,
+            3.904571056,
+            3.904571056
+        ],
+        "is_receptacle": false,
+        "object_name": "SoapBottle_1",
+        "object_env_id": "SoapBottle|-00.05|+00.98|+02.22",
+        "location": "loc|-2|7|0|60"
+    },
+    "Toilet__minus_0_dot_256_comma__minus_0_dot_256_comma_7_dot_356_comma_7_dot_356_comma_0_dot_048159182_comma_0_dot_048159182": {
+        "object_type": "Toilet",
+        "coords": [
+            -0.256,
+            -0.256,
+            7.356,
+            7.356,
+            0.048159182,
+            0.048159182
+        ],
+        "is_receptacle": true,
+        "object_name": "Toilet_1",
+        "object_env_id": null,
+        "location": "loc|-4|7|1|15"
+    },
+    "Cart__minus_11_dot_66_comma__minus_11_dot_66_comma_5_dot_924_comma_5_dot_924_comma_0_dot_048_comma_0_dot_048": {
+        "object_type": "Cart",
+        "coords": [
+            -11.66,
+            -11.66,
+            5.924,
+            5.924,
+            0.048,
+            0.048
+        ],
+        "is_receptacle": true,
+        "object_name": "Cart_1",
+        "object_env_id": "Cart|-02.92|+00.01|+01.48",
+        "location": "loc|-9|6|3|60"
+    },
+    "SoapBottle_0_dot_04201436_comma_0_dot_04201436_comma_9_dot_32343292_comma_9_dot_32343292_comma_3_dot_904571056_comma_3_dot_904571056": {
+        "object_type": "SoapBottle",
+        "coords": [
+            0.04201436,
+            0.04201436,
+            9.32343292,
+            9.32343292,
+            3.904571056,
+            3.904571056
+        ],
+        "is_receptacle": false,
+        "object_name": "SoapBottle_2",
+        "object_env_id": "SoapBottle|+00.01|+00.98|+02.33",
+        "location": "loc|0|5|0|30"
+    }
+}

@@ -1,0 +1,62 @@
+{
+    "SoapBar__minus_5_dot_97335816_comma__minus_5_dot_97335816_comma_2_dot_5207444_comma_2_dot_5207444_comma_3_dot_8453_comma_3_dot_8453": {
+        "object_type": "SoapBar",
+        "coords": [
+            -5.97335816,
+            -5.97335816,
+            2.5207444,
+            2.5207444,
+            3.8453,
+            3.8453
+        ],
+        "is_receptacle": false,
+        "object_name": "SoapBar_1",
+        "object_env_id": "SoapBar|-01.49|+00.96|+00.63",
+        "location": "loc|-6|0|0|45"
+    },
+    "CounterTop__minus_9_dot_192_comma__minus_9_dot_192_comma_2_dot_756_comma_2_dot_756_comma_3_dot_812_comma_3_dot_812": {
+        "object_type": "CounterTop",
+        "coords": [
+            -9.192,
+            -9.192,
+            2.756,
+            2.756,
+            3.812,
+            3.812
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-11|0|0|45"
+    },
+    "SinkBasin__minus_10_dot_6652_comma__minus_10_dot_6652_comma_2_dot_6772_comma_2_dot_6772_comma_3_dot_8468_comma_3_dot_8468": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -10.6652,
+            -10.6652,
+            2.6772,
+            2.6772,
+            3.8468,
+            3.8468
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-10|0|0|45"
+    },
+    "Cabinet__minus_12_dot_37948324_comma__minus_12_dot_37948324_comma_1_dot_685427664_comma_1_dot_685427664_comma_1_dot_5627072_comma_1_dot_5627072": {
+        "object_type": "Cabinet",
+        "coords": [
+            -12.37948324,
+            -12.37948324,
+            1.685427664,
+            1.685427664,
+            1.5627072,
+            1.5627072
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": "Cabinet|-03.09|+00.39|+00.42",
+        "location": "loc|-10|-2|0|60"
+    }
+}

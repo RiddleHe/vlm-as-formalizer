@@ -1,0 +1,7 @@
+There are 2 ToiletPapers in the room.
+There is a ToiletPaperHanger in the room.
+There is a Toilet in the room.
+There is a GarbageCan in the room.
+ToiletPaper_1 is on ToiletPaperHanger_1.
+ToiletPaper_2 is on GarbageCan_1.
+The instruction is: Put an empty and one full toilet paper roll on the back of a toilet.

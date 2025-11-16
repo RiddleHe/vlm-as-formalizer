@@ -1,0 +1,62 @@
+{
+    "CreditCard_10_dot_11736584_comma_10_dot_11736584_comma_1_dot_4468784_comma_1_dot_4468784_comma_3_dot_371984_comma_3_dot_371984": {
+        "object_type": "CreditCard",
+        "coords": [
+            10.11736584,
+            10.11736584,
+            1.4468784,
+            1.4468784,
+            3.371984,
+            3.371984
+        ],
+        "is_receptacle": false,
+        "object_name": "CreditCard_1",
+        "object_env_id": "CreditCard|+02.53|+00.84|+00.36",
+        "location": "loc|8|1|1|60"
+    },
+    "Dresser_10_dot_212_comma_10_dot_212_comma_2_dot_496_comma_2_dot_496_comma_2_dot_288_comma_2_dot_288": {
+        "object_type": "Dresser",
+        "coords": [
+            10.212,
+            10.212,
+            2.496,
+            2.496,
+            2.288,
+            2.288
+        ],
+        "is_receptacle": true,
+        "object_name": "Dresser_1",
+        "object_env_id": null,
+        "location": "loc|8|3|1|60"
+    },
+    "DiningTable_10_dot_304288_comma_10_dot_304288_comma_12_dot_21562_comma_12_dot_21562_comma_0_dot_009562092_comma_0_dot_009562092": {
+        "object_type": "DiningTable",
+        "coords": [
+            10.304288,
+            10.304288,
+            12.21562,
+            12.21562,
+            0.009562092,
+            0.009562092
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": "DiningTable|+02.58|+00.00|+03.05",
+        "location": "loc|7|13|1|60"
+    },
+    "CreditCard_11_dot_08131696_comma_11_dot_08131696_comma_0_dot_922317504_comma_0_dot_922317504_comma_3_dot_371984_comma_3_dot_371984": {
+        "object_type": "CreditCard",
+        "coords": [
+            11.08131696,
+            11.08131696,
+            0.922317504,
+            0.922317504,
+            3.371984,
+            3.371984
+        ],
+        "is_receptacle": false,
+        "object_name": "CreditCard_2",
+        "object_env_id": "CreditCard|+02.77|+00.84|+00.23",
+        "location": "loc|8|1|1|45"
+    }
+}

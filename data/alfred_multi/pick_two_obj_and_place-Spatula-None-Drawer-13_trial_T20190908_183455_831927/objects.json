@@ -1,0 +1,62 @@
+{
+    "Spatula__minus_1_dot_339830636_comma__minus_1_dot_339830636_comma_22_dot_412_comma_22_dot_412_comma_3_dot_7603996_comma_3_dot_7603996": {
+        "object_type": "Spatula",
+        "coords": [
+            -1.339830636,
+            -1.339830636,
+            22.412,
+            22.412,
+            3.7603996,
+            3.7603996
+        ],
+        "is_receptacle": false,
+        "object_name": "Spatula_1",
+        "object_env_id": "Spatula|-00.33|+00.94|+05.60",
+        "location": "loc|-4|22|1|45"
+    },
+    "CounterTop__minus_1_dot_384_comma__minus_1_dot_384_comma_22_dot_412_comma_22_dot_412_comma_3_dot_8424_comma_3_dot_8424": {
+        "object_type": "CounterTop",
+        "coords": [
+            -1.384,
+            -1.384,
+            22.412,
+            22.412,
+            3.8424,
+            3.8424
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-4|21|1|45"
+    },
+    "Drawer__minus_2_dot_036_comma__minus_2_dot_036_comma_23_dot_6808_comma_23_dot_6808_comma_3_dot_1022832_comma_3_dot_1022832": {
+        "object_type": "Drawer",
+        "coords": [
+            -2.036,
+            -2.036,
+            23.6808,
+            23.6808,
+            3.1022832,
+            3.1022832
+        ],
+        "is_receptacle": true,
+        "object_name": "Drawer_1",
+        "object_env_id": "Drawer|-00.51|+00.78|+05.92",
+        "location": "loc|-4|21|0|60"
+    },
+    "Spatula__minus_1_dot_339830636_comma__minus_1_dot_339830636_comma_21_dot_09466552_comma_21_dot_09466552_comma_3_dot_7603996_comma_3_dot_7603996": {
+        "object_type": "Spatula",
+        "coords": [
+            -1.339830636,
+            -1.339830636,
+            21.09466552,
+            21.09466552,
+            3.7603996,
+            3.7603996
+        ],
+        "is_receptacle": false,
+        "object_name": "Spatula_2",
+        "object_env_id": "Spatula|-00.33|+00.94|+05.27",
+        "location": "loc|-4|21|1|45"
+    }
+}

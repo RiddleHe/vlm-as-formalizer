@@ -1,0 +1,5 @@
+There is a DeskLamp in the room.
+There is a TissueBox in the room.
+There is a Desk in the room.
+TissueBox_1 is on Desk_1.
+The instruction is: Turn on a desk lamp, pick up a box of tissues

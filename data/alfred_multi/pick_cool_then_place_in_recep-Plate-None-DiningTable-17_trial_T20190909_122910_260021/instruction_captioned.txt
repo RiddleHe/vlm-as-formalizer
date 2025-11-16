@@ -1,0 +1,5 @@
+There is a Plate in the room.
+There is a DiningTable in the room.
+There is a Fridge in the room.
+Plate_1 is on DiningTable_1.
+The instruction is: Put a chilled plate on the table.

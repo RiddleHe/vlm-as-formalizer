@@ -1,0 +1,77 @@
+{
+    "Pen__minus_5_dot_32821228_comma__minus_5_dot_32821228_comma__minus_7_dot_02308272_comma__minus_7_dot_02308272_comma_2_dot_8201896_comma_2_dot_8201896": {
+        "object_type": "Pen",
+        "coords": [
+            -5.32821228,
+            -5.32821228,
+            -7.02308272,
+            -7.02308272,
+            2.8201896,
+            2.8201896
+        ],
+        "is_receptacle": false,
+        "object_name": "Pen_1",
+        "object_env_id": "Pen|-01.33|+00.71|-01.76",
+        "location": "loc|-3|-7|3|60"
+    },
+    "Dresser__minus_5_dot_864_comma__minus_5_dot_864_comma__minus_8_dot_184_comma__minus_8_dot_184_comma_0_dot_1_comma_0_dot_1": {
+        "object_type": "Dresser",
+        "coords": [
+            -5.864,
+            -5.864,
+            -8.184,
+            -8.184,
+            0.1,
+            0.1
+        ],
+        "is_receptacle": true,
+        "object_name": "Dresser_1",
+        "object_env_id": null,
+        "location": "loc|-3|-8|3|60"
+    },
+    "Bowl_5_dot_07737444_comma_5_dot_07737444_comma__minus_7_dot_9358964_comma__minus_7_dot_9358964_comma_2_dot_0191392_comma_2_dot_0191392": {
+        "object_type": "Bowl",
+        "coords": [
+            5.07737444,
+            5.07737444,
+            -7.9358964,
+            -7.9358964,
+            2.0191392,
+            2.0191392
+        ],
+        "is_receptacle": true,
+        "object_name": "Bowl_1",
+        "object_env_id": "Bowl|+01.27|+00.50|-01.98",
+        "location": "loc|3|-7|1|60"
+    },
+    "Shelf_4_dot_88_comma_4_dot_88_comma__minus_7_dot_208_comma__minus_7_dot_208_comma_3_dot_436_comma_3_dot_436": {
+        "object_type": "Shelf",
+        "coords": [
+            4.88,
+            4.88,
+            -7.208,
+            -7.208,
+            3.436,
+            3.436
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": null,
+        "location": "loc|2|-6|1|45"
+    },
+    "Desk_1_dot_784_comma_1_dot_784_comma__minus_10_dot_104_comma__minus_10_dot_104_comma__minus_0_dot_016_comma__minus_0_dot_016": {
+        "object_type": "Desk",
+        "coords": [
+            1.784,
+            1.784,
+            -10.104,
+            -10.104,
+            -0.016,
+            -0.016
+        ],
+        "is_receptacle": true,
+        "object_name": "Desk_1",
+        "object_env_id": "Desk|+00.45|00.00|-02.53",
+        "location": "loc|2|-6|2|60"
+    }
+}

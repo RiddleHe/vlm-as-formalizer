@@ -1,0 +1,4 @@
+(gotolocation agent1 bathtubbasin_1)
+(pickupobject agent1 cloth_1)
+(gotolocation agent1 sinkbasin_1)
+(putobjectinreceptacle agent1 cloth_1 sinkbasin_1)

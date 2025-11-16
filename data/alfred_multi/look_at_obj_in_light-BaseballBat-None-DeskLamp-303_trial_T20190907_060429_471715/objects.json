@@ -1,0 +1,32 @@
+{
+    "BaseballBat__minus_6_dot_5179186_comma__minus_6_dot_5179186_comma_1_dot_664_comma_1_dot_664_comma_2_dot_596_comma_2_dot_596": {
+        "object_type": "BaseballBat",
+        "coords": [
+            -6.5179186,
+            -6.5179186,
+            1.664,
+            1.664,
+            2.596,
+            2.596
+        ],
+        "is_receptacle": false,
+        "object_name": "BaseballBat_1",
+        "object_env_id": "BaseballBat|-01.63|+00.65|+00.42",
+        "location": "loc|-5|1|3|60"
+    },
+    "DeskLamp__minus_7_dot_3960004_comma__minus_7_dot_3960004_comma__minus_3_dot_1439984_comma__minus_3_dot_1439984_comma_2_dot_367104_comma_2_dot_367104": {
+        "object_type": "DeskLamp",
+        "coords": [
+            -7.3960004,
+            -7.3960004,
+            -3.1439984,
+            -3.1439984,
+            2.367104,
+            2.367104
+        ],
+        "is_receptacle": false,
+        "object_name": "DeskLamp_1",
+        "object_env_id": "DeskLamp|-01.85|+00.59|-00.79",
+        "location": "loc|-5|-4|3|60"
+    }
+}

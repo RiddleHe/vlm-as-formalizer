@@ -1,0 +1,62 @@
+{
+    "Apple__minus_1_dot_703108192_comma__minus_1_dot_703108192_comma_2_dot_853743076_comma_2_dot_853743076_comma_3_dot_36396694_comma_3_dot_36396694": {
+        "object_type": "Apple",
+        "coords": [
+            -1.703108192,
+            -1.703108192,
+            2.853743076,
+            2.853743076,
+            3.36396694,
+            3.36396694
+        ],
+        "is_receptacle": false,
+        "object_name": "Apple_1",
+        "object_env_id": "Apple|-00.43|+00.84|+00.71",
+        "location": "loc|2|3|3|45"
+    },
+    "DiningTable__minus_0_dot_848358096_comma__minus_0_dot_848358096_comma_3_dot_524_comma_3_dot_524_comma_0_dot_0886555464_comma_0_dot_0886555464": {
+        "object_type": "DiningTable",
+        "coords": [
+            -0.848358096,
+            -0.848358096,
+            3.524,
+            3.524,
+            0.0886555464,
+            0.0886555464
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|2|3|3|60"
+    },
+    "Knife__minus_0_dot_1718580724_comma__minus_0_dot_1718580724_comma_4_dot_199056_comma_4_dot_199056_comma_3_dot_2663408_comma_3_dot_2663408": {
+        "object_type": "Knife",
+        "coords": [
+            -0.1718580724,
+            -0.1718580724,
+            4.199056,
+            4.199056,
+            3.2663408,
+            3.2663408
+        ],
+        "is_receptacle": false,
+        "object_name": "Knife_1",
+        "object_env_id": "Knife|-00.04|+00.82|+01.05",
+        "location": "loc|2|4|3|60"
+    },
+    "Microwave__minus_1_dot_244_comma__minus_1_dot_244_comma_8_dot_312_comma_8_dot_312_comma_3_dot_7060904_comma_3_dot_7060904": {
+        "object_type": "Microwave",
+        "coords": [
+            -1.244,
+            -1.244,
+            8.312,
+            8.312,
+            3.7060904,
+            3.7060904
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": null,
+        "location": "loc|2|8|3|45"
+    }
+}

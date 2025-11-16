@@ -1,0 +1,62 @@
+{
+    "Cup__minus_7_dot_02137756_comma__minus_7_dot_02137756_comma__minus_5_dot_09283684_comma__minus_5_dot_09283684_comma_0_dot_536726952_comma_0_dot_536726952": {
+        "object_type": "Cup",
+        "coords": [
+            -7.02137756,
+            -7.02137756,
+            -5.09283684,
+            -5.09283684,
+            0.536726952,
+            0.536726952
+        ],
+        "is_receptacle": false,
+        "object_name": "Cup_1",
+        "object_env_id": "Cup|-01.76|+00.13|-01.27",
+        "location": "loc|-5|-5|3|60"
+    },
+    "Cabinet__minus_6_dot_2_comma__minus_6_dot_2_comma__minus_7_dot_85999964_comma__minus_7_dot_85999964_comma_1_dot_9799999_comma_1_dot_9799999": {
+        "object_type": "Cabinet",
+        "coords": [
+            -6.2,
+            -6.2,
+            -7.85999964,
+            -7.85999964,
+            1.9799999,
+            1.9799999
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": null,
+        "location": "loc|-3|-6|3|60"
+    },
+    "Microwave__minus_0_dot_948_comma__minus_0_dot_948_comma__minus_10_dot_1004_comma__minus_10_dot_1004_comma_6_dot_756_comma_6_dot_756": {
+        "object_type": "Microwave",
+        "coords": [
+            -0.948,
+            -0.948,
+            -10.1004,
+            -10.1004,
+            6.756,
+            6.756
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": null,
+        "location": "loc|-2|-7|2|0"
+    },
+    "Cabinet__minus_2_dot_9112_comma__minus_2_dot_9112_comma__minus_9_dot_84_comma__minus_9_dot_84_comma_8_dot_06_comma_8_dot_06": {
+        "object_type": "Cabinet",
+        "coords": [
+            -2.9112,
+            -2.9112,
+            -9.84,
+            -9.84,
+            8.06,
+            8.06
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_2",
+        "object_env_id": "Cabinet|-00.73|+02.02|-02.46",
+        "location": "loc|-3|-7|2|-30"
+    }
+}

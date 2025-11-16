@@ -1,0 +1,47 @@
+{
+    "CD_10_dot_22620584_comma_10_dot_22620584_comma__minus_12_dot_72928236_comma__minus_12_dot_72928236_comma_3_dot_585466_comma_3_dot_585466": {
+        "object_type": "CD",
+        "coords": [
+            10.22620584,
+            10.22620584,
+            -12.72928236,
+            -12.72928236,
+            3.585466,
+            3.585466
+        ],
+        "is_receptacle": false,
+        "object_name": "CD_1",
+        "object_env_id": "CD|+02.56|+00.90|-03.18",
+        "location": "loc|10|-9|2|45"
+    },
+    "Desk_9_dot_272_comma_9_dot_272_comma__minus_12_dot_86_comma__minus_12_dot_86_comma__minus_0_dot_04_comma__minus_0_dot_04": {
+        "object_type": "Desk",
+        "coords": [
+            9.272,
+            9.272,
+            -12.86,
+            -12.86,
+            -0.04,
+            -0.04
+        ],
+        "is_receptacle": true,
+        "object_name": "Desk_1",
+        "object_env_id": null,
+        "location": "loc|8|-10|2|60"
+    },
+    "Dresser_10_dot_708_comma_10_dot_708_comma_6_dot_044_comma_6_dot_044_comma__minus_0_dot_016_comma__minus_0_dot_016": {
+        "object_type": "Dresser",
+        "coords": [
+            10.708,
+            10.708,
+            6.044,
+            6.044,
+            -0.016,
+            -0.016
+        ],
+        "is_receptacle": true,
+        "object_name": "Dresser_1",
+        "object_env_id": "Dresser|+02.68|00.00|+01.51",
+        "location": "loc|8|6|1|60"
+    }
+}

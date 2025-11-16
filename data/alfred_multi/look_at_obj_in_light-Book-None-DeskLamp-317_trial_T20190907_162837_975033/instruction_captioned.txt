@@ -1,0 +1,5 @@
+There is a DeskLamp in the room.
+There is a Book in the room.
+There is a Bed in the room.
+Book_1 is on Bed_1.
+The instruction is: Inspect a book from the bed with a light.

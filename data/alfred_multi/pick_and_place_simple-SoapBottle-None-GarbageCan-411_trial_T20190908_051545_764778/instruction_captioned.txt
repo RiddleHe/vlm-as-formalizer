@@ -1,0 +1,5 @@
+There is a SoapBottle in the room.
+There is a GarbageCan in the room.
+There is a Toilet in the room.
+SoapBottle_1 is on Toilet_1.
+The instruction is: Put the pump bottle in the garbage can.

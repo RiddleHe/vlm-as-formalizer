@@ -1,0 +1,6 @@
+There is a Knife in the room.
+There is a Lettuce in the room.
+There is a DiningTable in the room.
+Lettuce_1 is on DiningTable_1.
+Knife_1 is on DiningTable_1.
+The instruction is: Slice lettuce on the table with the knife.

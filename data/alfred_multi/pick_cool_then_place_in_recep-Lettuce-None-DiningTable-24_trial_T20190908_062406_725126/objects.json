@@ -1,0 +1,47 @@
+{
+    "Lettuce__minus_5_dot_27052928_comma__minus_5_dot_27052928_comma_3_dot_7496612_comma_3_dot_7496612_comma_3_dot_9055344_comma_3_dot_9055344": {
+        "object_type": "Lettuce",
+        "coords": [
+            -5.27052928,
+            -5.27052928,
+            3.7496612,
+            3.7496612,
+            3.9055344,
+            3.9055344
+        ],
+        "is_receptacle": false,
+        "object_name": "Lettuce_1",
+        "object_env_id": "Lettuce|-01.32|+00.98|+00.94",
+        "location": "loc|-7|5|1|60"
+    },
+    "DiningTable__minus_3_dot_5_comma__minus_3_dot_5_comma_5_dot_296_comma_5_dot_296_comma_0_dot_024_comma_0_dot_024": {
+        "object_type": "DiningTable",
+        "coords": [
+            -3.5,
+            -3.5,
+            5.296,
+            5.296,
+            0.024,
+            0.024
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-4|8|2|60"
+    },
+    "Fridge__minus_10_dot_572_comma__minus_10_dot_572_comma_8_dot_536_comma_8_dot_536_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            -10.572,
+            -10.572,
+            8.536,
+            8.536,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": null,
+        "location": "loc|-7|9|3|60"
+    }
+}

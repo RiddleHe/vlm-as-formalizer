@@ -1,0 +1,7 @@
+(gotolocation agent1 coffeetable_1)
+(pickupobject agent1 creditcard_1)
+(gotolocation agent1 bowl_1)
+(putobjectinreceptacle agent1 creditcard_1 bowl_1)
+(pickupobject agent1 bowl_1)
+(gotolocation agent1 coffeetable_1)
+(putobjectinreceptacle agent1 bowl_1 coffeetable_1)

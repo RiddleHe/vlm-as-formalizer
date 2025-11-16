@@ -1,0 +1,47 @@
+{
+    "RemoteControl__minus_1_dot_2045151_comma__minus_1_dot_2045151_comma_3_dot_1803688_comma_3_dot_1803688_comma_1_dot_90403378_comma_1_dot_90403378": {
+        "object_type": "RemoteControl",
+        "coords": [
+            -1.2045151,
+            -1.2045151,
+            3.1803688,
+            3.1803688,
+            1.90403378,
+            1.90403378
+        ],
+        "is_receptacle": false,
+        "object_name": "RemoteControl_1",
+        "object_env_id": "RemoteControl|-00.30|+00.48|+00.80",
+        "location": "loc|-3|3|1|60"
+    },
+    "CoffeeTable__minus_0_dot_6_comma__minus_0_dot_6_comma_1_dot_684_comma_1_dot_684_comma__minus_0_dot_002000009408_comma__minus_0_dot_002000009408": {
+        "object_type": "CoffeeTable",
+        "coords": [
+            -0.6,
+            -0.6,
+            1.684,
+            1.684,
+            -0.002000009408,
+            -0.002000009408
+        ],
+        "is_receptacle": true,
+        "object_name": "CoffeeTable_1",
+        "object_env_id": null,
+        "location": "loc|4|2|3|60"
+    },
+    "Sofa__minus_5_dot_78_comma__minus_5_dot_78_comma_1_dot_68_comma_1_dot_68_comma__minus_0_dot_112_comma__minus_0_dot_112": {
+        "object_type": "Sofa",
+        "coords": [
+            -5.78,
+            -5.78,
+            1.68,
+            1.68,
+            -0.112,
+            -0.112
+        ],
+        "is_receptacle": true,
+        "object_name": "Sofa_1",
+        "object_env_id": "Sofa|-01.45|-00.03|+00.42",
+        "location": "loc|-5|-5|0|45"
+    }
+}

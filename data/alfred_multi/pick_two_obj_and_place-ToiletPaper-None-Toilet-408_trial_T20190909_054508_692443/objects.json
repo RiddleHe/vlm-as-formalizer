@@ -1,0 +1,77 @@
+{
+    "ToiletPaper__minus_5_dot_664_comma__minus_5_dot_664_comma_2_dot_6615996_comma_2_dot_6615996_comma_3_dot_2648_comma_3_dot_2648": {
+        "object_type": "ToiletPaper",
+        "coords": [
+            -5.664,
+            -5.664,
+            2.6615996,
+            2.6615996,
+            3.2648,
+            3.2648
+        ],
+        "is_receptacle": false,
+        "object_name": "ToiletPaper_1",
+        "object_env_id": "ToiletPaper|-01.42|+00.82|+00.67",
+        "location": "loc|-6|0|0|45"
+    },
+    "ToiletPaperHanger__minus_5_dot_94_comma__minus_5_dot_94_comma_2_dot_768_comma_2_dot_768_comma_3_dot_22_comma_3_dot_22": {
+        "object_type": "ToiletPaperHanger",
+        "coords": [
+            -5.94,
+            -5.94,
+            2.768,
+            2.768,
+            3.22,
+            3.22
+        ],
+        "is_receptacle": true,
+        "object_name": "ToiletPaperHanger_1",
+        "object_env_id": null,
+        "location": "loc|-6|0|0|45"
+    },
+    "Toilet__minus_4_dot_216_comma__minus_4_dot_216_comma_2_dot_212_comma_2_dot_212_comma_0_dot_00419187544_comma_0_dot_00419187544": {
+        "object_type": "Toilet",
+        "coords": [
+            -4.216,
+            -4.216,
+            2.212,
+            2.212,
+            0.00419187544,
+            0.00419187544
+        ],
+        "is_receptacle": true,
+        "object_name": "Toilet_1",
+        "object_env_id": "Toilet|-01.05|+00.00|+00.55",
+        "location": "loc|-2|2|3|15"
+    },
+    "ToiletPaper__minus_11_dot_830084_comma__minus_11_dot_830084_comma__minus_6_dot_24_comma__minus_6_dot_24_comma_0_dot_7190428_comma_0_dot_7190428": {
+        "object_type": "ToiletPaper",
+        "coords": [
+            -11.830084,
+            -11.830084,
+            -6.24,
+            -6.24,
+            0.7190428,
+            0.7190428
+        ],
+        "is_receptacle": false,
+        "object_name": "ToiletPaper_2",
+        "object_env_id": "ToiletPaper|-02.96|+00.18|-01.56",
+        "location": "loc|-10|-5|3|60"
+    },
+    "GarbageCan__minus_11_dot_696_comma__minus_11_dot_696_comma__minus_6_dot_24_comma__minus_6_dot_24_comma_0_dot_00419187544_comma_0_dot_00419187544": {
+        "object_type": "GarbageCan",
+        "coords": [
+            -11.696,
+            -11.696,
+            -6.24,
+            -6.24,
+            0.00419187544,
+            0.00419187544
+        ],
+        "is_receptacle": true,
+        "object_name": "GarbageCan_1",
+        "object_env_id": null,
+        "location": "loc|-9|-2|2|60"
+    }
+}

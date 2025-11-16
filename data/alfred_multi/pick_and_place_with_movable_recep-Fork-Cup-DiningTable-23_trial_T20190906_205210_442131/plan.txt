@@ -1,0 +1,7 @@
+(gotolocation agent1 countertop_1)
+(pickupobject agent1 fork_1)
+(gotolocation agent1 cup_1)
+(putobjectinreceptacle agent1 fork_1 cup_1)
+(pickupobject agent1 cup_1)
+(gotolocation agent1 diningtable_1)
+(putobjectinreceptacle agent1 cup_1 diningtable_1)

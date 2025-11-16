@@ -1,0 +1,77 @@
+{
+    "Fork__minus_2_dot_115677832_comma__minus_2_dot_115677832_comma__minus_14_dot_2239666_comma__minus_14_dot_2239666_comma_3_dot_665394_comma_3_dot_665394": {
+        "object_type": "Fork",
+        "coords": [
+            -2.115677832,
+            -2.115677832,
+            -14.2239666,
+            -14.2239666,
+            3.665394,
+            3.665394
+        ],
+        "is_receptacle": false,
+        "object_name": "Fork_1",
+        "object_env_id": "Fork|-00.53|+00.92|-03.56",
+        "location": "loc|-4|-12|2|60"
+    },
+    "CounterTop__minus_1_dot_216_comma__minus_1_dot_216_comma__minus_11_dot_176_comma__minus_11_dot_176_comma_3_dot_8052_comma_3_dot_8052": {
+        "object_type": "CounterTop",
+        "coords": [
+            -1.216,
+            -1.216,
+            -11.176,
+            -11.176,
+            3.8052,
+            3.8052
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-4|-7|2|30"
+    },
+    "Cup__minus_1_dot_4024_comma__minus_1_dot_4024_comma__minus_7_dot_738076_comma__minus_7_dot_738076_comma_3_dot_18473506_comma_3_dot_18473506": {
+        "object_type": "Cup",
+        "coords": [
+            -1.4024,
+            -1.4024,
+            -7.738076,
+            -7.738076,
+            3.18473506,
+            3.18473506
+        ],
+        "is_receptacle": true,
+        "object_name": "Cup_1",
+        "object_env_id": "Cup|-00.35|+00.80|-01.93",
+        "location": "loc|-4|-8|1|60"
+    },
+    "SinkBasin__minus_1_dot_4024_comma__minus_1_dot_4024_comma__minus_8_dot_0756_comma__minus_8_dot_0756_comma_3_dot_1465648_comma_3_dot_1465648": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -1.4024,
+            -1.4024,
+            -8.0756,
+            -8.0756,
+            3.1465648,
+            3.1465648
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-4|-7|1|60"
+    },
+    "DiningTable__minus_9_dot_73199272_comma__minus_9_dot_73199272_comma__minus_6_dot_78581428_comma__minus_6_dot_78581428_comma_3_dot_5828_comma_3_dot_5828": {
+        "object_type": "DiningTable",
+        "coords": [
+            -9.73199272,
+            -9.73199272,
+            -6.78581428,
+            -6.78581428,
+            3.5828,
+            3.5828
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": "DiningTable|-02.43|+00.90|-01.70",
+        "location": "loc|-5|-7|3|30"
+    }
+}

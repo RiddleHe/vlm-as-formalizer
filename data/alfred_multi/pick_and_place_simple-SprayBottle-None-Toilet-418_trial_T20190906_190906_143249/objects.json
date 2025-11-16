@@ -1,0 +1,47 @@
+{
+    "SprayBottle__minus_9_dot_423336_comma__minus_9_dot_423336_comma__minus_14_dot_8291216_comma__minus_14_dot_8291216_comma_3_dot_23161626_comma_3_dot_23161626": {
+        "object_type": "SprayBottle",
+        "coords": [
+            -9.423336,
+            -9.423336,
+            -14.8291216,
+            -14.8291216,
+            3.23161626,
+            3.23161626
+        ],
+        "is_receptacle": false,
+        "object_name": "SprayBottle_1",
+        "object_env_id": "SprayBottle|-02.36|+00.81|-03.71",
+        "location": "loc|-8|-15|3|60"
+    },
+    "CounterTop__minus_10_dot_532_comma__minus_10_dot_532_comma__minus_12_dot_164_comma__minus_12_dot_164_comma_3_dot_376_comma_3_dot_376": {
+        "object_type": "CounterTop",
+        "coords": [
+            -10.532,
+            -10.532,
+            -12.164,
+            -12.164,
+            3.376,
+            3.376
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-10|-7|2|30"
+    },
+    "Toilet__minus_1_dot_810838224_comma__minus_1_dot_810838224_comma__minus_12_dot_2095146_comma__minus_12_dot_2095146_comma_0_dot_0025726184_comma_0_dot_0025726184": {
+        "object_type": "Toilet",
+        "coords": [
+            -1.810838224,
+            -1.810838224,
+            -12.2095146,
+            -12.2095146,
+            0.0025726184,
+            0.0025726184
+        ],
+        "is_receptacle": true,
+        "object_name": "Toilet_1",
+        "object_env_id": "Toilet|-00.45|+00.00|-03.05",
+        "location": "loc|-2|-10|2|15"
+    }
+}

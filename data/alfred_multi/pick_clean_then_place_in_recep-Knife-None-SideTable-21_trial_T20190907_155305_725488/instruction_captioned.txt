@@ -1,0 +1,5 @@
+There is a Knife in the room.
+There is a SideTable in the room.
+There is a SinkBasin in the room.
+Knife_1 is on SideTable_1.
+The instruction is: Wash knife and return to shelf.

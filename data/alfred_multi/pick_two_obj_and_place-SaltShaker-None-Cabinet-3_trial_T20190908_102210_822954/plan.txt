@@ -1,0 +1,4 @@
+(gotolocation agent1 saltshaker_1)
+(pickupobject agent1 saltshaker_1)
+(gotolocation agent1 cabinet_1)
+(putobjectinreceptacle agent1 saltshaker_1 cabinet_1)

@@ -1,0 +1,47 @@
+{
+    "Pillow__minus_7_dot_3119974_comma__minus_7_dot_3119974_comma__minus_5_dot_00419952_comma__minus_5_dot_00419952_comma_2_dot_34_comma_2_dot_34": {
+        "object_type": "Pillow",
+        "coords": [
+            -7.3119974,
+            -7.3119974,
+            -5.00419952,
+            -5.00419952,
+            2.34,
+            2.34
+        ],
+        "is_receptacle": false,
+        "object_name": "Pillow_1",
+        "object_env_id": "Pillow|-01.83|+00.59|-01.25",
+        "location": "loc|-7|-2|2|60"
+    },
+    "ArmChair__minus_7_dot_332_comma__minus_7_dot_332_comma__minus_5_dot_4_comma__minus_5_dot_4_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "ArmChair",
+        "coords": [
+            -7.332,
+            -7.332,
+            -5.4,
+            -5.4,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "ArmChair_1",
+        "object_env_id": null,
+        "location": "loc|-7|-2|2|60"
+    },
+    "DeskLamp_6_dot_6285696_comma_6_dot_6285696_comma__minus_6_dot_421031_comma__minus_6_dot_421031_comma_2_dot_6008796_comma_2_dot_6008796": {
+        "object_type": "DeskLamp",
+        "coords": [
+            6.6285696,
+            6.6285696,
+            -6.421031,
+            -6.421031,
+            2.6008796,
+            2.6008796
+        ],
+        "is_receptacle": false,
+        "object_name": "DeskLamp_1",
+        "object_env_id": "DeskLamp|+01.66|+00.65|-01.61",
+        "location": "loc|6|-3|2|45"
+    }
+}

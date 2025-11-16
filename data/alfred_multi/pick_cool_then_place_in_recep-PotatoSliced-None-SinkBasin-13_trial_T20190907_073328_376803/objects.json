@@ -1,0 +1,77 @@
+{
+    "Knife__minus_17_dot_342012_comma__minus_17_dot_342012_comma_15_dot_45441152_comma_15_dot_45441152_comma_3_dot_8128012_comma_3_dot_8128012": {
+        "object_type": "Knife",
+        "coords": [
+            -17.342012,
+            -17.342012,
+            15.45441152,
+            15.45441152,
+            3.8128012,
+            3.8128012
+        ],
+        "is_receptacle": false,
+        "object_name": "Knife_1",
+        "object_env_id": "Knife|-04.34|+00.95|+03.86",
+        "location": "loc|-15|14|3|45"
+    },
+    "CounterTop__minus_17_dot_04_comma__minus_17_dot_04_comma_19_dot_7744_comma_19_dot_7744_comma_3_dot_836_comma_3_dot_836": {
+        "object_type": "CounterTop",
+        "coords": [
+            -17.04,
+            -17.04,
+            19.7744,
+            19.7744,
+            3.836,
+            3.836
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-15|18|3|60"
+    },
+    "Potato__minus_16_dot_6363468_comma__minus_16_dot_6363468_comma_13_dot_39046572_comma_13_dot_39046572_comma_3_dot_2977004_comma_3_dot_2977004": {
+        "object_type": "Potato",
+        "coords": [
+            -16.6363468,
+            -16.6363468,
+            13.39046572,
+            13.39046572,
+            3.2977004,
+            3.2977004
+        ],
+        "is_receptacle": false,
+        "object_name": "Potato_1",
+        "object_env_id": "Potato|-04.16|+00.82|+03.35",
+        "location": "loc|-15|13|3|60"
+    },
+    "Fridge__minus_1_dot_298918724_comma__minus_1_dot_298918724_comma_14_dot_412_comma_14_dot_412_comma__minus_0_dot_00599211456_comma__minus_0_dot_00599211456": {
+        "object_type": "Fridge",
+        "coords": [
+            -1.298918724,
+            -1.298918724,
+            14.412,
+            14.412,
+            -0.00599211456,
+            -0.00599211456
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": "Fridge|-00.32|00.00|+03.60",
+        "location": "loc|-5|15|1|60"
+    },
+    "SinkBasin__minus_16_dot_7856_comma__minus_16_dot_7856_comma_13_dot_104_comma_13_dot_104_comma_3_dot_121603728_comma_3_dot_121603728": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -16.7856,
+            -16.7856,
+            13.104,
+            13.104,
+            3.121603728,
+            3.121603728
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-15|14|3|60"
+    }
+}

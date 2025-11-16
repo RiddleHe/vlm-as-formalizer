@@ -1,0 +1,47 @@
+{
+    "Watch__minus_9_dot_05664636_comma__minus_9_dot_05664636_comma_17_dot_196_comma_17_dot_196_comma_4_dot_40226744_comma_4_dot_40226744": {
+        "object_type": "Watch",
+        "coords": [
+            -9.05664636,
+            -9.05664636,
+            17.196,
+            17.196,
+            4.40226744,
+            4.40226744
+        ],
+        "is_receptacle": false,
+        "object_name": "Watch_1",
+        "object_env_id": "Watch|-02.26|+01.10|+04.30",
+        "location": "loc|-9|15|0|45"
+    },
+    "Dresser__minus_10_dot_24_comma__minus_10_dot_24_comma_17_dot_196_comma_17_dot_196_comma_0_dot_012_comma_0_dot_012": {
+        "object_type": "Dresser",
+        "coords": [
+            -10.24,
+            -10.24,
+            17.196,
+            17.196,
+            0.012,
+            0.012
+        ],
+        "is_receptacle": true,
+        "object_name": "Dresser_1",
+        "object_env_id": null,
+        "location": "loc|-11|15|0|60"
+    },
+    "FloorLamp__minus_0_dot_9389992_comma__minus_0_dot_9389992_comma__minus_0_dot_51911688_comma__minus_0_dot_51911688_comma_0_dot_01902097464_comma_0_dot_01902097464": {
+        "object_type": "FloorLamp",
+        "coords": [
+            -0.9389992,
+            -0.9389992,
+            -0.51911688,
+            -0.51911688,
+            0.01902097464,
+            0.01902097464
+        ],
+        "is_receptacle": false,
+        "object_name": "FloorLamp_1",
+        "object_env_id": "FloorLamp|-00.23|+00.00|-00.13",
+        "location": "loc|-1|2|2|0"
+    }
+}

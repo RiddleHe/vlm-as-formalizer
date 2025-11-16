@@ -1,0 +1,47 @@
+{
+    "Book_2_dot_5998412_comma_2_dot_5998412_comma_2_dot_342586996_comma_2_dot_342586996_comma_1_dot_669942_comma_1_dot_669942": {
+        "object_type": "Book",
+        "coords": [
+            2.5998412,
+            2.5998412,
+            2.342586996,
+            2.342586996,
+            1.669942,
+            1.669942
+        ],
+        "is_receptacle": false,
+        "object_name": "Book_1",
+        "object_env_id": "Book|+00.65|+00.42|+00.59",
+        "location": "loc|3|4|2|60"
+    },
+    "Bed_5_dot_5319996_comma_5_dot_5319996_comma_0_dot_2920000552_comma_0_dot_2920000552_comma__minus_0_dot_048_comma__minus_0_dot_048": {
+        "object_type": "Bed",
+        "coords": [
+            5.5319996,
+            5.5319996,
+            0.2920000552,
+            0.2920000552,
+            -0.048,
+            -0.048
+        ],
+        "is_receptacle": true,
+        "object_name": "Bed_1",
+        "object_env_id": null,
+        "location": "loc|5|-5|0|45"
+    },
+    "DeskLamp_9_dot_06412888_comma_9_dot_06412888_comma_5_dot_74370336_comma_5_dot_74370336_comma_2_dot_2668872_comma_2_dot_2668872": {
+        "object_type": "DeskLamp",
+        "coords": [
+            9.06412888,
+            9.06412888,
+            5.74370336,
+            5.74370336,
+            2.2668872,
+            2.2668872
+        ],
+        "is_receptacle": false,
+        "object_name": "DeskLamp_1",
+        "object_env_id": "DeskLamp|+02.27|+00.57|+01.44",
+        "location": "loc|7|5|1|60"
+    }
+}

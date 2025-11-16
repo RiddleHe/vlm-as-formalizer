@@ -1,0 +1,7 @@
+There are 2 RemoteControls in the room.
+There is a SideTable in the room.
+There is a Sofa in the room.
+There is a ArmChair in the room.
+RemoteControl_2 is on SideTable_1.
+RemoteControl_1 is on Sofa_1.
+The instruction is: Move two remotes to the seat of a chair.

@@ -1,0 +1,6 @@
+There are 2 Candles in the room.
+There is a Shelf in the room.
+There is a Toilet in the room.
+Candle_2 is on Toilet_1.
+Candle_1 is on Toilet_1.
+The instruction is: Put two candles on a shelf.

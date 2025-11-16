@@ -1,0 +1,6 @@
+There are 2 Pans in the room.
+There are 2 StoveBurners in the room.
+There is a CounterTop in the room.
+Pan_1 is on StoveBurner_1.
+Pan_2 is on StoveBurner_2.
+The instruction is: Place two pans on a counter.

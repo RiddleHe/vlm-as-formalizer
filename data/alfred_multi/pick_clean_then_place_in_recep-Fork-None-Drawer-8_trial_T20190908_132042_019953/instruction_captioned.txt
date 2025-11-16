@@ -1,0 +1,6 @@
+There is a Fork in the room.
+There is a SinkBasin in the room.
+There is a CounterTop in the room.
+There is a Drawer in the room.
+Fork_1 is on CounterTop_1.
+The instruction is: Put a clean fork in a drawer.

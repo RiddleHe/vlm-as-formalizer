@@ -1,0 +1,8 @@
+There is a Potato in the room.
+There is a Knife in the room.
+There is a SideTable in the room.
+There is a DiningTable in the room.
+There is a Microwave in the room.
+Potato_1 is on SideTable_1.
+Knife_1 is on SideTable_1.
+The instruction is: Put a heated slice of potato next to the salt shaker on the black table.

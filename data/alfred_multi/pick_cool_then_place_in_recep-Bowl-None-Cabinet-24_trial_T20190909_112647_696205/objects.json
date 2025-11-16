@@ -1,0 +1,62 @@
+{
+    "Bowl__minus_8_dot_468708_comma__minus_8_dot_468708_comma_14_dot_69257928_comma_14_dot_69257928_comma_0_dot_50227976_comma_0_dot_50227976": {
+        "object_type": "Bowl",
+        "coords": [
+            -8.468708,
+            -8.468708,
+            14.69257928,
+            14.69257928,
+            0.50227976,
+            0.50227976
+        ],
+        "is_receptacle": false,
+        "object_name": "Bowl_1",
+        "object_env_id": "Bowl|-02.12|+00.13|+03.67",
+        "location": "loc|-8|12|0|60"
+    },
+    "Cabinet__minus_7_dot_94402744_comma__minus_7_dot_94402744_comma_14_dot_04586984_comma_14_dot_04586984_comma_1_dot_5401344_comma_1_dot_5401344": {
+        "object_type": "Cabinet",
+        "coords": [
+            -7.94402744,
+            -7.94402744,
+            14.04586984,
+            14.04586984,
+            1.5401344,
+            1.5401344
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": null,
+        "location": "loc|-7|13|0|60"
+    },
+    "Fridge__minus_10_dot_572_comma__minus_10_dot_572_comma_8_dot_536_comma_8_dot_536_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            -10.572,
+            -10.572,
+            8.536,
+            8.536,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": null,
+        "location": "loc|-7|9|3|60"
+    },
+    "Cabinet__minus_9_dot_511564_comma__minus_9_dot_511564_comma_10_dot_23552132_comma_10_dot_23552132_comma_8_dot_058236_comma_8_dot_058236": {
+        "object_type": "Cabinet",
+        "coords": [
+            -9.511564,
+            -9.511564,
+            10.23552132,
+            10.23552132,
+            8.058236,
+            8.058236
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_2",
+        "object_env_id": "Cabinet|-02.38|+02.01|+02.56",
+        "location": "loc|-6|9|3|-15"
+    }
+}

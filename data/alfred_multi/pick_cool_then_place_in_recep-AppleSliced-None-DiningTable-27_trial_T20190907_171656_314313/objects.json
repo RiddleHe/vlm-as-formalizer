@@ -1,0 +1,77 @@
+{
+    "ButterKnife__minus_0_dot_1718580724_comma__minus_0_dot_1718580724_comma_3_dot_5263996_comma_3_dot_5263996_comma_3_dot_1640232_comma_3_dot_1640232": {
+        "object_type": "ButterKnife",
+        "coords": [
+            -0.1718580724,
+            -0.1718580724,
+            3.5263996,
+            3.5263996,
+            3.1640232,
+            3.1640232
+        ],
+        "is_receptacle": false,
+        "object_name": "ButterKnife_1",
+        "object_env_id": "ButterKnife|-00.04|+00.79|+00.88",
+        "location": "loc|2|4|3|60"
+    },
+    "DiningTable__minus_0_dot_848358096_comma__minus_0_dot_848358096_comma_3_dot_524_comma_3_dot_524_comma_0_dot_0886555464_comma_0_dot_0886555464": {
+        "object_type": "DiningTable",
+        "coords": [
+            -0.848358096,
+            -0.848358096,
+            3.524,
+            3.524,
+            0.0886555464,
+            0.0886555464
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|2|3|3|60"
+    },
+    "Apple_8_dot_90021324_comma_8_dot_90021324_comma_3_dot_2240512_comma_3_dot_2240512_comma_3_dot_95331216_comma_3_dot_95331216": {
+        "object_type": "Apple",
+        "coords": [
+            8.90021324,
+            8.90021324,
+            3.2240512,
+            3.2240512,
+            3.95331216,
+            3.95331216
+        ],
+        "is_receptacle": false,
+        "object_name": "Apple_1",
+        "object_env_id": "Apple|+02.23|+00.99|+00.81",
+        "location": "loc|6|2|1|45"
+    },
+    "CounterTop_8_dot_2408_comma_8_dot_2408_comma_2_dot_3348_comma_2_dot_3348_comma_3_dot_8952_comma_3_dot_8952": {
+        "object_type": "CounterTop",
+        "coords": [
+            8.2408,
+            8.2408,
+            2.3348,
+            2.3348,
+            3.8952,
+            3.8952
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": "CounterTop|+02.06|+00.97|+00.58",
+        "location": "loc|6|2|1|45"
+    },
+    "Fridge_8_dot_416_comma_8_dot_416_comma__minus_1_dot_116_comma__minus_1_dot_116_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            8.416,
+            8.416,
+            -1.116,
+            -1.116,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": null,
+        "location": "loc|5|-1|1|60"
+    }
+}

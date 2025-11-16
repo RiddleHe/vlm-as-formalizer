@@ -1,0 +1,7 @@
+There are 2 Mugs in the room.
+There is a Desk in the room.
+There is a Shelf in the room.
+There is a SideTable in the room.
+Mug_1 is on SideTable_1.
+Mug_2 is on Shelf_1.
+The instruction is: Place cup on the desk.

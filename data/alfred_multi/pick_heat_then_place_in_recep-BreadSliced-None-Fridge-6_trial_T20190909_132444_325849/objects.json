@@ -1,0 +1,77 @@
+{
+    "ButterKnife__minus_9_dot_49020196_comma__minus_9_dot_49020196_comma_1_dot_325801848_comma_1_dot_325801848_comma_3_dot_6437684_comma_3_dot_6437684": {
+        "object_type": "ButterKnife",
+        "coords": [
+            -9.49020196,
+            -9.49020196,
+            1.325801848,
+            1.325801848,
+            3.6437684,
+            3.6437684
+        ],
+        "is_receptacle": false,
+        "object_name": "ButterKnife_1",
+        "object_env_id": "ButterKnife|-02.37|+00.91|+00.33",
+        "location": "loc|-7|2|3|45"
+    },
+    "CounterTop__minus_5_dot_94_comma__minus_5_dot_94_comma_5_dot_276_comma_5_dot_276_comma_3_dot_7856_comma_3_dot_7856": {
+        "object_type": "CounterTop",
+        "coords": [
+            -5.94,
+            -5.94,
+            5.276,
+            5.276,
+            3.7856,
+            3.7856
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-7|6|1|60"
+    },
+    "Bread__minus_10_dot_4870014_comma__minus_10_dot_4870014_comma_4_dot_9237728_comma_4_dot_9237728_comma_3_dot_986878632_comma_3_dot_986878632": {
+        "object_type": "Bread",
+        "coords": [
+            -10.4870014,
+            -10.4870014,
+            4.9237728,
+            4.9237728,
+            3.986878632,
+            3.986878632
+        ],
+        "is_receptacle": false,
+        "object_name": "Bread_1",
+        "object_env_id": "Bread|-02.62|+01.00|+01.23",
+        "location": "loc|-7|4|3|30"
+    },
+    "Microwave__minus_10_dot_3232_comma__minus_10_dot_3232_comma_9_dot_764_comma_9_dot_764_comma_3_dot_6_comma_3_dot_6": {
+        "object_type": "Microwave",
+        "coords": [
+            -10.3232,
+            -10.3232,
+            9.764,
+            9.764,
+            3.6,
+            3.6
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": "Microwave|-02.58|+00.90|+02.44",
+        "location": "loc|-7|10|3|45"
+    },
+    "Fridge__minus_9_dot_90399932_comma__minus_9_dot_90399932_comma__minus_3_dot_132_comma__minus_3_dot_132_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            -9.90399932,
+            -9.90399932,
+            -3.132,
+            -3.132,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": "Fridge|-02.48|+00.00|-00.78",
+        "location": "loc|-7|-3|3|60"
+    }
+}

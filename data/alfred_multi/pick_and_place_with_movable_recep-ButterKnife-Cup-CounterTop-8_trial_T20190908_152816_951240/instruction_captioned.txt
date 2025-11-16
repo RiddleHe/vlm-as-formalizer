@@ -1,0 +1,7 @@
+There is a Cup in the room.
+There is a ButterKnife in the room.
+There are 2 CounterTops in the room.
+There is a Cabinet in the room.
+ButterKnife_1 is on CounterTop_1.
+Cup_1 is on Cabinet_1.
+The instruction is: put a glass and knife onto a kitchen shelf

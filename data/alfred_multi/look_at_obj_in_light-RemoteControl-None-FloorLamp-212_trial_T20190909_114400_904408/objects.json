@@ -1,0 +1,47 @@
+{
+    "RemoteControl_6_dot_34570312_comma_6_dot_34570312_comma_7_dot_27871132_comma_7_dot_27871132_comma_1_dot_349453928_comma_1_dot_349453928": {
+        "object_type": "RemoteControl",
+        "coords": [
+            6.34570312,
+            6.34570312,
+            7.27871132,
+            7.27871132,
+            1.349453928,
+            1.349453928
+        ],
+        "is_receptacle": false,
+        "object_name": "RemoteControl_1",
+        "object_env_id": "RemoteControl|+01.59|+00.34|+01.82",
+        "location": "loc|6|4|0|60"
+    },
+    "Sofa_4_dot_696_comma_4_dot_696_comma_7_dot_46_comma_7_dot_46_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Sofa",
+        "coords": [
+            4.696,
+            4.696,
+            7.46,
+            7.46,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Sofa_1",
+        "object_env_id": null,
+        "location": "loc|5|4|0|60"
+    },
+    "FloorLamp_14_dot_43577672_comma_14_dot_43577672_comma_8_dot_65409376_comma_8_dot_65409376_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "FloorLamp",
+        "coords": [
+            14.43577672,
+            14.43577672,
+            8.65409376,
+            8.65409376,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": false,
+        "object_name": "FloorLamp_1",
+        "object_env_id": "FloorLamp|+03.61|+00.00|+02.16",
+        "location": "loc|14|5|0|0"
+    }
+}

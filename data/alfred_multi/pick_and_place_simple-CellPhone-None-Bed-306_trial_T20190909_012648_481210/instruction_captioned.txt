@@ -1,0 +1,5 @@
+There is a CellPhone in the room.
+There is a Bed in the room.
+There is a Desk in the room.
+CellPhone_1 is on Desk_1.
+The instruction is: Put a phone on the bed.

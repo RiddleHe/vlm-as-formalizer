@@ -1,0 +1,62 @@
+{
+    "Cloth__minus_2_dot_763601064_comma__minus_2_dot_763601064_comma_2_dot_3275796_comma_2_dot_3275796_comma_0_dot_1332689524_comma_0_dot_1332689524": {
+        "object_type": "Cloth",
+        "coords": [
+            -2.763601064,
+            -2.763601064,
+            2.3275796,
+            2.3275796,
+            0.1332689524,
+            0.1332689524
+        ],
+        "is_receptacle": false,
+        "object_name": "Cloth_1",
+        "object_env_id": "Cloth|-00.69|+00.03|+00.58",
+        "location": "loc|-6|2|1|60"
+    },
+    "BathtubBasin__minus_2_dot_232240676_comma__minus_2_dot_232240676_comma_3_dot_245409012_comma_3_dot_245409012_comma_0_dot_0928844212_comma_0_dot_0928844212": {
+        "object_type": "BathtubBasin",
+        "coords": [
+            -2.232240676,
+            -2.232240676,
+            3.245409012,
+            3.245409012,
+            0.0928844212,
+            0.0928844212
+        ],
+        "is_receptacle": true,
+        "object_name": "BathtubBasin_1",
+        "object_env_id": null,
+        "location": "loc|-6|3|1|60"
+    },
+    "SinkBasin__minus_12_dot_0672_comma__minus_12_dot_0672_comma_0_dot_87_comma_0_dot_87_comma_3_dot_4988_comma_3_dot_4988": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -12.0672,
+            -12.0672,
+            0.87,
+            0.87,
+            3.4988,
+            3.4988
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-10|1|3|60"
+    },
+    "Cloth__minus_2_dot_191014528_comma__minus_2_dot_191014528_comma_1_dot_409749508_comma_1_dot_409749508_comma_0_dot_1332689524_comma_0_dot_1332689524": {
+        "object_type": "Cloth",
+        "coords": [
+            -2.191014528,
+            -2.191014528,
+            1.409749508,
+            1.409749508,
+            0.1332689524,
+            0.1332689524
+        ],
+        "is_receptacle": false,
+        "object_name": "Cloth_2",
+        "object_env_id": "Cloth|-00.55|+00.03|+00.35",
+        "location": "loc|-6|1|1|60"
+    }
+}

@@ -1,0 +1,6 @@
+There are 2 CreditCards in the room.
+There is a Dresser in the room.
+There is a DiningTable in the room.
+CreditCard_2 is on Dresser_1.
+CreditCard_1 is on Dresser_1.
+The instruction is: Move two credit cards to the table. from the television stand.

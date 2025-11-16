@@ -1,0 +1,77 @@
+{
+    "SoapBar__minus_10_dot_85272_comma__minus_10_dot_85272_comma_3_dot_357682228_comma_3_dot_357682228_comma_3_dot_536687852_comma_3_dot_536687852": {
+        "object_type": "SoapBar",
+        "coords": [
+            -10.85272,
+            -10.85272,
+            3.357682228,
+            3.357682228,
+            3.536687852,
+            3.536687852
+        ],
+        "is_receptacle": false,
+        "object_name": "SoapBar_1",
+        "object_env_id": "SoapBar|-02.71|+00.88|+00.84",
+        "location": "loc|-8|3|3|45"
+    },
+    "SinkBasin__minus_11_dot_1844_comma__minus_11_dot_1844_comma_3_dot_0612_comma_3_dot_0612_comma_3_dot_5016_comma_3_dot_5016": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -11.1844,
+            -11.1844,
+            3.0612,
+            3.0612,
+            3.5016,
+            3.5016
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-10|0|0|45"
+    },
+    "Cart__minus_11_dot_66_comma__minus_11_dot_66_comma_5_dot_924_comma_5_dot_924_comma_0_dot_048_comma_0_dot_048": {
+        "object_type": "Cart",
+        "coords": [
+            -11.66,
+            -11.66,
+            5.924,
+            5.924,
+            0.048,
+            0.048
+        ],
+        "is_receptacle": true,
+        "object_name": "Cart_1",
+        "object_env_id": "Cart|-02.92|+00.01|+01.48",
+        "location": "loc|-9|6|3|60"
+    },
+    "SoapBar__minus_0_dot_20798636_comma__minus_0_dot_20798636_comma_9_dot_1091_comma_9_dot_1091_comma_3_dot_8604384_comma_3_dot_8604384": {
+        "object_type": "SoapBar",
+        "coords": [
+            -0.20798636,
+            -0.20798636,
+            9.1091,
+            9.1091,
+            3.8604384,
+            3.8604384
+        ],
+        "is_receptacle": false,
+        "object_name": "SoapBar_2",
+        "object_env_id": "SoapBar|-00.05|+00.97|+02.28",
+        "location": "loc|-2|7|0|60"
+    },
+    "Toilet__minus_0_dot_256_comma__minus_0_dot_256_comma_7_dot_356_comma_7_dot_356_comma_0_dot_048159182_comma_0_dot_048159182": {
+        "object_type": "Toilet",
+        "coords": [
+            -0.256,
+            -0.256,
+            7.356,
+            7.356,
+            0.048159182,
+            0.048159182
+        ],
+        "is_receptacle": true,
+        "object_name": "Toilet_1",
+        "object_env_id": null,
+        "location": "loc|-4|7|1|15"
+    }
+}

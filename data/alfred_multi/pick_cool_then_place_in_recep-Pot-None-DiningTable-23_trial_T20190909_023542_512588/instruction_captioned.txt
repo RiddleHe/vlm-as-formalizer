@@ -1,0 +1,6 @@
+There is a Pot in the room.
+There is a DiningTable in the room.
+There is a StoveBurner in the room.
+There is a Fridge in the room.
+Pot_1 is on StoveBurner_1.
+The instruction is: Put the chilled bowl on the table

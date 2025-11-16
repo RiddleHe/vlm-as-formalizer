@@ -1,0 +1,5 @@
+There is a KeyChain in the room.
+There is a Sofa in the room.
+There is a SideTable in the room.
+KeyChain_1 is on SideTable_1.
+The instruction is: Move a set of keys to the loveseat.

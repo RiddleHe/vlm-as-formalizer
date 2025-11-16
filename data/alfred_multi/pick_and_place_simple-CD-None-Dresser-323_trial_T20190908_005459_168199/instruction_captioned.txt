@@ -1,0 +1,5 @@
+There is a CD in the room.
+There is a Desk in the room.
+There is a Dresser in the room.
+CD_1 is on Desk_1.
+The instruction is: Move the CD that's on top of the desk to on top of the dresser.

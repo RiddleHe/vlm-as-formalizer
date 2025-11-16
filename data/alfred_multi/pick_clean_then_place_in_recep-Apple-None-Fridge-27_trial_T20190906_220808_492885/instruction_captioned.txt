@@ -1,0 +1,6 @@
+There is a Apple in the room.
+There is a Fridge in the room.
+There is a Microwave in the room.
+There is a SinkBasin in the room.
+Apple_1 is on Microwave_1.
+The instruction is: Put a cleaned apple in the fridge.

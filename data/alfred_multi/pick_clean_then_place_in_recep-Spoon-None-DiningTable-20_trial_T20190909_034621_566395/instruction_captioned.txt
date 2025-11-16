@@ -1,0 +1,6 @@
+There is a Spoon in the room.
+There is a DiningTable in the room.
+There is a CounterTop in the room.
+There is a SinkBasin in the room.
+Spoon_1 is on CounterTop_1.
+The instruction is: Stand a cleaned spoon on the table.

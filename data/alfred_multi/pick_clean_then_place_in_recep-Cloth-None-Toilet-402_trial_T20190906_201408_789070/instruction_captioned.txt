@@ -1,0 +1,6 @@
+There is a Cloth in the room.
+There is a SinkBasin in the room.
+There is a Toilet in the room.
+There is a CounterTop in the room.
+Cloth_1 is on CounterTop_1.
+The instruction is: Put a cleaned rag on the toilet tank lid.

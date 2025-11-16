@@ -1,0 +1,8 @@
+There is a ButterKnife in the room.
+There is a Bread in the room.
+There is a CounterTop in the room.
+There is a Fridge in the room.
+There is a Microwave in the room.
+ButterKnife_1 is on CounterTop_1.
+Bread_1 is on CounterTop_1.
+The instruction is: cook and chill a slice of bread

@@ -1,0 +1,92 @@
+{
+    "ButterKnife_6_dot_050644_comma_6_dot_050644_comma_1_dot_979781272_comma_1_dot_979781272_comma_3_dot_6445684_comma_3_dot_6445684": {
+        "object_type": "ButterKnife",
+        "coords": [
+            6.050644,
+            6.050644,
+            1.979781272,
+            1.979781272,
+            3.6445684,
+            3.6445684
+        ],
+        "is_receptacle": false,
+        "object_name": "ButterKnife_1",
+        "object_env_id": "ButterKnife|+01.51|+00.91|+00.49",
+        "location": "loc|4|2|1|60"
+    },
+    "CounterTop_6_dot_344_comma_6_dot_344_comma_1_dot_624_comma_1_dot_624_comma_3_dot_7864_comma_3_dot_7864": {
+        "object_type": "CounterTop",
+        "coords": [
+            6.344,
+            6.344,
+            1.624,
+            1.624,
+            3.7864,
+            3.7864
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|4|2|1|45"
+    },
+    "Lettuce__minus_2_dot_4042496_comma__minus_2_dot_4042496_comma_1_dot_69593334_comma_1_dot_69593334_comma_3_dot_976215364_comma_3_dot_976215364": {
+        "object_type": "Lettuce",
+        "coords": [
+            -2.4042496,
+            -2.4042496,
+            1.69593334,
+            1.69593334,
+            3.976215364,
+            3.976215364
+        ],
+        "is_receptacle": false,
+        "object_name": "Lettuce_1",
+        "object_env_id": "Lettuce|-00.60|+00.99|+00.42",
+        "location": "loc|-5|2|1|45"
+    },
+    "Fridge__minus_9_dot_90399932_comma__minus_9_dot_90399932_comma__minus_3_dot_132_comma__minus_3_dot_132_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            -9.90399932,
+            -9.90399932,
+            -3.132,
+            -3.132,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": "Fridge|-02.48|+00.00|-00.78",
+        "location": "loc|-7|-3|3|60"
+    },
+    "CounterTop__minus_1_dot_44_comma__minus_1_dot_44_comma_4_dot_376_comma_4_dot_376_comma_3_dot_7856_comma_3_dot_7856": {
+        "object_type": "CounterTop",
+        "coords": [
+            -1.44,
+            -1.44,
+            4.376,
+            4.376,
+            3.7856,
+            3.7856
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_2",
+        "object_env_id": null,
+        "location": "loc|-5|5|1|45"
+    },
+    "GarbageCan_6_dot_584_comma_6_dot_584_comma_2_dot_716_comma_2_dot_716_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "GarbageCan",
+        "coords": [
+            6.584,
+            6.584,
+            2.716,
+            2.716,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "GarbageCan_1",
+        "object_env_id": "GarbageCan|+01.65|+00.00|+00.68",
+        "location": "loc|3|5|1|60"
+    }
+}

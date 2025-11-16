@@ -1,0 +1,9 @@
+There is a ButterKnife in the room.
+There is a Pan in the room.
+There is a Tomato in the room.
+There is a DiningTable in the room.
+There is a StoveBurner in the room.
+Tomato_1 is on DiningTable_1.
+ButterKnife_1 is on DiningTable_1.
+Pan_1 is on StoveBurner_1.
+The instruction is: Place a pan with a slice of tomato onto the island.

@@ -1,0 +1,7 @@
+There are 2 ToiletPapers in the room.
+There is a CounterTop in the room.
+There is a Cabinet in the room.
+There is a GarbageCan in the room.
+ToiletPaper_2 is on CounterTop_1.
+ToiletPaper_1 is on GarbageCan_1.
+The instruction is: To place a roll of toilet paper plus an empty roll in the second cabinet from the left under the sink.

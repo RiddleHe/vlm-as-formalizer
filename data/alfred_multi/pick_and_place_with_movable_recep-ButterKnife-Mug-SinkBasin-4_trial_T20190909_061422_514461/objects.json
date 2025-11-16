@@ -1,0 +1,62 @@
+{
+    "ButterKnife__minus_1_dot_1689986_comma__minus_1_dot_1689986_comma_7_dot_6828704_comma_7_dot_6828704_comma_4_dot_18875836_comma_4_dot_18875836": {
+        "object_type": "ButterKnife",
+        "coords": [
+            -1.1689986,
+            -1.1689986,
+            7.6828704,
+            7.6828704,
+            4.18875836,
+            4.18875836
+        ],
+        "is_receptacle": false,
+        "object_name": "ButterKnife_1",
+        "object_env_id": "ButterKnife|-00.29|+01.05|+01.92",
+        "location": "loc|-1|5|0|45"
+    },
+    "DiningTable__minus_2_dot_48_comma__minus_2_dot_48_comma_9_dot_944_comma_9_dot_944_comma_0_dot_0698738544_comma_0_dot_0698738544": {
+        "object_type": "DiningTable",
+        "coords": [
+            -2.48,
+            -2.48,
+            9.944,
+            9.944,
+            0.0698738544,
+            0.0698738544
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-5|12|1|60"
+    },
+    "Mug__minus_1_dot_1689986_comma__minus_1_dot_1689986_comma_8_dot_57996464_comma_8_dot_57996464_comma_4_dot_16859008_comma_4_dot_16859008": {
+        "object_type": "Mug",
+        "coords": [
+            -1.1689986,
+            -1.1689986,
+            8.57996464,
+            8.57996464,
+            4.16859008,
+            4.16859008
+        ],
+        "is_receptacle": true,
+        "object_name": "Mug_1",
+        "object_env_id": "Mug|-00.29|+01.04|+02.14",
+        "location": "loc|-1|5|0|30"
+    },
+    "SinkBasin__minus_5_dot_5576_comma__minus_5_dot_5576_comma_1_dot_7152_comma_1_dot_7152_comma_3_dot_684_comma_3_dot_684": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -5.5576,
+            -5.5576,
+            1.7152,
+            1.7152,
+            3.684,
+            3.684
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-4|5|2|45"
+    }
+}

@@ -1,0 +1,5 @@
+There is a ToiletPaper in the room.
+There is a CounterTop in the room.
+There is a ToiletPaperHanger in the room.
+ToiletPaper_1 is on CounterTop_1.
+The instruction is: To move a toilet paper roll to the toilet paper dispenser.

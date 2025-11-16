@@ -1,0 +1,6 @@
+There are 2 SaltShakers in the room.
+There is a CounterTop in the room.
+There is a Cabinet in the room.
+SaltShaker_1 is on CounterTop_1.
+SaltShaker_2 is on CounterTop_1.
+The instruction is: To move two salt shakers to the cabinet below the counter.

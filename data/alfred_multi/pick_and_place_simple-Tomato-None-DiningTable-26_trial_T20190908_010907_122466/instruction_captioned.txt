@@ -1,0 +1,6 @@
+There is a Tomato in the room.
+There is a Fridge in the room.
+There is a DiningTable in the room.
+Tomato_1 is frozen.
+Tomato_1 is on Fridge_1.
+The instruction is: find a tomato to put on a table

@@ -1,0 +1,62 @@
+{
+    "Watch__minus_5_dot_80471228_comma__minus_5_dot_80471228_comma_6_dot_219536_comma_6_dot_219536_comma_3_dot_025145052_comma_3_dot_025145052": {
+        "object_type": "Watch",
+        "coords": [
+            -5.80471228,
+            -5.80471228,
+            6.219536,
+            6.219536,
+            3.025145052,
+            3.025145052
+        ],
+        "is_receptacle": false,
+        "object_name": "Watch_1",
+        "object_env_id": "Watch|-01.45|+00.76|+01.55",
+        "location": "loc|-6|9|2|45"
+    },
+    "DiningTable__minus_6_dot_368032_comma__minus_6_dot_368032_comma_5_dot_096312_comma_5_dot_096312_comma_1_dot_2581852_comma_1_dot_2581852": {
+        "object_type": "DiningTable",
+        "coords": [
+            -6.368032,
+            -6.368032,
+            5.096312,
+            5.096312,
+            1.2581852,
+            1.2581852
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-2|5|3|45"
+    },
+    "Dresser__minus_12_dot_804_comma__minus_12_dot_804_comma_27_dot_164_comma_27_dot_164_comma__minus_0_dot_032_comma__minus_0_dot_032": {
+        "object_type": "Dresser",
+        "coords": [
+            -12.804,
+            -12.804,
+            27.164,
+            27.164,
+            -0.032,
+            -0.032
+        ],
+        "is_receptacle": true,
+        "object_name": "Dresser_1",
+        "object_env_id": "Dresser|-03.20|-00.01|+06.79",
+        "location": "loc|-13|24|0|60"
+    },
+    "Watch__minus_5_dot_80471228_comma__minus_5_dot_80471228_comma_3_dot_411476612_comma_3_dot_411476612_comma_3_dot_025145052_comma_3_dot_025145052": {
+        "object_type": "Watch",
+        "coords": [
+            -5.80471228,
+            -5.80471228,
+            3.411476612,
+            3.411476612,
+            3.025145052,
+            3.025145052
+        ],
+        "is_receptacle": false,
+        "object_name": "Watch_2",
+        "object_env_id": "Watch|-01.45|+00.76|+00.85",
+        "location": "loc|-6|1|0|60"
+    }
+}

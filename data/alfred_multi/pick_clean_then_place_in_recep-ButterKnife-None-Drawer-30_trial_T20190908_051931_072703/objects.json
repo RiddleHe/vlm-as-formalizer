@@ -1,0 +1,62 @@
+{
+    "ButterKnife_4_dot_91945552_comma_4_dot_91945552_comma_2_dot_990052224_comma_2_dot_990052224_comma_3_dot_6440084_comma_3_dot_6440084": {
+        "object_type": "ButterKnife",
+        "coords": [
+            4.91945552,
+            4.91945552,
+            2.990052224,
+            2.990052224,
+            3.6440084,
+            3.6440084
+        ],
+        "is_receptacle": false,
+        "object_name": "ButterKnife_1",
+        "object_env_id": "ButterKnife|+01.23|+00.91|+00.75",
+        "location": "loc|8|3|3|45"
+    },
+    "CounterTop_4_dot_844_comma_4_dot_844_comma_1_dot_856_comma_1_dot_856_comma_3_dot_7488_comma_3_dot_7488": {
+        "object_type": "CounterTop",
+        "coords": [
+            4.844,
+            4.844,
+            1.856,
+            1.856,
+            3.7488,
+            3.7488
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|4|-2|0|45"
+    },
+    "SinkBasin_12_dot_28_comma_12_dot_28_comma_0_dot_4332_comma_0_dot_4332_comma_2_dot_947206_comma_2_dot_947206": {
+        "object_type": "SinkBasin",
+        "coords": [
+            12.28,
+            12.28,
+            0.4332,
+            0.4332,
+            2.947206,
+            2.947206
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|10|-1|1|60"
+    },
+    "Drawer_12_dot_084_comma_12_dot_084_comma__minus_3_dot_1352_comma__minus_3_dot_1352_comma_3_dot_0768_comma_3_dot_0768": {
+        "object_type": "Drawer",
+        "coords": [
+            12.084,
+            12.084,
+            -3.1352,
+            -3.1352,
+            3.0768,
+            3.0768
+        ],
+        "is_receptacle": true,
+        "object_name": "Drawer_1",
+        "object_env_id": "Drawer|+03.02|+00.77|-00.78",
+        "location": "loc|9|-2|1|45"
+    }
+}

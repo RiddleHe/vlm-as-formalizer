@@ -1,0 +1,6 @@
+There are 2 Spatulas in the room.
+There is a CounterTop in the room.
+There is a Drawer in the room.
+Spatula_2 is on CounterTop_1.
+Spatula_1 is on CounterTop_1.
+The instruction is: Place two spatulas in a counter drawer.

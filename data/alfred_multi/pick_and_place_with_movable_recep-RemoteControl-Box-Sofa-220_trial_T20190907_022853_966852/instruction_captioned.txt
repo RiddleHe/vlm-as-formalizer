@@ -1,0 +1,7 @@
+There is a RemoteControl in the room.
+There is a Box in the room.
+There is a Sofa in the room.
+There is a CoffeeTable in the room.
+RemoteControl_1 is on CoffeeTable_1.
+Box_1 is on CoffeeTable_1.
+The instruction is: Put a box with a remote in it on the couch.

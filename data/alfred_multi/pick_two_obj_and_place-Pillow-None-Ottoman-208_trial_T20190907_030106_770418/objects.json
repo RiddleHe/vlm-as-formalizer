@@ -1,0 +1,77 @@
+{
+    "Pillow_1_dot_752582552_comma_1_dot_752582552_comma__minus_2_dot_708798_comma__minus_2_dot_708798_comma_2_dot_412881852_comma_2_dot_412881852": {
+        "object_type": "Pillow",
+        "coords": [
+            1.752582552,
+            1.752582552,
+            -2.708798,
+            -2.708798,
+            2.412881852,
+            2.412881852
+        ],
+        "is_receptacle": false,
+        "object_name": "Pillow_1",
+        "object_env_id": "Pillow|+00.44|+00.60|-00.68",
+        "location": "loc|-1|-2|1|60"
+    },
+    "Sofa_3_dot_124_comma_3_dot_124_comma__minus_2_dot_04_comma__minus_2_dot_04_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Sofa",
+        "coords": [
+            3.124,
+            3.124,
+            -2.04,
+            -2.04,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Sofa_1",
+        "object_env_id": null,
+        "location": "loc|-2|-3|1|45"
+    },
+    "Ottoman__minus_2_dot_3039996_comma__minus_2_dot_3039996_comma_4_dot_212_comma_4_dot_212_comma_0_dot_032698512_comma_0_dot_032698512": {
+        "object_type": "Ottoman",
+        "coords": [
+            -2.3039996,
+            -2.3039996,
+            4.212,
+            4.212,
+            0.032698512,
+            0.032698512
+        ],
+        "is_receptacle": true,
+        "object_name": "Ottoman_1",
+        "object_env_id": "Ottoman|-00.58|+00.01|+01.05",
+        "location": "loc|-2|2|0|60"
+    },
+    "Pillow__minus_2_dot_17616868_comma__minus_2_dot_17616868_comma_7_dot_18225576_comma_7_dot_18225576_comma_2_dot_104881764_comma_2_dot_104881764": {
+        "object_type": "Pillow",
+        "coords": [
+            -2.17616868,
+            -2.17616868,
+            7.18225576,
+            7.18225576,
+            2.104881764,
+            2.104881764
+        ],
+        "is_receptacle": false,
+        "object_name": "Pillow_2",
+        "object_env_id": "Pillow|-00.54|+00.53|+01.80",
+        "location": "loc|-5|7|1|60"
+    },
+    "ArmChair__minus_2_dot_24_comma__minus_2_dot_24_comma_7_dot_804_comma_7_dot_804_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "ArmChair",
+        "coords": [
+            -2.24,
+            -2.24,
+            7.804,
+            7.804,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "ArmChair_1",
+        "object_env_id": null,
+        "location": "loc|-7|7|1|60"
+    }
+}

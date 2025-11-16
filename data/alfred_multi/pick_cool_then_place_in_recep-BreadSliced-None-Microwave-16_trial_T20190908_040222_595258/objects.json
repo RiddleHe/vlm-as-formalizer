@@ -1,0 +1,107 @@
+{
+    "Knife_4_dot_68322944_comma_4_dot_68322944_comma__minus_6_dot_6704054_comma__minus_6_dot_6704054_comma_4_dot_20889236_comma_4_dot_20889236": {
+        "object_type": "Knife",
+        "coords": [
+            4.68322944,
+            4.68322944,
+            -6.6704054,
+            -6.6704054,
+            4.20889236,
+            4.20889236
+        ],
+        "is_receptacle": false,
+        "object_name": "Knife_1",
+        "object_env_id": "Knife|+01.17|+01.05|-01.67",
+        "location": "loc|3|-7|1|60"
+    },
+    "CounterTop_11_dot_252_comma_11_dot_252_comma_2_dot_7_comma_2_dot_7_comma_3_dot_972_comma_3_dot_972": {
+        "object_type": "CounterTop",
+        "coords": [
+            11.252,
+            11.252,
+            2.7,
+            2.7,
+            3.972,
+            3.972
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|9|1|1|45"
+    },
+    "Bread_10_dot_90603256_comma_10_dot_90603256_comma_13_dot_97123148_comma_13_dot_97123148_comma_3_dot_330284_comma_3_dot_330284": {
+        "object_type": "Bread",
+        "coords": [
+            10.90603256,
+            10.90603256,
+            13.97123148,
+            13.97123148,
+            3.330284,
+            3.330284
+        ],
+        "is_receptacle": false,
+        "object_name": "Bread_1",
+        "object_env_id": "Bread|+02.73|+00.83|+03.49",
+        "location": "loc|11|12|0|60"
+    },
+    "CounterTop__minus_3_dot_2522_comma__minus_3_dot_2522_comma_8_dot_756_comma_8_dot_756_comma_4_dot_252_comma_4_dot_252": {
+        "object_type": "CounterTop",
+        "coords": [
+            -3.2522,
+            -3.2522,
+            8.756,
+            8.756,
+            4.252,
+            4.252
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_2",
+        "object_env_id": "CounterTop|-00.81|+01.06|+02.19",
+        "location": "loc|0|9|3|30"
+    },
+    "DiningTable_9_dot_788_comma_9_dot_788_comma_15_dot_904_comma_15_dot_904_comma_2_dot_673336984_comma_2_dot_673336984": {
+        "object_type": "DiningTable",
+        "coords": [
+            9.788,
+            9.788,
+            15.904,
+            15.904,
+            2.673336984,
+            2.673336984
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|10|12|0|45"
+    },
+    "Fridge__minus_3_dot_636_comma__minus_3_dot_636_comma__minus_1_dot_624_comma__minus_1_dot_624_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            -3.636,
+            -3.636,
+            -1.624,
+            -1.624,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": null,
+        "location": "loc|0|-2|3|60"
+    },
+    "Microwave_7_dot_758_comma_7_dot_758_comma__minus_7_dot_3052_comma__minus_7_dot_3052_comma_6_dot_982419_comma_6_dot_982419": {
+        "object_type": "Microwave",
+        "coords": [
+            7.758,
+            7.758,
+            -7.3052,
+            -7.3052,
+            6.982419,
+            6.982419
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": "Microwave|+01.94|+01.75|-01.83",
+        "location": "loc|8|-4|2|0"
+    }
+}

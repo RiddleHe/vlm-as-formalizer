@@ -1,0 +1,77 @@
+{
+    "CellPhone_5_dot_04_comma_5_dot_04_comma__minus_0_dot_95280862_comma__minus_0_dot_95280862_comma_5_dot_64643_comma_5_dot_64643": {
+        "object_type": "CellPhone",
+        "coords": [
+            5.04,
+            5.04,
+            -0.95280862,
+            -0.95280862,
+            5.64643,
+            5.64643
+        ],
+        "is_receptacle": false,
+        "object_name": "CellPhone_1",
+        "object_env_id": "CellPhone|+01.26|+01.41|-00.24",
+        "location": "loc|3|-1|1|30"
+    },
+    "Shelf_5_dot_04_comma_5_dot_04_comma__minus_1_dot_036_comma__minus_1_dot_036_comma_5_dot_61199952_comma_5_dot_61199952": {
+        "object_type": "Shelf",
+        "coords": [
+            5.04,
+            5.04,
+            -1.036,
+            -1.036,
+            5.61199952,
+            5.61199952
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": null,
+        "location": "loc|3|-1|1|30"
+    },
+    "Dresser__minus_5_dot_864_comma__minus_5_dot_864_comma__minus_8_dot_184_comma__minus_8_dot_184_comma_0_dot_1_comma_0_dot_1": {
+        "object_type": "Dresser",
+        "coords": [
+            -5.864,
+            -5.864,
+            -8.184,
+            -8.184,
+            0.1,
+            0.1
+        ],
+        "is_receptacle": true,
+        "object_name": "Dresser_1",
+        "object_env_id": "Dresser|-01.47|+00.03|-02.05",
+        "location": "loc|-3|-8|3|60"
+    },
+    "CellPhone__minus_6_dot_25463916_comma__minus_6_dot_25463916_comma_2_dot_47300148_comma_2_dot_47300148_comma_2_dot_447409868_comma_2_dot_447409868": {
+        "object_type": "CellPhone",
+        "coords": [
+            -6.25463916,
+            -6.25463916,
+            2.47300148,
+            2.47300148,
+            2.447409868,
+            2.447409868
+        ],
+        "is_receptacle": false,
+        "object_name": "CellPhone_2",
+        "object_env_id": "CellPhone|-01.56|+00.61|+00.62",
+        "location": "loc|-6|5|2|60"
+    },
+    "Bed__minus_4_dot_848_comma__minus_4_dot_848_comma__minus_1_dot_064_comma__minus_1_dot_064_comma_0_dot_08_comma_0_dot_08": {
+        "object_type": "Bed",
+        "coords": [
+            -4.848,
+            -4.848,
+            -1.064,
+            -1.064,
+            0.08,
+            0.08
+        ],
+        "is_receptacle": true,
+        "object_name": "Bed_1",
+        "object_env_id": null,
+        "location": "loc|0|0|3|60"
+    }
+}

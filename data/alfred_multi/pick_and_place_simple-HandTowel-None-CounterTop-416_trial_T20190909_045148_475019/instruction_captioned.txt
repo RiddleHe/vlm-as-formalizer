@@ -1,0 +1,5 @@
+There is a HandTowel in the room.
+There is a HandTowelHolder in the room.
+There is a CounterTop in the room.
+HandTowel_1 is on HandTowelHolder_1.
+The instruction is: Put the hand towel on the counter.

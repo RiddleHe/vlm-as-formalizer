@@ -1,0 +1,47 @@
+{
+    "SprayBottle__minus_7_dot_56399536_comma__minus_7_dot_56399536_comma_7_dot_77481316_comma_7_dot_77481316_comma_4_dot_18317272_comma_4_dot_18317272": {
+        "object_type": "SprayBottle",
+        "coords": [
+            -7.56399536,
+            -7.56399536,
+            7.77481316,
+            7.77481316,
+            4.18317272,
+            4.18317272
+        ],
+        "is_receptacle": false,
+        "object_name": "SprayBottle_1",
+        "object_env_id": "SprayBottle|-01.89|+01.05|+01.94",
+        "location": "loc|-3|8|3|30"
+    },
+    "Toilet__minus_6_dot_272_comma__minus_6_dot_272_comma_7_dot_264_comma_7_dot_264_comma__minus_0_dot_00123298168_comma__minus_0_dot_00123298168": {
+        "object_type": "Toilet",
+        "coords": [
+            -6.272,
+            -6.272,
+            7.264,
+            7.264,
+            -0.00123298168,
+            -0.00123298168
+        ],
+        "is_receptacle": true,
+        "object_name": "Toilet_1",
+        "object_env_id": null,
+        "location": "loc|-5|11|2|15"
+    },
+    "Cabinet__minus_6_dot_45430468_comma__minus_6_dot_45430468_comma_12_dot_562_comma_12_dot_562_comma_1_dot_2380676_comma_1_dot_2380676": {
+        "object_type": "Cabinet",
+        "coords": [
+            -6.45430468,
+            -6.45430468,
+            12.562,
+            12.562,
+            1.2380676,
+            1.2380676
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": "Cabinet|-01.61|+00.31|+03.14",
+        "location": "loc|-3|11|3|60"
+    }
+}

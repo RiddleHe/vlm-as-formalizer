@@ -1,0 +1,47 @@
+{
+    "CreditCard_45_dot_70508_comma_45_dot_70508_comma_3_dot_084484576_comma_3_dot_084484576_comma_2_dot_363983868_comma_2_dot_363983868": {
+        "object_type": "CreditCard",
+        "coords": [
+            45.70508,
+            45.70508,
+            3.084484576,
+            3.084484576,
+            2.363983868,
+            2.363983868
+        ],
+        "is_receptacle": false,
+        "object_name": "CreditCard_1",
+        "object_env_id": "CreditCard|+11.43|+00.59|+00.77",
+        "location": "loc|46|1|0|60"
+    },
+    "CoffeeTable_43_dot_29548_comma_43_dot_29548_comma_3_dot_789484_comma_3_dot_789484_comma_0_dot_052_comma_0_dot_052": {
+        "object_type": "CoffeeTable",
+        "coords": [
+            43.29548,
+            43.29548,
+            3.789484,
+            3.789484,
+            0.052,
+            0.052
+        ],
+        "is_receptacle": true,
+        "object_name": "CoffeeTable_1",
+        "object_env_id": null,
+        "location": "loc|43|8|2|60"
+    },
+    "FloorLamp_31_dot_45606232_comma_31_dot_45606232_comma_13_dot_586288_comma_13_dot_586288_comma_0_dot_00740993024_comma_0_dot_00740993024": {
+        "object_type": "FloorLamp",
+        "coords": [
+            31.45606232,
+            31.45606232,
+            13.586288,
+            13.586288,
+            0.00740993024,
+            0.00740993024
+        ],
+        "is_receptacle": false,
+        "object_name": "FloorLamp_1",
+        "object_env_id": "FloorLamp|+07.86|+00.00|+03.40",
+        "location": "loc|32|11|0|0"
+    }
+}

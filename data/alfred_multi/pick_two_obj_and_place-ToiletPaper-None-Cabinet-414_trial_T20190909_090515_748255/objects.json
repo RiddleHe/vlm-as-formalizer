@@ -1,0 +1,77 @@
+{
+    "ToiletPaper__minus_0_dot_92147374_comma__minus_0_dot_92147374_comma_1_dot_098029852_comma_1_dot_098029852_comma_0_dot_2122743428_comma_0_dot_2122743428": {
+        "object_type": "ToiletPaper",
+        "coords": [
+            -0.92147374,
+            -0.92147374,
+            1.098029852,
+            1.098029852,
+            0.2122743428,
+            0.2122743428
+        ],
+        "is_receptacle": false,
+        "object_name": "ToiletPaper_1",
+        "object_env_id": "ToiletPaper|-00.23|+00.05|+00.27",
+        "location": "loc|-2|2|1|60"
+    },
+    "GarbageCan__minus_0_dot_828_comma__minus_0_dot_828_comma_0_dot_984_comma_0_dot_984_comma_0_dot_00701242684_comma_0_dot_00701242684": {
+        "object_type": "GarbageCan",
+        "coords": [
+            -0.828,
+            -0.828,
+            0.984,
+            0.984,
+            0.00701242684,
+            0.00701242684
+        ],
+        "is_receptacle": true,
+        "object_name": "GarbageCan_1",
+        "object_env_id": null,
+        "location": "loc|-3|1|1|60"
+    },
+    "Cabinet__minus_9_dot_6404_comma__minus_9_dot_6404_comma_8_dot_163632_comma_8_dot_163632_comma_1_dot_487205744_comma_1_dot_487205744": {
+        "object_type": "Cabinet",
+        "coords": [
+            -9.6404,
+            -9.6404,
+            8.163632,
+            8.163632,
+            1.487205744,
+            1.487205744
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": "Cabinet|-02.41|+00.37|+02.04",
+        "location": "loc|-6|7|3|60"
+    },
+    "ToiletPaper__minus_10_dot_80701924_comma__minus_10_dot_80701924_comma_6_dot_08157252_comma_6_dot_08157252_comma_4_dot_8100004_comma_4_dot_8100004": {
+        "object_type": "ToiletPaper",
+        "coords": [
+            -10.80701924,
+            -10.80701924,
+            6.08157252,
+            6.08157252,
+            4.8100004,
+            4.8100004
+        ],
+        "is_receptacle": false,
+        "object_name": "ToiletPaper_2",
+        "object_env_id": "ToiletPaper|-02.70|+01.20|+01.52",
+        "location": "loc|-8|6|3|30"
+    },
+    "CounterTop__minus_10_dot_444_comma__minus_10_dot_444_comma_5_dot_824_comma_5_dot_824_comma_4_dot_972_comma_4_dot_972": {
+        "object_type": "CounterTop",
+        "coords": [
+            -10.444,
+            -10.444,
+            5.824,
+            5.824,
+            4.972,
+            4.972
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-8|5|3|30"
+    }
+}

@@ -1,0 +1,5 @@
+There is a DeskLamp in the room.
+There is a CD in the room.
+There is a Dresser in the room.
+CD_1 is on Dresser_1.
+The instruction is: Inspect a cd by lamp light.

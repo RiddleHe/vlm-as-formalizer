@@ -1,0 +1,4 @@
+(gotolocation agent1 countertop_1)
+(pickupobject agent1 toiletpaper_1)
+(gotolocation agent1 toiletpaperhanger_1)
+(putobjectinreceptacle agent1 toiletpaper_1 toiletpaperhanger_1)

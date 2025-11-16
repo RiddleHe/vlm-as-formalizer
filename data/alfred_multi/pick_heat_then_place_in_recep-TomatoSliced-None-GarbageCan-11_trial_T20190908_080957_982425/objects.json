@@ -1,0 +1,107 @@
+{
+    "Knife_0_dot_1414730548_comma_0_dot_1414730548_comma_2_dot_49544692_comma_2_dot_49544692_comma_3_dot_7505984_comma_3_dot_7505984": {
+        "object_type": "Knife",
+        "coords": [
+            0.1414730548,
+            0.1414730548,
+            2.49544692,
+            2.49544692,
+            3.7505984,
+            3.7505984
+        ],
+        "is_receptacle": false,
+        "object_name": "Knife_1",
+        "object_env_id": "Knife|+00.04|+00.94|+00.62",
+        "location": "loc|0|-1|0|45"
+    },
+    "CounterTop_1_dot_124_comma_1_dot_124_comma_1_dot_8324_comma_1_dot_8324_comma_3_dot_7912_comma_3_dot_7912": {
+        "object_type": "CounterTop",
+        "coords": [
+            1.124,
+            1.124,
+            1.8324,
+            1.8324,
+            3.7912,
+            3.7912
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|1|-1|0|45"
+    },
+    "Tomato_4_dot_66850664_comma_4_dot_66850664_comma__minus_5_dot_95615292_comma__minus_5_dot_95615292_comma_3_dot_845383404_comma_3_dot_845383404": {
+        "object_type": "Tomato",
+        "coords": [
+            4.66850664,
+            4.66850664,
+            -5.95615292,
+            -5.95615292,
+            3.845383404,
+            3.845383404
+        ],
+        "is_receptacle": false,
+        "object_name": "Tomato_1",
+        "object_env_id": "Tomato|+01.17|+00.96|-01.49",
+        "location": "loc|5|-4|2|60"
+    },
+    "Cabinet_4_dot_3196_comma_4_dot_3196_comma__minus_5_dot_3984_comma__minus_5_dot_3984_comma_1_dot_6036_comma_1_dot_6036": {
+        "object_type": "Cabinet",
+        "coords": [
+            4.3196,
+            4.3196,
+            -5.3984,
+            -5.3984,
+            1.6036,
+            1.6036
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": "Cabinet|+01.08|+00.40|-01.35",
+        "location": "loc|5|-2|2|60"
+    },
+    "CounterTop__minus_2_dot_724_comma__minus_2_dot_724_comma__minus_6_dot_6192_comma__minus_6_dot_6192_comma_3_dot_7912_comma_3_dot_7912": {
+        "object_type": "CounterTop",
+        "coords": [
+            -2.724,
+            -2.724,
+            -6.6192,
+            -6.6192,
+            3.7912,
+            3.7912
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_2",
+        "object_env_id": null,
+        "location": "loc|6|-4|3|15"
+    },
+    "Microwave__minus_4_dot_152_comma__minus_4_dot_152_comma__minus_6_dot_892_comma__minus_6_dot_892_comma_3_dot_6_comma_3_dot_6": {
+        "object_type": "Microwave",
+        "coords": [
+            -4.152,
+            -4.152,
+            -6.892,
+            -6.892,
+            3.6,
+            3.6
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": null,
+        "location": "loc|-4|-4|2|45"
+    },
+    "GarbageCan__minus_1_dot_448_comma__minus_1_dot_448_comma_2_dot_156_comma_2_dot_156_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "GarbageCan",
+        "coords": [
+            -1.448,
+            -1.448,
+            2.156,
+            2.156,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "GarbageCan_1",
+        "object_env_id": "GarbageCan|-00.36|+00.00|+00.54",
+        "location": "loc|-3|2|1|60"
+    }
+}

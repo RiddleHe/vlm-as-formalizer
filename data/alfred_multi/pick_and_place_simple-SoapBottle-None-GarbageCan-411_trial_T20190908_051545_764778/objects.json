@@ -1,0 +1,47 @@
+{
+    "SoapBottle__minus_10_dot_097472_comma__minus_10_dot_097472_comma_5_dot_97766256_comma_5_dot_97766256_comma_4_dot_18687772_comma_4_dot_18687772": {
+        "object_type": "SoapBottle",
+        "coords": [
+            -10.097472,
+            -10.097472,
+            5.97766256,
+            5.97766256,
+            4.18687772,
+            4.18687772
+        ],
+        "is_receptacle": false,
+        "object_name": "SoapBottle_1",
+        "object_env_id": "SoapBottle|-02.52|+01.05|+01.49",
+        "location": "loc|-6|6|3|30"
+    },
+    "Toilet__minus_8_dot_928_comma__minus_8_dot_928_comma_6_dot_516_comma_6_dot_516_comma_0_dot_00530231_comma_0_dot_00530231": {
+        "object_type": "Toilet",
+        "coords": [
+            -8.928,
+            -8.928,
+            6.516,
+            6.516,
+            0.00530231,
+            0.00530231
+        ],
+        "is_receptacle": true,
+        "object_name": "Toilet_1",
+        "object_env_id": null,
+        "location": "loc|-9|9|2|15"
+    },
+    "GarbageCan_3_dot_136_comma_3_dot_136_comma_12_dot_16_comma_12_dot_16_comma_0_dot_26930228_comma_0_dot_26930228": {
+        "object_type": "GarbageCan",
+        "coords": [
+            3.136,
+            3.136,
+            12.16,
+            12.16,
+            0.26930228,
+            0.26930228
+        ],
+        "is_receptacle": true,
+        "object_name": "GarbageCan_1",
+        "object_env_id": "GarbageCan|+00.78|+00.07|+03.04",
+        "location": "loc|3|14|2|60"
+    }
+}

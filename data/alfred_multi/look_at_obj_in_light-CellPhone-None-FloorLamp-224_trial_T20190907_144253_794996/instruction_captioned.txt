@@ -1,0 +1,5 @@
+There is a CellPhone in the room.
+There is a FloorLamp in the room.
+There is a SideTable in the room.
+CellPhone_1 is on SideTable_1.
+The instruction is: Examine a cell phone next to the light of the tall lamp.

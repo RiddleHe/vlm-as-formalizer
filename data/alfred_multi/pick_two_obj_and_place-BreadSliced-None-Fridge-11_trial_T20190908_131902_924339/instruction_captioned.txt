@@ -1,0 +1,12 @@
+There is a ButterKnife in the room.
+There are 2 Breads in the room.
+There is a Knife in the room.
+There are 2 CounterTops in the room.
+There is a DiningTable in the room.
+There is a Fridge in the room.
+There is a Cabinet in the room.
+ButterKnife_1 is on CounterTop_1.
+Knife_1 is on DiningTable_1.
+Bread_2 is on DiningTable_1.
+Bread_1 is on CounterTop_2.
+The instruction is: Put sliced bread in the fridge.

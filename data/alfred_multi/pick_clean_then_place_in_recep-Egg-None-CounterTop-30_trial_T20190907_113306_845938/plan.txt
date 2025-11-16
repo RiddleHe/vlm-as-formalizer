@@ -1,0 +1,6 @@
+(gotolocation agent1 egg_1)
+(pickupobject agent1 egg_1)
+(gotolocation agent1 sinkbasin_1)
+(cleanobject agent1 sinkbasin_1 egg_1)
+(gotolocation agent1 countertop_1)
+(putobjectinreceptacle agent1 egg_1 countertop_1)

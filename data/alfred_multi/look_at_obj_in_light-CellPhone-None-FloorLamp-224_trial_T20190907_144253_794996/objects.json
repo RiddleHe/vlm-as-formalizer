@@ -1,0 +1,47 @@
+{
+    "CellPhone_12_dot_329998_comma_12_dot_329998_comma_1_dot_989700556_comma_1_dot_989700556_comma_2_dot_3628464_comma_2_dot_3628464": {
+        "object_type": "CellPhone",
+        "coords": [
+            12.329998,
+            12.329998,
+            1.989700556,
+            1.989700556,
+            2.3628464,
+            2.3628464
+        ],
+        "is_receptacle": false,
+        "object_name": "CellPhone_1",
+        "object_env_id": "CellPhone|+03.08|+00.59|+00.50",
+        "location": "loc|11|2|1|60"
+    },
+    "SideTable_12_dot_652_comma_12_dot_652_comma_1_dot_46_comma_1_dot_46_comma_0_dot_064_comma_0_dot_064": {
+        "object_type": "SideTable",
+        "coords": [
+            12.652,
+            12.652,
+            1.46,
+            1.46,
+            0.064,
+            0.064
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": null,
+        "location": "loc|11|-3|0|60"
+    },
+    "FloorLamp_12_dot_416_comma_12_dot_416_comma__minus_9_dot_368_comma__minus_9_dot_368_comma_0_dot_0631953032_comma_0_dot_0631953032": {
+        "object_type": "FloorLamp",
+        "coords": [
+            12.416,
+            12.416,
+            -9.368,
+            -9.368,
+            0.0631953032,
+            0.0631953032
+        ],
+        "is_receptacle": false,
+        "object_name": "FloorLamp_1",
+        "object_env_id": "FloorLamp|+03.10|+00.02|-02.34",
+        "location": "loc|10|-9|1|0"
+    }
+}

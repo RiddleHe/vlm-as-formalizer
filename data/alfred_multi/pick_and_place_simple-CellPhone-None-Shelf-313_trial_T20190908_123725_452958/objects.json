@@ -1,0 +1,47 @@
+{
+    "CellPhone_6_dot_55415536_comma_6_dot_55415536_comma__minus_2_dot_1776852_comma__minus_2_dot_1776852_comma_2_dot_846819876_comma_2_dot_846819876": {
+        "object_type": "CellPhone",
+        "coords": [
+            6.55415536,
+            6.55415536,
+            -2.1776852,
+            -2.1776852,
+            2.846819876,
+            2.846819876
+        ],
+        "is_receptacle": false,
+        "object_name": "CellPhone_1",
+        "object_env_id": "CellPhone|+01.64|+00.71|-00.54",
+        "location": "loc|4|-2|1|60"
+    },
+    "SideTable_6_dot_2496_comma_6_dot_2496_comma__minus_1_dot_86_comma__minus_1_dot_86_comma__minus_0_dot_0496_comma__minus_0_dot_0496": {
+        "object_type": "SideTable",
+        "coords": [
+            6.2496,
+            6.2496,
+            -1.86,
+            -1.86,
+            -0.0496,
+            -0.0496
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": null,
+        "location": "loc|2|-1|1|60"
+    },
+    "Shelf_6_dot_1672_comma_6_dot_1672_comma__minus_1_dot_8988_comma__minus_1_dot_8988_comma_1_dot_9228_comma_1_dot_9228": {
+        "object_type": "Shelf",
+        "coords": [
+            6.1672,
+            6.1672,
+            -1.8988,
+            -1.8988,
+            1.9228,
+            1.9228
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": "Shelf|+01.54|+00.48|-00.47",
+        "location": "loc|3|-1|1|60"
+    }
+}

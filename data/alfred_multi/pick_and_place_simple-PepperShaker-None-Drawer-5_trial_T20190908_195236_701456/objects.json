@@ -1,0 +1,47 @@
+{
+    "PepperShaker__minus_3_dot_5919796_comma__minus_3_dot_5919796_comma__minus_7_dot_71837092_comma__minus_7_dot_71837092_comma_3_dot_6304244_comma_3_dot_6304244": {
+        "object_type": "PepperShaker",
+        "coords": [
+            -3.5919796,
+            -3.5919796,
+            -7.71837092,
+            -7.71837092,
+            3.6304244,
+            3.6304244
+        ],
+        "is_receptacle": false,
+        "object_name": "PepperShaker_1",
+        "object_env_id": "PepperShaker|-00.90|+00.91|-01.93",
+        "location": "loc|-2|-5|2|45"
+    },
+    "CounterTop_4_dot_64_comma_4_dot_64_comma__minus_8_dot_056_comma__minus_8_dot_056_comma_3_dot_7872_comma_3_dot_7872": {
+        "object_type": "CounterTop",
+        "coords": [
+            4.64,
+            4.64,
+            -8.056,
+            -8.056,
+            3.7872,
+            3.7872
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|4|-5|2|45"
+    },
+    "Drawer__minus_3_dot_28_comma__minus_3_dot_28_comma__minus_6_dot_76_comma__minus_6_dot_76_comma_3_dot_0_comma_3_dot_0": {
+        "object_type": "Drawer",
+        "coords": [
+            -3.28,
+            -3.28,
+            -6.76,
+            -6.76,
+            3.0,
+            3.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Drawer_1",
+        "object_env_id": "Drawer|-00.82|+00.75|-01.69",
+        "location": "loc|0|-5|3|45"
+    }
+}

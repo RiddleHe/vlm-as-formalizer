@@ -1,0 +1,47 @@
+{
+    "DeskLamp_12_dot_656_comma_12_dot_656_comma__minus_6_dot_624_comma__minus_6_dot_624_comma_3_dot_1654784_comma_3_dot_1654784": {
+        "object_type": "DeskLamp",
+        "coords": [
+            12.656,
+            12.656,
+            -6.624,
+            -6.624,
+            3.1654784,
+            3.1654784
+        ],
+        "is_receptacle": false,
+        "object_name": "DeskLamp_1",
+        "object_env_id": "DeskLamp|+03.16|+00.79|-01.66",
+        "location": "loc|12|-4|2|60"
+    },
+    "TissueBox_11_dot_61742496_comma_11_dot_61742496_comma__minus_5_dot_43522024_comma__minus_5_dot_43522024_comma_3_dot_200276612_comma_3_dot_200276612": {
+        "object_type": "TissueBox",
+        "coords": [
+            11.61742496,
+            11.61742496,
+            -5.43522024,
+            -5.43522024,
+            3.200276612,
+            3.200276612
+        ],
+        "is_receptacle": false,
+        "object_name": "TissueBox_1",
+        "object_env_id": "TissueBox|+02.90|+00.80|-01.36",
+        "location": "loc|12|-4|2|60"
+    },
+    "Desk_9_dot_972_comma_9_dot_972_comma__minus_6_dot_34_comma__minus_6_dot_34_comma_0_dot_004_comma_0_dot_004": {
+        "object_type": "Desk",
+        "coords": [
+            9.972,
+            9.972,
+            -6.34,
+            -6.34,
+            0.004,
+            0.004
+        ],
+        "is_receptacle": true,
+        "object_name": "Desk_1",
+        "object_env_id": null,
+        "location": "loc|10|-2|2|60"
+    }
+}

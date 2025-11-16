@@ -1,0 +1,5 @@
+There is a FloorLamp in the room.
+There is a Statue in the room.
+There is a SideTable in the room.
+Statue_1 is on SideTable_1.
+The instruction is: examine a trophy with a lamp

@@ -1,0 +1,7 @@
+There is a Plate in the room.
+There is a Candle in the room.
+There is a DiningTable in the room.
+There is a CoffeeTable in the room.
+Plate_1 is on DiningTable_1.
+Candle_1 is on DiningTable_1.
+The instruction is: Put a grey plate with a candle on it on a coffee table.

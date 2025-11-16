@@ -1,0 +1,5 @@
+There is a RemoteControl in the room.
+There is a FloorLamp in the room.
+There is a Sofa in the room.
+RemoteControl_1 is on Sofa_1.
+The instruction is: Turn on the lamp with the remote control

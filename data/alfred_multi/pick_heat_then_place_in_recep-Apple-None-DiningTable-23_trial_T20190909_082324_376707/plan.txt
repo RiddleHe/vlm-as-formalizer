@@ -1,0 +1,6 @@
+(gotolocation agent1 diningtable_1)
+(pickupobject agent1 apple_1)
+(gotolocation agent1 microwave_1)
+(heatobject agent1 microwave_1 apple_1)
+(gotolocation agent1 diningtable_1)
+(putobjectinreceptacle agent1 apple_1 diningtable_1)

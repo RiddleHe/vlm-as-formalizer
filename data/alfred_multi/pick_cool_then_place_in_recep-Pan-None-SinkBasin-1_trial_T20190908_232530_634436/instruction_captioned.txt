@@ -1,0 +1,6 @@
+There is a Pan in the room.
+There is a Fridge in the room.
+There is a SinkBasin in the room.
+There is a CounterTop in the room.
+Pan_1 is on CounterTop_1.
+The instruction is: To chill a pan and put it in the sink.

@@ -1,0 +1,5 @@
+There is a FloorLamp in the room.
+There is a KeyChain in the room.
+There is a DiningTable in the room.
+KeyChain_1 is on DiningTable_1.
+The instruction is: Look at some keys by the light of a tall lamp.

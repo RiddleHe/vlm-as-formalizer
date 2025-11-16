@@ -1,0 +1,6 @@
+There is a Cup in the room.
+There is a Microwave in the room.
+There is a Fridge in the room.
+There is a SinkBasin in the room.
+Cup_1 is on SinkBasin_1.
+The instruction is: Put a microwaved cup into the fridge

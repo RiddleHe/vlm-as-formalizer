@@ -1,0 +1,9 @@
+There is a Apple in the room.
+There is a Knife in the room.
+There is a DiningTable in the room.
+There is a Microwave in the room.
+There is a SinkBasin in the room.
+There is a SideTable in the room.
+Apple_1 is on DiningTable_1.
+Knife_1 is on SinkBasin_1.
+The instruction is: Cut an apple, cook a piece of the apple in a microwave, put the apple slice on the brown shelf.

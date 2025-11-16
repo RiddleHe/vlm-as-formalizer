@@ -1,0 +1,5 @@
+There is a KeyChain in the room.
+There is a ArmChair in the room.
+There is a Desk in the room.
+KeyChain_1 is on Desk_1.
+The instruction is: Move some keys from a desk to the floral armchair.

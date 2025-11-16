@@ -1,0 +1,5 @@
+There is a DeskLamp in the room.
+There is a Laptop in the room.
+There is a Bed in the room.
+Laptop_1 is on Bed_1.
+The instruction is: Carry a laptop while turning on a light

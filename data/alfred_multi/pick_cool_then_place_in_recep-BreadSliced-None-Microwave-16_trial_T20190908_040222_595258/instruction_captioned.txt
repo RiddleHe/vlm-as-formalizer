@@ -1,0 +1,9 @@
+There is a Bread in the room.
+There is a Knife in the room.
+There are 2 CounterTops in the room.
+There is a Microwave in the room.
+There is a DiningTable in the room.
+There is a Fridge in the room.
+Bread_1 is on DiningTable_1.
+Knife_1 is on CounterTop_1.
+The instruction is: Place a cooled bread slice into the microwave.

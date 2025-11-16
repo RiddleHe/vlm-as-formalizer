@@ -1,0 +1,62 @@
+{
+    "Book_6_dot_12892724_comma_6_dot_12892724_comma__minus_2_dot_598084212_comma__minus_2_dot_598084212_comma_2_dot_314777852_comma_2_dot_314777852": {
+        "object_type": "Book",
+        "coords": [
+            6.12892724,
+            6.12892724,
+            -2.598084212,
+            -2.598084212,
+            2.314777852,
+            2.314777852
+        ],
+        "is_receptacle": false,
+        "object_name": "Book_1",
+        "object_env_id": "Book|+01.53|+00.58|-00.65",
+        "location": "loc|1|-3|1|45"
+    },
+    "Bed_4_dot_972_comma_4_dot_972_comma__minus_3_dot_592_comma__minus_3_dot_592_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Bed",
+        "coords": [
+            4.972,
+            4.972,
+            -3.592,
+            -3.592,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Bed_1",
+        "object_env_id": null,
+        "location": "loc|0|-3|1|60"
+    },
+    "Desk__minus_4_dot_036_comma__minus_4_dot_036_comma__minus_4_dot_472_comma__minus_4_dot_472_comma__minus_0_dot_0465942024_comma__minus_0_dot_0465942024": {
+        "object_type": "Desk",
+        "coords": [
+            -4.036,
+            -4.036,
+            -4.472,
+            -4.472,
+            -0.0465942024,
+            -0.0465942024
+        ],
+        "is_receptacle": true,
+        "object_name": "Desk_1",
+        "object_env_id": "Desk|-01.01|-00.01|-01.12",
+        "location": "loc|-1|-3|3|60"
+    },
+    "Book_5_dot_55046368_comma_5_dot_55046368_comma__minus_0_dot_666252612_comma__minus_0_dot_666252612_comma_2_dot_314777852_comma_2_dot_314777852": {
+        "object_type": "Book",
+        "coords": [
+            5.55046368,
+            5.55046368,
+            -0.666252612,
+            -0.666252612,
+            2.314777852,
+            2.314777852
+        ],
+        "is_receptacle": false,
+        "object_name": "Book_2",
+        "object_env_id": "Book|+01.39|+00.58|-00.17",
+        "location": "loc|4|2|2|60"
+    }
+}

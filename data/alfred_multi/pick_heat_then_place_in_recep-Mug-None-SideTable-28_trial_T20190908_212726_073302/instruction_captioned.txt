@@ -1,0 +1,6 @@
+There is a Mug in the room.
+There is a Microwave in the room.
+There is a SideTable in the room.
+There is a CoffeeMachine in the room.
+Mug_1 is on CoffeeMachine_1.
+The instruction is: place microwaved mug on shelves to the left of counter

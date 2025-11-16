@@ -1,0 +1,47 @@
+{
+    "AlarmClock__minus_5_dot_58515264_comma__minus_5_dot_58515264_comma__minus_8_dot_40740584_comma__minus_8_dot_40740584_comma_7_dot_10946228_comma_7_dot_10946228": {
+        "object_type": "AlarmClock",
+        "coords": [
+            -5.58515264,
+            -5.58515264,
+            -8.40740584,
+            -8.40740584,
+            7.10946228,
+            7.10946228
+        ],
+        "is_receptacle": false,
+        "object_name": "AlarmClock_1",
+        "object_env_id": "AlarmClock|-01.40|+01.78|-02.10",
+        "location": "loc|-6|-5|2|-15"
+    },
+    "Desk__minus_3_dot_849575044_comma__minus_3_dot_849575044_comma__minus_8_dot_224_comma__minus_8_dot_224_comma__minus_0_dot_008_comma__minus_0_dot_008": {
+        "object_type": "Desk",
+        "coords": [
+            -3.849575044,
+            -3.849575044,
+            -8.224,
+            -8.224,
+            -0.008,
+            -0.008
+        ],
+        "is_receptacle": true,
+        "object_name": "Desk_1",
+        "object_env_id": null,
+        "location": "loc|2|-8|3|45"
+    },
+    "Shelf__minus_3_dot_757575036_comma__minus_3_dot_757575036_comma__minus_8_dot_4956_comma__minus_8_dot_4956_comma_5_dot_356_comma_5_dot_356": {
+        "object_type": "Shelf",
+        "coords": [
+            -3.757575036,
+            -3.757575036,
+            -8.4956,
+            -8.4956,
+            5.356,
+            5.356
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": "Shelf|-00.94|+01.34|-02.12",
+        "location": "loc|-2|-5|2|15"
+    }
+}

@@ -1,0 +1,6 @@
+There is a Tomato in the room.
+There is a Microwave in the room.
+There is a Fridge in the room.
+There is a CounterTop in the room.
+Tomato_1 is on CounterTop_1.
+The instruction is: Put a chilled tomato in the microwave.

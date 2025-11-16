@@ -1,0 +1,7 @@
+There are 2 KeyChains in the room.
+There is a Sofa in the room.
+There is a CoffeeTable in the room.
+There is a SideTable in the room.
+KeyChain_2 is on SideTable_1.
+KeyChain_1 is on CoffeeTable_1.
+The instruction is: Place two pairs of keys on the couch.

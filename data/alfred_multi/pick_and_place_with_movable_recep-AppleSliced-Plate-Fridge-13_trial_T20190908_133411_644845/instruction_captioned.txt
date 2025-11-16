@@ -1,0 +1,10 @@
+There is a Knife in the room.
+There is a Plate in the room.
+There is a Apple in the room.
+There are 2 CounterTops in the room.
+There is a Fridge in the room.
+There is a Microwave in the room.
+Knife_1 is on CounterTop_1.
+Plate_1 is on CounterTop_2.
+Apple_1 is on Microwave_1.
+The instruction is: Put the plate with the knife and apple piece in the refrigerator.

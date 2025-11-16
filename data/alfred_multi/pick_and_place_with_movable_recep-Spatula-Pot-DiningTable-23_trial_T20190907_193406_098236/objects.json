@@ -1,0 +1,62 @@
+{
+    "Spatula__minus_9_dot_754792_comma__minus_9_dot_754792_comma__minus_9_dot_38343812_comma__minus_9_dot_38343812_comma_3_dot_753899812_comma_3_dot_753899812": {
+        "object_type": "Spatula",
+        "coords": [
+            -9.754792,
+            -9.754792,
+            -9.38343812,
+            -9.38343812,
+            3.753899812,
+            3.753899812
+        ],
+        "is_receptacle": false,
+        "object_name": "Spatula_1",
+        "object_env_id": "Spatula|-02.44|+00.94|-02.35",
+        "location": "loc|-10|-12|0|45"
+    },
+    "DiningTable__minus_9_dot_73199272_comma__minus_9_dot_73199272_comma__minus_6_dot_78581428_comma__minus_6_dot_78581428_comma_3_dot_5828_comma_3_dot_5828": {
+        "object_type": "DiningTable",
+        "coords": [
+            -9.73199272,
+            -9.73199272,
+            -6.78581428,
+            -6.78581428,
+            3.5828,
+            3.5828
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-5|-7|3|30"
+    },
+    "Pot__minus_4_dot_5176_comma__minus_4_dot_5176_comma__minus_13_dot_9944_comma__minus_13_dot_9944_comma_3_dot_7428_comma_3_dot_7428": {
+        "object_type": "Pot",
+        "coords": [
+            -4.5176,
+            -4.5176,
+            -13.9944,
+            -13.9944,
+            3.7428,
+            3.7428
+        ],
+        "is_receptacle": true,
+        "object_name": "Pot_1",
+        "object_env_id": "Pot|-01.13|+00.94|-03.50",
+        "location": "loc|-5|-12|2|60"
+    },
+    "StoveBurner__minus_4_dot_5176_comma__minus_4_dot_5176_comma__minus_13_dot_9944_comma__minus_13_dot_9944_comma_3_dot_7128_comma_3_dot_7128": {
+        "object_type": "StoveBurner",
+        "coords": [
+            -4.5176,
+            -4.5176,
+            -13.9944,
+            -13.9944,
+            3.7128,
+            3.7128
+        ],
+        "is_receptacle": true,
+        "object_name": "StoveBurner_1",
+        "object_env_id": null,
+        "location": "loc|-5|-12|2|60"
+    }
+}

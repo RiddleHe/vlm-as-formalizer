@@ -1,0 +1,6 @@
+There are 2 Pencils in the room.
+There are 2 Shelfs in the room.
+There is a Desk in the room.
+Pencil_2 is on Shelf_2.
+Pencil_1 is on Shelf_1.
+The instruction is: Put two pencils on a desk.

@@ -1,0 +1,6 @@
+There is a ButterKnife in the room.
+There is a Drawer in the room.
+There is a SinkBasin in the room.
+There is a CounterTop in the room.
+ButterKnife_1 is on CounterTop_1.
+The instruction is: Put the clean knife in the cabinet drawer

@@ -1,0 +1,62 @@
+{
+    "Candle__minus_9_dot_297852_comma__minus_9_dot_297852_comma_7_dot_627584_comma_7_dot_627584_comma_3_dot_137266_comma_3_dot_137266": {
+        "object_type": "Candle",
+        "coords": [
+            -9.297852,
+            -9.297852,
+            7.627584,
+            7.627584,
+            3.137266,
+            3.137266
+        ],
+        "is_receptacle": false,
+        "object_name": "Candle_1",
+        "object_env_id": "Candle|-02.32|+00.78|+01.91",
+        "location": "loc|-6|8|3|45"
+    },
+    "DiningTable__minus_11_dot_612_comma__minus_11_dot_612_comma_8_dot_9_comma_8_dot_9_comma_0_dot_0572_comma_0_dot_0572": {
+        "object_type": "DiningTable",
+        "coords": [
+            -11.612,
+            -11.612,
+            8.9,
+            8.9,
+            0.0572,
+            0.0572
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-6|9|3|45"
+    },
+    "Plate__minus_13_dot_73041724_comma__minus_13_dot_73041724_comma_10_dot_10616876_comma_10_dot_10616876_comma_3_dot_190483808_comma_3_dot_190483808": {
+        "object_type": "Plate",
+        "coords": [
+            -13.73041724,
+            -13.73041724,
+            10.10616876,
+            10.10616876,
+            3.190483808,
+            3.190483808
+        ],
+        "is_receptacle": true,
+        "object_name": "Plate_1",
+        "object_env_id": "Plate|-03.43|+00.80|+02.53",
+        "location": "loc|-17|10|1|45"
+    },
+    "CoffeeTable__minus_12_dot_948_comma__minus_12_dot_948_comma_26_dot_396_comma_26_dot_396_comma_0_dot_04_comma_0_dot_04": {
+        "object_type": "CoffeeTable",
+        "coords": [
+            -12.948,
+            -12.948,
+            26.396,
+            26.396,
+            0.04,
+            0.04
+        ],
+        "is_receptacle": true,
+        "object_name": "CoffeeTable_1",
+        "object_env_id": "CoffeeTable|-03.24|+00.01|+06.60",
+        "location": "loc|-17|26|1|60"
+    }
+}

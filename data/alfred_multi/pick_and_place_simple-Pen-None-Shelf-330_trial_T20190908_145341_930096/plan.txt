@@ -1,0 +1,4 @@
+(gotolocation agent1 garbagecan_1)
+(pickupobject agent1 pen_1)
+(gotolocation agent1 shelf_1)
+(putobjectinreceptacle agent1 pen_1 shelf_1)

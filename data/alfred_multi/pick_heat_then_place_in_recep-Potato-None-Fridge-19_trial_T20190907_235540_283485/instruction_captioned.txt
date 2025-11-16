@@ -1,0 +1,6 @@
+There is a Potato in the room.
+There is a Microwave in the room.
+There is a Fridge in the room.
+There is a DiningTable in the room.
+Potato_1 is on DiningTable_1.
+The instruction is: Put a heated potato in the fridge.

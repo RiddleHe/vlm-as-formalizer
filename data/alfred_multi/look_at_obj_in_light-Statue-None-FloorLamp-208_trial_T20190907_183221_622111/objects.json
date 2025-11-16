@@ -1,0 +1,47 @@
+{
+    "Statue_7_dot_22955752_comma_7_dot_22955752_comma_3_dot_11062_comma_3_dot_11062_comma_3_dot_5407396_comma_3_dot_5407396": {
+        "object_type": "Statue",
+        "coords": [
+            7.22955752,
+            7.22955752,
+            3.11062,
+            3.11062,
+            3.5407396,
+            3.5407396
+        ],
+        "is_receptacle": false,
+        "object_name": "Statue_1",
+        "object_env_id": "Statue|+01.81|+00.89|+00.78",
+        "location": "loc|5|3|1|60"
+    },
+    "SideTable_7_dot_304_comma_7_dot_304_comma_4_dot_3712_comma_4_dot_3712_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "SideTable",
+        "coords": [
+            7.304,
+            7.304,
+            4.3712,
+            4.3712,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": null,
+        "location": "loc|5|4|1|60"
+    },
+    "FloorLamp_6_dot_84815932_comma_6_dot_84815932_comma_1_dot_49665022_comma_1_dot_49665022_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "FloorLamp",
+        "coords": [
+            6.84815932,
+            6.84815932,
+            1.49665022,
+            1.49665022,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": false,
+        "object_name": "FloorLamp_1",
+        "object_env_id": "FloorLamp|+01.71|+00.00|+00.37",
+        "location": "loc|5|3|1|0"
+    }
+}

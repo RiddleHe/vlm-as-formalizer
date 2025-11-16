@@ -1,0 +1,77 @@
+{
+    "Statue__minus_16_dot_24134636_comma__minus_16_dot_24134636_comma_8_dot_9024906_comma_8_dot_9024906_comma_1_dot_750751376_comma_1_dot_750751376": {
+        "object_type": "Statue",
+        "coords": [
+            -16.24134636,
+            -16.24134636,
+            8.9024906,
+            8.9024906,
+            1.750751376,
+            1.750751376
+        ],
+        "is_receptacle": false,
+        "object_name": "Statue_1",
+        "object_env_id": "Statue|-04.06|+00.44|+02.23",
+        "location": "loc|-18|9|1|60"
+    },
+    "CoffeeTable__minus_16_dot_0149_comma__minus_16_dot_0149_comma_9_dot_816_comma_9_dot_816_comma_0_dot_042_comma_0_dot_042": {
+        "object_type": "CoffeeTable",
+        "coords": [
+            -16.0149,
+            -16.0149,
+            9.816,
+            9.816,
+            0.042,
+            0.042
+        ],
+        "is_receptacle": true,
+        "object_name": "CoffeeTable_1",
+        "object_env_id": null,
+        "location": "loc|-11|9|3|45"
+    },
+    "DiningTable__minus_5_dot_584_comma__minus_5_dot_584_comma_5_dot_792_comma_5_dot_792_comma_0_dot_008_comma_0_dot_008": {
+        "object_type": "DiningTable",
+        "coords": [
+            -5.584,
+            -5.584,
+            5.792,
+            5.792,
+            0.008,
+            0.008
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": "DiningTable|-01.40|+00.00|+01.45",
+        "location": "loc|-10|6|1|60"
+    },
+    "Statue__minus_10_dot_77830504_comma__minus_10_dot_77830504_comma_18_dot_422772_comma_18_dot_422772_comma_2_dot_5268064_comma_2_dot_5268064": {
+        "object_type": "Statue",
+        "coords": [
+            -10.77830504,
+            -10.77830504,
+            18.422772,
+            18.422772,
+            2.5268064,
+            2.5268064
+        ],
+        "is_receptacle": false,
+        "object_name": "Statue_2",
+        "object_env_id": "Statue|-02.69|+00.63|+04.61",
+        "location": "loc|-11|17|0|60"
+    },
+    "SideTable__minus_10_dot_244_comma__minus_10_dot_244_comma_18_dot_952_comma_18_dot_952_comma__minus_0_dot_028_comma__minus_0_dot_028": {
+        "object_type": "SideTable",
+        "coords": [
+            -10.244,
+            -10.244,
+            18.952,
+            18.952,
+            -0.028,
+            -0.028
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": null,
+        "location": "loc|-7|18|3|60"
+    }
+}

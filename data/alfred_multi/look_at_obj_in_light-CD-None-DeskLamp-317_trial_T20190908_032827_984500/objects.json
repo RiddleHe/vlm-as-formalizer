@@ -1,0 +1,47 @@
+{
+    "CD_1_dot_611928_comma_1_dot_611928_comma__minus_6_dot_23139764_comma__minus_6_dot_23139764_comma_3_dot_8816268_comma_3_dot_8816268": {
+        "object_type": "CD",
+        "coords": [
+            1.611928,
+            1.611928,
+            -6.23139764,
+            -6.23139764,
+            3.8816268,
+            3.8816268
+        ],
+        "is_receptacle": false,
+        "object_name": "CD_1",
+        "object_env_id": "CD|+00.40|+00.97|-01.56",
+        "location": "loc|2|-4|2|45"
+    },
+    "Dresser_0_dot_044_comma_0_dot_044_comma__minus_7_dot_18_comma__minus_7_dot_18_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Dresser",
+        "coords": [
+            0.044,
+            0.044,
+            -7.18,
+            -7.18,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Dresser_1",
+        "object_env_id": null,
+        "location": "loc|1|-4|2|60"
+    },
+    "DeskLamp_9_dot_06412888_comma_9_dot_06412888_comma_5_dot_74371336_comma_5_dot_74371336_comma_2_dot_2669124_comma_2_dot_2669124": {
+        "object_type": "DeskLamp",
+        "coords": [
+            9.06412888,
+            9.06412888,
+            5.74371336,
+            5.74371336,
+            2.2669124,
+            2.2669124
+        ],
+        "is_receptacle": false,
+        "object_name": "DeskLamp_1",
+        "object_env_id": "DeskLamp|+02.27|+00.57|+01.44",
+        "location": "loc|7|5|1|60"
+    }
+}

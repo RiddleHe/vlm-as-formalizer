@@ -1,0 +1,8 @@
+There is a Knife in the room.
+There is a Lettuce in the room.
+There is a DiningTable in the room.
+There is a CounterTop in the room.
+There is a SinkBasin in the room.
+Knife_1 is on CounterTop_1.
+Lettuce_1 is on DiningTable_1.
+The instruction is: Put a washed slice of lettuce on the counter by the sink.

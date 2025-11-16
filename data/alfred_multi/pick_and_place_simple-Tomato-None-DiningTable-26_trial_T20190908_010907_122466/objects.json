@@ -1,0 +1,47 @@
+{
+    "Tomato__minus_10_dot_89036272_comma__minus_10_dot_89036272_comma_16_dot_817152_comma_16_dot_817152_comma_2_dot_785538196_comma_2_dot_785538196": {
+        "object_type": "Tomato",
+        "coords": [
+            -10.89036272,
+            -10.89036272,
+            16.817152,
+            16.817152,
+            2.785538196,
+            2.785538196
+        ],
+        "is_receptacle": false,
+        "object_name": "Tomato_1",
+        "object_env_id": "Tomato|-02.72|+00.70|+04.20",
+        "location": "loc|-8|17|3|60"
+    },
+    "Fridge__minus_11_dot_208_comma__minus_11_dot_208_comma_17_dot_708_comma_17_dot_708_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            -11.208,
+            -11.208,
+            17.708,
+            17.708,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": null,
+        "location": "loc|-8|18|3|60"
+    },
+    "DiningTable__minus_11_dot_056_comma__minus_11_dot_056_comma_9_dot_424_comma_9_dot_424_comma_0_dot_024_comma_0_dot_024": {
+        "object_type": "DiningTable",
+        "coords": [
+            -11.056,
+            -11.056,
+            9.424,
+            9.424,
+            0.024,
+            0.024
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": "DiningTable|-02.76|+00.01|+02.36",
+        "location": "loc|-8|10|3|60"
+    }
+}

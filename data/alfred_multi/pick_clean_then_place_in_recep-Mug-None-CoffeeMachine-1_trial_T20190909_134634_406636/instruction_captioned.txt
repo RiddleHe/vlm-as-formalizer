@@ -1,0 +1,7 @@
+There is a Mug in the room.
+There is a CoffeeMachine in the room.
+There is a CounterTop in the room.
+There is a SinkBasin in the room.
+Mug_1 is on CounterTop_1.
+Mug_1 is on CoffeeMachine_1.
+The instruction is: Wash the coffee mug and place it in the coffee maker

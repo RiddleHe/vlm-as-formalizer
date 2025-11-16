@@ -1,0 +1,7 @@
+There are 2 SoapBars in the room.
+There is a Toilet in the room.
+There is a SinkBasin in the room.
+There is a Cart in the room.
+SoapBar_1 is on SinkBasin_1.
+SoapBar_2 is on Toilet_1.
+The instruction is: Putting two bars of soap on the steel rack

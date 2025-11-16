@@ -1,0 +1,6 @@
+There are 2 Books in the room.
+There is a Desk in the room.
+There is a Bed in the room.
+Book_2 is on Bed_1.
+Book_1 is on Bed_1.
+The instruction is: Put the books on the desk.

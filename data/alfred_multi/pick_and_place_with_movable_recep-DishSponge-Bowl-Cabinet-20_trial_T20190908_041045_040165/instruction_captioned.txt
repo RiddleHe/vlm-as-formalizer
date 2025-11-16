@@ -1,0 +1,7 @@
+There is a Bowl in the room.
+There is a DishSponge in the room.
+There is a CounterTop in the room.
+There is a Cabinet in the room.
+DishSponge_1 is on CounterTop_1.
+Bowl_1 is on CounterTop_1.
+The instruction is: Place a bowl in the cupboard to the left of the dishwasher.

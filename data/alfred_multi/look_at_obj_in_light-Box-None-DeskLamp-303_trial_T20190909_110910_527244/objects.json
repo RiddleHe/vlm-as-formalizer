@@ -1,0 +1,32 @@
+{
+    "Box_7_dot_984_comma_7_dot_984_comma__minus_4_dot_168_comma__minus_4_dot_168_comma_1_dot_264_comma_1_dot_264": {
+        "object_type": "Box",
+        "coords": [
+            7.984,
+            7.984,
+            -4.168,
+            -4.168,
+            1.264,
+            1.264
+        ],
+        "is_receptacle": false,
+        "object_name": "Box_1",
+        "object_env_id": "Box|+02.00|+00.32|-01.04",
+        "location": "loc|6|-4|1|60"
+    },
+    "DeskLamp__minus_7_dot_3960004_comma__minus_7_dot_3960004_comma__minus_3_dot_1439984_comma__minus_3_dot_1439984_comma_2_dot_367104_comma_2_dot_367104": {
+        "object_type": "DeskLamp",
+        "coords": [
+            -7.3960004,
+            -7.3960004,
+            -3.1439984,
+            -3.1439984,
+            2.367104,
+            2.367104
+        ],
+        "is_receptacle": false,
+        "object_name": "DeskLamp_1",
+        "object_env_id": "DeskLamp|-01.85|+00.59|-00.79",
+        "location": "loc|-5|-4|3|60"
+    }
+}

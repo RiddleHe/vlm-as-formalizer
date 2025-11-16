@@ -1,0 +1,47 @@
+{
+    "Pillow_1_dot_1977572_comma_1_dot_1977572_comma__minus_6_dot_23033_comma__minus_6_dot_23033_comma_2_dot_572_comma_2_dot_572": {
+        "object_type": "Pillow",
+        "coords": [
+            1.1977572,
+            1.1977572,
+            -6.23033,
+            -6.23033,
+            2.572,
+            2.572
+        ],
+        "is_receptacle": false,
+        "object_name": "Pillow_1",
+        "object_env_id": "Pillow|+00.30|+00.64|-01.56",
+        "location": "loc|5|-5|3|45"
+    },
+    "Bed_0_dot_9099392_comma_0_dot_9099392_comma__minus_3_dot_792_comma__minus_3_dot_792_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Bed",
+        "coords": [
+            0.9099392,
+            0.9099392,
+            -3.792,
+            -3.792,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Bed_1",
+        "object_env_id": null,
+        "location": "loc|6|-4|3|45"
+    },
+    "DeskLamp_12_dot_656_comma_12_dot_656_comma__minus_6_dot_624_comma__minus_6_dot_624_comma_3_dot_1654784_comma_3_dot_1654784": {
+        "object_type": "DeskLamp",
+        "coords": [
+            12.656,
+            12.656,
+            -6.624,
+            -6.624,
+            3.1654784,
+            3.1654784
+        ],
+        "is_receptacle": false,
+        "object_name": "DeskLamp_1",
+        "object_env_id": "DeskLamp|+03.16|+00.79|-01.66",
+        "location": "loc|12|-4|2|60"
+    }
+}

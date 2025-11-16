@@ -1,0 +1,62 @@
+{
+    "Ladle_4_dot_9088_comma_4_dot_9088_comma_10_dot_0934782_comma_10_dot_0934782_comma_0_dot_503091336_comma_0_dot_503091336": {
+        "object_type": "Ladle",
+        "coords": [
+            4.9088,
+            4.9088,
+            10.0934782,
+            10.0934782,
+            0.503091336,
+            0.503091336
+        ],
+        "is_receptacle": false,
+        "object_name": "Ladle_1",
+        "object_env_id": "Ladle|+01.23|+00.13|+02.52",
+        "location": "loc|5|8|0|60"
+    },
+    "Cabinet_6_dot_056_comma_6_dot_056_comma_9_dot_44187832_comma_9_dot_44187832_comma_1_dot_555381776_comma_1_dot_555381776": {
+        "object_type": "Cabinet",
+        "coords": [
+            6.056,
+            6.056,
+            9.44187832,
+            9.44187832,
+            1.555381776,
+            1.555381776
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": null,
+        "location": "loc|4|6|0|60"
+    },
+    "SinkBasin_3_dot_616_comma_3_dot_616_comma_10_dot_56_comma_10_dot_56_comma_3_dot_1394172_comma_3_dot_1394172": {
+        "object_type": "SinkBasin",
+        "coords": [
+            3.616,
+            3.616,
+            10.56,
+            10.56,
+            3.1394172,
+            3.1394172
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|4|8|0|60"
+    },
+    "Drawer__minus_0_dot_096_comma__minus_0_dot_096_comma_8_dot_244172_comma_8_dot_244172_comma_3_dot_099568128_comma_3_dot_099568128": {
+        "object_type": "Drawer",
+        "coords": [
+            -0.096,
+            -0.096,
+            8.244172,
+            8.244172,
+            3.099568128,
+            3.099568128
+        ],
+        "is_receptacle": true,
+        "object_name": "Drawer_1",
+        "object_env_id": "Drawer|-00.02|+00.77|+02.06",
+        "location": "loc|3|8|3|45"
+    }
+}

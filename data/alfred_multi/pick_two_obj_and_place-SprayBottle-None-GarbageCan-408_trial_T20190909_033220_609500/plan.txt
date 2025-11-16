@@ -1,0 +1,4 @@
+(gotolocation agent1 spraybottle_1)
+(pickupobject agent1 spraybottle_1)
+(gotolocation agent1 garbagecan_1)
+(putobjectinreceptacle agent1 spraybottle_1 garbagecan_1)

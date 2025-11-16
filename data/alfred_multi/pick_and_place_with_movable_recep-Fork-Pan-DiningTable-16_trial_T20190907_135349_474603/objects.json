@@ -1,0 +1,62 @@
+{
+    "Fork_9_dot_804_comma_9_dot_804_comma_15_dot_18_comma_15_dot_18_comma_3_dot_0600752_comma_3_dot_0600752": {
+        "object_type": "Fork",
+        "coords": [
+            9.804,
+            9.804,
+            15.18,
+            15.18,
+            3.0600752,
+            3.0600752
+        ],
+        "is_receptacle": false,
+        "object_name": "Fork_1",
+        "object_env_id": "Fork|+02.45|+00.77|+03.80",
+        "location": "loc|10|12|0|45"
+    },
+    "DiningTable_9_dot_788_comma_9_dot_788_comma_15_dot_904_comma_15_dot_904_comma_2_dot_673336984_comma_2_dot_673336984": {
+        "object_type": "DiningTable",
+        "coords": [
+            9.788,
+            9.788,
+            15.904,
+            15.904,
+            2.673336984,
+            2.673336984
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|10|12|0|45"
+    },
+    "Pan_10_dot_31265068_comma_10_dot_31265068_comma_3_dot_628168_comma_3_dot_628168_comma_4_dot_10593176_comma_4_dot_10593176": {
+        "object_type": "Pan",
+        "coords": [
+            10.31265068,
+            10.31265068,
+            3.628168,
+            3.628168,
+            4.10593176,
+            4.10593176
+        ],
+        "is_receptacle": true,
+        "object_name": "Pan_1",
+        "object_env_id": "Pan|+02.58|+01.03|+00.91",
+        "location": "loc|9|1|0|45"
+    },
+    "CounterTop_11_dot_252_comma_11_dot_252_comma_2_dot_7_comma_2_dot_7_comma_3_dot_972_comma_3_dot_972": {
+        "object_type": "CounterTop",
+        "coords": [
+            11.252,
+            11.252,
+            2.7,
+            2.7,
+            3.972,
+            3.972
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|9|1|1|45"
+    }
+}

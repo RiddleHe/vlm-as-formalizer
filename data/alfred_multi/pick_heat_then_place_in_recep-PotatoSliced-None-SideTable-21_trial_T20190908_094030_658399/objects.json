@@ -1,0 +1,77 @@
+{
+    "Knife_3_dot_12699938_comma_3_dot_12699938_comma_2_dot_5224076_comma_2_dot_5224076_comma_2_dot_7539076_comma_2_dot_7539076": {
+        "object_type": "Knife",
+        "coords": [
+            3.12699938,
+            3.12699938,
+            2.5224076,
+            2.5224076,
+            2.7539076,
+            2.7539076
+        ],
+        "is_receptacle": false,
+        "object_name": "Knife_1",
+        "object_env_id": "Knife|+00.78|+00.69|+00.63",
+        "location": "loc|1|1|1|60"
+    },
+    "SideTable_3_dot_0924_comma_3_dot_0924_comma_1_dot_7924_comma_1_dot_7924_comma_2_dot_8004_comma_2_dot_8004": {
+        "object_type": "SideTable",
+        "coords": [
+            3.0924,
+            3.0924,
+            1.7924,
+            1.7924,
+            2.8004,
+            2.8004
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": null,
+        "location": "loc|-1|1|1|45"
+    },
+    "Potato_2_dot_4061796_comma_2_dot_4061796_comma_1_dot_7924_comma_1_dot_7924_comma_2_dot_7906128_comma_2_dot_7906128": {
+        "object_type": "Potato",
+        "coords": [
+            2.4061796,
+            2.4061796,
+            1.7924,
+            1.7924,
+            2.7906128,
+            2.7906128
+        ],
+        "is_receptacle": false,
+        "object_name": "Potato_1",
+        "object_env_id": "Potato|+00.60|+00.70|+00.45",
+        "location": "loc|1|1|1|60"
+    },
+    "DiningTable__minus_2_dot_096_comma__minus_2_dot_096_comma_3_dot_804_comma_3_dot_804_comma_0_dot_024_comma_0_dot_024": {
+        "object_type": "DiningTable",
+        "coords": [
+            -2.096,
+            -2.096,
+            3.804,
+            3.804,
+            0.024,
+            0.024
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": "DiningTable|-00.52|+00.01|+00.95",
+        "location": "loc|0|1|0|60"
+    },
+    "Microwave__minus_8_dot_052_comma__minus_8_dot_052_comma__minus_14_dot_756_comma__minus_14_dot_756_comma_2_dot_761099816_comma_2_dot_761099816": {
+        "object_type": "Microwave",
+        "coords": [
+            -8.052,
+            -8.052,
+            -14.756,
+            -14.756,
+            2.761099816,
+            2.761099816
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": null,
+        "location": "loc|-8|-11|2|45"
+    }
+}

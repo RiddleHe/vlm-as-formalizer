@@ -1,0 +1,7 @@
+There is a Tomato in the room.
+There is a SideTable in the room.
+There is a SinkBasin in the room.
+There is a Fridge in the room.
+Tomato_1 is frozen.
+Tomato_1 is on Fridge_1.
+The instruction is: Put a washed tomato on the black table.

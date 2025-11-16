@@ -1,0 +1,47 @@
+{
+    "KeyChain__minus_7_dot_49467088_comma__minus_7_dot_49467088_comma_6_dot_219536_comma_6_dot_219536_comma_3_dot_025528_comma_3_dot_025528": {
+        "object_type": "KeyChain",
+        "coords": [
+            -7.49467088,
+            -7.49467088,
+            6.219536,
+            6.219536,
+            3.025528,
+            3.025528
+        ],
+        "is_receptacle": false,
+        "object_name": "KeyChain_1",
+        "object_env_id": "KeyChain|-01.87|+00.76|+01.55",
+        "location": "loc|-10|7|1|60"
+    },
+    "DiningTable__minus_6_dot_368032_comma__minus_6_dot_368032_comma_5_dot_096312_comma_5_dot_096312_comma_1_dot_2581852_comma_1_dot_2581852": {
+        "object_type": "DiningTable",
+        "coords": [
+            -6.368032,
+            -6.368032,
+            5.096312,
+            5.096312,
+            1.2581852,
+            1.2581852
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-2|5|3|45"
+    },
+    "FloorLamp__minus_18_dot_884_comma__minus_18_dot_884_comma_14_dot_748_comma_14_dot_748_comma_0_dot_000504732132_comma_0_dot_000504732132": {
+        "object_type": "FloorLamp",
+        "coords": [
+            -18.884,
+            -18.884,
+            14.748,
+            14.748,
+            0.000504732132,
+            0.000504732132
+        ],
+        "is_receptacle": false,
+        "object_name": "FloorLamp_1",
+        "object_env_id": "FloorLamp|-04.72|+00.00|+03.69",
+        "location": "loc|-19|12|0|0"
+    }
+}

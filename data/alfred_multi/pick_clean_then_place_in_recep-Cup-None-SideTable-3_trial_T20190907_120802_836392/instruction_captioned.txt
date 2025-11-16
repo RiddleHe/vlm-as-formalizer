@@ -1,0 +1,6 @@
+There is a Cup in the room.
+There is a SinkBasin in the room.
+There is a SideTable in the room.
+There is a CounterTop in the room.
+Cup_1 is on CounterTop_1.
+The instruction is: Put a clean mug on the table.

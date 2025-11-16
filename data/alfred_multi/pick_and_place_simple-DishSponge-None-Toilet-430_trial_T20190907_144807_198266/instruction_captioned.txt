@@ -1,0 +1,5 @@
+There is a DishSponge in the room.
+There is a BathtubBasin in the room.
+There is a Toilet in the room.
+DishSponge_1 is on BathtubBasin_1.
+The instruction is: Place green sponge on toilet tank

@@ -1,0 +1,6 @@
+There are 2 HandTowels in the room.
+There is a BathtubBasin in the room.
+There are 2 HandTowelHolders in the room.
+HandTowel_2 is on HandTowelHolder_2.
+HandTowel_1 is on HandTowelHolder_1.
+The instruction is: Place two towel into the bathtub.

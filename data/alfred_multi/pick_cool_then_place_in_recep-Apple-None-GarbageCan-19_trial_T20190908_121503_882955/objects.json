@@ -1,0 +1,62 @@
+{
+    "Apple__minus_0_dot_05690384_comma__minus_0_dot_05690384_comma__minus_2_dot_0301832_comma__minus_2_dot_0301832_comma_3_dot_8345592_comma_3_dot_8345592": {
+        "object_type": "Apple",
+        "coords": [
+            -0.05690384,
+            -0.05690384,
+            -2.0301832,
+            -2.0301832,
+            3.8345592,
+            3.8345592
+        ],
+        "is_receptacle": false,
+        "object_name": "Apple_1",
+        "object_env_id": "Apple|-00.01|+00.96|-00.51",
+        "location": "loc|-4|-2|1|30"
+    },
+    "CounterTop__minus_1_dot_076_comma__minus_1_dot_076_comma__minus_4_dot_3592_comma__minus_4_dot_3592_comma_3_dot_806_comma_3_dot_806": {
+        "object_type": "CounterTop",
+        "coords": [
+            -1.076,
+            -1.076,
+            -4.3592,
+            -4.3592,
+            3.806,
+            3.806
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-4|-5|1|45"
+    },
+    "Fridge__minus_12_dot_75556944_comma__minus_12_dot_75556944_comma__minus_8_dot_74_comma__minus_8_dot_74_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            -12.75556944,
+            -12.75556944,
+            -8.74,
+            -8.74,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": null,
+        "location": "loc|-10|-9|3|60"
+    },
+    "GarbageCan__minus_1_dot_136_comma__minus_1_dot_136_comma__minus_0_dot_14_comma__minus_0_dot_14_comma_0_dot_0001941937516_comma_0_dot_0001941937516": {
+        "object_type": "GarbageCan",
+        "coords": [
+            -1.136,
+            -1.136,
+            -0.14,
+            -0.14,
+            0.0001941937516,
+            0.0001941937516
+        ],
+        "is_receptacle": true,
+        "object_name": "GarbageCan_1",
+        "object_env_id": "GarbageCan|-00.28|+00.00|-00.04",
+        "location": "loc|-3|0|1|60"
+    }
+}

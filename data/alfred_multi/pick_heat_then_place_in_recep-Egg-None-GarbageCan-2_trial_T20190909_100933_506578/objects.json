@@ -1,0 +1,62 @@
+{
+    "Egg_6_dot_61246872_comma_6_dot_61246872_comma__minus_0_dot_527892112_comma__minus_0_dot_527892112_comma_3_dot_87349_comma_3_dot_87349": {
+        "object_type": "Egg",
+        "coords": [
+            6.61246872,
+            6.61246872,
+            -0.527892112,
+            -0.527892112,
+            3.87349,
+            3.87349
+        ],
+        "is_receptacle": false,
+        "object_name": "Egg_1",
+        "object_env_id": "Egg|+01.65|+00.97|-00.13",
+        "location": "loc|5|0|1|60"
+    },
+    "CounterTop_0_dot_008_comma_0_dot_008_comma__minus_6_dot_052_comma__minus_6_dot_052_comma_3_dot_788_comma_3_dot_788": {
+        "object_type": "CounterTop",
+        "coords": [
+            0.008,
+            0.008,
+            -6.052,
+            -6.052,
+            3.788,
+            3.788
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-4|-3|1|30"
+    },
+    "Microwave_7_dot_732_comma_7_dot_732_comma__minus_3_dot_068_comma__minus_3_dot_068_comma_3_dot_600000144_comma_3_dot_600000144": {
+        "object_type": "Microwave",
+        "coords": [
+            7.732,
+            7.732,
+            -3.068,
+            -3.068,
+            3.600000144,
+            3.600000144
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": null,
+        "location": "loc|4|-3|1|45"
+    },
+    "GarbageCan__minus_7_dot_184_comma__minus_7_dot_184_comma_5_dot_32_comma_5_dot_32_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "GarbageCan",
+        "coords": [
+            -7.184,
+            -7.184,
+            5.32,
+            5.32,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "GarbageCan_1",
+        "object_env_id": "GarbageCan|-01.80|+00.00|+01.33",
+        "location": "loc|-5|5|3|60"
+    }
+}

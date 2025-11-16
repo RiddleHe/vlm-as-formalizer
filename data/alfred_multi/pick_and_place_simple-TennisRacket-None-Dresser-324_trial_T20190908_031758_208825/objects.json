@@ -1,0 +1,32 @@
+{
+    "TennisRacket__minus_6_dot_388_comma__minus_6_dot_388_comma__minus_5_dot_468_comma__minus_5_dot_468_comma_0_dot_00402465464_comma_0_dot_00402465464": {
+        "object_type": "TennisRacket",
+        "coords": [
+            -6.388,
+            -6.388,
+            -5.468,
+            -5.468,
+            0.00402465464,
+            0.00402465464
+        ],
+        "is_receptacle": false,
+        "object_name": "TennisRacket_1",
+        "object_env_id": "TennisRacket|-01.60|+00.00|-01.37",
+        "location": "loc|-6|-6|0|60"
+    },
+    "Dresser_6_dot_536_comma_6_dot_536_comma__minus_7_dot_324_comma__minus_7_dot_324_comma__minus_0_dot_084_comma__minus_0_dot_084": {
+        "object_type": "Dresser",
+        "coords": [
+            6.536,
+            6.536,
+            -7.324,
+            -7.324,
+            -0.084,
+            -0.084
+        ],
+        "is_receptacle": true,
+        "object_name": "Dresser_1",
+        "object_env_id": "Dresser|+01.63|-00.02|-01.83",
+        "location": "loc|4|-7|1|60"
+    }
+}

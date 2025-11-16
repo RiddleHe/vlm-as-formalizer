@@ -1,0 +1,62 @@
+{
+    "Candle__minus_0_dot_28200436_comma__minus_0_dot_28200436_comma__minus_15_dot_17560196_comma__minus_15_dot_17560196_comma_3_dot_8082572_comma_3_dot_8082572": {
+        "object_type": "Candle",
+        "coords": [
+            -0.28200436,
+            -0.28200436,
+            -15.17560196,
+            -15.17560196,
+            3.8082572,
+            3.8082572
+        ],
+        "is_receptacle": false,
+        "object_name": "Candle_1",
+        "object_env_id": "Candle|-00.07|+00.95|-03.79",
+        "location": "loc|2|-14|3|45"
+    },
+    "Toilet_0_dot_016_comma_0_dot_016_comma__minus_13_dot_744_comma__minus_13_dot_744_comma__minus_0_dot_00232115388_comma__minus_0_dot_00232115388": {
+        "object_type": "Toilet",
+        "coords": [
+            0.016,
+            0.016,
+            -13.744,
+            -13.744,
+            -0.00232115388,
+            -0.00232115388
+        ],
+        "is_receptacle": true,
+        "object_name": "Toilet_1",
+        "object_env_id": null,
+        "location": "loc|-4|-13|1|15"
+    },
+    "Shelf_3_dot_244_comma_3_dot_244_comma__minus_2_dot_436_comma__minus_2_dot_436_comma_3_dot_2365704_comma_3_dot_2365704": {
+        "object_type": "Shelf",
+        "coords": [
+            3.244,
+            3.244,
+            -2.436,
+            -2.436,
+            3.2365704,
+            3.2365704
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": "Shelf|+00.81|+00.81|-00.61",
+        "location": "loc|2|-6|0|45"
+    },
+    "Candle__minus_0_dot_53200382_comma__minus_0_dot_53200382_comma__minus_15_dot_71143436_comma__minus_15_dot_71143436_comma_3_dot_8098956_comma_3_dot_8098956": {
+        "object_type": "Candle",
+        "coords": [
+            -0.53200382,
+            -0.53200382,
+            -15.71143436,
+            -15.71143436,
+            3.8098956,
+            3.8098956
+        ],
+        "is_receptacle": false,
+        "object_name": "Candle_2",
+        "object_env_id": "Candle|-00.13|+00.95|-03.93",
+        "location": "loc|-2|-13|2|45"
+    }
+}

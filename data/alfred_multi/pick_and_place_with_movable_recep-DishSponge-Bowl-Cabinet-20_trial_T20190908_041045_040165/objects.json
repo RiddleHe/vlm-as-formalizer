@@ -1,0 +1,62 @@
+{
+    "DishSponge_2_dot_758396624_comma_2_dot_758396624_comma__minus_7_dot_00534248_comma__minus_7_dot_00534248_comma_3_dot_652256964_comma_3_dot_652256964": {
+        "object_type": "DishSponge",
+        "coords": [
+            2.758396624,
+            2.758396624,
+            -7.00534248,
+            -7.00534248,
+            3.652256964,
+            3.652256964
+        ],
+        "is_receptacle": false,
+        "object_name": "DishSponge_1",
+        "object_env_id": "DishSponge|+00.69|+00.91|-01.75",
+        "location": "loc|3|-5|2|60"
+    },
+    "CounterTop_0_dot_932_comma_0_dot_932_comma__minus_8_dot_008_comma__minus_8_dot_008_comma_3_dot_796_comma_3_dot_796": {
+        "object_type": "CounterTop",
+        "coords": [
+            0.932,
+            0.932,
+            -8.008,
+            -8.008,
+            3.796,
+            3.796
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|3|-5|2|45"
+    },
+    "Bowl_7_dot_67702532_comma_7_dot_67702532_comma__minus_4_dot_38238716_comma__minus_4_dot_38238716_comma_3_dot_640423776_comma_3_dot_640423776": {
+        "object_type": "Bowl",
+        "coords": [
+            7.67702532,
+            7.67702532,
+            -4.38238716,
+            -4.38238716,
+            3.640423776,
+            3.640423776
+        ],
+        "is_receptacle": true,
+        "object_name": "Bowl_1",
+        "object_env_id": "Bowl|+01.92|+00.91|-01.10",
+        "location": "loc|4|-4|1|45"
+    },
+    "Cabinet_5_dot_52_comma_5_dot_52_comma__minus_6_dot_75999976_comma__minus_6_dot_75999976_comma_1_dot_88_comma_1_dot_88": {
+        "object_type": "Cabinet",
+        "coords": [
+            5.52,
+            5.52,
+            -6.75999976,
+            -6.75999976,
+            1.88,
+            1.88
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": "Cabinet|+01.38|+00.47|-01.69",
+        "location": "loc|3|-3|2|45"
+    }
+}

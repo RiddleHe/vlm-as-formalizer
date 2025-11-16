@@ -1,0 +1,32 @@
+{
+    "CreditCard__minus_1_dot_8076356_comma__minus_1_dot_8076356_comma__minus_9_dot_29095364_comma__minus_9_dot_29095364_comma_3_dot_040318252_comma_3_dot_040318252": {
+        "object_type": "CreditCard",
+        "coords": [
+            -1.8076356,
+            -1.8076356,
+            -9.29095364,
+            -9.29095364,
+            3.040318252,
+            3.040318252
+        ],
+        "is_receptacle": false,
+        "object_name": "CreditCard_1",
+        "object_env_id": "CreditCard|-00.45|+00.76|-02.32",
+        "location": "loc|-4|-9|1|60"
+    },
+    "ArmChair_9_dot_172_comma_9_dot_172_comma__minus_8_dot_084_comma__minus_8_dot_084_comma_0_dot_052_comma_0_dot_052": {
+        "object_type": "ArmChair",
+        "coords": [
+            9.172,
+            9.172,
+            -8.084,
+            -8.084,
+            0.052,
+            0.052
+        ],
+        "is_receptacle": true,
+        "object_name": "ArmChair_1",
+        "object_env_id": "ArmChair|+02.29|+00.01|-02.02",
+        "location": "loc|5|-8|1|60"
+    }
+}

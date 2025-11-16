@@ -1,0 +1,6 @@
+There is a Mug in the room.
+There is a Cabinet in the room.
+There is a Microwave in the room.
+There is a CoffeeMachine in the room.
+Mug_1 is on Cabinet_1.
+The instruction is: Put a warm coffee cup into the coffee maker.

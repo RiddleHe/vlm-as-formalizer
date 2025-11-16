@@ -1,0 +1,4 @@
+(gotolocation agent1 peppershaker_1)
+(pickupobject agent1 peppershaker_1)
+(gotolocation agent1 drawer_1)
+(putobjectinreceptacle agent1 peppershaker_1 drawer_1)

@@ -1,0 +1,7 @@
+There is a Mug in the room.
+There is a Pen in the room.
+There is a Shelf in the room.
+There is a Dresser in the room.
+Mug_1 is on Shelf_1.
+Pen_1 is on Dresser_1.
+The instruction is: Place a pen in a black cup on a dresser near a computer.

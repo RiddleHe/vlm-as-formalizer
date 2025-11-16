@@ -1,0 +1,47 @@
+{
+    "Kettle_5_dot_28_comma_5_dot_28_comma_15_dot_392_comma_15_dot_392_comma_3_dot_954399824_comma_3_dot_954399824": {
+        "object_type": "Kettle",
+        "coords": [
+            5.28,
+            5.28,
+            15.392,
+            15.392,
+            3.954399824,
+            3.954399824
+        ],
+        "is_receptacle": false,
+        "object_name": "Kettle_1",
+        "object_env_id": "Kettle|+01.32|+00.99|+03.85",
+        "location": "loc|3|15|1|45"
+    },
+    "StoveBurner_5_dot_28_comma_5_dot_28_comma_15_dot_392_comma_15_dot_392_comma_3_dot_932_comma_3_dot_932": {
+        "object_type": "StoveBurner",
+        "coords": [
+            5.28,
+            5.28,
+            15.392,
+            15.392,
+            3.932,
+            3.932
+        ],
+        "is_receptacle": true,
+        "object_name": "StoveBurner_1",
+        "object_env_id": null,
+        "location": "loc|3|15|1|45"
+    },
+    "SinkBasin_5_dot_5492_comma_5_dot_5492_comma_9_dot_356_comma_9_dot_356_comma_3_dot_5209168_comma_3_dot_5209168": {
+        "object_type": "SinkBasin",
+        "coords": [
+            5.5492,
+            5.5492,
+            9.356,
+            9.356,
+            3.5209168,
+            3.5209168
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|3|9|1|45"
+    }
+}

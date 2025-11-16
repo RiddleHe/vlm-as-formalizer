@@ -1,0 +1,62 @@
+{
+    "KeyChain__minus_0_dot_540952204_comma__minus_0_dot_540952204_comma__minus_9_dot_97589492_comma__minus_9_dot_97589492_comma_3_dot_8918908_comma_3_dot_8918908": {
+        "object_type": "KeyChain",
+        "coords": [
+            -0.540952204,
+            -0.540952204,
+            -9.97589492,
+            -9.97589492,
+            3.8918908,
+            3.8918908
+        ],
+        "is_receptacle": false,
+        "object_name": "KeyChain_1",
+        "object_env_id": "KeyChain|-00.14|+00.97|-02.49",
+        "location": "loc|-1|-8|2|60"
+    },
+    "SideTable__minus_0_dot_124_comma__minus_0_dot_124_comma__minus_10_dot_208_comma__minus_10_dot_208_comma_0_dot_38996792_comma_0_dot_38996792": {
+        "object_type": "SideTable",
+        "coords": [
+            -0.124,
+            -0.124,
+            -10.208,
+            -10.208,
+            0.38996792,
+            0.38996792
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": null,
+        "location": "loc|0|-7|2|60"
+    },
+    "Plate__minus_14_dot_60362624_comma__minus_14_dot_60362624_comma__minus_5_dot_5425768_comma__minus_5_dot_5425768_comma_3_dot_5542764_comma_3_dot_5542764": {
+        "object_type": "Plate",
+        "coords": [
+            -14.60362624,
+            -14.60362624,
+            -5.5425768,
+            -5.5425768,
+            3.5542764,
+            3.5542764
+        ],
+        "is_receptacle": true,
+        "object_name": "Plate_1",
+        "object_env_id": "Plate|-03.65|+00.89|-01.39",
+        "location": "loc|-14|-8|0|60"
+    },
+    "DiningTable__minus_13_dot_716_comma__minus_13_dot_716_comma__minus_4_dot_755744_comma__minus_4_dot_755744_comma_0_dot_38_comma_0_dot_38": {
+        "object_type": "DiningTable",
+        "coords": [
+            -13.716,
+            -13.716,
+            -4.755744,
+            -4.755744,
+            0.38,
+            0.38
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-14|-8|0|60"
+    }
+}

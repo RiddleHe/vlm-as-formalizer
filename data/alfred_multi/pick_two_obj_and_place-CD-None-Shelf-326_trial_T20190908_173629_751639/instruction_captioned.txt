@@ -1,0 +1,6 @@
+There are 2 CDs in the room.
+There is a Shelf in the room.
+There is a DiningTable in the room.
+CD_2 is on DiningTable_1.
+CD_1 is on DiningTable_1.
+The instruction is: To move two disks on the desk to the shelf on the bottom right of the desk.

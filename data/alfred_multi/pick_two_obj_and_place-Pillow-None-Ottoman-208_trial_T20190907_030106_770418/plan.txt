@@ -1,0 +1,4 @@
+(gotolocation agent1 pillow_1)
+(pickupobject agent1 pillow_1)
+(gotolocation agent1 ottoman_1)
+(putobjectinreceptacle agent1 pillow_1 ottoman_1)

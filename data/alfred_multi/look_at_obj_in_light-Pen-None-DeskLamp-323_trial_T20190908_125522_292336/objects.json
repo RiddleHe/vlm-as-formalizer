@@ -1,0 +1,47 @@
+{
+    "Pen__minus_9_dot_939756_comma__minus_9_dot_939756_comma__minus_13_dot_21894264_comma__minus_13_dot_21894264_comma_2_dot_7466116_comma_2_dot_7466116": {
+        "object_type": "Pen",
+        "coords": [
+            -9.939756,
+            -9.939756,
+            -13.21894264,
+            -13.21894264,
+            2.7466116,
+            2.7466116
+        ],
+        "is_receptacle": false,
+        "object_name": "Pen_1",
+        "object_env_id": "Pen|-02.48|+00.69|-03.30",
+        "location": "loc|-8|-13|3|60"
+    },
+    "SideTable__minus_9_dot_664_comma__minus_9_dot_664_comma__minus_12_dot_6_comma__minus_12_dot_6_comma_1_dot_852_comma_1_dot_852": {
+        "object_type": "SideTable",
+        "coords": [
+            -9.664,
+            -9.664,
+            -12.6,
+            -12.6,
+            1.852,
+            1.852
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": null,
+        "location": "loc|-7|-12|3|60"
+    },
+    "DeskLamp__minus_9_dot_83871268_comma__minus_9_dot_83871268_comma__minus_2_dot_131565808_comma__minus_2_dot_131565808_comma_2_dot_6944376_comma_2_dot_6944376": {
+        "object_type": "DeskLamp",
+        "coords": [
+            -9.83871268,
+            -9.83871268,
+            -2.131565808,
+            -2.131565808,
+            2.6944376,
+            2.6944376
+        ],
+        "is_receptacle": false,
+        "object_name": "DeskLamp_1",
+        "object_env_id": "DeskLamp|-02.46|+00.67|-00.53",
+        "location": "loc|-8|-2|3|60"
+    }
+}

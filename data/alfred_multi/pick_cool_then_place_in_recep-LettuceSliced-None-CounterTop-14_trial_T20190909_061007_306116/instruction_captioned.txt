@@ -1,0 +1,7 @@
+There is a Lettuce in the room.
+There is a Knife in the room.
+There are 2 CounterTops in the room.
+There is a Fridge in the room.
+Knife_1 is on CounterTop_1.
+Lettuce_1 is on CounterTop_1.
+The instruction is: Put a slice of cold lettuce on a counter.

@@ -1,0 +1,7 @@
+(gotolocation agent1 diningtable_1)
+(pickupobject agent1 plate_1)
+(gotolocation agent1 sidetable_1)
+(putobjectinreceptacle agent1 plate_1 sidetable_1)
+(pickupobject agent1 keychain_1)
+(gotolocation agent1 plate_1)
+(putobjectinreceptacle agent1 keychain_1 plate_1)

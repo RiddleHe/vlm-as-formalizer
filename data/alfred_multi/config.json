@@ -1,0 +1,15 @@
+{
+    "actions": [
+        "GotoLocation (?a - agent ?lEnd - object)",
+        "OpenObject (?a - agent ?r - receptacle)",
+        "CloseObject (?a - agent ?r - receptacle)",
+        "PickupObject (?a - agent ?o - object)",
+        "PutObjectInReceptacle (?a - agent ?o - object ?r - receptacle)",
+        "CleanObject (?a - agent ?r - sink ?o - object)",
+        "HeatObject (?a - agent ?r - microwave ?o - object)",
+        "CoolObject (?a - agent ?r - fridge ?o - object)",
+        "ToggleObject (?a - agent ?o - object)",
+        "SliceObject (?a - agent ?co - object ?ko - knife)"
+    ],
+    "text": "The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such."
+}

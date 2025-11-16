@@ -1,0 +1,7 @@
+There is a ButterKnife in the room.
+There is a Bread in the room.
+There is a Fridge in the room.
+There are 2 CounterTops in the room.
+Bread_1 is on CounterTop_2.
+ButterKnife_1 is on CounterTop_1.
+The instruction is: Cut a slice of bread, put bread in fridge, remove bread from fridge, place on counter next to apple.

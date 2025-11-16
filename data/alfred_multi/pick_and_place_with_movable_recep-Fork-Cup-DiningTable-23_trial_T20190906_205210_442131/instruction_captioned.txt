@@ -1,0 +1,8 @@
+There is a Fork in the room.
+There is a Cup in the room.
+There is a CounterTop in the room.
+There is a SinkBasin in the room.
+There is a DiningTable in the room.
+Fork_1 is on CounterTop_1.
+Cup_1 is on SinkBasin_1.
+The instruction is: place a cup with a fork in it on top of the kitchen island counter

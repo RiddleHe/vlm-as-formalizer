@@ -1,0 +1,62 @@
+{
+    "Vase__minus_23_dot_268_comma__minus_23_dot_268_comma_6_dot_043108_comma_6_dot_043108_comma_2_dot_5696208_comma_2_dot_5696208": {
+        "object_type": "Vase",
+        "coords": [
+            -23.268,
+            -23.268,
+            6.043108,
+            6.043108,
+            2.5696208,
+            2.5696208
+        ],
+        "is_receptacle": false,
+        "object_name": "Vase_1",
+        "object_env_id": "Vase|-05.82|+00.64|+01.51",
+        "location": "loc|-23|3|0|60"
+    },
+    "DiningTable__minus_23_dot_268_comma__minus_23_dot_268_comma_10_dot_256_comma_10_dot_256_comma_0_dot_006619956_comma_0_dot_006619956": {
+        "object_type": "DiningTable",
+        "coords": [
+            -23.268,
+            -23.268,
+            10.256,
+            10.256,
+            0.006619956,
+            0.006619956
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-19|13|3|60"
+    },
+    "Box__minus_9_dot_448_comma__minus_9_dot_448_comma_1_dot_224_comma_1_dot_224_comma_2_dot_628_comma_2_dot_628": {
+        "object_type": "Box",
+        "coords": [
+            -9.448,
+            -9.448,
+            1.224,
+            1.224,
+            2.628,
+            2.628
+        ],
+        "is_receptacle": true,
+        "object_name": "Box_1",
+        "object_env_id": "Box|-02.36|+00.66|+00.31",
+        "location": "loc|-9|3|2|60"
+    },
+    "Shelf__minus_10_dot_684_comma__minus_10_dot_684_comma_1_dot_088_comma_1_dot_088_comma_2_dot_44_comma_2_dot_44": {
+        "object_type": "Shelf",
+        "coords": [
+            -10.684,
+            -10.684,
+            1.088,
+            1.088,
+            2.44,
+            2.44
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": null,
+        "location": "loc|-13|5|2|45"
+    }
+}

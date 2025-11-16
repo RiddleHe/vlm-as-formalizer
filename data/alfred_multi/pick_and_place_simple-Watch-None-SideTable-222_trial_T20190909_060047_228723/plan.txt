@@ -1,0 +1,4 @@
+(gotolocation agent1 watch_1)
+(pickupobject agent1 watch_1)
+(gotolocation agent1 sidetable_1)
+(putobjectinreceptacle agent1 watch_1 sidetable_1)

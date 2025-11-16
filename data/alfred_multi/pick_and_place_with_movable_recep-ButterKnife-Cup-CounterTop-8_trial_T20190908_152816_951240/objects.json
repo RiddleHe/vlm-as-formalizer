@@ -1,0 +1,77 @@
+{
+    "ButterKnife_5_dot_37288_comma_5_dot_37288_comma__minus_1_dot_236581324_comma__minus_1_dot_236581324_comma_3_dot_6453684_comma_3_dot_6453684": {
+        "object_type": "ButterKnife",
+        "coords": [
+            5.37288,
+            5.37288,
+            -1.236581324,
+            -1.236581324,
+            3.6453684,
+            3.6453684
+        ],
+        "is_receptacle": false,
+        "object_name": "ButterKnife_1",
+        "object_env_id": "ButterKnife|+01.34|+00.91|-00.31",
+        "location": "loc|2|-1|1|45"
+    },
+    "CounterTop_4_dot_66_comma_4_dot_66_comma__minus_2_dot_6_comma__minus_2_dot_6_comma_3_dot_7872_comma_3_dot_7872": {
+        "object_type": "CounterTop",
+        "coords": [
+            4.66,
+            4.66,
+            -2.6,
+            -2.6,
+            3.7872,
+            3.7872
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|2|-4|1|45"
+    },
+    "Cup_5_dot_8456154_comma_5_dot_8456154_comma__minus_3_dot_578875064_comma__minus_3_dot_578875064_comma_6_dot_62617256_comma_6_dot_62617256": {
+        "object_type": "Cup",
+        "coords": [
+            5.8456154,
+            5.8456154,
+            -3.578875064,
+            -3.578875064,
+            6.62617256,
+            6.62617256
+        ],
+        "is_receptacle": true,
+        "object_name": "Cup_1",
+        "object_env_id": "Cup|+01.46|+01.66|-00.89",
+        "location": "loc|2|-4|1|0"
+    },
+    "Cabinet_4_dot_63999844_comma_4_dot_63999844_comma__minus_1_dot_339999916_comma__minus_1_dot_339999916_comma_8_dot_24_comma_8_dot_24": {
+        "object_type": "Cabinet",
+        "coords": [
+            4.63999844,
+            4.63999844,
+            -1.339999916,
+            -1.339999916,
+            8.24,
+            8.24
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": null,
+        "location": "loc|2|-3|1|-30"
+    },
+    "CounterTop_6_dot_0_comma_6_dot_0_comma__minus_2_dot_62_comma__minus_2_dot_62_comma_4_dot_7908_comma_4_dot_7908": {
+        "object_type": "CounterTop",
+        "coords": [
+            6.0,
+            6.0,
+            -2.62,
+            -2.62,
+            4.7908,
+            4.7908
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_2",
+        "object_env_id": "CounterTop|+01.50|+01.20|-00.66",
+        "location": "loc|2|-4|1|30"
+    }
+}

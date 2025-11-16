@@ -1,0 +1,4 @@
+(gotolocation agent1 desk_1)
+(pickupobject agent1 cd_1)
+(gotolocation agent1 dresser_1)
+(putobjectinreceptacle agent1 cd_1 dresser_1)

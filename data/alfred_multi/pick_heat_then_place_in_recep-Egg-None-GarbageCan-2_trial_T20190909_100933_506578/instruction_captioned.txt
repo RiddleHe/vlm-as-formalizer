@@ -1,0 +1,6 @@
+There is a Egg in the room.
+There is a Microwave in the room.
+There is a CounterTop in the room.
+There is a GarbageCan in the room.
+Egg_1 is on CounterTop_1.
+The instruction is: Heat up an egg in the microwave and put in the trash.

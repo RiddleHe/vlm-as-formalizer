@@ -1,0 +1,62 @@
+{
+    "Egg__minus_0_dot_1882647276_comma__minus_0_dot_1882647276_comma_2_dot_136146544_comma_2_dot_136146544_comma_3_dot_92194414_comma_3_dot_92194414": {
+        "object_type": "Egg",
+        "coords": [
+            -0.1882647276,
+            -0.1882647276,
+            2.136146544,
+            2.136146544,
+            3.92194414,
+            3.92194414
+        ],
+        "is_receptacle": false,
+        "object_name": "Egg_1",
+        "object_env_id": "Egg|-00.05|+00.98|+00.53",
+        "location": "loc|-2|2|1|60"
+    },
+    "DiningTable_1_dot_66_comma_1_dot_66_comma_2_dot_712_comma_2_dot_712_comma_0_dot_052_comma_0_dot_052": {
+        "object_type": "DiningTable",
+        "coords": [
+            1.66,
+            1.66,
+            2.712,
+            2.712,
+            0.052,
+            0.052
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-4|3|1|45"
+    },
+    "Fridge__minus_5_dot_98224832_comma__minus_5_dot_98224832_comma__minus_2_dot_812_comma__minus_2_dot_812_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            -5.98224832,
+            -5.98224832,
+            -2.812,
+            -2.812,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": null,
+        "location": "loc|-3|-3|3|60"
+    },
+    "Microwave__minus_4_dot_936_comma__minus_4_dot_936_comma__minus_6_dot_724_comma__minus_6_dot_724_comma_3_dot_6_comma_3_dot_6": {
+        "object_type": "Microwave",
+        "coords": [
+            -4.936,
+            -4.936,
+            -6.724,
+            -6.724,
+            3.6,
+            3.6
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": "Microwave|-01.23|+00.90|-01.68",
+        "location": "loc|-1|-5|3|30"
+    }
+}

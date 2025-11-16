@@ -1,0 +1,9 @@
+There is a Tomato in the room.
+There is a Knife in the room.
+There is a GarbageCan in the room.
+There is a Cabinet in the room.
+There is a Microwave in the room.
+There are 2 CounterTops in the room.
+Tomato_1 is on CounterTop_2.
+Knife_1 is on CounterTop_1.
+The instruction is: Putting a slice of tomato in the trash

@@ -1,0 +1,6 @@
+(gotolocation agent1 pot_1)
+(pickupobject agent1 pot_1)
+(gotolocation agent1 sinkbasin_1)
+(cleanobject agent1 sinkbasin_1 pot_1)
+(gotolocation agent1 stoveburner_1)
+(putobjectinreceptacle agent1 pot_1 stoveburner_1)

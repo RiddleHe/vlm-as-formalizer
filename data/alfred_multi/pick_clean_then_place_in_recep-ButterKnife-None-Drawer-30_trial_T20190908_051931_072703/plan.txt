@@ -1,0 +1,6 @@
+(gotolocation agent1 countertop_1)
+(pickupobject agent1 butterknife_1)
+(gotolocation agent1 sinkbasin_1)
+(cleanobject agent1 sinkbasin_1 butterknife_1)
+(gotolocation agent1 drawer_1)
+(putobjectinreceptacle agent1 butterknife_1 drawer_1)

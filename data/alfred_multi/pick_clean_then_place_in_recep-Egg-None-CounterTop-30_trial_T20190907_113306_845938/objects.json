@@ -1,0 +1,62 @@
+{
+    "Egg__minus_4_dot_20863008_comma__minus_4_dot_20863008_comma_6_dot_0958996_comma_6_dot_0958996_comma_4_dot_20077564_comma_4_dot_20077564": {
+        "object_type": "Egg",
+        "coords": [
+            -4.20863008,
+            -4.20863008,
+            6.0958996,
+            6.0958996,
+            4.20077564,
+            4.20077564
+        ],
+        "is_receptacle": false,
+        "object_name": "Egg_1",
+        "object_env_id": "Egg|-01.05|+01.05|+01.52",
+        "location": "loc|-1|5|3|45"
+    },
+    "Microwave__minus_4_dot_136_comma__minus_4_dot_136_comma_5_dot_716_comma_5_dot_716_comma_3_dot_5567708_comma_3_dot_5567708": {
+        "object_type": "Microwave",
+        "coords": [
+            -4.136,
+            -4.136,
+            5.716,
+            5.716,
+            3.5567708,
+            3.5567708
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": null,
+        "location": "loc|-1|5|3|45"
+    },
+    "SinkBasin_12_dot_28_comma_12_dot_28_comma_0_dot_4332_comma_0_dot_4332_comma_2_dot_947206_comma_2_dot_947206": {
+        "object_type": "SinkBasin",
+        "coords": [
+            12.28,
+            12.28,
+            0.4332,
+            0.4332,
+            2.947206,
+            2.947206
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|10|-1|1|60"
+    },
+    "CounterTop_12_dot_444_comma_12_dot_444_comma_0_dot_08_comma_0_dot_08_comma_3_dot_7452_comma_3_dot_7452": {
+        "object_type": "CounterTop",
+        "coords": [
+            12.444,
+            12.444,
+            0.08,
+            0.08,
+            3.7452,
+            3.7452
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": "CounterTop|+03.11|+00.94|+00.02",
+        "location": "loc|10|-2|1|45"
+    }
+}

@@ -1,0 +1,77 @@
+{
+    "HandTowel__minus_14_dot_904_comma__minus_14_dot_904_comma_5_dot_32120036_comma_5_dot_32120036_comma_6_dot_584_comma_6_dot_584": {
+        "object_type": "HandTowel",
+        "coords": [
+            -14.904,
+            -14.904,
+            5.32120036,
+            5.32120036,
+            6.584,
+            6.584
+        ],
+        "is_receptacle": false,
+        "object_name": "HandTowel_1",
+        "object_env_id": "HandTowel|-03.73|+01.65|+01.33",
+        "location": "loc|-14|10|2|0"
+    },
+    "HandTowelHolder__minus_14_dot_904_comma__minus_14_dot_904_comma_5_dot_168_comma_5_dot_168_comma_6_dot_992_comma_6_dot_992": {
+        "object_type": "HandTowelHolder",
+        "coords": [
+            -14.904,
+            -14.904,
+            5.168,
+            5.168,
+            6.992,
+            6.992
+        ],
+        "is_receptacle": true,
+        "object_name": "HandTowelHolder_1",
+        "object_env_id": null,
+        "location": "loc|-14|10|2|0"
+    },
+    "BathtubBasin__minus_17_dot_23849296_comma__minus_17_dot_23849296_comma_9_dot_31468676_comma_9_dot_31468676_comma_0_dot_768_comma_0_dot_768": {
+        "object_type": "BathtubBasin",
+        "coords": [
+            -17.23849296,
+            -17.23849296,
+            9.31468676,
+            9.31468676,
+            0.768,
+            0.768
+        ],
+        "is_receptacle": true,
+        "object_name": "BathtubBasin_1",
+        "object_env_id": null,
+        "location": "loc|-15|14|2|45"
+    },
+    "HandTowel__minus_3_dot_693199872_comma__minus_3_dot_693199872_comma_8_dot_072_comma_8_dot_072_comma_6_dot_36_comma_6_dot_36": {
+        "object_type": "HandTowel",
+        "coords": [
+            -3.693199872,
+            -3.693199872,
+            8.072,
+            8.072,
+            6.36,
+            6.36
+        ],
+        "is_receptacle": false,
+        "object_name": "HandTowel_2",
+        "object_env_id": "HandTowel|-00.92|+01.59|+02.02",
+        "location": "loc|-5|11|2|0"
+    },
+    "HandTowelHolder__minus_3_dot_54_comma__minus_3_dot_54_comma_8_dot_072_comma_8_dot_072_comma_6_dot_768_comma_6_dot_768": {
+        "object_type": "HandTowelHolder",
+        "coords": [
+            -3.54,
+            -3.54,
+            8.072,
+            8.072,
+            6.768,
+            6.768
+        ],
+        "is_receptacle": true,
+        "object_name": "HandTowelHolder_2",
+        "object_env_id": null,
+        "location": "loc|-5|11|2|0"
+    }
+}

@@ -1,0 +1,8 @@
+There is a Pen in the room.
+There is a Bowl in the room.
+There is a Desk in the room.
+There is a Shelf in the room.
+There is a Dresser in the room.
+Pen_1 is on Dresser_1.
+Bowl_1 is on Shelf_1.
+The instruction is: Find pen on desk, put into metal bowl, place onto desk.

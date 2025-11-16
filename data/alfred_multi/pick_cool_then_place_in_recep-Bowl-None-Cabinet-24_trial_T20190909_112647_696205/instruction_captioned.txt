@@ -1,0 +1,5 @@
+There is a Bowl in the room.
+There are 2 Cabinets in the room.
+There is a Fridge in the room.
+Bowl_1 is on Cabinet_1.
+The instruction is: Put a cold bowl in a cabinet above a fridge.

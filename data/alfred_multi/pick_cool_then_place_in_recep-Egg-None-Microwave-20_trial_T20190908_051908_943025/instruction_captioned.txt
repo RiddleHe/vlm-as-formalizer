@@ -1,0 +1,6 @@
+There is a Egg in the room.
+There is a Microwave in the room.
+There is a Fridge in the room.
+There is a DiningTable in the room.
+Egg_1 is on DiningTable_1.
+The instruction is: Cool an egg and put it into microwave

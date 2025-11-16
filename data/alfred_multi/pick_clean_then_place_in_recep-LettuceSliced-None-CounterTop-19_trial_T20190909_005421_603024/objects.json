@@ -1,0 +1,77 @@
+{
+    "Knife__minus_11_dot_95083524_comma__minus_11_dot_95083524_comma__minus_15_dot_80896948_comma__minus_15_dot_80896948_comma_3_dot_7845488_comma_3_dot_7845488": {
+        "object_type": "Knife",
+        "coords": [
+            -11.95083524,
+            -11.95083524,
+            -15.80896948,
+            -15.80896948,
+            3.7845488,
+            3.7845488
+        ],
+        "is_receptacle": false,
+        "object_name": "Knife_1",
+        "object_env_id": "Knife|-02.99|+00.95|-03.95",
+        "location": "loc|-11|-13|2|45"
+    },
+    "CounterTop__minus_7_dot_16_comma__minus_7_dot_16_comma__minus_15_dot_216_comma__minus_15_dot_216_comma_3_dot_7968_comma_3_dot_7968": {
+        "object_type": "CounterTop",
+        "coords": [
+            -7.16,
+            -7.16,
+            -15.216,
+            -15.216,
+            3.7968,
+            3.7968
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-4|-13|3|45"
+    },
+    "Lettuce__minus_10_dot_9632_comma__minus_10_dot_9632_comma__minus_3_dot_1215_comma__minus_3_dot_1215_comma_3_dot_2191264_comma_3_dot_2191264": {
+        "object_type": "Lettuce",
+        "coords": [
+            -10.9632,
+            -10.9632,
+            -3.1215,
+            -3.1215,
+            3.2191264,
+            3.2191264
+        ],
+        "is_receptacle": false,
+        "object_name": "Lettuce_1",
+        "object_env_id": "Lettuce|-02.74|+00.80|-00.78",
+        "location": "loc|-11|-6|0|45"
+    },
+    "DiningTable__minus_11_dot_476_comma__minus_11_dot_476_comma__minus_2_dot_024_comma__minus_2_dot_024_comma_2_dot_708_comma_2_dot_708": {
+        "object_type": "DiningTable",
+        "coords": [
+            -11.476,
+            -11.476,
+            -2.024,
+            -2.024,
+            2.708,
+            2.708
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": "DiningTable|-02.87|+00.68|-00.51",
+        "location": "loc|-11|-6|0|45"
+    },
+    "SinkBasin__minus_7_dot_1452_comma__minus_7_dot_1452_comma__minus_14_dot_9888_comma__minus_14_dot_9888_comma_3_dot_12_comma_3_dot_12": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -7.1452,
+            -7.1452,
+            -14.9888,
+            -14.9888,
+            3.12,
+            3.12
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-7|-13|2|60"
+    }
+}

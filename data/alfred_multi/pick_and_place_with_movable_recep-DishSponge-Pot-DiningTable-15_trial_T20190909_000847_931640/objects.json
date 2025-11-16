@@ -1,0 +1,77 @@
+{
+    "DishSponge__minus_13_dot_835512_comma__minus_13_dot_835512_comma_7_dot_99909256_comma_7_dot_99909256_comma_7_dot_97604944_comma_7_dot_97604944": {
+        "object_type": "DishSponge",
+        "coords": [
+            -13.835512,
+            -13.835512,
+            7.99909256,
+            7.99909256,
+            7.97604944,
+            7.97604944
+        ],
+        "is_receptacle": false,
+        "object_name": "DishSponge_1",
+        "object_env_id": "DishSponge|-03.46|+01.99|+02.00",
+        "location": "loc|-10|8|3|-15"
+    },
+    "Cabinet__minus_13_dot_408548_comma__minus_13_dot_408548_comma_6_dot_86034964_comma_6_dot_86034964_comma_8_dot_822844_comma_8_dot_822844": {
+        "object_type": "Cabinet",
+        "coords": [
+            -13.408548,
+            -13.408548,
+            6.86034964,
+            6.86034964,
+            8.822844,
+            8.822844
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": null,
+        "location": "loc|-10|9|3|-30"
+    },
+    "Pot__minus_13_dot_6988_comma__minus_13_dot_6988_comma_7_dot_886_comma_7_dot_886_comma_3_dot_8672_comma_3_dot_8672": {
+        "object_type": "Pot",
+        "coords": [
+            -13.6988,
+            -13.6988,
+            7.886,
+            7.886,
+            3.8672,
+            3.8672
+        ],
+        "is_receptacle": true,
+        "object_name": "Pot_1",
+        "object_env_id": "Pot|-03.42|+00.97|+01.97",
+        "location": "loc|-10|8|3|30"
+    },
+    "StoveBurner__minus_13_dot_6988_comma__minus_13_dot_6988_comma_7_dot_886_comma_7_dot_886_comma_3_dot_836_comma_3_dot_836": {
+        "object_type": "StoveBurner",
+        "coords": [
+            -13.6988,
+            -13.6988,
+            7.886,
+            7.886,
+            3.836,
+            3.836
+        ],
+        "is_receptacle": true,
+        "object_name": "StoveBurner_1",
+        "object_env_id": null,
+        "location": "loc|-10|8|3|30"
+    },
+    "DiningTable__minus_5_dot_38_comma__minus_5_dot_38_comma_1_dot_332_comma_1_dot_332_comma_0_dot_0562074184_comma_0_dot_0562074184": {
+        "object_type": "DiningTable",
+        "coords": [
+            -5.38,
+            -5.38,
+            1.332,
+            1.332,
+            0.0562074184,
+            0.0562074184
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": "DiningTable|-01.35|+00.01|+00.33",
+        "location": "loc|-2|2|3|60"
+    }
+}

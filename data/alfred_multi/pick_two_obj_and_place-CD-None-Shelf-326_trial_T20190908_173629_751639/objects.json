@@ -1,0 +1,62 @@
+{
+    "CD_12_dot_837872_comma_12_dot_837872_comma__minus_7_dot_8733902_comma__minus_7_dot_8733902_comma_3_dot_1650188_comma_3_dot_1650188": {
+        "object_type": "CD",
+        "coords": [
+            12.837872,
+            12.837872,
+            -7.8733902,
+            -7.8733902,
+            3.1650188,
+            3.1650188
+        ],
+        "is_receptacle": false,
+        "object_name": "CD_1",
+        "object_env_id": "CD|+03.21|+00.79|-01.97",
+        "location": "loc|10|-8|1|45"
+    },
+    "DiningTable_12_dot_632_comma_12_dot_632_comma__minus_5_dot_66_comma__minus_5_dot_66_comma__minus_0_dot_02_comma__minus_0_dot_02": {
+        "object_type": "DiningTable",
+        "coords": [
+            12.632,
+            12.632,
+            -5.66,
+            -5.66,
+            -0.02,
+            -0.02
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|8|-5|1|60"
+    },
+    "Shelf_12_dot_164_comma_12_dot_164_comma__minus_9_dot_054_comma__minus_9_dot_054_comma_2_dot_13719988_comma_2_dot_13719988": {
+        "object_type": "Shelf",
+        "coords": [
+            12.164,
+            12.164,
+            -9.054,
+            -9.054,
+            2.13719988,
+            2.13719988
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": "Shelf|+03.04|+00.53|-02.26",
+        "location": "loc|9|-8|1|60"
+    },
+    "CD_11_dot_851348_comma_11_dot_851348_comma__minus_9_dot_00276564_comma__minus_9_dot_00276564_comma_3_dot_1650188_comma_3_dot_1650188": {
+        "object_type": "CD",
+        "coords": [
+            11.851348,
+            11.851348,
+            -9.00276564,
+            -9.00276564,
+            3.1650188,
+            3.1650188
+        ],
+        "is_receptacle": false,
+        "object_name": "CD_2",
+        "object_env_id": "CD|+02.96|+00.79|-02.25",
+        "location": "loc|10|-9|1|60"
+    }
+}

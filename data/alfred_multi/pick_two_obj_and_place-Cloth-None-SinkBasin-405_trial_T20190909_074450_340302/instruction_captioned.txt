@@ -1,0 +1,6 @@
+There are 2 Cloths in the room.
+There is a BathtubBasin in the room.
+There is a SinkBasin in the room.
+Cloth_1 is on BathtubBasin_1.
+Cloth_2 is on BathtubBasin_1.
+The instruction is: Pick up the rags from the bathtub and move them to the sink.

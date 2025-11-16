@@ -1,0 +1,62 @@
+{
+    "Cloth__minus_4_dot_03381348_comma__minus_4_dot_03381348_comma_19_dot_20365332_comma_19_dot_20365332_comma_3_dot_8562188_comma_3_dot_8562188": {
+        "object_type": "Cloth",
+        "coords": [
+            -4.03381348,
+            -4.03381348,
+            19.20365332,
+            19.20365332,
+            3.8562188,
+            3.8562188
+        ],
+        "is_receptacle": false,
+        "object_name": "Cloth_1",
+        "object_env_id": "Cloth|-01.01|+00.96|+04.80",
+        "location": "loc|-4|17|0|45"
+    },
+    "CounterTop__minus_4_dot_094204_comma__minus_4_dot_094204_comma_19_dot_53789712_comma_19_dot_53789712_comma_3_dot_8161704_comma_3_dot_8161704": {
+        "object_type": "CounterTop",
+        "coords": [
+            -4.094204,
+            -4.094204,
+            19.53789712,
+            19.53789712,
+            3.8161704,
+            3.8161704
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-4|17|0|45"
+    },
+    "SinkBasin__minus_2_dot_2768_comma__minus_2_dot_2768_comma_19_dot_544_comma_19_dot_544_comma_3_dot_9464_comma_3_dot_9464": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -2.2768,
+            -2.2768,
+            19.544,
+            19.544,
+            3.9464,
+            3.9464
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-2|17|0|45"
+    },
+    "Toilet__minus_2_dot_068_comma__minus_2_dot_068_comma_12_dot_88_comma_12_dot_88_comma__minus_0_dot_001314207912_comma__minus_0_dot_001314207912": {
+        "object_type": "Toilet",
+        "coords": [
+            -2.068,
+            -2.068,
+            12.88,
+            12.88,
+            -0.001314207912,
+            -0.001314207912
+        ],
+        "is_receptacle": true,
+        "object_name": "Toilet_1",
+        "object_env_id": "Toilet|-00.52|00.00|+03.22",
+        "location": "loc|-2|10|0|15"
+    }
+}

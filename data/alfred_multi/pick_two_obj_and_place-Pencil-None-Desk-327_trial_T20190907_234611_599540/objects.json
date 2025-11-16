@@ -1,0 +1,77 @@
+{
+    "Pencil_5_dot_17420672_comma_5_dot_17420672_comma__minus_2_dot_1518508_comma__minus_2_dot_1518508_comma_3_dot_6671224_comma_3_dot_6671224": {
+        "object_type": "Pencil",
+        "coords": [
+            5.17420672,
+            5.17420672,
+            -2.1518508,
+            -2.1518508,
+            3.6671224,
+            3.6671224
+        ],
+        "is_receptacle": false,
+        "object_name": "Pencil_1",
+        "object_env_id": "Pencil|+01.29|+00.92|-00.54",
+        "location": "loc|3|-2|1|60"
+    },
+    "Shelf_5_dot_04_comma_5_dot_04_comma__minus_1_dot_079600096_comma__minus_1_dot_079600096_comma_3_dot_6136_comma_3_dot_6136": {
+        "object_type": "Shelf",
+        "coords": [
+            5.04,
+            5.04,
+            -1.079600096,
+            -1.079600096,
+            3.6136,
+            3.6136
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": null,
+        "location": "loc|3|-1|1|60"
+    },
+    "Desk_1_dot_784_comma_1_dot_784_comma__minus_10_dot_104_comma__minus_10_dot_104_comma__minus_0_dot_016_comma__minus_0_dot_016": {
+        "object_type": "Desk",
+        "coords": [
+            1.784,
+            1.784,
+            -10.104,
+            -10.104,
+            -0.016,
+            -0.016
+        ],
+        "is_receptacle": true,
+        "object_name": "Desk_1",
+        "object_env_id": "Desk|+00.45|00.00|-02.53",
+        "location": "loc|2|-6|2|60"
+    },
+    "Pencil_4_dot_63736964_comma_4_dot_63736964_comma__minus_0_dot_9688076_comma__minus_0_dot_9688076_comma_1_dot_555122256_comma_1_dot_555122256": {
+        "object_type": "Pencil",
+        "coords": [
+            4.63736964,
+            4.63736964,
+            -0.9688076,
+            -0.9688076,
+            1.555122256,
+            1.555122256
+        ],
+        "is_receptacle": false,
+        "object_name": "Pencil_2",
+        "object_env_id": "Pencil|+01.16|+00.39|-00.24",
+        "location": "loc|3|-1|1|60"
+    },
+    "Shelf_5_dot_04_comma_5_dot_04_comma__minus_1_dot_052_comma__minus_1_dot_052_comma_1_dot_5016_comma_1_dot_5016": {
+        "object_type": "Shelf",
+        "coords": [
+            5.04,
+            5.04,
+            -1.052,
+            -1.052,
+            1.5016,
+            1.5016
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_2",
+        "object_env_id": null,
+        "location": "loc|2|-1|1|60"
+    }
+}

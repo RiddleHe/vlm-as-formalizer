@@ -1,0 +1,92 @@
+{
+    "ButterKnife__minus_4_dot_49468088_comma__minus_4_dot_49468088_comma__minus_1_dot_721859692_comma__minus_1_dot_721859692_comma_3_dot_6485684_comma_3_dot_6485684": {
+        "object_type": "ButterKnife",
+        "coords": [
+            -4.49468088,
+            -4.49468088,
+            -1.721859692,
+            -1.721859692,
+            3.6485684,
+            3.6485684
+        ],
+        "is_receptacle": false,
+        "object_name": "ButterKnife_1",
+        "object_env_id": "ButterKnife|-01.12|+00.91|-00.43",
+        "location": "loc|-2|0|3|45"
+    },
+    "CounterTop__minus_4_dot_0076_comma__minus_4_dot_0076_comma__minus_2_dot_676_comma__minus_2_dot_676_comma_3_dot_7904_comma_3_dot_7904": {
+        "object_type": "CounterTop",
+        "coords": [
+            -4.0076,
+            -4.0076,
+            -2.676,
+            -2.676,
+            3.7904,
+            3.7904
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-2|0|2|45"
+    },
+    "Potato__minus_5_dot_532696_comma__minus_5_dot_532696_comma_8_dot_35142232_comma_8_dot_35142232_comma_3_dot_178228616_comma_3_dot_178228616": {
+        "object_type": "Potato",
+        "coords": [
+            -5.532696,
+            -5.532696,
+            8.35142232,
+            8.35142232,
+            3.178228616,
+            3.178228616
+        ],
+        "is_receptacle": false,
+        "object_name": "Potato_1",
+        "object_env_id": "Potato|-01.38|+00.79|+02.09",
+        "location": "loc|-2|8|3|45"
+    },
+    "Microwave__minus_5_dot_376_comma__minus_5_dot_376_comma_0_dot_216_comma_0_dot_216_comma_3_dot_6_comma_3_dot_6": {
+        "object_type": "Microwave",
+        "coords": [
+            -5.376,
+            -5.376,
+            0.216,
+            0.216,
+            3.6,
+            3.6
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": "Microwave|-01.34|+00.90|+00.05",
+        "location": "loc|-2|0|3|45"
+    },
+    "DiningTable__minus_4_dot_8448_comma__minus_4_dot_8448_comma_9_dot_836_comma_9_dot_836_comma_3_dot_1376_comma_3_dot_1376": {
+        "object_type": "DiningTable",
+        "coords": [
+            -4.8448,
+            -4.8448,
+            9.836,
+            9.836,
+            3.1376,
+            3.1376
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|0|10|3|30"
+    },
+    "SinkBasin__minus_0_dot_1172_comma__minus_0_dot_1172_comma__minus_2_dot_45_comma__minus_2_dot_45_comma_2_dot_992_comma_2_dot_992": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -0.1172,
+            -0.1172,
+            -2.45,
+            -2.45,
+            2.992,
+            2.992
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-1|0|2|60"
+    }
+}

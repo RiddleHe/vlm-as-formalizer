@@ -1,0 +1,5 @@
+There is a PepperShaker in the room.
+There is a CounterTop in the room.
+There is a Drawer in the room.
+PepperShaker_1 is on CounterTop_1.
+The instruction is: Put a salt shaker in the drawer.

@@ -1,0 +1,8 @@
+There is a Knife in the room.
+There is a Potato in the room.
+There is a CounterTop in the room.
+There is a SinkBasin in the room.
+There is a Fridge in the room.
+Potato_1 is on SinkBasin_1.
+Knife_1 is on CounterTop_1.
+The instruction is: Put a chilled slice of potato in a sink, leaving the slicing knife in the fridge.

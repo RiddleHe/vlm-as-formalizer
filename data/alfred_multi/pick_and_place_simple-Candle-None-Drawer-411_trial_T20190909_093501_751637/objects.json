@@ -1,0 +1,47 @@
+{
+    "Candle_1_dot_804118276_comma_1_dot_804118276_comma_8_dot_69440268_comma_8_dot_69440268_comma_2_dot_961822_comma_2_dot_961822": {
+        "object_type": "Candle",
+        "coords": [
+            1.804118276,
+            1.804118276,
+            8.69440268,
+            8.69440268,
+            2.961822,
+            2.961822
+        ],
+        "is_receptacle": false,
+        "object_name": "Candle_1",
+        "object_env_id": "Candle|+00.45|+00.74|+02.17",
+        "location": "loc|0|9|1|60"
+    },
+    "CounterTop_2_dot_932_comma_2_dot_932_comma_7_dot_82_comma_7_dot_82_comma_2_dot_788_comma_2_dot_788": {
+        "object_type": "CounterTop",
+        "coords": [
+            2.932,
+            2.932,
+            7.82,
+            7.82,
+            2.788,
+            2.788
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-1|8|1|45"
+    },
+    "Drawer_1_dot_6384_comma_1_dot_6384_comma_9_dot_682348_comma_9_dot_682348_comma_2_dot_2044_comma_2_dot_2044": {
+        "object_type": "Drawer",
+        "coords": [
+            1.6384,
+            1.6384,
+            9.682348,
+            9.682348,
+            2.2044,
+            2.2044
+        ],
+        "is_receptacle": true,
+        "object_name": "Drawer_1",
+        "object_env_id": "Drawer|+00.41|+00.55|+02.42",
+        "location": "loc|-1|10|1|60"
+    }
+}

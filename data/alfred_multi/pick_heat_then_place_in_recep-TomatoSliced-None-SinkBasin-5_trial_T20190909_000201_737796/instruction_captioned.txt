@@ -1,0 +1,8 @@
+There is a ButterKnife in the room.
+There is a Tomato in the room.
+There is a SinkBasin in the room.
+There is a Microwave in the room.
+There is a CounterTop in the room.
+Tomato_1 is on SinkBasin_1.
+ButterKnife_1 is on CounterTop_1.
+The instruction is: Place a heated slice of tomato in the kitchen sink.

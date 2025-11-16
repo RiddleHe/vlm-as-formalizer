@@ -1,0 +1,47 @@
+{
+    "HandTowel__minus_7_dot_8468_comma__minus_7_dot_8468_comma_5_dot_29327488_comma_5_dot_29327488_comma_6_dot_3546648_comma_6_dot_3546648": {
+        "object_type": "HandTowel",
+        "coords": [
+            -7.8468,
+            -7.8468,
+            5.29327488,
+            5.29327488,
+            6.3546648,
+            6.3546648
+        ],
+        "is_receptacle": false,
+        "object_name": "HandTowel_1",
+        "object_env_id": "HandTowel|-01.96|+01.59|+01.32",
+        "location": "loc|-5|5|3|0"
+    },
+    "HandTowelHolder__minus_8_dot_0_comma__minus_8_dot_0_comma_5_dot_29327488_comma_5_dot_29327488_comma_6_dot_7626648_comma_6_dot_7626648": {
+        "object_type": "HandTowelHolder",
+        "coords": [
+            -8.0,
+            -8.0,
+            5.29327488,
+            5.29327488,
+            6.7626648,
+            6.7626648
+        ],
+        "is_receptacle": true,
+        "object_name": "HandTowelHolder_1",
+        "object_env_id": null,
+        "location": "loc|-5|5|3|0"
+    },
+    "CounterTop__minus_6_dot_436_comma__minus_6_dot_436_comma_11_dot_324_comma_11_dot_324_comma_2_dot_8064_comma_2_dot_8064": {
+        "object_type": "CounterTop",
+        "coords": [
+            -6.436,
+            -6.436,
+            11.324,
+            11.324,
+            2.8064,
+            2.8064
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": "CounterTop|-01.61|+00.70|+02.83",
+        "location": "loc|-3|9|3|45"
+    }
+}

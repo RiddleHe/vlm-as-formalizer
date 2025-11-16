@@ -1,0 +1,5 @@
+There is a DeskLamp in the room.
+There is a Newspaper in the room.
+There is a Sofa in the room.
+Newspaper_1 is on Sofa_1.
+The instruction is: Grab the newspaper on the sofa, turn on the lamp in the corner

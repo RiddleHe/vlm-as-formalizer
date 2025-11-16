@@ -1,0 +1,4 @@
+(gotolocation agent1 laptop_1)
+(pickupobject agent1 laptop_1)
+(gotolocation agent1 desklamp_1)
+(toggleobject agent1 desklamp_1)

@@ -1,0 +1,6 @@
+There is a Mug in the room.
+There is a Microwave in the room.
+There is a CounterTop in the room.
+There is a Cabinet in the room.
+Mug_1 is on CounterTop_1.
+The instruction is: warm up the mug and put it in the cabinet

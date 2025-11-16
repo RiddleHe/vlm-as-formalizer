@@ -1,0 +1,6 @@
+(gotolocation agent1 pot_1)
+(pickupobject agent1 pot_1)
+(gotolocation agent1 fridge_1)
+(coolobject agent1 fridge_1 pot_1)
+(gotolocation agent1 diningtable_1)
+(putobjectinreceptacle agent1 pot_1 diningtable_1)

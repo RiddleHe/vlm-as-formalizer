@@ -1,0 +1,7 @@
+There is a Mug in the room.
+There is a ButterKnife in the room.
+There is a SinkBasin in the room.
+There is a DiningTable in the room.
+Mug_1 is on DiningTable_1.
+ButterKnife_1 is on DiningTable_1.
+The instruction is: clean up a knife and a mug then put them into the sink

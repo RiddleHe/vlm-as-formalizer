@@ -1,0 +1,8 @@
+There is a Potato in the room.
+There is a ButterKnife in the room.
+There is a Fridge in the room.
+There is a Microwave in the room.
+There is a CounterTop in the room.
+ButterKnife_1 is on CounterTop_1.
+Potato_1 is on CounterTop_1.
+The instruction is: Place a cooked potato slice inside the refrigerator.

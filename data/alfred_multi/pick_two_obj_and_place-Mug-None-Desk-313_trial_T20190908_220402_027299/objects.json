@@ -1,0 +1,77 @@
+{
+    "Mug_6_dot_09732248_comma_6_dot_09732248_comma__minus_0_dot_9069448_comma__minus_0_dot_9069448_comma_2_dot_825600148_comma_2_dot_825600148": {
+        "object_type": "Mug",
+        "coords": [
+            6.09732248,
+            6.09732248,
+            -0.9069448,
+            -0.9069448,
+            2.825600148,
+            2.825600148
+        ],
+        "is_receptacle": false,
+        "object_name": "Mug_1",
+        "object_env_id": "Mug|+01.52|+00.71|-00.23",
+        "location": "loc|4|-1|1|60"
+    },
+    "SideTable_6_dot_2496_comma_6_dot_2496_comma__minus_1_dot_86_comma__minus_1_dot_86_comma__minus_0_dot_0496_comma__minus_0_dot_0496": {
+        "object_type": "SideTable",
+        "coords": [
+            6.2496,
+            6.2496,
+            -1.86,
+            -1.86,
+            -0.0496,
+            -0.0496
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": null,
+        "location": "loc|2|-1|1|60"
+    },
+    "Desk_2_dot_532_comma_2_dot_532_comma__minus_6_dot_52_comma__minus_6_dot_52_comma__minus_0_dot_148_comma__minus_0_dot_148": {
+        "object_type": "Desk",
+        "coords": [
+            2.532,
+            2.532,
+            -6.52,
+            -6.52,
+            -0.148,
+            -0.148
+        ],
+        "is_receptacle": true,
+        "object_name": "Desk_1",
+        "object_env_id": "Desk|+00.63|-00.04|-01.63",
+        "location": "loc|4|-2|2|60"
+    },
+    "Mug_6_dot_36415912_comma_6_dot_36415912_comma_3_dot_1170048_comma_3_dot_1170048_comma_5_dot_63923788_comma_5_dot_63923788": {
+        "object_type": "Mug",
+        "coords": [
+            6.36415912,
+            6.36415912,
+            3.1170048,
+            3.1170048,
+            5.63923788,
+            5.63923788
+        ],
+        "is_receptacle": false,
+        "object_name": "Mug_2",
+        "object_env_id": "Mug|+01.59|+01.41|+00.78",
+        "location": "loc|4|3|1|15"
+    },
+    "Shelf_6_dot_20235728_comma_6_dot_20235728_comma_1_dot_5_comma_1_dot_5_comma_5_dot_61651896_comma_5_dot_61651896": {
+        "object_type": "Shelf",
+        "coords": [
+            6.20235728,
+            6.20235728,
+            1.5,
+            1.5,
+            5.61651896,
+            5.61651896
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": null,
+        "location": "loc|0|3|1|15"
+    }
+}

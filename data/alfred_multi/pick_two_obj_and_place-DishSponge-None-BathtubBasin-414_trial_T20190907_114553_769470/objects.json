@@ -1,0 +1,77 @@
+{
+    "DishSponge__minus_10_dot_454804_comma__minus_10_dot_454804_comma_13_dot_61738588_comma_13_dot_61738588_comma_0_dot_37944008_comma_0_dot_37944008": {
+        "object_type": "DishSponge",
+        "coords": [
+            -10.454804,
+            -10.454804,
+            13.61738588,
+            13.61738588,
+            0.37944008,
+            0.37944008
+        ],
+        "is_receptacle": false,
+        "object_name": "DishSponge_1",
+        "object_env_id": "DishSponge|-02.61|+00.09|+03.40",
+        "location": "loc|-8|12|3|60"
+    },
+    "Cabinet__minus_9_dot_6404_comma__minus_9_dot_6404_comma_14_dot_28051948_comma_14_dot_28051948_comma_1_dot_487205744_comma_1_dot_487205744": {
+        "object_type": "Cabinet",
+        "coords": [
+            -9.6404,
+            -9.6404,
+            14.28051948,
+            14.28051948,
+            1.487205744,
+            1.487205744
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": null,
+        "location": "loc|-6|12|3|60"
+    },
+    "BathtubBasin__minus_1_dot_74_comma__minus_1_dot_74_comma_6_dot_176_comma_6_dot_176_comma_0_dot_74_comma_0_dot_74": {
+        "object_type": "BathtubBasin",
+        "coords": [
+            -1.74,
+            -1.74,
+            6.176,
+            6.176,
+            0.74,
+            0.74
+        ],
+        "is_receptacle": true,
+        "object_name": "BathtubBasin_1",
+        "object_env_id": null,
+        "location": "loc|-4|11|2|45"
+    },
+    "DishSponge__minus_0_dot_828000484_comma__minus_0_dot_828000484_comma_1_dot_214494_comma_1_dot_214494_comma_0_dot_23053148_comma_0_dot_23053148": {
+        "object_type": "DishSponge",
+        "coords": [
+            -0.828000484,
+            -0.828000484,
+            1.214494,
+            1.214494,
+            0.23053148,
+            0.23053148
+        ],
+        "is_receptacle": false,
+        "object_name": "DishSponge_2",
+        "object_env_id": "DishSponge|-00.21|+00.06|+00.30",
+        "location": "loc|-2|2|1|60"
+    },
+    "GarbageCan__minus_0_dot_828_comma__minus_0_dot_828_comma_0_dot_984_comma_0_dot_984_comma_0_dot_00701242684_comma_0_dot_00701242684": {
+        "object_type": "GarbageCan",
+        "coords": [
+            -0.828,
+            -0.828,
+            0.984,
+            0.984,
+            0.00701242684,
+            0.00701242684
+        ],
+        "is_receptacle": true,
+        "object_name": "GarbageCan_1",
+        "object_env_id": null,
+        "location": "loc|-3|1|1|60"
+    }
+}

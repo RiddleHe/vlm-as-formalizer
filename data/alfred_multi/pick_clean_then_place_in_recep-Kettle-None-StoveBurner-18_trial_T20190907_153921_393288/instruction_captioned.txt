@@ -1,0 +1,5 @@
+There is a Kettle in the room.
+There is a SinkBasin in the room.
+There is a StoveBurner in the room.
+Kettle_1 is on StoveBurner_1.
+The instruction is: Put a clean tea pot on the stove.

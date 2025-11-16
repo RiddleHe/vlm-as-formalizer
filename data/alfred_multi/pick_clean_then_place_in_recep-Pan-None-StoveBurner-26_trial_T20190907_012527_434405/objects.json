@@ -1,0 +1,47 @@
+{
+    "Pan__minus_2_dot_1436_comma__minus_2_dot_1436_comma_17_dot_0968_comma_17_dot_0968_comma_3_dot_715715408_comma_3_dot_715715408": {
+        "object_type": "Pan",
+        "coords": [
+            -2.1436,
+            -2.1436,
+            17.0968,
+            17.0968,
+            3.715715408,
+            3.715715408
+        ],
+        "is_receptacle": false,
+        "object_name": "Pan_1",
+        "object_env_id": "Pan|-00.54|+00.93|+04.27",
+        "location": "loc|-4|17|1|60"
+    },
+    "StoveBurner__minus_2_dot_1436_comma__minus_2_dot_1436_comma_17_dot_0968_comma_17_dot_0968_comma_3_dot_691315412_comma_3_dot_691315412": {
+        "object_type": "StoveBurner",
+        "coords": [
+            -2.1436,
+            -2.1436,
+            17.0968,
+            17.0968,
+            3.691315412,
+            3.691315412
+        ],
+        "is_receptacle": true,
+        "object_name": "StoveBurner_1",
+        "object_env_id": null,
+        "location": "loc|-4|17|1|60"
+    },
+    "SinkBasin__minus_4_dot_4268_comma__minus_4_dot_4268_comma_1_dot_3484_comma_1_dot_3484_comma_3_dot_141353368_comma_3_dot_141353368": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -4.4268,
+            -4.4268,
+            1.3484,
+            1.3484,
+            3.141353368,
+            3.141353368
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-3|5|2|45"
+    }
+}

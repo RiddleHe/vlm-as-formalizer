@@ -1,0 +1,47 @@
+{
+    "Newspaper__minus_6_dot_55562876_comma__minus_6_dot_55562876_comma_2_dot_314846992_comma_2_dot_314846992_comma_2_dot_005402_comma_2_dot_005402": {
+        "object_type": "Newspaper",
+        "coords": [
+            -6.55562876,
+            -6.55562876,
+            2.314846992,
+            2.314846992,
+            2.005402,
+            2.005402
+        ],
+        "is_receptacle": false,
+        "object_name": "Newspaper_1",
+        "object_env_id": "Newspaper|-01.64|+00.50|+00.58",
+        "location": "loc|-7|4|2|60"
+    },
+    "Sofa__minus_10_dot_1_comma__minus_10_dot_1_comma_1_dot_056_comma_1_dot_056_comma_0_dot_068_comma_0_dot_068": {
+        "object_type": "Sofa",
+        "coords": [
+            -10.1,
+            -10.1,
+            1.056,
+            1.056,
+            0.068,
+            0.068
+        ],
+        "is_receptacle": true,
+        "object_name": "Sofa_1",
+        "object_env_id": null,
+        "location": "loc|-12|7|2|45"
+    },
+    "DeskLamp__minus_27_dot_064_comma__minus_27_dot_064_comma__minus_0_dot_11199272_comma__minus_0_dot_11199272_comma_1_dot_6378008_comma_1_dot_6378008": {
+        "object_type": "DeskLamp",
+        "coords": [
+            -27.064,
+            -27.064,
+            -0.11199272,
+            -0.11199272,
+            1.6378008,
+            1.6378008
+        ],
+        "is_receptacle": false,
+        "object_name": "DeskLamp_1",
+        "object_env_id": "DeskLamp|-06.77|+00.41|-00.03",
+        "location": "loc|-27|2|2|60"
+    }
+}

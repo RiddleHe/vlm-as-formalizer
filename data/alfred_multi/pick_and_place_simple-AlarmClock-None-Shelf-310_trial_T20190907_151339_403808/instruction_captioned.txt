@@ -1,0 +1,5 @@
+There is a AlarmClock in the room.
+There is a Shelf in the room.
+There is a Desk in the room.
+AlarmClock_1 is on Desk_1.
+The instruction is: Put the clock on the desk

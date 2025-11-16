@@ -1,0 +1,6 @@
+There is a Potato in the room.
+There is a GarbageCan in the room.
+There is a Fridge in the room.
+There is a SinkBasin in the room.
+Potato_1 is on GarbageCan_1.
+The instruction is: Put a cold brown ball in the kitchen sink.

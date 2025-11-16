@@ -1,0 +1,77 @@
+{
+    "Pan_6_dot_1732_comma_6_dot_1732_comma__minus_1_dot_2812_comma__minus_1_dot_2812_comma_3_dot_6392_comma_3_dot_6392": {
+        "object_type": "Pan",
+        "coords": [
+            6.1732,
+            6.1732,
+            -1.2812,
+            -1.2812,
+            3.6392,
+            3.6392
+        ],
+        "is_receptacle": false,
+        "object_name": "Pan_1",
+        "object_env_id": "Pan|+01.54|+00.91|-00.32",
+        "location": "loc|4|-1|1|60"
+    },
+    "StoveBurner_6_dot_1732_comma_6_dot_1732_comma__minus_1_dot_2812_comma__minus_1_dot_2812_comma_3_dot_628_comma_3_dot_628": {
+        "object_type": "StoveBurner",
+        "coords": [
+            6.1732,
+            6.1732,
+            -1.2812,
+            -1.2812,
+            3.628,
+            3.628
+        ],
+        "is_receptacle": true,
+        "object_name": "StoveBurner_1",
+        "object_env_id": null,
+        "location": "loc|4|-1|1|60"
+    },
+    "CounterTop_3_dot_956_comma_3_dot_956_comma_4_dot_068_comma_4_dot_068_comma_3_dot_7844_comma_3_dot_7844": {
+        "object_type": "CounterTop",
+        "coords": [
+            3.956,
+            3.956,
+            4.068,
+            4.068,
+            3.7844,
+            3.7844
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": "CounterTop|+00.99|+00.95|+01.02",
+        "location": "loc|4|1|0|45"
+    },
+    "Pan_7_dot_228_comma_7_dot_228_comma__minus_1_dot_2812_comma__minus_1_dot_2812_comma_3_dot_6392_comma_3_dot_6392": {
+        "object_type": "Pan",
+        "coords": [
+            7.228,
+            7.228,
+            -1.2812,
+            -1.2812,
+            3.6392,
+            3.6392
+        ],
+        "is_receptacle": false,
+        "object_name": "Pan_2",
+        "object_env_id": "Pan|+01.81|+00.91|-00.32",
+        "location": "loc|4|-1|1|45"
+    },
+    "StoveBurner_7_dot_228_comma_7_dot_228_comma__minus_1_dot_2812_comma__minus_1_dot_2812_comma_3_dot_628_comma_3_dot_628": {
+        "object_type": "StoveBurner",
+        "coords": [
+            7.228,
+            7.228,
+            -1.2812,
+            -1.2812,
+            3.628,
+            3.628
+        ],
+        "is_receptacle": true,
+        "object_name": "StoveBurner_2",
+        "object_env_id": null,
+        "location": "loc|4|-1|1|45"
+    }
+}

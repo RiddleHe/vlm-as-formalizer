@@ -1,0 +1,47 @@
+{
+    "ToiletPaper_2_dot_582643032_comma_2_dot_582643032_comma_8_dot_55708312_comma_8_dot_55708312_comma_4_dot_2048378_comma_4_dot_2048378": {
+        "object_type": "ToiletPaper",
+        "coords": [
+            2.582643032,
+            2.582643032,
+            8.55708312,
+            8.55708312,
+            4.2048378,
+            4.2048378
+        ],
+        "is_receptacle": false,
+        "object_name": "ToiletPaper_1",
+        "object_env_id": "ToiletPaper|+00.65|+01.05|+02.14",
+        "location": "loc|-1|9|1|30"
+    },
+    "CounterTop_1_dot_948103904_comma_1_dot_948103904_comma_12_dot_36307716_comma_12_dot_36307716_comma_4_dot_06002472_comma_4_dot_06002472": {
+        "object_type": "CounterTop",
+        "coords": [
+            1.948103904,
+            1.948103904,
+            12.36307716,
+            12.36307716,
+            4.06002472,
+            4.06002472
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-1|15|1|45"
+    },
+    "ToiletPaperHanger__minus_0_dot_324_comma__minus_0_dot_324_comma_20_dot_0_comma_20_dot_0_comma_3_dot_8852_comma_3_dot_8852": {
+        "object_type": "ToiletPaperHanger",
+        "coords": [
+            -0.324,
+            -0.324,
+            20.0,
+            20.0,
+            3.8852,
+            3.8852
+        ],
+        "is_receptacle": true,
+        "object_name": "ToiletPaperHanger_1",
+        "object_env_id": "ToiletPaperHanger|-00.08|+00.97|+05.00",
+        "location": "loc|-2|19|1|60"
+    }
+}

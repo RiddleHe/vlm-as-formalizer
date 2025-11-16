@@ -1,0 +1,5 @@
+There is a Pen in the room.
+There is a Shelf in the room.
+There is a GarbageCan in the room.
+Pen_1 is on GarbageCan_1.
+The instruction is: Move the pen to the dresser.

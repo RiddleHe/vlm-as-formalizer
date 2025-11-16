@@ -1,0 +1,5 @@
+There is a Apple in the room.
+There is a SideTable in the room.
+There is a Microwave in the room.
+Apple_1 is on SideTable_1.
+The instruction is: Put a warm apple on the table.

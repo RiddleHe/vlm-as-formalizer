@@ -1,0 +1,5 @@
+There is a Pillow in the room.
+There is a DeskLamp in the room.
+There is a Bed in the room.
+Pillow_1 is on Bed_1.
+The instruction is: Look at a cushion by the light of a lamp.

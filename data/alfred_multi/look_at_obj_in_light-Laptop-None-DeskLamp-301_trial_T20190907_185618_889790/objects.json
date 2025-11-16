@@ -1,0 +1,47 @@
+{
+    "Laptop__minus_3_dot_916757824_comma__minus_3_dot_916757824_comma_2_dot_4102564_comma_2_dot_4102564_comma_2_dot_244_comma_2_dot_244": {
+        "object_type": "Laptop",
+        "coords": [
+            -3.916757824,
+            -3.916757824,
+            2.4102564,
+            2.4102564,
+            2.244,
+            2.244
+        ],
+        "is_receptacle": false,
+        "object_name": "Laptop_1",
+        "object_env_id": "Laptop|-00.98|+00.56|+00.60",
+        "location": "loc|-3|-2|0|45"
+    },
+    "Bed__minus_2_dot_562682_comma__minus_2_dot_562682_comma_3_dot_484_comma_3_dot_484_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Bed",
+        "coords": [
+            -2.562682,
+            -2.562682,
+            3.484,
+            3.484,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Bed_1",
+        "object_env_id": null,
+        "location": "loc|3|5|3|45"
+    },
+    "DeskLamp__minus_5_dot_25600244_comma__minus_5_dot_25600244_comma__minus_3_dot_979995728_comma__minus_3_dot_979995728_comma_4_dot_91223764_comma_4_dot_91223764": {
+        "object_type": "DeskLamp",
+        "coords": [
+            -5.25600244,
+            -5.25600244,
+            -3.979995728,
+            -3.979995728,
+            4.91223764,
+            4.91223764
+        ],
+        "is_receptacle": false,
+        "object_name": "DeskLamp_1",
+        "object_env_id": "DeskLamp|-01.31|+01.23|-00.99",
+        "location": "loc|-3|-4|3|30"
+    }
+}

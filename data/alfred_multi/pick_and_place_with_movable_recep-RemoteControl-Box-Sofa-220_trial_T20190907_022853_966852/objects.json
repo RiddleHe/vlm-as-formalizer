@@ -1,0 +1,62 @@
+{
+    "RemoteControl__minus_10_dot_05611704_comma__minus_10_dot_05611704_comma_5_dot_14709472_comma_5_dot_14709472_comma_1_dot_8986584_comma_1_dot_8986584": {
+        "object_type": "RemoteControl",
+        "coords": [
+            -10.05611704,
+            -10.05611704,
+            5.14709472,
+            5.14709472,
+            1.8986584,
+            1.8986584
+        ],
+        "is_receptacle": false,
+        "object_name": "RemoteControl_1",
+        "object_env_id": "RemoteControl|-02.51|+00.47|+01.29",
+        "location": "loc|-10|7|2|60"
+    },
+    "CoffeeTable__minus_10_dot_584_comma__minus_10_dot_584_comma_4_dot_6012_comma_4_dot_6012_comma__minus_0_dot_002000009408_comma__minus_0_dot_002000009408": {
+        "object_type": "CoffeeTable",
+        "coords": [
+            -10.584,
+            -10.584,
+            4.6012,
+            4.6012,
+            -0.002000009408,
+            -0.002000009408
+        ],
+        "is_receptacle": true,
+        "object_name": "CoffeeTable_1",
+        "object_env_id": null,
+        "location": "loc|-11|9|2|60"
+    },
+    "Box__minus_9_dot_05871392_comma__minus_9_dot_05871392_comma_5_dot_0059352_comma_5_dot_0059352_comma_2_dot_668_comma_2_dot_668": {
+        "object_type": "Box",
+        "coords": [
+            -9.05871392,
+            -9.05871392,
+            5.0059352,
+            5.0059352,
+            2.668,
+            2.668
+        ],
+        "is_receptacle": true,
+        "object_name": "Box_1",
+        "object_env_id": "Box|-02.26|+00.67|+01.25",
+        "location": "loc|-9|7|2|60"
+    },
+    "Sofa__minus_10_dot_732_comma__minus_10_dot_732_comma__minus_0_dot_4984_comma__minus_0_dot_4984_comma__minus_0_dot_184_comma__minus_0_dot_184": {
+        "object_type": "Sofa",
+        "coords": [
+            -10.732,
+            -10.732,
+            -0.4984,
+            -0.4984,
+            -0.184,
+            -0.184
+        ],
+        "is_receptacle": true,
+        "object_name": "Sofa_1",
+        "object_env_id": "Sofa|-02.68|-00.05|-00.12",
+        "location": "loc|-11|2|2|60"
+    }
+}

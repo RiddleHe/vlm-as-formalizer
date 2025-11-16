@@ -1,0 +1,6 @@
+There are 2 Watchs in the room.
+There is a DiningTable in the room.
+There is a Dresser in the room.
+Watch_2 is on DiningTable_1.
+Watch_1 is on DiningTable_1.
+The instruction is: Place two watches on the TV stand.

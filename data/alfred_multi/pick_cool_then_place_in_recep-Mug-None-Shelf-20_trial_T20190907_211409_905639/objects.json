@@ -1,0 +1,62 @@
+{
+    "Mug_5_dot_04439972_comma_5_dot_04439972_comma__minus_7_dot_73639964_comma__minus_7_dot_73639964_comma_3_dot_807999848_comma_3_dot_807999848": {
+        "object_type": "Mug",
+        "coords": [
+            5.04439972,
+            5.04439972,
+            -7.73639964,
+            -7.73639964,
+            3.807999848,
+            3.807999848
+        ],
+        "is_receptacle": false,
+        "object_name": "Mug_1",
+        "object_env_id": "Mug|+01.26|+00.95|-01.93",
+        "location": "loc|4|-5|2|45"
+    },
+    "CounterTop_0_dot_932_comma_0_dot_932_comma__minus_8_dot_008_comma__minus_8_dot_008_comma_3_dot_796_comma_3_dot_796": {
+        "object_type": "CounterTop",
+        "coords": [
+            0.932,
+            0.932,
+            -8.008,
+            -8.008,
+            3.796,
+            3.796
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|3|-5|2|45"
+    },
+    "Fridge__minus_5_dot_98224832_comma__minus_5_dot_98224832_comma__minus_2_dot_812_comma__minus_2_dot_812_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            -5.98224832,
+            -5.98224832,
+            -2.812,
+            -2.812,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": null,
+        "location": "loc|-3|-3|3|60"
+    },
+    "Shelf_6_dot_20640184_comma_6_dot_20640184_comma_9_dot_9316_comma_9_dot_9316_comma_2_dot_1681444_comma_2_dot_1681444": {
+        "object_type": "Shelf",
+        "coords": [
+            6.20640184,
+            6.20640184,
+            9.9316,
+            9.9316,
+            2.1681444,
+            2.1681444
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": "Shelf|+01.55|+00.54|+02.48",
+        "location": "loc|6|6|0|45"
+    }
+}

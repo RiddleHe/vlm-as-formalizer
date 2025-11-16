@@ -1,0 +1,77 @@
+{
+    "Ladle__minus_3_dot_311030628_comma__minus_3_dot_311030628_comma_2_dot_639001368_comma_2_dot_639001368_comma_4_dot_65627052_comma_4_dot_65627052": {
+        "object_type": "Ladle",
+        "coords": [
+            -3.311030628,
+            -3.311030628,
+            2.639001368,
+            2.639001368,
+            4.65627052,
+            4.65627052
+        ],
+        "is_receptacle": false,
+        "object_name": "Ladle_1",
+        "object_env_id": "Ladle|-00.83|+01.16|+00.66",
+        "location": "loc|-3|4|2|60"
+    },
+    "CounterTop__minus_2_dot_06_comma__minus_2_dot_06_comma_1_dot_968_comma_1_dot_968_comma_4_dot_6416_comma_4_dot_6416": {
+        "object_type": "CounterTop",
+        "coords": [
+            -2.06,
+            -2.06,
+            1.968,
+            1.968,
+            4.6416,
+            4.6416
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-4|4|2|45"
+    },
+    "Plate__minus_6_dot_21466876_comma__minus_6_dot_21466876_comma_2_dot_269312_comma_2_dot_269312_comma_3_dot_720301868_comma_3_dot_720301868": {
+        "object_type": "Plate",
+        "coords": [
+            -6.21466876,
+            -6.21466876,
+            2.269312,
+            2.269312,
+            3.720301868,
+            3.720301868
+        ],
+        "is_receptacle": true,
+        "object_name": "Plate_1",
+        "object_env_id": "Plate|-01.55|+00.93|+00.57",
+        "location": "loc|-6|4|2|60"
+    },
+    "SinkBasin__minus_5_dot_5576_comma__minus_5_dot_5576_comma_1_dot_7152_comma_1_dot_7152_comma_3_dot_684_comma_3_dot_684": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -5.5576,
+            -5.5576,
+            1.7152,
+            1.7152,
+            3.684,
+            3.684
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-4|5|2|45"
+    },
+    "CounterTop__minus_9_dot_1232_comma__minus_9_dot_1232_comma_1_dot_516_comma_1_dot_516_comma_4_dot_6416_comma_4_dot_6416": {
+        "object_type": "CounterTop",
+        "coords": [
+            -9.1232,
+            -9.1232,
+            1.516,
+            1.516,
+            4.6416,
+            4.6416
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_2",
+        "object_env_id": "CounterTop|-02.28|+01.16|+00.38",
+        "location": "loc|-7|4|2|45"
+    }
+}

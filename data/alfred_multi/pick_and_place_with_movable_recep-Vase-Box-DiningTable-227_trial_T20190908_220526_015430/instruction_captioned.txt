@@ -1,0 +1,7 @@
+There is a Vase in the room.
+There is a Box in the room.
+There is a Shelf in the room.
+There is a DiningTable in the room.
+Box_1 is on Shelf_1.
+Vase_1 is on DiningTable_1.
+The instruction is: Place a box with a plate on a table.

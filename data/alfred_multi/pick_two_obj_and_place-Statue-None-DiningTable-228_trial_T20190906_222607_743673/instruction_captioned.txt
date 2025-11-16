@@ -1,0 +1,7 @@
+There are 2 Statues in the room.
+There is a SideTable in the room.
+There is a CoffeeTable in the room.
+There is a DiningTable in the room.
+Statue_2 is on SideTable_1.
+Statue_1 is on CoffeeTable_1.
+The instruction is: Set two statues on the table.

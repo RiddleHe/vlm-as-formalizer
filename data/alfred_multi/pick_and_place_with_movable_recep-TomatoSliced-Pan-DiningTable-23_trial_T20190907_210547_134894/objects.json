@@ -1,0 +1,77 @@
+{
+    "ButterKnife__minus_10_dot_2110424_comma__minus_10_dot_2110424_comma__minus_3_dot_85218978_comma__minus_3_dot_85218978_comma_3_dot_694068672_comma_3_dot_694068672": {
+        "object_type": "ButterKnife",
+        "coords": [
+            -10.2110424,
+            -10.2110424,
+            -3.85218978,
+            -3.85218978,
+            3.694068672,
+            3.694068672
+        ],
+        "is_receptacle": false,
+        "object_name": "ButterKnife_1",
+        "object_env_id": "ButterKnife|-02.55|+00.92|-00.96",
+        "location": "loc|-10|-2|2|60"
+    },
+    "DiningTable__minus_9_dot_73199272_comma__minus_9_dot_73199272_comma__minus_6_dot_78581428_comma__minus_6_dot_78581428_comma_3_dot_5828_comma_3_dot_5828": {
+        "object_type": "DiningTable",
+        "coords": [
+            -9.73199272,
+            -9.73199272,
+            -6.78581428,
+            -6.78581428,
+            3.5828,
+            3.5828
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-5|-7|3|30"
+    },
+    "Tomato__minus_10_dot_6672926_comma__minus_10_dot_6672926_comma__minus_6_dot_61781408_comma__minus_6_dot_61781408_comma_3_dot_9491456_comma_3_dot_9491456": {
+        "object_type": "Tomato",
+        "coords": [
+            -10.6672926,
+            -10.6672926,
+            -6.61781408,
+            -6.61781408,
+            3.9491456,
+            3.9491456
+        ],
+        "is_receptacle": false,
+        "object_name": "Tomato_1",
+        "object_env_id": "Tomato|-02.67|+00.99|-01.65",
+        "location": "loc|-14|-7|1|45"
+    },
+    "Pan__minus_4_dot_5176_comma__minus_4_dot_5176_comma__minus_13_dot_9944_comma__minus_13_dot_9944_comma_3_dot_7428_comma_3_dot_7428": {
+        "object_type": "Pan",
+        "coords": [
+            -4.5176,
+            -4.5176,
+            -13.9944,
+            -13.9944,
+            3.7428,
+            3.7428
+        ],
+        "is_receptacle": true,
+        "object_name": "Pan_1",
+        "object_env_id": "Pan|-01.13|+00.94|-03.50",
+        "location": "loc|-5|-12|2|60"
+    },
+    "StoveBurner__minus_4_dot_5176_comma__minus_4_dot_5176_comma__minus_15_dot_0092_comma__minus_15_dot_0092_comma_3_dot_7128_comma_3_dot_7128": {
+        "object_type": "StoveBurner",
+        "coords": [
+            -4.5176,
+            -4.5176,
+            -15.0092,
+            -15.0092,
+            3.7128,
+            3.7128
+        ],
+        "is_receptacle": true,
+        "object_name": "StoveBurner_1",
+        "object_env_id": null,
+        "location": "loc|-5|-12|2|45"
+    }
+}

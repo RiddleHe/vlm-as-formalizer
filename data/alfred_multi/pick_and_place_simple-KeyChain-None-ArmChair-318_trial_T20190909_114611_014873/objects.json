@@ -1,0 +1,47 @@
+{
+    "KeyChain_6_dot_06017732_comma_6_dot_06017732_comma_1_dot_92911_comma_1_dot_92911_comma_2_dot_908522128_comma_2_dot_908522128": {
+        "object_type": "KeyChain",
+        "coords": [
+            6.06017732,
+            6.06017732,
+            1.92911,
+            1.92911,
+            2.908522128,
+            2.908522128
+        ],
+        "is_receptacle": false,
+        "object_name": "KeyChain_1",
+        "object_env_id": "KeyChain|+01.52|+00.73|+00.48",
+        "location": "loc|4|2|1|60"
+    },
+    "Desk_7_dot_252_comma_7_dot_252_comma__minus_0_dot_468_comma__minus_0_dot_468_comma__minus_0_dot_048_comma__minus_0_dot_048": {
+        "object_type": "Desk",
+        "coords": [
+            7.252,
+            7.252,
+            -0.468,
+            -0.468,
+            -0.048,
+            -0.048
+        ],
+        "is_receptacle": true,
+        "object_name": "Desk_1",
+        "object_env_id": null,
+        "location": "loc|4|1|1|60"
+    },
+    "ArmChair_7_dot_304_comma_7_dot_304_comma_6_dot_424_comma_6_dot_424_comma_0_dot_055999998_comma_0_dot_055999998": {
+        "object_type": "ArmChair",
+        "coords": [
+            7.304,
+            7.304,
+            6.424,
+            6.424,
+            0.055999998,
+            0.055999998
+        ],
+        "is_receptacle": true,
+        "object_name": "ArmChair_1",
+        "object_env_id": "ArmChair|+01.83|+00.01|+01.61",
+        "location": "loc|3|7|1|60"
+    }
+}

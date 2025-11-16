@@ -1,0 +1,47 @@
+{
+    "Knife_2_dot_88672614_comma_2_dot_88672614_comma_1_dot_7924_comma_1_dot_7924_comma_2_dot_750722168_comma_2_dot_750722168": {
+        "object_type": "Knife",
+        "coords": [
+            2.88672614,
+            2.88672614,
+            1.7924,
+            1.7924,
+            2.750722168,
+            2.750722168
+        ],
+        "is_receptacle": false,
+        "object_name": "Knife_1",
+        "object_env_id": "Knife|+00.72|+00.69|+00.45",
+        "location": "loc|1|1|1|60"
+    },
+    "SideTable_3_dot_0924_comma_3_dot_0924_comma_1_dot_7924_comma_1_dot_7924_comma_2_dot_8004_comma_2_dot_8004": {
+        "object_type": "SideTable",
+        "coords": [
+            3.0924,
+            3.0924,
+            1.7924,
+            1.7924,
+            2.8004,
+            2.8004
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": null,
+        "location": "loc|-1|1|1|45"
+    },
+    "SinkBasin_3_dot_0292_comma_3_dot_0292_comma__minus_2_dot_754_comma__minus_2_dot_754_comma_3_dot_048_comma_3_dot_048": {
+        "object_type": "SinkBasin",
+        "coords": [
+            3.0292,
+            3.0292,
+            -2.754,
+            -2.754,
+            3.048,
+            3.048
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|1|-2|1|60"
+    }
+}

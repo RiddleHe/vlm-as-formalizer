@@ -1,0 +1,32 @@
+{
+    "Plunger__minus_11_dot_34927368_comma__minus_11_dot_34927368_comma_0_dot_5279541_comma_0_dot_5279541_comma_0_dot_00701242684_comma_0_dot_00701242684": {
+        "object_type": "Plunger",
+        "coords": [
+            -11.34927368,
+            -11.34927368,
+            0.5279541,
+            0.5279541,
+            0.00701242684,
+            0.00701242684
+        ],
+        "is_receptacle": false,
+        "object_name": "Plunger_1",
+        "object_env_id": "Plunger|-02.84|+00.00|+00.13",
+        "location": "loc|-7|1|3|60"
+    },
+    "Cabinet__minus_9_dot_6404_comma__minus_9_dot_6404_comma_8_dot_163632_comma_8_dot_163632_comma_1_dot_487205744_comma_1_dot_487205744": {
+        "object_type": "Cabinet",
+        "coords": [
+            -9.6404,
+            -9.6404,
+            8.163632,
+            8.163632,
+            1.487205744,
+            1.487205744
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": "Cabinet|-02.41|+00.37|+02.04",
+        "location": "loc|-6|7|3|60"
+    }
+}

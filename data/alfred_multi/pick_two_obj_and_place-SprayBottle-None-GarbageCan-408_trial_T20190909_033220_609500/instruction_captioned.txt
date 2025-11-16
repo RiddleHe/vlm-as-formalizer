@@ -1,0 +1,6 @@
+There are 2 SprayBottles in the room.
+There is a GarbageCan in the room.
+There are 2 Cabinets in the room.
+SprayBottle_2 is on Cabinet_2.
+SprayBottle_1 is on Cabinet_1.
+The instruction is: place two spray bottles inside of the garbage bin in the corner of the room

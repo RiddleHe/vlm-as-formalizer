@@ -1,0 +1,7 @@
+There is a Pan in the room.
+There is a Fork in the room.
+There is a CounterTop in the room.
+There is a DiningTable in the room.
+Pan_1 is on CounterTop_1.
+Fork_1 is on DiningTable_1.
+The instruction is: Put a frying pan with a fork in it on a round table.

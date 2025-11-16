@@ -1,0 +1,7 @@
+There is a Pot in the room.
+There is a Knife in the room.
+There is a StoveBurner in the room.
+There is a DiningTable in the room.
+Pot_1 is on StoveBurner_1.
+Knife_1 is on DiningTable_1.
+The instruction is: Place a pan with a knife in it on the table.

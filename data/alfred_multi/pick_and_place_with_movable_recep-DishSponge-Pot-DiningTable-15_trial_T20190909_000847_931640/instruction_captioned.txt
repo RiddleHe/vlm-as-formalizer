@@ -1,0 +1,8 @@
+There is a DishSponge in the room.
+There is a Pot in the room.
+There is a DiningTable in the room.
+There is a Cabinet in the room.
+There is a StoveBurner in the room.
+DishSponge_1 is on Cabinet_1.
+Pot_1 is on StoveBurner_1.
+The instruction is: Put a pot with sponge on the table.

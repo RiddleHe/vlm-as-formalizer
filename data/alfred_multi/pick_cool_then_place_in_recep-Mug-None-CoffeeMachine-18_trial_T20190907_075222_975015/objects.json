@@ -1,0 +1,47 @@
+{
+    "Mug_5_dot_53879928_comma_5_dot_53879928_comma_3_dot_3896012_comma_3_dot_3896012_comma_4_dot_172376_comma_4_dot_172376": {
+        "object_type": "Mug",
+        "coords": [
+            5.53879928,
+            5.53879928,
+            3.3896012,
+            3.3896012,
+            4.172376,
+            4.172376
+        ],
+        "is_receptacle": false,
+        "object_name": "Mug_1",
+        "object_env_id": "Mug|+01.38|+01.04|+00.85",
+        "location": "loc|3|4|1|45"
+    },
+    "CoffeeMachine_6_dot_208_comma_6_dot_208_comma_3_dot_816_comma_3_dot_816_comma_3_dot_926776_comma_3_dot_926776": {
+        "object_type": "CoffeeMachine",
+        "coords": [
+            6.208,
+            6.208,
+            3.816,
+            3.816,
+            3.926776,
+            3.926776
+        ],
+        "is_receptacle": true,
+        "object_name": "CoffeeMachine_1",
+        "object_env_id": null,
+        "location": "loc|3|4|1|45"
+    },
+    "Fridge_8_dot_14_comma_8_dot_14_comma_22_dot_504_comma_22_dot_504_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            8.14,
+            8.14,
+            22.504,
+            22.504,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": null,
+        "location": "loc|4|22|1|30"
+    }
+}

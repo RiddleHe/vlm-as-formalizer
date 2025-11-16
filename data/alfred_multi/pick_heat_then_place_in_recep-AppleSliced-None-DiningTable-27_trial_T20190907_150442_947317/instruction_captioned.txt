@@ -1,0 +1,7 @@
+There is a Apple in the room.
+There is a Knife in the room.
+There is a DiningTable in the room.
+There is a Microwave in the room.
+Knife_1 is on DiningTable_1.
+Apple_1 is on DiningTable_1.
+The instruction is: Warm up a piece of apple.

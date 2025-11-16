@@ -1,0 +1,6 @@
+There is a Mug in the room.
+There is a Shelf in the room.
+There is a Fridge in the room.
+There is a CounterTop in the room.
+Mug_1 is on CounterTop_1.
+The instruction is: Chill the mug in the fridge and set it on the rack.

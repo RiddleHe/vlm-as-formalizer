@@ -1,0 +1,5 @@
+There is a Pot in the room.
+There is a SinkBasin in the room.
+There are 2 StoveBurners in the room.
+Pot_1 is on StoveBurner_1.
+The instruction is: Put a pot with water in it on the stove.

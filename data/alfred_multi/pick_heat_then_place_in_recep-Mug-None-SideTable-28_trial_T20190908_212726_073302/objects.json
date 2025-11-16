@@ -1,0 +1,62 @@
+{
+    "Mug__minus_10_dot_056_comma__minus_10_dot_056_comma__minus_14_dot_5976_comma__minus_14_dot_5976_comma_3_dot_8906808_comma_3_dot_8906808": {
+        "object_type": "Mug",
+        "coords": [
+            -10.056,
+            -10.056,
+            -14.5976,
+            -14.5976,
+            3.8906808,
+            3.8906808
+        ],
+        "is_receptacle": false,
+        "object_name": "Mug_1",
+        "object_env_id": "Mug|-02.51|+00.97|-03.65",
+        "location": "loc|-10|-12|2|45"
+    },
+    "CoffeeMachine__minus_10_dot_056_comma__minus_10_dot_056_comma__minus_15_dot_192_comma__minus_15_dot_192_comma_3_dot_7214808_comma_3_dot_7214808": {
+        "object_type": "CoffeeMachine",
+        "coords": [
+            -10.056,
+            -10.056,
+            -15.192,
+            -15.192,
+            3.7214808,
+            3.7214808
+        ],
+        "is_receptacle": true,
+        "object_name": "CoffeeMachine_1",
+        "object_env_id": null,
+        "location": "loc|-10|-12|2|45"
+    },
+    "Microwave__minus_0_dot_8676_comma__minus_0_dot_8676_comma__minus_8_dot_22_comma__minus_8_dot_22_comma_5_dot_88028048_comma_5_dot_88028048": {
+        "object_type": "Microwave",
+        "coords": [
+            -0.8676,
+            -0.8676,
+            -8.22,
+            -8.22,
+            5.88028048,
+            5.88028048
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": null,
+        "location": "loc|-4|-8|1|15"
+    },
+    "SideTable__minus_16_dot_284_comma__minus_16_dot_284_comma__minus_1_dot_236_comma__minus_1_dot_236_comma_2_dot_904_comma_2_dot_904": {
+        "object_type": "SideTable",
+        "coords": [
+            -16.284,
+            -16.284,
+            -1.236,
+            -1.236,
+            2.904,
+            2.904
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": "SideTable|-04.07|+00.73|-00.31",
+        "location": "loc|-15|-5|0|45"
+    }
+}

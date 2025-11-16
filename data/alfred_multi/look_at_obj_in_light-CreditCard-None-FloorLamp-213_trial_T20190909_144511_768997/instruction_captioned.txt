@@ -1,0 +1,5 @@
+There is a CreditCard in the room.
+There is a FloorLamp in the room.
+There is a CoffeeTable in the room.
+CreditCard_1 is on CoffeeTable_1.
+The instruction is: Examine a credit card by the light of a tall lamp.

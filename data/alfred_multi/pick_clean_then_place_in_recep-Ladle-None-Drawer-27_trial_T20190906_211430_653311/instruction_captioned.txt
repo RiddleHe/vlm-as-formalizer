@@ -1,0 +1,6 @@
+There is a Ladle in the room.
+There is a Drawer in the room.
+There is a Cabinet in the room.
+There is a SinkBasin in the room.
+Ladle_1 is on Cabinet_1.
+The instruction is: Cleaning a spoon and putting it away.

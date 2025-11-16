@@ -1,0 +1,7 @@
+There are 2 CellPhones in the room.
+There is a Bed in the room.
+There is a Shelf in the room.
+There is a Dresser in the room.
+CellPhone_2 is on Bed_1.
+CellPhone_1 is on Shelf_1.
+The instruction is: Put two phones on the dresser at the foot of the bed.

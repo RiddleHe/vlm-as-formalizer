@@ -1,0 +1,4 @@
+(gotolocation agent1 countertop_1)
+(pickupobject agent1 candle_1)
+(gotolocation agent1 drawer_1)
+(putobjectinreceptacle agent1 candle_1 drawer_1)

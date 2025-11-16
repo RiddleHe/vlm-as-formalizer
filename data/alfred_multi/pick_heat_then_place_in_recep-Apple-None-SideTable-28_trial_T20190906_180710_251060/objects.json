@@ -1,0 +1,47 @@
+{
+    "Apple__minus_16_dot_24940108_comma__minus_16_dot_24940108_comma__minus_0_dot_992664_comma__minus_0_dot_992664_comma_3_dot_0076476_comma_3_dot_0076476": {
+        "object_type": "Apple",
+        "coords": [
+            -16.24940108,
+            -16.24940108,
+            -0.992664,
+            -0.992664,
+            3.0076476,
+            3.0076476
+        ],
+        "is_receptacle": false,
+        "object_name": "Apple_1",
+        "object_env_id": "Apple|-04.06|+00.75|-00.25",
+        "location": "loc|-16|-4|0|45"
+    },
+    "SideTable__minus_16_dot_284_comma__minus_16_dot_284_comma__minus_1_dot_236_comma__minus_1_dot_236_comma_2_dot_904_comma_2_dot_904": {
+        "object_type": "SideTable",
+        "coords": [
+            -16.284,
+            -16.284,
+            -1.236,
+            -1.236,
+            2.904,
+            2.904
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": null,
+        "location": "loc|-15|-5|0|45"
+    },
+    "Microwave__minus_0_dot_8676_comma__minus_0_dot_8676_comma__minus_8_dot_22_comma__minus_8_dot_22_comma_5_dot_88028048_comma_5_dot_88028048": {
+        "object_type": "Microwave",
+        "coords": [
+            -0.8676,
+            -0.8676,
+            -8.22,
+            -8.22,
+            5.88028048,
+            5.88028048
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": null,
+        "location": "loc|-4|-8|1|15"
+    }
+}

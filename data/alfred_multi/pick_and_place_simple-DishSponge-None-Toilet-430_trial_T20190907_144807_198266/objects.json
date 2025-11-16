@@ -1,0 +1,47 @@
+{
+    "DishSponge__minus_7_dot_36053848_comma__minus_7_dot_36053848_comma__minus_6_dot_20593832_comma__minus_6_dot_20593832_comma_0_dot_3138905764_comma_0_dot_3138905764": {
+        "object_type": "DishSponge",
+        "coords": [
+            -7.36053848,
+            -7.36053848,
+            -6.20593832,
+            -6.20593832,
+            0.3138905764,
+            0.3138905764
+        ],
+        "is_receptacle": false,
+        "object_name": "DishSponge_1",
+        "object_env_id": "DishSponge|-01.84|+00.08|-01.55",
+        "location": "loc|-3|-6|3|60"
+    },
+    "BathtubBasin__minus_7_dot_94685316_comma__minus_7_dot_94685316_comma__minus_4_dot_77308272_comma__minus_4_dot_77308272_comma_0_dot_26715172_comma_0_dot_26715172": {
+        "object_type": "BathtubBasin",
+        "coords": [
+            -7.94685316,
+            -7.94685316,
+            -4.77308272,
+            -4.77308272,
+            0.26715172,
+            0.26715172
+        ],
+        "is_receptacle": true,
+        "object_name": "BathtubBasin_1",
+        "object_env_id": null,
+        "location": "loc|-10|0|2|60"
+    },
+    "Toilet__minus_0_dot_256_comma__minus_0_dot_256_comma_7_dot_356_comma_7_dot_356_comma_0_dot_048159182_comma_0_dot_048159182": {
+        "object_type": "Toilet",
+        "coords": [
+            -0.256,
+            -0.256,
+            7.356,
+            7.356,
+            0.048159182,
+            0.048159182
+        ],
+        "is_receptacle": true,
+        "object_name": "Toilet_1",
+        "object_env_id": "Toilet|-00.06|+00.01|+01.84",
+        "location": "loc|-4|7|1|15"
+    }
+}

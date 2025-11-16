@@ -1,0 +1,4 @@
+(gotolocation agent1 soapbottle_1)
+(pickupobject agent1 soapbottle_1)
+(gotolocation agent1 cart_1)
+(putobjectinreceptacle agent1 soapbottle_1 cart_1)

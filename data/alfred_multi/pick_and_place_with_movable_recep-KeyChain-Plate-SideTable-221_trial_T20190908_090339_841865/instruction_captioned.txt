@@ -1,0 +1,7 @@
+There is a Plate in the room.
+There is a KeyChain in the room.
+There is a DiningTable in the room.
+There is a SideTable in the room.
+KeyChain_1 is on SideTable_1.
+Plate_1 is on DiningTable_1.
+The instruction is: Put a plate with keys on it on the small table.

@@ -1,0 +1,62 @@
+{
+    "CreditCard__minus_10_dot_2052946_comma__minus_10_dot_2052946_comma_20_dot_16960524_comma_20_dot_16960524_comma_1_dot_3940736_comma_1_dot_3940736": {
+        "object_type": "CreditCard",
+        "coords": [
+            -10.2052946,
+            -10.2052946,
+            20.16960524,
+            20.16960524,
+            1.3940736,
+            1.3940736
+        ],
+        "is_receptacle": false,
+        "object_name": "CreditCard_1",
+        "object_env_id": "CreditCard|-02.55|+00.35|+05.04",
+        "location": "loc|-12|20|1|60"
+    },
+    "CoffeeTable__minus_9_dot_275952_comma__minus_9_dot_275952_comma_19_dot_548292_comma_19_dot_548292_comma_0_dot_0136_comma_0_dot_0136": {
+        "object_type": "CoffeeTable",
+        "coords": [
+            -9.275952,
+            -9.275952,
+            19.548292,
+            19.548292,
+            0.0136,
+            0.0136
+        ],
+        "is_receptacle": true,
+        "object_name": "CoffeeTable_1",
+        "object_env_id": null,
+        "location": "loc|-14|18|1|60"
+    },
+    "Bowl__minus_11_dot_73904992_comma__minus_11_dot_73904992_comma_4_dot_70320272_comma_4_dot_70320272_comma_2_dot_7551336_comma_2_dot_7551336": {
+        "object_type": "Bowl",
+        "coords": [
+            -11.73904992,
+            -11.73904992,
+            4.70320272,
+            4.70320272,
+            2.7551336,
+            2.7551336
+        ],
+        "is_receptacle": true,
+        "object_name": "Bowl_1",
+        "object_env_id": "Bowl|-02.93|+00.69|+01.18",
+        "location": "loc|-12|2|0|60"
+    },
+    "DiningTable__minus_9_dot_076_comma__minus_9_dot_076_comma_5_dot_692_comma_5_dot_692_comma__minus_0_dot_0633479952_comma__minus_0_dot_0633479952": {
+        "object_type": "DiningTable",
+        "coords": [
+            -9.076,
+            -9.076,
+            5.692,
+            5.692,
+            -0.0633479952,
+            -0.0633479952
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-10|10|2|60"
+    }
+}

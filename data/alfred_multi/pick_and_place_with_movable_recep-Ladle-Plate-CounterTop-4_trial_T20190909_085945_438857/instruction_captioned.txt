@@ -1,0 +1,7 @@
+There is a Ladle in the room.
+There is a Plate in the room.
+There are 2 CounterTops in the room.
+There is a SinkBasin in the room.
+Plate_1 is on SinkBasin_1.
+Ladle_1 is on CounterTop_1.
+The instruction is: Put a grey plate with a large metal spoon on it on the counter.

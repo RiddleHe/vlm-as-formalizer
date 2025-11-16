@@ -1,0 +1,6 @@
+(gotolocation agent1 potato_1)
+(pickupobject agent1 potato_1)
+(gotolocation agent1 microwave_1)
+(heatobject agent1 microwave_1 potato_1)
+(gotolocation agent1 sinkbasin_1)
+(putobjectinreceptacle agent1 potato_1 sinkbasin_1)

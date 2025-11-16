@@ -1,0 +1,62 @@
+{
+    "Spoon_6_dot_59133672_comma_6_dot_59133672_comma__minus_5_dot_786112_comma__minus_5_dot_786112_comma_3_dot_65851736_comma_3_dot_65851736": {
+        "object_type": "Spoon",
+        "coords": [
+            6.59133672,
+            6.59133672,
+            -5.786112,
+            -5.786112,
+            3.65851736,
+            3.65851736
+        ],
+        "is_receptacle": false,
+        "object_name": "Spoon_1",
+        "object_env_id": "Spoon|+01.65|+00.91|-01.45",
+        "location": "loc|4|-5|1|45"
+    },
+    "CounterTop_0_dot_932_comma_0_dot_932_comma__minus_8_dot_008_comma__minus_8_dot_008_comma_3_dot_796_comma_3_dot_796": {
+        "object_type": "CounterTop",
+        "coords": [
+            0.932,
+            0.932,
+            -8.008,
+            -8.008,
+            3.796,
+            3.796
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|3|-5|2|45"
+    },
+    "SinkBasin__minus_0_dot_5932_comma__minus_0_dot_5932_comma__minus_8_dot_1056_comma__minus_8_dot_1056_comma_3_dot_0156_comma_3_dot_0156": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -0.5932,
+            -0.5932,
+            -8.1056,
+            -8.1056,
+            3.0156,
+            3.0156
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-1|-5|2|45"
+    },
+    "DiningTable_1_dot_66_comma_1_dot_66_comma_2_dot_712_comma_2_dot_712_comma_0_dot_052_comma_0_dot_052": {
+        "object_type": "DiningTable",
+        "coords": [
+            1.66,
+            1.66,
+            2.712,
+            2.712,
+            0.052,
+            0.052
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": "DiningTable|+00.42|+00.01|+00.68",
+        "location": "loc|-4|3|1|45"
+    }
+}

@@ -1,0 +1,47 @@
+{
+    "CellPhone__minus_2_dot_4023284_comma__minus_2_dot_4023284_comma__minus_6_dot_35270216_comma__minus_6_dot_35270216_comma_3_dot_5913524_comma_3_dot_5913524": {
+        "object_type": "CellPhone",
+        "coords": [
+            -2.4023284,
+            -2.4023284,
+            -6.35270216,
+            -6.35270216,
+            3.5913524,
+            3.5913524
+        ],
+        "is_receptacle": false,
+        "object_name": "CellPhone_1",
+        "object_env_id": "CellPhone|-00.60|+00.90|-01.59",
+        "location": "loc|-3|-3|2|45"
+    },
+    "Desk__minus_2_dot_108_comma__minus_2_dot_108_comma__minus_6_dot_128_comma__minus_6_dot_128_comma__minus_0_dot_012_comma__minus_0_dot_012": {
+        "object_type": "Desk",
+        "coords": [
+            -2.108,
+            -2.108,
+            -6.128,
+            -6.128,
+            -0.012,
+            -0.012
+        ],
+        "is_receptacle": true,
+        "object_name": "Desk_1",
+        "object_env_id": null,
+        "location": "loc|3|-5|3|45"
+    },
+    "Bed_9_dot_296_comma_9_dot_296_comma__minus_4_dot_228_comma__minus_4_dot_228_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Bed",
+        "coords": [
+            9.296,
+            9.296,
+            -4.228,
+            -4.228,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Bed_1",
+        "object_env_id": "Bed|+02.32|+00.00|-01.06",
+        "location": "loc|2|-4|1|45"
+    }
+}

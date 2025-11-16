@@ -1,0 +1,62 @@
+{
+    "Cup__minus_7_dot_68027256_comma__minus_7_dot_68027256_comma__minus_8_dot_80539704_comma__minus_8_dot_80539704_comma_5_dot_28159048_comma_5_dot_28159048": {
+        "object_type": "Cup",
+        "coords": [
+            -7.68027256,
+            -7.68027256,
+            -8.80539704,
+            -8.80539704,
+            5.28159048,
+            5.28159048
+        ],
+        "is_receptacle": false,
+        "object_name": "Cup_1",
+        "object_env_id": "Cup|-01.92|+01.32|-02.20",
+        "location": "loc|-4|-9|3|30"
+    },
+    "CounterTop__minus_7_dot_236_comma__minus_7_dot_236_comma_4_dot_728_comma_4_dot_728_comma_5_dot_434_comma_5_dot_434": {
+        "object_type": "CounterTop",
+        "coords": [
+            -7.236,
+            -7.236,
+            4.728,
+            4.728,
+            5.434,
+            5.434
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-4|-8|0|15"
+    },
+    "SinkBasin__minus_7_dot_34220268_comma__minus_7_dot_34220268_comma__minus_2_dot_168930532_comma__minus_2_dot_168930532_comma_4_dot_16_comma_4_dot_16": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -7.34220268,
+            -7.34220268,
+            -2.168930532,
+            -2.168930532,
+            4.16,
+            4.16
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-4|-3|3|45"
+    },
+    "SideTable_4_dot_088_comma_4_dot_088_comma_3_dot_4844_comma_3_dot_4844_comma_4_dot_9732_comma_4_dot_9732": {
+        "object_type": "SideTable",
+        "coords": [
+            4.088,
+            4.088,
+            3.4844,
+            3.4844,
+            4.9732,
+            4.9732
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": "SideTable|+01.02|+01.24|+00.87",
+        "location": "loc|1|4|1|45"
+    }
+}

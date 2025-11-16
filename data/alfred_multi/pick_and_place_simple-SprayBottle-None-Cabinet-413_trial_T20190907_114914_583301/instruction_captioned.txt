@@ -1,0 +1,5 @@
+There is a SprayBottle in the room.
+There is a Cabinet in the room.
+There is a Toilet in the room.
+SprayBottle_1 is on Toilet_1.
+The instruction is: put a spray bottle in cabinet

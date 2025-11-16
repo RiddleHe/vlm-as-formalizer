@@ -1,0 +1,6 @@
+There are 2 KeyChains in the room.
+There is a Desk in the room.
+There is a Shelf in the room.
+KeyChain_1 is on Shelf_1.
+KeyChain_2 is on Shelf_1.
+The instruction is: Move two sets of keys from the dresser to the white table.

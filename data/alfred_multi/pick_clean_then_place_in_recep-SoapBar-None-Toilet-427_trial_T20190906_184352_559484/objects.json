@@ -1,0 +1,62 @@
+{
+    "SoapBar__minus_14_dot_06609724_comma__minus_14_dot_06609724_comma_1_dot_63925028_comma_1_dot_63925028_comma_0_dot_1567328_comma_0_dot_1567328": {
+        "object_type": "SoapBar",
+        "coords": [
+            -14.06609724,
+            -14.06609724,
+            1.63925028,
+            1.63925028,
+            0.1567328,
+            0.1567328
+        ],
+        "is_receptacle": false,
+        "object_name": "SoapBar_1",
+        "object_env_id": "SoapBar|-03.52|+00.04|+00.41",
+        "location": "loc|-11|2|3|60"
+    },
+    "BathtubBasin__minus_15_dot_152_comma__minus_15_dot_152_comma_2_dot_38_comma_2_dot_38_comma_0_dot_1159999372_comma_0_dot_1159999372": {
+        "object_type": "BathtubBasin",
+        "coords": [
+            -15.152,
+            -15.152,
+            2.38,
+            2.38,
+            0.1159999372,
+            0.1159999372
+        ],
+        "is_receptacle": true,
+        "object_name": "BathtubBasin_1",
+        "object_env_id": null,
+        "location": "loc|-11|2|3|60"
+    },
+    "SinkBasin__minus_7_dot_6359992_comma__minus_7_dot_6359992_comma_7_dot_92400028_comma_7_dot_92400028_comma_4_dot_044_comma_4_dot_044": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -7.6359992,
+            -7.6359992,
+            7.92400028,
+            7.92400028,
+            4.044,
+            4.044
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-10|7|1|45"
+    },
+    "Toilet__minus_2_dot_88_comma__minus_2_dot_88_comma__minus_1_dot_242898704_comma__minus_1_dot_242898704_comma_0_dot_0041680336_comma_0_dot_0041680336": {
+        "object_type": "Toilet",
+        "coords": [
+            -2.88,
+            -2.88,
+            -1.242898704,
+            -1.242898704,
+            0.0041680336,
+            0.0041680336
+        ],
+        "is_receptacle": true,
+        "object_name": "Toilet_1",
+        "object_env_id": "Toilet|-00.72|+00.00|-00.31",
+        "location": "loc|-3|1|2|15"
+    }
+}

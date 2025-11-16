@@ -1,0 +1,5 @@
+There is a Bowl in the room.
+There is a DiningTable in the room.
+There is a SinkBasin in the room.
+Bowl_1 is on DiningTable_1.
+The instruction is: fill the pan with water, put the pan on the kitchen island

@@ -1,0 +1,62 @@
+{
+    "Pen_6_dot_87975692_comma_6_dot_87975692_comma__minus_8_dot_87806224_comma__minus_8_dot_87806224_comma_3_dot_2226112_comma_3_dot_2226112": {
+        "object_type": "Pen",
+        "coords": [
+            6.87975692,
+            6.87975692,
+            -8.87806224,
+            -8.87806224,
+            3.2226112,
+            3.2226112
+        ],
+        "is_receptacle": false,
+        "object_name": "Pen_1",
+        "object_env_id": "Pen|+01.72|+00.81|-02.22",
+        "location": "loc|4|-9|1|45"
+    },
+    "Dresser_6_dot_536_comma_6_dot_536_comma__minus_7_dot_324_comma__minus_7_dot_324_comma__minus_0_dot_084_comma__minus_0_dot_084": {
+        "object_type": "Dresser",
+        "coords": [
+            6.536,
+            6.536,
+            -7.324,
+            -7.324,
+            -0.084,
+            -0.084
+        ],
+        "is_receptacle": true,
+        "object_name": "Dresser_1",
+        "object_env_id": null,
+        "location": "loc|4|-7|1|60"
+    },
+    "Mug_1_dot_021898508_comma_1_dot_021898508_comma__minus_10_dot_43599796_comma__minus_10_dot_43599796_comma_2_dot_6855072_comma_2_dot_6855072": {
+        "object_type": "Mug",
+        "coords": [
+            1.021898508,
+            1.021898508,
+            -10.43599796,
+            -10.43599796,
+            2.6855072,
+            2.6855072
+        ],
+        "is_receptacle": true,
+        "object_name": "Mug_1",
+        "object_env_id": "Mug|+00.26|+00.67|-02.61",
+        "location": "loc|1|-9|2|60"
+    },
+    "Shelf_0_dot_9724_comma_0_dot_9724_comma__minus_10_dot_35994528_comma__minus_10_dot_35994528_comma_2_dot_6625408_comma_2_dot_6625408": {
+        "object_type": "Shelf",
+        "coords": [
+            0.9724,
+            0.9724,
+            -10.35994528,
+            -10.35994528,
+            2.6625408,
+            2.6625408
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": null,
+        "location": "loc|1|-8|2|60"
+    }
+}

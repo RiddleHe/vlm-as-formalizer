@@ -1,0 +1,47 @@
+{
+    "Pen__minus_7_dot_09945868_comma__minus_7_dot_09945868_comma_3_dot_4943176_comma_3_dot_4943176_comma_0_dot_23549628_comma_0_dot_23549628": {
+        "object_type": "Pen",
+        "coords": [
+            -7.09945868,
+            -7.09945868,
+            3.4943176,
+            3.4943176,
+            0.23549628,
+            0.23549628
+        ],
+        "is_receptacle": false,
+        "object_name": "Pen_1",
+        "object_env_id": "Pen|-01.77|+00.06|+00.87",
+        "location": "loc|-7|5|2|60"
+    },
+    "GarbageCan__minus_7_dot_192_comma__minus_7_dot_192_comma_3_dot_428_comma_3_dot_428_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "GarbageCan",
+        "coords": [
+            -7.192,
+            -7.192,
+            3.428,
+            3.428,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "GarbageCan_1",
+        "object_env_id": null,
+        "location": "loc|-7|5|2|60"
+    },
+    "Shelf__minus_6_dot_798_comma__minus_6_dot_798_comma__minus_8_dot_228_comma__minus_8_dot_228_comma_4_dot_5512_comma_4_dot_5512": {
+        "object_type": "Shelf",
+        "coords": [
+            -6.798,
+            -6.798,
+            -8.228,
+            -8.228,
+            4.5512,
+            4.5512
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": "Shelf|-01.70|+01.14|-02.06",
+        "location": "loc|-5|-9|3|45"
+    }
+}

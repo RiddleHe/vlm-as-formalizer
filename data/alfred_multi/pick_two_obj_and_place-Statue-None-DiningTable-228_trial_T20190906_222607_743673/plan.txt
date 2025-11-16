@@ -1,0 +1,4 @@
+(gotolocation agent1 statue_1)
+(pickupobject agent1 statue_1)
+(gotolocation agent1 diningtable_1)
+(putobjectinreceptacle agent1 statue_1 diningtable_1)

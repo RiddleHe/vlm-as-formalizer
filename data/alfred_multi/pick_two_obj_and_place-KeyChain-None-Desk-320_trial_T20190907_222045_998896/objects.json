@@ -1,0 +1,62 @@
+{
+    "KeyChain_2_dot_5896356_comma_2_dot_5896356_comma__minus_7_dot_15748596_comma__minus_7_dot_15748596_comma_2_dot_739676952_comma_2_dot_739676952": {
+        "object_type": "KeyChain",
+        "coords": [
+            2.5896356,
+            2.5896356,
+            -7.15748596,
+            -7.15748596,
+            2.739676952,
+            2.739676952
+        ],
+        "is_receptacle": false,
+        "object_name": "KeyChain_1",
+        "object_env_id": "KeyChain|+00.65|+00.68|-01.79",
+        "location": "loc|3|-5|2|60"
+    },
+    "Shelf_2_dot_508_comma_2_dot_508_comma__minus_6_dot_8228_comma__minus_6_dot_8228_comma_2_dot_7062684_comma_2_dot_7062684": {
+        "object_type": "Shelf",
+        "coords": [
+            2.508,
+            2.508,
+            -6.8228,
+            -6.8228,
+            2.7062684,
+            2.7062684
+        ],
+        "is_receptacle": true,
+        "object_name": "Shelf_1",
+        "object_env_id": null,
+        "location": "loc|3|-3|2|45"
+    },
+    "Desk_6_dot_312_comma_6_dot_312_comma_1_dot_5415192_comma_1_dot_5415192_comma__minus_0_dot_008_comma__minus_0_dot_008": {
+        "object_type": "Desk",
+        "coords": [
+            6.312,
+            6.312,
+            1.5415192,
+            1.5415192,
+            -0.008,
+            -0.008
+        ],
+        "is_receptacle": true,
+        "object_name": "Desk_1",
+        "object_env_id": "Desk|+01.58|00.00|+00.39",
+        "location": "loc|3|2|1|60"
+    },
+    "KeyChain_1_dot_455801368_comma_1_dot_455801368_comma__minus_6_dot_8228_comma__minus_6_dot_8228_comma_2_dot_739676952_comma_2_dot_739676952": {
+        "object_type": "KeyChain",
+        "coords": [
+            1.455801368,
+            1.455801368,
+            -6.8228,
+            -6.8228,
+            2.739676952,
+            2.739676952
+        ],
+        "is_receptacle": false,
+        "object_name": "KeyChain_2",
+        "object_env_id": "KeyChain|+00.36|+00.68|-01.71",
+        "location": "loc|1|-5|2|60"
+    }
+}

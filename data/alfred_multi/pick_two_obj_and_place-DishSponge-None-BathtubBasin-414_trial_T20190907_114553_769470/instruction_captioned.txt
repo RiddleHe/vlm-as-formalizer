@@ -1,0 +1,7 @@
+There are 2 DishSponges in the room.
+There is a GarbageCan in the room.
+There is a BathtubBasin in the room.
+There is a Cabinet in the room.
+DishSponge_2 is on GarbageCan_1.
+DishSponge_1 is on Cabinet_1.
+The instruction is: Place two sponges in the tub.

@@ -1,0 +1,62 @@
+{
+    "Mug__minus_2_dot_58799982_comma__minus_2_dot_58799982_comma_1_dot_4696_comma_1_dot_4696_comma_3_dot_5528428_comma_3_dot_5528428": {
+        "object_type": "Mug",
+        "coords": [
+            -2.58799982,
+            -2.58799982,
+            1.4696,
+            1.4696,
+            3.5528428,
+            3.5528428
+        ],
+        "is_receptacle": false,
+        "object_name": "Mug_1",
+        "object_env_id": "Mug|-00.65|+00.89|+00.37",
+        "location": "loc|-4|5|2|45"
+    },
+    "CounterTop__minus_6_dot_232_comma__minus_6_dot_232_comma_1_dot_112_comma_1_dot_112_comma_3_dot_4364_comma_3_dot_4364": {
+        "object_type": "CounterTop",
+        "coords": [
+            -6.232,
+            -6.232,
+            1.112,
+            1.112,
+            3.4364,
+            3.4364
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|-8|5|2|45"
+    },
+    "Microwave__minus_11_dot_18_comma__minus_11_dot_18_comma_5_dot_396_comma_5_dot_396_comma_3_dot_2488436_comma_3_dot_2488436": {
+        "object_type": "Microwave",
+        "coords": [
+            -11.18,
+            -11.18,
+            5.396,
+            5.396,
+            3.2488436,
+            3.2488436
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": null,
+        "location": "loc|-8|5|3|45"
+    },
+    "Cabinet__minus_11_dot_1271496_comma__minus_11_dot_1271496_comma_3_dot_301936628_comma_3_dot_301936628_comma_7_dot_19391156_comma_7_dot_19391156": {
+        "object_type": "Cabinet",
+        "coords": [
+            -11.1271496,
+            -11.1271496,
+            3.301936628,
+            3.301936628,
+            7.19391156,
+            7.19391156
+        ],
+        "is_receptacle": true,
+        "object_name": "Cabinet_1",
+        "object_env_id": "Cabinet|-02.78|+01.80|+00.83",
+        "location": "loc|-8|5|3|-15"
+    }
+}

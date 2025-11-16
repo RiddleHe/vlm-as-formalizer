@@ -1,0 +1,5 @@
+There is a CellPhone in the room.
+There is a Shelf in the room.
+There is a SideTable in the room.
+CellPhone_1 is on SideTable_1.
+The instruction is: Move a phone to the shelf of an end table.

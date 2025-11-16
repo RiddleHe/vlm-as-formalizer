@@ -1,0 +1,8 @@
+There is a ButterKnife in the room.
+There is a Apple in the room.
+There is a CounterTop in the room.
+There is a DiningTable in the room.
+There is a Fridge in the room.
+Apple_1 is on CounterTop_1.
+ButterKnife_1 is on DiningTable_1.
+The instruction is: To chill a piece of apple and put it down on the white table.

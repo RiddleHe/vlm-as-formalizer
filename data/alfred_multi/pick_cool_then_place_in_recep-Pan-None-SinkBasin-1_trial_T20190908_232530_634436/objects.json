@@ -1,0 +1,62 @@
+{
+    "Pan_2_dot_8847976_comma_2_dot_8847976_comma__minus_9_dot_66171836_comma__minus_9_dot_66171836_comma_3_dot_6_comma_3_dot_6": {
+        "object_type": "Pan",
+        "coords": [
+            2.8847976,
+            2.8847976,
+            -9.66171836,
+            -9.66171836,
+            3.6,
+            3.6
+        ],
+        "is_receptacle": false,
+        "object_name": "Pan_1",
+        "object_env_id": "Pan|+00.72|+00.90|-02.42",
+        "location": "loc|3|-7|2|45"
+    },
+    "CounterTop_2_dot_772_comma_2_dot_772_comma__minus_9_dot_936_comma__minus_9_dot_936_comma_3_dot_7848_comma_3_dot_7848": {
+        "object_type": "CounterTop",
+        "coords": [
+            2.772,
+            2.772,
+            -9.936,
+            -9.936,
+            3.7848,
+            3.7848
+        ],
+        "is_receptacle": true,
+        "object_name": "CounterTop_1",
+        "object_env_id": null,
+        "location": "loc|3|-7|2|45"
+    },
+    "Fridge__minus_8_dot_388_comma__minus_8_dot_388_comma_4_dot_352_comma_4_dot_352_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            -8.388,
+            -8.388,
+            4.352,
+            4.352,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": null,
+        "location": "loc|-5|4|3|60"
+    },
+    "SinkBasin__minus_7_dot_6324_comma__minus_7_dot_6324_comma__minus_5_dot_9552_comma__minus_5_dot_9552_comma_3_dot_0368_comma_3_dot_0368": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -7.6324,
+            -7.6324,
+            -5.9552,
+            -5.9552,
+            3.0368,
+            3.0368
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-5|-6|3|60"
+    }
+}

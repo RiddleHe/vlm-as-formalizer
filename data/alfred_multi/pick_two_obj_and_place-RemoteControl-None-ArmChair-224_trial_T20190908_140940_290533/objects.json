@@ -1,0 +1,77 @@
+{
+    "RemoteControl__minus_11_dot_83527088_comma__minus_11_dot_83527088_comma_7_dot_226501_comma_7_dot_226501_comma_2_dot_2583556_comma_2_dot_2583556": {
+        "object_type": "RemoteControl",
+        "coords": [
+            -11.83527088,
+            -11.83527088,
+            7.226501,
+            7.226501,
+            2.2583556,
+            2.2583556
+        ],
+        "is_receptacle": false,
+        "object_name": "RemoteControl_1",
+        "object_env_id": "RemoteControl|-02.96|+00.56|+01.81",
+        "location": "loc|-9|7|3|60"
+    },
+    "Sofa__minus_11_dot_828_comma__minus_11_dot_828_comma_5_dot_576_comma_5_dot_576_comma_0_dot_3068_comma_0_dot_3068": {
+        "object_type": "Sofa",
+        "coords": [
+            -11.828,
+            -11.828,
+            5.576,
+            5.576,
+            0.3068,
+            0.3068
+        ],
+        "is_receptacle": true,
+        "object_name": "Sofa_1",
+        "object_env_id": null,
+        "location": "loc|-7|6|3|60"
+    },
+    "ArmChair__minus_11_dot_44_comma__minus_11_dot_44_comma__minus_8_dot_148_comma__minus_8_dot_148_comma_0_dot_064_comma_0_dot_064": {
+        "object_type": "ArmChair",
+        "coords": [
+            -11.44,
+            -11.44,
+            -8.148,
+            -8.148,
+            0.064,
+            0.064
+        ],
+        "is_receptacle": true,
+        "object_name": "ArmChair_1",
+        "object_env_id": "ArmChair|-02.86|+00.02|-02.04",
+        "location": "loc|-9|-3|2|45"
+    },
+    "RemoteControl_12_dot_64018632_comma_12_dot_64018632_comma_1_dot_989698648_comma_1_dot_989698648_comma_2_dot_3649364_comma_2_dot_3649364": {
+        "object_type": "RemoteControl",
+        "coords": [
+            12.64018632,
+            12.64018632,
+            1.989698648,
+            1.989698648,
+            2.3649364,
+            2.3649364
+        ],
+        "is_receptacle": false,
+        "object_name": "RemoteControl_2",
+        "object_env_id": "RemoteControl|+03.16|+00.59|+00.50",
+        "location": "loc|11|2|1|60"
+    },
+    "SideTable_12_dot_652_comma_12_dot_652_comma_1_dot_46_comma_1_dot_46_comma_0_dot_064_comma_0_dot_064": {
+        "object_type": "SideTable",
+        "coords": [
+            12.652,
+            12.652,
+            1.46,
+            1.46,
+            0.064,
+            0.064
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": null,
+        "location": "loc|11|-3|0|60"
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "Watch_2_dot_713719844_comma_2_dot_713719844_comma_5_dot_60575296_comma_5_dot_60575296_comma_1_dot_644290684_comma_1_dot_644290684": {
+        "object_type": "Watch",
+        "coords": [
+            2.713719844,
+            2.713719844,
+            5.60575296,
+            5.60575296,
+            1.644290684,
+            1.644290684
+        ],
+        "is_receptacle": false,
+        "object_name": "Watch_1",
+        "object_env_id": "Watch|+00.68|+00.41|+01.40",
+        "location": "loc|3|4|0|60"
+    },
+    "SideTable_7_dot_984_comma_7_dot_984_comma_6_dot_984_comma_6_dot_984_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "SideTable",
+        "coords": [
+            7.984,
+            7.984,
+            6.984,
+            6.984,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "SideTable_1",
+        "object_env_id": "SideTable|+02.00|+00.00|+01.75",
+        "location": "loc|8|4|0|60"
+    }
+}

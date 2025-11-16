@@ -1,0 +1,6 @@
+(gotolocation agent1 coffeetable_1)
+(pickupobject agent1 remotecontrol_1)
+(putobjectinreceptacle agent1 remotecontrol_1 box_1)
+(pickupobject agent1 box_1)
+(gotolocation agent1 sofa_1)
+(putobjectinreceptacle agent1 box_1 sofa_1)

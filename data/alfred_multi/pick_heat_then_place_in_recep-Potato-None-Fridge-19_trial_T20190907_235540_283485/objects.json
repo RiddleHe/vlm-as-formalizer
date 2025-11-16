@@ -1,0 +1,62 @@
+{
+    "Potato__minus_12_dot_4443102_comma__minus_12_dot_4443102_comma__minus_2_dot_611556528_comma__minus_2_dot_611556528_comma_3_dot_030268192_comma_3_dot_030268192": {
+        "object_type": "Potato",
+        "coords": [
+            -12.4443102,
+            -12.4443102,
+            -2.611556528,
+            -2.611556528,
+            3.030268192,
+            3.030268192
+        ],
+        "is_receptacle": false,
+        "object_name": "Potato_1",
+        "object_env_id": "Potato|-03.11|+00.76|-00.65",
+        "location": "loc|-12|-6|0|45"
+    },
+    "DiningTable__minus_11_dot_476_comma__minus_11_dot_476_comma__minus_2_dot_024_comma__minus_2_dot_024_comma_2_dot_708_comma_2_dot_708": {
+        "object_type": "DiningTable",
+        "coords": [
+            -11.476,
+            -11.476,
+            -2.024,
+            -2.024,
+            2.708,
+            2.708
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-11|-6|0|45"
+    },
+    "Microwave__minus_0_dot_576_comma__minus_0_dot_576_comma__minus_3_dot_632_comma__minus_3_dot_632_comma_3_dot_615618228_comma_3_dot_615618228": {
+        "object_type": "Microwave",
+        "coords": [
+            -0.576,
+            -0.576,
+            -3.632,
+            -3.632,
+            3.615618228,
+            3.615618228
+        ],
+        "is_receptacle": true,
+        "object_name": "Microwave_1",
+        "object_env_id": null,
+        "location": "loc|-4|-3|1|45"
+    },
+    "Fridge__minus_12_dot_75556944_comma__minus_12_dot_75556944_comma__minus_8_dot_74_comma__minus_8_dot_74_comma_0_dot_0_comma_0_dot_0": {
+        "object_type": "Fridge",
+        "coords": [
+            -12.75556944,
+            -12.75556944,
+            -8.74,
+            -8.74,
+            0.0,
+            0.0
+        ],
+        "is_receptacle": true,
+        "object_name": "Fridge_1",
+        "object_env_id": "Fridge|-03.19|+00.00|-02.19",
+        "location": "loc|-10|-9|3|60"
+    }
+}

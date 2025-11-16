@@ -1,0 +1,47 @@
+{
+    "Bowl__minus_9_dot_29854296_comma__minus_9_dot_29854296_comma__minus_5_dot_69593908_comma__minus_5_dot_69593908_comma_3_dot_690051796_comma_3_dot_690051796": {
+        "object_type": "Bowl",
+        "coords": [
+            -9.29854296,
+            -9.29854296,
+            -5.69593908,
+            -5.69593908,
+            3.690051796,
+            3.690051796
+        ],
+        "is_receptacle": false,
+        "object_name": "Bowl_1",
+        "object_env_id": "Bowl|-02.32|+00.92|-01.42",
+        "location": "loc|-7|-6|3|45"
+    },
+    "DiningTable__minus_9_dot_73199272_comma__minus_9_dot_73199272_comma__minus_6_dot_78581428_comma__minus_6_dot_78581428_comma_3_dot_5828_comma_3_dot_5828": {
+        "object_type": "DiningTable",
+        "coords": [
+            -9.73199272,
+            -9.73199272,
+            -6.78581428,
+            -6.78581428,
+            3.5828,
+            3.5828
+        ],
+        "is_receptacle": true,
+        "object_name": "DiningTable_1",
+        "object_env_id": null,
+        "location": "loc|-5|-7|3|30"
+    },
+    "SinkBasin__minus_1_dot_4024_comma__minus_1_dot_4024_comma__minus_8_dot_0756_comma__minus_8_dot_0756_comma_3_dot_1465648_comma_3_dot_1465648": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -1.4024,
+            -1.4024,
+            -8.0756,
+            -8.0756,
+            3.1465648,
+            3.1465648
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-4|-7|1|60"
+    }
+}

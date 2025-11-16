@@ -1,0 +1,5 @@
+There is a FloorLamp in the room.
+There is a Watch in the room.
+There is a Dresser in the room.
+Watch_1 is on Dresser_1.
+The instruction is: get a ring and turn on a lamp

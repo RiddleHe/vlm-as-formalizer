@@ -1,0 +1,62 @@
+{
+    "Pot__minus_1_dot_8608_comma__minus_1_dot_8608_comma__minus_9_dot_488_comma__minus_9_dot_488_comma_3_dot_801999808_comma_3_dot_801999808": {
+        "object_type": "Pot",
+        "coords": [
+            -1.8608,
+            -1.8608,
+            -9.488,
+            -9.488,
+            3.801999808,
+            3.801999808
+        ],
+        "is_receptacle": false,
+        "object_name": "Pot_1",
+        "object_env_id": "Pot|-00.47|+00.95|-02.37",
+        "location": "loc|-2|-7|2|45"
+    },
+    "StoveBurner__minus_1_dot_8608_comma__minus_1_dot_8608_comma__minus_9_dot_488_comma__minus_9_dot_488_comma_3_dot_6604_comma_3_dot_6604": {
+        "object_type": "StoveBurner",
+        "coords": [
+            -1.8608,
+            -1.8608,
+            -9.488,
+            -9.488,
+            3.6604,
+            3.6604
+        ],
+        "is_receptacle": true,
+        "object_name": "StoveBurner_1",
+        "object_env_id": null,
+        "location": "loc|-2|-7|2|45"
+    },
+    "SinkBasin__minus_7_dot_6324_comma__minus_7_dot_6324_comma__minus_5_dot_9552_comma__minus_5_dot_9552_comma_3_dot_0368_comma_3_dot_0368": {
+        "object_type": "SinkBasin",
+        "coords": [
+            -7.6324,
+            -7.6324,
+            -5.9552,
+            -5.9552,
+            3.0368,
+            3.0368
+        ],
+        "is_receptacle": true,
+        "object_name": "SinkBasin_1",
+        "object_env_id": null,
+        "location": "loc|-5|-6|3|60"
+    },
+    "StoveBurner__minus_1_dot_8608_comma__minus_1_dot_8608_comma__minus_10_dot_304_comma__minus_10_dot_304_comma_3_dot_6604_comma_3_dot_6604": {
+        "object_type": "StoveBurner",
+        "coords": [
+            -1.8608,
+            -1.8608,
+            -10.304,
+            -10.304,
+            3.6604,
+            3.6604
+        ],
+        "is_receptacle": true,
+        "object_name": "StoveBurner_2",
+        "object_env_id": "StoveBurner|-00.47|+00.92|-02.58",
+        "location": "loc|-2|-7|2|45"
+    }
+}

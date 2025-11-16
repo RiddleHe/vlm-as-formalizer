@@ -1,0 +1,7 @@
+There is a Bowl in the room.
+There is a Pencil in the room.
+There is a Desk in the room.
+There is a SideTable in the room.
+Pencil_1 is on Desk_1.
+Bowl_1 is on Desk_1.
+The instruction is: Place a bowl with a pencil in it on a nightstand.
