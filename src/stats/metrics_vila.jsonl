@@ -1,8 +1,0 @@
-{"experiment": "alfred_gpt41_vila_fixed_gpt-4.1_generate_vila_planning", "plan_success_rate": "", "solver_success_rate": ""}
-{"experiment": "alfred_qwenvl-72B_vllm_planning_blocksworld_real_qwenvl-72B-vllm_generate_vila_planning", "plan_success_rate": "", "solver_success_rate": ""}
-{"experiment": "blocksworld-real_gpt41_vila_fixed_gpt-4.1_generate_vila_planning", "plan_success_rate": "", "solver_success_rate": ""}
-{"experiment": "blocksworld-real_qwenvl-72B_vllm_planning_blocksworld_real_qwenvl-72B-vllm_generate_vila_planning", "plan_success_rate": "", "solver_success_rate": ""}
-{"experiment": "alfred_gpt41_vila_fixed_gpt-4.1_generate_vila_planning", "plan_success_rate": " 0.00%", "solver_success_rate": ": 0.00%"}
-{"experiment": "alfred_qwenvl-72B_vllm_planning_blocksworld_real_qwenvl-72B-vllm_generate_vila_planning", "plan_success_rate": " 0.00%", "solver_success_rate": ": 0.00%"}
-{"experiment": "blocksworld-real_gpt41_vila_fixed_gpt-4.1_generate_vila_planning", "plan_success_rate": " 11.76%", "solver_success_rate": ": 0.00%"}
-{"experiment": "blocksworld-real_qwenvl-72B_vllm_planning_blocksworld_real_qwenvl-72B-vllm_generate_vila_planning", "plan_success_rate": " 6.86%", "solver_success_rate": ": 0.00%"}
