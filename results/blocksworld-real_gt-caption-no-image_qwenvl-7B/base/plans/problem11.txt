@@ -1,6 +1,0 @@
-(pick-up b1 robot1)
-(stack b1 p1 robot1)
-(unstack g1 o1 robot1)
-(stack g1 b1 robot1)
-(unstack r1 g1 robot1)
-(stack r1 y1 robot1)

@@ -1,6 +1,0 @@
-(slice robot2 carrot knife kitchen_workspace)
-(slice robot2 cucumber knife kitchen_workspace)
-(pick robot1 carrot kitchen_workspace)
-(place robot1 carrot bowl)
-(pick robot1 cucumber kitchen_workspace)
-(place robot1 cucumber bowl)

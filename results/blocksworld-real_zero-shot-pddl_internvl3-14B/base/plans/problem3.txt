@@ -1,2 +1,0 @@
-(pick-up purple robot1)
-(stack purple red robot1)

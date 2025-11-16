@@ -1,6 +1,0 @@
-(pick-up cube_blue robot1)
-(stack cube_blue cube_green robot1)
-(pick-up cube_purple robot1)
-(stack cube_purple cube_orange robot1)
-(pick-up cube_red robot1)
-(stack cube_red cube_yellow robot1)

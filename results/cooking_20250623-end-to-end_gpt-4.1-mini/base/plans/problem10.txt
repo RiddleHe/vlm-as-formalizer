@@ -1,5 +1,0 @@
-(slice robot2 tomato knife workspace)
-(pick robot1 carrot cutting_board)
-(place robot1 carrot bowl)
-(pick robot1 tomato workspace)
-(place robot1 tomato bowl)

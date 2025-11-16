@@ -1,2 +1,0 @@
-(slice robot2 carrot knife workspace)
-(place robot2 knife cutting_board)

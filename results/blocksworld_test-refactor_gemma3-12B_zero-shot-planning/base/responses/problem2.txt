@@ -1,7 +1,0 @@
-(pick-up (red) robot)
-(pick-up (blue) robot)
-(pick-up (purple) robot)
-(pick-up (pink) robot)
-(stack (red) (blue) robot)
-(stack (blue) (purple) robot)
-(stack (purple) (pink) robot)

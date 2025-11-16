@@ -1,6 +1,0 @@
-(pick-up block1 robot1)
-(stack block1 block2 robot1)
-(pick-up block3 robot1)
-(stack block3 block4 robot1)
-(pick-up block5 robot1)
-(stack block5 block6 robot1)
