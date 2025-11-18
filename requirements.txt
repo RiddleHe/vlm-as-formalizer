@@ -1,0 +1,11 @@
+numpy
+torch
+matplotlib
+Pillow
+scipy
+opencv-python
+tqdm
+python-dotenv
+openai
+transformers
+imageio

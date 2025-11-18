@@ -23,3 +23,5 @@ InternVL/
 
 results/
 downward
+
+**/.env

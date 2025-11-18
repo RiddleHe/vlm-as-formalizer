@@ -55,7 +55,6 @@ def parse_args():
     # Planning baseline
     parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
     parser.add_argument("--generate_vila_planning", action="store_true", help="Pipeline 1: ViLA - VLM zero-shot planning")
-    parser.add_argument("--generate_villain_pddl", action="store_true", help="Pipeline 2: ViLain - VLM → DINO → VLM PDDL Generation")
     parser.add_argument("--generate_villain_direct_pddl", action="store_true", help="Pipeline 3: ViLain Direct PDDL Generation (no object detection)")
     parser.add_argument("--generate_villain_captioning_pddl", action="store_true", help="Pipeline 4a: ViLain Captioning → PDDL (without DINO)")
     parser.add_argument("--generate_scene_graph_pddl", action="store_true", help="Pipeline 5a: Scene Graph → PDDL (without DINO)")
