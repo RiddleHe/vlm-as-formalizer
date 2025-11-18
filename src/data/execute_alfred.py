@@ -31,7 +31,7 @@ def get_action_sequence(plan: str, object_mapping: dict) -> List[Dict]:
 if __name__ == "__main__":
     task_id = "pick_and_place_simple-BaseballBat-None-Bed-326-train"
 
-    solution_dir = "/home/mh3897/pddl/villain/scripts/alfred/test-pick_and_place_simple-BaseballBat-None-Bed-326" # contain problem.pddl, plan.txt, objects.json, traj_data.json
+    solution_dir = "/pddl/villain/scripts/alfred/test-pick_and_place_simple-BaseballBat-None-Bed-326" # contain problem.pddl, plan.txt, objects.json, traj_data.json
 
     with open(os.path.join(solution_dir, "plan.txt"), "r") as f:
         plan = f.read()

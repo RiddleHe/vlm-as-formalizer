@@ -6,7 +6,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--domain", type=str, required=True)
 parser.add_argument("--problem", type=str, required=True)
-parser.add_argument("--downward_dir", type=str, default="/home/mh3897/pddl/villain/downward", help="Path to downward directory")
+parser.add_argument("--downward_dir", type=str, default="/pddl/villain/downward", help="Path to downward directory")
 parser.add_argument("--time_limit", type=int, default=20, help="Time limit for the planner")
 
 args = parser.parse_args()

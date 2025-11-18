@@ -27,7 +27,7 @@ needs_run_tag() {
 }
 
 PREFIXES=("blocksworld_" "cooking_" "alfred_" "blocksworld-real")
-DATA_PATHS=("/local-ssd/mh3897/alfred/blocksworld" "/local-ssd/mh3897/alfred/cooking" "/local-ssd/mh3897/alfred/alfred_137" "/local-ssd/mh3897/alfred/blocksworld-real")
+DATA_PATHS=("/alfred/blocksworld" "/alfred/cooking" "/alfred/alfred_137" "/alfred/blocksworld-real")
 MODEL_NAMES=("gpt-4.1" "qwen")
 
 if [[ -z "${ROOT_DIR}" || -z "${OUTPUT_DIR}" ]]; then

@@ -276,8 +276,8 @@ def find_files_from_alfred_dir(input_dir):
     return traj_data, problem
 
 def process_alfred_dir(input_dir, output_dir):
-    domain_path = "/home/mh3897/pddl/villain/scripts/alfred/domain-alfred.pddl"
-    downward_dir = "/home/mh3897/pddl/villain/downward"
+    domain_path = "/pddl/villain/scripts/alfred/domain-alfred.pddl"
+    downward_dir = "/pddl/villain/downward"
     time_limit = 5
 
     tasks = os.listdir(input_dir)

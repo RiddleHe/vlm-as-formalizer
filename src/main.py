@@ -79,7 +79,7 @@ def parse_args():
     parser.add_argument("--num_tries", type=int, default=3, help="the number of tries for each generation stage")
 
     # Downward solver
-    parser.add_argument("--downward_dir", type=str, default="/home/mh3897/pddl/villain/downward", help="")
+    parser.add_argument("--downward_dir", type=str, default="/pddl/villain/downward", help="")
     parser.add_argument("--time_limit", type=int, default=30, help="")
 
     # related to problem generation and refinement
@@ -99,7 +99,7 @@ def main():
     args = parse_args()
 
     # Parse domain
-    data_root = "/local-ssd/mh3897/alfred"
+    data_root = "/alfred"
     if args.domain == "cooking": # TODO: clean upon submission
         data_dir = f"{data_root}/cooking" 
     elif args.domain == "blocksworld":
@@ -113,7 +113,7 @@ def main():
 
     # build the result directory suffix, remove the pipeline number, use descriptive name
     if args.result_dir_full is not None:
-        result_dir = f"/local-ssd/mh3897/villain/results/formal_experiments/{args.result_dir_full}"
+        result_dir = f"/villain/results/formal_experiments/{args.result_dir_full}"
     
     else:
         result_dir_suffix = ""
@@ -122,7 +122,7 @@ def main():
         if args.model is not None:
             result_dir_suffix += f"_{args.model.replace('/', '-')}"
         
-        result_dir = f"/local-ssd/mh3897/villain/results/formal_experiments/{args.domain}"
+        result_dir = f"/villain/results/formal_experiments/{args.domain}"
         if args.generate_plan:
             result_dir_suffix += "_generate_plan"
         if args.generate_vila_planning:

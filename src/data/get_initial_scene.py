@@ -123,6 +123,6 @@ def get_images_for_all_tasks(root_dir="/local-ssd/alfred/alfred_train_cleaned"):
 if __name__ == "__main__":
     if sys.argv[1] == "test":
         env = ALFREDEnvironment()
-        get_images("/home/mh3897/pddl/villain/scripts/alfred/look_at_obj_in_light-AlarmClock-None-DeskLamp-302_trial_T20190908_192756_298295", env)
+        get_images("/pddl/villain/scripts/alfred/look_at_obj_in_light-AlarmClock-None-DeskLamp-302_trial_T20190908_192756_298295", env)
     elif sys.argv[1] == "dev":
         get_images_for_all_tasks()

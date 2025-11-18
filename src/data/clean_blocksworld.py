@@ -32,7 +32,7 @@ def get_image_digit(image_path):
         return 100000
 
 def get_instruction(dir_name):
-    instruction_root = "/home/mh3897/pddl/villain/data/blocksworld-configs/instructions"
+    instruction_root = "/pddl/villain/data/blocksworld-configs/instructions"
 
     problem_idx = int(dir_name.split("_")[-1])
     instruction_file = f"problem{problem_idx}.txt"
@@ -42,7 +42,7 @@ def get_instruction(dir_name):
     return instruction
 
 def get_pddl(dir_name):
-    problem_root = "/home/mh3897/pddl/villain/data/blocksworld-configs/problems"
+    problem_root = "/pddl/villain/data/blocksworld-configs/problems"
 
     problem_idx = int(dir_name.split("_")[-1])
     problem_file = f"problem{problem_idx}.pddl"
@@ -61,8 +61,8 @@ def copy_domain(domain_path, output_path):
     shutil.copy(domain_path, os.path.join(output_path, "domain.pddl"))
 
 def iterate_over_tasks(root_dir, output_dir, version):
-    domain_path = "/home/mh3897/pddl/villain/data/blocksworld-real/domain.pddl"
-    downward_dir = "/home/mh3897/pddl/villain/downward"
+    domain_path = "/pddl/villain/data/blocksworld-real/domain.pddl"
+    downward_dir = "/pddl/villain/downward"
     time_limit = 10
 
     dir_list = sorted(os.listdir(root_dir))
@@ -141,7 +141,7 @@ if __name__ == "__main__":
     # for dir_name in tqdm(os.listdir(output_dir)):
     #     if os.path.isdir(os.path.join(output_dir, dir_name)):
     #         copy_domain(
-    #             domain_path="/home/mh3897/pddl/villain/data/blocksworld-real/domain.pddl", 
+    #             domain_path="/pddl/villain/data/blocksworld-real/domain.pddl", 
     #             output_path=os.path.join(output_dir, dir_name)
     #         )
 
@@ -149,7 +149,7 @@ if __name__ == "__main__":
     # for dir_name in tqdm(os.listdir(output_dir_alfred)):
     #     if os.path.isdir(os.path.join(output_dir_alfred, dir_name)):
     #         copy_domain(
-    #             domain_path="/home/mh3897/pddl/villain/scripts/data/domain-alfred.pddl", 
+    #             domain_path="/pddl/villain/scripts/data/domain-alfred.pddl", 
     #             output_path=os.path.join(output_dir_alfred, dir_name)
     #         )
 
