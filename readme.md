@@ -27,23 +27,70 @@ Two datasets are proposed by the paper: Alfred-Multi (`data/alfred_multi`) and B
 
 ## Run pipelines
 
-All pipelines run through `src/main.py` as the entrypoint. 
+All pipelines run through `src/main.py` as the entrypoint. Use `--validate_with_planner` to enable Fast Downward plan generation and validation.
 
-The basic syntax is:
-
-```python
+### Direct Planning (Direct-Plan)
+```bash
 python src/main.py \
-    --domain [alfred/blocksworld/blocksworld-real] \
-    --model [gpt-4.1/qwenvl-72B] \
-    --result_dir [dir_path] \
-    # choose pipelines
-    --generate_villain_direct_pddl \  # Direct-P
-    --generate_villain_captioning_pddl \ # Caption-P
-    --generate_scene_graph_pddl \ # SG-P
-    --batch_relations \ # AP-SG-P
-    --no-batch_relations \ # EP-SG-P
-    --generate_vila_planning \ # Direct-Plan
+    --route vila_planning \
+    --dataset blocksworld_real \
+    --model gpt-4.1 \
+    --validate_with_planner
 ```
+
+### Direct PDDL Generation (Direct-P) 
+```bash
+python src/main.py \
+    --route villain_direct_pddl \
+    --dataset blocksworld_real \
+    --model gpt-4.1 \
+    --validate_with_planner
+```
+
+### Caption PDDL Generation (Caption-P)
+```bash
+python src/main.py \
+    --route villain_captioning_pddl \
+    --dataset blocksworld_real \
+    --model gpt-4.1 \
+    --validate_with_planner
+```
+
+### Scene Graph PDDL Generation (SG-P)
+```bash
+python src/main.py \
+    --route scene_graph_to_pddl \
+    --dataset blocksworld_real \
+    --model gpt-4.1 \
+    --validate_with_planner
+```
+
+### Multi-step VLM PDDL Generation - Batch Mode (AP-SG-P)
+```bash
+python src/main.py \
+    --route multi_step_with_vlm \
+    --dataset blocksworld_real \
+    --model gpt-4.1 \
+    --batch_relations \
+    --validate_with_planner
+```
+
+### Multi-step VLM PDDL Generation - Individual Mode (EP-SG-P) 
+```bash
+python src/main.py \
+    --route multi_step_with_vlm \
+    --dataset blocksworld_real \
+    --model gpt-4.1 \
+    --no-batch_relations \
+    --validate_with_planner
+```
+
+### Additional Options
+- `--dataset`: Use `alfred_multi` or `blocksworld_real`
+- `--time_limit`: Planner timeout in seconds (default: 30)
+- `--num_tries`: Number of generation attempts per task (default: 3)
+- `--task_limit`: Limit number of tasks to process
+- `--task_offset`: Skip first N tasks
 
 ## Eval
 

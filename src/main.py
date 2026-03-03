@@ -75,7 +75,7 @@ def parse_args():
         default=False,
         help="Run Fast Downward validation in addition to PDDL semantic checks.",
     )
-    parser.add_argument("--downward_dir", type=str, default="/pddl/villain/downward")
+    parser.add_argument("--downward_dir", type=str, default="/home/mh3897/pddl/villain/downward")
     parser.add_argument("--time_limit", type=int, default=30)
 
     return parser.parse_args()

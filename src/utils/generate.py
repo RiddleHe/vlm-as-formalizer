@@ -11,7 +11,6 @@ from .baseline import (
 
 SUPPORTED_ROUTES = [
     "vila_planning",
-    "villain_pddl",
     "villain_direct_pddl",
     "villain_captioning_pddl",
     "scene_graph_to_pddl",
@@ -30,7 +29,6 @@ ROUTE_ALIASES = {
 
 ROUTE_KINDS = {
     "vila_planning": "plan",
-    "villain_pddl": "pddl",
     "villain_direct_pddl": "pddl",
     "villain_captioning_pddl": "pddl",
     "scene_graph_to_pddl": "pddl",
@@ -106,14 +104,6 @@ def _run_single_attempt(route_name, target, config, model, observations, retry_i
             retry_idx,
         )
 
-    if route_name == "villain_pddl":
-        return generate_villain_pddl(
-            target,
-            config,
-            model,
-            observations,
-            retry_idx,
-        )
 
     if route_name == "villain_direct_pddl":
         return generate_villain_direct_pddl(
