@@ -267,72 +267,156 @@ def parse_conditions(pddl_file):
 
     return conditions
 
+def _normalize_object_name(name: str) -> str:
+    value = name.strip()
+    if not value:
+        return ""
+
+    value = value.strip(",.;")
+    if value.startswith("-"):
+        value = value[1:].strip()
+
+    # Remove trailing type hints such as "(receptacle)" from names.
+    value = re.sub(r"\s*\([^)]*\)\s*$", "", value)
+    value = value.replace("-", "_")
+    value = re.sub(r"\s+", "_", value)
+    value = re.sub(r"[^A-Za-z0-9_]", "", value)
+    value = re.sub(r"_+", "_", value).strip("_")
+
+    lowered = value.lower()
+    if lowered in {"", "none", "null", "na", "n_a", "empty"}:
+        return ""
+    return value
+
+
+def _canonical_type_label(type_name: str) -> str:
+    return re.sub(r"\s+", " ", type_name.strip())
+
+
+def _base_type_name(type_name: str) -> str:
+    canonical = _canonical_type_label(type_name)
+    if "(" in canonical and canonical.endswith(")"):
+        return canonical.split("(", 1)[0].strip()
+    return canonical
+
+
+def _type_lookup(object_types):
+    lookup = {}
+    for original in object_types:
+        canonical = _canonical_type_label(original)
+        base = _base_type_name(original)
+        lookup[canonical] = base
+        lookup[base] = base
+        short = canonical.split("(", 1)[0].strip()
+        if short and short not in lookup:
+            lookup[short] = base
+    return lookup
+
+
+def _resolve_type_name(candidate: str, object_types, lookup):
+    canonical = _canonical_type_label(candidate)
+    if not object_types:
+        return canonical
+    if canonical in lookup:
+        return lookup[canonical]
+    return None
+
+
+def _split_inline_objects(objects_str: str, object_type: str):
+    raw = objects_str.strip()
+    if not raw:
+        return []
+    if raw.lower() in {"none", "null", "na", "n/a", "[]"}:
+        return []
+
+    raw = raw.replace(",", " ")
+    tokens = [tok for tok in raw.split() if tok]
+    if not tokens:
+        return []
+
+    # Backward compatibility: "green block blue block" -> green_block blue_block
+    base_type = object_type.split("(", 1)[0].strip().split()[-1].lower()
+    if (
+        base_type
+        and len(tokens) % 2 == 0
+        and all(tokens[idx + 1].lower() == base_type for idx in range(0, len(tokens), 2))
+    ):
+        tokens = [f"{tokens[idx]}_{tokens[idx+1]}" for idx in range(0, len(tokens), 2)]
+
+    normalized = []
+    for token in tokens:
+        clean = _normalize_object_name(token)
+        if not clean:
+            continue
+        if clean.lower() == base_type:
+            continue
+        normalized.append(clean)
+    return normalized
+
+
 def parse_objects_from_categorized_response(response, object_types=[]):
     objects = defaultdict(list)
+    seen = defaultdict(set)
     current_type = None
-    
+    lookup = _type_lookup(object_types)
+
     for line in response.split("\n"):
         line = line.strip()
-        
-        # Check if this is a type header (e.g., "block:" or "robot:")
-        if line.endswith(':'):
+        if not line:
+            continue
+
+        # Unified format: "<type>: <object_1> <object_2>"
+        if ":" in line:
+            potential_type, values = line.split(":", 1)
+            resolved_type = _resolve_type_name(potential_type, object_types, lookup)
+            if resolved_type:
+                current_type = resolved_type
+                for object_name in _split_inline_objects(values, resolved_type):
+                    if object_name not in seen[resolved_type]:
+                        seen[resolved_type].add(object_name)
+                        objects[resolved_type].append(object_name)
+                continue
+
+        # Backward compatible bullet format:
+        # block:
+        # - green_block
+        if line.endswith(":"):
             potential_type = line[:-1].strip()
-            if not object_types or potential_type in object_types:
-                current_type = potential_type
-            else:
-                current_type = None
-        # Check if this is an object entry (starts with "- ")
-        elif line.startswith('- ') and current_type:
-            object_name = line[2:].strip()  # Remove "- " prefix
-            if object_name:
-                # Convert spaces to underscores for consistency
-                clean_name = "_".join(object_name.split())
-                objects[current_type].append(clean_name)
-    
+            current_type = _resolve_type_name(potential_type, object_types, lookup)
+            continue
+
+        if line.startswith("- ") and current_type:
+            object_name = _normalize_object_name(line[2:])
+            if object_name and object_name not in seen[current_type]:
+                seen[current_type].add(object_name)
+                objects[current_type].append(object_name)
+
     return objects
 
 def parse_objects(response, object_types = []):
-    # First try the new categorized format (for VLM responses)
+    # First try categorized/unified format.
     categorized_result = parse_objects_from_categorized_response(response, object_types)
     if categorized_result and any(obj_list for obj_list in categorized_result.values()):
         return categorized_result
     
-    # Fallback to original format (name - type)
+    # Fallback: original format "<object> - <type>"
     objects = defaultdict(list)
+    seen = defaultdict(set)
+    lookup = _type_lookup(object_types)
+
     for line in response.split("\n"):
         if "-" in line:
-            name_and_type = line.split("-")
+            name_and_type = line.rsplit("-", 1)
             if len(name_and_type) == 2:
                 name, object_type = name_and_type
-                name, object_type = name.strip(), object_type.strip()
-                name = "_".join(name.split())
-                if object_types and object_type not in object_types:
+                resolved_type = _resolve_type_name(object_type, object_types, lookup)
+                if object_types and not resolved_type:
                     continue
-                objects[object_type].append(name)
-
-    # Additional fallback for comma-separated format (e.g., "block: green, blue, red")
-    if not objects or not any(obj_list for obj_list in objects.values()):
-        for line in response.split("\n"):
-            line = line.strip()
-            if ":" in line:
-                parts = line.split(":", 1)
-                if len(parts) == 2:
-                    object_type = parts[0].strip()
-                    objects_str = parts[1].strip()
-                    
-                    # Check if this type is valid
-                    if not object_types or object_type in object_types:
-                        # Split by comma and clean up
-                        if "," in objects_str:
-                            object_names = [name.strip() for name in objects_str.split(",")]
-                        else:
-                            # Single object or space-separated
-                            object_names = objects_str.split()
-                        
-                        for name in object_names:
-                            if name:
-                                clean_name = "_".join(name.split())
-                                objects[object_type].append(clean_name)
+                resolved_type = resolved_type or _canonical_type_label(object_type)
+                name = _normalize_object_name(name)
+                if name and name not in seen[resolved_type]:
+                    seen[resolved_type].add(name)
+                    objects[resolved_type].append(name)
 
     return objects
 

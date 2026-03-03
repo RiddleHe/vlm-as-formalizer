@@ -1,0 +1,62 @@
+Scene graph:
+block: purple-block (top of a left stack), orange-block (middle of a left stack), blue-block (bottom of a left stack), red-block (top of a right stack), yellow-block (bottom of a right stack), green-block (single block on table to the right)
+robot: robot-arm
+
+ontable (block) block x is on table, not on another block:
+- (ontable blue-block)
+- (ontable yellow-block)
+- (ontable green-block)
+
+clear (block) there is no block on top of block x:
+- (clear purple-block)
+- (clear red-block)
+- (clear green-block)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot-arm)
+
+handfull (robot) :
+- none
+
+holding (block) block x is being held by the robot:
+- none
+
+on (block, block) block x is on block y:
+- (on purple-block orange-block)
+- (on orange-block blue-block)
+- (on red-block yellow-block)
+
+PDDL problem: (define (problem blocksworld-stacks-1)
+  (:domain blocksworld)
+  (:objects
+    purple-block orange-block blue-block red-block yellow-block green-block - block
+    robot-arm - robot
+  )
+  (:init
+    ;; block positions
+    (ontable blue-block)
+    (ontable yellow-block)
+    (ontable green-block)
+
+    (on purple-block orange-block)
+    (on orange-block blue-block)
+    (on red-block yellow-block)
+
+    ;; clear blocks
+    (clear purple-block)
+    (clear red-block)
+    (clear green-block)
+
+    ;; robot state
+    (handempty robot-arm)
+  )
+  (:goal
+    (and
+      (on green-block red-block)
+      (on red-block orange-block)
+      (on orange-block purple-block)
+      (on purple-block blue-block)
+      (on blue-block yellow-block)
+    )
+  )
+)

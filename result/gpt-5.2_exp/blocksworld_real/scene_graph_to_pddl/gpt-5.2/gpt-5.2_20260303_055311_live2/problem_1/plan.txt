@@ -1,0 +1,6 @@
+(pick-up green-wooden-cube robot-arm)
+(stack green-wooden-cube blue-wooden-cube robot-arm)
+(unstack orange-wooden-cube purple-wooden-cube robot-arm)
+(stack orange-wooden-cube yellow-wooden-cube robot-arm)
+(pick-up red-wooden-cube robot-arm)
+(stack red-wooden-cube purple-wooden-cube robot-arm)

@@ -1,0 +1,164 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot) ; if robot is not seen in the image, it can be assumed to exist and is handempty
+        (handfull ?x - robot)
+        (holding ?x - block) ; block x is being held by the robot
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    You can always assume that at least one robot arm is available if not in the image.
+    Instruction: Create 2 stacks: orange over purple over red over yellow, green over blue
+    
+
+SCENE CAPTION:
+Scene overview (Blocksworld tabletop):
+
+### 1) Objects and types
+- **Blocks (6 total)** on a light-colored tabletop:
+  1. **blue block** (top of a small vertical stack)
+  2. **orange block** (directly under the blue block)
+  3. **green block**
+  4. **red block** (orange-red/salmon cube to the right)
+  5. **yellow block** (pale yellow cube behind/left of the center stack)
+  6. **purple block** (left/front cube)
+- **Robot (1 assumed)**: not visible; per instructions can be assumed present and **handempty**.
+
+### 2) Quantities
+- Blocks: **6**
+- Robots: **1 (assumed)**
+
+### 3) Spatial relationships (matching domain predicates)
+- There is **one existing stack**:
+  - **blue is on orange** (the blue cube sits directly atop the orange cube).
+- All other blocks appear **not stacked on other blocks** and are resting on the table:
+  - **green** is on the table, in the front/center area.
+  - **red** is on the table, to the right of the central stack.
+  - **yellow** is on the table, slightly behind and left of the central stack.
+  - **purple** is on the table, left/front of the group.
+
+### 4) Current state relevant to planning (clear/ontable/holding)
+- **blue block**:  
+  - **clear** (nothing on top of it).  
+  - **not on the table** (it is supported by the orange block).  
+- **orange block**:  
+  - **not clear** (blue is on top of it).  
+  - **not on the table** (it is supported by another block below it is not shown; however visually it is the lower of the two-block stack and appears to be sitting on the tabletop—if treated as directly on the table, it is **ontable** but **not clear**. The key visible relation is that it has blue on it.)
+- **green block**: **ontable** and **clear**.
+- **red block**: **ontable** and **clear**.
+- **yellow block**: **ontable** and **clear**.
+- **purple block**: **ontable** and **clear**.
+- **Robot hand state**: **handempty** (no block is being held; none shows signs of being grasped).
+
+### 5) Visual/layout details to distinguish blocks
+- The **blue-on-orange stack** is near the center-left of the cluster.
+- The **green block** is in the foreground near the center.
+- The **red block** is separated to the right of the cluster.
+- The **yellow block** sits behind the purple/near the left side of the central stack.
+- The **purple block** is the leftmost foreground cube.
+
+Target instruction context:
+- Desired final arrangement requires **two stacks**:
+  1) **orange over purple over red over yellow**
+  2) **green over blue**
+- Currently, only **blue over orange** is stacked; all other blocks are single and clear on the table.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

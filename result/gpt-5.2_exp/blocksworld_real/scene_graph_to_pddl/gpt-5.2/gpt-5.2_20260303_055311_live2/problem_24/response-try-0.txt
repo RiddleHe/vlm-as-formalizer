@@ -1,0 +1,76 @@
+Scene graph:
+block: 
+- purple_block_top_of_center_stack
+- blue_block_middle_of_center_stack
+- green_block_bottom_of_center_stack
+- orange_block_front_left
+- red_block_bottom_right_stack
+- yellow_block_top_right_stack
+
+robot:
+- robot_arm
+
+ontable (block) block x is on table, not on another block:
+- (ontable green_block_bottom_of_center_stack)
+- (ontable orange_block_front_left)
+- (ontable red_block_bottom_right_stack)
+
+clear (block) there is no block on top of block x:
+- (clear purple_block_top_of_center_stack)
+- (clear orange_block_front_left)
+- (clear yellow_block_top_right_stack)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot_arm)
+
+handfull (robot) :
+- 
+
+holding (block) block x is being held by the robot:
+- 
+
+on (block, block) block x is on block y:
+- (on purple_block_top_of_center_stack blue_block_middle_of_center_stack)
+- (on blue_block_middle_of_center_stack green_block_bottom_of_center_stack)
+- (on yellow_block_top_right_stack red_block_bottom_right_stack)
+
+PDDL problem: (define (problem blocksworld_scene_stack1)
+  (:domain blocksworld)
+
+  (:objects
+    purple_block_top_of_center_stack
+    blue_block_middle_of_center_stack
+    green_block_bottom_of_center_stack
+    orange_block_front_left
+    red_block_bottom_right_stack
+    yellow_block_top_right_stack
+    - block
+    robot_arm - robot
+  )
+
+  (:init
+    (ontable green_block_bottom_of_center_stack)
+    (ontable orange_block_front_left)
+    (ontable red_block_bottom_right_stack)
+
+    (on purple_block_top_of_center_stack blue_block_middle_of_center_stack)
+    (on blue_block_middle_of_center_stack green_block_bottom_of_center_stack)
+    (on yellow_block_top_right_stack red_block_bottom_right_stack)
+
+    (clear purple_block_top_of_center_stack)
+    (clear orange_block_front_left)
+    (clear yellow_block_top_right_stack)
+
+    (handempty robot_arm)
+  )
+
+  (:goal
+    (and
+      (on blue_block_middle_of_center_stack orange_block_front_left)
+      (on orange_block_front_left green_block_bottom_of_center_stack)
+      (on green_block_bottom_of_center_stack purple_block_top_of_center_stack)
+      (on purple_block_top_of_center_stack red_block_bottom_right_stack)
+      (on red_block_bottom_right_stack yellow_block_top_right_stack)
+    )
+  )
+)

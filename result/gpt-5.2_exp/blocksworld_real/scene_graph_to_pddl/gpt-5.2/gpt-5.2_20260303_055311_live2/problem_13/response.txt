@@ -1,0 +1,76 @@
+Scene graph:
+block: 
+- blue_block_front_stack: a blue cube block (top of the front/right stack)
+- purple_block_front_stack: a purple cube block (middle of the front/right stack)
+- yellow_block_front_stack: a yellow cube block (bottom of the front/right stack)
+- green_block_back_stack: a green cube block (top of the back/left stack)
+- red_block_back_stack: a red cube block (middle of the back/left stack)
+- orange_block_back_stack: an orange cube block (bottom of the back/left stack)
+
+robot:
+- robot_arm: robot arm (not visible; assumed available)
+
+ontable (block) block x is on table, not on another block:
+- (ontable yellow_block_front_stack)
+- (ontable orange_block_back_stack)
+
+clear (block) there is no block on top of block x:
+- (clear blue_block_front_stack)
+- (clear green_block_back_stack)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot_arm)
+
+handfull (robot) :
+- none
+
+holding (block) block x is being held by the robot:
+- none
+
+on (block, block) block x is on block y:
+- (on blue_block_front_stack purple_block_front_stack)
+- (on purple_block_front_stack yellow_block_front_stack)
+- (on green_block_back_stack red_block_back_stack)
+- (on red_block_back_stack orange_block_back_stack)
+
+PDDL problem: (define (problem blocksworld_stacks_2)
+  (:domain blocksworld)
+  (:objects
+    blue_block_front_stack - block
+    purple_block_front_stack - block
+    yellow_block_front_stack - block
+    green_block_back_stack - block
+    red_block_back_stack - block
+    orange_block_back_stack - block
+    robot_arm - robot
+  )
+
+  (:init
+    ;; front/right stack
+    (ontable yellow_block_front_stack)
+    (on purple_block_front_stack yellow_block_front_stack)
+    (on blue_block_front_stack purple_block_front_stack)
+    (clear blue_block_front_stack)
+
+    ;; back/left stack
+    (ontable orange_block_back_stack)
+    (on red_block_back_stack orange_block_back_stack)
+    (on green_block_back_stack red_block_back_stack)
+    (clear green_block_back_stack)
+
+    ;; robot state
+    (handempty robot_arm)
+  )
+
+  (:goal
+    (and
+      ;; stack 1: blue over yellow
+      (on blue_block_front_stack yellow_block_front_stack)
+
+      ;; stack 2: orange over red over purple over green
+      (on orange_block_back_stack red_block_back_stack)
+      (on red_block_back_stack purple_block_front_stack)
+      (on purple_block_front_stack green_block_back_stack)
+    )
+  )
+)

@@ -1,0 +1,207 @@
+You are given some images which contain various objects of interests for a given task.
+
+    The following domain file specifies all possible states and actions for the task:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot) ; if robot is not seen in the image, it can be assumed to exist and is handempty
+        (handfull ?x - robot)
+        (holding ?x - block) ; block x is being held by the robot
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+
+    Given each object type below, identify all objects in the images that belong to that type.
+    Follow this exact unified format for every line:
+    <type>: <object_1> <object_2> <object_3>
+
+    Critical formatting rules:
+    1) Every object name must be a single token using underscores (example: green_block, DeskLamp_1).
+    2) Never output spaces inside an object name.
+    3) If no object is found for a type, output: <type>: none
+    4) Output only type lines. Do not output bullet points or extra explanations.
+
+    The images have been provided. You can always assume that at least one robot arm is available if not in the image.
+    The task instruction is: Create 1 stacks: red over yellow over orange over green over purple over blue
+    Now identify all the objects for the following types relevant to the task instruction:
+    block: 
+robot: 
+
+
+
+    You are given some images which contain various objects of interests for a given task.
+    The images have been provided. You can always assume that at least one robot arm is available if not in the image.
+    The task instruction is: Create 1 stacks: red over yellow over orange over green over purple over blue
+
+    The following domain file specifies all possible states and actions for the task:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot) ; if robot is not seen in the image, it can be assumed to exist and is handempty
+        (handfull ?x - robot)
+        (holding ?x - block) ; block x is being held by the robot
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+
+    The following are all the objects and their states:
+        (:objects
+        red_block - block
+        yellow_block - block
+        orange_block - block
+        green_block - block
+        purple_block - block
+        blue_block - block
+        robot_arm - robot
+    )
+
+    The following are all the initial states:
+        (:init
+        (on orange_block yellow_block)
+        (ontable red_block)
+        (ontable yellow_block)
+        (ontable green_block)
+        (clear orange_block)
+        (clear green_block)
+        (clear purple_block)
+        (handempty robot_arm)
+    )
+
+
+    For the task instruction, Create 1 stacks: red over yellow over orange over green over purple over blue, generate the goal specification for the PDDL file.
+    The goal specification should be in the following format:
+    (:goal (and 
+        (predicate arg1 arg2)
+        (predicate arg)
+        ...
+      )
+    )
+    

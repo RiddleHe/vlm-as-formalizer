@@ -262,4 +262,8 @@ def find_plan(command, plan_path):
         return False, "No plan found"
 
     except Exception as e:
-        return False, e.output.decode().strip()
+        output = getattr(e, "output", b"")
+        if isinstance(output, bytes):
+            output = output.decode(errors="replace")
+        message = output.strip() if output else str(e)
+        return False, message

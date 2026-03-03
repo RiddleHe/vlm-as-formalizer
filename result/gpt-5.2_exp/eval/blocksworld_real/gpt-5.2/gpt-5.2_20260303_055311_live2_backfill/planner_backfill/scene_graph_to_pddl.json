@@ -1,0 +1,21 @@
+{
+  "route": "scene_graph_to_pddl",
+  "tasks_total": 102,
+  "planner_success": 99,
+  "planner_failure": 3,
+  "missing_problem_file": 0,
+  "failed_tasks": [
+    {
+      "task": "problem_15",
+      "error": " registered states: 1\n[t=0.006997s, 11196 KB] Int hash set load factor: 1/1 = 1.000000\n[t=0.006997s, 11196 KB] Int hash set resizes: 0\n[t=0.006997s, 11196 KB] No solution found - keep searching\n[t=0.006997s, 11196 KB] Actual search time: 0.002999s\n[t=0.006997s, 11196 KB] Cumulative statistics:\n[t=0.006997s, 11196 KB] Expanded 0 state(s).\n[t=0.006997s, 11196 KB] Reopened 0 state(s).\n[t=0.006997s, 11196 KB] Evaluated 5 state(s).\n[t=0.006997s, 11196 KB] Evaluations: 5\n[t=0.006997s, 11196 KB] Generated 0 state(s).\n[t=0.006997s, 11196 KB] Dead ends: 0 state(s).\n[t=0.006997s, 11196 KB] Search time: 0.002999s\n[t=0.006997s, 11196 KB] Total time: 0.006997s\nSearch stopped without finding a solution.\nPeak memory: 11196 KB\nsearch exit code: 12\n\nDriver aborting after search\nINFO     Planner time: 0.09s"
+    },
+    {
+      "task": "problem_19",
+      "error": " registered states: 1\n[t=0.007000s, 11196 KB] Int hash set load factor: 1/1 = 1.000000\n[t=0.007000s, 11196 KB] Int hash set resizes: 0\n[t=0.007000s, 11196 KB] No solution found - keep searching\n[t=0.007000s, 11196 KB] Actual search time: 0.002998s\n[t=0.007000s, 11196 KB] Cumulative statistics:\n[t=0.007000s, 11196 KB] Expanded 0 state(s).\n[t=0.007000s, 11196 KB] Reopened 0 state(s).\n[t=0.007000s, 11196 KB] Evaluated 5 state(s).\n[t=0.007000s, 11196 KB] Evaluations: 5\n[t=0.007000s, 11196 KB] Generated 0 state(s).\n[t=0.007000s, 11196 KB] Dead ends: 0 state(s).\n[t=0.007000s, 11196 KB] Search time: 0.002998s\n[t=0.007000s, 11196 KB] Total time: 0.007000s\nSearch stopped without finding a solution.\nPeak memory: 11196 KB\nsearch exit code: 12\n\nDriver aborting after search\nINFO     Planner time: 0.10s"
+    },
+    {
+      "task": "problem_9",
+      "error": " registered states: 1\n[t=0.004000s, 11196 KB] Int hash set load factor: 1/1 = 1.000000\n[t=0.004000s, 11196 KB] Int hash set resizes: 0\n[t=0.004000s, 11196 KB] No solution found - keep searching\n[t=0.004000s, 11196 KB] Actual search time: 0.001999s\n[t=0.004000s, 11196 KB] Cumulative statistics:\n[t=0.004000s, 11196 KB] Expanded 0 state(s).\n[t=0.004000s, 11196 KB] Reopened 0 state(s).\n[t=0.004000s, 11196 KB] Evaluated 5 state(s).\n[t=0.004000s, 11196 KB] Evaluations: 5\n[t=0.004000s, 11196 KB] Generated 0 state(s).\n[t=0.004000s, 11196 KB] Dead ends: 0 state(s).\n[t=0.004000s, 11196 KB] Search time: 0.001999s\n[t=0.004000s, 11196 KB] Total time: 0.004000s\nSearch stopped without finding a solution.\nPeak memory: 11196 KB\nsearch exit code: 12\n\nDriver aborting after search\nINFO     Planner time: 0.08s"
+    }
+  ]
+}

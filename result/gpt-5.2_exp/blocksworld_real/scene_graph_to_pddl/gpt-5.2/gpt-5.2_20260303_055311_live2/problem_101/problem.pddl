@@ -1,0 +1,29 @@
+(define (problem blocksworld_scene1)
+  (:domain blocksworld)
+  (:objects
+    orange_top_block red_bottom_block yellow_top_block purple_bottom_block green_top_block blue_bottom_block - block
+    robot_arm - robot
+  )
+  (:init
+    (ontable red_bottom_block)
+    (ontable purple_bottom_block)
+    (ontable blue_bottom_block)
+
+    (on orange_top_block red_bottom_block)
+    (on yellow_top_block purple_bottom_block)
+    (on green_top_block blue_bottom_block)
+
+    (clear orange_top_block)
+    (clear yellow_top_block)
+    (clear green_top_block)
+
+    (handempty robot_arm)
+  )
+  (:goal
+    (and
+      (on yellow_top_block orange_top_block)
+      (on red_bottom_block green_top_block)
+      (on blue_bottom_block purple_bottom_block)
+    )
+  )
+)

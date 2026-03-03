@@ -1,0 +1,76 @@
+Scene graph:
+block: 
+- purple_block (purple cube)
+- orange_block_left (orange/red cube under the purple cube on the left)
+- green_block (green cube)
+- yellow_block (pale yellow cube on top of the right stack)
+- orange_block_right (orange cube in the middle of the right stack)
+- blue_block (blue cube at the bottom of the right stack)
+
+robot:
+- robot_arm
+
+ontable (block) block x is on table, not on another block:
+- (ontable orange_block_left)
+- (ontable green_block)
+- (ontable blue_block)
+
+clear (block) there is no block on top of block x:
+- (clear purple_block)
+- (clear green_block)
+- (clear yellow_block)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot_arm)
+
+handfull (robot) :
+- (handfull robot_arm)
+
+holding (block) block x is being held by the robot:
+- (holding purple_block)
+- (holding orange_block_left)
+- (holding green_block)
+- (holding yellow_block)
+- (holding orange_block_right)
+- (holding blue_block)
+
+on (block, block) block x is on block y:
+- (on purple_block orange_block_left)
+- (on yellow_block orange_block_right)
+- (on orange_block_right blue_block)
+
+PDDL problem: (define (problem blocksworld_scene_1)
+  (:domain blocksworld)
+  (:objects
+    purple_block orange_block_left green_block yellow_block orange_block_right blue_block - block
+    robot_arm - robot
+  )
+  (:init
+    ;; blocks on table
+    (ontable orange_block_left)
+    (ontable green_block)
+    (ontable blue_block)
+
+    ;; stacking relations
+    (on purple_block orange_block_left)
+    (on orange_block_right blue_block)
+    (on yellow_block orange_block_right)
+
+    ;; clear blocks
+    (clear purple_block)
+    (clear green_block)
+    (clear yellow_block)
+
+    ;; robot state
+    (handempty robot_arm)
+  )
+  (:goal
+    (and
+      (on green_block purple_block)
+      (on purple_block orange_block_left)
+      (on orange_block_left yellow_block)
+      (on yellow_block blue_block)
+      (on blue_block red_block)
+    )
+  )
+)

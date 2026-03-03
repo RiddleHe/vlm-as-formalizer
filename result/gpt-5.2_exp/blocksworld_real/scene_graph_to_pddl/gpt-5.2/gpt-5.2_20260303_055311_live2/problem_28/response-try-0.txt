@@ -1,0 +1,55 @@
+Scene graph:
+block: orange-block-bottom-of-stack, blue-block-middle-of-stack, green-block-top-of-stack, yellow-block-single, red-block-single, purple-block-front
+robot: robot-arm
+ontable (block) block x is on table, not on another block: (ontable orange-block-bottom-of-stack), (ontable yellow-block-single), (ontable red-block-single), (ontable purple-block-front)
+clear (block) there is no block on top of block x: (clear green-block-top-of-stack), (clear yellow-block-single), (clear red-block-single), (clear purple-block-front)
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty: (handempty robot-arm)
+handfull (robot) : 
+holding (block) block x is being held by the robot: 
+on (block, block) block x is on block y: (on blue-block-middle-of-stack orange-block-bottom-of-stack), (on green-block-top-of-stack blue-block-middle-of-stack)
+
+PDDL problem: ```lisp
+(define (problem blocksworld-stacking-1)
+  (:domain blocksworld)
+  (:objects
+    orange-block-bottom-of-stack
+    blue-block-middle-of-stack
+    green-block-top-of-stack
+    yellow-block-single
+    red-block-single
+    purple-block-front
+    robot-arm - robot
+  )
+
+  (:init
+    ;; robot state
+    (handempty robot-arm)
+
+    ;; blocks on table
+    (ontable orange-block-bottom-of-stack)
+    (ontable yellow-block-single)
+    (ontable red-block-single)
+    (ontable purple-block-front)
+
+    ;; existing stack relations
+    (on blue-block-middle-of-stack orange-block-bottom-of-stack)
+    (on green-block-top-of-stack blue-block-middle-of-stack)
+
+    ;; clear blocks
+    (clear green-block-top-of-stack)
+    (clear yellow-block-single)
+    (clear red-block-single)
+    (clear purple-block-front)
+  )
+
+  (:goal
+    (and
+      (on orange-block-bottom-of-stack yellow-block-single)
+      (on yellow-block-single green-block-top-of-stack)
+      (on green-block-top-of-stack purple-block-front)
+      (on purple-block-front red-block-single)
+      (on red-block-single blue-block-middle-of-stack)
+    )
+  )
+)
+```

@@ -275,16 +275,16 @@ def load_problem_data(data_dir, task_name, enable_caption=False, clean_image=Fal
     else:
         inst_file = f"{problem_dir}/instruction.txt"
     
-    with open(inst_file, "r") as f:
+    with open(inst_file, "r", encoding="utf-8") as f:
         instruction = f.read()
 
     # Load domain file
     domain_path = f"{problem_dir}/domain.pddl"
-    with open(domain_path, "r") as f:
+    with open(domain_path, "r", encoding="utf-8") as f:
         domain_file = f.read()
 
     # Load plan
-    with open(f"{problem_dir}/plan.txt", "r") as f:
+    with open(f"{problem_dir}/plan.txt", "r", encoding="utf-8") as f:
         plan = f.read()
     
     # Load observations
@@ -293,14 +293,15 @@ def load_problem_data(data_dir, task_name, enable_caption=False, clean_image=Fal
     # When enable_caption is True, skip image loading to test caption-only mode
     if not enable_caption and os.path.exists(problem_dir):
         observations_dir = f"{problem_dir}/observations"
-        for filename in os.listdir(observations_dir):
-            if filename.endswith((".jpg", ".png", ".jpeg")):
-                if clean_image:
-                    if "clean" in filename:
-                        observations.append(f"{observations_dir}/{filename}")
-                else:
-                    if "clean" not in filename:
-                        observations.append(f"{observations_dir}/{filename}")
+        if os.path.isdir(observations_dir):
+            for filename in os.listdir(observations_dir):
+                if filename.endswith((".jpg", ".png", ".jpeg")):
+                    if clean_image:
+                        if "clean" in filename:
+                            observations.append(f"{observations_dir}/{filename}")
+                    else:
+                        if "clean" not in filename:
+                            observations.append(f"{observations_dir}/{filename}")
     
     # Sort observations to ensure consistent ordering
     observations.sort()

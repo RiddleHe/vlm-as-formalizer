@@ -1,0 +1,12 @@
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  blue-cube-block green-cube-block red-orange-cube-block
+  yellow-rectangular-block orange-rectangular-block purple-rectangular-block
+
+Object does not have a type:
+  purple-rectangular-block
+  blue-cube-block
+  green-cube-block
+  red-orange-cube-block
+  orange-rectangular-block
+  yellow-rectangular-block
+

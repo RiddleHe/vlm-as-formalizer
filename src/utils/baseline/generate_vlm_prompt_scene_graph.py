@@ -9,14 +9,48 @@ from ..build_prompts import (
     build_observation_prompt,
 )
 from ..parse_response import (
-    parse_objects, 
-    parse_types, 
-    parse_predicates, 
     parse_block,
-    assemble_object_states,
+    parse_objects,
+    parse_predicates,
+    parse_types,
     assemble_grounded_predicates,
+    assemble_object_states,
     assemble_pddl,
 )
+
+
+def _format_relation_text(predicate_name, predicate_args, bound_args, comment):
+    if comment and ("{x" in comment or "{y" in comment):
+        try:
+            if len(predicate_args) == 1:
+                return comment.format(x=f"{predicate_args[0]} {bound_args[0]}")
+            if len(predicate_args) == 2:
+                return comment.format(
+                    x=f"{predicate_args[0]} {bound_args[0]}",
+                    y=f"{predicate_args[1]} {bound_args[1]}",
+                )
+        except Exception:
+            pass
+
+    if len(bound_args) == 1:
+        return f"predicate ({predicate_name} {bound_args[0]}) is true in the scene"
+    if len(bound_args) == 2:
+        return (
+            f"predicate ({predicate_name} {bound_args[0]} {bound_args[1]}) "
+            "is true in the scene"
+        )
+    return f"predicate {predicate_name} with args {bound_args} is true in the scene"
+
+
+def _extract_type_hierarchy(type_entries):
+    hierarchy = {}
+    for entry in type_entries:
+        if "(" in entry and entry.endswith(")"):
+            child = entry.split("(", 1)[0].strip()
+            parent = entry.split("(", 1)[1][:-1].strip()
+            if child and parent:
+                hierarchy[child] = parent
+    return hierarchy
 
 def generate_multi_step_with_vlm(
     target,
@@ -47,6 +81,21 @@ def generate_multi_step_with_vlm(
     object_types = parse_types(target["domain"])
     objects = parse_objects(object_response, object_types)
 
+    # Inject a default agent/robot object when the model omits it.
+    for type_name in object_types:
+        canonical = type_name.split("(", 1)[0].strip()
+        if canonical.lower() in {"agent", "robot"} and not objects.get(canonical):
+            objects[canonical].append(f"{canonical.lower()}1")
+
+    # If an object appears in both a subtype and its parent, keep the subtype only.
+    hierarchy = _extract_type_hierarchy(object_types)
+    for child_type, parent_type in hierarchy.items():
+        child_objects = objects.get(child_type, [])
+        parent_objects = objects.get(parent_type, [])
+        if child_objects and parent_objects:
+            child_set = set(child_objects)
+            objects[parent_type] = [obj for obj in parent_objects if obj not in child_set]
+
     object_states = assemble_object_states(objects)
 
     print("---------------objects--------------")
@@ -61,30 +110,38 @@ def generate_multi_step_with_vlm(
         comment = predicate_info.get("comment", "")
 
         if len(predicate_args) == 1:  # unary relation
-            typed_objects = objects[predicate_args[0]]
+            typed_objects = objects.get(predicate_args[0], [])
             all_grounded_predicates.extend([
                 {"name": predicate_name, "args": [obj]} for obj in typed_objects
             ])
 
             for obj in typed_objects:
-                obj_str = f"{predicate_args[0]} {obj}"
-                all_predicate_strs.extend([
-                    comment.format(x=obj_str)
-                ])
+                all_predicate_strs.append(
+                    _format_relation_text(
+                        predicate_name,
+                        predicate_args,
+                        [obj],
+                        comment,
+                    )
+                )
         
         elif len(predicate_args) == 2:  # binary relation
             type_1, type_2 = predicate_args
-            type_1_objects, type_2_objects = objects[type_1], objects[type_2]
+            type_1_objects = objects.get(type_1, [])
+            type_2_objects = objects.get(type_2, [])
             for obj1, obj2 in itertools.product(type_1_objects, type_2_objects):
                 if obj1 != obj2:
                     all_grounded_predicates.append({
                         "name": predicate_name,
                         "args": [obj1, obj2]
                     })
-                    obj1_str = f"{type_1} {obj1}"
-                    obj2_str = f"{type_2} {obj2}"
                     all_predicate_strs.append(
-                        comment.format(x=obj1_str, y=obj2_str)
+                        _format_relation_text(
+                            predicate_name,
+                            predicate_args,
+                            [obj1, obj2],
+                            comment,
+                        )
                     )
 
         # TODO: add support for arbitrary num of args
@@ -96,7 +153,7 @@ def generate_multi_step_with_vlm(
     print("--------------grounded predicates---------------")
     print(all_grounded_predicates)
     
-    relation_prompt_template = "Is {relation} "
+    relation_prompt_template = "Is it true that {relation}? Answer with yes or no."
     relation_prompts = list(map(
         lambda x: relation_prompt_template.format(relation=x), all_predicate_strs
     ))
@@ -154,7 +211,11 @@ def generate_multi_step_with_vlm(
     # print("--------------------------------")
     # print(goal_response)    
 
-    goal_states = "    " + parse_block(goal_response, "(:goal", save_header=True)
+    parsed_goal = parse_block(goal_response, "(:goal", save_header=True)
+    if parsed_goal:
+        goal_states = f"    {parsed_goal}"
+    else:
+        goal_states = "    (:goal (and))"
 
     # print("--------------------------------")
     # print(goal_states)

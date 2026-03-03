@@ -16,13 +16,17 @@ VLLM_BASE_URL = os.getenv("VLLM_BASE_URL", "http://localhost:15100/v1")
 
 def get_gpt_client_name(client_name):
     model_mapping = {
-        "gpt-4.1": "gpt-4.1-2025-04-14",
-        "gpt-4.1-mini": "gpt-4.1-mini-2025-04-14",
-        "o3-mini": "o3-mini-2025-01-31",
-        "o4-mini": "o4-mini-2025-04-16"
+        "gpt-4.1": "gpt-4.1",
+        "gpt-4.1-mini": "gpt-4.1-mini",
+        "gpt-4o": "gpt-4o",
+        "gpt-4o-mini": "gpt-4o-mini",
+        "o3-mini": "o3-mini",
+        "o4-mini": "o4-mini",
     }
     if client_name in model_mapping:
         return model_mapping[client_name]
+    if client_name.startswith(("gpt-", "o1", "o3", "o4")):
+        return client_name
     return None
 
 def get_openrouter_client_name(client_name):
@@ -81,7 +85,10 @@ class OpenAIClient(VLMClient):
         
     def load_client(self, **kwargs):
         from openai import OpenAI
-        return OpenAI(api_key="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")
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError("OPENAI_API_KEY is not set.")
+        return OpenAI(api_key=api_key)
 
     def generate(self, prompt: str, observations: list[str] = []) -> str:
         content = []
@@ -95,7 +102,7 @@ class OpenAIClient(VLMClient):
         content.append({"type": "text", "text": prompt})
 
         # Handle different parameter names for different models
-        if self.client_name.startswith(('o3', 'o4')):
+        if self.client_name.startswith(('o3', 'o4', 'gpt-5')):
             # O3 and O4 models use max_completion_tokens instead of max_tokens
             response = self.client.chat.completions.create(
                 model=self.client_name,
@@ -115,7 +122,9 @@ class OpenAIClient(VLMClient):
                 }],
                 max_tokens=1024,
         )
-        return response.choices[0].message.content
+        if response and response.choices and response.choices[0].message:
+            return response.choices[0].message.content or ""
+        return ""
 
 class OpenRouterClient(VLMClient):
     """Client for OpenRouter models (Llama 3.2 Vision)."""
@@ -124,9 +133,12 @@ class OpenRouterClient(VLMClient):
         
     def load_client(self, **kwargs):
         from openai import OpenAI
+        api_key = os.getenv("OPENROUTER_API_KEY")
+        if not api_key:
+            raise ValueError("OPENROUTER_API_KEY is not set.")
         return OpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key="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"
+            api_key=api_key
         )
 
     def generate(self, prompt: str, observations: list[str] = []) -> str:
@@ -292,9 +304,9 @@ class HuggingFaceClient(VLMClient):
     def _load_llama_vision(self, device):
         """Load Llama Vision model and processor."""
         from transformers import MllamaForConditionalGeneration, AutoProcessor
-        
-        # Hardcoded HuggingFace token
-        hf_token = "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"
+        hf_token = os.getenv("HF_TOKEN")
+        if not hf_token:
+            raise ValueError("HF_TOKEN is not set.")
         
         model = MllamaForConditionalGeneration.from_pretrained(
             self.client_name,
@@ -404,22 +416,32 @@ class VLLMOpenAIClient(OpenAIClient):
 
 def VLMClientFactory(client_name: str, device=None) -> VLMClient:
     """Factory function to create a VLM client."""
-    if get_gpt_client_name(client_name):
-        return OpenAIClient(get_gpt_client_name(client_name), device=device)
-    elif get_openrouter_client_name(client_name):
-        return OpenRouterClient(get_openrouter_client_name(client_name), device=device)
-    elif get_hf_client_name(client_name):
-        return HuggingFaceClient(get_hf_client_name(client_name), device=device)
-    elif client_name.endswith("-vllm"):
+    if not client_name:
+        raise ValueError("Model name cannot be empty.")
+
+    mapped_openai_name = get_gpt_client_name(client_name)
+    if mapped_openai_name:
+        return OpenAIClient(mapped_openai_name, device=device)
+
+    mapped_openrouter_name = get_openrouter_client_name(client_name)
+    if mapped_openrouter_name:
+        return OpenRouterClient(mapped_openrouter_name, device=device)
+
+    mapped_hf_name = get_hf_client_name(client_name)
+    if mapped_hf_name:
+        return HuggingFaceClient(mapped_hf_name, device=device)
+
+    if client_name.endswith("-vllm"):
         base_model = client_name[:-5]
         return VLLMOpenAIClient(base_model)
-    elif "/" in client_name:
+
+    if "/" in client_name:
         try:
             return HuggingFaceClient(client_name, device=device)
         except Exception as e:
-            raise ValueError(f"Error loading HuggingFace model for name: {client_name}")
-    else:
-        raise ValueError(f"Unknown model name: {client_name}")
+            raise ValueError(f"Error loading HuggingFace model for name: {client_name}") from e
+
+    raise ValueError(f"Unknown model name: {client_name}")
 
 def predict_relation_probs(model, prompts, observations, past_key_values=None):
     raw_model = model.client["model"]

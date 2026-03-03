@@ -1,332 +1,323 @@
 #!/usr/bin/env python
 
-import os
+import argparse
 import json
-import random
-import base64
 import re
-from tqdm import tqdm
-import time
 import traceback
 from datetime import datetime
-import subprocess
-import glob
-import tempfile
-import shutil
-
-from utils.experiment_logger import ExperimentLogger, create_experiment_log_path
-
-from PIL import Image
-import torch
-import argparse
-
-from utils.helpers import (
-    seed_everything, 
-    format_command,
-    create_file_paths,
-    load_problem_data,
-    get_problem_pddl_path,
-    get_annotated_bbox_path,
-)
-from utils.checkers import find_plan, compare_plans
-from utils.generate import generate_pddl
-from utils.models import VLMClientFactory
+from pathlib import Path
 
 from dotenv import load_dotenv
-load_dotenv('.env')
+from tqdm import tqdm
 
-torch.set_float32_matmul_precision('high')
+from utils.checkers import check_error, check_pddl, compare_plans
+from utils.generate import (
+    SUPPORTED_ROUTES,
+    generate_pddl,
+    normalize_route_name,
+)
+from utils.helpers import load_problem_data, seed_everything
+from utils.models import VLMClientFactory
+
+
+DATASET_ALIASES = {
+    "alfred": "alfred_multi",
+    "alfred_multi": "alfred_multi",
+    "blocksworld": "blocksworld_real",
+    "blocksworld-real": "blocksworld_real",
+    "blocksworld_real": "blocksworld_real",
+}
 
 
 def parse_args():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Run a single baseline route on a dataset and report evaluation stats."
+    )
+    parser.add_argument(
+        "--route",
+        required=True,
+        help=f"One route to execute. Supported: {', '.join(SUPPORTED_ROUTES)}",
+    )
+    parser.add_argument(
+        "--dataset",
+        default=None,
+        help="Dataset name under data/ (e.g. alfred_multi) or full dataset path.",
+    )
+    parser.add_argument(
+        "--domain",
+        default=None,
+        help="Deprecated alias of --dataset.",
+    )
 
-    # Data dirs
-    parser.add_argument("--result_dir", type=str, default=None, help="direcotry for predicted bboxes, generated problems, and found plans")
-    parser.add_argument("--result_dir_full", type=str, default=None)
-    parser.add_argument("--domain", type=str, default=None, help="domain name (cooking/blocksworld/hanoi)")
+    parser.add_argument("--model", required=True, help="Model name (OpenAI or HF identifier).")
+    parser.add_argument("--device", default="cuda:0", help="Device hint for non-OpenAI models.")
 
-    # Model args
-    parser.add_argument("--model", type=str, default=None, help="model name")
-    parser.add_argument("--device", type=str, default="cuda:0", help="device")
-    parser.add_argument("--find_plan", action="store_true", default=True, help="refine generated problems by corrective reprompting")
-    parser.add_argument("--find_vila_plan", action="store_true", default=False)
+    parser.add_argument("--output_root", default=None, help="Root output directory. Defaults to <repo>/results")
+    parser.add_argument("--run_name", default=None, help="Optional run name. Defaults to timestamp.")
 
-    # Planning baseline
-    parser.add_argument("--generate_plan", action="store_true", help="generate end-to-end plans")
-    parser.add_argument("--generate_vila_planning", action="store_true", help="Pipeline 1: ViLA - VLM zero-shot planning")
-    parser.add_argument("--generate_villain_direct_pddl", action="store_true", help="Pipeline 3: ViLain Direct PDDL Generation (no object detection)")
-    parser.add_argument("--generate_villain_captioning_pddl", action="store_true", help="Pipeline 4a: ViLain Captioning → PDDL (without DINO)")
-    parser.add_argument("--generate_scene_graph_pddl", action="store_true", help="Pipeline 5a: Scene Graph → PDDL (without DINO)")
-    parser.add_argument("--generate_multi_step_with_vlm", action="store_true", help="generate scene graph first with VLM")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed.")
+    parser.add_argument("--num_tries", type=int, default=3, help="Number of generation attempts per task.")
+    parser.add_argument("--task_offset", type=int, default=0, help="Skip the first N tasks.")
+    parser.add_argument("--task_limit", type=int, default=None, help="Evaluate at most N tasks.")
 
-    # Template constraint options
-    parser.add_argument("--hard_template", action="store_true", default=True, help="Use hard domain template (strict predicate enforcement)")
-    parser.add_argument("--soft_template", dest="hard_template", action="store_false", help="Use soft domain template (flexible predicate usage)")
+    parser.add_argument("--enable_caption", action="store_true", default=False)
+    parser.add_argument("--clean_image", action="store_true", default=False)
 
-    # If choose generate_end_to_end
-    parser.add_argument("--generate_caption", action="store_true", help="generate caption for observation")
-    parser.add_argument("--generate_scene_graph", action="store_true", help="generate scene graph for observation")
-    parser.add_argument("--enable_caption", action="store_true", default=False, help="Enable captioning for the observation")
+    parser.add_argument("--hard_template", action="store_true", default=True)
+    parser.add_argument("--soft_template", dest="hard_template", action="store_false")
 
-    # If choose generate_multi_step with VLM SCENE GRAPH
-    parser.add_argument("--batch_relations", action="store_true", default=True, help="Generate all relations at once (default: True). Set --no-batch_relations for one-by-one")
-    parser.add_argument("--no-batch_relations", dest="batch_relations", action="store_false", help="Generate relations one by one instead of all at once")
+    parser.add_argument("--batch_relations", action="store_true", default=True)
+    parser.add_argument("--no-batch_relations", dest="batch_relations", action="store_false")
 
-    parser.add_argument("--clean_image", action="store_true", default=False, help="Present a clean image to the model")
+    parser.add_argument(
+        "--validate_with_planner",
+        action="store_true",
+        default=False,
+        help="Run Fast Downward validation in addition to PDDL semantic checks.",
+    )
+    parser.add_argument("--downward_dir", type=str, default="/pddl/villain/downward")
+    parser.add_argument("--time_limit", type=int, default=30)
 
-    # Runtime config
-    parser.add_argument("--num_tries", type=int, default=3, help="the number of tries for each generation stage")
+    return parser.parse_args()
 
-    # Downward solver
-    parser.add_argument("--downward_dir", type=str, default="/pddl/villain/downward", help="")
-    parser.add_argument("--time_limit", type=int, default=30, help="")
 
-    # related to problem generation and refinement
-    parser.add_argument("--seed", type=int, default=42, help="random seed")
-    parser.add_argument("--gen_step", type=str, default="base", help="PDDL generation step")
-    parser.add_argument("--prev_gen_step", type=str, default="base", help="Previous generation step, used for corrective reprompting")
-    parser.add_argument("--num_examples", type=int, default=1, help="the numebr of examples for few-shot prompting")
-    parser.add_argument("--num_repeat", type=int, default=1, help="the number of problems to generate per task")
-    parser.add_argument("--refine_all", action="store_true", help="refine all problems regardless of errors")
-    args = parser.parse_args()
+def _sanitize_component(text: str) -> str:
+    safe = re.sub(r"[^A-Za-z0-9._-]+", "-", text.strip())
+    return safe.strip("-") or "run"
 
-    return args
 
-# Main
+def _resolve_dataset_path(dataset_arg: str, data_root: Path) -> tuple[Path, str]:
+    candidate = DATASET_ALIASES.get(dataset_arg, dataset_arg)
+
+    explicit = Path(candidate)
+    if explicit.exists() and explicit.is_dir():
+        return explicit.resolve(), explicit.name
+
+    local = data_root / candidate
+    if local.exists() and local.is_dir():
+        return local.resolve(), local.name
+
+    raise ValueError(
+        f"Dataset '{dataset_arg}' not found. "
+        f"Use one of {sorted(DATASET_ALIASES.keys())} or pass a valid path."
+    )
+
+
+def _discover_tasks(dataset_path: Path) -> list[str]:
+    required_files = {"instruction.txt", "domain.pddl", "plan.txt"}
+    tasks = []
+    for child in sorted(dataset_path.iterdir()):
+        if not child.is_dir():
+            continue
+        if all((child / fname).exists() for fname in required_files):
+            tasks.append(child.name)
+    return tasks
+
+
+def _load_config(dataset_path: Path) -> dict:
+    config_path = dataset_path / "config.json"
+    if config_path.exists():
+        with open(config_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+
+def _write_text(path: Path, text: str):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(text)
+
+
+def _save_attempts(task_dir: Path, result: dict):
+    attempts = result.get("attempts", [])
+    final_index = result.get("final_index", -1)
+    kind = result.get("kind", "")
+
+    for idx, attempt in enumerate(attempts):
+        suffix = "" if idx == final_index else f"-try-{idx}"
+
+        if kind == "plan":
+            _write_text(task_dir / f"plan{suffix}.txt", attempt.get("plan", ""))
+        else:
+            _write_text(task_dir / f"problem{suffix}.pddl", attempt.get("problem", ""))
+
+        _write_text(task_dir / f"prompt{suffix}.txt", attempt.get("prompt", ""))
+        _write_text(task_dir / f"response{suffix}.txt", attempt.get("response", ""))
+
+        error = attempt.get("error", "")
+        if error:
+            _write_text(task_dir / f"error{suffix}.txt", error)
+
+    with open(task_dir / "generation_summary.json", "w", encoding="utf-8") as f:
+        json.dump(result, f, indent=2)
+
+
+def _infer_compare_domain(dataset_name: str) -> str:
+    if "alfred" in dataset_name.lower():
+        return "alfred"
+    return "blocksworld"
+
 
 def main():
+    repo_root = Path(__file__).resolve().parents[1]
+    load_dotenv(repo_root / ".env")
+
     args = parse_args()
+    seed_everything(args.seed)
 
-    # Parse domain
-    data_root = "/alfred"
-    if args.domain == "cooking": # TODO: clean upon submission
-        data_dir = f"{data_root}/cooking" 
-    elif args.domain == "blocksworld":
-        data_dir = f"{data_root}/blocksworld"
-    elif args.domain == "blocksworld-real":
-        data_dir = f"{data_root}/blocksworld-real"
-    elif args.domain == "alfred":
-        data_dir = f"{data_root}/alfred_137"
-    else:
-        raise ValueError(f"Invalid domain: {args.domain}")
+    route = normalize_route_name(args.route)
+    dataset_arg = args.dataset or args.domain
+    if not dataset_arg:
+        raise ValueError("One of --dataset or --domain must be provided.")
 
-    # build the result directory suffix, remove the pipeline number, use descriptive name
-    if args.result_dir_full is not None:
-        result_dir = f"/villain/results/formal_experiments/{args.result_dir_full}"
-    
-    else:
-        result_dir_suffix = ""
-        if args.result_dir is not None:
-            result_dir_suffix += f"_{args.result_dir}"
-        if args.model is not None:
-            result_dir_suffix += f"_{args.model.replace('/', '-')}"
-        
-        result_dir = f"/villain/results/formal_experiments/{args.domain}"
-        if args.generate_plan:
-            result_dir_suffix += "_generate_plan"
-        if args.generate_vila_planning:
-            result_dir_suffix += "_generate_vila_planning"
-        if args.generate_villain_pddl:
-            result_dir_suffix += "_generate_villain_pddl"
-        if args.generate_villain_direct_pddl:
-            result_dir_suffix += "_generate_villain_direct_pddl"
-        if args.generate_villain_captioning_pddl:
-            result_dir_suffix += "_generate_villain_captioning_pddl"
-        if args.generate_multi_step_with_vlm:
-            result_dir_suffix += "_generate_multi_step_with_vlm"
-        if args.generate_scene_graph_pddl:
-            template_type = "hard" if args.hard_template else "soft"
-            result_dir_suffix += f"_generate_scene_graph_{template_type}_pddl"
-        
-        # set the final path
-        result_dir = result_dir + result_dir_suffix
-    print(f"Result dir: {result_dir}")
+    dataset_path, dataset_name = _resolve_dataset_path(dataset_arg, repo_root / "data")
+    task_names = _discover_tasks(dataset_path)
 
-    seed_everything(args.seed) 
+    if args.task_offset > 0:
+        task_names = task_names[args.task_offset :]
+    if args.task_limit is not None:
+        task_names = task_names[: args.task_limit]
 
-    # Get task names from the reorganized structure (problem directories)
-    task_names = sorted([
-        dirname for dirname in os.listdir(data_dir)
-        if os.path.isdir(f"{data_dir}/{dirname}")
-        # and dirname.startswith("problem")
-    ])
+    if not task_names:
+        raise ValueError(f"No valid tasks found in dataset: {dataset_path}")
 
-    logger = None
-    solver_success_count = 0
-    plan_success_count = 0
+    config = _load_config(dataset_path)
 
-    # Generate / refine PDDL problems
-    if args.generate_plan or args.generate_vila_planning or args.generate_villain_pddl or args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or args.generate_scene_graph_pddl:
-        
-        log_file_path = create_experiment_log_path(result_dir, args.domain, result_dir_suffix.lstrip('_'))
-        logger = ExperimentLogger(log_file_path, console_output=True)
-        logger.__enter__()
-        
-        print(f"🧪 Starting experiment: {args.domain}{result_dir_suffix}")
-        print(f"📁 Results will be saved to: {result_dir}")
-        print(f"📋 Log will be saved to: {log_file_path}")
-        print(f"{'='*80}")
+    output_root = Path(args.output_root) if args.output_root else repo_root / "results"
+    run_name = args.run_name or datetime.now().strftime("%Y%m%d_%H%M%S")
+    result_dir = (
+        output_root
+        / dataset_name
+        / route
+        / _sanitize_component(args.model)
+        / _sanitize_component(run_name)
+    )
+    result_dir.mkdir(parents=True, exist_ok=True)
 
-         # Load model
-        model = VLMClientFactory(args.model, args.device)
+    print("=" * 80)
+    print("Experiment configuration")
+    print("=" * 80)
+    print(f"Route: {route}")
+    print(f"Dataset: {dataset_path}")
+    print(f"Model: {args.model}")
+    print(f"Tasks: {len(task_names)}")
+    print(f"Results: {result_dir}")
+    print("=" * 80)
 
-        # Load config (TODO: remove this)
-        if os.path.exists(f"{data_dir}/config.json"):
-            with open(f"{data_dir}/config.json", "r") as f:
-                config = json.load(f)
-        else:
-            config = None
+    model = VLMClientFactory(args.model, args.device)
+    compare_domain = _infer_compare_domain(dataset_name)
 
-    # Set up problem tasks: instructions, observations...
-    targets = []
-    for i, task_name in tqdm(enumerate(task_names), total=len(task_names), desc="Loading problem data"):
-        # task_idx = task_name.split("problem")[1] # problem might not have a number, eg. Alfred
-        
-        # Load problem data using new helper function
-        problem_data = load_problem_data(data_dir, task_name, args.enable_caption, args.clean_image)
+    metrics = {
+        "tasks_total": len(task_names),
+        "generation_success": 0,
+        "generation_failure": 0,
+        "task_exceptions": 0,
+        "pddl_valid": 0,
+        "planner_success": 0,
+        "plan_match_success": 0,
+    }
 
-        targets += [{
-            "problem": None,    
-            "response": None,
-            "observations": problem_data["observations"],
-            "instruction": problem_data["instruction"],
-            "domain": problem_data["domain_file"],
-            "domain_path": problem_data["domain_path"],
-            "plan": problem_data["plan"],
-            "error": None,
-        }]
+    for task_name in tqdm(task_names, desc="Running tasks"):
+        task_dir = result_dir / task_name
+        task_dir.mkdir(parents=True, exist_ok=True)
 
-    # Start generating
-    for i, (task_name, target) in tqdm(
-        enumerate(zip(task_names, targets)), 
-        total=len(task_names), 
-        desc="Generating PDDL problems"
-    ):
+        try:
+            problem_data = load_problem_data(
+                str(dataset_path),
+                task_name,
+                enable_caption=args.enable_caption,
+                clean_image=args.clean_image,
+            )
 
-        task_dir = f"{result_dir}/{task_name}"
-        os.makedirs(task_dir, exist_ok=True)
+            target = {
+                "problem": None,
+                "response": None,
+                "observations": problem_data["observations"],
+                "instruction": problem_data["instruction"],
+                "domain": problem_data["domain_file"],
+                "domain_path": problem_data["domain_path"],
+                "plan": problem_data["plan"],
+                "error": None,
+            }
 
-        if args.generate_plan or args.generate_vila_planning or args.generate_villain_pddl or args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or args.generate_scene_graph_pddl:
-            if "problem.pddl" in os.listdir(task_dir) or "problem-try-0.pddl" in os.listdir(task_dir):
-                print(f"👀 {task_name} already exists, skipping...")
-                continue
+            result, success = generate_pddl(
+                target,
+                config,
+                model=model,
+                args=args,
+            )
+            _save_attempts(task_dir, result)
 
-            print(f"Observations: {target['observations']}\n")
-            print(f"Instruction: {target['instruction'][:100]}\n")
-
-            # generate PDDL objects, initial state, and goal specification
-            if args.generate_plan or args.generate_vila_planning:
-
-                res, success = generate_pddl(
-                    target,
-                    config,
-                    model=model,
-                    args=args,
-                )
-
-            else:
-                res, success = generate_pddl(
-                    target,
-                    config,
-                    model=model,
-                    args=args,
-                    result_dir=result_dir,
-                    save_step=args.gen_step,
-                    task_name=task_name,
-                )
-                
             if success:
-                solver_success_count += 1
-
-            try:
-                if args.generate_multi_step_with_vlm or args.generate_villain_direct_pddl or args.generate_villain_captioning_pddl or args.generate_scene_graph_pddl:
-                    
-                    for retry_idx in range(len(res["problem"]["file"])):
-                        file_idx = f"-try-{retry_idx}"
-                        if success and retry_idx == len(res["problem"]["file"]) - 1:
-                            file_idx = ""
-                        
-                        with open(f"{task_dir}/problem{file_idx}.pddl", "w") as fw:
-                            fw.write(res["problem"]["file"][retry_idx])
-
-                        with open(f"{task_dir}/prompt{file_idx}.txt", "w") as fw:
-                            fw.write(res["problem"]["prompt"][retry_idx])
-
-                        with open(f"{task_dir}/response{file_idx}.txt", "w") as fw:
-                            fw.write(res["problem"]["response"][retry_idx])
-                
-                elif args.generate_plan or args.generate_vila_planning:
-                    with open(f"{task_dir}/plan.txt", "w") as fw:
-                        fw.write(res["plan"])
-
-                    with open(f"{task_dir}/prompt.txt", "w") as fw:
-                        fw.write(res["prompt"])
-
-                    with open(f"{task_dir}/response.txt", "w") as fw:
-                        fw.write(res["response"])
-        
-            except Exception as e:
-                print(f"Error saving PDDL: {traceback.format_exc()}")
-
-        if args.find_vila_plan:
-            with open(f"{task_dir}/plan.txt", "r") as fw:
-                pred_plan = fw.readlines()
-
-            with open(f"{task_dir}/plan_gt.txt", "r") as fw:
-                gt_plan = fw.readlines()
-
-            plan_success, err = compare_plans(gt_plan, pred_plan, args.domain)
-
-            if plan_success:
-                plan_success_count += 1
-            elif err:
-                with open(f"{task_dir}/error.txt", "w") as fw:
-                    fw.write(err)
-
-        elif args.find_plan:
-            problem_path = f"{task_dir}/problem.pddl"
-            plan_path = f"{task_dir}/plan.txt" 
-            if os.path.exists(problem_path):
-                command = format_command(
-                    target["domain_path"],  # pass in domain path, not file
-                    problem_path,
-                    plan_path,
-                    args.downward_dir,
-                    args.time_limit,
-                )
-                success, err = find_plan(command, plan_path)
-
-                with open(f"{task_dir}/plan_gt.txt", "w") as fw:
-                    fw.write(target["plan"])
-
-                if success:
-                    with open(f"{task_dir}/plan.txt", "r") as fw:
-                        pred_plan = fw.readlines()
-                    gt_plan = target["plan"].split("\n")
-                    plan_success, err = compare_plans(gt_plan, pred_plan, args.domain)
-                    if plan_success:
-                        plan_success_count += 1
-                    if not plan_success:
-                        print(f"Failed to verify the plan for {os.path.join(data_dir, task_name)}\n{err}")
-                        with open(f"{task_dir}/error.txt", "w") as fw:
-                            fw.write(err)
-
-                else:
-                    print(f"Failed to solve for a plan for {os.path.join(data_dir, task_name)}\n{err}")
-                    with open(f"{task_dir}/error.txt", "w") as fw:
-                        fw.write(err)
+                metrics["generation_success"] += 1
             else:
-                print(f"Problem file not found for {os.path.join(data_dir, task_name)}")
+                metrics["generation_failure"] += 1
 
-    print(f"\n{'='*80}")
-    print(f"📊 FINAL EXPERIMENT METRICS")
-    print(f"{'='*80}")
-    print(f"🔧 Solver Success Count: {solver_success_count}")
-    print(f"📋 Plan Success Count: {plan_success_count}")
-    print(f"📈 Plan Success Rate: {plan_success_count / len(task_names):.2%}")
-    print(f"📈 Solver Success Rate: {solver_success_count / len(task_names):.2%}")
-    print(f"{'='*80}")
+            final = result.get("final", {})
+            kind = result.get("kind")
+
+            if kind == "pddl":
+                final_problem = (final.get("problem") or "").strip()
+                if final_problem:
+                    is_valid, msg = check_pddl(final_problem, target["domain"])
+                    if is_valid:
+                        metrics["pddl_valid"] += 1
+                        _write_text(task_dir / "pddl_validation.txt", "valid\n")
+                    else:
+                        _write_text(task_dir / "pddl_validation.txt", f"invalid\n{msg or ''}\n")
+
+                    if args.validate_with_planner:
+                        planner_ok, planner_msg = check_error(
+                            final_problem,
+                            target["domain"],
+                            args.downward_dir,
+                            args.time_limit,
+                        )
+                        if planner_ok:
+                            metrics["planner_success"] += 1
+                            _write_text(task_dir / "planner_validation.txt", "solved\n")
+                        else:
+                            _write_text(
+                                task_dir / "planner_validation.txt",
+                                f"failed\n{planner_msg or ''}\n",
+                            )
+
+            elif kind == "plan":
+                pred_plan_text = final.get("plan", "")
+                pred_plan_lines = pred_plan_text.splitlines()
+                gt_plan_lines = target["plan"].splitlines()
+
+                plan_ok, plan_msg = compare_plans(gt_plan_lines, pred_plan_lines, compare_domain)
+                if plan_ok:
+                    metrics["plan_match_success"] += 1
+                    _write_text(task_dir / "plan_validation.txt", "matched\n")
+                else:
+                    _write_text(task_dir / "plan_validation.txt", f"mismatch\n{plan_msg or ''}\n")
+
+        except Exception:
+            metrics["task_exceptions"] += 1
+            metrics["generation_failure"] += 1
+            _write_text(task_dir / "exception_traceback.txt", traceback.format_exc())
+
+    with open(result_dir / "metrics.json", "w", encoding="utf-8") as f:
+        json.dump(metrics, f, indent=2)
+
+    total = metrics["tasks_total"]
+    gen_rate = metrics["generation_success"] / total if total else 0.0
+
+    print("\n" + "=" * 80)
+    print("Final metrics")
+    print("=" * 80)
+    print(f"Generation success: {metrics['generation_success']}/{total} ({gen_rate:.2%})")
+    print(f"Generation failure: {metrics['generation_failure']}")
+    print(f"Task exceptions: {metrics['task_exceptions']}")
+    print(f"PDDL valid tasks: {metrics['pddl_valid']}")
+    if args.validate_with_planner:
+        print(f"Planner success: {metrics['planner_success']}")
+    print(f"Plan match success: {metrics['plan_match_success']}")
+    print(f"Output: {result_dir}")
+    print("=" * 80)
+
 
 if __name__ == "__main__":
     main()

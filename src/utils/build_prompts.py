@@ -1,6 +1,10 @@
 """Build prompts for different tasks."""
 
-from .parse_response import parse_types, parse_predicates
+from .parse_response import (
+    parse_actions_from_domain,
+    parse_predicates,
+    parse_types,
+)
 
 def build_problem_prompt(target, config, add_examples=True, generate_caption=False, generate_scene_graph=False, enable_caption=False):
     prompt = f"""
@@ -127,11 +131,15 @@ def build_observation_prompt(target, config):
     The following domain file specifies all possible states and actions for the task:
     {target["domain"]}
 
-    Given the name of an object type, identify all objects with an appropriate name in the images that belong to this type.
-    Follow this exact format:
-    <object> - <type>
-    <object> - <type>
-    ...
+    Given each object type below, identify all objects in the images that belong to that type.
+    Follow this exact unified format for every line:
+    <type>: <object_1> <object_2> <object_3>
+
+    Critical formatting rules:
+    1) Every object name must be a single token using underscores (example: green_block, DeskLamp_1).
+    2) Never output spaces inside an object name.
+    3) If no object is found for a type, output: <type>: none
+    4) Output only type lines. Do not output bullet points or extra explanations.
 
     The images have been provided. {config.get("text", "") if config else ""}
     The task instruction is: {target["instruction"]}
@@ -145,9 +153,10 @@ def build_observation_prompt(target, config):
     return prompt
 
 def build_goal_prompt(target, config, object_states, init_states):
+    config_text = config.get("text", "") if config else ""
     prompt = f"""
     You are given some images which contain various objects of interests for a given task.
-    The images have been provided. {config.get("text", "")}
+    The images have been provided. {config_text}
     The task instruction is: {target["instruction"]}
 
     The following domain file specifies all possible states and actions for the task:
@@ -171,11 +180,20 @@ def build_goal_prompt(target, config, object_states, init_states):
     return prompt
 
 def build_plan_prompt(target, config, generate_caption=False, generate_scene_graph=False):
+    if config and config.get("actions"):
+        actions_text = config["actions"]
+    else:
+        actions_text = parse_actions_from_domain(target["domain"])
+        if not actions_text:
+            actions_text = "(No explicit actions found in domain file.)"
+
+    config_text = config.get("text", "") if config else ""
+
     prompt = f"""
     You are helping a robotic planning task. 
     Given the image of a scene and an instruction, generate a step-by-step plan for the robot(s).
     All the possible actions and their arguments are given below:
-    {config["actions"]}
+    {actions_text}
 
     You must first reason what objects are in the scene that can be the arguments of the actions.
     Then you must reason what actions to take in the plan. Be mindful of the preconditions and effects of the actions.
@@ -188,7 +206,7 @@ def build_plan_prompt(target, config, generate_caption=False, generate_scene_gra
 
     prompt += f"""
     For the current domain,
-    {config.get("text", "")}
+    {config_text}
     """
 
     if generate_caption:

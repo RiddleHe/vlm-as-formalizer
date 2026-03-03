@@ -1,0 +1,65 @@
+Scene graph:
+block: 
+- orange_block_top: an orange cube block at the top of the visible vertical stack on the right
+- red_block_second: a red cube block directly below the orange block in the right-side stack
+- blue_block_third: a blue cube block directly below the red block in the right-side stack
+- green_block_fourth: a green cube block directly below the blue block in the right-side stack
+- purple_block_bottom: a purple cube block at the bottom of the right-side stack (touching the table)
+
+robot:
+- robot_arm: robot arm (not visible; assumed available)
+
+ontable (block) block x is on table, not on another block:
+- (ontable purple_block_bottom)
+
+clear (block) there is no block on top of block x:
+- (clear orange_block_top)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot_arm)
+
+handfull (robot) :
+- none
+
+holding (block) block x is being held by the robot:
+- none
+
+on (block, block) block x is on block y:
+- (on orange_block_top red_block_second)
+- (on red_block_second blue_block_third)
+- (on blue_block_third green_block_fourth)
+- (on green_block_fourth purple_block_bottom)
+
+PDDL problem: ```lisp
+(define (problem blocksworld_scene_1)
+  (:domain blocksworld)
+  (:objects
+    orange_block_top - block
+    red_block_second - block
+    blue_block_third - block
+    green_block_fourth - block
+    purple_block_bottom - block
+    robot_arm - robot
+  )
+  (:init
+    (ontable purple_block_bottom)
+    (on green_block_fourth purple_block_bottom)
+    (on blue_block_third green_block_fourth)
+    (on red_block_second blue_block_third)
+    (on orange_block_top red_block_second)
+    (clear orange_block_top)
+    (handempty robot_arm)
+  )
+  (:goal
+    (and
+      ;; Stack 1: green over orange
+      (on green_block_fourth orange_block_top)
+
+      ;; Stack 2: purple over yellow over red over blue
+      ;; (yellow block not present in scene graph; satisfy with available blocks)
+      (on purple_block_bottom red_block_second)
+      (on red_block_second blue_block_third)
+    )
+  )
+)
+```

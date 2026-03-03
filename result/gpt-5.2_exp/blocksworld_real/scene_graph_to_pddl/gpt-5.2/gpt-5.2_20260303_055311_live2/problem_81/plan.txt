@@ -1,0 +1,6 @@
+(unstack yellow_block_top_of_tower purple_block_second_from_top robot_arm)
+(put-down yellow_block_top_of_tower robot_arm)
+(unstack purple_block_second_from_top blue_block_middle robot_arm)
+(stack purple_block_second_from_top yellow_block_top_of_tower robot_arm)
+(unstack blue_block_middle green_block_second_from_bottom robot_arm)
+(stack blue_block_middle orange_block_single_on_table_right robot_arm)

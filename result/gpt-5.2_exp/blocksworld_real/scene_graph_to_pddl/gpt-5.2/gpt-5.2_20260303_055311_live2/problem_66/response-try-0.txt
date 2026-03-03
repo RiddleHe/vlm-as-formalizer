@@ -1,0 +1,72 @@
+Scene graph:
+block: 
+- blue-bottom-block (blue cube at base of left tall stack)
+- yellow-middle-block (yellow cube above blue in left tall stack)
+- red-upper-block (red cube above yellow in left tall stack)
+- green-top-block (green cube at top of left tall stack)
+- orange-bottom-block (orange cube at base of right short stack)
+- purple-top-block (purple cube on top of orange in right short stack)
+
+robot:
+- robot-arm (assumed robot, not visible)
+
+ontable (block) block x is on table, not on another block:
+- (ontable blue-bottom-block)
+- (ontable orange-bottom-block)
+
+clear (block) there is no block on top of block x:
+- (clear green-top-block)
+- (clear purple-top-block)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot-arm)
+
+handfull (robot) :
+- none
+
+holding (block) block x is being held by the robot:
+- none
+
+on (block, block) block x is on block y:
+- (on yellow-middle-block blue-bottom-block)
+- (on red-upper-block yellow-middle-block)
+- (on green-top-block red-upper-block)
+- (on purple-top-block orange-bottom-block)
+
+PDDL problem: (define (problem blocksworld-stacks-2)
+  (:domain blocksworld)
+  (:objects
+    blue-bottom-block yellow-middle-block red-upper-block green-top-block
+    orange-bottom-block purple-top-block
+    robot-arm - robot
+  )
+  (:init
+    ;; table placements
+    (ontable blue-bottom-block)
+    (ontable orange-bottom-block)
+
+    ;; existing stacks
+    (on yellow-middle-block blue-bottom-block)
+    (on red-upper-block yellow-middle-block)
+    (on green-top-block red-upper-block)
+    (on purple-top-block orange-bottom-block)
+
+    ;; clear blocks
+    (clear green-top-block)
+    (clear purple-top-block)
+
+    ;; robot state
+    (handempty robot-arm)
+  )
+  (:goal
+    (and
+      ;; Stack 1: orange over green
+      (on orange-bottom-block green-top-block)
+
+      ;; Stack 2: red over blue over purple over yellow
+      (on red-upper-block blue-bottom-block)
+      (on blue-bottom-block purple-top-block)
+      (on purple-top-block yellow-middle-block)
+    )
+  )
+)
