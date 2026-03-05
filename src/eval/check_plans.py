@@ -5,13 +5,19 @@ import statistics
 from tqdm import tqdm
 import json
 
-from find_goal import (
+from .find_goal import (
     parse_domain, parse_problem, parse_plan,
     simulate,
 )
 
-from openai import OpenAI
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+_client = None
+
+def _get_openai_client():
+    global _client
+    if _client is None:
+        from openai import OpenAI
+        _client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    return _client
 
 def open_file(path):
     with open(path, "r") as f:
@@ -83,39 +89,35 @@ def _lev_similarity(a, b):
 def suggest_mapping_with_llm(targets, leftovers):
     if not leftovers:
         return {}, []
-    prompt = {
-        "role": "user",
-        "content": json.dumps({
-            "instruction": (
-                "Map each leftover object to ONE existing problem object or mark as unmappable. "
-                "Do not invent names. Do not reuse a problem object. "
-                "Each leftover object should be mapped to a single problem object and vice versa. "
-                "If there is no reasonable mapping, mark as unmappable. "
-                "For example, all names beginning with '?' is a variable and should not map to anything. " 
-                "Return only JSON with keys 'mapping' and 'unmappable'."
-            ),
-            "unmapped_raw_tokens": leftovers,
-            "problem_objects": targets,
-            "example": {
-                "input": {
-                    "unmapped_raw_tokens": ["robo-arm", "peach"],
-                    "problem_objects": ["agent1", "orange"],
-                },
-                "output": {
-                    "mapping": {"robo-arm": "agent1", "peach": "orange"},
-                    "unmappable": [],
-                }
+    input_text = json.dumps({
+        "instruction": (
+            "Map each leftover object to ONE existing problem object or mark as unmappable. "
+            "Do not invent names. Do not reuse a problem object. "
+            "Each leftover object should be mapped to a single problem object and vice versa. "
+            "If there is no reasonable mapping, mark as unmappable. "
+            "For example, all names beginning with '?' is a variable and should not map to anything. "
+            "Return only JSON with keys 'mapping' and 'unmappable'."
+        ),
+        "unmapped_raw_tokens": leftovers,
+        "problem_objects": targets,
+        "example": {
+            "input": {
+                "unmapped_raw_tokens": ["robo-arm", "peach"],
+                "problem_objects": ["agent1", "orange"],
+            },
+            "output": {
+                "mapping": {"robo-arm": "agent1", "peach": "orange"},
+                "unmappable": [],
             }
-        }, ensure_ascii=False)
-    }
-    resp = client.chat.completions.create(
-        model="gpt-4.1-mini-2025-04-14",
-        messages=[prompt],
-        temperature=0.2,
-        max_tokens=256,
-        response_format={"type": "json_object"},
+        }
+    }, ensure_ascii=False)
+    resp = _get_openai_client().responses.create(
+        model="gpt-5-mini",
+        input=input_text,
+        max_output_tokens=256,
+        text={"format": {"type": "json_object"}},
     )
-    text = resp.choices[0].message.content
+    text = resp.output_text
     try:
         data = json.loads(text)
     except Exception:

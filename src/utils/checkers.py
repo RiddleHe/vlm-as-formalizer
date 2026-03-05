@@ -201,13 +201,14 @@ def compare_plans(gt_plan: list[str], pred_plan: list[str], domain: str) -> bool
 
 def check_error(problem_file, domain_file, downward_dir, time_limit):
     ret, msg = False, None
-    
+    plan_text = ""
+
     ret, msg = check_pddl(problem_file, domain_file)
     if ret:
         with tempfile.TemporaryDirectory() as temp_dir_path:
             domain_path, problem_path, plan_path = create_file_paths(domain_file, problem_file, temp_dir_path)
             command = format_command(domain_path, problem_path, plan_path, downward_dir, time_limit)
-            ret, msg = find_plan(command, plan_path)
+            ret, msg, plan_text = find_plan(command, plan_path)
 
         if not ret:
             if "Search stopped without finding a solution" in msg:
@@ -217,7 +218,7 @@ def check_error(problem_file, domain_file, downward_dir, time_limit):
             else:
                 msg = "..." + msg[-500:]
 
-    return ret, msg
+    return ret, msg, plan_text
 
 def find_plan(command, plan_path):
     def get_cost(line: str):
@@ -257,13 +258,13 @@ def find_plan(command, plan_path):
             with open(f"{plan_path}", "w") as fw:
                 fw.write(best_plan)
 
-            return True, None
+            return True, None, best_plan
 
-        return False, "No plan found"
+        return False, "No plan found", ""
 
     except Exception as e:
         output = getattr(e, "output", b"")
         if isinstance(output, bytes):
             output = output.decode(errors="replace")
         message = output.strip() if output else str(e)
-        return False, message
+        return False, message, ""

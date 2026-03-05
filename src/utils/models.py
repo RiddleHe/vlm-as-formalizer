@@ -1,5 +1,7 @@
 import os
 import base64
+import subprocess
+import shutil
 import torch
 from dotenv import load_dotenv
 from abc import ABC, abstractmethod
@@ -8,11 +10,127 @@ import sys
 import hashlib
 import torch.nn.functional as F
 import time
+import urllib.request
+import urllib.error
 
 # Load environment variables
 load_dotenv()
 
-VLLM_BASE_URL = os.getenv("VLLM_BASE_URL", "http://localhost:15100/v1")
+VLLM_PORT = int(os.getenv("VLLM_PORT", "15100"))
+VLLM_BASE_URL = os.getenv("VLLM_BASE_URL", f"http://localhost:{VLLM_PORT}/v1")
+
+# ---------------------------------------------------------------------------
+# vLLM serving configurations per model
+# ---------------------------------------------------------------------------
+VLLM_SERVE_CONFIGS = {
+    "Qwen/Qwen3-VL-235B-A22B-Instruct": {
+        "tp_size": None,  # auto-detect via torch.cuda.device_count()
+        "expert_parallel": True,
+        "max_model_len": 8192,
+        "gpu_memory_utilization": 0.9,
+        "mm_encoder_tp_mode": "data",
+    },
+    "Qwen/Qwen3-VL-8B-Thinking": {
+        "tp_size": 1,
+        "expert_parallel": False,
+        "max_model_len": 8192,
+        "gpu_memory_utilization": 0.9,
+        "mm_encoder_tp_mode": None,
+    },
+}
+
+
+def _vllm_health_ok(port: int = VLLM_PORT, timeout: float = 3.0) -> bool:
+    """Return True if the vLLM server on *port* responds to /health."""
+    try:
+        req = urllib.request.Request(f"http://localhost:{port}/health", method="GET")
+        with urllib.request.urlopen(req, timeout=timeout):
+            return True
+    except Exception:
+        return False
+
+
+def _vllm_model_matches(model_name: str, port: int = VLLM_PORT) -> bool:
+    """Return True if the running vLLM server is serving *model_name*."""
+    import json
+    try:
+        req = urllib.request.Request(f"http://localhost:{port}/v1/models", method="GET")
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read().decode())
+            served = [m["id"] for m in data.get("data", [])]
+            return model_name in served
+    except Exception:
+        return False
+
+
+def _launch_vllm_server(model_name: str, port: int = VLLM_PORT) -> None:
+    """Launch a vLLM server for *model_name* and block until it's healthy."""
+    cfg = VLLM_SERVE_CONFIGS.get(model_name)
+    if cfg is None:
+        raise RuntimeError(
+            f"No vLLM serving config for '{model_name}'. "
+            f"Add one to VLLM_SERVE_CONFIGS in models.py, or start the server manually."
+        )
+
+    tp_size = cfg["tp_size"]
+    if tp_size is None:
+        tp_size = torch.cuda.device_count()
+    if tp_size < 1:
+        raise RuntimeError("No CUDA GPUs detected — cannot launch vLLM server.")
+
+    vllm_bin = shutil.which("vllm")
+    if vllm_bin is None:
+        raise RuntimeError("vllm CLI not found. Install with: pip install vllm")
+
+    cmd = [
+        vllm_bin, "serve", model_name,
+        "--tensor-parallel-size", str(tp_size),
+        "--port", str(port),
+        "--max-model-len", str(cfg.get("max_model_len", 8192)),
+        "--gpu-memory-utilization", str(cfg.get("gpu_memory_utilization", 0.9)),
+    ]
+    if cfg.get("expert_parallel"):
+        cmd.append("--enable-expert-parallel")
+    if cfg.get("mm_encoder_tp_mode"):
+        cmd.extend(["--mm-encoder-tp-mode", cfg["mm_encoder_tp_mode"]])
+
+    print(f"Launching vLLM server: {' '.join(cmd)}")
+    log_path = f"/tmp/vllm_{model_name.replace('/', '_')}.log"
+    log_file = open(log_path, "w")
+    subprocess.Popen(cmd, stdout=log_file, stderr=subprocess.STDOUT)
+    print(f"vLLM log: {log_path}")
+
+    # Wait for server to become healthy
+    print("Waiting for vLLM server to be ready...", end="", flush=True)
+    max_wait = 600  # 10 minutes (large models take time to load)
+    waited = 0
+    interval = 5
+    while waited < max_wait:
+        time.sleep(interval)
+        waited += interval
+        if _vllm_health_ok(port):
+            print(f" ready! ({waited}s)")
+            return
+        if waited % 30 == 0:
+            print(f" {waited}s...", end="", flush=True)
+
+    raise RuntimeError(
+        f"vLLM server did not become healthy within {max_wait}s. "
+        f"Check logs at {log_path}"
+    )
+
+
+def ensure_vllm_server(model_name: str, port: int = VLLM_PORT) -> None:
+    """Ensure a vLLM server is running for *model_name*, launching one if needed."""
+    if _vllm_health_ok(port):
+        if _vllm_model_matches(model_name, port):
+            print(f"vLLM server already running for {model_name} on port {port}")
+            return
+        raise RuntimeError(
+            f"A vLLM server is running on port {port} but serving a different model. "
+            f"Stop it first or use a different VLLM_PORT."
+        )
+    _launch_vllm_server(model_name, port)
 
 def get_gpt_client_name(client_name):
     model_mapping = {
@@ -41,7 +159,9 @@ def get_hf_client_name(client_name):
     model_mapping = {
         "qwenvl-7B": "Qwen/Qwen2.5-VL-7B-Instruct",
         "qwenvl-72B": "Qwen/Qwen2.5-VL-72B-Instruct",
-        "internvl3-14B": "OpenGVLab/InternVL3-14B", 
+        "qwen3vl-8B": "Qwen/Qwen3-VL-8B-Thinking",
+        "qwen3vl-235B": "Qwen/Qwen3-VL-235B-A22B-Thinking",
+        "internvl3-14B": "OpenGVLab/InternVL3-14B",
         "internvl3-78B": "OpenGVLab/InternVL3-78B",
         "gemma3-12B": "google/gemma-3-12b-it",
         "gemma3-27B": "google/gemma-3-27b-it",
@@ -229,7 +349,9 @@ class HuggingFaceClient(VLMClient):
         super().__init__(client_name, device=device, **kwargs)
 
     def load_client(self, **kwargs):
-        if "qwen2.5-vl" in self.client_name.lower() or "qwen2_5" in self.client_name.lower():
+        if "qwen3-vl" in self.client_name.lower() or "qwen3_vl" in self.client_name.lower():
+            return self._load_qwen3_vl(self.device)
+        elif "qwen2.5-vl" in self.client_name.lower() or "qwen2_5" in self.client_name.lower():
             return self._load_qwen2_5_vl(self.device)
         elif "internvl" in self.client_name.lower():
             return self._load_internvl(self.device, **kwargs)
@@ -253,7 +375,21 @@ class HuggingFaceClient(VLMClient):
         processor = AutoProcessor.from_pretrained(self.client_name)
         
         return {"model": model, "processor": processor, "type": "qwen2.5vl"}
-    
+
+    def _load_qwen3_vl(self, device):
+        """Load Qwen3-VL model and processor."""
+        from transformers import Qwen3VLForConditionalGeneration, AutoProcessor
+
+        model = Qwen3VLForConditionalGeneration.from_pretrained(
+            self.client_name,
+            torch_dtype=torch.bfloat16,
+            device_map="auto",
+            attn_implementation="sdpa",
+        )
+        processor = AutoProcessor.from_pretrained(self.client_name)
+
+        return {"model": model, "processor": processor, "type": "qwen3vl"}
+
     def _load_internvl(self, device, **kwargs):
         """Load InternVL model using vlm_utils."""
         from transformers import AutoModel, AutoTokenizer
@@ -322,6 +458,8 @@ class HuggingFaceClient(VLMClient):
 
     def generate(self, prompt: str, observations: list[str] = [], return_cache=False, past_key_values=None) -> str:
         model_type = self.client["type"]
+        if model_type == "qwen3vl":
+            return self._generate_qwen3_vl(prompt, observations)
         if model_type == "qwen2.5vl":
             return self._generate_qwen2_5_vl(prompt, observations)
         if model_type == "internvl":
@@ -346,7 +484,39 @@ class HuggingFaceClient(VLMClient):
         generated_ids_trimmed = [out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)]
         output_text = processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
         return output_text[0] if output_text else ""
-    
+
+    def _generate_qwen3_vl(self, prompt: str, observations: list[str]):
+        model = self.client["model"]
+        processor = self.client["processor"]
+        content = []
+        for obs_path in observations:
+            content.append({"type": "image", "url": obs_path})
+        content.append({"type": "text", "text": prompt})
+        messages = [{"role": "user", "content": content}]
+        inputs = processor.apply_chat_template(
+            messages,
+            add_generation_prompt=True,
+            tokenize=True,
+            return_dict=True,
+            return_tensors="pt",
+        ).to(model.device)
+        with torch.no_grad():
+            generated_ids = model.generate(**inputs, max_new_tokens=4096)
+        generated_ids_trimmed = [
+            out_ids[len(in_ids):]
+            for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
+        ]
+        output_text = processor.batch_decode(
+            generated_ids_trimmed,
+            skip_special_tokens=True,
+            clean_up_tokenization_spaces=False,
+        )
+        text = output_text[0] if output_text else ""
+        # Strip thinking tags from Thinking models
+        if "</think>" in text:
+            text = text.split("</think>")[-1].strip()
+        return text
+
     def _generate_internvl(self, prompt: str, observations: list[str]):
         sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
         from vlm_utils import load_image
@@ -404,42 +574,95 @@ class HuggingFaceClient(VLMClient):
 class VLLMOpenAIClient(OpenAIClient):
     def __init__(self, client_name, base_url=VLLM_BASE_URL, **kwargs):
         self.base_url = base_url
+        self._is_thinking = "thinking" in client_name.lower()
         # Map simplified model names to full HuggingFace model names for vLLM
         mapped_name = get_hf_client_name(client_name)
         if mapped_name:
             client_name = mapped_name
+            self._is_thinking = "thinking" in client_name.lower()
+        # Auto-launch vLLM server if not running
+        ensure_vllm_server(client_name, port=VLLM_PORT)
         super().__init__(client_name, **kwargs)
 
     def load_client(self, **kwargs):
         from openai import OpenAI
         return OpenAI(base_url=self.base_url, api_key="EMPTY")
 
+    def generate(self, prompt: str, observations: list[str] = []) -> str:
+        content = []
+        if observations:
+            base64_images = self._encode_images(observations)
+            for base64_image in base64_images:
+                content.append({
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
+                })
+        content.append({"type": "text", "text": prompt})
+
+        response = self.client.chat.completions.create(
+            model=self.client_name,
+            messages=[{"role": "user", "content": content}],
+            max_tokens=4096,
+        )
+        text = ""
+        if response and response.choices and response.choices[0].message:
+            text = response.choices[0].message.content or ""
+
+        # Strip thinking tags from Thinking models
+        if self._is_thinking and "</think>" in text:
+            text = text.split("</think>")[-1].strip()
+        return text
+
+QWEN_MODEL_ALIASES = {
+    "qwen": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+    "qwen-235b": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+    "qwen-8b": "Qwen/Qwen3-VL-8B-Thinking",
+}
+
+
+def resolve_model_name(client_name: str) -> str:
+    """Resolve shorthand model aliases to full model identifiers."""
+    return QWEN_MODEL_ALIASES.get(client_name, client_name)
+
+
+def _is_qwen3_vl(name: str) -> bool:
+    """Check if a resolved model name is a Qwen3-VL model (served via vLLM)."""
+    return "qwen3-vl" in name.lower()
+
+
 def VLMClientFactory(client_name: str, device=None) -> VLMClient:
     """Factory function to create a VLM client."""
     if not client_name:
         raise ValueError("Model name cannot be empty.")
 
-    mapped_openai_name = get_gpt_client_name(client_name)
+    # Resolve shorthand aliases (e.g. "qwen" -> full HF name)
+    resolved_name = resolve_model_name(client_name)
+
+    # Qwen3-VL models are served via a vLLM server for fast inference
+    if _is_qwen3_vl(resolved_name):
+        return VLLMOpenAIClient(resolved_name)
+
+    mapped_openai_name = get_gpt_client_name(resolved_name)
     if mapped_openai_name:
         return OpenAIClient(mapped_openai_name, device=device)
 
-    mapped_openrouter_name = get_openrouter_client_name(client_name)
+    mapped_openrouter_name = get_openrouter_client_name(resolved_name)
     if mapped_openrouter_name:
         return OpenRouterClient(mapped_openrouter_name, device=device)
 
-    mapped_hf_name = get_hf_client_name(client_name)
+    mapped_hf_name = get_hf_client_name(resolved_name)
     if mapped_hf_name:
         return HuggingFaceClient(mapped_hf_name, device=device)
 
-    if client_name.endswith("-vllm"):
-        base_model = client_name[:-5]
+    if resolved_name.endswith("-vllm"):
+        base_model = resolved_name[:-5]
         return VLLMOpenAIClient(base_model)
 
-    if "/" in client_name:
+    if "/" in resolved_name:
         try:
-            return HuggingFaceClient(client_name, device=device)
+            return HuggingFaceClient(resolved_name, device=device)
         except Exception as e:
-            raise ValueError(f"Error loading HuggingFace model for name: {client_name}") from e
+            raise ValueError(f"Error loading HuggingFace model for name: {resolved_name}") from e
 
     raise ValueError(f"Unknown model name: {client_name}")
 

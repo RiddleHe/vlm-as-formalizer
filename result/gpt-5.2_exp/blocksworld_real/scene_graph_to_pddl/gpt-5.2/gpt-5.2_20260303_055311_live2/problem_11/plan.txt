@@ -1,8 +1,0 @@
-(unstack block_purple_cube block_yellow_cube robot_arm_1)
-(stack block_purple_cube block_orange_cube robot_arm_1)
-(unstack block_blue_cube block_red_cube robot_arm_1)
-(stack block_blue_cube block_purple_cube robot_arm_1)
-(unstack block_red_cube block_green_cube robot_arm_1)
-(stack block_red_cube block_yellow_cube robot_arm_1)
-(pick-up block_green_cube robot_arm_1)
-(stack block_green_cube block_blue_cube robot_arm_1)

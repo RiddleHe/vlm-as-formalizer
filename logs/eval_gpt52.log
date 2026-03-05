@@ -1,0 +1,967 @@
+
+============================================================
+Evaluating: blocksworld_real / villain_direct_pddl
+============================================================
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/villain_direct_pddl/gpt-5.2/gpt52_from_yuchen/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/villain_direct_pddl/gpt-5.2/gpt52_from_yuchen/eval_summary.csv
+[eval] task_success_rate=89.22%  macro_P=0.9628  macro_R=0.9594  macro_F1=0.9611
+
+============================================================
+Evaluating: blocksworld_real / vila_planning
+============================================================
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/vila_planning/gpt-5.2/gpt52_from_yuchen/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/vila_planning/gpt-5.2/gpt52_from_yuchen/eval_summary.csv
+[eval] task_success_rate=20.59%  macro_P=0.0000  macro_R=0.0000  macro_F1=0.0000
+
+============================================================
+Evaluating: blocksworld_real / villain_captioning_pddl
+============================================================
+[WARN] no mapping for ['block_b', 'block_g', 'block_o', 'block_p', 'block_r', 'block_y']
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/villain_captioning_pddl/gpt-5.2/gpt52_from_yuchen/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/villain_captioning_pddl/gpt-5.2/gpt52_from_yuchen/eval_summary.csv
+[eval] task_success_rate=90.20%  macro_P=0.9762  macro_R=0.9374  macro_F1=0.9564
+
+============================================================
+Evaluating: blocksworld_real / scene_graph_to_pddl
+============================================================
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/scene_graph_to_pddl/gpt-5.2/gpt52_from_yuchen/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/scene_graph_to_pddl/gpt-5.2/gpt52_from_yuchen/eval_summary.csv
+[eval] task_success_rate=79.41%  macro_P=0.9870  macro_R=0.8587  macro_F1=0.9184
+
+============================================================
+Evaluating: alfred_multi / villain_direct_pddl
+============================================================
+[WARN] no mapping for ['desk1', 'lamp1']
+[WARN] no mapping for ['nightstand']
+[WARN] no mapping for ['lamp']
+[WARN] no mapping for ['lamp']
+[WARN] no mapping for ['cushion', 'lamp', 'nightstand']
+[WARN] no mapping for ['lamp', 'table']
+[WARN] no mapping for ['lamp', 'ring']
+[WARN] no mapping for ['desk']
+[WARN] no mapping for ['sponge_green']
+[WARN] no mapping for ['keys', 'loveseat']
+[WARN] no mapping for ['saltshaker1']
+[WARN] no mapping for ['glass1', 'shelf']
+[WARN] no mapping for ['microwave', 'pan', 'table']
+[WARN] no mapping for ['cup_black']
+[WARN] no mapping for ['nightstand1']
+[WARN] no mapping for ['table']
+[WARN] no mapping for ['island', 'knife']
+[WARN] no mapping for ['kitchen_island', 'pan1', 'water1']
+[WARN] no mapping for ['cabinetdrawer1', 'knife1', 'sink1']
+[WARN] no mapping for ['sink1', 'stove1', 'teapot1']
+[WARN] no mapping for ['fridge1', 'sink1', 'spoon1']
+[WARN] no mapping for ['stove']
+[WARN] no mapping for ['fridge1', 'knife1', 'sink1']
+[WARN] no mapping for ['sink', 'table']
+[WARN] no mapping for ['table1']
+[WARN] no mapping for ['sink1']
+[WARN] no mapping for ['bowl1', 'table1']
+Task pick_cool_then_place_in_recep-Potato-None-CounterTop-30_trial_T20190908_111640_207484: Expecting ',' delimiter: line 1 column 38 (char 37)
+[WARN] no mapping for ['brown_ball1', 'sink1']
+[WARN] no mapping for ['blacktable1', 'fridge1', 'saltshaker1']
+[WARN] no mapping for ['table1']
+[WARN] no mapping for ['knife1', 'sink1']
+[WARN] no mapping for ['disk1', 'disk2']
+[WARN] no mapping for ['rag', 'sink']
+[WARN] no mapping for ['card1', 'card2', 'table', 'tvstand']
+[WARN] no mapping for ['sponge_green', 'sponge_green2', 'tub']
+[WARN] no mapping for ['dresser', 'keys1', 'keys2', 'white_table']
+[WARN] no mapping for ['couch', 'keys1', 'keys2', 'table']
+[WARN] no mapping for ['chair', 'remote1', 'remote2']
+[WARN] no mapping for ['steel_rack']
+[WARN] no mapping for ['metal_rack', 'spray_bottle_silver']
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/villain_direct_pddl/gpt-5.2/gpt52_from_yuchen/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/villain_direct_pddl/gpt-5.2/gpt52_from_yuchen/eval_summary.csv
+[eval] task_success_rate=20.00%  macro_P=0.8230  macro_R=0.4117  macro_F1=0.5489
+
+============================================================
+Evaluating: alfred_multi / vila_planning
+============================================================
+[WARN] no mapping for ['nightstand']
+[WARN] no mapping for ['keys', 'tall_lamp']
+[WARN] no mapping for ['lamp', 'pencil']
+[WARN] no mapping for ['lamp', 'trophy']
+[WARN] no mapping for ['lamp', 'ring']
+[WARN] no mapping for ['keys', 'loveseat']
+[WARN] no mapping for ['glass', 'kitchen_shelf', 'knife']
+[WARN] no mapping for ['glass_table']
+[WARN] no mapping for ['keys', 'small_table']
+[WARN] no mapping for ['pan', 'table']
+[WARN] no mapping for ['large_metal_spoon', 'sink']
+[WARN] no mapping for ['table']
+[WARN] no mapping for ['island', 'knife']
+[WARN] no mapping for ['plate', 'table']
+[WARN] no mapping for ['robot1', 'sink']
+[WARN] no mapping for ['kitchen_island', 'pan', 'sink']
+[WARN] no mapping for ['cabinetdrawer', 'knife', 'sink']
+[WARN] no mapping for ['mug', 'sink', 'table']
+[WARN] no mapping for ['sink', 'stove', 'teapot']
+[WARN] no mapping for ['sink', 'spoon', 'table']
+Task pick_clean_then_place_in_recep-PotatoSliced-None-Microwave-17_trial_T20190908_200044_008579: Expecting ',' delimiter: line 1 column 62 (char 61)
+[WARN] no mapping for ['sink', 'table']
+[WARN] no mapping for ['black_table', 'sink']
+[WARN] no mapping for ['lettuceslice']
+[WARN] no mapping for ['rack']
+Task pick_cool_then_place_in_recep-Pot-None-DiningTable-23_trial_T20190909_023542_512588: Expecting ',' delimiter: line 1 column 56 (char 55)
+[WARN] no mapping for ['brown_shelf', 'table']
+[WARN] no mapping for ['counter_in_front_of_sink', 'toaster']
+[WARN] no mapping for ['glass', 'robot1']
+[WARN] no mapping for ['shelves_left_of_counter']
+[WARN] no mapping for ['black_table']
+[WARN] no mapping for ['sink']
+[WARN] no mapping for ['disk1', 'disk2']
+[WARN] no mapping for ['bathtub', 'rag', 'sink']
+[WARN] no mapping for ['table', 'television_stand']
+[WARN] no mapping for ['bathtub', 'green_sponge', 'green_sponge_2', 'green_sponge_counter', 'green_sponge_trashcan']
+[WARN] no mapping for ['dresser', 'keys_1', 'keys_2', 'white_table']
+[WARN] no mapping for ['couch', 'keys_1', 'keys_2']
+Task pick_two_obj_and_place-Pan-None-CounterTop-14_trial_T20190907_012608_530399: Expecting ',' delimiter: line 1 column 39 (char 38)
+[WARN] no mapping for ['chair', 'chair_seat', 'remote1', 'remote2']
+[WARN] no mapping for ['sink', 'steel_rack']
+[WARN] no mapping for ['metal_rack', 'silver_spray_bottle', 'yellow_spray_bottle']
+[WARN] no mapping for ['table']
+[WARN] no mapping for ['empty_toilet_paper_roll_in_black_trash_bin', 'toilet_paper_roll_on_counter']
+[WARN] no mapping for ['remotecontrol1', 'remotecontrol2', 'tvstand1']
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/vila_planning/gpt-5.2/gpt52_from_yuchen/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/vila_planning/gpt-5.2/gpt52_from_yuchen/eval_summary.csv
+[eval] task_success_rate=22.67%  macro_P=0.0000  macro_R=0.0000  macro_F1=0.0000
+
+============================================================
+Evaluating: alfred_multi / villain_captioning_pddl
+============================================================
+[WARN] no mapping for ['lamp', 'nightstand']
+[WARN] no mapping for ['lamp', 'nightstand']
+[WARN] no mapping for ['lamp', 'table']
+[WARN] no mapping for ['lamp', 'sidetable']
+[WARN] no mapping for ['nightstand', 'pencil']
+[WARN] no mapping for ['cushion', 'lamp']
+[WARN] no mapping for ['lamp', 'trophy']
+[WARN] no mapping for ['lamp1', 'ring1']
+[WARN] no mapping for ['keys', 'loveseat']
+[WARN] no mapping for ['saltshaker']
+[WARN] no mapping for ['cardboard_box', 'remote']
+[WARN] no mapping for ['glass1', 'kitchen_shelf']
+[WARN] no mapping for ['knife1', 'sink1']
+[WARN] no mapping for ['glass_table']
+Task pick_and_place_with_movable_recep-DishSponge-Bowl-Cabinet-20_trial_T20190908_041045_040165: Expecting ',' delimiter: line 1 column 55 (char 54)
+[WARN] no mapping for ['cart_black', 'table_round', 'table_white']
+[WARN] no mapping for ['island', 'knife']
+[WARN] no mapping for ['kitchen_island', 'pan1', 'sink1']
+Task pick_clean_then_place_in_recep-ButterKnife-None-Drawer-30_trial_T20190908_051931_072703: Expecting ',' delimiter: line 1 column 70 (char 69)
+[WARN] no mapping for ['rag_purple', 'sink_left']
+[WARN] no mapping for ['mug1', 'sink1']
+[WARN] no mapping for ['microwave1', 'sink1', 'spoon1']
+[WARN] no mapping for ['fridge1', 'knife1', 'sink1']
+[WARN] no mapping for ['blacktable', 'kitchensink']
+[WARN] no mapping for ['table']
+[WARN] no mapping for ['bowl1', 'table1']
+Task pick_cool_then_place_in_recep-Potato-None-SinkBasin-30_trial_T20190906_210247_069914: Expecting ',' delimiter: line 1 column 66 (char 65)
+[WARN] no mapping for ['left_shelves1']
+[WARN] no mapping for ['blacktable1']
+[WARN] no mapping for ['table1']
+[WARN] no mapping for ['kitchen_sink', 'knife2']
+[WARN] no mapping for ['disk_1', 'disk_2']
+[WARN] no mapping for ['bathroom_sink', 'rag1']
+Task pick_two_obj_and_place-CreditCard-None-DiningTable-311_trial_T20190908_072852_125912: Expecting ',' delimiter: line 1 column 64 (char 63)
+[WARN] no mapping for ['sink1', 'sponge_bin', 'sponge_counter', 'tub1']
+[WARN] no mapping for ['keys_set_a', 'keys_set_b', 'white_table', 'wooden_dresser']
+[WARN] no mapping for ['couch', 'keypair_a', 'keypair_b']
+[WARN] no mapping for ['cup_1', 'robot_1']
+[WARN] no mapping for ['chair_seat_1', 'remote_1', 'remote_2']
+[WARN] no mapping for ['bathroom_sink', 'steel_rack']
+[WARN] no mapping for ['sink1', 'tp_empty', 'tp_full']
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/villain_captioning_pddl/gpt-5.2/gpt52_from_yuchen/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/villain_captioning_pddl/gpt-5.2/gpt52_from_yuchen/eval_summary.csv
+[eval] task_success_rate=22.00%  macro_P=0.8350  macro_R=0.3875  macro_F1=0.5293
+
+============================================================
+Evaluating: alfred_multi / scene_graph_to_pddl
+============================================================
+[WARN] no mapping for ['beige_table_lamp_on_desk', 'wooden_desk_right_side']
+[WARN] no mapping for ['green_shaded_table_lamp']
+[WARN] no mapping for ['red_credit_card_on_table', 'tall_floor_lamp_green_shade']
+[WARN] no mapping for ['clear_glass_dining_table_receptacle', 'tall_table_lamp_with_white_shade']
+[WARN] no mapping for ['dark_wood_side_table_with_drawer', 'pink_base_table_lamp_with_rectangular_shade']
+[WARN] no mapping for ['black_console_table_with_two_drawers', 'tall_lamp_with_square_base_and_rectangular_shade']
+[WARN] no mapping for ['silver_ring_with_brown_band_on_left_side_of_wooden_dresser', 'tall_table_lamp_with_beige_shade_and_red_trim']
+[WARN] no mapping for ['dark_wood_side_table_with_shelf', 'green_upholstered_chair_with_gray_arms']
+[WARN] no mapping for ['wall_mounted_hand_towel_white']
+[WARN] no mapping for ['set_of_keys_with_black_fob']
+Task pick_and_place_simple-ToiletPaper-None-ToiletPaperHanger-406_trial_T20190908_122807_136741: Expecting ',' delimiter: line 1 column 141 (char 140)
+[WARN] no mapping for ['long_low_wooden_tv_console', 'small_wooden_side_table_with_drawer']
+[WARN] no mapping for ['watermelon_whole_green_on_counter_center']
+[WARN] no mapping for ['glass_side_table_centerleft', 'red_card_on_lower_shelf_glass_side_table']
+[WARN] no mapping for ['green_table_surface', 'right_frying_pan_on_table']
+[WARN] no mapping for ['black_cup_on_small_bookshelf']
+[WARN] no mapping for ['egg_brown_on_counter', 'knife_metal_counter_next_to_stove']
+[WARN] no mapping for ['green_grid_pattern_couch', 'left_tv_remote_on_table', 'open_cardboard_box_on_left_side_of_coffee_table']
+[WARN] no mapping for ['green_kitchen_table', 'yellow_handle_knife_on_green_table']
+[WARN] no mapping for ['green_kitchen_island_countertop', 'metal_table_knife_on_island']
+[WARN] no mapping for ['round_gray_plate_on_table_right', 'white_dining_table_center']
+[WARN] no mapping for ['clear-glass-bottle-carafe', 'silver-metal-pan']
+[WARN] no mapping for ['cabinet_drawers_white_under_counter', 'knife_gray_handle_on_island_counter', 'sink_basin_left_counter']
+[WARN] no mapping for ['black_stove_counter_unit_right', 'stainless_double_sink_left_counter']
+[WARN] no mapping for ['counter_brown_marble_surface', 'sink_white_basins_left']
+[WARN] no mapping for ['double_basin_stainless_sink', 'red_countertop_microwave', 'yellow_banana_on_left_table']
+[WARN] no mapping for ['counter_by_sink', 'stainless_sink_in_counter']
+Task pick_clean_then_place_in_recep-Pan-None-StoveBurner-26_trial_T20190907_012527_434405: Expecting ',' delimiter: line 1 column 50 (char 49)
+[WARN] no mapping for ['pink-bar-soap-center', 'round-dark-stone-sink-basin']
+Task pick_clean_then_place_in_recep-SoapBar-None-Toilet-427_trial_T20190906_184352_559484: Expecting ',' delimiter: line 6 column 4 (char 151)
+[WARN] no mapping for ['black_table_left_of_sink', 'white_sink_with_faucet_center_right']
+[WARN] no mapping for ['double_basin_metal_sink']
+[WARN] no mapping for ['metal_spoon_left_edge', 'white_table_with_lower_shelf']
+[WARN] no mapping for ['green_kitchen_table', 'metal_bowl_left_edge_of_table']
+[WARN] no mapping for ['brown_ball_in_recycling_bin', 'sink_white_basins_in_counter']
+[WARN] no mapping for ['bowl_small_on_small_counter_by_stove']
+[WARN] no mapping for ['left_metal_sink_basin', 'round_black_bowl_on_right_counter', 'round_gold_bun_on_right_counter']
+[WARN] no mapping for ['dark_blade_knife_on_counter']
+[WARN] no mapping for ['clear_glass_tumbler_in_sink_left']
+[WARN] no mapping for ['beige-coffee-maker-with-drip-tray', 'round-brown-item-on-counter']
+[WARN] no mapping for ['black_side_shelf_left_of_table', 'small_glass_or_cup_on_black_side_shelf']
+[WARN] no mapping for ['small_yellow_handled_knife_on_counter']
+[WARN] no mapping for ['white_table_with_metal_legs']
+[WARN] no mapping for ['iridescent_cd_disk_near_left_of_laptop_on_desk']
+[WARN] no mapping for ['black_phone_on_small_table_left', 'small_wooden_table_surface']
+[WARN] no mapping for ['rag_red_in_bathtub', 'sink_bathroom_oval_basin']
+[WARN] no mapping for ['dark_wood_table_desk', 'red_credit_card_near_tv_base_left', 'red_credit_card_near_tv_base_right', 'white_tv_stand_with_drawers']
+[WARN] no mapping for ['bathroom_sink_basin_left', 'freestanding_bathtub_left', 'green_sponge_in_trash_bin', 'green_sponge_on_counter']
+[WARN] no mapping for ['freestanding_white_bathtub_right_side', 'white_towel_hanging_on_left_wall_ring', 'white_towel_hanging_on_right_wall_ring']
+[WARN] no mapping for ['blue_keys_set_left_on_dresser', 'blue_keys_set_right_on_dresser', 'white_table_with_sun_pattern', 'wooden_dresser_top']
+[WARN] no mapping for ['pink_soap_bar_in_sink']
+[WARN] no mapping for ['metal_rolling_rack_with_horizontal_bars']
+[WARN] no mapping for ['black-rectangular-trash-bin-on-floor-corner', 'empty-toilet-paper-cardboard-roll-in-trash-bin', 'toilet-paper-roll-front-on-counter']
+[WARN] no mapping for ['dark_wood_tv_stand_receptacle', 'transparent_glass_dining_table_receptacle']
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/scene_graph_to_pddl/gpt-5.2/gpt52_from_yuchen/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/scene_graph_to_pddl/gpt-5.2/gpt52_from_yuchen/eval_summary.csv
+[eval] task_success_rate=23.33%  macro_P=0.8476  macro_R=0.3053  macro_F1=0.4489
+
+Merged CSV: /home/mh3897/vlm-asf-muyu/results/eval_summary_gpt-5.2_gpt52_from_yuchen.csv
+
+Checking plans:   0%|          | 0/102 [00:00<?, ?it/s]Error: Precondition failed at step 8: (stack blue red robot)
+Error: Precondition failed at step 1: (unstack blue green robot)
+Error: Precondition failed at step 5: (unstack purple blue robot)
+Error: Precondition failed at step 3: (unstack orange red robot)
+Error: Precondition failed at step 3: (pick-up green robot)
+Error: Precondition failed at step 3: (unstack purple yellow robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 5: (pick-up red robot)
+
+Checking plans: 100%|██████████| 102/102 [00:00<00:00, 1213.27it/s]
+
+Checking plans:   0%|          | 0/102 [00:00<?, ?it/s]Error: Precondition failed at step 1: (pick-up orange robot)
+Error: Precondition failed at step 3: (pick-up yellow robot)
+Error: Precondition failed at step 7: (unstack blue green robot)
+Error: Precondition failed at step 1: (pick-up green robot)
+Error: Precondition failed at step 1: (unstack green purple robot)
+Error: Precondition failed at step 5: (pick-up yellow robot)
+Error: Precondition failed at step 5: (unstack red orange robot)
+Error: Precondition failed at step 3: (unstack green purple robot)
+Error: Precondition failed at step 3: (unstack purple orange robot)
+Error: Precondition failed at step 3: (pick-up green robot)
+Error: Precondition failed at step 1: (pick-up green robot)
+Error: Precondition failed at step 3: (pick-up orange robot)
+Error: Precondition failed at step 5: (unstack purple yellow robot)
+Error: Precondition failed at step 1: (unstack green purple robot)
+Error: Precondition failed at step 7: (pick-up red robot)
+Error: Precondition failed at step 1: (unstack blue green robot)
+Error: Precondition failed at step 5: (pick-up orange robot)
+Error: Precondition failed at step 9: (unstack blue purple robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 9: (pick-up purple robot)
+Error: Precondition failed at step 3: (unstack orange green robot)
+Error: Precondition failed at step 9: (pick-up blue robot)
+Error: Precondition failed at step 1: (unstack orange red robot)
+Error: Precondition failed at step 9: (stack purple red robot)
+Error: Precondition failed at step 1: (unstack blue red robot)
+Error: Precondition failed at step 11: (pick-up blue robot)
+Error: Precondition failed at step 8: (stack yellow blue robot)
+Error: Precondition failed at step 9: (stack orange red robot)
+Error: Precondition failed at step 5: (pick-up green robot)
+Error: Precondition failed at step 8: (stack orange blue robot)
+Error: Precondition failed at step 3: (pick-up blue robot)
+Error: Precondition failed at step 7: (pick-up orange robot)
+Error: Precondition failed at step 1: (unstack purple yellow robot)
+Error: Precondition failed at step 5: (pick-up orange robot)
+Error: Precondition failed at step 17: (stack green yellow robot)
+Error: Precondition failed at step 1: (unstack red orange robot)
+Error: Precondition failed at step 3: (pick-up blue robot)
+Error: Precondition failed at step 1: (unstack blue purple robot)
+Error: Precondition failed at step 9: (pick-up yellow robot)
+Error: Precondition failed at step 3: (pick-up yellow robot)
+Error: Precondition failed at step 2: (pick-up orange robot)
+Error: Precondition failed at step 4: (stack orange yellow robot)
+Error: Precondition failed at step 3: (pick-up orange robot)
+Error: Precondition failed at step 2: (stack green blue robot)
+Error: Precondition failed at step 9: (pick-up green robot)
+Error: Precondition failed at step 4: (stack blue orange robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 3: (unstack green purple robot)
+Error: Precondition failed at step 1: (pick-up orange robot)
+Error: Precondition failed at step 5: (unstack red purple robot)
+Error: Precondition failed at step 13: (pick-up purple robot)
+Error: Precondition failed at step 1: (pick-up red robot)
+Error: Precondition failed at step 11: (pick-up red robot)
+Error: Precondition failed at step 9: (pick-up purple robot)
+Error: Precondition failed at step 3: (pick-up purple robot)
+Error: Precondition failed at step 5: (pick-up orange robot)
+Error: Precondition failed at step 5: (pick-up green robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 2: (stack blue orange robot)
+Error: Precondition failed at step 3: (pick-up blue robot)
+Error: Precondition failed at step 4: (pick-up yellow robot)
+Error: Precondition failed at step 13: (pick-up green robot)
+Error: Precondition failed at step 3: (unstack yellow red robot)
+Error: Precondition failed at step 11: (unstack blue red robot)
+Error: Precondition failed at step 7: (pick-up orange robot)
+Error: Precondition failed at step 6: (stack green red robot)
+Error: Precondition failed at step 9: (pick-up green robot)
+Error: Precondition failed at step 1: (pick-up orange robot)
+Error: Precondition failed at step 4: (stack red green robot)
+Error: Precondition failed at step 3: (unstack purple red robot)
+Error: Precondition failed at step 17: (pick-up yellow robot)
+
+Checking plans: 100%|██████████| 102/102 [00:00<00:00, 2943.11it/s]
+
+Checking plans:   0%|          | 0/102 [00:00<?, ?it/s]Error: Precondition failed at step 3: (unstack yellow orange robot)
+Error: Precondition failed at step 5: (unstack purple blue robot)
+Error: Precondition failed at step 3: (unstack orange red robot)
+
+Checking plans:  37%|███▋      | 38/102 [00:05<00:08,  7.18it/s]Error: Precondition failed at step 1: (pick-up blue robot)
+
+Checking plans: 100%|██████████| 102/102 [00:05<00:00, 19.18it/s]
+
+Checking plans:   0%|          | 0/102 [00:00<?, ?it/s]Error: Precondition failed at step 9: (unstack purple orange robot)
+Error: Precondition failed at step 5: (pick-up orange robot)
+Error: Precondition failed at step 5: (unstack purple blue robot)
+Error: Precondition failed at step 3: (unstack orange red robot)
+Error: Precondition failed at step 1: (put-down orange robot)
+Error: Precondition failed at step 1: (unstack green orange robot)
+Error: Precondition failed at step 1: (unstack green orange robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+
+Checking plans: 100%|██████████| 102/102 [00:00<00:00, 2677.82it/s]
+
+Checking plans:   0%|          | 0/150 [00:00<?, ?it/s]
+Checking plans:   1%|          | 1/150 [00:05<12:29,  5.03s/it]Error: Precondition failed at step 1: (toggleobject agent1 desklamp_1)
+
+Checking plans:   1%|▏         | 2/150 [00:10<13:08,  5.33s/it]Error: Type mismatch for ?r: expected receptacle, got object (object box_1)
+
+Checking plans:   2%|▏         | 3/150 [00:13<10:15,  4.19s/it]
+Checking plans:   3%|▎         | 4/150 [00:17<10:18,  4.24s/it]Error: Precondition failed at step 1: (pickupobject agent1 cellphone_1)
+
+Checking plans:   4%|▍         | 6/150 [00:20<06:27,  2.69s/it]Error: Precondition failed at step 2: (toggleobject agent1 floorlamp_1)
+
+Checking plans:   5%|▍         | 7/150 [00:23<06:43,  2.82s/it]Error: Precondition failed at step 1: (pickupobject agent1 laptop_1)
+
+Checking plans:   5%|▌         | 8/150 [00:27<07:34,  3.20s/it]
+Checking plans:   6%|▌         | 9/150 [00:32<08:17,  3.53s/it]Error: Precondition failed at step 1: (toggleobject agent1 desklamp_1)
+
+Checking plans:   7%|▋         | 11/150 [00:35<06:18,  2.73s/it]
+Checking plans:   8%|▊         | 12/150 [00:39<07:03,  3.07s/it]
+Checking plans:   9%|▊         | 13/150 [00:46<09:03,  3.97s/it]
+Checking plans:   9%|▉         | 14/150 [00:53<11:04,  4.89s/it]
+Checking plans:  10%|█         | 15/150 [00:57<10:17,  4.57s/it]
+Checking plans:  11%|█         | 16/150 [01:02<10:28,  4.69s/it]
+Checking plans:  15%|█▍        | 22/150 [01:04<03:33,  1.67s/it]Error: Precondition failed at step 1: (pickupobject agent1 creditcard_1)
+
+Checking plans:  16%|█▌        | 24/150 [01:08<03:32,  1.69s/it]
+Checking plans:  17%|█▋        | 25/150 [01:12<04:19,  2.08s/it]
+Checking plans:  18%|█▊        | 27/150 [01:15<04:00,  1.96s/it]
+Checking plans:  19%|█▊        | 28/150 [01:21<05:05,  2.51s/it]
+Checking plans:  19%|█▉        | 29/150 [01:23<05:02,  2.50s/it]
+Checking plans:  21%|██        | 31/150 [01:31<05:58,  3.01s/it]Error: Precondition failed at step 1: (pickupobject agent1 plunger_1)
+
+Checking plans:  22%|██▏       | 33/150 [01:34<04:45,  2.44s/it]Error: Precondition failed at step 1: (pickupobject agent1 spraybottle_1)
+
+Checking plans:  27%|██▋       | 40/150 [01:36<02:04,  1.13s/it]
+Checking plans:  28%|██▊       | 42/150 [01:40<02:16,  1.26s/it]Error: Precondition failed at step 1: (pickupobject agent1 butterknife_1)
+
+Checking plans:  29%|██▊       | 43/150 [01:45<03:13,  1.80s/it]
+Checking plans:  30%|███       | 45/150 [01:48<02:58,  1.70s/it]
+Checking plans:  31%|███       | 46/150 [01:51<03:23,  1.95s/it]Error: Precondition failed at step 3: (putobjectinreceptacle agent1 fork_1 pan_1)
+
+Checking plans:  33%|███▎      | 49/150 [01:54<02:38,  1.57s/it]
+Checking plans:  33%|███▎      | 50/150 [01:59<03:21,  2.01s/it]Error: Precondition failed at step 1: (pickupobject agent1 knife_1)
+
+Checking plans:  34%|███▍      | 51/150 [02:04<04:15,  2.58s/it]Error: Precondition failed at step 2: (pickupobject agent1 pen_1)
+
+Checking plans:  36%|███▌      | 54/150 [02:14<04:40,  2.92s/it]
+Checking plans:  37%|███▋      | 55/150 [02:18<04:53,  3.09s/it]
+Checking plans:  37%|███▋      | 56/150 [02:21<04:49,  3.08s/it]
+Checking plans:  38%|███▊      | 57/150 [02:25<05:07,  3.31s/it]Error: Precondition failed at step 3: (putobjectinreceptacle agent1 spoon_1 mug_1)
+
+Checking plans:  39%|███▉      | 59/150 [02:29<04:21,  2.87s/it]Error: Precondition failed at step 1: (pickupobject agent1 pan_1)
+
+Checking plans:  40%|████      | 60/150 [02:34<04:58,  3.32s/it]
+Checking plans:  41%|████      | 61/150 [02:38<05:06,  3.45s/it]
+Checking plans:  41%|████▏     | 62/150 [02:40<04:34,  3.11s/it]
+Checking plans:  42%|████▏     | 63/150 [02:44<04:57,  3.42s/it]
+Checking plans:  43%|████▎     | 64/150 [02:50<05:47,  4.04s/it]Error: Precondition failed at step 2: (pickupobject agent1 cloth_1)
+
+Checking plans:  43%|████▎     | 65/150 [02:55<06:12,  4.38s/it]
+Checking plans:  44%|████▍     | 66/150 [02:58<05:21,  3.82s/it]Error: Precondition failed at step 2: (pickupobject agent1 cup_1)
+
+Checking plans:  45%|████▍     | 67/150 [03:01<05:12,  3.77s/it]
+Checking plans:  45%|████▌     | 68/150 [03:05<05:06,  3.74s/it]
+Checking plans:  47%|████▋     | 70/150 [03:09<03:52,  2.91s/it]
+Checking plans:  47%|████▋     | 71/150 [03:12<03:59,  3.04s/it]
+Checking plans:  48%|████▊     | 72/150 [03:17<04:39,  3.58s/it]
+Checking plans:  49%|████▊     | 73/150 [03:20<04:10,  3.25s/it]
+Checking plans:  49%|████▉     | 74/150 [03:23<04:08,  3.27s/it]Error: Precondition failed at step 2: (pickupobject agent1 pan_1)
+
+Checking plans:  50%|█████     | 75/150 [03:26<04:02,  3.23s/it]
+Checking plans:  51%|█████     | 76/150 [03:31<04:30,  3.66s/it]Error: Precondition failed at step 1: (pickupobject agent1 potato_1)
+
+Checking plans:  51%|█████▏    | 77/150 [03:35<04:40,  3.85s/it]
+Checking plans:  53%|█████▎    | 79/150 [03:37<03:05,  2.62s/it]
+Checking plans:  53%|█████▎    | 80/150 [03:41<03:17,  2.82s/it]Error: Precondition failed at step 1: (pickupobject agent1 spoon_1)
+
+Checking plans:  54%|█████▍    | 81/150 [03:45<03:38,  3.17s/it]Error: Precondition failed at step 2: (pickupobject agent1 tomato_1)
+
+Checking plans:  55%|█████▍    | 82/150 [03:49<03:42,  3.27s/it]Error: Precondition failed at step 2: (pickupobject agent1 apple_1)
+
+Checking plans:  55%|█████▌    | 83/150 [03:52<03:41,  3.31s/it]
+Checking plans:  56%|█████▌    | 84/150 [03:56<03:52,  3.53s/it]Error: Precondition failed at step 2: (pickupobject agent1 bowl_1)
+
+Checking plans:  57%|█████▋    | 86/150 [04:00<03:00,  2.82s/it]Error: Precondition failed at step 1: (pickupobject agent1 butterknife_1)
+
+Checking plans:  58%|█████▊    | 87/150 [04:04<03:15,  3.10s/it]Error: Precondition failed at step 1: (pickupobject agent1 bread_1)
+
+Checking plans:  59%|█████▊    | 88/150 [04:07<03:13,  3.11s/it]Error: Precondition failed at step 2: (pickupobject agent1 cup_1)
+Error: Precondition failed at step 1: (pickupobject agent1 egg_1)
+
+Checking plans:  61%|██████    | 91/150 [04:10<02:02,  2.07s/it]
+Checking plans:  63%|██████▎   | 94/150 [04:13<01:29,  1.59s/it]Error: Precondition failed at step 2: (pickupobject agent1 mug_1)
+
+Checking plans:  63%|██████▎   | 95/150 [04:17<01:48,  1.97s/it]Error: Precondition failed at step 2: (pickupobject agent1 pan_1)
+
+Checking plans:  64%|██████▍   | 96/150 [04:22<02:12,  2.44s/it]Error: Precondition failed at step 2: (pickupobject agent1 plate_1)
+
+Checking plans:  65%|██████▍   | 97/150 [04:24<02:10,  2.46s/it]
+Checking plans:  65%|██████▌   | 98/150 [04:30<02:48,  3.24s/it]
+Checking plans:  66%|██████▌   | 99/150 [04:35<03:11,  3.76s/it]
+Checking plans:  67%|██████▋   | 100/150 [04:39<03:11,  3.83s/it]Error: Precondition failed at step 2: (pickupobject agent1 knife_1)
+
+Checking plans:  67%|██████▋   | 101/150 [04:43<03:03,  3.74s/it]Error: Precondition failed at step 3: (pickupobject agent1 tomato_1)
+Error: Precondition failed at step 2: (pickupobject agent1 tomato_1)
+
+Checking plans:  69%|██████▉   | 104/150 [04:46<01:45,  2.30s/it]Error: Precondition failed at step 2: (pickupobject agent1 apple_1)
+
+Checking plans:  71%|███████▏  | 107/150 [04:50<01:20,  1.88s/it]Error: Precondition failed at step 2: (pickupobject agent1 bread_1)
+
+Checking plans:  73%|███████▎  | 110/150 [04:53<01:00,  1.51s/it]Error: Precondition failed at step 2: (pickupobject agent1 cup_1)
+
+Checking plans:  75%|███████▍  | 112/150 [04:55<00:54,  1.44s/it]Error: Precondition failed at step 2: (pickupobject agent1 egg_1)
+
+Checking plans:  75%|███████▌  | 113/150 [04:59<01:05,  1.78s/it]
+Checking plans:  77%|███████▋  | 115/150 [05:02<01:01,  1.77s/it]Error: Precondition failed at step 2: (pickupobject agent1 mug_1)
+
+Checking plans:  77%|███████▋  | 116/150 [05:06<01:11,  2.10s/it]Error: Precondition failed at step 2: (pickupobject agent1 plate_1)
+Error: Precondition failed at step 1: (pickupobject agent1 potato_1)
+
+Checking plans:  79%|███████▉  | 119/150 [05:09<00:49,  1.59s/it]Error: Precondition failed at step 1: (pickupobject agent1 potato_1)
+
+Checking plans:  81%|████████  | 121/150 [05:15<00:59,  2.04s/it]
+Checking plans:  81%|████████▏ | 122/150 [05:19<01:07,  2.43s/it]Error: Precondition failed at step 2: (pickupobject agent1 tomato_1)
+
+Checking plans:  82%|████████▏ | 123/150 [05:22<01:07,  2.51s/it]Error: Precondition failed at step 3: (sliceobject agent1 tomato_1 knife_1)
+
+Checking plans:  83%|████████▎ | 124/150 [05:25<01:09,  2.66s/it]
+Checking plans:  83%|████████▎ | 125/150 [05:29<01:11,  2.85s/it]Error: Precondition failed at step 6: (pickupobject agent1 book_2)
+
+Checking plans:  85%|████████▌ | 128/150 [05:32<00:43,  1.97s/it]Error: Precondition failed at step 1: (pickupobject agent1 candle_1)
+
+Checking plans:  87%|████████▋ | 131/150 [05:36<00:33,  1.75s/it]
+Checking plans:  88%|████████▊ | 132/150 [05:40<00:38,  2.16s/it]
+Checking plans:  89%|████████▊ | 133/150 [05:45<00:42,  2.53s/it]Error: Precondition failed at step 1: (pickupobject agent1 handtowel_1)
+
+Checking plans:  89%|████████▉ | 134/150 [05:48<00:44,  2.77s/it]
+Checking plans:  90%|█████████ | 135/150 [05:53<00:47,  3.15s/it]
+Checking plans:  91%|█████████ | 136/150 [05:57<00:48,  3.47s/it]Error: Precondition failed at step 6: (pickupobject agent1 pan_1)
+
+Checking plans:  92%|█████████▏| 138/150 [06:01<00:33,  2.78s/it]Error: Precondition failed at step 2: (pickupobject agent1 pillow_1)
+
+Checking plans:  93%|█████████▎| 140/150 [06:05<00:24,  2.48s/it]
+Checking plans:  94%|█████████▍| 141/150 [06:09<00:26,  2.99s/it]Error: Precondition failed at step 1: (pickupobject agent1 saltshaker_2)
+Error: Precondition failed at step 4: (pickupobject agent1 soapbar_2)
+
+Checking plans:  95%|█████████▌| 143/150 [06:16<00:21,  3.12s/it]
+Checking plans:  96%|█████████▌| 144/150 [06:21<00:20,  3.44s/it]Error: Precondition failed at step 2: (pickupobject agent1 toiletpaper_1)
+
+Checking plans:  99%|█████████▊| 148/150 [06:25<00:04,  2.10s/it]
+Checking plans: 100%|██████████| 150/150 [06:29<00:00,  2.14s/it]
+Checking plans: 100%|██████████| 150/150 [06:29<00:00,  2.60s/it]
+
+Checking plans:   0%|          | 0/150 [00:00<?, ?it/s]
+Checking plans:   1%|          | 1/150 [00:02<07:24,  2.98s/it]Error: Precondition failed at step 3: (pickupobject agent1 desklamp_1)
+
+Checking plans:   1%|▏         | 2/150 [00:07<09:40,  3.92s/it]
+Checking plans:   2%|▏         | 3/150 [00:10<08:42,  3.56s/it]
+Checking plans:   3%|▎         | 4/150 [00:13<07:37,  3.13s/it]
+Checking plans:   3%|▎         | 5/150 [00:16<07:33,  3.13s/it]
+Checking plans:   4%|▍         | 6/150 [00:19<07:14,  3.02s/it]
+Checking plans:   5%|▍         | 7/150 [00:23<07:55,  3.32s/it]
+Checking plans:   5%|▌         | 8/150 [00:26<07:42,  3.26s/it]
+Checking plans:   6%|▌         | 9/150 [00:28<07:00,  2.98s/it]
+Checking plans:   7%|▋         | 10/150 [00:32<07:26,  3.19s/it]
+Checking plans:   7%|▋         | 11/150 [00:35<07:16,  3.14s/it]
+Checking plans:   8%|▊         | 12/150 [00:40<08:34,  3.73s/it]
+Checking plans:   9%|▊         | 13/150 [00:43<08:21,  3.66s/it]
+Checking plans:   9%|▉         | 14/150 [00:48<08:51,  3.91s/it]Error: Precondition failed at step 3: (gotolocation agent1 tissuebox_1)
+
+Checking plans:  11%|█         | 16/150 [00:54<07:50,  3.51s/it]
+Checking plans:  11%|█▏        | 17/150 [00:57<07:38,  3.44s/it]
+Checking plans:  13%|█▎        | 19/150 [01:01<06:09,  2.82s/it]Error: Precondition failed at step 4: (openobject agent1 drawer_1)
+
+Checking plans:  15%|█▍        | 22/150 [01:03<03:54,  1.83s/it]Error: Precondition failed at step 4: (putobjectinreceptacle agent1 cellphone_1 shelf_1)
+
+Checking plans:  15%|█▌        | 23/150 [01:06<04:17,  2.03s/it]
+Checking plans:  17%|█▋        | 25/150 [01:09<03:57,  1.90s/it]
+Checking plans:  18%|█▊        | 27/150 [01:13<03:49,  1.86s/it]
+Checking plans:  19%|█▊        | 28/150 [01:17<04:32,  2.23s/it]
+Checking plans:  19%|█▉        | 29/150 [01:20<04:46,  2.37s/it]
+Checking plans:  20%|██        | 30/150 [01:23<05:24,  2.70s/it]Error: Precondition failed at step 2: (openobject agent1 drawer_1)
+
+Checking plans:  21%|██        | 31/150 [01:26<05:31,  2.78s/it]Error: Precondition failed at step 4: (openobject agent1 cabinet_1)
+
+Checking plans:  22%|██▏       | 33/150 [01:30<04:37,  2.37s/it]Error: Precondition failed at step 4: (openobject agent1 cabinet_1)
+
+Checking plans:  25%|██▍       | 37/150 [01:33<02:54,  1.55s/it]Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+
+Checking plans:  26%|██▌       | 39/150 [01:36<02:37,  1.42s/it]
+Checking plans:  27%|██▋       | 40/150 [01:39<03:05,  1.68s/it]Error: Precondition failed at step 4: (openobject agent1 fridge_1)
+
+Checking plans:  28%|██▊       | 42/150 [01:44<03:31,  1.96s/it]
+Checking plans:  29%|██▊       | 43/150 [01:49<04:42,  2.64s/it]Error: Precondition failed at step 4: (pickupobject agent1 candle_1)
+Error: Precondition failed at step 5: (gotolocation agent1 bowl_1)
+
+Checking plans:  30%|███       | 45/150 [01:55<04:51,  2.78s/it]Error: Precondition failed at step 2: (openobject agent1 cabinet_1)
+
+Checking plans:  31%|███       | 46/150 [01:59<05:07,  2.96s/it]Error: Precondition failed at step 4: (pickupobject agent1 pot_1)
+
+Checking plans:  31%|███▏      | 47/150 [02:04<05:50,  3.40s/it]Error: Precondition failed at step 2: (pickupobject agent1 cup_1)
+
+Checking plans:  32%|███▏      | 48/150 [02:08<06:02,  3.56s/it]Error: Precondition failed at step 4: (pickupobject agent1 fork_1)
+
+Checking plans:  33%|███▎      | 49/150 [02:14<06:47,  4.03s/it]
+Checking plans:  33%|███▎      | 50/150 [02:19<07:12,  4.32s/it]
+Checking plans:  34%|███▍      | 51/150 [02:23<07:01,  4.26s/it]Error: Precondition failed at step 1: (pickupobject agent1 plate_1)
+
+Checking plans:  35%|███▍      | 52/150 [02:27<07:07,  4.36s/it]Error: Precondition failed at step 2: (pickupobject agent1 pen_1)
+Error: Precondition failed at step 3: (putobjectinreceptacle agent1 pen_1 mug_1)
+
+Checking plans:  36%|███▌      | 54/150 [02:30<04:55,  3.07s/it]Error: Precondition failed at step 5: (gotolocation agent1 bowl_1)
+
+Checking plans:  37%|███▋      | 55/150 [02:34<05:02,  3.19s/it]Error: Precondition failed at step 2: (pickupobject agent1 butterknife_1)
+
+Checking plans:  37%|███▋      | 56/150 [02:38<05:28,  3.49s/it]
+Checking plans:  38%|███▊      | 57/150 [02:43<05:47,  3.73s/it]Error: Precondition failed at step 3: (pickupobject agent1 spatula_1)
+
+Checking plans:  39%|███▊      | 58/150 [02:47<05:47,  3.78s/it]Error: Precondition failed at step 4: (pickupobject agent1 spoon_1)
+
+Checking plans:  39%|███▉      | 59/150 [02:51<06:13,  4.10s/it]Error: Precondition failed at step 4: (putobjectinreceptacle agent1 tomato_1 pan_1)
+
+Checking plans:  40%|████      | 60/150 [02:56<06:17,  4.20s/it]
+Checking plans:  41%|████      | 61/150 [03:02<07:05,  4.79s/it]
+Checking plans:  41%|████▏     | 62/150 [03:07<07:05,  4.84s/it]
+Checking plans:  42%|████▏     | 63/150 [03:12<06:56,  4.79s/it]
+Checking plans:  43%|████▎     | 64/150 [03:17<07:00,  4.89s/it]Error: Precondition failed at step 6: (openobject agent1 cabinet_1)
+
+Checking plans:  43%|████▎     | 65/150 [03:19<05:56,  4.20s/it]
+Checking plans:  44%|████▍     | 66/150 [03:23<05:41,  4.06s/it]
+Checking plans:  45%|████▍     | 67/150 [03:27<05:32,  4.01s/it]Error: Precondition failed at step 2: (openobject agent1 microwave_1)
+
+Checking plans:  45%|████▌     | 68/150 [03:31<05:39,  4.13s/it]Error: Precondition failed at step 2: (pickupobject agent1 fork_1)
+
+Checking plans:  46%|████▌     | 69/150 [03:36<05:35,  4.14s/it]
+Checking plans:  47%|████▋     | 70/150 [03:40<05:39,  4.25s/it]
+Checking plans:  47%|████▋     | 71/150 [03:45<05:45,  4.38s/it]Error: Precondition failed at step 1: (openobject agent1 cabinet_1)
+
+Checking plans:  48%|████▊     | 72/150 [03:49<05:26,  4.19s/it]Error: Precondition failed at step 6: (pickupobject agent1 knife_1)
+
+Checking plans:  49%|████▊     | 73/150 [03:53<05:25,  4.22s/it]
+Checking plans:  49%|████▉     | 74/150 [03:56<04:47,  3.78s/it]
+Checking plans:  50%|█████     | 75/150 [03:59<04:42,  3.77s/it]
+Checking plans:  51%|█████     | 76/150 [04:03<04:44,  3.84s/it]
+Checking plans:  51%|█████▏    | 77/150 [04:09<05:09,  4.24s/it]Error: Precondition failed at step 4: (openobject agent1 cabinet_1)
+
+Checking plans:  52%|█████▏    | 78/150 [04:12<04:40,  3.90s/it]Error: Precondition failed at step 6: (openobject agent1 drawer_1)
+
+Checking plans:  53%|█████▎    | 79/150 [04:15<04:23,  3.71s/it]
+Checking plans:  53%|█████▎    | 80/150 [04:19<04:20,  3.72s/it]Error: Precondition failed at step 1: (pickupobject agent1 spoon_1)
+
+Checking plans:  54%|█████▍    | 81/150 [04:23<04:30,  3.93s/it]
+Checking plans:  55%|█████▍    | 82/150 [04:27<04:35,  4.05s/it]Error: Precondition failed at step 4: (openobject agent1 fridge_1)
+
+Checking plans:  55%|█████▌    | 83/150 [04:31<04:20,  3.90s/it]Error: Precondition failed at step 4: (openobject agent1 fridge_1)
+
+Checking plans:  56%|█████▌    | 84/150 [04:34<03:56,  3.59s/it]Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+
+Checking plans:  57%|█████▋    | 86/150 [04:36<02:42,  2.54s/it]Error: Precondition failed at step 3: (sliceobject agent1 bread_1 butterknife_1)
+
+Checking plans:  58%|█████▊    | 87/150 [04:39<02:43,  2.60s/it]Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+Error: Precondition failed at step 4: (openobject agent1 fridge_1)
+Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+
+Checking plans:  61%|██████    | 91/150 [04:43<01:33,  1.59s/it]Error: Precondition failed at step 4: (pickupobject agent1 knife_1)
+
+Checking plans:  61%|██████▏   | 92/150 [04:48<02:08,  2.22s/it]Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+Error: Precondition failed at step 4: (openobject agent1 fridge_1)
+
+Checking plans:  63%|██████▎   | 94/150 [04:50<01:44,  1.87s/it]Error: Precondition failed at step 4: (openobject agent1 fridge_1)
+
+Checking plans:  63%|██████▎   | 95/150 [04:55<02:09,  2.36s/it]Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+
+Checking plans:  64%|██████▍   | 96/150 [04:58<02:13,  2.47s/it]Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+
+Checking plans:  65%|██████▍   | 97/150 [05:00<02:05,  2.37s/it]
+Checking plans:  65%|██████▌   | 98/150 [05:06<02:50,  3.28s/it]Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+
+Checking plans:  66%|██████▌   | 99/150 [05:10<02:58,  3.49s/it]Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+
+Checking plans:  67%|██████▋   | 100/150 [05:14<03:02,  3.64s/it]Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+
+Checking plans:  67%|██████▋   | 101/150 [05:17<02:47,  3.43s/it]Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+Error: Precondition failed at step 2: (openobject agent1 fridge_1)
+Error: Precondition failed at step 4: (openobject agent1 microwave_1)
+
+Checking plans:  69%|██████▉   | 104/150 [05:19<01:34,  2.06s/it]
+Checking plans:  70%|███████   | 105/150 [05:23<01:46,  2.36s/it]Error: Precondition failed at step 4: (openobject agent1 microwave_1)
+Error: Precondition failed at step 4: (pickupobject agent1 knife_1)
+
+Checking plans:  71%|███████▏  | 107/150 [05:27<01:40,  2.34s/it]Error: Precondition failed at step 1: (pickupobject agent1 bread_1)
+
+Checking plans:  72%|███████▏  | 108/150 [05:31<01:52,  2.67s/it]Error: Precondition failed at step 4: (pickupobject agent1 butterknife_1)
+
+Checking plans:  73%|███████▎  | 109/150 [05:36<02:05,  3.06s/it]
+Checking plans:  73%|███████▎  | 110/150 [05:40<02:11,  3.29s/it]Error: Precondition failed at step 2: (openobject agent1 microwave_1)
+Error: Precondition failed at step 5: (openobject agent1 microwave_1)
+
+Checking plans:  75%|███████▍  | 112/150 [05:43<01:39,  2.62s/it]Error: Precondition failed at step 4: (openobject agent1 microwave_1)
+
+Checking plans:  75%|███████▌  | 113/150 [05:47<01:48,  2.93s/it]Error: Precondition failed at step 6: (openobject agent1 cabinet_1)
+
+Checking plans:  76%|███████▌  | 114/150 [05:51<01:57,  3.25s/it]
+Checking plans:  77%|███████▋  | 115/150 [05:54<01:48,  3.10s/it]Error: Precondition failed at step 2: (openobject agent1 microwave_1)
+
+Checking plans:  77%|███████▋  | 116/150 [05:58<01:51,  3.28s/it]Error: Precondition failed at step 6: (openobject agent1 fridge_1)
+Error: Precondition failed at step 6: (openobject agent1 fridge_1)
+Error: Precondition failed at step 2: (pickupobject agent1 potato_1)
+
+Checking plans:  79%|███████▉  | 119/150 [06:00<01:00,  1.97s/it]Error: Precondition failed at step 4: (sliceobject agent1 potato_1 butterknife_1)
+
+Checking plans:  80%|████████  | 120/150 [06:03<01:06,  2.20s/it]Error: Precondition failed at step 2: (openobject agent1 microwave_1)
+
+Checking plans:  81%|████████  | 121/150 [06:09<01:26,  2.98s/it]Error: Precondition failed at step 4: (openobject agent1 microwave_1)
+
+Checking plans:  81%|████████▏ | 122/150 [06:13<01:29,  3.20s/it]Error: Precondition failed at step 2: (openobject agent1 microwave_1)
+
+Checking plans:  82%|████████▏ | 123/150 [06:18<01:38,  3.67s/it]Error: Precondition failed at step 3: (sliceobject agent1 tomato_1 knife_1)
+
+Checking plans:  83%|████████▎ | 124/150 [06:21<01:33,  3.61s/it]Error: Precondition failed at step 2: (openobject agent1 microwave_1)
+
+Checking plans:  83%|████████▎ | 125/150 [06:26<01:33,  3.76s/it]Error: Precondition failed at step 4: (sliceobject agent1 bread_1 knife_1)
+Error: Precondition failed at step 2: (gotolocation agent1 shelf_1)
+
+Checking plans:  85%|████████▌ | 128/150 [06:30<00:55,  2.54s/it]
+Checking plans:  87%|████████▋ | 131/150 [06:34<00:38,  2.00s/it]Error: Precondition failed at step 1: (pickupobject agent1 creditcard_1)
+
+Checking plans:  88%|████████▊ | 132/150 [06:38<00:43,  2.40s/it]
+Checking plans:  89%|████████▊ | 133/150 [06:42<00:46,  2.75s/it]
+Checking plans:  89%|████████▉ | 134/150 [06:46<00:45,  2.82s/it]
+Checking plans:  90%|█████████ | 135/150 [06:51<00:51,  3.43s/it]Error: Precondition failed at step 2: (gotolocation agent1 sidetable_1)
+
+Checking plans:  91%|█████████ | 136/150 [06:55<00:49,  3.55s/it]
+Checking plans:  91%|█████████▏| 137/150 [06:58<00:45,  3.54s/it]
+Checking plans:  92%|█████████▏| 138/150 [07:08<01:03,  5.31s/it]
+Checking plans:  93%|█████████▎| 140/150 [07:12<00:38,  3.81s/it]
+Checking plans:  94%|█████████▍| 141/150 [07:16<00:35,  3.93s/it]Error: Precondition failed at step 2: (openobject agent1 cabinet_1)
+Error: Precondition failed at step 1: (pickupobject agent1 soapbar_1)
+
+Checking plans:  95%|█████████▌| 143/150 [07:21<00:23,  3.32s/it]
+Checking plans:  96%|█████████▌| 144/150 [07:26<00:21,  3.53s/it]Error: Precondition failed at step 3: (openobject agent1 drawer_1)
+
+Checking plans:  97%|█████████▋| 145/150 [07:29<00:18,  3.61s/it]Error: Precondition failed at step 4: (openobject agent1 garbagecan_1)
+Error: Precondition failed at step 1: (pickupobject agent1 statue_1)
+
+Checking plans:  98%|█████████▊| 147/150 [07:33<00:08,  2.94s/it]Error: Precondition failed at step 2: (openobject agent1 cabinet_1)
+
+Checking plans:  99%|█████████▊| 148/150 [07:40<00:07,  3.77s/it]Error: Precondition failed at step 3: (gotolocation agent1 toilet_1)
+
+Checking plans: 100%|██████████| 150/150 [07:44<00:00,  3.16s/it]
+Checking plans: 100%|██████████| 150/150 [07:44<00:00,  3.10s/it]
+
+Checking plans:   0%|          | 0/150 [00:00<?, ?it/s]
+Checking plans:   1%|          | 1/150 [00:04<11:19,  4.56s/it]
+Checking plans:   1%|▏         | 2/150 [00:08<10:56,  4.44s/it]
+Checking plans:   2%|▏         | 3/150 [00:11<08:53,  3.63s/it]
+Checking plans:   3%|▎         | 4/150 [00:16<10:01,  4.12s/it]Error: Precondition failed at step 1: (toggleobject agent1 cellphone_1)
+
+Checking plans:   4%|▍         | 6/150 [00:20<06:57,  2.90s/it]
+Checking plans:   5%|▍         | 7/150 [00:24<07:59,  3.35s/it]
+Checking plans:   5%|▌         | 8/150 [00:28<08:17,  3.50s/it]
+Checking plans:   6%|▌         | 9/150 [00:33<08:53,  3.78s/it]
+Checking plans:   7%|▋         | 10/150 [00:38<09:54,  4.24s/it]
+Checking plans:   7%|▋         | 11/150 [00:41<08:59,  3.88s/it]
+Checking plans:   8%|▊         | 12/150 [00:50<12:43,  5.53s/it]
+Checking plans:   9%|▊         | 13/150 [00:53<10:49,  4.74s/it]Error: Precondition failed at step 2: (gotolocation agent1 agent1)
+
+Checking plans:   9%|▉         | 14/150 [00:58<10:56,  4.83s/it]Error: Precondition failed at step 3: (gotolocation agent1 tissuebox_1)
+
+Checking plans:  11%|█         | 16/150 [01:02<07:59,  3.58s/it]
+Checking plans:  11%|█▏        | 17/150 [01:08<09:01,  4.07s/it]
+Checking plans:  13%|█▎        | 19/150 [01:12<06:53,  3.16s/it]
+Checking plans:  15%|█▍        | 22/150 [01:15<04:36,  2.16s/it]Error: Precondition failed at step 1: (pickupobject agent1 creditcard_1)
+
+Checking plans:  17%|█▋        | 25/150 [01:18<03:41,  1.77s/it]
+Checking plans:  18%|█▊        | 27/150 [01:22<03:39,  1.78s/it]
+Checking plans:  19%|█▊        | 28/150 [01:27<04:31,  2.22s/it]
+Checking plans:  19%|█▉        | 29/150 [01:30<04:53,  2.42s/it]
+Checking plans:  20%|██        | 30/150 [01:34<05:31,  2.76s/it]
+Checking plans:  21%|██        | 31/150 [01:41<07:26,  3.75s/it]
+Checking plans:  22%|██▏       | 33/150 [01:47<06:45,  3.46s/it]Error: Precondition failed at step 1: (pickupobject agent1 soapbottle_1)
+Error: Precondition failed at step 1: (pickupobject agent1 spraybottle_1)
+Error: Precondition failed at step 1: (pickupobject agent1 spraybottle_1)
+
+Checking plans:  25%|██▍       | 37/150 [01:50<03:55,  2.08s/it]
+Checking plans:  27%|██▋       | 40/150 [01:54<03:18,  1.80s/it]
+Checking plans:  28%|██▊       | 42/150 [01:59<03:36,  2.00s/it]
+Checking plans:  29%|██▊       | 43/150 [02:04<04:17,  2.41s/it]Error: Precondition failed at step 1: (pickupobject agent1 creditcard_1)
+
+Checking plans:  30%|███       | 45/150 [02:09<04:07,  2.35s/it]
+Checking plans:  31%|███       | 46/150 [02:16<05:31,  3.18s/it]
+Checking plans:  31%|███▏      | 47/150 [02:19<05:30,  3.21s/it]Error: Precondition failed at step 3: (putobjectinreceptacle agent1 fork_1 cup_1)
+
+Checking plans:  32%|███▏      | 48/150 [02:22<05:25,  3.19s/it]
+Checking plans:  33%|███▎      | 49/150 [02:25<05:09,  3.07s/it]Error: Precondition failed at step 3: (putobjectinreceptacle agent1 knife_1 pot_1)
+
+Checking plans:  34%|███▍      | 51/150 [02:30<04:55,  2.99s/it]Error: Precondition failed at step 3: (putobjectinreceptacle agent1 pen_1 mug_1)
+
+Checking plans:  36%|███▌      | 54/150 [02:34<03:21,  2.10s/it]
+Checking plans:  37%|███▋      | 56/150 [02:37<03:11,  2.04s/it]
+Checking plans:  38%|███▊      | 57/150 [02:42<03:44,  2.41s/it]
+Checking plans:  39%|███▊      | 58/150 [02:44<03:49,  2.49s/it]Error: Precondition failed at step 1: (pickupobject agent1 spoon_1)
+
+Checking plans:  39%|███▉      | 59/150 [02:49<04:27,  2.94s/it]Error: Precondition failed at step 1: (pickupobject agent1 tomato_1)
+
+Checking plans:  40%|████      | 60/150 [02:54<05:14,  3.49s/it]
+Checking plans:  41%|████▏     | 62/150 [02:57<04:01,  2.75s/it]
+Checking plans:  42%|████▏     | 63/150 [03:01<04:13,  2.92s/it]
+Checking plans:  43%|████▎     | 64/150 [03:05<04:40,  3.26s/it]Error: Precondition failed at step 1: (pickupobject agent1 cloth_1)
+
+Checking plans:  43%|████▎     | 65/150 [03:09<04:39,  3.28s/it]
+Checking plans:  44%|████▍     | 66/150 [03:13<04:55,  3.52s/it]
+Checking plans:  45%|████▍     | 67/150 [03:18<05:33,  4.01s/it]Error: Precondition failed at step 2: (pickupobject agent1 fork_1)
+
+Checking plans:  46%|████▌     | 69/150 [03:23<04:34,  3.39s/it]
+Checking plans:  47%|████▋     | 70/150 [03:27<04:44,  3.56s/it]
+Checking plans:  48%|████▊     | 72/150 [03:34<04:34,  3.52s/it]
+Checking plans:  49%|████▊     | 73/150 [03:39<04:43,  3.68s/it]
+Checking plans:  49%|████▉     | 74/150 [03:42<04:44,  3.74s/it]
+Checking plans:  50%|█████     | 75/150 [03:46<04:27,  3.57s/it]Error: Precondition failed at step 1: (pickupobject agent1 potato_1)
+
+Checking plans:  51%|█████▏    | 77/150 [03:52<04:09,  3.41s/it]Error: Precondition failed at step 1: (pickupobject agent1 soapbar_1)
+Error: Precondition failed at step 2: (pickupobject agent1 soapbar_1)
+
+Checking plans:  53%|█████▎    | 79/150 [03:55<03:12,  2.71s/it]Error: Precondition failed at step 2: (pickupobject agent1 spoon_1)
+
+Checking plans:  54%|█████▍    | 81/150 [03:58<02:40,  2.32s/it]
+Checking plans:  55%|█████▍    | 82/150 [04:02<02:54,  2.57s/it]
+Checking plans:  55%|█████▌    | 83/150 [04:05<03:01,  2.71s/it]Error: Precondition failed at step 2: (pickupobject agent1 apple_1)
+
+Checking plans:  56%|█████▌    | 84/150 [04:08<03:05,  2.80s/it]Error: Precondition failed at step 2: (pickupobject agent1 bowl_1)
+
+Checking plans:  57%|█████▋    | 86/150 [04:11<02:18,  2.17s/it]Error: Precondition failed at step 3: (sliceobject agent1 bread_1 butterknife_1)
+
+Checking plans:  58%|█████▊    | 87/150 [04:13<02:21,  2.24s/it]Error: Precondition failed at step 1: (pickupobject agent1 egg_1)
+
+Checking plans:  61%|██████    | 91/150 [04:15<01:17,  1.32s/it]Error: Precondition failed at step 1: (pickupobject agent1 lettuce_1)
+Error: Precondition failed at step 1: (pickupobject agent1 mug_1)
+
+Checking plans:  63%|██████▎   | 94/150 [04:18<01:02,  1.12s/it]Error: Precondition failed at step 2: (pickupobject agent1 mug_1)
+
+Checking plans:  63%|██████▎   | 95/150 [04:20<01:12,  1.31s/it]
+Checking plans:  64%|██████▍   | 96/150 [04:23<01:26,  1.61s/it]
+Checking plans:  65%|██████▍   | 97/150 [04:27<01:51,  2.10s/it]
+Checking plans:  65%|██████▌   | 98/150 [04:32<02:20,  2.71s/it]
+Checking plans:  66%|██████▌   | 99/150 [04:34<02:08,  2.52s/it]
+Checking plans:  67%|██████▋   | 100/150 [04:37<02:18,  2.77s/it]Error: Precondition failed at step 2: (pickupobject agent1 knife_1)
+
+Checking plans:  67%|██████▋   | 101/150 [04:42<02:43,  3.35s/it]Error: Precondition failed at step 2: (pickupobject agent1 tomato_1)
+
+Checking plans:  69%|██████▉   | 104/150 [04:45<01:36,  2.11s/it]Error: Precondition failed at step 2: (pickupobject agent1 apple_1)
+
+Checking plans:  71%|███████▏  | 107/150 [04:48<01:09,  1.62s/it]
+Checking plans:  72%|███████▏  | 108/150 [04:53<01:29,  2.12s/it]Error: Precondition failed at step 1: (pickupobject agent1 butterknife_1)
+
+Checking plans:  73%|███████▎  | 109/150 [04:59<01:55,  2.82s/it]
+Checking plans:  73%|███████▎  | 110/150 [05:04<02:10,  3.26s/it]
+Checking plans:  75%|███████▍  | 112/150 [05:06<01:30,  2.39s/it]
+Checking plans:  75%|███████▌  | 113/150 [05:10<01:44,  2.82s/it]
+Checking plans:  77%|███████▋  | 115/150 [05:12<01:12,  2.09s/it]Error: Precondition failed at step 2: (pickupobject agent1 mug_1)
+
+Checking plans:  77%|███████▋  | 116/150 [05:15<01:22,  2.44s/it]Error: Precondition failed at step 1: (pickupobject agent1 plate_1)
+
+Checking plans:  79%|███████▉  | 119/150 [05:18<00:53,  1.72s/it]Error: Precondition failed at step 6: (pickupobject agent1 knife_1)
+
+Checking plans:  81%|████████  | 121/150 [05:21<00:48,  1.68s/it]
+Checking plans:  81%|████████▏ | 122/150 [05:27<01:05,  2.32s/it]Error: Precondition failed at step 1: (pickupobject agent1 tomato_1)
+
+Checking plans:  82%|████████▏ | 123/150 [05:30<01:09,  2.57s/it]
+Checking plans:  83%|████████▎ | 125/150 [05:35<01:01,  2.45s/it]
+Checking plans:  85%|████████▌ | 128/150 [05:38<00:39,  1.81s/it]Error: Precondition failed at step 1: (pickupobject agent1 cellphone_1)
+
+Checking plans:  87%|████████▋ | 131/150 [05:41<00:29,  1.54s/it]
+Checking plans:  88%|████████▊ | 132/150 [05:46<00:37,  2.07s/it]
+Checking plans:  89%|████████▊ | 133/150 [05:50<00:40,  2.40s/it]Error: Precondition failed at step 1: (pickupobject agent1 handtowel_1)
+
+Checking plans:  90%|█████████ | 135/150 [05:54<00:33,  2.25s/it]
+Checking plans:  91%|█████████ | 136/150 [05:57<00:34,  2.46s/it]
+Checking plans:  91%|█████████▏| 137/150 [06:01<00:35,  2.74s/it]Error: Precondition failed at step 1: (pickupobject agent1 pan_1)
+Error: Precondition failed at step 6: (pickupobject agent1 pillow_2)
+
+Checking plans:  93%|█████████▎| 140/150 [06:05<00:20,  2.05s/it]
+Checking plans:  94%|█████████▍| 141/150 [06:08<00:20,  2.25s/it]Error: Precondition failed at step 6: (pickupobject agent1 saltshaker_2)
+
+Checking plans:  95%|█████████▍| 142/150 [06:10<00:18,  2.31s/it]Error: Precondition failed at step 1: (pickupobject agent1 soapbar_1)
+
+Checking plans:  95%|█████████▌| 143/150 [06:14<00:18,  2.64s/it]Error: Precondition failed at step 1: (pickupobject agent1 toiletpaper_1)
+
+Checking plans:  99%|█████████▊| 148/150 [06:18<00:03,  1.53s/it]Error: Precondition failed at step 2: (gotolocation agent1 toilet_1)
+
+Checking plans:  99%|█████████▉| 149/150 [06:23<00:01,  1.93s/it]
+Checking plans: 100%|██████████| 150/150 [06:23<00:00,  2.55s/it]
+
+Checking plans:   0%|          | 0/150 [00:00<?, ?it/s]
+Checking plans:   1%|          | 1/150 [00:08<21:43,  8.75s/it]
+Checking plans:   1%|▏         | 2/150 [00:12<14:32,  5.90s/it]
+Checking plans:   2%|▏         | 3/150 [00:20<16:48,  6.86s/it]
+Checking plans:   3%|▎         | 4/150 [00:25<14:18,  5.88s/it]
+Checking plans:   3%|▎         | 5/150 [00:27<11:33,  4.78s/it]
+Checking plans:   4%|▍         | 6/150 [00:31<10:39,  4.44s/it]
+Checking plans:   5%|▍         | 7/150 [00:35<09:58,  4.18s/it]
+Checking plans:   5%|▌         | 8/150 [00:38<08:59,  3.80s/it]
+Checking plans:   6%|▌         | 9/150 [00:41<08:19,  3.55s/it]
+Checking plans:   7%|▋         | 10/150 [00:51<13:11,  5.65s/it]
+Checking plans:   7%|▋         | 11/150 [00:55<11:51,  5.12s/it]
+Checking plans:   8%|▊         | 12/150 [00:59<10:52,  4.73s/it]
+Checking plans:   9%|▊         | 13/150 [01:02<09:39,  4.23s/it]
+Checking plans:   9%|▉         | 14/150 [01:06<09:33,  4.22s/it]Error: Precondition failed at step 3: (toggleobject agent1 desklamp_1)
+
+Checking plans:  10%|█         | 15/150 [01:09<08:48,  3.91s/it]
+Checking plans:  11%|█         | 16/150 [01:13<08:14,  3.69s/it]Error: Precondition failed at step 1: (pickupobject agent1 box_1)
+
+Checking plans:  13%|█▎        | 19/150 [01:16<04:53,  2.24s/it]
+Checking plans:  16%|█▌        | 24/150 [01:18<02:30,  1.20s/it]
+Checking plans:  17%|█▋        | 26/150 [01:21<02:41,  1.30s/it]
+Checking plans:  19%|█▊        | 28/150 [01:25<02:51,  1.41s/it]
+Checking plans:  20%|██        | 30/150 [01:28<02:51,  1.43s/it]
+Checking plans:  22%|██▏       | 33/150 [01:31<02:29,  1.28s/it]
+Checking plans:  23%|██▎       | 34/150 [01:33<02:44,  1.42s/it]
+Checking plans:  24%|██▍       | 36/150 [01:36<02:53,  1.52s/it]
+Checking plans:  25%|██▍       | 37/150 [01:38<03:00,  1.60s/it]
+Checking plans:  25%|██▌       | 38/150 [01:42<03:47,  2.03s/it]Error: Precondition failed at step 1: (pickupobject agent1 watch_1)
+
+Checking plans:  27%|██▋       | 40/150 [01:45<03:24,  1.86s/it]
+Checking plans:  27%|██▋       | 41/150 [01:48<03:53,  2.15s/it]
+Checking plans:  29%|██▉       | 44/150 [01:52<02:50,  1.61s/it]
+Checking plans:  30%|███       | 45/150 [01:56<03:35,  2.05s/it]
+Checking plans:  31%|███       | 46/150 [01:58<03:50,  2.21s/it]
+Checking plans:  31%|███▏      | 47/150 [02:01<04:05,  2.39s/it]
+Checking plans:  34%|███▍      | 51/150 [02:05<02:27,  1.49s/it]
+Checking plans:  35%|███▍      | 52/150 [02:08<02:57,  1.81s/it]
+Checking plans:  36%|███▌      | 54/150 [02:12<02:59,  1.87s/it]
+Checking plans:  37%|███▋      | 55/150 [02:15<03:13,  2.03s/it]Error: Precondition failed at step 7: (gotolocation agent1 fridge_1)
+
+Checking plans:  37%|███▋      | 56/150 [02:20<04:12,  2.69s/it]
+Checking plans:  38%|███▊      | 57/150 [02:23<04:28,  2.88s/it]
+Checking plans:  39%|███▊      | 58/150 [02:27<04:41,  3.06s/it]Error: Precondition failed at step 4: (putobjectinreceptacle agent1 spoon_1 mug_1)
+
+Checking plans:  39%|███▉      | 59/150 [02:31<04:58,  3.28s/it]Error: Precondition failed at step 1: (pickupobject agent1 tomato_1)
+
+Checking plans:  40%|████      | 60/150 [02:34<05:03,  3.37s/it]
+Checking plans:  41%|████      | 61/150 [02:38<04:59,  3.37s/it]
+Checking plans:  41%|████▏     | 62/150 [02:41<04:53,  3.33s/it]
+Checking plans:  42%|████▏     | 63/150 [02:45<05:09,  3.56s/it]
+Checking plans:  43%|████▎     | 64/150 [02:50<05:26,  3.80s/it]Error: Precondition failed at step 2: (pickupobject agent1 cloth_1)
+
+Checking plans:  44%|████▍     | 66/150 [02:54<04:11,  3.00s/it]Error: Precondition failed at step 1: (pickupobject agent1 cup_1)
+
+Checking plans:  45%|████▍     | 67/150 [02:57<04:11,  3.03s/it]
+Checking plans:  45%|████▌     | 68/150 [03:00<04:20,  3.17s/it]
+Checking plans:  46%|████▌     | 69/150 [03:03<04:12,  3.12s/it]
+Checking plans:  47%|████▋     | 70/150 [03:06<04:11,  3.14s/it]
+Checking plans:  47%|████▋     | 71/150 [03:09<03:50,  2.92s/it]
+Checking plans:  48%|████▊     | 72/150 [03:13<04:09,  3.20s/it]Error: Precondition failed at step 4: (pickupobject agent1 knife_1)
+
+Checking plans:  49%|████▊     | 73/150 [03:16<04:11,  3.27s/it]
+Checking plans:  49%|████▉     | 74/150 [03:19<03:59,  3.15s/it]
+Checking plans:  50%|█████     | 75/150 [03:23<04:20,  3.47s/it]
+Checking plans:  52%|█████▏    | 78/150 [03:27<02:38,  2.20s/it]
+Checking plans:  53%|█████▎    | 79/150 [03:34<03:50,  3.25s/it]
+Checking plans:  53%|█████▎    | 80/150 [03:39<04:08,  3.56s/it]Error: Type mismatch for ?r: expected sink, got receptacle (object countertop_1)
+
+Checking plans:  54%|█████▍    | 81/150 [03:42<03:57,  3.45s/it]Error: Precondition failed at step 1: (pickupobject agent1 tomato_1)
+
+Checking plans:  55%|█████▍    | 82/150 [03:46<04:17,  3.79s/it]
+Checking plans:  55%|█████▌    | 83/150 [03:49<03:56,  3.53s/it]
+Checking plans:  57%|█████▋    | 86/150 [03:53<02:26,  2.29s/it]
+Checking plans:  61%|██████    | 91/150 [03:55<01:15,  1.28s/it]
+Checking plans:  62%|██████▏   | 93/150 [03:59<01:19,  1.40s/it]
+Checking plans:  64%|██████▍   | 96/150 [04:02<01:10,  1.30s/it]
+Checking plans:  65%|██████▍   | 97/150 [04:06<01:28,  1.68s/it]
+Checking plans:  65%|██████▌   | 98/150 [04:10<01:44,  2.00s/it]
+Checking plans:  66%|██████▌   | 99/150 [04:13<01:51,  2.18s/it]
+Checking plans:  67%|██████▋   | 100/150 [04:16<02:01,  2.43s/it]
+Checking plans:  69%|██████▊   | 103/150 [04:20<01:26,  1.85s/it]
+Checking plans:  69%|██████▉   | 104/150 [04:23<01:34,  2.05s/it]
+Checking plans:  70%|███████   | 105/150 [04:26<01:43,  2.31s/it]
+Checking plans:  72%|███████▏  | 108/150 [04:31<01:23,  2.00s/it]Error: Precondition failed at step 1: (pickupobject agent1 bread_1)
+
+Checking plans:  73%|███████▎  | 109/150 [04:34<01:31,  2.23s/it]
+Checking plans:  73%|███████▎  | 110/150 [04:38<01:39,  2.48s/it]
+Checking plans:  75%|███████▍  | 112/150 [04:42<01:28,  2.33s/it]
+Checking plans:  75%|███████▌  | 113/150 [04:45<01:33,  2.52s/it]
+Checking plans:  77%|███████▋  | 115/150 [04:49<01:20,  2.29s/it]
+Checking plans:  77%|███████▋  | 116/150 [04:53<01:30,  2.66s/it]
+Checking plans:  79%|███████▉  | 119/150 [04:57<01:03,  2.06s/it]
+Checking plans:  80%|████████  | 120/150 [05:04<01:26,  2.89s/it]
+Checking plans:  81%|████████  | 121/150 [05:34<04:11,  8.68s/it]
+Checking plans:  81%|████████▏ | 122/150 [05:38<03:30,  7.52s/it]
+Checking plans:  82%|████████▏ | 123/150 [05:41<02:50,  6.32s/it]Error: Precondition failed at step 6: (pickupobject agent1 book_2)
+
+Checking plans:  85%|████████▌ | 128/150 [05:45<01:01,  2.79s/it]Error: Precondition failed at step 5: (gotolocation agent1 shelf_1)
+Error: Precondition failed at step 5: (gotolocation agent1 dresser_1)
+
+Checking plans:  87%|████████▋ | 130/150 [05:49<00:51,  2.57s/it]
+Checking plans:  87%|████████▋ | 131/150 [05:52<00:51,  2.70s/it]
+Checking plans:  88%|████████▊ | 132/150 [05:56<00:52,  2.91s/it]
+Checking plans:  89%|████████▊ | 133/150 [05:59<00:50,  2.99s/it]
+Checking plans:  89%|████████▉ | 134/150 [06:02<00:49,  3.10s/it]
+Checking plans:  90%|█████████ | 135/150 [06:06<00:47,  3.20s/it]Error: Precondition failed at step 2: (pickupobject agent1 mug_1)
+
+Checking plans:  91%|█████████▏| 137/150 [06:09<00:32,  2.50s/it]
+Checking plans:  92%|█████████▏| 138/150 [06:13<00:33,  2.79s/it]Error: Precondition failed at step 6: (pickupobject agent1 pencil_2)
+
+Checking plans:  94%|█████████▍| 141/150 [06:16<00:16,  1.88s/it]
+Checking plans:  95%|█████████▌| 143/150 [06:19<00:13,  1.87s/it]
+Checking plans:  96%|█████████▌| 144/150 [06:24<00:13,  2.33s/it]Error: Precondition failed at step 2: (gotolocation agent1 cabinet_1)
+
+Checking plans:  99%|█████████▊| 148/150 [06:29<00:03,  1.77s/it]Error: Precondition failed at step 3: (pickupobject agent1 watch_1)
+
+Checking plans: 100%|██████████| 150/150 [06:32<00:00,  1.78s/it]
+Checking plans: 100%|██████████| 150/150 [06:32<00:00,  2.62s/it]
+
+

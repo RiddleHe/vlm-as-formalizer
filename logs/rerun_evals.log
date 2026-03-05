@@ -1,0 +1,244 @@
+
+Checking plans:   0%|          | 0/105 [00:00<?, ?it/s]Error: Precondition failed at step 3: (pick-up orange robot)
+Error: Precondition failed at step 5: (unstack blue orange robot)
+Error: Precondition failed at step 1: (pick-up red robot)
+Error: Precondition failed at step 1: (pick-up red robot)
+Error: Precondition failed at step 1: (pick-up green robot)
+Error: Precondition failed at step 1: (pick-up purple robot)
+Error: Precondition failed at step 1: (pick-up orange robot)
+Error: Precondition failed at step 5: (pick-up orange robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 1: (pick-up green robot)
+Error: Precondition failed at step 1: (pick-up yellow robot)
+Error: Precondition failed at step 1: (pick-up red robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 1: (pick-up purple robot)
+Error: Precondition failed at step 1: (pick-up yellow robot)
+Error: Precondition failed at step 5: (pick-up orange robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 3: (pick-up yellow robot)
+Error: Precondition failed at step 3: (pick-up red robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 1: (pick-up purple robot)
+Error: Precondition failed at step 4: (stack green blue robot)
+Error: Precondition failed at step 1: (pick-up purple robot)
+Error: Precondition failed at step 5: (pick-up yellow robot)
+Error: Precondition failed at step 7: (pick-up orange robot)
+Error: Precondition failed at step 2: (stack green blue robot)
+Error: Precondition failed at step 5: (pick-up purple robot)
+Error: Precondition failed at step 1: (pick-up orange robot)
+Error: Precondition failed at step 3: (pick-up purple robot)
+Error: Precondition failed at step 3: (pick-up purple robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 3: (pick-up red robot)
+Error: Precondition failed at step 1: (pick-up orange robot)
+Error: Precondition failed at step 1: (pick-up yellow robot)
+Error: Precondition failed at step 1: (unstack green blue robot)
+Error: Precondition failed at step 3: (pick-up red robot)
+Error: Precondition failed at step 1: (pick-up green robot)
+Error: Precondition failed at step 2: (stack blue orange robot)
+Error: Precondition failed at step 1: (pick-up red robot)
+Error: Precondition failed at step 5: (unstack blue red robot)
+Error: Precondition failed at step 2: (stack blue orange robot)
+Error: Precondition failed at step 1: (pick-up orange robot)
+Error: Precondition failed at step 1: (pick-up red robot)
+Error: Precondition failed at step 5: (pick-up red robot)
+Error: Precondition failed at step 2: (stack green blue robot)
+Error: Precondition failed at step 1: (pick-up orange robot)
+Error: Precondition failed at step 1: (pick-up yellow robot)
+Error: Precondition failed at step 3: (pick-up yellow robot)
+
+Checking plans: 100%|██████████| 105/105 [00:00<00:00, 1341.99it/s]
+
+Checking plans:   0%|          | 0/105 [00:00<?, ?it/s]Error: Precondition failed at step 1: (pick-up orange robot)
+Error: Precondition failed at step 1: (unstack yellow orange robot)
+Error: Precondition failed at step 2: (unstack red orange robot)
+Error: Precondition failed at step 1: (unstack blue purple robot)
+Error: Precondition failed at step 1: (unstack yellow orange robot)
+Error: Precondition failed at step 1: (unstack purple yellow robot)
+Error: Precondition failed at step 1: (pick-up purple robot)
+Error: Precondition failed at step 1: (unstack yellow green robot)
+Error: Precondition failed at step 1: (pick-up yellow robot)
+Error: Precondition failed at step 1: (unstack orange purple robot)
+Error: Precondition failed at step 3: (pick-up orange robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 2: (unstack orange blue robot)
+Error: Precondition failed at step 1: (pick-up purple robot)
+Error: Precondition failed at step 2: (unstack orange purple robot)
+Error: Precondition failed at step 1: (unstack green orange robot)
+Error: Precondition failed at step 1: (unstack green yellow robot)
+Error: Precondition failed at step 1: (pick-up yellow robot)
+Error: Precondition failed at step 2: (unstack yellow red robot)
+Error: Precondition failed at step 1: (unstack green blue robot)
+Error: Precondition failed at step 5: (pick-up yellow robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 2: (pick-up red robot)
+Error: Precondition failed at step 1: (pick-up purple robot)
+Error: Precondition failed at step 1: (pick-up red robot)
+Error: Precondition failed at step 1: (pick-up red robot)
+Error: Precondition failed at step 2: (unstack blue yellow robot)
+Error: Precondition failed at step 1: (pick-up red robot)
+Error: Precondition failed at step 1: (pick-up purple robot)
+Error: Precondition failed at step 2: (pick-up blue robot)
+
+Checking plans:  33%|███▎      | 35/105 [00:01<00:02, 30.90it/s]
+
+Checking plans:   0%|          | 0/105 [00:00<?, ?it/s]Error: Precondition failed at step 1: (unstack green blue robot)
+Error: Precondition failed at step 3: (unstack orange red robot)
+Error: Precondition failed at step 11: (pick-up orange robot)
+Error: Precondition failed at step 1: (unstack orange green robot)
+Error: Precondition failed at step 8: (stack blue red robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+Error: Precondition failed at step 5: (unstack purple blue robot)
+Error: Precondition failed at step 1: (unstack red yellow robot)
+Error: Precondition failed at step 3: (unstack orange red robot)
+Error: Precondition failed at step 1: (pick-up blue robot)
+
+Checking plans:  33%|███▎      | 35/105 [00:00<00:01, 36.55it/s]
+
+Checking plans:   0%|          | 0/105 [00:00<?, ?it/s]Error: Precondition failed at step 1: (unstack orange green robot)
+
+Checking plans: 100%|██████████| 105/105 [00:00<00:00, 17690.38it/s]
+
+Checking plans:   0%|          | 0/13 [00:00<?, ?it/s]Error: Precondition failed at step 1: (pick-up red_block robot)
+Error: Precondition failed at step 1: (pick-up pink_block robot)
+
+Checking plans: 100%|██████████| 13/13 [00:00<00:00, 4665.52it/s]
+
+Checking plans:   0%|          | 0/13 [00:00<?, ?it/s]Error: Precondition failed at step 2: (stack red_block blue_block robot)
+Error: Precondition failed at step 5: (pick-up red_block robot)
+Error: Precondition failed at step 1: (pick-up red_block robot)
+Error: Precondition failed at step 1: (unstack yellow_block red_block robot)
+Error: Precondition failed at step 1: (unstack pink_block purple_block robot)
+Error: Precondition failed at step 1: (pick-up yellow_block robot)
+Error: Precondition failed at step 1: (unstack green_block yellow_block robot)
+Error: Precondition failed at step 2: (pick-up red_block robot)
+
+Checking plans: 100%|██████████| 13/13 [00:00<00:00, 4081.28it/s]
+
+Checking plans:   0%|          | 0/13 [00:00<?, ?it/s]Error: Precondition failed at step 1: (unstack red_block orange_block robot)
+
+Checking plans:  77%|███████▋  | 10/13 [00:00<00:00, 17.47it/s]
+
+Checking plans:   0%|          | 0/13 [00:00<?, ?it/s]
+Checking plans: 100%|██████████| 13/13 [00:00<00:00, 8553.09it/s]
+
+Checking plans:   0%|          | 0/153 [00:00<?, ?it/s]
+Checking plans:   1%|▏         | 2/153 [00:00<00:40,  3.76it/s]
+
+Checking plans:   0%|          | 0/153 [00:00<?, ?it/s]
+Checking plans:   1%|▏         | 2/153 [00:00<00:08, 16.96it/s]
+
+Checking plans:   0%|          | 0/153 [00:00<?, ?it/s]
+Checking plans:   1%|▏         | 2/153 [00:01<01:26,  1.75it/s]
+
+Checking plans:   0%|          | 0/153 [00:00<?, ?it/s]
+Checking plans:   1%|▏         | 2/153 [00:00<00:08, 16.96it/s]
+
+
+============================================================
+Evaluating: blocksworld_real / villain_direct_pddl
+============================================================
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/villain_direct_pddl/qwen/qwen_full_20260304_232913/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/villain_direct_pddl/qwen/qwen_full_20260304_232913/eval_summary.csv
+[eval] task_success_rate=45.10%  macro_P=0.8398  macro_R=0.8726  macro_F1=0.8559
+
+============================================================
+Evaluating: blocksworld_real / vila_planning
+============================================================
+[eval] check_plans failed: Error code: 400 - {'error': {'message': "Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.", 'type': 'invalid_request_error', 'param': 'max_tokens', 'code': 'unsupported_parameter'}}
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/vila_planning/qwen/qwen_full_20260304_232913/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/vila_planning/qwen/qwen_full_20260304_232913/eval_summary.csv
+[eval] task_success_rate=0.00%  macro_P=0.0000  macro_R=0.0000  macro_F1=0.0000
+
+============================================================
+Evaluating: blocksworld_real / villain_captioning_pddl
+============================================================
+[eval] check_plans failed: Error code: 400 - {'error': {'message': "Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.", 'type': 'invalid_request_error', 'param': 'max_tokens', 'code': 'unsupported_parameter'}}
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/villain_captioning_pddl/qwen/qwen_full_20260304_232913/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/villain_captioning_pddl/qwen/qwen_full_20260304_232913/eval_summary.csv
+[eval] task_success_rate=0.00%  macro_P=0.0000  macro_R=0.0000  macro_F1=0.0000
+
+============================================================
+Evaluating: blocksworld_real / scene_graph_to_pddl
+============================================================
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_real/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/eval_summary.csv
+[eval] task_success_rate=3.92%  macro_P=0.9959  macro_R=0.0490  macro_F1=0.0934
+
+============================================================
+Evaluating: blocksworld_sim / villain_direct_pddl
+============================================================
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913/eval_summary.csv
+[eval] task_success_rate=60.00%  macro_P=0.8876  macro_R=0.7406  macro_F1=0.8075
+
+============================================================
+Evaluating: blocksworld_sim / vila_planning
+============================================================
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_sim/vila_planning/qwen/qwen_full_20260304_232913/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_sim/vila_planning/qwen/qwen_full_20260304_232913/eval_summary.csv
+[eval] task_success_rate=10.00%  macro_P=0.0000  macro_R=0.0000  macro_F1=0.0000
+
+============================================================
+Evaluating: blocksworld_sim / villain_captioning_pddl
+============================================================
+[eval] check_plans failed: Error code: 400 - {'error': {'message': "Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.", 'type': 'invalid_request_error', 'param': 'max_tokens', 'code': 'unsupported_parameter'}}
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_captioning_pddl/qwen/qwen_full_20260304_232913/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_captioning_pddl/qwen/qwen_full_20260304_232913/eval_summary.csv
+[eval] task_success_rate=0.00%  macro_P=0.0000  macro_R=0.0000  macro_F1=0.0000
+
+============================================================
+Evaluating: blocksworld_sim / scene_graph_to_pddl
+============================================================
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/eval_summary.csv
+[eval] task_success_rate=20.00%  macro_P=0.9771  macro_R=0.2000  macro_F1=0.3320
+
+============================================================
+Evaluating: alfred_multi / villain_direct_pddl
+============================================================
+[eval] check_plans failed: Error code: 400 - {'error': {'message': "Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.", 'type': 'invalid_request_error', 'param': 'max_tokens', 'code': 'unsupported_parameter'}}
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/villain_direct_pddl/qwen/qwen_full_20260304_232913/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/villain_direct_pddl/qwen/qwen_full_20260304_232913/eval_summary.csv
+[eval] task_success_rate=0.00%  macro_P=0.0000  macro_R=0.0000  macro_F1=0.0000
+
+============================================================
+Evaluating: alfred_multi / vila_planning
+============================================================
+[eval] check_plans failed: Error code: 400 - {'error': {'message': "Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.", 'type': 'invalid_request_error', 'param': 'max_tokens', 'code': 'unsupported_parameter'}}
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/vila_planning/qwen/qwen_full_20260304_232913/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/vila_planning/qwen/qwen_full_20260304_232913/eval_summary.csv
+[eval] task_success_rate=0.00%  macro_P=0.0000  macro_R=0.0000  macro_F1=0.0000
+
+============================================================
+Evaluating: alfred_multi / villain_captioning_pddl
+============================================================
+[eval] check_plans failed: Error code: 400 - {'error': {'message': "Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.", 'type': 'invalid_request_error', 'param': 'max_tokens', 'code': 'unsupported_parameter'}}
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/villain_captioning_pddl/qwen/qwen_full_20260304_232913/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/villain_captioning_pddl/qwen/qwen_full_20260304_232913/eval_summary.csv
+[eval] task_success_rate=0.00%  macro_P=0.0000  macro_R=0.0000  macro_F1=0.0000
+
+============================================================
+Evaluating: alfred_multi / scene_graph_to_pddl
+============================================================
+[eval] check_plans failed: Error code: 400 - {'error': {'message': "Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.", 'type': 'invalid_request_error', 'param': 'max_tokens', 'code': 'unsupported_parameter'}}
+
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/eval_report.json
+[eval] Saved /home/mh3897/vlm-asf-muyu/results/alfred_multi/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/eval_summary.csv
+[eval] task_success_rate=0.00%  macro_P=0.0000  macro_R=0.0000  macro_F1=0.0000
+
+Merged CSV: /home/mh3897/vlm-asf-muyu/results/eval_summary_rerun_qwen_full_20260304_232913.csv
+

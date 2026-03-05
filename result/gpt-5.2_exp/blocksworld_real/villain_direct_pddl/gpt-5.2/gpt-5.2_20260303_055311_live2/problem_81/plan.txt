@@ -1,6 +1,0 @@
-(unstack yellow purple robot1)
-(put-down yellow robot1)
-(unstack purple blue robot1)
-(stack purple yellow robot1)
-(unstack blue green robot1)
-(stack blue orange robot1)

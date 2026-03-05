@@ -1,0 +1,103 @@
+
+[villain_direct_pddl]:   0%|          | 0/10 [00:00<?, ?it/s]
+[villain_direct_pddl]: 100%|██████████| 10/10 [00:00<00:00, 2336.79it/s]
+Traceback (most recent call last):
+  File "<string>", line 43, in <module>
+  File "/home/mh3897/vlm-asf-muyu/src/main.py", line 474, in run_single_route
+    if route_args.validate_with_planner:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: '_Args' object has no attribute 'validate_with_planner'
+
+ERROR conda.cli.main_run:execute(125): `conda run python -c 
+import sys
+sys.path.insert(0, 'src')
+from dotenv import load_dotenv
+from pathlib import Path
+load_dotenv('.env')
+
+from main import evaluate_results, run_single_route, _load_config, _discover_tasks, parse_args
+from utils.models import VLMClientFactory
+import csv, json
+
+REPO = Path('.')
+dataset_path = REPO / 'data' / 'blocksworld_sim'
+dataset_name = 'blocksworld_sim'
+config = _load_config(dataset_path)
+task_names = _discover_tasks(dataset_path)
+output_root = REPO / 'results'
+run_name = 'gpt52_from_yuchen'
+model_name = 'gpt-5.2'
+
+# Build minimal args object
+class Args:
+    model = model_name
+    device = 'cuda:0'
+    seed = 42
+    num_tries = 3
+    enable_caption = False
+    clean_image = False
+    hard_template = True
+    batch_relations = True
+    validate_with_planner = True
+    downward_dir = '/home/mh3897/pddl/villain/downward'
+    time_limit = 30
+    route = None
+
+args = Args()
+model = VLMClientFactory(model_name, args.device)
+routes = ['villain_direct_pddl', 'vila_planning', 'villain_captioning_pddl', 'scene_graph_to_pddl']
+
+all_rows = []
+for route in routes:
+    print(f'\n### Running {route} ###')
+    metrics, result_dir = run_single_route(
+        route=route,
+        task_names=task_names,
+        dataset_path=dataset_path,
+        dataset_name=dataset_name,
+        config=config,
+        model=model,
+        args=args,
+        output_root=output_root,
+        run_name=run_name,
+    )
+
+# Now append to existing CSV
+csv_path = output_root / f'eval_summary_{model_name}_{run_name}.csv'
+new_rows = []
+for route in routes:
+    rd = output_root / dataset_name / route / model_name / run_name
+    summary_csv = rd / 'eval_summary.csv'
+    if summary_csv.exists():
+        with open(summary_csv) as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                new_rows.append(row)
+
+# Append to merged CSV
+with open(csv_path, 'a', newline='', encoding='utf-8') as f:
+    writer = csv.DictWriter(f, fieldnames=list(new_rows[0].keys()))
+    for row in new_rows:
+        writer.writerow(row)
+
+print(f'\nAppended {len(new_rows)} rows to {csv_path}')
+` failed. (See above for error)
+Loaded client for: gpt-5.2
+
+### Running villain_direct_pddl ###
+================================================================================
+Pipeline: villain_direct_pddl
+Dataset:  data/blocksworld_sim
+Model:    gpt-5.2
+Tasks:    10
+Results:  results/blocksworld_sim/villain_direct_pddl/gpt-5.2/gpt52_from_yuchen
+================================================================================
+
+================================================================================
+Metrics for villain_direct_pddl
+================================================================================
+Generation success: 0/10 (0.00%)
+Generation failure: 10
+Task exceptions:    10
+PDDL valid tasks:   0
+

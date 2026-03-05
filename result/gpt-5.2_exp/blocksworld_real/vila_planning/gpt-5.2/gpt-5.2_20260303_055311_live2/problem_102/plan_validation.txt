@@ -1,6 +1,0 @@
-mismatch
-Plan length mismatch.
-Ground truth has 18 steps.
-Predicted has 20 steps.
-
-

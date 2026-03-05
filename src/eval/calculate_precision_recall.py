@@ -1,6 +1,6 @@
 import os, json, argparse
 
-from find_goal import literal_to_atom, _flatten_and, parse_problem
+from .find_goal import literal_to_atom, _flatten_and, parse_problem
 
 def read_text(path):
     with open(path, "r", encoding="utf-8") as f:

@@ -1,9 +1,0 @@
-{
-  "tasks_total": 102,
-  "generation_success": 102,
-  "generation_failure": 0,
-  "task_exceptions": 0,
-  "pddl_valid": 102,
-  "planner_success": 0,
-  "plan_match_success": 0
-}

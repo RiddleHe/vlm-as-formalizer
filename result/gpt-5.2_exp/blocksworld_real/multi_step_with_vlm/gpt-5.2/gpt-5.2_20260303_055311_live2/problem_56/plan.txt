@@ -1,6 +1,0 @@
-(unstack yellow_block red_block robot_arm)
-(stack yellow_block purple_block robot_arm)
-(unstack orange_block blue_block robot_arm)
-(stack orange_block red_block robot_arm)
-(pick-up green_block robot_arm)
-(stack green_block blue_block robot_arm)

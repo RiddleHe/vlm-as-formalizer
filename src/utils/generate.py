@@ -187,10 +187,11 @@ def generate_pddl(
         success = bool(problem_text)
         error_message = ""
 
+        planner_plan = ""
         if not success:
             error_message = "Empty PDDL output"
         elif validate_with_planner:
-            success, error_message = check_error(
+            success, error_message, planner_plan = check_error(
                 problem_text,
                 target["domain"],
                 downward_dir,
@@ -207,7 +208,7 @@ def generate_pddl(
                 "prompt": prompt or "",
                 "response": response or "",
                 "problem": generated or "",
-                "plan": "",
+                "plan": planner_plan,
             }
         )
         if success:

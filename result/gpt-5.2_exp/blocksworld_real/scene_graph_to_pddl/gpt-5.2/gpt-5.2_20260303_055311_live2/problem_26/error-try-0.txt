@@ -1,8 +1,0 @@
-Objects missing '- type' definition. Every line should be of the form 'object1 - type':
-  purple_block_bottom blue_block_above_purple green_block_above_blue
-
-Object does not have a type:
-  purple_block_bottom
-  blue_block_above_purple
-  green_block_above_blue
-

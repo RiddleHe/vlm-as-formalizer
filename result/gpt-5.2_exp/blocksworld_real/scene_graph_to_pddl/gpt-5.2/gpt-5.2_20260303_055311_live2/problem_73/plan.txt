@@ -1,8 +1,0 @@
-(unstack red_top_in_three_stack green_middle_in_three_stack robot_arm)
-(put-down red_top_in_three_stack robot_arm)
-(unstack green_middle_in_three_stack yellow_bottom_in_three_stack robot_arm)
-(stack green_middle_in_three_stack purple_single_block robot_arm)
-(pick-up yellow_bottom_in_three_stack robot_arm)
-(stack yellow_bottom_in_three_stack orange_block_in_two_stack robot_arm)
-(pick-up red_top_in_three_stack robot_arm)
-(stack red_top_in_three_stack yellow_bottom_in_three_stack robot_arm)
