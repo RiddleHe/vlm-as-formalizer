@@ -1,0 +1,50 @@
+Scene graph:
+agent: agent
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife
+receptacle (object): open_box, table, countertop
+object: plate, golden_statue, newspaper, keys, open_box, table, countertop, microwave, fridge, sink, knife
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge), (openable sink)
+opened (receptacle) true if a receptacle is opened: (opened microwave), (opened fridge), (opened sink)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle plate table), (inReceptacle golden_statue table), (inReceptacle newspaper table), (inReceptacle keys table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation agent countertop)
+
+PDDL problem: ```pddl
+(define (problem put_box_with_plate_on_table)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave fridge sink - receptacle
+        knife - object
+        open_box table countertop - receptacle
+        plate golden_statue newspaper keys - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (opened microwave)
+        (opened fridge)
+        (opened sink)
+        (atLocation agent countertop)
+        (inReceptacle plate table)
+        (inReceptacle golden_statue table)
+        (inReceptacle newspaper table)
+        (inReceptacle keys table)
+    )
+    (:goal (and
+        (inReceptacle plate open_box)
+        (inReceptacle open_box table)
+    ))
+)
+```

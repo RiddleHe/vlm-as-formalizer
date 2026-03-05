@@ -1,0 +1,4 @@
+(gotolocation agent1 fridge1)
+(pickupobject agent1 bowl1)
+(gotolocation agent1 table1)
+(putobjectinreceptacle agent1 bowl1 table1)

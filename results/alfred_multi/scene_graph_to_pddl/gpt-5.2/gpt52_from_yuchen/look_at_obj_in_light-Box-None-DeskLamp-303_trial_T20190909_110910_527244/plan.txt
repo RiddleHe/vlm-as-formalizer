@@ -1,0 +1,5 @@
+(gotolocation agent_robot open_cardboard_box_on_floor)
+(pickupobject agent_robot open_cardboard_box_on_floor)
+(gotolocation agent_robot wooden_desk_right_side)
+(putobjectinreceptacle agent_robot open_cardboard_box_on_floor wooden_desk_right_side)
+(toggleobject agent_robot beige_table_lamp_on_desk)

@@ -1,0 +1,6 @@
+(pick-up orange_robot)
+(stack orange purple_robot)
+(stack yellow orange_robot)
+(stack red yellow_robot)
+(stack blue red_robot)
+(stack green blue_robot)

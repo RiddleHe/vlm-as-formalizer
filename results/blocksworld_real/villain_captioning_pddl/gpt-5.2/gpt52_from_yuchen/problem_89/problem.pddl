@@ -1,0 +1,39 @@
+(define (problem blocksworld_scene1)
+  (:domain blocksworld)
+  (:objects
+    yellow blue green purple orange red - block
+    robot1 - robot
+  )
+  (:init
+    ;; robot state
+    (handempty robot1)
+
+    ;; Stack A: yellow on blue, blue on table
+    (on yellow blue)
+    (ontable blue)
+    (clear yellow)
+
+    ;; Stack B: green on purple on orange, orange on table
+    (on green purple)
+    (on purple orange)
+    (ontable orange)
+    (clear green)
+
+    ;; Single block: red on table
+    (ontable red)
+    (clear red)
+  )
+  (:goal
+    (and
+      ;; Stack 1: purple over green over blue over yellow
+      (on purple green)
+      (on green blue)
+      (on blue yellow)
+      (ontable yellow)
+
+      ;; Stack 2: orange over red
+      (on orange red)
+      (ontable red)
+    )
+  )
+)

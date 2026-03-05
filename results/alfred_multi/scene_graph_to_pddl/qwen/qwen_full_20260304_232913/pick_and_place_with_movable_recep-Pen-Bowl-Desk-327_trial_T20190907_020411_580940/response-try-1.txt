@@ -1,0 +1,60 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): wooden desk, wooden cabinet, metal bowl left, metal bowl right
+object: pen, cd, laptop, chair, lamp, alarm clock, basketball, boots, wooden desk, wooden cabinet, metal bowl left, metal bowl right
+openable (receptacle) true if a receptacle is openable: (openable wooden cabinet)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn lamp)
+isToggled (object) true if the object has been toggled: (isToggled lamp)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle cd wooden cabinet), (inReceptacle metal bowl left wooden cabinet), (inReceptacle metal bowl right wooden cabinet)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_pen_in_bowl)
+    (:domain put_task)
+    (:objects
+        agent
+        wooden_desk
+        wooden_cabinet
+        metal_bowl_left
+        metal_bowl_right
+        pen
+        cd
+        laptop
+        chair
+        lamp
+        alarm_clock
+        basketball
+        boots
+        microwave
+        fridge
+        sink
+        knife
+    )
+    (:init
+        (openable wooden_cabinet)
+        (isOn lamp)
+        (isToggled lamp)
+        (inReceptacle cd wooden_cabinet)
+        (inReceptacle metal_bowl_left wooden_cabinet)
+        (inReceptacle metal_bowl_right wooden_cabinet)
+        (atLocation agent wooden_desk)  ; Assuming agent starts near desk for initial interaction
+    )
+    (:goal
+        (and
+            (inReceptacle pen metal_bowl_left)
+            (atLocation agent wooden_desk)
+        )
+    )
+)
+```

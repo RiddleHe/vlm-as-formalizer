@@ -1,0 +1,42 @@
+```pddl
+(define (problem put_slice_cold_lettuce_on_counter)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        sink - receptacle
+        fridge - receptacle
+        lettuce - object
+        knife - knife
+        dining_table - object
+        stovetop - object
+        egg - object
+        spoon - object
+        pot - object
+        cutting_board - object
+        fork - object
+        spatula - object
+    )
+    (:init
+        (openable sink)
+        (openable fridge)
+        (not (opened fridge))
+        (inReceptacle egg sink)
+        (inReceptacle spoon sink)
+        (atLocation robot dining_table) ; Lettuce is on dining table, so agent starts here for efficiency
+        (atLocation lettuce dining_table)
+        (atLocation knife stovetop)
+        (not (holdsAny robot))
+        (not (isSliced lettuce))
+        (not (isCool lettuce))
+        (not (isClean lettuce))
+        (not (isHot lettuce))
+        (not (isToggled fridge))
+        (not (isToggled sink))
+    )
+    (:goal (and
+        (inReceptacle lettuce dining_table) ; Place on counter (dining table is used as counter surface)
+        (isSliced lettuce)
+        (isCool lettuce)
+    ))
+)
+```

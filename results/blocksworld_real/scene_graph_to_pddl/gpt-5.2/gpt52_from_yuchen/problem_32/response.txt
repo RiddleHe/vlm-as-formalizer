@@ -1,0 +1,75 @@
+Scene graph:
+block: 
+- purple-top-left block (purple cube on top of the left stack)
+- blue-middle-left block (blue cube in the middle of the left stack)
+- yellow-bottom-left block (pale yellow cube at the bottom of the left stack)
+- orange-top-right block (orange cube on top of the right stack)
+- red-middle-right block (red/coral cube in the middle of the right stack)
+- green-bottom-right block (green cube at the bottom of the right stack)
+
+robot:
+- robot-arm (robot; not visible, assumed available)
+
+ontable (block) block x is on table, not on another block:
+- (ontable yellow-bottom-left)
+- (ontable green-bottom-right)
+
+clear (block) there is no block on top of block x:
+- (clear purple-top-left)
+- (clear orange-top-right)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot-arm)
+
+handfull (robot) :
+- none
+
+holding (block) block x is being held by the robot:
+- none
+
+on (block, block) block x is on block y:
+- (on purple-top-left blue-middle-left)
+- (on blue-middle-left yellow-bottom-left)
+- (on orange-top-right red-middle-right)
+- (on red-middle-right green-bottom-right)
+
+PDDL problem: (define (problem blocksworld-stacking-1)
+  (:domain blocksworld)
+  (:objects
+    purple-top-left - block
+    blue-middle-left - block
+    yellow-bottom-left - block
+    orange-top-right - block
+    red-middle-right - block
+    green-bottom-right - block
+    robot-arm - robot
+  )
+  (:init
+    ;; left stack
+    (ontable yellow-bottom-left)
+    (on blue-middle-left yellow-bottom-left)
+    (on purple-top-left blue-middle-left)
+
+    ;; right stack
+    (ontable green-bottom-right)
+    (on red-middle-right green-bottom-right)
+    (on orange-top-right red-middle-right)
+
+    ;; clear blocks
+    (clear purple-top-left)
+    (clear orange-top-right)
+
+    ;; robot state
+    (handempty robot-arm)
+  )
+  (:goal
+    (and
+      (ontable orange-top-right)
+      (on green-bottom-right orange-top-right)
+      (on red-middle-right green-bottom-right)
+      (on purple-top-left red-middle-right)
+      (on blue-middle-left purple-top-left)
+      (on yellow-bottom-left blue-middle-left)
+    )
+  )
+)

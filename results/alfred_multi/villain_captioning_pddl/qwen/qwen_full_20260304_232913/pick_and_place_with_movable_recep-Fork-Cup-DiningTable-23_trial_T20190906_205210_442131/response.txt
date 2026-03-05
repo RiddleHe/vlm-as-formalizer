@@ -1,0 +1,44 @@
+```pddl
+(define (problem place_cup_with_fork)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        sink - receptacle
+        fridge - receptacle
+        microwave - receptacle
+        cup - object
+        fork - object
+        knife - knife
+        kitchen_island_counter - object
+        shelf_under_island - receptacle
+    )
+    (:init
+        (atLocation robot kitchen_island_counter)
+        (inReceptacle cup shelf_under_island)
+        (inReceptacle fork sink)
+        (openable sink)
+        (openable fridge)
+        (openable microwave)
+        (not (opened sink))
+        (not (opened fridge))
+        (not (opened microwave))
+        (not (holdsAny robot))
+        (not (isClean fork))
+        (not (isHot fork))
+        (not (isCool fork))
+        (not (isSliced fork))
+        (not (isToggled fork))
+        (not (isClean cup))
+        (not (isHot cup))
+        (not (isCool cup))
+        (not (isSliced cup))
+        (not (isToggled cup))
+    )
+    (:goal
+        (and
+            (inReceptacle fork cup)
+            (inReceptacle cup kitchen_island_counter)
+        )
+    )
+)
+```

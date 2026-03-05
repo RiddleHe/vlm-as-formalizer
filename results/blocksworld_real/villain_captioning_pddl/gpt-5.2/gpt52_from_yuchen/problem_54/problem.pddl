@@ -1,0 +1,39 @@
+(define (problem blocksworld_scene1)
+  (:domain blocksworld)
+  (:objects
+    red orange yellow green blue purple - block
+    robot1 - robot
+  )
+  (:init
+    ;; robot state
+    (handempty robot1)
+
+    ;; block placements
+    (ontable red)
+    (ontable orange)
+    (ontable green)
+    (ontable blue)
+    (ontable purple)
+
+    ;; existing stack
+    (on yellow green)
+
+    ;; clear blocks
+    (clear red)
+    (clear orange)
+    (clear yellow)
+    (clear blue)
+    (clear purple)
+    ;; green is not clear because yellow is on it
+  )
+  (:goal
+    (and
+      (on yellow orange)
+      (on orange purple)
+      (on purple green)
+      (on green blue)
+      (on blue red)
+      (ontable red)
+    )
+  )
+)

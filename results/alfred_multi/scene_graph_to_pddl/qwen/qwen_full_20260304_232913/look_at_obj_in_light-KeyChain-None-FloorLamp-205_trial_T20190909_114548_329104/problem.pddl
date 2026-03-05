@@ -1,0 +1,23 @@
+(define (problem look_at_keys_by_lamp)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        golden_statue_1 golden_statue_2 golden_statue_3 black_laptop red_card tall_lamp wicker_chair_1 wicker_chair_2 wicker_chair_3 wicker_chair_4 wooden_table - object
+        microwave fridge sink - receptacle
+        knife - knife
+    )
+    (:init
+        (isOn tall_lamp)
+        (isToggled tall_lamp)
+        (inReceptacle golden_statue_1 wooden_table)
+        (inReceptacle golden_statue_2 wooden_table)
+        (inReceptacle golden_statue_3 wooden_table)
+        (inReceptacle black_laptop wooden_table)
+        (inReceptacle red_card wooden_table)
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (atLocation robot tall_lamp)
+        (atLocation robot red_card)
+    ))
+)

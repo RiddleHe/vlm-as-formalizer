@@ -1,0 +1,6 @@
+(gotolocation robot_agent white_mug_on_coffee_machine_drip_tray)
+(pickupobject robot_agent white_mug_on_coffee_machine_drip_tray)
+(gotolocation robot_agent stainless_fridge_right)
+(coolobject robot_agent stainless_fridge_right white_mug_on_coffee_machine_drip_tray)
+(gotolocation robot_agent wooden_rack_shelf_unit)
+(putobjectinreceptacle robot_agent white_mug_on_coffee_machine_drip_tray wooden_rack_shelf_unit)

@@ -1,0 +1,53 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object): green_upholstered_chair_with_gray_arms
+object: brown_cardboard_box_open_top, dark_wood_side_table_with_shelf, stack_of_books_on_table, pencil_on_shelf, metallic_tool_set_on_shelf
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle stack_of_books_on_table dark_wood_side_table_with_shelf)
+- (inReceptacle pencil_on_shelf dark_wood_side_table_with_shelf)
+- (inReceptacle metallic_tool_set_on_shelf dark_wood_side_table_with_shelf)
+- (inReceptacle brown_cardboard_box_open_top dark_wood_side_table_with_shelf)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) :
+- none
+
+PDDL problem: (define (problem put_cardboard_box_on_green_chair)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    green_upholstered_chair_with_gray_arms - receptacle
+    dark_wood_side_table_with_shelf - receptacle
+
+    brown_cardboard_box_open_top - object
+    stack_of_books_on_table - object
+    pencil_on_shelf - object
+    metallic_tool_set_on_shelf - object
+  )
+
+  (:init
+    (inReceptacle stack_of_books_on_table dark_wood_side_table_with_shelf)
+    (inReceptacle pencil_on_shelf dark_wood_side_table_with_shelf)
+    (inReceptacle metallic_tool_set_on_shelf dark_wood_side_table_with_shelf)
+    (inReceptacle brown_cardboard_box_open_top dark_wood_side_table_with_shelf)
+  )
+
+  (:goal
+    (and
+      (inReceptacle brown_cardboard_box_open_top green_upholstered_chair_with_gray_arms)
+    )
+  )
+)

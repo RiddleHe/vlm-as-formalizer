@@ -1,0 +1,6 @@
+(gotolocation robot apple)
+(pickupobject robot apple)
+(gotolocation robot sink)
+(cleanobject robot sink apple)
+(gotolocation robot fridge)
+(putobjectinreceptacle robot apple fridge)

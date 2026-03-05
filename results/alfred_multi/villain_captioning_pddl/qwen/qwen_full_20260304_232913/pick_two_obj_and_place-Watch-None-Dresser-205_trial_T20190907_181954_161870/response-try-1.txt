@@ -1,0 +1,34 @@
+```pddl
+(define (problem place_watches_on_tv_stand)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        tv_stand - receptacle
+        watch1 watch2 - object
+        dining_table - object
+    )
+    (:init
+        (not (atLocation robot tv_stand))
+        (not (atLocation robot dining_table))
+        (atLocation watch1 dining_table)
+        (atLocation watch2 dining_table)
+        (not (holdsAny robot))
+        (not (inReceptacle watch1 tv_stand))
+        (not (inReceptacle watch2 tv_stand))
+        (not (opened tv_stand))
+        (not (isOn tv_stand))
+        (not (isClean watch1))
+        (not (isClean watch2))
+        (not (isHot watch1))
+        (not (isHot watch2))
+        (not (isCool watch1))
+        (not (isCool watch2))
+        (not (isSliced watch1))
+        (not (isSliced watch2))
+    )
+    (:goal (and
+        (inReceptacle watch1 tv_stand)
+        (inReceptacle watch2 tv_stand)
+    ))
+)
+```

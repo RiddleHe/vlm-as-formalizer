@@ -1,0 +1,37 @@
+```pddl
+(define (problem put_warm_apple_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        apple - object
+        microwave - microwave
+        table - receptacle
+        side_table - receptacle
+        pan - object
+        salt_shaker - object
+        spoon - object
+        bottle - object
+        plate - object
+    )
+    (:init
+        (atLocation robot side_table)
+        (inReceptacle apple side_table)
+        (inReceptacle pan table)
+        (inReceptacle salt_shaker table)
+        (inReceptacle spoon side_table)
+        (inReceptacle bottle side_table)
+        (inReceptacle plate side_table)
+        (openable microwave)
+        (not (opened microwave))
+        (not (isHot apple))
+        (not (holdsAny robot))
+        (not (holds robot apple))
+    )
+    (:goal
+        (and
+            (inReceptacle apple table)
+            (isHot apple)
+        )
+    )
+)
+```

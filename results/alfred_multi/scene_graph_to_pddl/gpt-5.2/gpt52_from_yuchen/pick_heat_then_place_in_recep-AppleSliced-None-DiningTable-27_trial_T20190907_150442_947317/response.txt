@@ -1,0 +1,49 @@
+Scene graph:
+agent: none
+microwave (receptacle): microwave_red_countertop_right
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object): microwave_red_countertop_right
+object: square_black_pan_left, oval_brown_bread_loaf_center, salt_shaker_coppercap_left_of_bread, salt_shaker_coppercap_below_bread, salt_shaker_coppercap_right_of_tomato, metal_fork_top_right, apple_yellow_top_right_1, apple_yellow_top_right_2, apple_yellow_mid_right, tomato_red_right
+
+openable (receptacle) true if a receptacle is openable: (openable microwave_red_countertop_right)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem puttask_warm_apple)
+  (:domain put_task)
+  (:objects
+    robot - agent
+    microwave_red_countertop_right - microwave
+    square_black_pan_left - object
+    oval_brown_bread_loaf_center - object
+    salt_shaker_coppercap_left_of_bread - object
+    salt_shaker_coppercap_below_bread - object
+    salt_shaker_coppercap_right_of_tomato - object
+    metal_fork_top_right - object
+    apple_yellow_top_right_1 - object
+    apple_yellow_top_right_2 - object
+    apple_yellow_mid_right - object
+    tomato_red_right - object
+  )
+
+  (:init
+    (openable microwave_red_countertop_right)
+  )
+
+  (:goal
+    (and
+      (isHot apple_yellow_mid_right)
+    )
+  )
+)

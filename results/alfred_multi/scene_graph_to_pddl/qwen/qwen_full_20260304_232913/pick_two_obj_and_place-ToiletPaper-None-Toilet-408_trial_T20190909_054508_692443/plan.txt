@@ -1,0 +1,8 @@
+(gotolocation robot white_toilet_paper_roll)
+(pickupobject robot white_toilet_paper_roll)
+(gotolocation robot gray_toilet)
+(putobjectinreceptacle robot white_toilet_paper_roll gray_toilet)
+(gotolocation robot gray_trash_can)
+(pickupobject robot white_toilet_paper_roll_in_trash_can)
+(gotolocation robot gray_toilet)
+(putobjectinreceptacle robot white_toilet_paper_roll_in_trash_can gray_toilet)

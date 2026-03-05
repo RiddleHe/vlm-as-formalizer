@@ -1,0 +1,4 @@
+(gotolocation robot hand_towel)
+(pickupobject robot hand_towel)
+(gotolocation robot counter)
+(putobjectinreceptacle robot hand_towel counter)

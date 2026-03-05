@@ -1,0 +1,95 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object): round_black_table_receptacle, white_rectangular_table_receptacle, black_side_shelf_receptacle, black_takeout_container_receptacle, blue_mug_receptacle, gray_bowl_receptacle, metal_cup_receptacle
+object: square_coaster_mat, small_dark_vase, yellow_pencil, metal_fork, white_salt_shaker, tomato, metal_spoon, green_scrubber_pad, brown_egg, amber_pump_bottle_1, amber_pump_bottle_2
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle small_dark_vase round_black_table_receptacle)
+- (inReceptacle yellow_pencil round_black_table_receptacle)
+- (inReceptacle metal_fork round_black_table_receptacle)
+- (inReceptacle blue_mug_receptacle round_black_table_receptacle)
+- (inReceptacle white_salt_shaker round_black_table_receptacle)
+- (inReceptacle square_coaster_mat round_black_table_receptacle)
+- (inReceptacle tomato white_rectangular_table_receptacle)
+- (inReceptacle metal_spoon white_rectangular_table_receptacle)
+- (inReceptacle black_takeout_container_receptacle white_rectangular_table_receptacle)
+- (inReceptacle gray_bowl_receptacle black_side_shelf_receptacle)
+- (inReceptacle metal_cup_receptacle black_side_shelf_receptacle)
+- (inReceptacle green_scrubber_pad black_side_shelf_receptacle)
+- (inReceptacle brown_egg black_side_shelf_receptacle)
+- (inReceptacle amber_pump_bottle_1 black_side_shelf_receptacle)
+- (inReceptacle amber_pump_bottle_2 black_side_shelf_receptacle)
+- (inReceptacle white_salt_shaker black_side_shelf_receptacle)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_mug_spoon_on_table)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+
+    round_black_table_receptacle - receptacle
+    white_rectangular_table_receptacle - receptacle
+    black_side_shelf_receptacle - receptacle
+    black_takeout_container_receptacle - receptacle
+    blue_mug_receptacle - receptacle
+    gray_bowl_receptacle - receptacle
+    metal_cup_receptacle - receptacle
+
+    square_coaster_mat - object
+    small_dark_vase - object
+    yellow_pencil - object
+    metal_fork - object
+    white_salt_shaker - object
+    tomato - object
+    metal_spoon - object
+    green_scrubber_pad - object
+    brown_egg - object
+    amber_pump_bottle_1 - object
+    amber_pump_bottle_2 - object
+  )
+
+  (:init
+    ;; Robot initially not at any location
+    ;; Receptacle contents from scene graph
+    (inReceptacle small_dark_vase round_black_table_receptacle)
+    (inReceptacle yellow_pencil round_black_table_receptacle)
+    (inReceptacle metal_fork round_black_table_receptacle)
+    (inReceptacle blue_mug_receptacle round_black_table_receptacle)
+    (inReceptacle white_salt_shaker round_black_table_receptacle)
+    (inReceptacle square_coaster_mat round_black_table_receptacle)
+
+    (inReceptacle tomato white_rectangular_table_receptacle)
+    (inReceptacle metal_spoon white_rectangular_table_receptacle)
+    (inReceptacle black_takeout_container_receptacle white_rectangular_table_receptacle)
+
+    (inReceptacle gray_bowl_receptacle black_side_shelf_receptacle)
+    (inReceptacle metal_cup_receptacle black_side_shelf_receptacle)
+    (inReceptacle green_scrubber_pad black_side_shelf_receptacle)
+    (inReceptacle brown_egg black_side_shelf_receptacle)
+    (inReceptacle amber_pump_bottle_1 black_side_shelf_receptacle)
+    (inReceptacle amber_pump_bottle_2 black_side_shelf_receptacle)
+    (inReceptacle white_salt_shaker black_side_shelf_receptacle)
+  )
+
+  (:goal
+    (and
+      ;; mug with spoon in it on the table
+      (inReceptacle blue_mug_receptacle round_black_table_receptacle)
+      (inReceptacle metal_spoon blue_mug_receptacle)
+    )
+  )
+)

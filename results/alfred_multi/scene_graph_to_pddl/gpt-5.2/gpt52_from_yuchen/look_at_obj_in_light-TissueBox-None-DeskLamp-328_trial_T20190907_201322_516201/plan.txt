@@ -1,0 +1,3 @@
+(gotolocation robot wooden_desk_surface_receptacle)
+(pickupobject robot green_tissue_box_center_receptacle)
+(toggleobject robot pink_table_lamp_object)

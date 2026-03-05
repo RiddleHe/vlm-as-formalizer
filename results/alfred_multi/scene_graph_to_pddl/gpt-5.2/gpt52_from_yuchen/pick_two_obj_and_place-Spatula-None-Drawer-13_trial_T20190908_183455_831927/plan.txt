@@ -1,0 +1,8 @@
+(gotolocation robot_agent wooden_spatula_flat_right_counter)
+(pickupobject robot_agent wooden_spatula_flat_right_counter)
+(gotolocation robot_agent white_counter_drawer_unit)
+(putobjectinreceptacle robot_agent wooden_spatula_flat_right_counter white_counter_drawer_unit)
+(gotolocation robot_agent wooden_spatula_upright_center)
+(pickupobject robot_agent wooden_spatula_upright_center)
+(gotolocation robot_agent white_counter_drawer_unit)
+(putobjectinreceptacle robot_agent wooden_spatula_upright_center white_counter_drawer_unit)

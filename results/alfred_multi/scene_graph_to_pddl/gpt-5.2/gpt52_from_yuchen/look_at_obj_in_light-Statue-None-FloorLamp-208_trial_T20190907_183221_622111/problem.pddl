@@ -1,0 +1,29 @@
+(define (problem examine_trophy_with_lamp)
+  (:domain put_task)
+  (:objects
+    agent_robot - agent
+    black_console_table_with_two_drawers - receptacle
+    dark_human_figure_trophy_on_square_base - object
+    orange_animal_figure_statue_on_white_base - object
+    tall_lamp_with_square_base_and_rectangular_shade - object
+  )
+
+  (:init
+    ;; Robot starts not at any location (no atLocation facts)
+
+    ;; Objects on/in the console table
+    (inReceptacle dark_human_figure_trophy_on_square_base black_console_table_with_two_drawers)
+    (inReceptacle orange_animal_figure_statue_on_white_base black_console_table_with_two_drawers)
+
+    ;; Lamp is separate (not in a receptacle)
+  )
+
+  (:goal
+    (and
+      ;; Interpreting "examine ... with ..." as bringing both items together:
+      ;; place the trophy into/onto the lamp's location (treating lamp as a receptacle is not allowed by types),
+      ;; so instead place the lamp into the table receptacle with the trophy.
+      (inReceptacle tall_lamp_with_square_base_and_rectangular_shade black_console_table_with_two_drawers)
+    )
+  )
+)

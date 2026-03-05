@@ -1,0 +1,6 @@
+(GotoLocation robot sink)
+(PickupObject robot egg sink)
+(GotoLocation robot microwave)
+(HeatObject robot microwave egg)
+(GotoLocation robot diningtable)
+(PutObjectInReceptacle robot egg diningtable)

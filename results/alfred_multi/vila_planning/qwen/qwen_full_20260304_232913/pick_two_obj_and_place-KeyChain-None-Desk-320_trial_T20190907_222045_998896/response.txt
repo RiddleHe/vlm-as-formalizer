@@ -1,0 +1,8 @@
+(GotoLocation robot dresser)
+(PickupObject robot keychain)
+(GotoLocation robot sidetable)
+(PutObjectInReceptacle robot keychain sidetable)
+(GotoLocation robot dresser)
+(PickupObject robot keychain)
+(GotoLocation robot sidetable)
+(PutObjectInReceptacle robot keychain sidetable)

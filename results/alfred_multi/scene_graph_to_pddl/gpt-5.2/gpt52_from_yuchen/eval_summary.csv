@@ -1,0 +1,2 @@
+route,dataset,model,gen_success_rate,pddl_valid_rate,task_success_rate,obj_precision,obj_recall,obj_f1,init_precision,init_recall,init_f1,goal_precision,goal_recall,goal_f1,macro_precision,macro_recall,macro_f1
+scene_graph_to_pddl,alfred_multi,gpt-5.2,0.0,0.0,0.2333,1.0,0.4682,0.6377,0.6928,0.1233,0.2094,0.85,0.3244,0.4696,0.8476,0.3053,0.4489

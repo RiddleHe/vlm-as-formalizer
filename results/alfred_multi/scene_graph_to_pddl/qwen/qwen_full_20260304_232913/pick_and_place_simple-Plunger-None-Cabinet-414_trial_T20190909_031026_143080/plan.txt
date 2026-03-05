@@ -1,0 +1,4 @@
+(gotolocation robot plunger)
+(pickupobject robot plunger)
+(gotolocation robot wooden_cabinet_under_sink)
+(putobjectinreceptacle robot plunger wooden_cabinet_under_sink)

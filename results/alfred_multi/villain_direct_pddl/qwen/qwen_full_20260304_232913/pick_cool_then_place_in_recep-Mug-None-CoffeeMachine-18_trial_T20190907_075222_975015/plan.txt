@@ -1,0 +1,4 @@
+(gotolocation robot cup)
+(pickupobject robot cup)
+(gotolocation robot fridge)
+(coolobject robot fridge cup)

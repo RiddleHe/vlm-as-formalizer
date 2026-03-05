@@ -1,0 +1,4 @@
+(gotolocation robot set_of_keys)
+(pickupobject robot set_of_keys)
+(gotolocation robot black_loveseat)
+(putobjectinreceptacle robot set_of_keys black_loveseat)

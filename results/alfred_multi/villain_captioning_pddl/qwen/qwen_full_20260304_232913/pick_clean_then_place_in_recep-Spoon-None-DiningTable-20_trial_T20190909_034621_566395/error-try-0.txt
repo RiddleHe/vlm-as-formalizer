@@ -1,0 +1,8 @@
+Predicate argument has wrong type:
+  atLocation spoon dining_table: spoon is not a agent
+  atLocation spoon countertop: spoon is not a agent
+
+Object does not have a type:
+  countertop
+  dining_table
+

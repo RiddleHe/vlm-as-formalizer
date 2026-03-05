@@ -1,0 +1,47 @@
+Scene graph:
+block: orange block (currently on blue); blue block (bottom of 2-block stack); purple block (top of tall stack); green block (second from top in tall stack); red/orange block (third from top in tall stack, above yellow); yellow block (bottom of tall stack, on table).
+robot: single robot arm (assumed, not visible).
+ontable (block) block x is on table, not on another block: (ontable blue-block-bottom-left-stack), (ontable yellow-block-bottom-right-stack)
+clear (block) there is no block on top of block x: (clear orange-block-top-left-stack), (clear purple-block-top-right-stack)
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty: (handempty robot-arm)
+handfull (robot) : 
+holding (block) block x is being held by the robot: 
+on (block, block) block x is on block y: (on orange-block-top-left-stack blue-block-bottom-left-stack), (on purple-block-top-right-stack green-block-second-right-stack), (on green-block-second-right-stack red-block-third-right-stack), (on red-block-third-right-stack yellow-block-bottom-right-stack)
+
+PDDL problem: (define (problem blocksworld_scene_1)
+  (:domain blocksworld)
+  (:objects
+    orange-block-top-left-stack - block
+    blue-block-bottom-left-stack - block
+    purple-block-top-right-stack - block
+    green-block-second-right-stack - block
+    red-block-third-right-stack - block
+    yellow-block-bottom-right-stack - block
+    robot-arm - robot
+  )
+  (:init
+    ;; robot state
+    (handempty robot-arm)
+
+    ;; table placements
+    (ontable blue-block-bottom-left-stack)
+    (ontable yellow-block-bottom-right-stack)
+
+    ;; stacks in the scene
+    (on orange-block-top-left-stack blue-block-bottom-left-stack)
+    (on red-block-third-right-stack yellow-block-bottom-right-stack)
+    (on green-block-second-right-stack red-block-third-right-stack)
+    (on purple-block-top-right-stack green-block-second-right-stack)
+
+    ;; clear blocks
+    (clear orange-block-top-left-stack)
+    (clear purple-block-top-right-stack)
+  )
+  (:goal
+    (and
+      (on orange-block-top-left-stack purple-block-top-right-stack)
+      (on green-block-second-right-stack blue-block-bottom-left-stack)
+      (on yellow-block-bottom-right-stack red-block-third-right-stack)
+    )
+  )
+)

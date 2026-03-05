@@ -1,0 +1,4 @@
+(GotoLocation robot mug)
+(PickupObject robot mug)
+(GotoLocation robot desk)
+(PutObjectInReceptacle robot mug desk)

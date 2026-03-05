@@ -1,0 +1,23 @@
+```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        bathtub - receptacle
+        sink - receptacle
+        rag1 - object
+        rag2 - object
+    )
+    (:init
+        (atLocation agent1 bathtub)
+        (inReceptacle rag1 bathtub)
+        (inReceptacle rag2 bathtub)
+    )
+    (:goal
+        (and
+            (inReceptacle rag1 sink)
+            (inReceptacle rag2 sink)
+        )
+    )
+)
+```

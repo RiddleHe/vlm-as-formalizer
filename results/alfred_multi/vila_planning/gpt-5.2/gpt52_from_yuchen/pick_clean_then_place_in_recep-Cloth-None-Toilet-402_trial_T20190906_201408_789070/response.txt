@@ -1,0 +1,6 @@
+(GotoLocation agent1 rag)
+(PickupObject agent1 rag)
+(GotoLocation agent1 sink)
+(CleanObject agent1 sink rag)
+(GotoLocation agent1 toilet_tank_lid)
+(PutObjectInReceptacle agent1 rag toilet_tank_lid)

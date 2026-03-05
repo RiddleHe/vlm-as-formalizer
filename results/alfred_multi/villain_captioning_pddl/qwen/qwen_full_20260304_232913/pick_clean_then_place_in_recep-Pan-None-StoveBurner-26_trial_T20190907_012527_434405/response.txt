@@ -1,0 +1,48 @@
+```pddl
+(define (problem rinse_pan)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        sink1 - sink
+        stove1 - object  ; stove is not a receptacle per domain, treated as a surface
+        pan1 - object
+        egg1 - object
+    )
+    (:init
+        ; Agent is not at any location initially
+        (not (atLocation agent1 microwave1))
+        (not (atLocation agent1 sink1))
+        (not (atLocation agent1 stove1))
+        (not (atLocation agent1 pan1))
+        (not (atLocation agent1 egg1))
+
+        ; Microwave is closed and not openable? Actually, microwave is openable per domain, but not opened
+        (openable microwave1)
+        (not (opened microwave1))
+
+        ; Sink is not openable
+        (not (openable sink1))
+
+        ; Pan is on the stove (stove is treated as a surface, not a receptacle)
+        ; Since stove is not a receptacle, we don't use inReceptacle for pan on stove.
+        ; We'll use atLocation to indicate pan is at stove.
+        (atLocation pan1 stove1)
+
+        ; Egg is on the countertop (we can consider it at sink location since it's adjacent, or create a separate location? 
+        ; But domain doesn't have countertop. We'll put egg at sink location for simplicity, as it's next to sink.
+        (atLocation egg1 sink1)
+
+        ; Pan is not clean
+        (not (isClean pan1))
+
+        ; Agent is not holding anything
+        (not (holdsAny agent1))
+    )
+    (:goal 
+        (and
+            (isClean pan1)
+        )
+    )
+)
+```

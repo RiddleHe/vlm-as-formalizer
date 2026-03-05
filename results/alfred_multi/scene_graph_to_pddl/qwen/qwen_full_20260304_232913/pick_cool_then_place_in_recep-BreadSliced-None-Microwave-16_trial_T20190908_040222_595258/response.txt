@@ -1,0 +1,78 @@
+Scene graph:
+agent: robot
+microwave (receptacle): red microwave
+fridge (receptacle): dark grey fridge
+sink (receptacle): kitchen sink
+knife (object): yellow-handled knife
+receptacle (object): round white table, wooden countertop
+object: red tomato, brown bread loaf, brown bread slice, salt shaker, pepper shaker, green book, metal spoon, metal cup, wine bottle, egg, paper towel roll, toaster, log, red microwave, dark grey fridge, kitchen sink, round white table, wooden countertop, yellow-handled knife
+openable (receptacle) true if a receptacle is openable: (openable dark grey fridge), (openable red microwave)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn red microwave), (isOn toaster)
+isToggled (object) true if the object has been toggled: (isToggled red microwave), (isToggled toaster)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle brown bread slice round white table), (inReceptacle red tomato round white table), (inReceptacle salt shaker round white table), (inReceptacle pepper shaker round white table), (inReceptacle green book round white table), (inReceptacle metal spoon round white table), (inReceptacle metal cup round white table), (inReceptacle wine bottle round white table), (inReceptacle egg round white table), (inReceptacle paper towel roll round white table), (inReceptacle brown bread loaf round white table), (inReceptacle red tomato wooden countertop), (inReceptacle salt shaker wooden countertop), (inReceptacle yellow-handled knife wooden countertop), (inReceptacle metal spoon wooden countertop), (inReceptacle toaster wooden countertop), (inReceptacle log wooden countertop)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot round white table)
+
+PDDL problem: ```pddl
+(define (problem place_cooled_bread_slice_in_microwave)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        red_microwave - microwave
+        dark_grey_fridge - fridge
+        kitchen_sink - sink
+        yellow_handled_knife - knife
+        round_white_table - receptacle
+        wooden_countertop - receptacle
+        red_tomato - object
+        brown_bread_loaf - object
+        brown_bread_slice - object
+        salt_shaker - object
+        pepper_shaker - object
+        green_book - object
+        metal_spoon - object
+        metal_cup - object
+        wine_bottle - object
+        egg - object
+        paper_towel_roll - object
+        toaster - object
+        log - object
+    )
+    (:init
+        (openable dark_grey_fridge)
+        (openable red_microwave)
+        (isOn red_microwave)
+        (isOn toaster)
+        (isToggled red_microwave)
+        (isToggled toaster)
+        (atLocation robot round_white_table)
+        (inReceptacle brown_bread_slice round_white_table)
+        (inReceptacle red_tomato round_white_table)
+        (inReceptacle salt_shaker round_white_table)
+        (inReceptacle pepper_shaker round_white_table)
+        (inReceptacle green_book round_white_table)
+        (inReceptacle metal_spoon round_white_table)
+        (inReceptacle metal_cup round_white_table)
+        (inReceptacle wine_bottle round_white_table)
+        (inReceptacle egg round_white_table)
+        (inReceptacle paper_towel_roll round_white_table)
+        (inReceptacle brown_bread_loaf round_white_table)
+        (inReceptacle red_tomato wooden_countertop)
+        (inReceptacle salt_shaker wooden_countertop)
+        (inReceptacle yellow_handled_knife wooden_countertop)
+        (inReceptacle metal_spoon wooden_countertop)
+        (inReceptacle toaster wooden_countertop)
+        (inReceptacle log wooden_countertop)
+    )
+    (:goal (and
+        (inReceptacle brown_bread_slice red_microwave)
+        (isCool brown_bread_slice)
+    ))
+)
+```

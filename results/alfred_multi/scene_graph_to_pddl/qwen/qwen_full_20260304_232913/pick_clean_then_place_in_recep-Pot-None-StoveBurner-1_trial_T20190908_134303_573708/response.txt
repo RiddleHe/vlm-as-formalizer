@@ -1,0 +1,44 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): stainless steel sink
+knife (object): knife on countertop
+receptacle (object): stainless steel sink, stove top, oven door, countertop
+object: stainless steel pot with water, stainless steel pot empty, white mug, knife on countertop, stove top, oven door, countertop, stainless steel sink
+openable (receptacle) true if a receptacle is openable: (openable stainless steel sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn stove top)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle stainless steel pot with water stove top), (inReceptacle stainless steel pot empty stove top), (inReceptacle white mug countertop)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_pot_on_stove)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        stainless_steel_sink - sink
+        stove_top - receptacle
+        countertop - receptacle
+        stainless_steel_pot_with_water - object
+        stainless_steel_pot_empty - object
+        white_mug - object
+        knife_on_countertop - knife
+    )
+    (:init
+        (openable stainless_steel_sink)
+        (isOn stove_top)
+        (inReceptacle stainless_steel_pot_with_water stove_top)
+        (inReceptacle stainless_steel_pot_empty stove_top)
+        (inReceptacle white_mug countertop)
+    )
+    (:goal (and (inReceptacle stainless_steel_pot_with_water stove_top)))
+)
+```

@@ -1,0 +1,69 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): stainless steel sink
+knife (object): knife on countertop
+receptacle (object): stainless steel sink, stove top, oven door, countertop
+object: stainless steel pot with water, stainless steel pot empty, white ceramic mug, knife on countertop, stove top, oven door, countertop, stainless steel sink
+openable (receptacle) true if a receptacle is openable: (openable stainless steel sink), (openable oven door)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn stove top)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle stainless steel pot with water stove top), (inReceptacle stainless steel pot empty stove top), (inReceptacle white ceramic mug countertop), (inReceptacle knife on countertop countertop)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_pot_on_stove)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        stainless_steel_sink - sink
+        oven_door - receptacle
+        countertop - receptacle
+        stove_top - receptacle
+        stainless_steel_pot_with_water - object
+        stainless_steel_pot_empty - object
+        white_ceramic_mug - object
+        knife_on_countertop - knife
+    )
+    (:init
+        (openable stainless_steel_sink)
+        (openable oven_door)
+        (isOn stove_top)
+        (inReceptacle stainless_steel_pot_with_water stove_top)
+        (inReceptacle stainless_steel_pot_empty stove_top)
+        (inReceptacle white_ceramic_mug countertop)
+        (inReceptacle knife_on_countertop countertop)
+        (not (atLocation robot stainless_steel_sink))
+        (not (atLocation robot oven_door))
+        (not (atLocation robot countertop))
+        (not (atLocation robot stove_top))
+        (not (atLocation robot stainless_steel_pot_with_water))
+        (not (atLocation robot stainless_steel_pot_empty))
+        (not (atLocation robot white_ceramic_mug))
+        (not (atLocation robot knife_on_countertop))
+        (not (holdsAny robot))
+        (not (opened stainless_steel_sink))
+        (not (opened oven_door))
+        (not (isClean stainless_steel_pot_with_water))
+        (not (isClean stainless_steel_pot_empty))
+        (not (isHot stainless_steel_pot_with_water))
+        (not (isHot stainless_steel_pot_empty))
+        (not (isCool stainless_steel_pot_with_water))
+        (not (isCool stainless_steel_pot_empty))
+        (not (isSliced stainless_steel_pot_with_water))
+        (not (isSliced stainless_steel_pot_empty))
+        (not (isToggled stove_top))
+    )
+    (:goal (and
+        (inReceptacle stainless_steel_pot_with_water stove_top)
+    ))
+)
+```

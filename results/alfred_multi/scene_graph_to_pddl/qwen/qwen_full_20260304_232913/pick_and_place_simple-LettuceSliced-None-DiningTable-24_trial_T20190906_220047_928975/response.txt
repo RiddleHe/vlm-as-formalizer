@@ -1,0 +1,53 @@
+Scene graph:
+agent: agent1
+microwave (receptacle): microwave1
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): knife_with_yellow_handle
+receptacle (object): table1
+object: tomato1, apple1, salt_shaker1, lettuce1, mug1, wine_glass1, spatula1
+openable (receptacle) true if a receptacle is openable: (openable microwave1)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn microwave1)
+isToggled (object) true if the object has been toggled: (isToggled microwave1)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle mug1 microwave1), (inReceptacle tomato1 table1), (inReceptacle apple1 table1), (inReceptacle salt_shaker1 table1), (inReceptacle lettuce1 table1), (inReceptacle knife_with_yellow_handle table1), (inReceptacle spatula1 table1), (inReceptacle wine_glass1 table1)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem slice_lettuce)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        table1 - receptacle
+        knife_with_yellow_handle - knife
+        tomato1 - object
+        apple1 - object
+        salt_shaker1 - object
+        lettuce1 - object
+        mug1 - object
+        wine_glass1 - object
+        spatula1 - object
+    )
+    (:init
+        (openable microwave1)
+        (isOn microwave1)
+        (isToggled microwave1)
+        (inReceptacle mug1 microwave1)
+        (inReceptacle tomato1 table1)
+        (inReceptacle apple1 table1)
+        (inReceptacle salt_shaker1 table1)
+        (inReceptacle lettuce1 table1)
+        (inReceptacle knife_with_yellow_handle table1)
+        (inReceptacle spatula1 table1)
+        (inReceptacle wine_glass1 table1)
+    )
+    (:goal (isSliced lettuce1))
+)
+```

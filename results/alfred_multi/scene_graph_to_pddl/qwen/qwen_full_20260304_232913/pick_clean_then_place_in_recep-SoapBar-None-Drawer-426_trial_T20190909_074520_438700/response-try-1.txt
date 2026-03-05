@@ -1,0 +1,49 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): brown_marble_sink
+knife (object): yellow_knife
+receptacle (object): green_cabinet_drawers, brown_marble_sink
+object: pink_bar_of_soap_left, pink_bar_of_soap_right, white_toilet_paper_roll, brown_soap_dispenser, yellow_knife, green_cabinet_drawers, brown_marble_sink
+openable (receptacle) true if a receptacle is openable: (openable green_cabinet_drawers)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle pink_bar_of_soap_left green_cabinet_drawers), (inReceptacle pink_bar_of_soap_right green_cabinet_drawers), (inReceptacle white_toilet_paper_roll green_cabinet_drawers), (inReceptacle brown_soap_dispenser green_cabinet_drawers), (inReceptacle yellow_knife green_cabinet_drawers)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        green_cabinet_drawers - receptacle
+        brown_marble_sink - receptacle
+        pink_bar_of_soap_left - object
+        pink_bar_of_soap_right - object
+        white_toilet_paper_roll - object
+        brown_soap_dispenser - object
+        yellow_knife - knife
+    )
+    (:init
+        (openable green_cabinet_drawers)
+        (inReceptacle pink_bar_of_soap_left green_cabinet_drawers)
+        (inReceptacle pink_bar_of_soap_right green_cabinet_drawers)
+        (inReceptacle white_toilet_paper_roll green_cabinet_drawers)
+        (inReceptacle brown_soap_dispenser green_cabinet_drawers)
+        (inReceptacle yellow_knife green_cabinet_drawers)
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (inReceptacle pink_bar_of_soap_left green_cabinet_drawers)
+        (isClean pink_bar_of_soap_left)
+    ))
+)
+```

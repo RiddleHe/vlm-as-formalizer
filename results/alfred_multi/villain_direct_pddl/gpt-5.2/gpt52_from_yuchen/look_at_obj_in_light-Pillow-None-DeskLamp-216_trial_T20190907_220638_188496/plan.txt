@@ -1,0 +1,2 @@
+(toggleobject robot lamp1)
+(pickupobject robot pillow1)

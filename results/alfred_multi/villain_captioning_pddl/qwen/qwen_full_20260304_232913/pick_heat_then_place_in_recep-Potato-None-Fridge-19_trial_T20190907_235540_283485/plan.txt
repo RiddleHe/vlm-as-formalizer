@@ -1,0 +1,8 @@
+(gotolocation agent1 potato1)
+(pickupobject agent1 potato1)
+(gotolocation agent1 countertop1)
+(heatobject agent1 microwave1 potato1)
+(putobjectinreceptacle agent1 potato1 fridge1)
+(gotolocation agent1 table1)
+(pickupobject agent1 knife1)
+(sliceobject agent1 potato1 knife1)

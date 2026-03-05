@@ -1,0 +1,4 @@
+(GotoLocation robot handtowelholder)
+(PickupObject robot handtowel)
+(GotoLocation robot countertop)
+(PutObjectInReceptacle robot handtowel countertop)

@@ -1,0 +1,14 @@
+(define (problem put_racket_on_dresser)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        racket - object
+        dresser - receptacle
+    )
+    (:init
+        (atLocation robot racket)
+        (not (holdsAny robot))
+        (not (atLocation robot dresser))
+    )
+    (:goal (and (inReceptacle racket dresser)))
+)

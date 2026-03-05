@@ -1,0 +1,38 @@
+(define (problem put_glass_and_knife_on_shelf)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        knife1 - knife
+        glass1 - object
+        microwave1 - microwave
+        cabinet1 - receptacle
+        countertop1 - object
+    )
+    (:init
+        (atLocation agent1 countertop1)
+        (inReceptacle knife1 countertop1)
+        (inReceptacle glass1 countertop1)
+        (openable microwave1)
+        (openable cabinet1)
+        (not (opened microwave1))
+        (not (opened cabinet1))
+        (not (holdsAny agent1))
+        (not (isClean knife1))
+        (not (isClean glass1))
+        (not (isHot knife1))
+        (not (isHot glass1))
+        (not (isCool knife1))
+        (not (isCool glass1))
+        (not (isSliced knife1))
+        (not (isSliced glass1))
+        (not (isOn knife1))
+        (not (isOn glass1))
+        (not (isToggled knife1))
+        (not (isToggled glass1))
+    )
+    (:goal (and
+        (inReceptacle knife1 cabinet1)
+        (inReceptacle glass1 cabinet1)
+        (opened cabinet1)
+    ))
+)

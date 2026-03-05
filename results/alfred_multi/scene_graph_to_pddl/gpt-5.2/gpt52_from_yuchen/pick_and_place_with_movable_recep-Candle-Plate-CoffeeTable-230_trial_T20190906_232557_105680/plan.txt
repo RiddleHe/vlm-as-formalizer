@@ -1,0 +1,6 @@
+(gotolocation agent_robot dining_table_wooden_large)
+(pickupobject agent_robot candle_lightgreen_cylinder_on_dining_table)
+(putobjectinreceptacle agent_robot candle_lightgreen_cylinder_on_dining_table grey_plate_top_left_on_dining_table)
+(pickupobject agent_robot grey_plate_top_left_on_dining_table)
+(gotolocation agent_robot coffee_table_wooden_low)
+(putobjectinreceptacle agent_robot grey_plate_top_left_on_dining_table coffee_table_wooden_low)

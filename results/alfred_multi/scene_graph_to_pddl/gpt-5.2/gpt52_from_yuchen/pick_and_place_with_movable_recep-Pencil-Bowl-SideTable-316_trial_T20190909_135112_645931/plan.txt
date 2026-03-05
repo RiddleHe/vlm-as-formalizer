@@ -1,0 +1,6 @@
+(gotolocation robot_agent curved_wood_desk_surface)
+(pickupobject robot_agent blue_pencil_center_desk)
+(putobjectinreceptacle robot_agent blue_pencil_center_desk brown_bowl_on_right_desk)
+(pickupobject robot_agent brown_bowl_on_right_desk)
+(gotolocation robot_agent wooden_nightstand_right_of_bed)
+(putobjectinreceptacle robot_agent brown_bowl_on_right_desk wooden_nightstand_right_of_bed)

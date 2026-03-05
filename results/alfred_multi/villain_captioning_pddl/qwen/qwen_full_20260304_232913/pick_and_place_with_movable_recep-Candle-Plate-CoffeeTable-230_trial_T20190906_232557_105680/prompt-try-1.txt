@@ -1,0 +1,268 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Put a grey plate with a candle on it on a coffee table.
+    
+
+SCENE CAPTION:
+Scene Description:
+
+1. Objects and their types:
+   - Receptacles:
+     - A wooden dining table (large, rectangular, light brown wood grain) — functions as a surface for holding objects.
+     - A wooden coffee table (smaller, rectangular, light brown wood grain) — positioned in front of a brown sofa, also functions as a surface for holding objects.
+     - A cardboard box (open, on the coffee table) — can hold objects.
+     - A tissue box (on the dining table, olive green, with tissues protruding) — can hold tissues.
+     - A blue recycling bin (cylindrical, in the background near the dining table) — can hold recyclable items.
+   - Objects:
+     - Grey plates (2): octagonal, matte finish, placed on the dining table.
+     - Candle (1): small, cylindrical, light green/yellowish, placed on the dining table near the tissue box.
+     - Laptop (1): black, open, on the dining table.
+     - Remote control (1): silver and gray, on the dining table.
+     - Newspapers (2): folded, grayish, on the dining table.
+     - Potted plant (1): green leaves, white pot, on the coffee table.
+     - Statue (1): dark, abstract, on the coffee table.
+     - Blue card (1): small, rectangular, on both the dining table and coffee table (possibly the same object moved or duplicated in views).
+
+2. Quantities:
+   - Receptacles: 5 (dining table, coffee table, cardboard box, tissue box, recycling bin)
+   - Grey plates: 2
+   - Candles: 1
+   - Laptops: 1
+   - Remote controls: 1
+   - Newspapers: 2
+   - Potted plants: 1
+   - Statues: 1
+   - Blue cards: 1 (appears in multiple views, likely the same object)
+
+3. Spatial relationships:
+   - The dining table is central in the scene, surrounded by chairs.
+   - The coffee table is in front of the sofa, on a red and black patterned rug.
+   - The candle is on the dining table, to the right of the laptop and near the tissue box.
+   - One grey plate is near the top right of the dining table; the other is near the bottom right.
+   - The laptop is open and positioned vertically on the dining table.
+   - The cardboard box is on the coffee table, to the right of the potted plant.
+   - The blue card is on the coffee table near the cardboard box and also appears on the dining table near the remote control.
+   - The tissue box is on the dining table, to the right of the laptop.
+   - The recycling bin is in the upper left corner, partially visible.
+
+4. Current state relevant to the planning task:
+   - The candle is not currently on a plate.
+   - The grey plates are empty and on the dining table.
+   - The coffee table is available to receive objects.
+   - No object is currently being held by an agent (robot).
+   - No receptacle is currently opened or closed (except the cardboard box, which is open).
+   - No object is clean, hot, cool, sliced, or toggled.
+
+5. Colors and visual properties:
+   - The grey plates are matte and octagonal, distinct from the wooden tables.
+   - The candle is light green/yellowish and cylindrical, easily distinguishable.
+   - The laptop is black with a visible keyboard and trackpad.
+   - The tissue box is olive green with white tissues sticking out.
+   - The cardboard box is brown and open, with flaps visible.
+   - The coffee table and dining table are both light brown wood, but the coffee table is smaller and lower.
+   - The rug has a red and black pattern, providing contrast to the wooden furniture.
+   - The potted plant has green leaves and a white pot, adding a natural element to the coffee table.
+   - The blue card is small and rectangular, standing out against the wooden surfaces.
+
+This scene description provides a comprehensive overview of the objects, their types, quantities, spatial relationships, current states, and visual properties relevant to the planning task of putting a grey plate with a candle on the coffee table.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

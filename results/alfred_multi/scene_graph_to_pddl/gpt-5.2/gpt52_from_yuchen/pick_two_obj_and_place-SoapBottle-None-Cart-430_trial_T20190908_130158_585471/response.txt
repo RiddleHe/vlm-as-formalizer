@@ -1,0 +1,53 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): none visible.
+fridge (receptacle): none visible.
+sink (receptacle): none visible.
+knife (object): none visible.
+receptacle (object): metal_rolling_rack_with_horizontal_bars; blue_hexagonal_bucket_on_floor; white_toilet_bowl_and_tank; glass_shower_enclosure
+object: yellow_spray_bottle_with_white_trigger_on_rack; silver_pump_bottle_on_toilet_tank; green_plunger_with_brown_handle; copper_toilet_paper_holder_on_wall; small_orange_rectangular_item_on_floor
+openable (receptacle) true if a receptacle is openable: none.
+opened (receptacle) true if a receptacle is opened: none.
+holdsAny (agent) agent ?a holds an object: none.
+isClean (object) true if the object has been clean in sink: none.
+isHot (object) true if the object has been heated up: none.
+isCool (object) true if the object has been cooled: none.
+isOn (object) true if the object is on: none.
+isToggled (object) true if the object has been toggled: none.
+isSliced (object) true if the object is sliced: none.
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle yellow_spray_bottle_with_white_trigger_on_rack metal_rolling_rack_with_horizontal_bars)
+holds (agent, object) object ?o is held by agent ?a: none.
+atLocation (agent, object) : none.
+
+PDDL problem: (define (problem put_two_spray_bottles_on_metal_rack)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    metal_rolling_rack_with_horizontal_bars - receptacle
+    blue_hexagonal_bucket_on_floor - receptacle
+    white_toilet_bowl_and_tank - receptacle
+    glass_shower_enclosure - receptacle
+
+    yellow_spray_bottle_with_white_trigger_on_rack - object
+    silver_pump_bottle_on_toilet_tank - object
+    green_plunger_with_brown_handle - object
+    copper_toilet_paper_holder_on_wall - object
+    small_orange_rectangular_item_on_floor - object
+  )
+
+  (:init
+    ;; Robot starts not at any location and holds nothing (no atLocation/holds/holdsAny facts).
+
+    ;; Current containment relationships from the scene graph
+    (inReceptacle yellow_spray_bottle_with_white_trigger_on_rack metal_rolling_rack_with_horizontal_bars)
+  )
+
+  (:goal
+    (and
+      (inReceptacle yellow_spray_bottle_with_white_trigger_on_rack metal_rolling_rack_with_horizontal_bars)
+      (inReceptacle silver_pump_bottle_on_toilet_tank metal_rolling_rack_with_horizontal_bars)
+    )
+  )
+)

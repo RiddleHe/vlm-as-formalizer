@@ -1,0 +1,6 @@
+(gotolocation agent1 apple)
+(pickupobject agent1 apple)
+(gotolocation agent1 fridge)
+(coolobject agent1 fridge apple)
+(gotolocation agent1 trash_can)
+(putobjectinreceptacle agent1 apple trash_can)

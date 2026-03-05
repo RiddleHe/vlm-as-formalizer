@@ -1,0 +1,4 @@
+(GotoLocation agent1 cup)
+(PickupObject agent1 cup)
+(GotoLocation agent1 desk)
+(PutObjectInReceptacle agent1 cup desk)

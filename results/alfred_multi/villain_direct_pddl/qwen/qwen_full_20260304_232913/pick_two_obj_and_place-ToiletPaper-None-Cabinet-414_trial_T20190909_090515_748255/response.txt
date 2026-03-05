@@ -1,0 +1,24 @@
+```pddl
+(define (problem put_toilet_paper_in_cabinet)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        toilet_paper1 toilet_paper2 - object
+        cabinet1 cabinet2 cabinet3 - receptacle
+        sink1 - sink
+    )
+    (:init
+        (atLocation agent1 sink1)
+        (inReceptacle toilet_paper1 sink1)
+        (inReceptacle toilet_paper2 sink1)
+        (openable cabinet2)
+        (not (opened cabinet2))
+    )
+    (:goal
+        (and
+            (inReceptacle toilet_paper1 cabinet2)
+            (inReceptacle toilet_paper2 cabinet2)
+        )
+    )
+)
+```

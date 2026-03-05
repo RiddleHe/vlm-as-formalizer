@@ -1,0 +1,58 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): wooden_brown_dresser_with_drawers
+object: gray_laptop_on_dresser, white_table_lamp_on_dresser, bed_with_blue_blanket, green_pillow_near_bed_edge_left, green_pillow_near_bed_edge_right, orange_tennis_racket_on_floor
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: (define (problem put_racket_on_dresser)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    microwave - microwave
+    fridge - fridge
+    sink - sink
+
+    wooden_brown_dresser_with_drawers - receptacle
+
+    knife - knife
+
+    gray_laptop_on_dresser - object
+    white_table_lamp_on_dresser - object
+    bed_with_blue_blanket - object
+    green_pillow_near_bed_edge_left - object
+    green_pillow_near_bed_edge_right - object
+    orange_tennis_racket_on_floor - object
+  )
+
+  (:init
+    ;; Robot starts not at any object's location and holds nothing.
+    ;; (No atLocation facts)
+    ;; (No holds / holdsAny facts)
+
+    ;; Objects currently on/in the dresser surface (modeled as inReceptacle).
+    (inReceptacle gray_laptop_on_dresser wooden_brown_dresser_with_drawers)
+    (inReceptacle white_table_lamp_on_dresser wooden_brown_dresser_with_drawers)
+  )
+
+  (:goal
+    (and
+      (inReceptacle orange_tennis_racket_on_floor wooden_brown_dresser_with_drawers)
+    )
+  )
+)

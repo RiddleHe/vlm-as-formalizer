@@ -1,0 +1,73 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): none visible.
+fridge (receptacle): none visible.
+sink (receptacle): one rectangular dark-gray sink basin set into the countertop (dark_gray_rectangular_sink).
+knife (object): none visible.
+receptacle (object): 
+- dark_gray_rectangular_sink (sink)
+- white_under_sink_cabinet (receptacle; the white cabinet under the sink with multiple doors)
+object:
+- gold_faucet_left (left gold faucet/handle on the sink)
+- gold_faucet_right (right gold faucet/handle on the sink)
+- green_soap_dispenser_bottle (green bottle behind the sink)
+
+openable (receptacle) true if a receptacle is openable:
+- (openable white_under_sink_cabinet)
+
+opened (receptacle) true if a receptacle is opened: none.
+
+holdsAny (agent) agent ?a holds an object: none.
+
+isClean (object) true if the object has been clean in sink: none.
+
+isHot (object) true if the object has been heated up: none.
+
+isCool (object) true if the object has been cooled: none.
+
+isOn (object) true if the object is on: none.
+
+isToggled (object) true if the object has been toggled: none.
+
+isSliced (object) true if the object is sliced: none.
+
+inReceptacle (object, object) object ?o is in receptacle ?r: none visible/confirmable.
+
+holds (agent, object) object ?o is held by agent ?a: none.
+
+atLocation (agent, object) : none.
+
+PDDL problem: (define (problem put_task_spray_bottles_garbage_bin)
+  (:domain put_task)
+  (:objects
+    ;; agent
+    robot - agent
+
+    ;; receptacles
+    dark_gray_rectangular_sink - sink
+    white_under_sink_cabinet - receptacle
+
+    ;; objects
+    gold_faucet_left - object
+    gold_faucet_right - object
+    green_soap_dispenser_bottle - object
+  )
+
+  (:init
+    ;; receptacle properties
+    (openable white_under_sink_cabinet)
+
+    ;; robot initially not at any object's location (no atLocation facts)
+
+    ;; no objects are initially held (no holds / holdsAny facts)
+
+    ;; no inReceptacle relations are confirmed initially
+  )
+
+  ;; Note: The instruction requests placing TWO spray bottles into a garbage bin,
+  ;; but the provided scene graph contains neither spray bottles nor a garbage bin.
+  ;; Therefore the goal cannot be expressed with the available objects.
+  (:goal
+    (and)
+  )
+)

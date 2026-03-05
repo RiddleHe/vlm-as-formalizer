@@ -1,0 +1,6 @@
+(gotolocation agent1 lettuce)
+(pickupobject agent1 lettuce)
+(gotolocation agent1 fridge)
+(coolobject agent1 fridge lettuce)
+(gotolocation agent1 garbage_can)
+(putobjectinreceptacle agent1 lettuce garbage_can)

@@ -1,0 +1,4 @@
+(pickupobject robot towel1)
+(putobjectinreceptacle robot towel1 bathtub1)
+(pickupobject robot towel2)
+(putobjectinreceptacle robot towel2 bathtub1)

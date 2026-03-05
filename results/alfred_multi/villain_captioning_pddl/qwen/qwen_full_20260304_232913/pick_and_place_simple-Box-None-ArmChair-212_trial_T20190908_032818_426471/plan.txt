@@ -1,0 +1,4 @@
+(gotolocation agent1 cardboard_box)
+(pickupobject agent1 cardboard_box)
+(gotolocation agent1 green_chair)
+(putobjectinreceptacle agent1 cardboard_box green_chair)

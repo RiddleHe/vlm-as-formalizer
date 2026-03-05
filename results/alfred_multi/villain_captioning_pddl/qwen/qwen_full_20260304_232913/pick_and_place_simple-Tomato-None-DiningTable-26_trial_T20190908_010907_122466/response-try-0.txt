@@ -1,0 +1,31 @@
+```pddl
+(define (problem find_tomato_on_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        tomato1 - object
+        knife1 - knife
+        fridge1 - fridge
+        table1 - object  ; table is not a receptacle per domain, so treated as object for location
+    )
+    (:init
+        (atLocation agent1 table1)  ; agent is at the table to start, as it needs to interact with objects there
+        (not (holdsAny agent1))
+        (openable fridge1)
+        (not (opened fridge1))
+        (isOn table1)  ; table is considered "on" as a location
+        (isSliced tomato1)  ; assuming tomato is already sliced if needed, but not required for goal
+        (not (isClean tomato1))
+        (not (isHot tomato1))
+        (not (isCool tomato1))
+        ; Tomato is on the table, so agent can interact with it directly
+        (atLocation tomato1 table1)
+        (atLocation knife1 table1)
+        (atLocation fridge1 table1)  ; fridge is adjacent to table, so agent can go to it
+    )
+    (:goal (and
+        (atLocation agent1 table1)
+        (atLocation tomato1 table1)
+    ))
+)
+```

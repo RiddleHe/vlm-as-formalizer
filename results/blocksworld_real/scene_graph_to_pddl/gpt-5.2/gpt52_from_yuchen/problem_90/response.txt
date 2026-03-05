@@ -1,0 +1,63 @@
+Scene graph:
+block: 
+- blue_block (blue cube at the top of the vertical stack)
+- yellow_block (light yellow cube directly under the blue block)
+- orange_block (orange cube directly under the yellow block)
+- green_block (green cube directly under the orange block)
+- red_block (reddish/salmon cube directly under the green block)
+- purple_block (purple cube at the bottom of the vertical stack)
+
+robot:
+- robot_arm (robot; not visible, assumed available)
+
+ontable (block) block x is on table, not on another block:
+- (ontable purple_block)
+
+clear (block) there is no block on top of block x:
+- (clear blue_block)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot_arm)
+
+handfull (robot) :
+- (none)
+
+holding (block) block x is being held by the robot:
+- (none)
+
+on (block, block) block x is on block y:
+- (on blue_block yellow_block)
+- (on yellow_block orange_block)
+- (on orange_block green_block)
+- (on green_block red_block)
+- (on red_block purple_block)
+
+PDDL problem: ```lisp
+(define (problem blocksworld_scene_01)
+  (:domain blocksworld)
+  (:objects
+    blue_block yellow_block orange_block green_block red_block purple_block - block
+    robot_arm - robot
+  )
+  (:init
+    (ontable purple_block)
+
+    (on red_block purple_block)
+    (on green_block red_block)
+    (on orange_block green_block)
+    (on yellow_block orange_block)
+    (on blue_block yellow_block)
+
+    (clear blue_block)
+
+    (handempty robot_arm)
+  )
+  (:goal
+    (and
+      (on red_block blue_block)
+      (on orange_block yellow_block)
+      (on purple_block green_block)
+    )
+  )
+)
+```

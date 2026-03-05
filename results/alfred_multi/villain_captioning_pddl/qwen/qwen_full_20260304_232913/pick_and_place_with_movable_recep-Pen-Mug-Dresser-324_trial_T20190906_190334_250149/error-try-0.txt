@@ -1,0 +1,13 @@
+Predicate argument has wrong type:
+  atLocation book2 side_table: book2 is not a agent
+  atLocation pen dresser: pen is not a agent
+  atLocation smartphone dresser: smartphone is not a agent
+  atLocation book3 side_table: book3 is not a agent
+  atLocation laptop dresser: laptop is not a agent
+  atLocation book4 side_table: book4 is not a agent
+  atLocation radio side_table: radio is not a agent
+  atLocation book1 side_table: book1 is not a agent
+  atLocation black_cup side_table: black_cup is not a agent
+  atLocation lamp dresser: lamp is not a agent
+  atLocation keys side_table: keys is not a agent
+

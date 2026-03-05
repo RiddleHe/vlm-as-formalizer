@@ -1,0 +1,7 @@
+(GotoLocation agent fridge)
+(OpenObject agent fridge)
+(PickupObject agent potato)
+(CoolObject agent fridge potato)
+(CloseObject agent fridge)
+(GotoLocation agent island)
+(PutObjectInReceptacle agent potato island)

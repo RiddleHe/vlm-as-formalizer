@@ -1,0 +1,7 @@
+(GotoLocation agent box)
+(PickupObject agent box)
+(GotoLocation agent plate)
+(PickupObject agent plate)
+(PutObjectInReceptacle agent plate box)
+(GotoLocation agent table)
+(PutObjectInReceptacle agent box table)

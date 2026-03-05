@@ -1,0 +1,79 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): microwave_above_stove_silver_right_keypad
+fridge (receptacle): (none visible)
+sink (receptacle): (none visible)
+knife (object): (none visible)
+receptacle (object): microwave_above_stove_silver_right_keypad, white_table_right_side, black_side_shelf_left_of_table, brown_countertop_surface_left, gas_stove_top_white
+object: robot_agent, square_brown_pan_on_right_stove_burner, red_coffee_machine_on_counter, small_red_toaster_left_of_coffee_machine, green_hexagon_trash_bin_under_counter, loaf_of_bread_on_black_side_shelf, loaf_of_bread_on_white_table, red_apple_on_black_side_shelf, dark_round_fruit_on_black_side_shelf, small_spoon_on_black_side_shelf, small_glass_or_cup_on_black_side_shelf
+openable (receptacle) true if a receptacle is openable: (openable microwave_above_stove_silver_right_keypad)
+opened (receptacle) true if a receptacle is opened: (none)
+holdsAny (agent) agent ?a holds an object: (none)
+isClean (object) true if the object has been clean in sink: (none)
+isHot (object) true if the object has been heated up: (none)
+isCool (object) true if the object has been cooled: (none)
+isOn (object) true if the object is on: (none)
+isToggled (object) true if the object has been toggled: (none)
+isSliced (object) true if the object is sliced: (none)
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle square_brown_pan_on_right_stove_burner gas_stove_top_white)
+- (inReceptacle red_coffee_machine_on_counter brown_countertop_surface_left)
+- (inReceptacle small_red_toaster_left_of_coffee_machine brown_countertop_surface_left)
+- (inReceptacle green_hexagon_trash_bin_under_counter brown_countertop_surface_left)
+- (inReceptacle loaf_of_bread_on_black_side_shelf black_side_shelf_left_of_table)
+- (inReceptacle red_apple_on_black_side_shelf black_side_shelf_left_of_table)
+- (inReceptacle dark_round_fruit_on_black_side_shelf black_side_shelf_left_of_table)
+- (inReceptacle small_spoon_on_black_side_shelf black_side_shelf_left_of_table)
+- (inReceptacle small_glass_or_cup_on_black_side_shelf black_side_shelf_left_of_table)
+- (inReceptacle loaf_of_bread_on_white_table white_table_right_side)
+holds (agent, object) object ?o is held by agent ?a: (none)
+atLocation (agent, object) : (none)
+
+PDDL problem: (define (problem put_task_microwaved_mug_on_left_shelves)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+
+    microwave_above_stove_silver_right_keypad - microwave
+    black_side_shelf_left_of_table - receptacle
+    white_table_right_side - receptacle
+    brown_countertop_surface_left - receptacle
+    gas_stove_top_white - receptacle
+
+    small_glass_or_cup_on_black_side_shelf - object
+    square_brown_pan_on_right_stove_burner - object
+    red_coffee_machine_on_counter - object
+    small_red_toaster_left_of_coffee_machine - object
+    green_hexagon_trash_bin_under_counter - object
+    loaf_of_bread_on_black_side_shelf - object
+    red_apple_on_black_side_shelf - object
+    dark_round_fruit_on_black_side_shelf - object
+    small_spoon_on_black_side_shelf - object
+    loaf_of_bread_on_white_table - object
+  )
+
+  (:init
+    (openable microwave_above_stove_silver_right_keypad)
+
+    (inReceptacle square_brown_pan_on_right_stove_burner gas_stove_top_white)
+    (inReceptacle red_coffee_machine_on_counter brown_countertop_surface_left)
+    (inReceptacle small_red_toaster_left_of_coffee_machine brown_countertop_surface_left)
+    (inReceptacle green_hexagon_trash_bin_under_counter brown_countertop_surface_left)
+
+    (inReceptacle loaf_of_bread_on_black_side_shelf black_side_shelf_left_of_table)
+    (inReceptacle red_apple_on_black_side_shelf black_side_shelf_left_of_table)
+    (inReceptacle dark_round_fruit_on_black_side_shelf black_side_shelf_left_of_table)
+    (inReceptacle small_spoon_on_black_side_shelf black_side_shelf_left_of_table)
+    (inReceptacle small_glass_or_cup_on_black_side_shelf black_side_shelf_left_of_table)
+
+    (inReceptacle loaf_of_bread_on_white_table white_table_right_side)
+  )
+
+  (:goal
+    (and
+      (isHot small_glass_or_cup_on_black_side_shelf)
+      (inReceptacle small_glass_or_cup_on_black_side_shelf black_side_shelf_left_of_table)
+    )
+  )
+)

@@ -1,0 +1,63 @@
+Scene graph:
+agent: robot
+microwave (receptacle): none
+fridge (receptacle): stainless steel fridge with digital display showing -15°C
+sink (receptacle): stainless steel sink with faucet, containing an egg and a spoon
+knife (object): black-handled knife on countertop near stove, golden-handled knife on countertop near stove
+receptacle (object): coffee maker with black mug on drip tray, toaster with dark brown casing, stainless steel sink, stainless steel fridge
+object: egg in sink, spoon in sink, black mug on coffee maker, lettuce on dining table, fork on dining table, spatula on dining table, bread on dining table, green cutting board on stove, golden ladle on stove, black-handled knife on stove, golden-handled knife on stove, stainless steel pot on stove
+openable (receptacle) true if a receptacle is openable: (openable stainless steel fridge), (openable stainless steel sink)
+opened (receptacle) true if a receptacle is opened: (opened stainless steel sink)
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn coffee maker), (isOn toaster), (isOn stove)
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle egg stainless steel sink), (inReceptacle spoon stainless steel sink), (inReceptacle black mug coffee maker)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem put_slice_cold_lettuce_on_counter)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        stainless_steel_fridge - fridge
+        stainless_steel_sink - sink
+        coffee_maker - receptacle
+        toaster - receptacle
+        stove - receptacle
+        egg - object
+        spoon - object
+        black_mug - object
+        lettuce - object
+        fork - object
+        spatula - object
+        bread - object
+        green_cutting_board - object
+        golden_ladle - object
+        black_handled_knife - knife
+        golden_handled_knife - knife
+        stainless_steel_pot - object
+    )
+    (:init
+        (openable stainless_steel_fridge)
+        (openable stainless_steel_sink)
+        (opened stainless_steel_sink)
+        (isOn coffee_maker)
+        (isOn toaster)
+        (isOn stove)
+        (inReceptacle egg stainless_steel_sink)
+        (inReceptacle spoon stainless_steel_sink)
+        (inReceptacle black_mug coffee_maker)
+        (atLocation robot stainless_steel_sink) ; assuming robot starts near sink for accessibility
+    )
+    (:goal (and
+        (isSliced lettuce)
+        (isCool lettuce)
+        (atLocation robot lettuce) ; lettuce is now on counter (dining table is treated as counter surface)
+    ))
+)
+```

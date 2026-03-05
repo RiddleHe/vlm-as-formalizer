@@ -1,0 +1,4 @@
+(gotolocation agent red_and_gray_cd_player)
+(pickupobject agent red_and_gray_cd_player)
+(gotolocation agent bookshelf)
+(putobjectinreceptacle agent red_and_gray_cd_player bookshelf)

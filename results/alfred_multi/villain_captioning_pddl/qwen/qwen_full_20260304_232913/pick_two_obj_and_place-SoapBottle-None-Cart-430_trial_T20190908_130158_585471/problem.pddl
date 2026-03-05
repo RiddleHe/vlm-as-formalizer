@@ -1,0 +1,26 @@
+(define (problem put_spray_bottles_on_rack)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        yellow_spray_bottle silver_spray_bottle - object
+        metal_rack blue_bin - receptacle
+        toilet - object
+    )
+    (:init
+        (atLocation agent1 toilet) ; agent starts near toilet
+        (inReceptacle yellow_spray_bottle metal_rack)
+        (not (holdsAny agent1))
+        (openable metal_rack)
+        (opened metal_rack) ; metal rack is open and accessible
+        (openable blue_bin)
+        (opened blue_bin)
+        ; silver spray bottle is on toilet, not in any receptacle
+        (atLocation silver_spray_bottle toilet)
+        (atLocation metal_rack toilet) ; metal rack is near toilet
+        (atLocation blue_bin metal_rack) ; blue bin is next to metal rack
+    )
+    (:goal (and
+        (inReceptacle yellow_spray_bottle metal_rack)
+        (inReceptacle silver_spray_bottle metal_rack)
+    ))
+)

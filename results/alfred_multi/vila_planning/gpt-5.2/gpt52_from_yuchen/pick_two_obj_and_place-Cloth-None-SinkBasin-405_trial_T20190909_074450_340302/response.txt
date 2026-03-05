@@ -1,0 +1,8 @@
+(GotoLocation agent bathtub)
+(PickupObject agent rag)
+(GotoLocation agent sink)
+(PutObjectInReceptacle agent rag sink)
+(GotoLocation agent bathtub)
+(PickupObject agent rag)
+(GotoLocation agent sink)
+(PutObjectInReceptacle agent rag sink)

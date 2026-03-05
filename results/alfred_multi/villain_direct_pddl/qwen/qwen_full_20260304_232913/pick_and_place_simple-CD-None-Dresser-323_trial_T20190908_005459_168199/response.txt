@@ -1,0 +1,23 @@
+```pddl
+(define (problem move_cd_to_dresser)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        cd1 cd2 - object
+        desk dresser - receptacle
+    )
+    (:init
+        (atLocation robot desk)
+        (inReceptacle cd1 desk)
+        (inReceptacle cd2 desk)
+        (openable desk)
+        (openable dresser)
+    )
+    (:goal
+        (and
+            (inReceptacle cd1 dresser)
+            (inReceptacle cd2 dresser)
+        )
+    )
+)
+```

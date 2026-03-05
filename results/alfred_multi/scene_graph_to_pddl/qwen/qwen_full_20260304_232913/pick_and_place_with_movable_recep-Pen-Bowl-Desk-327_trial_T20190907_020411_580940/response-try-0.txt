@@ -1,0 +1,63 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): wooden desk, wooden dresser, metal bowl on dresser, metal bowl on dresser
+object: pen on dresser, cd on dresser, cd on desk, laptop on desk, black office chair, brown boots, basketball, lamp on dresser, alarm clock on dresser
+openable (receptacle) true if a receptacle is openable: (openable wooden dresser), (openable wooden desk)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn lamp on dresser), (isOn laptop on desk)
+isToggled (object) true if the object has been toggled: (isToggled lamp on dresser), (isToggled laptop on desk)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle cd on dresser metal bowl on dresser), (inReceptacle cd on dresser metal bowl on dresser)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent
+        wooden_desk
+        wooden_dresser
+        metal_bowl_on_dresser_1
+        metal_bowl_on_dresser_2
+        pen_on_dresser
+        cd_on_dresser
+        cd_on_desk
+        laptop_on_desk
+        black_office_chair
+        brown_boots
+        basketball
+        lamp_on_dresser
+        alarm_clock_on_dresser
+        microwave
+        fridge
+        sink
+        knife
+    )
+    (:init
+        (openable wooden_dresser)
+        (openable wooden_desk)
+        (isOn lamp_on_dresser)
+        (isOn laptop_on_desk)
+        (isToggled lamp_on_dresser)
+        (isToggled laptop_on_desk)
+        (inReceptacle cd_on_dresser metal_bowl_on_dresser_1)
+        (inReceptacle cd_on_dresser metal_bowl_on_dresser_2)
+        (atLocation agent wooden_dresser) ; Assuming agent starts near dresser where pen is
+    )
+    (:goal
+        (and
+            (inReceptacle pen_on_dresser metal_bowl_on_dresser_1)
+            (atLocation agent wooden_desk)
+        )
+    )
+)
+```

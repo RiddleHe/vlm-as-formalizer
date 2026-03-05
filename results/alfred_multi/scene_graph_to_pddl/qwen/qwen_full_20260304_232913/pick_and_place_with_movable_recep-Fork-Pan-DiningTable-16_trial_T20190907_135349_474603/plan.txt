@@ -1,0 +1,4 @@
+(gotolocation robot spatula)
+(pickupobject robot spatula)
+(gotolocation robot round_table)
+(putobjectinreceptacle robot spatula round_table)

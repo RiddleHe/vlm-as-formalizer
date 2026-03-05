@@ -1,0 +1,4 @@
+(pickupobject robot cushion1)
+(putobjectinreceptacle robot cushion1 ottoman)
+(pickupobject robot cushion2)
+(putobjectinreceptacle robot cushion2 ottoman)

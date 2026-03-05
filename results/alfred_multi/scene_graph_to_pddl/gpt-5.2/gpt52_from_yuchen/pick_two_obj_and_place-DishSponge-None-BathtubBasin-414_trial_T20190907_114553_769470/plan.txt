@@ -1,0 +1,8 @@
+(gotolocation robot_agent bathroom_sink_basin_left)
+(pickupobject robot_agent green_sponge_on_counter)
+(gotolocation robot_agent freestanding_bathtub_left)
+(putobjectinreceptacle robot_agent green_sponge_on_counter freestanding_bathtub_left)
+(gotolocation robot_agent green_sponge_in_trash_bin)
+(pickupobject robot_agent green_sponge_in_trash_bin)
+(gotolocation robot_agent freestanding_bathtub_left)
+(putobjectinreceptacle robot_agent green_sponge_in_trash_bin freestanding_bathtub_left)

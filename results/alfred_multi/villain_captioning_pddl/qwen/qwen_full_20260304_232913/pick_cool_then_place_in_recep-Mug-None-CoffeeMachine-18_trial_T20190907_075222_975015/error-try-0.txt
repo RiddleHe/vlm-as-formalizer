@@ -1,0 +1,3 @@
+Predicate argument has wrong type:
+  atLocation coffee_maker cup: coffee_maker is not a agent
+

@@ -1,0 +1,4 @@
+(GotoLocation robot clock)
+(PickupObject robot clock)
+(GotoLocation robot desk)
+(PutObjectInReceptacle robot clock desk)

@@ -1,0 +1,3 @@
+Predicate argument has wrong type:
+  atLocation credit_card coffee_table: credit_card is not a agent
+

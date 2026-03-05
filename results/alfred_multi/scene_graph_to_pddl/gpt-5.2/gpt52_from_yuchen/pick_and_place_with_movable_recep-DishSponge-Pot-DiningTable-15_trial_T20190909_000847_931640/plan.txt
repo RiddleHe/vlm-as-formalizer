@@ -1,0 +1,4 @@
+(gotolocation robot_agent copper_pot_front_left_burner)
+(pickupobject robot_agent copper_pot_front_left_burner)
+(gotolocation robot_agent white_kitchen_table_center)
+(putobjectinreceptacle robot_agent copper_pot_front_left_burner white_kitchen_table_center)

@@ -1,0 +1,1 @@
+(gotolocation robot_agent cell_phone_black_rectangular_next_to_tall_lamp_light)

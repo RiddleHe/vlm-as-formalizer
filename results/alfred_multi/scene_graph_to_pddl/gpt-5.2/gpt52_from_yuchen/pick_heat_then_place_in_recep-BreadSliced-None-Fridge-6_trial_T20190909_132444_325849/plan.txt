@@ -1,0 +1,6 @@
+(pickupobject robot_agent dark_blade_knife_on_counter)
+(sliceobject robot_agent rectangular_bread_loaf_on_counter dark_blade_knife_on_counter)
+(putobjectinreceptacle robot_agent dark_blade_knife_on_counter black_fridge_with_smiley_magnet)
+(pickupobject robot_agent rectangular_bread_loaf_on_counter)
+(coolobject robot_agent black_fridge_with_smiley_magnet rectangular_bread_loaf_on_counter)
+(heatobject robot_agent stainless_microwave_on_right_counter rectangular_bread_loaf_on_counter)

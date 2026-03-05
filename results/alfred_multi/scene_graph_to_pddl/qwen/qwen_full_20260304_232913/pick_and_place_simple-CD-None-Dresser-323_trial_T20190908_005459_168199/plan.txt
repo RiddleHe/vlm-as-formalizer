@@ -1,0 +1,4 @@
+(gotolocation robot cd_on_desk)
+(pickupobject robot cd_on_desk)
+(gotolocation robot wooden_dresser_with_drawers)
+(putobjectinreceptacle robot cd_on_desk wooden_dresser_with_drawers)

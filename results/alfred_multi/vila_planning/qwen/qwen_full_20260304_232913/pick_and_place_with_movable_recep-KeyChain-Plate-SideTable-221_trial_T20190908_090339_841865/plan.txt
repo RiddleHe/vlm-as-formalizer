@@ -1,0 +1,7 @@
+(GotoLocation robot plate)
+(PickupObject robot plate)
+(GotoLocation robot keychain)
+(PickupObject robot keychain)
+(GotoLocation robot sidetable)
+(PutObjectInReceptacle robot keychain sidetable)
+(PutObjectInReceptacle robot plate sidetable)

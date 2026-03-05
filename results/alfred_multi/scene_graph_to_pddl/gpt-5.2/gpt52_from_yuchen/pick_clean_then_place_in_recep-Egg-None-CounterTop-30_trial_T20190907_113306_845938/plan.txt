@@ -1,0 +1,6 @@
+(gotolocation agent_robot egg_light_brown_inside_microwave)
+(pickupobject agent_robot egg_light_brown_inside_microwave)
+(gotolocation agent_robot sink_white_basins_left)
+(cleanobject agent_robot sink_white_basins_left egg_light_brown_inside_microwave)
+(gotolocation agent_robot counter_brown_marble_surface)
+(putobjectinreceptacle agent_robot egg_light_brown_inside_microwave counter_brown_marble_surface)

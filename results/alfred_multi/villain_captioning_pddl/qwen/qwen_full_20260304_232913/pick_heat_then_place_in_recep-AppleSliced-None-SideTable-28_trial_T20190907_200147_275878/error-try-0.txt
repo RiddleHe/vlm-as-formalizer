@@ -1,0 +1,7 @@
+Predicate argument has wrong type:
+  atLocation apple2 black_side_table: apple2 is not a agent
+  atLocation knife1 sink: knife1 is not a agent
+  atLocation apple1 black_side_table: apple1 is not a agent
+  atLocation knife2 black_side_table: knife2 is not a agent
+  atLocation apple1 countertop: apple1 is not a agent
+

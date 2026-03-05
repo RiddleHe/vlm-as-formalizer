@@ -1,0 +1,59 @@
+Scene graph:
+block: 
+- purple_cube_block: a purple cube block at the top of the right-side tower
+- yellow_cube_block: a yellow cube block directly below the purple block in the right-side tower
+- red_cube_block: a red cube block directly below the yellow block in the right-side tower
+- orange_cube_block: an orange cube block directly below the red block in the right-side tower
+- blue_cube_block: a blue cube block directly below the orange block in the right-side tower
+- green_cube_block: a green cube block at the bottom of the right-side tower, resting on the table
+
+robot:
+- robot_arm: robot (not visible), assumed available
+
+ontable (block) block x is on table, not on another block:
+- (ontable green_cube_block)
+
+clear (block) there is no block on top of block x:
+- (clear purple_cube_block)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot_arm)
+
+handfull (robot) :
+- None
+
+holding (block) block x is being held by the robot:
+- None
+
+on (block, block) block x is on block y:
+- (on purple_cube_block yellow_cube_block)
+- (on yellow_cube_block red_cube_block)
+- (on red_cube_block orange_cube_block)
+- (on orange_cube_block blue_cube_block)
+- (on blue_cube_block green_cube_block)
+
+PDDL problem: (define (problem blocksworld-stacks-2)
+  (:domain blocksworld)
+  (:objects
+    purple_cube_block yellow_cube_block red_cube_block orange_cube_block blue_cube_block green_cube_block - block
+    robot_arm - robot
+  )
+  (:init
+    (ontable green_cube_block)
+    (on blue_cube_block green_cube_block)
+    (on orange_cube_block blue_cube_block)
+    (on red_cube_block orange_cube_block)
+    (on yellow_cube_block red_cube_block)
+    (on purple_cube_block yellow_cube_block)
+    (clear purple_cube_block)
+    (handempty robot_arm)
+  )
+  (:goal
+    (and
+      (on purple_cube_block red_cube_block)
+      (on yellow_cube_block orange_cube_block)
+      (on orange_cube_block green_cube_block)
+      (on green_cube_block blue_cube_block)
+    )
+  )
+)

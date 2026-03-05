@@ -1,0 +1,4 @@
+(gotolocation robot desk)
+(pickupobject robot keys)
+(gotolocation robot armchair)
+(putobjectinreceptacle robot keys armchair)

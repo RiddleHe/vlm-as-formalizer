@@ -1,0 +1,8 @@
+(gotolocation robot black-rectangular-trash-bin-on-floor-corner)
+(pickupobject robot empty-toilet-paper-cardboard-roll-in-trash-bin)
+(gotolocation robot wooden-under-sink-cabinet-right-door)
+(putobjectinreceptacle robot empty-toilet-paper-cardboard-roll-in-trash-bin wooden-under-sink-cabinet-right-door)
+(gotolocation robot toilet-paper-roll-front-on-counter)
+(pickupobject robot toilet-paper-roll-front-on-counter)
+(gotolocation robot wooden-under-sink-cabinet-right-door)
+(putobjectinreceptacle robot toilet-paper-roll-front-on-counter wooden-under-sink-cabinet-right-door)

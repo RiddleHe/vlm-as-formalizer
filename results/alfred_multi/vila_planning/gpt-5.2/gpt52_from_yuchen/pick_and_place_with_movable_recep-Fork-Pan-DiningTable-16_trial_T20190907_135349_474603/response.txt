@@ -1,0 +1,7 @@
+(GotoLocation robot frying_pan)
+(PickupObject robot frying_pan)
+(GotoLocation robot fork)
+(PickupObject robot fork)
+(PutObjectInReceptacle robot fork frying_pan)
+(GotoLocation robot round_table)
+(PutObjectInReceptacle robot frying_pan round_table)

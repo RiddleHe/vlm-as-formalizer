@@ -1,0 +1,11 @@
+Predicate argument has wrong type:
+  atLocation shaker2 table: shaker2 is not a agent
+  atLocation apple2 table: apple2 is not a agent
+  atLocation spoon table: spoon is not a agent
+  atLocation tomato table: tomato is not a agent
+  atLocation microwave table: microwave is not a agent
+  atLocation apple3 table: apple3 is not a agent
+  atLocation bread table: bread is not a agent
+  atLocation shaker1 table: shaker1 is not a agent
+  atLocation apple1 table: apple1 is not a agent
+

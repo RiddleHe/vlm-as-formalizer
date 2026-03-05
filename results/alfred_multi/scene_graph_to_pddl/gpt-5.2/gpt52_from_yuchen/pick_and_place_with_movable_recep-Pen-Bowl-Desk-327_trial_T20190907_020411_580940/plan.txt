@@ -1,0 +1,7 @@
+(gotolocation robot_agent white_pen_on_nightstand)
+(pickupobject robot_agent white_pen_on_nightstand)
+(gotolocation robot_agent left_metal_bowl_on_lower_shelf)
+(putobjectinreceptacle robot_agent white_pen_on_nightstand left_metal_bowl_on_lower_shelf)
+(pickupobject robot_agent left_metal_bowl_on_lower_shelf)
+(gotolocation robot_agent white_desk_table)
+(putobjectinreceptacle robot_agent left_metal_bowl_on_lower_shelf white_desk_table)

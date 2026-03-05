@@ -1,0 +1,6 @@
+(gotolocation agent black_bowl)
+(pickupobject agent black_bowl)
+(gotolocation agent fridge)
+(coolobject agent fridge black_bowl)
+(gotolocation agent sink)
+(putobjectinreceptacle agent black_bowl sink)

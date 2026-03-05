@@ -1,0 +1,8 @@
+(gotolocation robot pot_left_burner)
+(pickupobject robot pot_left_burner)
+(gotolocation robot table)
+(putobjectinreceptacle robot pot_left_burner table)
+(gotolocation robot pot_right_burner)
+(pickupobject robot pot_right_burner)
+(gotolocation robot table)
+(putobjectinreceptacle robot pot_right_burner table)

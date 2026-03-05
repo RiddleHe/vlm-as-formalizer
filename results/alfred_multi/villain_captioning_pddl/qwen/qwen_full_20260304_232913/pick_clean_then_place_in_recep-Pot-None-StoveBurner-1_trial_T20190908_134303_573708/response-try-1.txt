@@ -1,0 +1,38 @@
+```pddl
+(define (problem put_pot_on_stove)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        stove - receptacle
+        sink - receptacle
+        pot1 pot2 knife mug - object
+    )
+    (:init
+        (openable stove)
+        (openable sink)
+        (inReceptacle pot1 stove)
+        (inReceptacle pot2 stove)
+        (not (holdsAny agent1))
+        (not (atLocation agent1 stove))
+        (not (atLocation agent1 sink))
+        (not (atLocation agent1 pot1))
+        (not (atLocation agent1 pot2))
+        (not (atLocation agent1 knife))
+        (not (atLocation agent1 mug))
+        (not (isClean pot1))
+        (not (isClean pot2))
+        (not (isHot pot1))
+        (not (isHot pot2))
+        (not (isCool pot1))
+        (not (isCool pot2))
+        (not (isSliced pot1))
+        (not (isSliced pot2))
+        (not (isOn stove))
+        (not (isToggled stove))
+    )
+    (:goal (and
+        (inReceptacle pot1 stove)
+        (inReceptacle pot2 stove)
+    ))
+)
+```

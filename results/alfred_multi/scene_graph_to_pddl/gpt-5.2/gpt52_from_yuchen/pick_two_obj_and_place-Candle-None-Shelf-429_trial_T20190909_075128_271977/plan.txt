@@ -1,0 +1,8 @@
+(gotolocation agent_robot object_left_candle_1_on_left_shelf)
+(pickupobject agent_robot object_left_candle_1_on_left_shelf)
+(gotolocation agent_robot receptacle_wall_shelf_right)
+(putobjectinreceptacle agent_robot object_left_candle_1_on_left_shelf receptacle_wall_shelf_right)
+(gotolocation agent_robot receptacle_white_shelf_ledge_left)
+(pickupobject agent_robot object_left_candle_2_on_left_shelf)
+(gotolocation agent_robot receptacle_wall_shelf_right)
+(putobjectinreceptacle agent_robot object_left_candle_2_on_left_shelf receptacle_wall_shelf_right)

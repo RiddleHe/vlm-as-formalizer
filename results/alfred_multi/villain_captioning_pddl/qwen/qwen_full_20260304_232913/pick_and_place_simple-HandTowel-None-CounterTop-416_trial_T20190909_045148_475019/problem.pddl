@@ -1,0 +1,31 @@
+(define (problem put_hand_towel_on_counter)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        sink1 - sink
+        hand_towel1 - object
+        counter1 - object  ; Counter is treated as a general object since it's not a receptacle in the domain
+        towel_ring1 - object  ; The towel ring is the object the towel is currently on
+    )
+    (:init
+        (not (atLocation agent1 sink1))
+        (not (atLocation agent1 hand_towel1))
+        (not (atLocation agent1 counter1))
+        (not (atLocation agent1 towel_ring1))
+        (not (holdsAny agent1))
+        (not (inReceptacle hand_towel1 sink1))
+        (atLocation hand_towel1 towel_ring1)  ; The towel is currently on the towel ring
+        (openable sink1)  ; Sink is openable as per domain, though not relevant for this task
+        (not (opened sink1))  ; Sink is not opened
+        (not (isClean hand_towel1))
+        (not (isHot hand_towel1))
+        (not (isCool hand_towel1))
+        (not (isSliced hand_towel1))
+        (not (isToggled hand_towel1))
+    )
+    (:goal
+        (and
+            (atLocation hand_towel1 counter1)  ; Goal: hand towel is on the counter
+        )
+    )
+)

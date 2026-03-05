@@ -1,0 +1,67 @@
+```pddl
+(define (problem wash_mug_and_place_in_coffee_maker)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        coffee_mug - object
+        coffee_maker - object
+        sink - sink
+        knife - knife
+        glass - object
+        potato - object
+        bowl - object
+        wine_bottle - object
+        fork - object
+        toaster - object
+    )
+    (:init
+        ; Initial locations: robot is not at any location
+        (not (atLocation robot coffee_mug))
+        (not (atLocation robot coffee_maker))
+        (not (atLocation robot sink))
+        (not (atLocation robot knife))
+        (not (atLocation robot glass))
+        (not (atLocation robot potato))
+        (not (atLocation robot bowl))
+        (not (atLocation robot wine_bottle))
+        (not (atLocation robot fork))
+        (not (atLocation robot toaster))
+
+        ; The coffee mug is on the coffee maker (though coffee maker is not a receptacle, we note its position for planning)
+        ; We'll model the mug as being at the coffee maker's location for the purpose of pickup
+        (atLocation coffee_mug coffee_maker)
+
+        ; The sink contains several objects
+        (inReceptacle glass sink)
+        (inReceptacle potato sink)
+        (inReceptacle bowl sink)
+        (inReceptacle knife sink)
+
+        ; The coffee maker is not a receptacle, so we don't use inReceptacle for the mug
+        ; The mug is not clean
+        (not (isClean coffee_mug))
+
+        ; No object is held by the agent
+        (not (holdsAny robot))
+
+        ; The sink is not openable (as per domain, sink is a receptacle but not openable)
+        (not (openable sink))
+
+        ; The coffee maker is not toggled
+        (not (isOn coffee_maker))
+
+        ; The knife is not held
+        (not (holds robot knife))
+
+        ; The wine bottle and fork are on the countertop (we don't need to model their location for the task, but we note they are present)
+        ; We'll assume they are at the countertop, but since we don't have a countertop object, we don't model their location for the robot's actions
+    )
+    (:goal (and
+        ; The coffee mug must be clean
+        (isClean coffee_mug)
+        ; The coffee mug must be placed back on the coffee maker
+        ; Since the coffee maker is not a receptacle, we cannot use inReceptacle. We must model the mug being at the coffee maker's location.
+        (atLocation coffee_mug coffee_maker)
+    ))
+)
+```

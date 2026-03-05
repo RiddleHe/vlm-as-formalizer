@@ -1,0 +1,4 @@
+(gotolocation agent1 phone)
+(pickupobject agent1 phone)
+(gotolocation agent1 end_table)
+(putobjectinreceptacle agent1 phone end_table)

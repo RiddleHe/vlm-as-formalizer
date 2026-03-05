@@ -1,0 +1,11 @@
+...h5s/domain.pddl /tmp/tmpc204zh5s/problem.pddl --sas-file /tmp/tmpc204zh5s/output_plan.sas
+Parsing...
+Parsing task
+	->Parsing goal
+Expected a non-empty block starting with any of the following words: :goal
+Syntax: (:goal GOAL)
+Got: (:init (openable trash_can) (opened trash_can) (inreceptacle full_toilet_paper_roll trash_can) (openable trash_can) (opened trash_can) (inreceptacle full_toilet_paper_roll trash_can))
+translate exit code: 31
+
+Driver aborting after translate
+INFO     Planner time: 0.08s

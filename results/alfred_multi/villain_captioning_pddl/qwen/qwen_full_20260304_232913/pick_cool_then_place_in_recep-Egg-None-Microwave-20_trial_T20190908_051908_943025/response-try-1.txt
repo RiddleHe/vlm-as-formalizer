@@ -1,0 +1,32 @@
+```pddl
+(define (problem cool_egg_put_microwave)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        egg1 - object
+        knife1 - knife
+    )
+    (:init
+        (not (atLocation agent1 egg1))
+        (not (atLocation agent1 fridge1))
+        (not (atLocation agent1 microwave1))
+        (not (holdsAny agent1))
+        (not (holds agent1 egg1))
+        (not (isCool egg1))
+        (not (isHot egg1))
+        (not (isSliced egg1))
+        (not (isClean egg1))
+        (not (isOn microwave1))
+        (not (isToggled microwave1))
+        (not (opened fridge1))
+        (openable fridge1)
+        (atLocation agent1 egg1) ; Assuming the agent can start at the egg's location for simplicity, as per typical PDDL initialization
+    )
+    (:goal (and
+        (inReceptacle egg1 microwave1)
+        (isCool egg1)
+    ))
+)
+```

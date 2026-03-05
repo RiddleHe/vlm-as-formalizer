@@ -1,0 +1,52 @@
+(define (problem fill_pan_with_water)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        sink - sink
+        pan - receptacle
+        table - receptacle
+        knife - knife
+        fork - object
+        spoon - object
+        bowl1 - receptacle
+        bowl2 - receptacle
+        wine_bottle1 - object
+        wine_bottle2 - object
+        glass_bottle - object
+        apple - object
+        cup - object
+        chair1 - object
+        chair2 - object
+    )
+    (:init
+        (openable sink)
+        (not (opened sink)) ; sink is not opened (though it may not matter for cleaning)
+        (atLocation robot table) ; robot starts at the table (kitchen island) where the pan is
+        (inReceptacle pan table)
+        (inReceptacle knife table)
+        (inReceptacle fork table)
+        (inReceptacle spoon table)
+        (inReceptacle bowl1 table)
+        (inReceptacle bowl2 table)
+        (inReceptacle wine_bottle1 table)
+        (inReceptacle wine_bottle2 table)
+        (inReceptacle glass_bottle table)
+        (inReceptacle apple table)
+        (inReceptacle cup table) ; cup is under table, but we treat it as on table for simplicity
+        (inReceptacle chair1 table)
+        (inReceptacle chair2 table)
+        (not (holdsAny robot))
+        (not (isClean pan))
+        (not (isHot pan))
+        (not (isCool pan))
+        (not (isSliced pan))
+        (not (isOn sink))
+        (not (isToggled sink))
+    )
+    (:goal
+        (and
+            (inReceptacle pan table) ; pan is back on the kitchen island (table)
+            (isClean pan) ; pan has been filled with water (using CleanObject as proxy)
+        )
+    )
+)

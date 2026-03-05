@@ -1,0 +1,64 @@
+Scene graph:
+agent: agent
+microwave (receptacle): red microwave on countertop
+fridge (receptacle): black fridge
+sink (receptacle): stainless steel sink with items inside
+knife (object): knife on countertop near sink, knife on countertop near microwave
+receptacle (object): black stool, potted plant, pot on stove, pan on stove, green book on countertop
+object: tomato, lettuce, egg, glass, spoon, knife on countertop near sink, knife on countertop near microwave, red microwave on countertop, black fridge, stainless steel sink with items inside, black stool, potted plant, pot on stove, pan on stove, green book on countertop
+openable (receptacle) true if a receptacle is openable: (openable red microwave on countertop), (openable black fridge), (openable stainless steel sink with items inside)
+opened (receptacle) true if a receptacle is opened: (opened red microwave on countertop)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn red microwave on countertop)
+isToggled (object) true if the object has been toggled: (isToggled red microwave on countertop)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle tomato stainless steel sink with items inside), (inReceptacle lettuce stainless steel sink with items inside), (inReceptacle egg stainless steel sink with items inside), (inReceptacle glass stainless steel sink with items inside), (inReceptacle spoon stainless steel sink with items inside)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation agent red microwave on countertop)
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        tomato - object
+        lettuce - object
+        egg - object
+        glass - object
+        spoon - object
+        stool - object
+        plant - object
+        pot - object
+        pan - object
+        book - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (opened microwave)
+        (isOn microwave)
+        (isToggled microwave)
+        (inReceptacle tomato sink)
+        (inReceptacle lettuce sink)
+        (inReceptacle egg sink)
+        (inReceptacle glass sink)
+        (inReceptacle spoon sink)
+        (atLocation agent microwave)
+    )
+    (:goal
+        (and
+            (inReceptacle tomato sink)
+            (isHot tomato)
+            (isSliced tomato)
+        )
+    )
+)
+```

@@ -1,0 +1,4 @@
+(gotolocation robot keys)
+(pickupobject robot keys)
+(gotolocation robot floral_armchair)
+(putobjectinreceptacle robot keys floral_armchair)

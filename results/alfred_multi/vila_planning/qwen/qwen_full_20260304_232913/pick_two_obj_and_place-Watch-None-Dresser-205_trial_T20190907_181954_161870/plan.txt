@@ -1,0 +1,8 @@
+(GotoLocation robot diningtable)
+(PickupObject robot watch)
+(GotoLocation robot tvstand)
+(PutObjectInReceptacle robot watch tvstand)
+(GotoLocation robot diningtable)
+(PickupObject robot watch)
+(GotoLocation robot tvstand)
+(PutObjectInReceptacle robot watch tvstand)

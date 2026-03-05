@@ -1,0 +1,4 @@
+(GotoLocation agent1 cardboard_box)
+(PickupObject agent1 cardboard_box)
+(GotoLocation agent1 green_chair)
+(PutObjectInReceptacle agent1 cardboard_box green_chair)

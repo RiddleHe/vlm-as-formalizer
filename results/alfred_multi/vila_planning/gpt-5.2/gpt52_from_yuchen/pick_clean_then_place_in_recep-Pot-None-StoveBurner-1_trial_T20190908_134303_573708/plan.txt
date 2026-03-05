@@ -1,0 +1,3 @@
+(GotoLocation agent stove)
+(PickupObject agent pot_with_water)
+(PutObjectInReceptacle agent pot_with_water stove)

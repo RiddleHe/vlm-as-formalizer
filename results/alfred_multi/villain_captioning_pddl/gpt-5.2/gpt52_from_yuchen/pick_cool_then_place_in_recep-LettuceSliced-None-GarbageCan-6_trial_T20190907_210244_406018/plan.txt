@@ -1,0 +1,3 @@
+(pickupobject agent1 lettuce1)
+(coolobject agent1 fridge1 lettuce1)
+(putobjectinreceptacle agent1 lettuce1 garbagecan1)

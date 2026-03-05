@@ -1,0 +1,4 @@
+(GotoLocation robot ring)
+(PickupObject robot ring)
+(GotoLocation robot lamp)
+(ToggleObject robot lamp)

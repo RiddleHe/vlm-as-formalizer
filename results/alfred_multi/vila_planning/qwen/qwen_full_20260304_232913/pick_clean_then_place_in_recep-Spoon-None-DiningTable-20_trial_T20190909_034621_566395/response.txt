@@ -1,0 +1,5 @@
+(GotoLocation robot sink)
+(PickupObject robot spoon sink)
+(CleanObject robot sink spoon)
+(GotoLocation robot diningtable)
+(PutObjectInReceptacle robot spoon diningtable)

@@ -1,0 +1,8 @@
+(pick-up purple-block-front-right robot-arm-1)
+(stack purple-block-front-right yellow-block-back-right robot-arm-1)
+(pick-up blue-block-back-center robot-arm-1)
+(stack blue-block-back-center purple-block-front-right robot-arm-1)
+(pick-up orange-block-front-left robot-arm-1)
+(stack orange-block-front-left red-block-left robot-arm-1)
+(pick-up green-block-front-center robot-arm-1)
+(stack green-block-front-center orange-block-front-left robot-arm-1)

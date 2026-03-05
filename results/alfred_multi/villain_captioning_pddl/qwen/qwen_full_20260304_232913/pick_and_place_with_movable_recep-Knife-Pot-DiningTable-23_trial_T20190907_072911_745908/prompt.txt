@@ -1,0 +1,278 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Place a pan with a knife in it on the table.
+    
+
+SCENE CAPTION:
+Scene Description:
+
+The scene is set in a kitchen environment with a central dining table and a stove area. The primary goal is to place a pan with a knife inside it onto the table.
+
+1. Objects and Their Types:
+   - Receptacles: 
+     - The dining table (green checkered tablecloth) is a large, flat surface that can hold objects. It is not explicitly defined as a receptacle in the domain, but for the purpose of this task, it functions as one for placing items.
+     - The stove has two burners, each with a square metal pot (receptacle type) sitting on it. These pots are metallic and have handles.
+     - A brown rectangular pan (receptacle) is visible on the table in the first image, positioned near the right edge. It is empty.
+     - A metallic trash can is located to the right of the stove (not a receptacle in the domain).
+     - A black circular object under the table (possibly a pot or bowl) is partially visible but not clearly a receptacle per domain definition.
+     - A clear plastic container is under the table in the first image, which could be a receptacle but is not interacted with in the task.
+   - Objects (non-receptacle):
+     - Two green melons (or watermelons) are on the table. They are large, round, and green with a mottled pattern.
+     - A dark green wine bottle is on the table.
+     - A single white egg is on the table.
+     - A salt shaker (small, clear with a silver top) is on the table.
+     - A green rectangular block (possibly a cutting board or soap) is on the table.
+     - A knife with a brown handle is on the table, near the center.
+     - A spoon is on the table.
+     - A spatula is on the table.
+     - A metal funnel is on the table.
+     - A brown baking pan (receptacle) is on the table.
+     - A wooden chair is at the table.
+     - A second knife (with a yellow handle) is on the table in the first image, but in the second image, a different knife (with a black handle) is visible, suggesting it may be the same object from a different angle or a different knife.
+     - In the second image, a white rectangular object (possibly a block of cheese or butter) is on the table.
+
+2. Quantities:
+   - Knives: At least two knives are visible — one with a brown handle and one with a black handle (possibly the same object from different views).
+   - Pans: Two square metal pots on the stove (receptacles) and one brown rectangular pan on the table (receptacle).
+   - Melons: Two green melons.
+   - Other objects: One wine bottle, one egg, one salt shaker, one green block, one spoon, one spatula, one funnel, one baking pan, one chair.
+
+3. Spatial Relationships:
+   - The brown rectangular pan is on the table, near the right edge, in the first image.
+   - The knife with the brown handle is on the table, near the center, close to the wine bottle.
+   - The second knife (black handle) is also on the table in the second image, near the center.
+   - The two melons are on the table, one near the left and one near the center.
+   - The wine bottle is between the two melons.
+   - The egg is to the right of the wine bottle.
+   - The salt shaker is to the left of the left melon.
+   - The green block is near the left melon.
+   - The spoon and spatula are near the center of the table.
+   - The funnel is near the right side of the table.
+   - The stove with the two metal pots is to the right of the table, with the trash can next to it.
+   - The clear plastic container is under the table, near the center.
+   - The black circular object is under the table, near the right side.
+
+4. Current State of Objects Relevant to the Planning Task:
+   - The brown rectangular pan is on the table and is empty.
+   - The knife (with brown or black handle) is on the table and is not currently in any receptacle.
+   - The robot is not holding any object initially.
+   - The robot is not at any object's location initially.
+   - No objects are sliced, cleaned, heated, or cooled as per the domain predicates.
+   - The pan and knife are not currently together.
+
+5. Colors and Positions:
+   - The table has a green checkered tablecloth.
+   - The melons are green with a mottled pattern.
+   - The wine bottle is dark green.
+   - The egg is white.
+   - The salt shaker is clear with a silver top.
+   - The green block is solid green.
+   - The knife with the brown handle is near the center of the table.
+   - The knife with the black handle is also near the center in the second image.
+   - The brown rectangular pan is on the right side of the table.
+   - The stove is white with two black burners and two silver pots.
+   - The trash can is metallic and cylindrical.
+   - The chairs are dark brown wood.
+
+The task requires the robot to pick up the knife and place it into the pan, then place the pan (with the knife inside) on the table. The pan is already on the table, so the robot needs to pick up the knife, put it in the pan, and then ensure the pan with the knife is on the table. The robot must navigate to the knife, pick it up, then go to the pan, and put the knife in it. Since the pan is already on the table, no additional movement of the pan is required after placing the knife in it.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

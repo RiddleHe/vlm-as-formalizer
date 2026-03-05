@@ -1,0 +1,54 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): bathroom_sink_basin
+knife (object): 
+receptacle (object): bathroom_sink_basin, under_sink_cabinet_left, under_sink_cabinet_right, blue_trash_bin_receptacle
+object: green_candle_left_counter, red_cloth_left_counter, purple_spray_bottle_counter, pink_soap_bar_in_sink, under_sink_cabinet_left, under_sink_cabinet_right, blue_trash_bin_receptacle
+openable (receptacle) true if a receptacle is openable: (openable under_sink_cabinet_left), (openable under_sink_cabinet_right)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle pink_soap_bar_in_sink bathroom_sink_basin)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: (define (problem put_task_rinsed_cloth_in_cabinet)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+
+    bathroom_sink_basin - sink
+    under_sink_cabinet_left under_sink_cabinet_right - receptacle
+
+    red_cloth_left_counter
+    pink_soap_bar_in_sink
+    green_candle_left_counter
+    purple_spray_bottle_counter
+    blue_trash_bin_receptacle
+    - object
+  )
+
+  (:init
+    ;; receptacle properties
+    (openable under_sink_cabinet_left)
+    (openable under_sink_cabinet_right)
+
+    ;; object containment
+    (inReceptacle pink_soap_bar_in_sink bathroom_sink_basin)
+  )
+
+  (:goal
+    (and
+      (isClean red_cloth_left_counter)
+      (inReceptacle red_cloth_left_counter under_sink_cabinet_left)
+    )
+  )
+)

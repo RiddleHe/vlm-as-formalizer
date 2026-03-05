@@ -1,0 +1,54 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): black fridge
+sink (receptacle): stainless steel sink
+knife (object): black knife hanging on wall
+receptacle (object): black cabinet under counter, black cabinet under counter with pot inside
+object: green book on counter, black pot inside cabinet, tomato on counter, salt shaker on shelf, pepper shaker on shelf, potted plant on counter, loaf of bread on counter, green apple on counter, black knife hanging on wall, black cabinet under counter, black cabinet under counter with pot inside, black fridge, stainless steel sink
+openable (receptacle) true if a receptacle is openable: (openable black cabinet under counter), (openable black cabinet under counter with pot inside), (openable black fridge)
+opened (receptacle) true if a receptacle is opened: (opened black cabinet under counter with pot inside)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle black pot black cabinet under counter with pot inside)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem move_salt_shakers_to_cabinet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        black_cabinet_under_counter - receptacle
+        black_cabinet_under_counter_with_pot_inside - receptacle
+        black_fridge - receptacle
+        stainless_steel_sink - receptacle
+        black_knife - knife
+        green_book - object
+        black_pot - object
+        tomato - object
+        salt_shaker - object
+        pepper_shaker - object
+        potted_plant - object
+        loaf_of_bread - object
+        green_apple - object
+    )
+    (:init
+        (openable black_cabinet_under_counter)
+        (openable black_cabinet_under_counter_with_pot_inside)
+        (openable black_fridge)
+        (opened black_cabinet_under_counter_with_pot_inside)
+        (inReceptacle black_pot black_cabinet_under_counter_with_pot_inside)
+        (atLocation robot black_cabinet_under_counter_with_pot_inside) ; robot starts at the opened cabinet
+    )
+    (:goal (and
+        (inReceptacle salt_shaker black_cabinet_under_counter)
+        (inReceptacle pepper_shaker black_cabinet_under_counter)
+    ))
+)
+```

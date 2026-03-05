@@ -1,0 +1,71 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): none visible.
+fridge (receptacle): none visible.
+sink (receptacle): none visible.
+knife (object): none visible.
+receptacle (object):
+- dark_rectangular_ottoman_coffee_table (large dark rectangular padded surface in front of armchair)
+- dark_two_seat_sofa (dark sofa on the right)
+- dark_single_armchair (dark armchair behind the ottoman)
+object:
+- orange_plaid_cylindrical_cushion_on_armchair (orange plaid cushion resting on the armchair seat)
+- orange_plaid_cylindrical_cushion_on_sofa (orange plaid cushion resting on the right side of the sofa seat)
+- gold_remote_on_ottoman (gold remote control on the ottoman surface)
+- small_gray_remote_on_ottoman (small gray remote control on the ottoman surface)
+- gold_remote_on_sofa (gold remote control on the sofa seat near the center)
+- green_throw_blanket_on_sofa (green blanket draped over the left back of the sofa)
+
+openable (receptacle) true if a receptacle is openable: none.
+opened (receptacle) true if a receptacle is opened: none.
+holdsAny (agent) agent ?a holds an object: none.
+isClean (object) true if the object has been clean in sink: none.
+isHot (object) true if the object has been heated up: none.
+isCool (object) true if the object has been cooled: none.
+isOn (object) true if the object is on: none.
+isToggled (object) true if the object has been toggled: none.
+isSliced (object) true if the object is sliced: none.
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle orange_plaid_cylindrical_cushion_on_armchair dark_single_armchair)
+- (inReceptacle orange_plaid_cylindrical_cushion_on_sofa dark_two_seat_sofa)
+- (inReceptacle gold_remote_on_ottoman dark_rectangular_ottoman_coffee_table)
+- (inReceptacle small_gray_remote_on_ottoman dark_rectangular_ottoman_coffee_table)
+- (inReceptacle gold_remote_on_sofa dark_two_seat_sofa)
+- (inReceptacle green_throw_blanket_on_sofa dark_two_seat_sofa)
+holds (agent, object) object ?o is held by agent ?a: none.
+atLocation (agent, object) : none.
+
+PDDL problem: (define (problem put_two_cushions_on_ottoman)
+  (:domain put_task)
+
+  (:objects
+    robot - agent
+
+    dark_rectangular_ottoman_coffee_table - receptacle
+    dark_two_seat_sofa - receptacle
+    dark_single_armchair - receptacle
+
+    orange_plaid_cylindrical_cushion_on_armchair - object
+    orange_plaid_cylindrical_cushion_on_sofa - object
+    gold_remote_on_ottoman - object
+    small_gray_remote_on_ottoman - object
+    gold_remote_on_sofa - object
+    green_throw_blanket_on_sofa - object
+  )
+
+  (:init
+    (inReceptacle orange_plaid_cylindrical_cushion_on_armchair dark_single_armchair)
+    (inReceptacle orange_plaid_cylindrical_cushion_on_sofa dark_two_seat_sofa)
+    (inReceptacle gold_remote_on_ottoman dark_rectangular_ottoman_coffee_table)
+    (inReceptacle small_gray_remote_on_ottoman dark_rectangular_ottoman_coffee_table)
+    (inReceptacle gold_remote_on_sofa dark_two_seat_sofa)
+    (inReceptacle green_throw_blanket_on_sofa dark_two_seat_sofa)
+  )
+
+  (:goal
+    (and
+      (inReceptacle orange_plaid_cylindrical_cushion_on_armchair dark_rectangular_ottoman_coffee_table)
+      (inReceptacle orange_plaid_cylindrical_cushion_on_sofa dark_rectangular_ottoman_coffee_table)
+    )
+  )
+)

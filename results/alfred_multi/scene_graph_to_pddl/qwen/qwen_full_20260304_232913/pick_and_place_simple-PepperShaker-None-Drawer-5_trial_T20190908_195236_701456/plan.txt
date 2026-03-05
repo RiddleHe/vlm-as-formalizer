@@ -1,0 +1,4 @@
+(gotolocation robot salt_shaker)
+(pickupobject robot salt_shaker)
+(gotolocation robot drawer_left)
+(putobjectinreceptacle robot salt_shaker drawer_left)

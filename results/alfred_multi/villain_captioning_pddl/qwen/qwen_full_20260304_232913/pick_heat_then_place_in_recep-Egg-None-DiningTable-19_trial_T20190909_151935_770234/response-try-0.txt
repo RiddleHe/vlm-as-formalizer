@@ -1,0 +1,52 @@
+```pddl
+(define (problem place_cooked_egg_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        sink - sink
+        table - object
+        egg - object
+        knife - knife
+        fork - object
+        tomato1 tomato2 - object
+        mug - object
+        spatula - object
+        bottle - object
+        green_object - object
+        coffee_machine - object
+    )
+    (:init
+        (openable microwave)
+        (openable sink)
+        (opened sink) ; sink is open as it contains objects
+        (not (opened microwave)) ; microwave is closed
+        (inReceptacle egg sink)
+        (inReceptacle fork sink)
+        (inReceptacle mug sink)
+        (inReceptacle green_object sink)
+        (inReceptacle tomato2 microwave) ; tomato inside microwave
+        (atLocation knife table)
+        (atLocation fork table) ; fork also on table per caption, but also in sink — we'll use sink for pickup
+        (atLocation tomato1 table)
+        (atLocation spatula table)
+        (atLocation bottle table)
+        (atLocation green_object table)
+        (atLocation coffee_machine table)
+        (atLocation spatula countertop) ; near microwave
+        (atLocation microwave countertop)
+        (atLocation sink countertop)
+        (not (isHot egg))
+        (not (isClean egg))
+        (not (isSliced egg))
+        (not (isCool egg))
+        (not (isOn microwave))
+        (not (holdsAny robot))
+        (not (atLocation robot ?)) ; robot not at any location initially
+    )
+    (:goal (and
+        (inReceptacle egg table) ; egg placed on table
+        (isHot egg) ; egg is cooked (heated)
+    ))
+)
+```

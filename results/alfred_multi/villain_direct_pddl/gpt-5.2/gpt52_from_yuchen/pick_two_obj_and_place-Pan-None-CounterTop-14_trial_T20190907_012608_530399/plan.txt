@@ -1,0 +1,8 @@
+(gotolocation robot pan1)
+(pickupobject robot pan1)
+(gotolocation robot counter)
+(putobjectinreceptacle robot pan1 counter)
+(gotolocation robot microwave1)
+(pickupobject robot pan2)
+(gotolocation robot counter)
+(putobjectinreceptacle robot pan2 counter)

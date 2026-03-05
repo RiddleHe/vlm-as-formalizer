@@ -1,0 +1,28 @@
+```pddl
+(define (problem examine_credit_card)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        credit_card - object
+        lamp - object
+        coffee_table - object
+    )
+    (:init
+        (atLocation robot coffee_table)
+        (not (holdsAny robot))
+        (not (isOn lamp))
+        (not (isToggled lamp))
+        (not (holds robot credit_card))
+        (not (inReceptacle credit_card coffee_table))
+        (not (isClean credit_card))
+        (not (isHot credit_card))
+        (not (isCool credit_card))
+        (not (isSliced credit_card))
+    )
+    (:goal (and
+        (holds robot credit_card)
+        (atLocation robot lamp)
+        (isOn lamp)
+    ))
+)
+```

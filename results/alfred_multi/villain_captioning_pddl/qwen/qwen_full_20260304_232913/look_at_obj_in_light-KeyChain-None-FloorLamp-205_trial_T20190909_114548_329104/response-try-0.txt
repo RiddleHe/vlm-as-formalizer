@@ -1,0 +1,42 @@
+```pddl
+(define (problem look_at_keys_by_lamp)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        keys - object
+        tall_lamp - object
+        dining_table - object
+        side_table - object
+    )
+    (:init
+        ; The robot is not at any location initially
+        (not (atLocation robot keys))
+        (not (atLocation robot tall_lamp))
+        (not (atLocation robot dining_table))
+        (not (atLocation robot side_table))
+
+        ; The keys are on the dining table
+        (atLocation keys dining_table)
+
+        ; The tall lamp is on the side table
+        (atLocation tall_lamp side_table)
+
+        ; The lamp is currently on (as per scene description)
+        (isOn tall_lamp)
+
+        ; The robot is not holding anything
+        (not (holdsAny robot))
+
+        ; No objects are in receptacles (none defined in scene)
+        ; No cleaning, heating, cooling, slicing needed
+    )
+    (:goal
+        (and
+            ; The robot must be at the location of the keys to look at them
+            (atLocation robot keys)
+            ; The lamp must be on to provide light (it already is, but we ensure it remains on)
+            (isOn tall_lamp)
+        )
+    )
+)
+```

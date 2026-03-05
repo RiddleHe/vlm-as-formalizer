@@ -1,0 +1,4 @@
+(gotolocation robot long_low_wooden_tv_console)
+(pickupobject robot black_watch_on_tv_console_right_of_remote)
+(gotolocation robot small_wooden_side_table_with_drawer)
+(putobjectinreceptacle robot black_watch_on_tv_console_right_of_remote small_wooden_side_table_with_drawer)

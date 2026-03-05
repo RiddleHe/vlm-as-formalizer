@@ -1,0 +1,53 @@
+Scene graph:
+agent: robot
+microwave (receptacle): black microwave on countertop
+fridge (receptacle): dark refrigerator with double doors
+sink (receptacle): double stainless steel sink with faucet
+knife (object): silver knife on countertop near sink
+receptacle (object): wooden cabinet under sink, wooden cabinet above fridge
+object: silver bowl in left sink basin, brown egg in right sink basin, black toaster on countertop
+openable (receptacle) true if a receptacle is openable: (openable wooden cabinet under sink), (openable wooden cabinet above fridge), (openable dark refrigerator with double doors)
+opened (receptacle) true if a receptacle is opened: (opened wooden cabinet under sink)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle silver bowl in left sink basin), (inReceptacle brown egg in right sink basin)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot black microwave on countertop)
+
+PDDL problem: ```pddl
+(define (problem put_cold_bowl_in_cabinet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        black_microwave - microwave
+        dark_refrigerator - fridge
+        double_sink - sink
+        silver_knife - knife
+        wooden_cabinet_under_sink - receptacle
+        wooden_cabinet_above_fridge - receptacle
+        silver_bowl - object
+        brown_egg - object
+        black_toaster - object
+    )
+    (:init
+        (openable wooden_cabinet_under_sink)
+        (openable wooden_cabinet_above_fridge)
+        (openable dark_refrigerator)
+        (opened wooden_cabinet_under_sink)
+        (inReceptacle silver_bowl double_sink)
+        (inReceptacle brown_egg double_sink)
+        (atLocation robot black_microwave)
+    )
+    (:goal
+        (and
+            (inReceptacle silver_bowl wooden_cabinet_above_fridge)
+            (isCool silver_bowl)
+        )
+    )
+)
+```

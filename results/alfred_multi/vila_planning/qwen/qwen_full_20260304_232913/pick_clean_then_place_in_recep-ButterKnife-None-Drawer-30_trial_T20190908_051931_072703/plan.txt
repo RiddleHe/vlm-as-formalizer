@@ -1,0 +1,8 @@
+(GotoLocation robot knife)
+(PickupObject robot knife)
+(GotoLocation robot sink)
+(CleanObject robot sink knife)
+(GotoLocation robot drawer)
+(OpenObject robot drawer)
+(PutObjectInReceptacle robot knife drawer)
+(CloseObject robot drawer)

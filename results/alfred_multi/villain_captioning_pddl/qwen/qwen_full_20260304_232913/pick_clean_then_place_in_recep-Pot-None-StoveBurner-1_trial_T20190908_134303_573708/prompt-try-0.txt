@@ -1,0 +1,253 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Put a pot with water in it on the stove.
+    
+
+SCENE CAPTION:
+Scene Description:
+
+1. Objects and Their Types:
+   - Receptacles:
+     - Stove: A stainless steel stove with a black cooktop and four burners. It is a receptacle because it can hold pots. It has four black control knobs on the front panel and an oven door with a glass window below. The stove is positioned against a white subway tile backsplash.
+     - Sink: A stainless steel single-basin sink embedded in a gray marbled countertop. It is a receptacle and is openable (though typically not “opened” in the mechanical sense, it is treated as such in the domain). It has a faucet above it and is located to the right of the stove area.
+     - Countertop: The marbled countertop adjacent to the sink and stove is not a receptacle in the domain’s definition, but it holds objects such as a mug and a knife.
+   - Objects (non-receptacles):
+     - Pot 1: A stainless steel pot with two side handles, sitting on the left front burner of the stove. It appears to contain some liquid (possibly water or broth) and has some residue or browning on the bottom.
+     - Pot 2: A second stainless steel pot, identical in material and design, sitting on the right front burner of the stove. It also contains liquid and has similar residue.
+     - Mug: A white ceramic mug with a handle, placed on the countertop to the right of the stove.
+     - Knife: A metallic knife with a dark handle, lying horizontally on the countertop next to the mug.
+     - Agent: The robotic agent is not visually present but is assumed to be in the environment and initially not at any object’s location.
+
+2. Quantities of Each Object Type:
+   - Receptacles: 2 (Stove, Sink)
+   - Objects: 4 (Pot 1, Pot 2, Mug, Knife)
+
+3. Spatial Relationships (Matching Domain Predicates):
+   - Pot 1 is on the stove (inReceptacle Pot1 Stove).
+   - Pot 2 is on the stove (inReceptacle Pot2 Stove).
+   - Mug is on the countertop (not a receptacle in the domain, so no inReceptacle predicate applies).
+   - Knife is on the countertop (not a receptacle, so no inReceptacle predicate applies).
+   - The sink is adjacent to the countertop and to the right of the stove area.
+   - The stove is against the wall with the tile backsplash.
+   - The agent is not currently at any object’s location (not (atLocation Agent ?o) for any object).
+
+4. Current State of Each Object Relevant to the Planning Task:
+   - Stove: Not toggled on (isOn Stove is false). It is not openable in the mechanical sense, but in the domain it is treated as a receptacle.
+   - Sink: Not opened (opened Sink is false). It is openable (openable Sink is true).
+   - Pot 1: Currently on the stove (inReceptacle Pot1 Stove is true). It is not being held by the agent. It is not clean (isClean Pot1 is false). It is not hot (isHot Pot1 is false). It is not sliced (isSliced Pot1 is false).
+   - Pot 2: Currently on the stove (inReceptacle Pot2 Stove is true). It is not being held by the agent. It is not clean (isClean Pot2 is false). It is not hot (isHot Pot2 is false). It is not sliced (isSliced Pot2 is false).
+   - Mug: On the countertop. Not held by the agent. Not clean (isClean Mug is false). Not hot or cool. Not sliced.
+   - Knife: On the countertop. Not held by the agent. Not clean (isClean Knife is false). Not hot or cool. Not sliced.
+
+5. Colors, Positions, and Other Visual Properties:
+   - Stove: Stainless steel with black control knobs and a black cooktop. The oven door is stainless steel with a glass window. Positioned centrally in the first image, against a white subway tile backsplash.
+   - Sink: Stainless steel basin with a shiny surface, embedded in a gray marbled countertop. Positioned in the second image, centered under a window with sunlight casting a patterned shadow into the basin.
+   - Pot 1 and Pot 2: Both are shiny stainless steel with two side handles. Pot 1 is on the left front burner; Pot 2 is on the right front burner. Both contain a small amount of liquid with browned residue at the bottom.
+   - Mug: White ceramic with a handle, sitting on the countertop to the right of the stove.
+   - Knife: Metallic blade with a dark handle, lying horizontally on the countertop next to the mug.
+   - Countertop: Gray marbled surface, extends from the stove to the sink area.
+   - Floor: Light wood laminate visible under the sink cabinet in the second image.
+   - Wall: White subway tile backsplash behind the stove and sink.
+
+Note: The instruction “Put a pot with water in it on the stove” is already satisfied in the current scene, as both pots are already on the stove and contain water (or liquid). However, the robot may need to perform actions if the task requires a specific pot or if the pots need to be cleaned, heated, or moved. The scene description reflects the current state as observed.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

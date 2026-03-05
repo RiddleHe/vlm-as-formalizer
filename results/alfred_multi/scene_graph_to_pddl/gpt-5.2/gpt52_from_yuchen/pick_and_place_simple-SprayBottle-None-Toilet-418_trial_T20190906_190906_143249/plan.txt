@@ -1,0 +1,4 @@
+(gotolocation agent_robot spray_bottle_teal_with_white_nozzle)
+(pickupobject agent_robot spray_bottle_teal_with_white_nozzle)
+(gotolocation agent_robot toilet_black_base)
+(putobjectinreceptacle agent_robot spray_bottle_teal_with_white_nozzle toilet_black_base)

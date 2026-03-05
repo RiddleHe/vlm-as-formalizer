@@ -1,0 +1,51 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): stainless_microwave_above_counter
+fridge (receptacle): (none visible)
+sink (receptacle): stainless_sink_in_left_counter
+knife (object): black_handle_knife_in_sink
+receptacle (object): round_black_dining_table, small_black_side_table, stainless_microwave_above_counter, stainless_sink_in_left_counter
+object: green_apple_like_fruit_on_round_table, purple_cup_on_round_table, rectangular_bread_loaf_on_round_table, metal_spoon_near_center_round_table, metal_spoon_near_edge_round_table, patterned_gray_napkin_on_round_table, salt_shaker_left_round_table, salt_shaker_right_round_table, red_tomato_on_counter_by_sink, metal_fork_on_counter_by_tomato, metal_spatula_in_sink, red_apple_on_small_black_side_table, blue_cup_on_small_black_side_table, egg_on_small_black_side_table, small_round_brown_fruit_on_small_black_side_table, salt_shaker_on_small_black_side_table, rectangular_bread_loaf_on_white_table, black_bowl_on_white_table, metal_spoon_under_white_table_edge
+
+openable (receptacle) true if a receptacle is openable: (openable stainless_microwave_above_counter)
+opened (receptacle) true if a receptacle is opened: (none)
+holdsAny (agent) agent ?a holds an object: (none)
+isClean (object) true if the object has been clean in sink: (none)
+isHot (object) true if the object has been heated up: (none)
+isCool (object) true if the object has been cooled: (none)
+isOn (object) true if the object is on: (none)
+isToggled (object) true if the object has been toggled: (none)
+isSliced (object) true if the object is sliced: (none)
+inReceptacle (object, object) object ?o is in receptacle ?r: (none)
+holds (agent, object) object ?o is held by agent ?a: (none)
+atLocation (agent, object) : (none)
+
+PDDL problem: (define (problem put_task_apple_slice_microwave_shelf)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    stainless_microwave_above_counter - microwave
+    stainless_sink_in_left_counter - sink
+
+    black_handle_knife_in_sink - knife
+
+    red_apple_on_small_black_side_table - object
+    small_black_side_table - receptacle
+    round_black_dining_table - receptacle
+    stainless_microwave_above_counter - receptacle
+    stainless_sink_in_left_counter - receptacle
+  )
+
+  (:init
+    (openable stainless_microwave_above_counter)
+  )
+
+  (:goal
+    (and
+      (isSliced red_apple_on_small_black_side_table)
+      (isHot red_apple_on_small_black_side_table)
+      (inReceptacle red_apple_on_small_black_side_table small_black_side_table)
+    )
+  )
+)

@@ -1,0 +1,8 @@
+(gotolocation robot microwave1)
+(pickupobject robot bread1)
+(heatobject robot microwave1 bread1)
+(gotolocation robot counter1)
+(putobjectinreceptacle robot bread1 counter1)
+(pickupobject robot knife1)
+(gotolocation robot bread1)
+(sliceobject robot bread1 knife1)

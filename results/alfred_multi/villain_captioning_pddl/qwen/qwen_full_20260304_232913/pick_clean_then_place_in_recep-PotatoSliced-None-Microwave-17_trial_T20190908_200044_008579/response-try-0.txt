@@ -1,0 +1,51 @@
+```pddl
+(define (problem put_washed_sliced_potato_in_microwave)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        sink - sink
+        potato - object
+        knife - knife
+        table - object  ; representing the white table where potato is
+        countertop - object  ; representing the granite countertop where microwave and knife are
+    )
+    (:init
+        ; Agent is not at any location initially
+        (not (atLocation robot microwave))
+        (not (atLocation robot sink))
+        (not (atLocation robot potato))
+        (not (atLocation robot knife))
+        (not (atLocation robot table))
+        (not (atLocation robot countertop))
+
+        ; Microwave is closed and not holding anything
+        (openable microwave)
+        (not (opened microwave))
+        (not (inReceptacle potato microwave))
+
+        ; Sink is not openable (as per domain, but it's a receptacle for cleaning)
+        ; Sink contains other items, but we don't need to model them for this task
+        ; Potato is on the table
+        (atLocation potato table)
+
+        ; Knife is on the countertop (as per first image) and also appears near sink, but we'll use countertop as primary location
+        (atLocation knife countertop)
+
+        ; Potato is not sliced, not clean, not heated
+        (not (isSliced potato))
+        (not (isClean potato))
+        (not (isHot potato))
+
+        ; Agent is not holding anything
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (inReceptacle potato microwave)
+        (isClean potato)
+        (isSliced potato)
+        (isHot potato)
+        (isToggled microwave)  ; assuming toggling microwave on is required to heat
+    ))
+)
+```

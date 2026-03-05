@@ -1,0 +1,47 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): dark gray rectangular sink on wooden countertop
+knife (object): 
+receptacle (object): white cabinet under sink, toilet tank
+object: bar of soap, toilet, mirror, faucet, candle holder, candle, green curtain, wooden countertop, checkered floor tiles
+openable (receptacle) true if a receptacle is openable: (openable white cabinet under sink), (openable toilet tank)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle bar of soap dark gray rectangular sink on wooden countertop)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_wet_soap_in_cabinet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        sink - sink
+        cabinet - receptacle
+        soap - object
+        toilet_tank - receptacle
+    )
+    (:init
+        (openable cabinet)
+        (openable toilet_tank)
+        (inReceptacle soap sink)
+        (not (atLocation robot cabinet))
+        (not (atLocation robot sink))
+        (not (holdsAny robot))
+        (not (opened cabinet))
+        (not (isClean soap))
+    )
+    (:goal (and
+        (inReceptacle soap cabinet)
+        (isClean soap)
+    ))
+)
+```

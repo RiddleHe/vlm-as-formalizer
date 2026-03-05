@@ -1,0 +1,25 @@
+```pddl
+(define (problem put_clean_knife_in_drawer)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        sink - sink
+        cabinet_drawer - receptacle
+        knife - knife
+    )
+    (:init
+        (openable sink)
+        (opened sink)
+        (inReceptacle knife sink)
+        (not (isClean knife))
+        (openable cabinet_drawer)
+        (not (opened cabinet_drawer))
+        (not (atLocation robot sink))
+        (not (atLocation robot cabinet_drawer))
+    )
+    (:goal (and
+        (inReceptacle knife cabinet_drawer)
+        (isClean knife)
+    ))
+)
+```

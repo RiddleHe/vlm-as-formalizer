@@ -1,0 +1,34 @@
+(define (problem put_washed_tomato_on_table)
+    (:domain put_task)
+    (:objects
+        agent
+        fridge
+        sink
+        black_table
+        tomato
+        knife
+        lettuce
+        bowl
+        salt_shaker
+        egg
+        trash_bag
+    )
+    (:init
+        (openable fridge)
+        (not (opened fridge))
+        (atLocation agent tomato) ; Agent starts near the tomato for efficiency, though not strictly required per caption
+        (not (holdsAny agent))
+        (not (isClean tomato))
+        (not (isSliced tomato))
+        (inReceptacle knife sink)
+        (inReceptacle lettuce sink)
+        (inReceptacle bowl black_table)
+        (inReceptacle salt_shaker black_table)
+        ; Tomato is on countertop, not in any receptacle, so no inReceptacle predicate for it
+        ; Egg is on countertop, not in any receptacle
+    )
+    (:goal (and
+        (inReceptacle tomato black_table)
+        (isClean tomato)
+    ))
+)

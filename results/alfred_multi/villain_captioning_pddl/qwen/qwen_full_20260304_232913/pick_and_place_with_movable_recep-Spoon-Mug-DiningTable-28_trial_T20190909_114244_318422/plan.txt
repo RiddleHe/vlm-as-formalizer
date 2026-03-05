@@ -1,0 +1,7 @@
+(gotolocation robot spoon)
+(pickupobject robot spoon)
+(gotolocation robot mug)
+(putobjectinreceptacle robot spoon mug)
+(pickupobject robot mug)
+(gotolocation robot black_round_table)
+(putobjectinreceptacle robot mug black_round_table)

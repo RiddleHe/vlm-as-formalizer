@@ -1,0 +1,4 @@
+(gotolocation robot cardboard_box)
+(pickupobject robot remote)
+(gotolocation robot sofa)
+(putobjectinreceptacle robot remote sofa)

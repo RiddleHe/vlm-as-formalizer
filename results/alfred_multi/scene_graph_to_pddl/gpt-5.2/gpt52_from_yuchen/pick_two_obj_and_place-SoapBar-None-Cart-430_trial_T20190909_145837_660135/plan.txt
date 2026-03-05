@@ -1,0 +1,4 @@
+(gotolocation robot pink_soap_bar_in_sink)
+(pickupobject robot pink_soap_bar_in_sink)
+(gotolocation robot steel_wire_rack_cart)
+(putobjectinreceptacle robot pink_soap_bar_in_sink steel_wire_rack_cart)

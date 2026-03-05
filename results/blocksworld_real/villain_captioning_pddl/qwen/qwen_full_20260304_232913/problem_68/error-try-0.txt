@@ -1,0 +1,16 @@
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  yellow
+  green
+  red
+  orange
+  blue
+  purple
+
+Object does not have a type:
+  yellow
+  green
+  red
+  orange
+  blue
+  purple
+

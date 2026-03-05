@@ -1,0 +1,8 @@
+(gotolocation robot fridge)
+(gotolocation robot countertop)
+(pickupobject robot knife)
+(sliceobject robot bread knife)
+(putobjectinreceptacle robot knife countertop)
+(pickupobject robot bread)
+(gotolocation robot fridge)
+(putobjectinreceptacle robot bread fridge)

@@ -1,0 +1,8 @@
+(gotolocation robot table)
+(pickupobject robot keys1)
+(gotolocation robot couch)
+(putobjectinreceptacle robot keys1 couch)
+(gotolocation robot table)
+(pickupobject robot keys2)
+(gotolocation robot couch)
+(putobjectinreceptacle robot keys2 couch)

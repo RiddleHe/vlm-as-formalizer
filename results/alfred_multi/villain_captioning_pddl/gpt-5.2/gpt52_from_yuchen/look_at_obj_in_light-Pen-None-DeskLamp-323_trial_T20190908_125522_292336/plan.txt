@@ -1,0 +1,2 @@
+(gotolocation robot nightstand)
+(pickupobject robot pencil)

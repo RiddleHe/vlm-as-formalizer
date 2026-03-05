@@ -1,0 +1,92 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): none visible.
+fridge (receptacle): none visible.
+sink (receptacle): 
+- sink_basin_left_counter
+knife (object):
+- knife_gray_handle_on_island_counter
+receptacle (object):
+- cabinet_drawers_white_under_counter (set of drawers/cabinetry under the countertop)
+object:
+- bread_loaf_brown_on_island_counter
+- cup_brown_on_island_counter
+- spoon_metal_on_island_counter
+- apple_yellow_on_island_counter
+- phone_black_on_island_counter
+- lettuce_green_on_island_counter
+- fork_metal_on_counter_by_plant
+- tomato_red_on_counter_by_plant
+- tray_black_on_right_counter
+- spatula_gray_in_sink
+- spoon_metal_in_sink
+
+openable (receptacle) true if a receptacle is openable:
+- (openable cabinet_drawers_white_under_counter)
+
+opened (receptacle) true if a receptacle is opened: none.
+
+holdsAny (agent) agent ?a holds an object: none.
+
+isClean (object) true if the object has been clean in sink: none.
+
+isHot (object) true if the object has been heated up: none.
+
+isCool (object) true if the object has been cooled: none.
+
+isOn (object) true if the object is on: none.
+
+isToggled (object) true if the object has been toggled: none.
+
+isSliced (object) true if the object is sliced: none.
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle spatula_gray_in_sink sink_basin_left_counter)
+- (inReceptacle spoon_metal_in_sink sink_basin_left_counter)
+
+holds (agent, object) object ?o is held by agent ?a: none.
+
+atLocation (agent, object) : none.
+
+PDDL problem: (define (problem put_clean_knife_in_cabinet_drawer)
+  (:domain put_task)
+
+  (:objects
+    robot - agent
+
+    sink_basin_left_counter - sink
+    cabinet_drawers_white_under_counter - receptacle
+
+    knife_gray_handle_on_island_counter - knife
+
+    bread_loaf_brown_on_island_counter - object
+    cup_brown_on_island_counter - object
+    spoon_metal_on_island_counter - object
+    apple_yellow_on_island_counter - object
+    phone_black_on_island_counter - object
+    lettuce_green_on_island_counter - object
+    fork_metal_on_counter_by_plant - object
+    tomato_red_on_counter_by_plant - object
+    tray_black_on_right_counter - object
+    spatula_gray_in_sink - object
+    spoon_metal_in_sink - object
+  )
+
+  (:init
+    ;; receptacle properties
+    (openable cabinet_drawers_white_under_counter)
+
+    ;; objects currently in receptacles
+    (inReceptacle spatula_gray_in_sink sink_basin_left_counter)
+    (inReceptacle spoon_metal_in_sink sink_basin_left_counter)
+
+    ;; robot initially not at any location and holding nothing
+  )
+
+  (:goal
+    (and
+      (isClean knife_gray_handle_on_island_counter)
+      (inReceptacle knife_gray_handle_on_island_counter cabinet_drawers_white_under_counter)
+    )
+  )
+)

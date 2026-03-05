@@ -1,0 +1,3 @@
+Predicate argument has wrong type:
+  atLocation lamp nightstand: lamp is not a agent
+

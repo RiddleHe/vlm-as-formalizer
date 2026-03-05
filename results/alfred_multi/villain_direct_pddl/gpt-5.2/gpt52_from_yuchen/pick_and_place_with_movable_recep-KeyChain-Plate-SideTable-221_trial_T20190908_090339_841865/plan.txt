@@ -1,0 +1,7 @@
+(gotolocation robot small_table)
+(pickupobject robot keys)
+(gotolocation robot plate)
+(putobjectinreceptacle robot keys plate)
+(pickupobject robot plate)
+(gotolocation robot small_table)
+(putobjectinreceptacle robot plate small_table)

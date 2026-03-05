@@ -1,0 +1,166 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot) ; if robot is not seen in the image, it can be assumed to exist and is handempty
+        (handfull ?x - robot)
+        (holding ?x - block) ; block x is being held by the robot
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    You can always assume that at least one robot arm is available if not in the image.
+    Instruction: Create a stack of blocks: red over blue over purple over pink.
+
+    
+
+SCENE CAPTION:
+Scene Description:
+
+1. Objects and Their Types:
+   - There are four blocks, each of type "block" as defined in the domain.
+   - One robot is assumed to be present (though not visible in the image) and is of type "robot".
+
+2. Quantities:
+   - Total blocks: 4 (one pink, one purple, one blue, one red).
+   - Total robots: 1 (inferred, not visible).
+
+3. Spatial Relationships (Matching Domain Predicates):
+   - The pink block is at the bottom of a vertical stack. It is on the table and has the purple block on top of it.
+     → (ontable pink) is true.
+     → (on purple pink) is true.
+     → (clear pink) is false (because purple is on it).
+   - The purple block is directly on top of the pink block and has the blue block on top of it.
+     → (on blue purple) is true.
+     → (clear purple) is false (because blue is on it).
+   - The blue block is on top of the purple block and has the red block on top of it.
+     → (on red blue) is true.
+     → (clear blue) is false (because red is on it).
+   - The red block is at the top of the stack.
+     → (clear red) is true (nothing is on top of it).
+     → (on red blue) is true.
+   - The robot is assumed to be present and currently not holding any block.
+     → (handempty robot) is true.
+     → (handfull robot) is false.
+     → (holding ?x) is false for all blocks.
+
+4. Current State of Each Object Relevant to Planning Task:
+   - pink: on table, not clear, base of current stack.
+   - purple: on pink, not clear, middle of stack.
+   - blue: on purple, not clear, second from top.
+   - red: on blue, clear, top of stack.
+   - robot: handempty, ready to perform actions.
+
+5. Colors, Positions, and Distinguishing Features:
+   - The stack is positioned slightly left of center in the image.
+   - From bottom to top: pink (light pink), purple (dark purple), blue (bright blue), red (bright red).
+   - A separate red block is visible to the right of the stack — but this is an error in perception; upon closer inspection, there is only one red block, which is on top of the blue block. There is no separate red block — the “separate red block” is a misinterpretation; the red block is part of the stack.
+   - All blocks are cube-shaped and appear to be of equal size.
+   - The background is a plain black fabric, providing high contrast for block visibility.
+   - The lighting is even, with no strong shadows, allowing clear identification of colors and stacking.
+
+Note: The current stack is pink → purple → blue → red. The goal is to create a stack: red → blue → purple → pink. This means the current stack is in reverse order from the goal. The robot must unstack all blocks and restack them in the reverse order. The robot must first unstack the red block, then blue, then purple, leaving pink on the table, and then stack red onto blue, blue onto purple, and purple onto pink — but since the goal is red over blue over purple over pink, the robot must ultimately place red on blue, blue on purple, and purple on pink — which implies the pink must remain at the bottom, and the rest must be rearranged on top in reverse order. However, since the current stack is pink (bottom) → purple → blue → red (top), to achieve red → blue → purple → pink, the robot must completely disassemble the stack and rebuild it with pink at the bottom and red at the top — but that would be pink → purple → blue → red, which is the current state. Wait — the instruction says: “Create a stack of blocks: red over blue over purple over pink.” This means: red on top, then blue, then purple, then pink at the bottom. So the goal is: red → blue → purple → pink (from top to bottom), which corresponds to: pink at bottom, purple on pink, blue on purple, red on blue — which is exactly the current state.
+
+Therefore, the current stack already satisfies the goal: red is over blue, blue is over purple, purple is over pink. No action is needed.
+
+However, if the instruction is interpreted as “red on top, then blue, then purple, then pink at the bottom” — which is the same as the current configuration — then the scene is already in the goal state.
+
+Final note: The scene description reflects the current physical state as observed. The robot is idle and handempty. All blocks are stacked in the required order per the instruction. No planning actions are necessary to achieve the goal.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

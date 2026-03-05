@@ -1,0 +1,4 @@
+(GotoLocation robot watch)
+(PickupObject robot watch)
+(GotoLocation robot sidetable)
+(PutObjectInReceptacle robot watch sidetable)

@@ -1,0 +1,67 @@
+Scene graph:
+agent: robot
+microwave (receptacle): stainless steel microwave on countertop
+fridge (receptacle): black fridge on right side
+sink (receptacle): stainless steel sink with faucet
+knife (object): knife on countertop near microwave, knife on floor near sink
+receptacle (object): wooden cabinet under microwave, white table with shelf
+object: potato on table, fork on table, spoon on table, spatula on table, metal cup on table, bowl on table, kettle on table, apple in sink, fork in sink, black mug in sink, salt shaker on countertop, egg on countertop, egg in microwave
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge), (openable sink), (openable wooden cabinet)
+opened (receptacle) true if a receptacle is opened: (opened microwave)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn microwave)
+isToggled (object) true if the object has been toggled: (isToggled microwave)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle egg microwave), (inReceptacle apple sink), (inReceptacle fork sink), (inReceptacle black mug sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot microwave)
+
+PDDL problem: ```pddl
+(define (problem put_washed_slice_of_potato_in_microwave)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife - knife
+        potato - object
+        fork - object
+        spoon - object
+        spatula - object
+        metal_cup - object
+        bowl - object
+        kettle - object
+        apple - object
+        black_mug - object
+        salt_shaker - object
+        egg - object
+        wooden_cabinet - receptacle
+        white_table - receptacle
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (openable wooden_cabinet)
+        (opened microwave)
+        (isOn microwave)
+        (isToggled microwave)
+        (inReceptacle egg microwave)
+        (inReceptacle apple sink)
+        (inReceptacle fork sink)
+        (inReceptacle black_mug sink)
+        (atLocation robot microwave)
+    )
+    (:goal
+        (and
+            (inReceptacle potato microwave)
+            (isClean potato)
+            (isSliced potato)
+        )
+    )
+)
+```

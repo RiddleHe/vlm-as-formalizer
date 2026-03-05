@@ -1,0 +1,16 @@
+Predicate argument has wrong type:
+  atLocation dining_table golden_statue3: dining_table is not a agent
+  atLocation dining_table golden_statue1: dining_table is not a agent
+  atLocation dining_table keys: dining_table is not a agent
+  atLocation dining_table red_card: dining_table is not a agent
+  atLocation dining_table golden_statue2: dining_table is not a agent
+  atLocation side_table lamp: side_table is not a agent
+  atLocation dining_table laptop: dining_table is not a agent
+
+Predicate expects wrong number of arguments:
+  atLocation chair4: should have 2 arguments
+  atLocation chair2: should have 2 arguments
+  atLocation television: should have 2 arguments
+  atLocation chair1: should have 2 arguments
+  atLocation chair3: should have 2 arguments
+

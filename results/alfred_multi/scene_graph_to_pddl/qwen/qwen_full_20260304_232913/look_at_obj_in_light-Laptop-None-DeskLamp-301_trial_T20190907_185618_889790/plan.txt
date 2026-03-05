@@ -1,0 +1,4 @@
+(gotolocation robot beige_nightstand)
+(toggleobject robot beige_lamp_on_nightstand)
+(gotolocation robot gray_laptop_on_bed)
+(pickupobject robot gray_laptop_on_bed)

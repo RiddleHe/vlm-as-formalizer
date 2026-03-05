@@ -1,0 +1,6 @@
+(gotolocation agent1 grey_plate1)
+(pickupobject agent1 grey_plate1)
+(gotolocation agent1 microwave1)
+(heatobject agent1 microwave1 grey_plate1)
+(gotolocation agent1 fridge1)
+(putobjectinreceptacle agent1 grey_plate1 fridge1)

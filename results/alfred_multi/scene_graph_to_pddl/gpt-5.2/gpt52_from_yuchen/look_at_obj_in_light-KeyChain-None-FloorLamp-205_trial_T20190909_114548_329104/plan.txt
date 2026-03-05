@@ -1,0 +1,6 @@
+(gotolocation robot tall_table_lamp_with_white_shade)
+(pickupobject robot tall_table_lamp_with_white_shade)
+(gotolocation robot clear_glass_dining_table_receptacle)
+(putobjectinreceptacle robot tall_table_lamp_with_white_shade clear_glass_dining_table_receptacle)
+(gotolocation robot tall_table_lamp_with_white_shade)
+(gotolocation robot clear_glass_dining_table_receptacle)

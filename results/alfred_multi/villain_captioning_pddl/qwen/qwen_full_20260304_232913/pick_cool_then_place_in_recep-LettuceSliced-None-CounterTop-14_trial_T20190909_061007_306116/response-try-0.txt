@@ -1,0 +1,54 @@
+```pddl
+(define (problem put_slice_cold_lettuce_on_counter)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        sink1 - sink
+        fridge1 - fridge
+        counter1 - receptacle
+        lettuce1 - object
+        knife1 - knife
+        egg1 - object
+        egg2 - object
+        spoon1 - object
+        fork1 - object
+        coffee_machine1 - object
+        toaster1 - object
+        pot1 - object
+        cutting_board1 - object
+        salt_shaker1 - object
+        ladle1 - object
+    )
+    (:init
+        (openable sink1)
+        (openable fridge1)
+        (not (opened sink1))
+        (not (opened fridge1))
+        (inReceptacle egg1 sink1)
+        (inReceptacle spoon1 sink1)
+        (inReceptacle egg2 counter1) ; assuming the egg on the table is on the counter area
+        (atLocation agent1 counter1) ; starting position, as per instruction, agent is not at any object, but we need to pick a starting point. Counter is a logical default.
+        (not (holdsAny agent1))
+        (not (isClean lettuce1))
+        (not (isHot lettuce1))
+        (not (isCool lettuce1))
+        (not (isSliced lettuce1))
+        (not (isOn fridge1)) ; assuming fridge is off unless toggled, though display shows temp. We'll toggle it on.
+        (isOn fridge1) ; based on display, it's on.
+        (atLocation lettuce1 counter1) ; assuming the dining table is part of the counter area for simplicity, or it's a separate surface. We'll treat it as on counter for accessibility.
+        (atLocation knife1 counter1) ; assuming stovetop is part of counter area.
+        (atLocation coffee_machine1 counter1)
+        (atLocation toaster1 counter1)
+        (atLocation pot1 counter1)
+        (atLocation cutting_board1 counter1)
+        (atLocation salt_shaker1 counter1)
+        (atLocation ladle1 counter1)
+        (atLocation fork1 counter1)
+    )
+    (:goal (and
+        (isSliced lettuce1)
+        (isCool lettuce1)
+        (inReceptacle lettuce1 counter1)
+    ))
+)
+```

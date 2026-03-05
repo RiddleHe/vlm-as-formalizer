@@ -1,0 +1,48 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): black_coffee_table, black_sofa, open_cardboard_box
+object: gray_dog_statue, scattered_papers, remote_control, blue_cushion, open_cardboard_box, black_coffee_table, black_sofa
+openable (receptacle) true if a receptacle is openable: (openable open_cardboard_box)
+opened (receptacle) true if a receptacle is opened: (opened open_cardboard_box)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle scattered_papers open_cardboard_box), (inReceptacle gray_dog_statue black_coffee_table), (inReceptacle remote_control black_coffee_table), (inReceptacle blue_cushion black_sofa)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot black_coffee_table)
+
+PDDL problem: ```pddl
+(define (problem place_remote_on_sofa)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        black_coffee_table - receptacle
+        black_sofa - receptacle
+        open_cardboard_box - receptacle
+        gray_dog_statue - object
+        scattered_papers - object
+        remote_control - object
+        blue_cushion - object
+    )
+    (:init
+        (openable open_cardboard_box)
+        (opened open_cardboard_box)
+        (inReceptacle scattered_papers open_cardboard_box)
+        (inReceptacle gray_dog_statue black_coffee_table)
+        (inReceptacle remote_control black_coffee_table)
+        (inReceptacle blue_cushion black_sofa)
+        (atLocation robot black_coffee_table)
+    )
+    (:goal (and
+        (inReceptacle remote_control black_sofa)
+    ))
+)
+```

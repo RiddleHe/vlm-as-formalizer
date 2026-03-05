@@ -1,0 +1,8 @@
+(unstack purple blue r1)
+(put-down purple r1)
+(pick-up blue r1)
+(stack blue red r1)
+(pick-up green r1)
+(stack green purple r1)
+(pick-up yellow r1)
+(stack yellow orange r1)

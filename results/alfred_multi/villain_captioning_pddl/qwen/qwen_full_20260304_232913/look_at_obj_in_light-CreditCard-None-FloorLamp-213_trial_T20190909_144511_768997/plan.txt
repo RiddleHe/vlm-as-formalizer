@@ -1,0 +1,4 @@
+(gotolocation robot credit_card)
+(pickupobject robot credit_card)
+(gotolocation robot lamp)
+(toggleobject robot lamp)

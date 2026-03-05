@@ -1,0 +1,39 @@
+```pddl
+(define (problem put_chilled_tomato_in_microwave)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        tomato - object
+        microwave - microwave
+        fridge - fridge
+        knife - knife
+        toaster - object
+        cup - object
+        pot - object
+        sink - sink
+        countertop - receptacle
+        cabinet - receptacle
+        oven - object
+    )
+    (:init
+        (atLocation robot countertop)
+        (inReceptacle tomato countertop)
+        (openable fridge)
+        (openable microwave)
+        (not (opened fridge))
+        (not (opened microwave))
+        (not (isCool tomato))
+        (not (isHot tomato))
+        (not (isClean tomato))
+        (not (isSliced tomato))
+        (not (isOn microwave))
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (inReceptacle tomato microwave)
+            (isCool tomato)
+        )
+    )
+)
+```

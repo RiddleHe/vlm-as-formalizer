@@ -1,0 +1,85 @@
+(define (problem put_frying_pan_with_fork_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        round_table - receptacle
+        countertop - receptacle
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - knife
+        fork - object
+        frying_pan - object
+        bottle - object
+        potato - object
+        green_vegetable1 - object
+        green_vegetable2 - object
+        egg - object
+        paper_towel_roll - object
+        bread_loaf - object
+        spatula - object
+    )
+    (:init
+        ; Agent is not at any location initially
+        (not (atLocation robot round_table))
+        (not (atLocation robot countertop))
+        (not (atLocation robot microwave))
+        (not (atLocation robot fridge))
+        (not (atLocation robot sink))
+
+        ; Receptacles are not opened
+        (not (opened microwave))
+        (not (opened fridge))
+        (not (opened sink))
+
+        ; Objects are not held
+        (not (holdsAny robot))
+
+        ; Objects are not clean, hot, cool, on, toggled, or sliced
+        (not (isClean fork))
+        (not (isHot fork))
+        (not (isCool fork))
+        (not (isOn fork))
+        (not (isToggled fork))
+        (not (isSliced fork))
+
+        (not (isClean frying_pan))
+        (not (isHot frying_pan))
+        (not (isCool frying_pan))
+        (not (isOn frying_pan))
+        (not (isToggled frying_pan))
+        (not (isSliced frying_pan))
+
+        ; Objects are initially on surfaces (not in defined receptacles)
+        ; Since the domain does not define "on" predicate for surfaces, we assume they are not in any receptacle
+        (not (inReceptacle knife round_table))
+        (not (inReceptacle fork round_table))
+        (not (inReceptacle green_vegetable1 round_table))
+        (not (inReceptacle green_vegetable2 round_table))
+        (not (inReceptacle potato round_table))
+        (not (inReceptacle egg round_table))
+        (not (inReceptacle paper_towel_roll round_table))
+        (not (inReceptacle bottle round_table))
+        (not (inReceptacle bread_loaf countertop))
+        (not (inReceptacle spatula countertop))
+
+        ; Frying pan is not visible, so assume it's in an off-screen location or in a receptacle
+        ; For planning, we assume it is in the microwave (as an example)
+        (inReceptacle frying_pan microwave)
+
+        ; Receptacles are openable
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+
+        ; The round table and countertop are not defined as openable in the domain, so we don't mark them as such
+    )
+    (:goal
+        (and
+            ; The frying pan is on the round table
+            (inReceptacle frying_pan round_table)
+            ; The fork is inside the frying pan
+            (inReceptacle fork frying_pan)
+        )
+    )
+)

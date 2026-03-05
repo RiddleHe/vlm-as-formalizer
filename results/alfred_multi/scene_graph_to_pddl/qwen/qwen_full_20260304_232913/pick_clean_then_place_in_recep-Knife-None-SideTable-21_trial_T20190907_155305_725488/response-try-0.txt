@@ -1,0 +1,63 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): sink
+knife (object): knife_on_black_table, knife_in_sink
+receptacle (object): black_table, sink, cabinet
+object: agent, knife_on_black_table, knife_in_sink, apple_on_black_table, apple_in_sink, red_apple_in_sink, fork_on_black_table, spoon_on_black_table, salt_shaker_on_black_table, glass_on_black_table, black_trash_bag, cabinet, sink, soap_dispenser_on_cabinet
+openable (receptacle) true if a receptacle is openable: (openable sink), (openable cabinet)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle knife_in_sink sink), (inReceptacle apple_in_sink sink), (inReceptacle red_apple_in_sink sink), (inReceptacle knife_on_black_table black_table), (inReceptacle apple_on_black_table black_table), (inReceptacle fork_on_black_table black_table), (inReceptacle spoon_on_black_table black_table), (inReceptacle salt_shaker_on_black_table black_table), (inReceptacle glass_on_black_table black_table), (inReceptacle black_trash_bag black_table), (inReceptacle soap_dispenser_on_cabinet cabinet)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem wash_knife_and_return_to_shelf)
+    (:domain put_task)
+    (:objects
+        agent
+        sink - receptacle
+        cabinet - receptacle
+        black_table - receptacle
+        knife_on_black_table - object
+        knife_in_sink - object
+        apple_on_black_table - object
+        apple_in_sink - object
+        red_apple_in_sink - object
+        fork_on_black_table - object
+        spoon_on_black_table - object
+        salt_shaker_on_black_table - object
+        glass_on_black_table - object
+        black_trash_bag - object
+        soap_dispenser_on_cabinet - object
+    )
+    (:init
+        (openable sink)
+        (openable cabinet)
+        (inReceptacle knife_on_black_table black_table)
+        (inReceptacle apple_on_black_table black_table)
+        (inReceptacle fork_on_black_table black_table)
+        (inReceptacle spoon_on_black_table black_table)
+        (inReceptacle salt_shaker_on_black_table black_table)
+        (inReceptacle glass_on_black_table black_table)
+        (inReceptacle black_trash_bag black_table)
+        (inReceptacle soap_dispenser_on_cabinet cabinet)
+        (inReceptacle knife_in_sink sink)
+        (inReceptacle apple_in_sink sink)
+        (inReceptacle red_apple_in_sink sink)
+        (not (holdsAny agent))
+    )
+    (:goal (and
+        (inReceptacle knife_on_black_table black_table)
+        (isClean knife_on_black_table)
+    ))
+)
+```

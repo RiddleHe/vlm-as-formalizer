@@ -1,0 +1,6 @@
+(gotolocation robot yellow_banana_on_left_table)
+(pickupobject robot yellow_banana_on_left_table)
+(gotolocation robot double_basin_stainless_sink)
+(cleanobject robot double_basin_stainless_sink yellow_banana_on_left_table)
+(gotolocation robot red_countertop_microwave)
+(putobjectinreceptacle robot yellow_banana_on_left_table red_countertop_microwave)

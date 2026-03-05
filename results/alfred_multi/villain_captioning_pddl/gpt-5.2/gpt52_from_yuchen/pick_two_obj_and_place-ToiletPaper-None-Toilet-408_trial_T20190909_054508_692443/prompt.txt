@@ -1,0 +1,243 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Put an empty and one full toilet paper roll on the back of a toilet.
+    
+
+SCENE CAPTION:
+The scene is a small bathroom with a checkered floor (dark gray and light gray tiles), white walls, a vanity with two sinks, and a toilet.
+
+## Relevant objects and types (from the domain)
+- **Agent (robot):** 1 agent. The agent is **not initially at any location** (not atLocation with any object yet).
+- **Sink receptacles:** **2 sinks** (side-by-side) set into a light pink countertop on top of a white vanity cabinet. Each sink has a bronze-colored faucet. These are receptacles that can hold objects.
+- **Toilet (not a declared domain type):** 1 toilet with a white tank and seat. The **back of the toilet** (top of the tank lid) is a flat surface that can physically hold objects, but it is **not defined as a receptacle type in this domain file** (only microwave/fridge/sink are receptacle subtypes).
+- **Toilet paper rolls (domain “object”):** **2 rolls visible total**
+  - **Roll A (full roll):** A white toilet paper roll located **inside a small trash can** (see below). It appears full (thick roll).
+  - **Roll B (empty roll / cardboard core):** A brown cardboard core is visible at the center of the roll in the trash can image views; this indicates an **empty roll/core is present** as well (treated as a separate object only if the environment models it separately; visually, the trash can contains a roll with a visible brown core).
+- **Trash can (receptacle-like container, but not a declared domain receptacle subtype):** 1 small rectangular gray trash can located against the wall in a corner. It contains at least one toilet paper roll.
+- **Other visible items (not in domain types):**
+  - Green bottle (likely soap/cleaner) sitting on the toilet tank lid (top back of toilet).
+  - Towel ring with a green towel on the wall near the sinks.
+  - Mirror above the vanity.
+
+## Quantities summary (domain-relevant)
+- agent: 1
+- sinks (receptacle): 2
+- toilet paper rolls (objects): 2 apparent (one full roll, one empty core/roll implied by visible brown core)
+- No **microwave** visible.
+- No **fridge** visible.
+- No **knife** visible.
+
+## Spatial relationships / containment (predicate-relevant where possible)
+- The **trash can** is in the corner along the wall; **a toilet paper roll is inside the trash can** (matches the idea of `(inReceptacle roll trashcan)` in natural language, though “trash can” is not a declared receptacle type in the provided domain).
+- The **toilet** is next to the vanity; the **top of the toilet tank** currently has a **green bottle** on it (an object resting on that surface).
+- The **two sinks** are adjacent on the same countertop; no toilet paper roll is currently in either sink (no visible roll in sinks).
+
+## Current states relevant to planning
+- No receptacles shown have doors; **no open/close state is visually applicable** (and sinks are typically not openable).
+- The toilet paper roll(s) in the trash can are **not held** by the agent (agent holds nothing initially).
+- No object shows signs of being **cleaned/heated/cooled/toggled/sliced** (none of `isClean`, `isHot`, `isCool`, `isOn`, `isToggled`, `isSliced` are visually indicated).
+
+## Key locations for the instruction
+- The goal location “**back of a toilet**” corresponds to the **top of the toilet tank lid**, currently partially occupied by a **green bottle**. To place two rolls there, the bottle may obstruct space depending on how placement is modeled.
+- The only clearly visible source of toilet paper in the scene is the **trash can**, which contains a **toilet paper roll** (appearing full) and shows a **brown core** indicating an empty roll/core is also present or the roll’s core is visible.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

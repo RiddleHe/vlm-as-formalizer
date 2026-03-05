@@ -1,0 +1,6 @@
+(gotolocation robot fork)
+(pickupobject robot fork)
+(gotolocation robot sink)
+(cleanobject robot sink fork)
+(gotolocation robot drawer)
+(putobjectinreceptacle robot fork drawer)

@@ -1,0 +1,7 @@
+(gotolocation robot green_kitchen_table)
+(pickupobject robot yellow_handle_knife_on_green_table)
+(gotolocation robot left_metal_pot_on_left_burner)
+(putobjectinreceptacle robot yellow_handle_knife_on_green_table left_metal_pot_on_left_burner)
+(pickupobject robot left_metal_pot_on_left_burner)
+(gotolocation robot green_kitchen_table)
+(putobjectinreceptacle robot left_metal_pot_on_left_burner green_kitchen_table)

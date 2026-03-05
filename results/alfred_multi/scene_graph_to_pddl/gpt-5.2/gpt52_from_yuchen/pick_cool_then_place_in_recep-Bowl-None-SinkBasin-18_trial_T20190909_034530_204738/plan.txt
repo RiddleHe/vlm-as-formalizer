@@ -1,0 +1,6 @@
+(gotolocation robot_agent black_bowl_on_table_left)
+(pickupobject robot_agent black_bowl_on_table_left)
+(gotolocation robot_agent tall_white_fridge_right_side)
+(coolobject robot_agent tall_white_fridge_right_side black_bowl_on_table_left)
+(gotolocation robot_agent double_basin_metal_sink)
+(putobjectinreceptacle robot_agent black_bowl_on_table_left double_basin_metal_sink)

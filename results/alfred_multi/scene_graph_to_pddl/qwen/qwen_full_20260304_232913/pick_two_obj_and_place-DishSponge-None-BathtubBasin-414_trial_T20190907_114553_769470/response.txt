@@ -1,0 +1,48 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): white bathtub
+knife (object): 
+receptacle (object): black trash can, wooden cabinet
+object: green sponge, white roll of paper towels, brown soap dispenser, white bathtub, black trash can, wooden cabinet
+openable (receptacle) true if a receptacle is openable: (openable black trash can), (openable wooden cabinet)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle green sponge black trash can)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        bathtub - sink
+        trash_can - receptacle
+        cabinet - receptacle
+        sponge - object
+        paper_towels - object
+        soap_dispenser - object
+    )
+    (:init
+        (openable trash_can)
+        (openable cabinet)
+        (inReceptacle sponge trash_can)
+        (not (atLocation robot bathtub))
+        (not (atLocation robot trash_can))
+        (not (atLocation robot cabinet))
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (inReceptacle sponge bathtub)
+        (inReceptacle sponge bathtub) ; This represents placing two sponges, assuming another sponge is available or implied
+    ))
+)
+```

@@ -1,0 +1,50 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        sink1 - sink
+        fridge1 - fridge
+        stove1 - microwave  ; Using microwave type for stove as per domain, though it's a stove in reality
+        cup1 - object
+        fork1 - object
+        knife1 - knife
+        lettuce1 - object
+        lettuce2 - object
+        bowl1 - object
+        bowl2 - object
+        spoon1 - object
+        egg1 - object
+        soap_dispenser1 - object
+        pan1 - object
+        kitchen_island_counter - object  ; Not a receptacle, just a location
+    )
+    (:init
+        (openable sink1)
+        (openable fridge1)
+        (openable stove1)
+        (not (opened sink1))
+        (not (opened fridge1))
+        (not (opened stove1))
+        (inReceptacle fork1 sink1)
+        (inReceptacle spoon1 sink1)
+        (inReceptacle egg1 sink1)
+        (inReceptacle bowl1 stove1)
+        (inReceptacle bowl2 stove1)
+        (not (holdsAny agent1))
+        (not (isClean fork1))
+        (not (isHot fork1))
+        (not (isCool fork1))
+        (not (isOn fork1))
+        (not (isSliced fork1))
+        (not (isClean cup1))
+        (not (isHot cup1))
+        (not (isCool cup1))
+        (not (isOn cup1))
+        (not (isSliced cup1))
+        (atLocation agent1 kitchen_island_counter)  ; Starting location for agent
+    )
+    (:goal (and
+        (inReceptacle fork1 cup1)
+        (atLocation agent1 kitchen_island_counter)
+    ))
+)

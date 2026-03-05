@@ -1,0 +1,29 @@
+(define (problem clean_egg_on_counter)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave - microwave
+        sink - sink
+        egg - object
+        counter - object
+    )
+    (:init
+        (openable microwave)
+        (not (opened microwave))
+        (inReceptacle egg microwave)
+        (not (isClean egg))
+        (not (isHot egg))
+        (not (isSliced egg))
+        (not (isOn microwave))
+        (not (atLocation agent1 microwave))
+        (not (atLocation agent1 sink))
+        (not (atLocation agent1 counter))
+        (not (holdsAny agent1))
+    )
+    (:goal
+        (and
+            (inReceptacle egg counter)
+            (isClean egg)
+        )
+    )
+)

@@ -1,0 +1,51 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): beige oval sink on white vanity, second beige oval sink on white vanity
+knife (object): 
+receptacle (object): white bathroom vanity cabinet, red trash bin, toilet tank
+object: green spray bottle, toilet paper roll, white towel, black stains in bathtub, beige oval sink on white vanity, second beige oval sink on white vanity, white bathroom vanity cabinet, red trash bin, toilet tank, green bar of soap, pink bar of soap
+openable (receptacle) true if a receptacle is openable: (openable white bathroom vanity cabinet)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn green spray bottle)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle toilet paper roll red trash bin), (inReceptacle green spray bottle toilet tank)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_spray_bottle_in_cabinet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        green_spray_bottle - object
+        toilet_tank - receptacle
+        white_bathroom_vanity_cabinet - receptacle
+        red_trash_bin - receptacle
+        toilet_paper_roll - object
+        beige_oval_sink_on_white_vanity - sink
+        second_beige_oval_sink_on_white_vanity - sink
+    )
+    (:init
+        (openable white_bathroom_vanity_cabinet)
+        (not (opened white_bathroom_vanity_cabinet))
+        (inReceptacle toilet_paper_roll red_trash_bin)
+        (inReceptacle green_spray_bottle toilet_tank)
+        (isOn green_spray_bottle)
+        (not (atLocation robot toilet_tank))
+        (not (atLocation robot white_bathroom_vanity_cabinet))
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (inReceptacle green_spray_bottle white_bathroom_vanity_cabinet)
+        )
+    )
+)
+```

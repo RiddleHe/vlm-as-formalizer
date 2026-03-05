@@ -1,0 +1,4 @@
+(gotolocation robot_agent metal_spoon)
+(pickupobject robot_agent metal_spoon)
+(gotolocation robot_agent round_black_table_receptacle)
+(putobjectinreceptacle robot_agent metal_spoon blue_mug_receptacle)

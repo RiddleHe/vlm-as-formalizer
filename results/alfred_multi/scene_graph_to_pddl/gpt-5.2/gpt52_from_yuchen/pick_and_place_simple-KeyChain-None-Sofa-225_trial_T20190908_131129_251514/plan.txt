@@ -1,0 +1,4 @@
+(gotolocation robot_agent set_of_keys_with_black_fob)
+(pickupobject robot_agent set_of_keys_with_black_fob)
+(gotolocation robot_agent black_leather_loveseat_sofa)
+(putobjectinreceptacle robot_agent set_of_keys_with_black_fob black_leather_loveseat_sofa)

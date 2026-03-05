@@ -1,0 +1,4 @@
+(GotoLocation robot sink)
+(PickupObject robot pot)
+(GotoLocation robot stove)
+(PutObjectInReceptacle robot pot stove)

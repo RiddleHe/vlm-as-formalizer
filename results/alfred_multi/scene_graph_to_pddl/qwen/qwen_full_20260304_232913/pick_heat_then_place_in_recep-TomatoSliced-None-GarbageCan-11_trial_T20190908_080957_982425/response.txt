@@ -1,0 +1,62 @@
+Scene graph:
+agent: agent
+microwave (receptacle): red microwave
+fridge (receptacle): gray fridge
+sink (receptacle): kitchen sink
+knife (object): knife in sink
+receptacle (object): green trash bin
+object: silver kettle, red tomato, orange cup, black mug, red toaster, brown bread, fork
+openable (receptacle) true if a receptacle is openable: (openable red microwave), (openable gray fridge), (openable kitchen sink), (openable green trash bin)
+opened (receptacle) true if a receptacle is opened: (opened red microwave), (opened gray fridge), (opened kitchen sink), (opened green trash bin)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn red toaster), (isOn black mug)
+isToggled (object) true if the object has been toggled: (isToggled red toaster), (isToggled black mug)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle knife kitchen sink), (inReceptacle fork kitchen sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_slice_tomato_in_trash)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        trash_bin - receptacle
+        knife - object
+        kettle - object
+        tomato - object
+        cup - object
+        mug - object
+        toaster - object
+        bread - object
+        fork - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (openable trash_bin)
+        (opened microwave)
+        (opened fridge)
+        (opened sink)
+        (opened trash_bin)
+        (isOn toaster)
+        (isOn mug)
+        (isToggled toaster)
+        (isToggled mug)
+        (inReceptacle knife sink)
+        (inReceptacle fork sink)
+        (atLocation agent sink) ; assuming agent starts near sink as it's a common starting point
+    )
+    (:goal (and
+        (inReceptacle tomato trash_bin)
+        (isSliced tomato)
+    ))
+)
+```

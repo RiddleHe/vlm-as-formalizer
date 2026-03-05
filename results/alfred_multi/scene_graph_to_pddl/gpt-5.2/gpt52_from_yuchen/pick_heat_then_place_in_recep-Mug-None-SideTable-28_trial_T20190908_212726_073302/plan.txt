@@ -1,0 +1,6 @@
+(gotolocation robot_agent small_glass_or_cup_on_black_side_shelf)
+(pickupobject robot_agent small_glass_or_cup_on_black_side_shelf)
+(gotolocation robot_agent microwave_above_stove_silver_right_keypad)
+(heatobject robot_agent microwave_above_stove_silver_right_keypad small_glass_or_cup_on_black_side_shelf)
+(gotolocation robot_agent black_side_shelf_left_of_table)
+(putobjectinreceptacle robot_agent small_glass_or_cup_on_black_side_shelf black_side_shelf_left_of_table)

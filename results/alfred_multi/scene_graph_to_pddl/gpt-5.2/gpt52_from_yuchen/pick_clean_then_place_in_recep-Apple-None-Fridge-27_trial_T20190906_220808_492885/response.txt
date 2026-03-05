@@ -1,0 +1,49 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): red_countertop_microwave_right_keypad
+fridge (receptacle): black_fridge_large_left
+sink (receptacle): double_basin_metal_sink
+knife (object): (none)
+receptacle (object): red_countertop_microwave_right_keypad, black_fridge_large_left, double_basin_metal_sink
+object: yellow_apple_on_left_table, brown_egg_in_right_sink_basin, clear_glass_cup_in_left_sink_basin, metal_bowl_in_right_sink_basin
+openable (receptacle) true if a receptacle is openable: (openable red_countertop_microwave_right_keypad), (openable black_fridge_large_left)
+opened (receptacle) true if a receptacle is opened: (none)
+holdsAny (agent) agent ?a holds an object: (none)
+isClean (object) true if the object has been clean in sink: (none)
+isHot (object) true if the object has been heated up: (none)
+isCool (object) true if the object has been cooled: (none)
+isOn (object) true if the object is on: (none)
+isToggled (object) true if the object has been toggled: (none)
+isSliced (object) true if the object is sliced: (none)
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle clear_glass_cup_in_left_sink_basin double_basin_metal_sink), (inReceptacle brown_egg_in_right_sink_basin double_basin_metal_sink), (inReceptacle metal_bowl_in_right_sink_basin double_basin_metal_sink), (inReceptacle yellow_apple_on_left_table red_countertop_microwave_right_keypad)
+holds (agent, object) object ?o is held by agent ?a: (none)
+atLocation (agent, object) : (none)
+
+PDDL problem: (define (problem puttask_clean_apple_in_fridge)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+    red_countertop_microwave_right_keypad - microwave
+    black_fridge_large_left - fridge
+    double_basin_metal_sink - sink
+    yellow_apple_on_left_table - object
+    brown_egg_in_right_sink_basin - object
+    clear_glass_cup_in_left_sink_basin - object
+    metal_bowl_in_right_sink_basin - object
+  )
+  (:init
+    (openable red_countertop_microwave_right_keypad)
+    (openable black_fridge_large_left)
+
+    (inReceptacle clear_glass_cup_in_left_sink_basin double_basin_metal_sink)
+    (inReceptacle brown_egg_in_right_sink_basin double_basin_metal_sink)
+    (inReceptacle metal_bowl_in_right_sink_basin double_basin_metal_sink)
+    (inReceptacle yellow_apple_on_left_table red_countertop_microwave_right_keypad)
+  )
+  (:goal
+    (and
+      (isClean yellow_apple_on_left_table)
+      (inReceptacle yellow_apple_on_left_table black_fridge_large_left)
+    )
+  )
+)

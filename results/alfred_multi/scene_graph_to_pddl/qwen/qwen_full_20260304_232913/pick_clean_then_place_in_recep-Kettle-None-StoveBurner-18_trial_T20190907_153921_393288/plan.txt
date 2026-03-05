@@ -1,0 +1,6 @@
+(gotolocation robot tea_pot_with_blue_handle)
+(pickupobject robot tea_pot_with_blue_handle)
+(gotolocation robot double_basin_sink)
+(cleanobject robot double_basin_sink tea_pot_with_blue_handle)
+(gotolocation robot stove_top)
+(putobjectinreceptacle robot tea_pot_with_blue_handle stove_top)

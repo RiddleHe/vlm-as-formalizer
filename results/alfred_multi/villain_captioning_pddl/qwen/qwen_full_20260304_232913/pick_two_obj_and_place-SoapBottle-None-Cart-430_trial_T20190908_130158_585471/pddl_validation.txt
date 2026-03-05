@@ -1,0 +1,7 @@
+invalid
+Predicate argument has wrong type:
+  atLocation silver_spray_bottle toilet: silver_spray_bottle is not a agent
+  atLocation blue_bin metal_rack: blue_bin is not a agent
+  atLocation metal_rack toilet: metal_rack is not a agent
+
+

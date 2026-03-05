@@ -1,0 +1,2 @@
+(pickupobject robot soap_bar)
+(putobjectinreceptacle robot soap_bar white_cabinet)

@@ -1,0 +1,6 @@
+(gotolocation robot potato_brown_left_on_table)
+(pickupobject robot potato_brown_left_on_table)
+(gotolocation robot microwave_black_on_counter)
+(heatobject robot microwave_black_on_counter potato_brown_left_on_table)
+(gotolocation robot fridge_tall_black_double_door)
+(putobjectinreceptacle robot potato_brown_left_on_table fridge_tall_black_double_door)

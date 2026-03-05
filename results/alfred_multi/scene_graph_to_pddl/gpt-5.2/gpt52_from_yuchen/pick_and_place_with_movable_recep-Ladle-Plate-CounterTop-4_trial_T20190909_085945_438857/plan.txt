@@ -1,0 +1,4 @@
+(gotolocation robot large_metal_spoon_in_sink)
+(pickupobject robot large_metal_spoon_in_sink)
+(gotolocation robot left_grey_countertop)
+(putobjectinreceptacle robot large_metal_spoon_in_sink left_grey_countertop)

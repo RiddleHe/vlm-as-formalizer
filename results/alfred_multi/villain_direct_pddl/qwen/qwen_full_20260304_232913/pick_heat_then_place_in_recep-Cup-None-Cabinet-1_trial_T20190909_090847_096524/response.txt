@@ -1,0 +1,25 @@
+```pddl
+(define (problem put_hot_glass_in_cabinet)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        cabinet1 - receptacle
+        glass1 - object
+        sink1 - sink
+    )
+    (:init
+        (openable cabinet1)
+        (not (opened cabinet1))
+        (atLocation agent1 microwave1)
+        (inReceptacle glass1 microwave1)
+        (isOn microwave1)
+    )
+    (:goal
+        (and
+            (inReceptacle glass1 cabinet1)
+            (isHot glass1)
+        )
+    )
+)
+```

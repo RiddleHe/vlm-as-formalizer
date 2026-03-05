@@ -1,0 +1,8 @@
+(GotoLocation robot side_table)
+(PickupObject robot keys_1)
+(GotoLocation robot couch)
+(PutObjectInReceptacle robot keys_1 couch)
+(GotoLocation robot side_table)
+(PickupObject robot keys_2)
+(GotoLocation robot couch)
+(PutObjectInReceptacle robot keys_2 couch)

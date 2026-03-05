@@ -1,0 +1,249 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Place two spatulas in a counter drawer.
+    
+
+SCENE CAPTION:
+Scene appears to be a kitchen counter/cabinet area viewed from above/oblique angles.
+
+## Receptacles / locations (domain-relevant)
+- **Counter (worktop surface)**: a flat white countertop. This functions as the current support surface for several loose items (i.e., multiple objects are effectively “in/on the counter area” as their current location).
+- **Counter drawer / cabinet unit**: a wooden built-in unit directly under the countertop (visible wood front panels). A drawer is implied by the instruction (“counter drawer”), but **no drawer interior is visible** in the images, and there is **no visible open/closed state** that can be confirmed from the view (i.e., cannot tell if it is openable/opened from the image alone).
+- **Microwave / fridge / sink**: **not visible** in these images.
+
+## Objects (domain types) and quantities
+### Spatulas (treated as domain “object”; visually spatulas)
+There are **2 spatulas** visible on the countertop:
+1. **Spatula A (center-right)**:  
+   - Appearance: beige/wooden-looking flat head with a **thin dark (black) handle**.  
+   - Position: lying on the countertop near the middle-right area, oriented roughly horizontally with handle pointing upward/right in different views.
+2. **Spatula B (left area, near pot handle)**:  
+   - Appearance: similar beige/wooden-looking flat head; handle is less clearly seen due to clutter, but it is positioned adjacent to a utensil/pot handle area.  
+   - Position: on the countertop left-of-center, close to the pot/pan handle and paper clutter.
+
+### Knife (domain type: knife)
+- **0 clearly identifiable knives**.  
+  - A small metallic utensil-like object near the right bread loaf could be a knife, but it is too unclear to confirm as a “knife” type.
+
+### Other visible objects (domain “object”, not special types)
+- **Bread loaves**: **2** identical-looking loaves on the countertop (one left-front, one right-front).
+- **Pot/pan**: **1** dark pot/pan at the far left edge of the counter with a black handle.
+- **Paper/photos/clutter**: multiple small stacks of papers and photo-like prints scattered near the spatulas (especially behind the left loaf and near the right loaf).
+
+## Spatial relationships (useful for planning predicates like atLocation/inReceptacle)
+- Both **spatulas are on the countertop surface**, not inside any visible receptacle.
+  - **Spatula A** is on the counter **between** the two bread loaves, slightly closer to the right loaf.
+  - **Spatula B** is on the counter **near the pot/pan handle** and adjacent to paper/photo clutter.
+- The **counter drawer** is **below** the countertop (wooden front). The instruction target is “in a counter drawer,” but the drawer interior is not shown; thus, **no spatula is currently in the drawer** as far as can be observed.
+
+## State information relevant to the task
+- The robot (agent) is **not initially at any object location** (per problem statement).
+- **No objects are being held** (nothing indicates the agent holds anything).
+- No evidence of objects being **clean/hot/cool/sliced/toggled/on**; these states are **unknown/unsupported** visually for spatulas and drawer.
+
+## Distinguishing visual cues for the two spatulas (for correct selection)
+- **Spatula A**: clearly visible **black handle** with beige flat head; isolated near center-right.
+- **Spatula B**: beige head visible near left clutter/pot handle area; partially occluded by nearby items, making it less prominent than Spatula A.
+
+Goal-relevant summary: **Two spatulas are loose on the countertop** and must be moved into the **counter drawer beneath the counter** (drawer not shown open).
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

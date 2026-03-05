@@ -1,0 +1,4 @@
+(GotoLocation robot tennisracket)
+(PickupObject robot tennisracket)
+(GotoLocation robot dresser)
+(PutObjectInReceptacle robot tennisracket dresser)

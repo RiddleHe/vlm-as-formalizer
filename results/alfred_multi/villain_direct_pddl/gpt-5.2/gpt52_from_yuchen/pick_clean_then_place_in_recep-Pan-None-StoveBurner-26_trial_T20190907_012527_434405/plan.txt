@@ -1,0 +1,3 @@
+(gotolocation robot sink1)
+(pickupobject robot pan1)
+(cleanobject robot sink1 pan1)

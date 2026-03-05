@@ -1,0 +1,57 @@
+Scene graph:
+agent: agent
+microwave (receptacle): red microwave
+fridge (receptacle): black fridge
+sink (receptacle): sink
+knife (object): knife on countertop
+receptacle (object): black bowl, blue plate, green plate, black cup, red cup, brown bread, green lettuce, orange apple, black pan
+object: knife on countertop, black bowl, blue plate, green plate, black cup, red cup, brown bread, green lettuce, orange apple, black pan
+openable (receptacle) true if a receptacle is openable: (openable black fridge), (openable red microwave)
+opened (receptacle) true if a receptacle is opened: (opened red microwave)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn red microwave)
+isToggled (object) true if the object has been toggled: (isToggled red microwave)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle black cup red microwave), (inReceptacle red cup red microwave), (inReceptacle orange apple red microwave), (inReceptacle black pan stove)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation agent red microwave)
+
+PDDL problem: ```pddl
+(define (problem put_plate_knife_apple_in_fridge)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        bowl - object
+        plate - object
+        cup - object
+        bread - object
+        lettuce - object
+        apple - object
+        pan - object
+    )
+    (:init
+        (openable fridge)
+        (openable microwave)
+        (opened microwave)
+        (isOn microwave)
+        (isToggled microwave)
+        (inReceptacle cup microwave)
+        (inReceptacle cup microwave)
+        (inReceptacle apple microwave)
+        (inReceptacle pan stove)
+        (atLocation agent microwave)
+    )
+    (:goal (and
+        (inReceptacle plate fridge)
+        (inReceptacle knife fridge)
+        (inReceptacle apple fridge)
+    ))
+)
+```

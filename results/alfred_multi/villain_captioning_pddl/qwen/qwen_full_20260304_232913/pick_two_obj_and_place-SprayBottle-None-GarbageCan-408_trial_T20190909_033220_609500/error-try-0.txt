@@ -1,0 +1,5 @@
+Object does not have a type:
+  spray_bottle_2
+  garbage_bin
+  spray_bottle_1
+

@@ -1,0 +1,8 @@
+(gotolocation robot mug)
+(pickupobject robot mug)
+(gotolocation robot table)
+(putobjectinreceptacle robot mug table)
+(gotolocation robot side_table)
+(pickupobject robot spoon)
+(gotolocation robot table)
+(putobjectinreceptacle robot spoon table)

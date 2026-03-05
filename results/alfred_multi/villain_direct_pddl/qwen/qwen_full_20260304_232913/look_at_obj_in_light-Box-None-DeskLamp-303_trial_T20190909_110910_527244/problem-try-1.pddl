@@ -1,0 +1,13 @@
+(define (problem look_at_box_by_lamp)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        box - object
+        lamp - object
+    )
+    (:init
+        (atLocation robot box)
+        (isOn lamp)
+    )
+    (:goal (and (atLocation robot box) (isOn lamp)))
+)

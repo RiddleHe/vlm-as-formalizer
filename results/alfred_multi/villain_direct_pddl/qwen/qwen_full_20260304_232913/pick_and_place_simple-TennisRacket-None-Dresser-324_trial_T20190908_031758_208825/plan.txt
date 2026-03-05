@@ -1,0 +1,3 @@
+(pickupobject robot racket)
+(gotolocation robot dresser)
+(putobjectinreceptacle robot racket dresser)

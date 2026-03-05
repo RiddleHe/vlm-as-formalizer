@@ -1,0 +1,84 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): none visible.
+fridge (receptacle): none visible.
+sink (receptacle): none visible.
+knife (object): none visible.
+receptacle (object):
+- white_table_with_sun_pattern (receptacle): white tabletop with sun/shadow pattern (top image).
+- wooden_dresser_top (receptacle): light wood dresser/console surface under the window (bottom images).
+object:
+- red_digital_alarm_clock (object): red/orange clock showing “8:25” on the white table.
+- black_smartphone_on_white_table (object): black phone lying on the left side of the white table.
+- yellow_pencil_left_on_white_table (object): yellow pencil near left/center of the white table.
+- yellow_pencil_right_on_white_table (object): yellow pencil near center-right of the white table.
+- small_pink_item_on_white_table (object): small pink object near the right edge of the white table.
+- checkerboard_board_on_dresser (object): black-and-white checkerboard board on the left side of the dresser.
+- blue_keys_set_left_on_dresser (object): blue keyring/keys near left-center of the dresser.
+- white_smartphone_on_dresser (object): white phone near right-center of the dresser.
+- blue_keys_set_right_on_dresser (object): blue keyring/keys near the right side of the dresser.
+
+openable (receptacle) true if a receptacle is openable: none.
+opened (receptacle) true if a receptacle is opened: none.
+holdsAny (agent) agent ?a holds an object: none.
+isClean (object) true if the object has been clean in sink: none.
+isHot (object) true if the object has been heated up: none.
+isCool (object) true if the object has been cooled: none.
+isOn (object) true if the object is on: none.
+isToggled (object) true if the object has been toggled: none.
+isSliced (object) true if the object is sliced: none.
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle red_digital_alarm_clock white_table_with_sun_pattern)
+- (inReceptacle black_smartphone_on_white_table white_table_with_sun_pattern)
+- (inReceptacle yellow_pencil_left_on_white_table white_table_with_sun_pattern)
+- (inReceptacle yellow_pencil_right_on_white_table white_table_with_sun_pattern)
+- (inReceptacle small_pink_item_on_white_table white_table_with_sun_pattern)
+- (inReceptacle checkerboard_board_on_dresser wooden_dresser_top)
+- (inReceptacle blue_keys_set_left_on_dresser wooden_dresser_top)
+- (inReceptacle white_smartphone_on_dresser wooden_dresser_top)
+- (inReceptacle blue_keys_set_right_on_dresser wooden_dresser_top)
+
+holds (agent, object) object ?o is held by agent ?a: none.
+atLocation (agent, object) : none.
+
+PDDL problem: (define (problem move_two_keysets_dresser_to_white_table)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    white_table_with_sun_pattern - receptacle
+    wooden_dresser_top - receptacle
+
+    blue_keys_set_left_on_dresser - object
+    blue_keys_set_right_on_dresser - object
+    checkerboard_board_on_dresser - object
+    white_smartphone_on_dresser - object
+
+    red_digital_alarm_clock - object
+    black_smartphone_on_white_table - object
+    yellow_pencil_left_on_white_table - object
+    yellow_pencil_right_on_white_table - object
+    small_pink_item_on_white_table - object
+  )
+
+  (:init
+    ;; objects on / in receptacles
+    (inReceptacle red_digital_alarm_clock white_table_with_sun_pattern)
+    (inReceptacle black_smartphone_on_white_table white_table_with_sun_pattern)
+    (inReceptacle yellow_pencil_left_on_white_table white_table_with_sun_pattern)
+    (inReceptacle yellow_pencil_right_on_white_table white_table_with_sun_pattern)
+    (inReceptacle small_pink_item_on_white_table white_table_with_sun_pattern)
+
+    (inReceptacle checkerboard_board_on_dresser wooden_dresser_top)
+    (inReceptacle blue_keys_set_left_on_dresser wooden_dresser_top)
+    (inReceptacle white_smartphone_on_dresser wooden_dresser_top)
+    (inReceptacle blue_keys_set_right_on_dresser wooden_dresser_top)
+  )
+
+  (:goal
+    (and
+      (inReceptacle blue_keys_set_left_on_dresser white_table_with_sun_pattern)
+      (inReceptacle blue_keys_set_right_on_dresser white_table_with_sun_pattern)
+    )
+  )
+)

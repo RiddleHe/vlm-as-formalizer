@@ -1,0 +1,8 @@
+(gotolocation robot fridge1)
+(pickupobject robot knife1)
+(sliceobject robot potato1 knife1)
+(putobjectinreceptacle robot knife1 fridge1)
+(pickupobject robot potato1)
+(coolobject robot fridge1 potato1)
+(gotolocation robot sink1)
+(putobjectinreceptacle robot potato1 sink1)

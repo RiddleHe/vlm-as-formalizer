@@ -1,0 +1,4 @@
+(gotolocation robot bowl_small_on_small_counter_by_stove)
+(pickupobject robot bowl_small_on_small_counter_by_stove)
+(gotolocation robot microwave_red_trim_above_double_sinks)
+(putobjectinreceptacle robot bowl_small_on_small_counter_by_stove microwave_red_trim_above_double_sinks)

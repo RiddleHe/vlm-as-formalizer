@@ -1,0 +1,8 @@
+(gotolocation agent1 watch1)
+(pickupobject agent1 watch1)
+(gotolocation agent1 tv_stand)
+(putobjectinreceptacle agent1 watch1 tv_stand)
+(gotolocation agent1 dining_table)
+(pickupobject agent1 watch2)
+(gotolocation agent1 tv_stand)
+(putobjectinreceptacle agent1 watch2 tv_stand)

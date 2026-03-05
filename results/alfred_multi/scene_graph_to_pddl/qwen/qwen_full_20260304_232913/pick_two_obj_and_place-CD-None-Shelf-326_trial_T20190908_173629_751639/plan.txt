@@ -1,0 +1,8 @@
+(gotolocation robot_agent cd_disk_on_desk)
+(pickupobject robot_agent cd_disk_on_desk)
+(gotolocation robot_agent wooden_desk_with_shelf)
+(putobjectinreceptacle robot_agent cd_disk_on_desk wooden_desk_with_shelf)
+(gotolocation robot_agent cd_disk_on_desk_right)
+(pickupobject robot_agent cd_disk_on_desk_right)
+(gotolocation robot_agent wooden_desk_with_shelf)
+(putobjectinreceptacle robot_agent cd_disk_on_desk_right wooden_desk_with_shelf)

@@ -1,0 +1,44 @@
+Scene graph:
+agent: none visible
+microwave (receptacle): red_countertop_microwave
+fridge (receptacle): none visible
+sink (receptacle): double_basin_stainless_sink
+knife (object): none visible
+receptacle (object): red_countertop_microwave, double_basin_stainless_sink
+object: yellow_banana_on_left_table
+
+openable (receptacle) true if a receptacle is openable: (openable red_countertop_microwave)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_task_clean_spoon_put_away)
+  (:domain put_task)
+
+  (:objects
+    robot - agent
+    red_countertop_microwave - microwave
+    double_basin_stainless_sink - sink
+    yellow_banana_on_left_table - object
+  )
+
+  (:init
+    (openable red_countertop_microwave)
+  )
+
+  (:goal
+    (and
+      (isClean yellow_banana_on_left_table)
+      (inReceptacle yellow_banana_on_left_table red_countertop_microwave)
+    )
+  )
+)

@@ -1,0 +1,8 @@
+(gotolocation agent1 remote1)
+(pickupobject agent1 remote1)
+(gotolocation agent1 chair1)
+(putobjectinreceptacle agent1 remote1 chair1)
+(gotolocation agent1 sofa1)
+(pickupobject agent1 remote2)
+(gotolocation agent1 chair1)
+(putobjectinreceptacle agent1 remote2 chair1)

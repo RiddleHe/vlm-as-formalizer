@@ -1,0 +1,42 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): white_table, black_loveseat, open_cardboard_box
+object: robot, white_table, black_loveseat, open_cardboard_box, set_of_keys, green_chair
+openable (receptacle) true if a receptacle is openable: (openable white_table), (openable black_loveseat), (openable open_cardboard_box)
+opened (receptacle) true if a receptacle is opened: (opened open_cardboard_box)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle set_of_keys white_table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem move_keys_to_loveseat)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        white_table - receptacle
+        black_loveseat - receptacle
+        open_cardboard_box - receptacle
+        set_of_keys - object
+        green_chair - object
+    )
+    (:init
+        (openable white_table)
+        (openable black_loveseat)
+        (openable open_cardboard_box)
+        (opened open_cardboard_box)
+        (inReceptacle set_of_keys white_table)
+    )
+    (:goal (and (inReceptacle set_of_keys black_loveseat)))
+)
+```

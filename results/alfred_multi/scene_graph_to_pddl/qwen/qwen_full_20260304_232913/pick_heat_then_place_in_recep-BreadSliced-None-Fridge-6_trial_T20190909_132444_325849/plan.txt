@@ -1,0 +1,6 @@
+(pickupobject robot bread)
+(coolobject robot fridge bread)
+(heatobject robot microwave bread)
+(putobjectinreceptacle robot bread fridge)
+(pickupobject robot knife)
+(sliceobject robot bread knife)

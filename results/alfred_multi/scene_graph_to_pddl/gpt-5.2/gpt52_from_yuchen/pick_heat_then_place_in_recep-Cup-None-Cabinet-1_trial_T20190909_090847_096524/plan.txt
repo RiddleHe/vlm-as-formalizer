@@ -1,0 +1,6 @@
+(gotolocation robot_agent clear_glass_tumbler_in_sink_left)
+(pickupobject robot_agent clear_glass_tumbler_in_sink_left)
+(gotolocation robot_agent black_countertop_microwave_left)
+(heatobject robot_agent black_countertop_microwave_left clear_glass_tumbler_in_sink_left)
+(gotolocation robot_agent white_lower_cabinet_under_sink)
+(putobjectinreceptacle robot_agent clear_glass_tumbler_in_sink_left white_lower_cabinet_under_sink)

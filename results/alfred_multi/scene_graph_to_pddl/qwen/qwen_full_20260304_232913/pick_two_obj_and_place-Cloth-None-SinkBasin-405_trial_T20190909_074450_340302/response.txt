@@ -1,0 +1,44 @@
+Scene graph:
+agent: agent1
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): beige_oval_sink
+knife (object): 
+receptacle (object): beige_oval_sink
+object: red_rag, pink_sponge_in_bathtub, pink_sponge_in_sink, beige_oval_sink, bathtub
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle red_rag bathtub), (inReceptacle pink_sponge_in_bathtub bathtub), (inReceptacle pink_sponge_in_sink beige_oval_sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation agent1 bathtub)
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        bathtub - receptacle
+        beige_oval_sink - sink
+        red_rag - object
+        pink_sponge_in_bathtub - object
+        pink_sponge_in_sink - object
+    )
+    (:init
+        (atLocation agent1 bathtub)
+        (inReceptacle red_rag bathtub)
+        (inReceptacle pink_sponge_in_bathtub bathtub)
+        (inReceptacle pink_sponge_in_sink beige_oval_sink)
+    )
+    (:goal (and
+        (inReceptacle red_rag beige_oval_sink)
+        (inReceptacle pink_sponge_in_bathtub beige_oval_sink)
+    ))
+)
+```

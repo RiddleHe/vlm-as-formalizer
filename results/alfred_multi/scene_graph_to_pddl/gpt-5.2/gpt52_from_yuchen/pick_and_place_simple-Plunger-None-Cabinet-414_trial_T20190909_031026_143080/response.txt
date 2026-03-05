@@ -1,0 +1,90 @@
+Scene graph:
+agent: 
+- (none visible)
+
+microwave (receptacle): 
+- (none visible)
+
+fridge (receptacle): 
+- (none visible)
+
+sink (receptacle): 
+- (none visible)
+
+knife (object): 
+- (none visible)
+
+receptacle (object): 
+- bathroom_sink_base_cabinet_under_countertop (wooden cabinet under the sink/counter area, right side of image)
+
+object: 
+- black_rubber_plunger_beside_toilet (black plunger with wooden handle, on floor near toilet)
+- white_toilet_brush_in_holder_beside_toilet (white brush and holder, on floor near toilet)
+- white_toilet (toilet)
+- wall_toilet_paper_holder_black (black wall-mounted toilet paper holder)
+- bathroom_countertop_surface (countertop above cabinet)
+- tiled_bathroom_floor (floor)
+- wall_partition_column (vertical wall/column between toilet and cabinet)
+
+openable (receptacle) true if a receptacle is openable:
+- (openable bathroom_sink_base_cabinet_under_countertop)
+
+opened (receptacle) true if a receptacle is opened:
+- (none)
+
+holdsAny (agent) agent ?a holds an object:
+- (none)
+
+isClean (object) true if the object has been clean in sink:
+- (none)
+
+isHot (object) true if the object has been heated up:
+- (none)
+
+isCool (object) true if the object has been cooled:
+- (none)
+
+isOn (object) true if the object is on:
+- (none)
+
+isToggled (object) true if the object has been toggled:
+- (none)
+
+isSliced (object) true if the object is sliced:
+- (none)
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (none)
+
+holds (agent, object) object ?o is held by agent ?a:
+- (none)
+
+atLocation (agent, object) :
+- (none)
+
+PDDL problem: (define (problem put_plunger_in_sink_cabinet)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    bathroom_sink_base_cabinet_under_countertop - receptacle
+
+    black_rubber_plunger_beside_toilet - object
+    white_toilet_brush_in_holder_beside_toilet - object
+    white_toilet - object
+    wall_toilet_paper_holder_black - object
+    bathroom_countertop_surface - object
+    tiled_bathroom_floor - object
+    wall_partition_column - object
+  )
+
+  (:init
+    (openable bathroom_sink_base_cabinet_under_countertop)
+  )
+
+  (:goal
+    (and
+      (inReceptacle black_rubber_plunger_beside_toilet bathroom_sink_base_cabinet_under_countertop)
+    )
+  )
+)

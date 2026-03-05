@@ -1,0 +1,6 @@
+(GotoLocation agent0 apple)
+(PickupObject agent0 apple)
+(GotoLocation agent0 microwave)
+(HeatObject agent0 microwave apple)
+(GotoLocation agent0 table)
+(PutObjectInReceptacle agent0 apple table)

@@ -1,0 +1,61 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): kitchen_sink
+knife (object): silver_knife_on_table
+receptacle (object): black_table, kitchen_sink, grey_cabinet
+object: silver_knife_on_table, yellow_apple_on_table, silver_fork_on_table, silver_spoon_on_table, salt_shaker_on_table, black_table, kitchen_sink, grey_cabinet, grey_cabinet_drawer, silver_cup_on_cabinet, silver_spoon_on_cabinet, brown_pump_bottle_on_cabinet, red_apple_in_sink, yellow_apple_in_sink, silver_knife_in_sink
+openable (receptacle) true if a receptacle is openable: (openable grey_cabinet)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle yellow_apple_on_table black_table), (inReceptacle silver_fork_on_table black_table), (inReceptacle silver_spoon_on_table black_table), (inReceptacle salt_shaker_on_table black_table), (inReceptacle silver_knife_on_table black_table), (inReceptacle silver_cup_on_cabinet grey_cabinet), (inReceptacle silver_spoon_on_cabinet grey_cabinet), (inReceptacle brown_pump_bottle_on_cabinet grey_cabinet), (inReceptacle red_apple_in_sink kitchen_sink), (inReceptacle yellow_apple_in_sink kitchen_sink), (inReceptacle silver_knife_in_sink kitchen_sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem wash_knife_and_return_to_shelf)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        kitchen_sink - sink
+        black_table - receptacle
+        grey_cabinet - receptacle
+        silver_knife_on_table - knife
+        yellow_apple_on_table - object
+        silver_fork_on_table - object
+        silver_spoon_on_table - object
+        salt_shaker_on_table - object
+        silver_cup_on_cabinet - object
+        silver_spoon_on_cabinet - object
+        brown_pump_bottle_on_cabinet - object
+        red_apple_in_sink - object
+        yellow_apple_in_sink - object
+        silver_knife_in_sink - object
+    )
+    (:init
+        (openable grey_cabinet)
+        (inReceptacle yellow_apple_on_table black_table)
+        (inReceptacle silver_fork_on_table black_table)
+        (inReceptacle silver_spoon_on_table black_table)
+        (inReceptacle salt_shaker_on_table black_table)
+        (inReceptacle silver_knife_on_table black_table)
+        (inReceptacle silver_cup_on_cabinet grey_cabinet)
+        (inReceptacle silver_spoon_on_cabinet grey_cabinet)
+        (inReceptacle brown_pump_bottle_on_cabinet grey_cabinet)
+        (inReceptacle red_apple_in_sink kitchen_sink)
+        (inReceptacle yellow_apple_in_sink kitchen_sink)
+        (inReceptacle silver_knife_in_sink kitchen_sink)
+    )
+    (:goal (and
+        (inReceptacle silver_knife_on_table black_table)
+        (isClean silver_knife_on_table)
+    ))
+)
+```

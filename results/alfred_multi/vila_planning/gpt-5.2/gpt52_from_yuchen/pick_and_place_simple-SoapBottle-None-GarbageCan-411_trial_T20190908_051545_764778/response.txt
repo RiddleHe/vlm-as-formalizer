@@ -1,0 +1,4 @@
+(GotoLocation agent pump_bottle)
+(PickupObject agent pump_bottle)
+(GotoLocation agent garbage_can)
+(PutObjectInReceptacle agent pump_bottle garbage_can)

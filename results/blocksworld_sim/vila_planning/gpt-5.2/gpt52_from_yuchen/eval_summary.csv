@@ -1,0 +1,2 @@
+route,dataset,model,gen_success_rate,pddl_valid_rate,task_success_rate,obj_precision,obj_recall,obj_f1,init_precision,init_recall,init_f1,goal_precision,goal_recall,goal_f1,macro_precision,macro_recall,macro_f1
+vila_planning,blocksworld_sim,gpt-5.2,1.0,0.0,0.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0

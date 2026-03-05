@@ -1,0 +1,4 @@
+(gotolocation robot coffee_maker_with_display)
+(pickupobject robot white_cup_on_coffee_maker)
+(gotolocation robot silver_fridge_with_black_handles)
+(coolobject robot silver_fridge_with_black_handles white_cup_on_coffee_maker)

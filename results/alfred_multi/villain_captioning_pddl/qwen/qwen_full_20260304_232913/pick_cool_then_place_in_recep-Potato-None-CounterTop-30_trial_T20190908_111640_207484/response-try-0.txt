@@ -1,0 +1,54 @@
+```pddl
+(define (problem put_chilled_potato_on_island)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        refrigerator - fridge
+        microwave - microwave
+        potato - object
+        knife - knife
+        bread - object
+        green_vegetable - object
+        bowl - object
+        bottle - object
+        tray - object
+        island - object  ; treated as a location/surface, not a receptacle per domain
+    )
+    (:init
+        (openable refrigerator)
+        (not (opened refrigerator))
+        (openable microwave)
+        (not (opened microwave))
+        (not (isCool potato))
+        (not (isHot potato))
+        (not (isClean potato))
+        (not (isSliced potato))
+        (not (isOn microwave))
+        (not (isToggled microwave))
+        (not (holdsAny agent1))
+        (not (atLocation agent1 refrigerator))
+        (not (atLocation agent1 microwave))
+        (not (atLocation agent1 potato))
+        (not (atLocation agent1 knife))
+        (not (atLocation agent1 bread))
+        (not (atLocation agent1 green_vegetable))
+        (not (atLocation agent1 bowl))
+        (not (atLocation agent1 bottle))
+        (not (atLocation agent1 tray))
+        (not (atLocation agent1 island))
+        ; Objects are on the island initially
+        (atLocation potato island)
+        (atLocation knife island)
+        (atLocation bread island)
+        (atLocation green_vegetable island)
+        (atLocation bowl island)
+        (atLocation bottle island)
+        ; Tray is on countertop next to microwave
+        (atLocation tray microwave)
+    )
+    (:goal (and
+        (inReceptacle potato island)  ; potato is on the island
+        (isCool potato)              ; potato is chilled
+    ))
+)
+```

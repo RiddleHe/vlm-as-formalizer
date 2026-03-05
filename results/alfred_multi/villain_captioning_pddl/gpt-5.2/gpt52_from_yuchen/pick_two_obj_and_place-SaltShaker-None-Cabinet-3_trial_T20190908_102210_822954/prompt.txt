@@ -1,0 +1,263 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: To move two salt shakers to the cabinet below the counter.
+    
+
+SCENE CAPTION:
+## Scene overview
+The scene is a kitchen with wooden countertops along the left and bottom edges of view, a stainless-steel sink set into the left counter, a stovetop on the bottom-right counter, hanging utensils on the wall above the stove, and tall dark cabinetry/fridge-like furniture on the right side. The instruction is to move **two salt shakers** into the **cabinet below the counter**.
+
+## Agent (robot)
+- **1 agent** is present conceptually.
+- The robot is **not initially at any object’s location** (so it must use `GotoLocation` before interacting with anything).
+
+## Receptacles (domain-relevant)
+1. **Lower cabinet below the counter (receptacle)**
+   - Type: **receptacle** (likely a cabinet under the countertop).
+   - Location/appearance: Under the left/central wooden counter (below the counter edge visible along the left side). Multiple lower cabinet doors/drawer fronts are visible beneath the counter.
+   - State: **Closed** in the images (no open door is visible).
+   - Openability: Visually appears to be a cabinet with doors, so it is **openable** (intended to be opened before placing items inside), though the exact door seams/handles are subtle.
+
+2. **Sink (receptacle)**
+   - Type: **sink** (also a receptacle per domain).
+   - Location: Left foreground, embedded in the countertop.
+   - State: Not visibly running; no objects are shown inside it.
+
+*(Other potential receptacles like fridge/microwave are not clearly identifiable as such in these views; a tall dark unit on the right could be a fridge/cabinet but is not clearly usable for this specific instruction.)*
+
+## Objects (domain-relevant) and quantities
+### Salt shakers (objects)
+- **2 salt shakers** are present.
+  - Appearance: Two small, matching shakers with **metallic/silver tops** and **clear/transparent bodies**.
+  - Location: Both are on a **small wall shelf** above/left of the stovetop area.
+  - Spatial relation: The two shakers are **side-by-side** on the shelf.
+  - Current containment/support: They are **resting on the shelf** (not inside a receptacle; no `inReceptacle` relation is visually indicated).
+  - State: Not held by the agent; no toggled/heated/cooled/cleaned state applies visually.
+
+### Other visible objects (context, less relevant)
+- **Kettle** (object): A metallic kettle sits on the stovetop (bottom-right).
+- **Hanging utensils** (objects): Several utensils hang vertically on the wall rack above the stove.
+- **Jar/container** (object): A clear jar with a light label sits on the same wall shelf near the shakers.
+- **Tomato** (object): A red tomato sits on the wooden counter near the stove area (left of stovetop).
+- **Plant** (object): A small green plant in a silver pot sits near the sink on the counter.
+- **Food items** (objects): A green vegetable (possibly cucumber/zucchini) and brown loaf-like items on the left counter.
+
+(These are not required by the instruction, but help situate the scene.)
+
+## Key spatial relationships for the task
+- The **two salt shakers** are located on the **wall shelf** above the counter and left of the stovetop area.
+- The target receptacle is the **lower cabinet below the countertop** (beneath the wooden counter along the left/center).
+- To complete the task, each shaker will need to be:
+  1. Approached by the agent (agent at the shaker’s location),
+  2. Picked up (agent holds shaker),
+  3. Agent moved to the **lower cabinet** location,
+  4. Cabinet opened if required/possible (it appears closed),
+  5. Shaker placed **in** the cabinet (inside the below-counter receptacle),
+  6. Repeated for the second shaker.
+
+## Current relevant states (predicate-focused)
+- Agent: **not atLocation** of any object initially; **not holding anything** initially (implied by problem statement).
+- Salt shakers (2): **not held**, and currently **on the wall shelf** (no indication they are in any receptacle).
+- Lower cabinet below counter: **appears closed**; intended to be an **openable receptacle** used as the destination.
+- No relevant `isOn`, `isToggled`, `isClean`, `isHot`, `isCool`, or `isSliced` states apply to the salt shakers based on the images.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

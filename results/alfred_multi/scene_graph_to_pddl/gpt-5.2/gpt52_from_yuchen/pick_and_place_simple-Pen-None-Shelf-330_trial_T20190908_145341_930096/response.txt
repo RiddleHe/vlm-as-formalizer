@@ -1,0 +1,47 @@
+Scene graph:
+agent: none
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object):
+- dark_wood_dresser_top_surface_receptacle
+- blue_hexagonal_trash_bin_receptacle
+object:
+- black_pen_like_object
+- metal_keyring_with_keys
+- white_cylinder_container_on_dresser
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle black_pen_like_object blue_hexagonal_trash_bin_receptacle)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_task_pen_to_dresser)
+  (:domain put_task)
+  (:objects
+    robot - agent
+    dark_wood_dresser_top_surface_receptacle - receptacle
+    blue_hexagonal_trash_bin_receptacle - receptacle
+    black_pen_like_object - object
+    metal_keyring_with_keys - object
+    white_cylinder_container_on_dresser - object
+  )
+  (:init
+    ;; Object locations (via receptacles)
+    (inReceptacle black_pen_like_object blue_hexagonal_trash_bin_receptacle)
+  )
+  (:goal
+    (and
+      (inReceptacle black_pen_like_object dark_wood_dresser_top_surface_receptacle)
+    )
+  )
+)

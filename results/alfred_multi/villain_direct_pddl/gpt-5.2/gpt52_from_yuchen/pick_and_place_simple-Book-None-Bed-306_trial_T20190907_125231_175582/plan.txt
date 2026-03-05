@@ -1,0 +1,4 @@
+(gotolocation robot desk)
+(pickupobject robot book)
+(gotolocation robot bed)
+(putobjectinreceptacle robot book bed)

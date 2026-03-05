@@ -1,0 +1,19 @@
+(define (problem turn_on_lamp_and_pickup_tissues)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        desk_lamp - object
+        tissue_box - object
+        desk - receptacle
+    )
+    (:init
+        (atLocation robot desk)
+        (inReceptacle tissue_box desk)
+        (not (isOn desk_lamp))
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (isOn desk_lamp)
+        (holds robot tissue_box)
+    ))
+)

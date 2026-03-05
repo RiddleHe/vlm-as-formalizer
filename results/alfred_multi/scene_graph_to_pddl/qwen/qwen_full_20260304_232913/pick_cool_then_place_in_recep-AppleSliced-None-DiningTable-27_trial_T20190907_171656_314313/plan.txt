@@ -1,0 +1,6 @@
+(gotolocation robot yellow_apple_on_table)
+(pickupobject robot yellow_apple_on_table)
+(gotolocation robot black_refrigerator)
+(coolobject robot black_refrigerator yellow_apple_on_table)
+(gotolocation robot white_table)
+(putobjectinreceptacle robot yellow_apple_on_table white_table)

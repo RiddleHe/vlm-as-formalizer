@@ -1,0 +1,5 @@
+(gotolocation robot microwave1)
+(pickupobject robot mug1)
+(heatobject robot microwave1 mug1)
+(gotolocation robot left_shelves1)
+(putobjectinreceptacle robot mug1 left_shelves1)

@@ -1,0 +1,53 @@
+Scene graph:
+agent: agent
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): left_sink, right_sink
+knife (object): knife_on_counter
+receptacle (object): wooden_cabinet_above_fridge, wooden_cabinet_left, wooden_cabinet_right
+object: bowl_in_left_sink, egg_in_right_sink, toaster, knife_on_counter
+openable (receptacle) true if a receptacle is openable: (openable wooden_cabinet_above_fridge), (openable wooden_cabinet_left), (openable wooden_cabinet_right)
+opened (receptacle) true if a receptacle is opened: (opened wooden_cabinet_left)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle bowl_in_left_sink left_sink), (inReceptacle egg_in_right_sink right_sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_cold_bowl_in_cabinet)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave
+        fridge
+        left_sink
+        right_sink
+        knife_on_counter
+        wooden_cabinet_above_fridge
+        wooden_cabinet_left
+        wooden_cabinet_right
+        bowl_in_left_sink
+        egg_in_right_sink
+        toaster
+    )
+    (:init
+        (openable wooden_cabinet_above_fridge)
+        (openable wooden_cabinet_left)
+        (openable wooden_cabinet_right)
+        (opened wooden_cabinet_left)
+        (inReceptacle bowl_in_left_sink left_sink)
+        (inReceptacle egg_in_right_sink right_sink)
+        (atLocation agent wooden_cabinet_left) ; assuming agent starts near an open cabinet for initial state consistency
+    )
+    (:goal (and
+        (inReceptacle bowl_in_left_sink wooden_cabinet_above_fridge)
+        (isCool bowl_in_left_sink)
+    ))
+)
+```

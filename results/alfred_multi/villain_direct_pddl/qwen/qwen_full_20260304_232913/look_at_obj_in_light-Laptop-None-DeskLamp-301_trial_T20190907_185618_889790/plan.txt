@@ -1,0 +1,4 @@
+(gotolocation robot bed)
+(pickupobject robot laptop1)
+(gotolocation robot lamp)
+(toggleobject robot lamp)

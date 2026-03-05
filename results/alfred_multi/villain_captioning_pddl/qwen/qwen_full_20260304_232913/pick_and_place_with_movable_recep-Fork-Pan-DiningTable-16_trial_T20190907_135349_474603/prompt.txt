@@ -1,0 +1,275 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Put a frying pan with a fork in it on a round table.
+    
+
+SCENE CAPTION:
+Scene Description:
+
+The scene consists of a kitchen environment with two primary surfaces: a round white table and a tiled kitchen countertop. The robot agent is not currently located at any object's position and must navigate to interact with them.
+
+1. Objects and Their Types:
+
+   - Receptacles:
+     - Round white table (not explicitly defined as a receptacle in the domain, but functions as one for placing objects).
+     - Kitchen countertop (not a defined receptacle type in the domain, but serves as a surface for objects).
+     - Microwave (not visible in the images, but is a defined receptacle type in the domain).
+     - Fridge (not visible in the images, but is a defined receptacle type in the domain).
+     - Sink (not visible in the images, but is a defined receptacle type in the domain).
+
+   - Objects (non-receptacles):
+     - Knife: A yellow-handled knife is on the round table. It is a “knife” type as defined in the domain.
+     - Fork: A fork is on the round table near a green vegetable (possibly a cucumber or zucchini). It is an “object” type.
+     - Frying pan: Not visible in either image. Must be retrieved from an off-screen location or inferred to be elsewhere in the environment.
+     - Bottle: A dark green bottle is on the round table. It is an “object” type.
+     - Potato: A brown potato is on the round table. It is an “object” type.
+     - Green vegetables: Two green, oblong objects (possibly zucchinis or cucumbers) are on the round table. They are “object” types.
+     - Egg: A brown egg is on the round table. It is an “object” type.
+     - Paper towel roll: A white paper towel roll is on the round table. It is an “object” type.
+     - Bread loaf: A brown loaf of bread is on the countertop. It is an “object” type.
+     - Spatula: A black-handled spatula is on the countertop. It is an “object” type.
+
+2. Quantities of Each Object Type:
+
+   - Knife: 1 (yellow-handled, on the round table).
+   - Fork: 1 (on the round table, near green vegetables).
+   - Frying pan: 0 visible (must be acquired from elsewhere).
+   - Bottle: 1 (dark green, on the round table).
+   - Potato: 1 (brown, on the round table).
+   - Green vegetables: 2 (on the round table).
+   - Egg: 1 (brown, on the round table).
+   - Paper towel roll: 1 (white, on the round table).
+   - Bread loaf: 1 (brown, on the countertop).
+   - Spatula: 1 (black-handled, on the countertop).
+
+3. Spatial Relationships (Matching Domain Predicates):
+
+   - The round table is a surface holding multiple objects: knife, fork, green vegetables, potato, egg, paper towel roll, and bottle. These objects are “on” the table, but the domain does not define “on” as a predicate for surfaces — only “inReceptacle” for receptacles. Since the table is not defined as a receptacle in the domain, these objects are not “inReceptacle” any defined receptacle.
+   - The countertop holds the bread loaf and spatula. Similarly, these are not “inReceptacle” any defined receptacle.
+   - No object is currently held by the agent (holdsAny ?a is false).
+   - No receptacle is opened or closed (opened ?r is false for all receptacles).
+   - No object is clean, hot, cool, on, toggled, or sliced (all respective predicates are false).
+
+4. Current State of Each Object Relevant to the Planning Task:
+
+   - The fork is on the round table and is not currently held by the agent.
+   - The frying pan is not visible and must be located and retrieved.
+   - The round table is the target location for placing the frying pan with the fork inside it.
+   - No object has been manipulated (cleaned, heated, cooled, toggled, or sliced) yet.
+
+5. Colors, Positions, and Distinguishing Features:
+
+   - The round table is white and has a checkered shadow pattern from a window or light source.
+   - The knife has a distinct yellow handle and is positioned near the edge of the table.
+   - The fork is metallic and lies near the green vegetables.
+   - The green vegetables are oblong and dark green, possibly zucchinis or cucumbers.
+   - The potato is brown and oval-shaped.
+   - The egg is small and brown.
+   - The paper towel roll is white and cylindrical.
+   - The bottle is dark green and has a narrow neck.
+   - The countertop is tiled with beige tiles and holds a brown loaf of bread and a black-handled spatula.
+   - The bread loaf is rectangular and brown.
+   - The spatula has a black handle and a flat, gray head.
+
+Note: The frying pan is not visible in the images and must be located in an off-screen area or inferred to be in a receptacle (e.g., microwave, fridge, or sink) that is not shown. The robot must first navigate to find the frying pan, then pick it up, retrieve the fork from the table, place the fork inside the frying pan, and then place the frying pan with the fork on the round table.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

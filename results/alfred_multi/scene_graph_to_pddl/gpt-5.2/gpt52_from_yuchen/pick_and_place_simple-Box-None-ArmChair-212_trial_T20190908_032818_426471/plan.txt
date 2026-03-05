@@ -1,0 +1,4 @@
+(gotolocation robot_agent dark_wood_side_table_with_shelf)
+(pickupobject robot_agent brown_cardboard_box_open_top)
+(gotolocation robot_agent green_upholstered_chair_with_gray_arms)
+(putobjectinreceptacle robot_agent brown_cardboard_box_open_top green_upholstered_chair_with_gray_arms)

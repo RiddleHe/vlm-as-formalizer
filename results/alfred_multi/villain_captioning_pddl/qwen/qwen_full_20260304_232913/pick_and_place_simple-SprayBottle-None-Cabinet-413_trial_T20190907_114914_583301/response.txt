@@ -1,0 +1,31 @@
+```pddl
+(define (problem put_spray_bottle_in_cabinet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        spray_bottle - object
+        cabinet - receptacle
+        sink - receptacle
+        trash_bin - receptacle
+        toilet - object
+    )
+    (:init
+        (atLocation robot toilet)
+        (not (holdsAny robot))
+        (not (opened cabinet))
+        (openable cabinet)
+        (not (inReceptacle spray_bottle cabinet))
+        (not (inReceptacle spray_bottle sink))
+        (not (inReceptacle spray_bottle trash_bin))
+        (not (holds robot spray_bottle))
+        (not (isClean spray_bottle))
+        (not (isHot spray_bottle))
+        (not (isCool spray_bottle))
+        (not (isSliced spray_bottle))
+        (not (isToggled spray_bottle))
+    )
+    (:goal (and
+        (inReceptacle spray_bottle cabinet)
+    ))
+)
+```

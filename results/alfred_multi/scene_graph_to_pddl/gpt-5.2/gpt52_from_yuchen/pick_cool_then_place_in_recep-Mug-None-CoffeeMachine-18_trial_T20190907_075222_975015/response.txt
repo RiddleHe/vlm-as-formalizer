@@ -1,0 +1,52 @@
+Scene graph:
+agent: none visible
+microwave (receptacle): none visible
+fridge (receptacle): none visible
+sink (receptacle): none visible
+knife (object): none visible
+receptacle (object): none visible
+object: 
+- black-and-red coffee_maker_machine_on_counter
+- white_cup_on_coffee_maker_drip_tray
+- two_copper_hanging_utensils_left
+- white_countertop_surface
+- wooden_cabinet_edge_bottom_right
+- dark_horizontal_rail_under_cabinet
+- two_dark_vertical_handles_upper_cabinet
+
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem cool-cup-coffee-maker)
+  (:domain put_task)
+  (:objects
+    robot - agent
+    coffee_maker_machine_on_counter - object
+    white_cup_on_coffee_maker_drip_tray - object
+    two_copper_hanging_utensils_left - object
+    white_countertop_surface - object
+    wooden_cabinet_edge_bottom_right - object
+    dark_horizontal_rail_under_cabinet - object
+    two_dark_vertical_handles_upper_cabinet - object
+  )
+
+  (:init
+    ;; No initial atLocation facts: robot starts not at any object's location.
+  )
+
+  (:goal
+    (and
+      (isCool white_cup_on_coffee_maker_drip_tray)
+    )
+  )
+)

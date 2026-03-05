@@ -1,0 +1,62 @@
+Scene graph:
+agent: robot
+microwave (receptacle): black microwave on black cabinet
+fridge (receptacle): tall black fridge
+sink (receptacle): stainless steel sink with faucet
+knife (object): knife in sink
+receptacle (object): wooden countertop, black cabinet under microwave
+object: green glass, silver toaster, brown bread loaf, black pot, silver potted plant, clear glass, copper pepper shaker, knife
+openable (receptacle) true if a receptacle is openable: (openable tall black fridge), (openable black microwave on black cabinet)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle knife stainless steel sink with faucet), (inReceptacle clear glass black microwave on black cabinet), (inReceptacle copper pepper shaker black microwave on black cabinet), (inReceptacle green glass wooden countertop), (inReceptacle silver toaster wooden countertop), (inReceptacle brown bread loaf wooden countertop), (inReceptacle black pot wooden countertop), (inReceptacle silver potted plant wooden countertop)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_clean_mug_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife - knife
+        green_glass - object
+        silver_toaster - object
+        brown_bread_loaf - object
+        black_pot - object
+        silver_potted_plant - object
+        clear_glass - object
+        copper_pepper_shaker - object
+        wooden_countertop - receptacle
+        black_cabinet - receptacle
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (inReceptacle knife sink)
+        (inReceptacle clear_glass microwave)
+        (inReceptacle copper_pepper_shaker microwave)
+        (inReceptacle green_glass wooden_countertop)
+        (inReceptacle silver_toaster wooden_countertop)
+        (inReceptacle brown_bread_loaf wooden_countertop)
+        (inReceptacle black_pot wooden_countertop)
+        (inReceptacle silver_potted_plant wooden_countertop)
+        (not (isClean clear_glass))
+        (not (isClean green_glass))
+        (not (isClean knife))
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (inReceptacle clear_glass wooden_countertop)
+        (isClean clear_glass)
+    ))
+)
+```

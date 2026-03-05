@@ -1,0 +1,8 @@
+(gotolocation robot_agent wooden_shelf_unit_lower_shelf)
+(pickupobject robot_agent compact_disc_on_lower_shelf_left_center)
+(gotolocation robot_agent white_desk_surface_top_view)
+(putobjectinreceptacle robot_agent compact_disc_on_lower_shelf_left_center white_desk_surface_top_view)
+(gotolocation robot_agent wooden_shelf_unit_lower_shelf)
+(pickupobject robot_agent orange_pencil_on_lower_shelf_left)
+(gotolocation robot_agent white_desk_surface_top_view)
+(putobjectinreceptacle robot_agent orange_pencil_on_lower_shelf_left white_desk_surface_top_view)

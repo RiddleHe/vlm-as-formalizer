@@ -1,0 +1,89 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): black_countertop_microwave_right
+fridge (receptacle): none
+sink (receptacle): stainless_kitchen_sink_basin
+knife (object): none
+receptacle (object): round_wooden_table, tan_countertop_coffee_machine, black_coffee_mug, square_tan_bowl, blue_soap_dispenser_bottle
+object: green_sponge_rectangular, metal_fork_on_table, metal_butter_knife_on_table, metal_spatula_on_counter_left, red_tomato_on_table_center, red_tomato_on_table_edge, brown_egg_in_sink
+
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle black_coffee_mug tan_countertop_coffee_machine)
+- (inReceptacle green_sponge_rectangular stainless_kitchen_sink_basin)
+- (inReceptacle brown_egg_in_sink stainless_kitchen_sink_basin)
+- (inReceptacle metal_fork_on_table round_wooden_table)
+- (inReceptacle metal_butter_knife_on_table round_wooden_table)
+- (inReceptacle red_tomato_on_table_center round_wooden_table)
+- (inReceptacle red_tomato_on_table_edge round_wooden_table)
+- (inReceptacle square_tan_bowl round_wooden_table)
+- (inReceptacle blue_soap_dispenser_bottle round_wooden_table)
+- (inReceptacle tan_countertop_coffee_machine round_wooden_table)
+
+holds (agent, object) object ?o is held by agent ?a: none
+
+atLocation (agent, object) :
+- none
+
+PDDL problem: (define (problem put_task_cooked_egg_on_table)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+
+    ;; receptacles
+    round_wooden_table - receptacle
+    tan_countertop_coffee_machine - receptacle
+    black_coffee_mug - receptacle
+    square_tan_bowl - receptacle
+    blue_soap_dispenser_bottle - receptacle
+
+    ;; special receptacles
+    black_countertop_microwave_right - microwave
+    stainless_kitchen_sink_basin - sink
+
+    ;; objects
+    green_sponge_rectangular - object
+    metal_fork_on_table - object
+    metal_butter_knife_on_table - object
+    metal_spatula_on_counter_left - object
+    red_tomato_on_table_center - object
+    red_tomato_on_table_edge - object
+    brown_egg_in_sink - object
+  )
+
+  (:init
+    ;; no openable/opened receptacles observed
+    ;; agent starts not at any location and holds nothing
+
+    ;; containment relations from scene graph
+    (inReceptacle black_coffee_mug tan_countertop_coffee_machine)
+    (inReceptacle green_sponge_rectangular stainless_kitchen_sink_basin)
+    (inReceptacle brown_egg_in_sink stainless_kitchen_sink_basin)
+
+    (inReceptacle metal_fork_on_table round_wooden_table)
+    (inReceptacle metal_butter_knife_on_table round_wooden_table)
+    (inReceptacle red_tomato_on_table_center round_wooden_table)
+    (inReceptacle red_tomato_on_table_edge round_wooden_table)
+    (inReceptacle square_tan_bowl round_wooden_table)
+    (inReceptacle blue_soap_dispenser_bottle round_wooden_table)
+    (inReceptacle tan_countertop_coffee_machine round_wooden_table)
+  )
+
+  (:goal
+    (and
+      ;; "cooked" corresponds to heated in the microwave in this domain
+      (isHot brown_egg_in_sink)
+      (inReceptacle brown_egg_in_sink round_wooden_table)
+    )
+  )
+)

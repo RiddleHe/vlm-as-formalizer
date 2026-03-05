@@ -1,0 +1,8 @@
+(gotolocation robot sink_basin)
+(pickupobject robot soap1)
+(gotolocation robot steel_rack)
+(putobjectinreceptacle robot soap1 steel_rack)
+(gotolocation robot soap2)
+(pickupobject robot soap2)
+(gotolocation robot steel_rack)
+(putobjectinreceptacle robot soap2 steel_rack)

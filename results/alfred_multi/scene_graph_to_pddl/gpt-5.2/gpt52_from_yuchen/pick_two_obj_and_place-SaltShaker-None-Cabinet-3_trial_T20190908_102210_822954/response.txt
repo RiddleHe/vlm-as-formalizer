@@ -1,0 +1,64 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): (none visible)
+fridge (receptacle): tall_black_fridge_right_side
+sink (receptacle): stainless_sink_left_counter
+knife (object): (none visible)
+receptacle (object): lower_cabinet_doors_under_left_counter; tall_black_fridge_right_side; stainless_sink_left_counter
+object: salt_shaker_left_on_spice_shelf; salt_shaker_right_on_spice_shelf; clear_vinegar_bottle_on_spice_shelf; red_tomato_on_left_counter; metal_kettle_on_stovetop; black_pot_left_edge_counter; hanging_ladle_black_handle; hanging_spatula_blue_handle; hanging_spatula_white_handle; hanging_spoon_black_handle; hanging_tool_red_handle; hanging_tool_orange_handle; black_pan_on_right_burner; green_vegetable_on_counter; wooden_block_on_counter
+
+openable (receptacle) true if a receptacle is openable: (openable tall_black_fridge_right_side); (openable lower_cabinet_doors_under_left_counter)
+opened (receptacle) true if a receptacle is opened: (none)
+holdsAny (agent) agent ?a holds an object: (none)
+isClean (object) true if the object has been clean in sink: (none)
+isHot (object) true if the object has been heated up: (none)
+isCool (object) true if the object has been cooled: (none)
+isOn (object) true if the object is on: (none)
+isToggled (object) true if the object has been toggled: (none)
+isSliced (object) true if the object is sliced: (none)
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle salt_shaker_left_on_spice_shelf lower_cabinet_doors_under_left_counter); (inReceptacle salt_shaker_right_on_spice_shelf lower_cabinet_doors_under_left_counter); (inReceptacle clear_vinegar_bottle_on_spice_shelf lower_cabinet_doors_under_left_counter)
+holds (agent, object) object ?o is held by agent ?a: (none)
+atLocation (agent, object) : (none)
+
+PDDL problem: (define (problem put_task_salt_shakers_to_lower_cabinet)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    lower_cabinet_doors_under_left_counter - receptacle
+    tall_black_fridge_right_side - fridge
+    stainless_sink_left_counter - sink
+
+    salt_shaker_left_on_spice_shelf - object
+    salt_shaker_right_on_spice_shelf - object
+    clear_vinegar_bottle_on_spice_shelf - object
+    red_tomato_on_left_counter - object
+    metal_kettle_on_stovetop - object
+    black_pot_left_edge_counter - object
+    hanging_ladle_black_handle - object
+    hanging_spatula_blue_handle - object
+    hanging_spatula_white_handle - object
+    hanging_spoon_black_handle - object
+    hanging_tool_red_handle - object
+    hanging_tool_orange_handle - object
+    black_pan_on_right_burner - object
+    green_vegetable_on_counter - object
+    wooden_block_on_counter - object
+  )
+
+  (:init
+    (openable tall_black_fridge_right_side)
+    (openable lower_cabinet_doors_under_left_counter)
+
+    (inReceptacle salt_shaker_left_on_spice_shelf lower_cabinet_doors_under_left_counter)
+    (inReceptacle salt_shaker_right_on_spice_shelf lower_cabinet_doors_under_left_counter)
+    (inReceptacle clear_vinegar_bottle_on_spice_shelf lower_cabinet_doors_under_left_counter)
+  )
+
+  (:goal
+    (and
+      (inReceptacle salt_shaker_left_on_spice_shelf lower_cabinet_doors_under_left_counter)
+      (inReceptacle salt_shaker_right_on_spice_shelf lower_cabinet_doors_under_left_counter)
+    )
+  )
+)

@@ -1,0 +1,6 @@
+Predicate argument has wrong type:
+  atLocation salt_shaker_countertop countertop: salt_shaker_countertop is not a agent
+  atLocation potato table: potato is not a agent
+  atLocation knife_countertop countertop: knife_countertop is not a agent
+  atLocation knife_floor floor: knife_floor is not a agent
+

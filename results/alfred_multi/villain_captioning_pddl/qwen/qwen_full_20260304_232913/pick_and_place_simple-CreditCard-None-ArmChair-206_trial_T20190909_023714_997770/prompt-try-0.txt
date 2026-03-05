@@ -1,0 +1,238 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Move a credit card to an armchair.
+    
+
+SCENE CAPTION:
+Scene Description:
+
+The scene contains a single armchair, which is a dark blue, leather-like object with a cushioned seat and backrest. It is positioned on a beige carpeted floor, against a light beige wall. The armchair is not defined as a receptacle in the provided domain file, as it is not listed among the receptacle types (microwave, fridge, sink). However, for the purpose of the instruction "Move a credit card to an armchair," the armchair must be treated as a receptacle since it is the target location for placing the credit card. In the domain, only microwave, fridge, and sink are explicitly typed as receptacles, so the armchair does not have the (openable ?r) predicate and cannot be opened or closed.
+
+There is no credit card visible in the image. Since the instruction requires moving a credit card to the armchair, the credit card must be assumed to exist elsewhere in the environment (not shown in the provided images) and must be picked up by the agent before being placed on the armchair. The credit card is an object (not a receptacle) and will be held by the agent during transit.
+
+In the second image, there is a dark brown, rectangular object that appears to be a side table or cabinet with a metallic appliance (possibly a microwave or oven) on top. The appliance has circular dials and a glass door, suggesting it might be a microwave. However, without explicit labeling or domain confirmation, it cannot be definitively classified as a microwave unless the domain assigns it that type. The side table or cabinet is not a receptacle as per the domain, and no objects are visibly inside it.
+
+No sink, fridge, or knife is visible in the images. Therefore, no cleaning, heating, cooling, or slicing actions are relevant to the current instruction.
+
+The agent is not present in the images and is initially not at any object’s location. The agent must first navigate to the location of the credit card (not shown) to pick it up, then navigate to the armchair to place it there.
+
+Spatial relationships:
+- The armchair is on the floor, against the wall.
+- The side table/appliance is also on the floor, adjacent to a wall and possibly near a doorway (as suggested by the white frame in the second image).
+- No objects are currently in the armchair or on the side table (as per visible evidence).
+
+Current state:
+- The armchair is closed (not applicable since it’s not openable) and empty.
+- The credit card is not visible; its location and state (clean, hot, cool, sliced, etc.) are unknown.
+- No objects are being held by the agent.
+- No objects are in any receptacle.
+- No objects are toggled, sliced, cleaned, heated, or cooled.
+
+Colors and visual properties:
+- Armchair: dark blue, textured leather appearance, boxy shape with wide armrests.
+- Floor: beige carpet.
+- Walls: light beige.
+- Side table/appliance: dark brown wood texture, metallic appliance with silver dials and a glass door.
+
+Note: Since the armchair is not defined as a receptacle in the domain, the action PutObjectInReceptacle cannot be used with it unless the domain is extended. For the purpose of this instruction, we assume the armchair can receive objects (i.e., it acts as a receptacle for placement), even if not formally typed as such in the domain.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

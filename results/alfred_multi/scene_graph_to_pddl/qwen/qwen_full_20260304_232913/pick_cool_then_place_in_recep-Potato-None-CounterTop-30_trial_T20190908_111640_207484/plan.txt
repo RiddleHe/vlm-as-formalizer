@@ -1,0 +1,6 @@
+(gotolocation robot dark_brown_potato)
+(pickupobject robot dark_brown_potato)
+(gotolocation robot black_fridge)
+(coolobject robot black_fridge dark_brown_potato)
+(gotolocation robot wooden_countertop_island)
+(putobjectinreceptacle robot dark_brown_potato wooden_countertop_island)

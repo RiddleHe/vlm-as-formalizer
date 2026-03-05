@@ -1,0 +1,39 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): open_brown_cardboard_box, green_chair
+object: open_brown_cardboard_box, green_chair, robot
+openable (receptacle) true if a receptacle is openable: (openable open_brown_cardboard_box)
+opened (receptacle) true if a receptacle is opened: (opened open_brown_cardboard_box)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot open_brown_cardboard_box)
+
+PDDL problem: ```pddl
+(define (problem put_box_on_chair)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        open_brown_cardboard_box - receptacle
+        green_chair - receptacle
+    )
+    (:init
+        (openable open_brown_cardboard_box)
+        (opened open_brown_cardboard_box)
+        (atLocation robot open_brown_cardboard_box)
+    )
+    (:goal
+        (inReceptacle open_brown_cardboard_box green_chair)
+    )
+)
+```

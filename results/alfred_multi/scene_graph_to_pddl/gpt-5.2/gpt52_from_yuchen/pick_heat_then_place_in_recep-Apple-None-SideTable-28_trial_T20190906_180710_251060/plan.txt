@@ -1,0 +1,6 @@
+(gotolocation robot red_apple_on_white_table)
+(pickupobject robot red_apple_on_white_table)
+(gotolocation robot microwave_silver_over_stove)
+(heatobject robot microwave_silver_over_stove red_apple_on_white_table)
+(gotolocation robot white_table_right)
+(putobjectinreceptacle robot red_apple_on_white_table white_table_right)

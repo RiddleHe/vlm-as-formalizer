@@ -1,0 +1,34 @@
+```pddl
+(define (problem put_washed_tomato_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        fridge - fridge
+        sink - sink
+        black_table - receptacle
+        tomato - object
+        knife - knife
+        lettuce - object
+        salt_shaker - object
+        bowl - object
+    )
+    (:init
+        (openable fridge)
+        (not (opened fridge))
+        (inReceptacle tomato black_table)
+        (inReceptacle knife sink)
+        (inReceptacle lettuce sink)
+        (inReceptacle salt_shaker black_table)
+        (inReceptacle bowl black_table)
+        (not (isClean tomato))
+        (not (holdsAny robot))
+        (not (atLocation robot black_table))
+        (not (atLocation robot sink))
+        (not (atLocation robot fridge))
+    )
+    (:goal (and
+        (inReceptacle tomato black_table)
+        (isClean tomato)
+    ))
+)
+```

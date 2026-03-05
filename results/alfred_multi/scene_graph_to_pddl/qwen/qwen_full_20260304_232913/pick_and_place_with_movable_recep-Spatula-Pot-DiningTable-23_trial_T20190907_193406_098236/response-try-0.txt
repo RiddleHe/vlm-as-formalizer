@@ -1,0 +1,56 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): yellow-handled knife on green table
+receptacle (object): green table, brown chair, oven with two pots, shelf under table
+object: yellow-handled knife, brown pan, metal pot, metal pot, brown chair, green table, shelf under table, oven with two pots
+openable (receptacle) true if a receptacle is openable: (openable shelf under table)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn oven with two pots)
+isToggled (object) true if the object has been toggled: (isToggled oven with two pots)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle brown pan shelf under table), (inReceptacle metal pot oven with two pots), (inReceptacle metal pot oven with two pots)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_pot_with_spatula_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        shelf_under_table - receptacle
+        table - object
+        chair - object
+        oven_with_pots - object
+        brown_pan - object
+        metal_pot1 - object
+        metal_pot2 - object
+    )
+    (:init
+        (openable shelf_under_table)
+        (not (opened shelf_under_table))
+        (isOn oven_with_pots)
+        (isToggled oven_with_pots)
+        (inReceptacle brown_pan shelf_under_table)
+        (inReceptacle metal_pot1 oven_with_pots)
+        (inReceptacle metal_pot2 oven_with_pots)
+        (atLocation robot table)
+    )
+    (:goal
+        (and
+            (inReceptacle brown_pan table)
+            (inReceptacle metal_pot1 table)
+        )
+    )
+)
+```

@@ -1,0 +1,5 @@
+(GotoLocation robot sink)
+(PickupObject robot tomato)
+(CleanObject robot sink tomato)
+(GotoLocation robot sidetable)
+(PutObjectInReceptacle robot tomato sidetable)

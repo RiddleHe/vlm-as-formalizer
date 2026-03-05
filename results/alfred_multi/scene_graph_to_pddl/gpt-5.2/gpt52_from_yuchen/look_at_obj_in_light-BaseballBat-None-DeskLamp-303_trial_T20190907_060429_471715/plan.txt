@@ -1,0 +1,2 @@
+(gotolocation robot_agent beige_lamp_on_desk)
+(toggleobject robot_agent beige_lamp_on_desk)

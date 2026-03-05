@@ -1,0 +1,4 @@
+(GotoLocation robot sidetable)
+(PickupObject robot keychain)
+(GotoLocation robot sofa)
+(PutObjectInReceptacle robot keychain sofa)

@@ -1,0 +1,6 @@
+(gotolocation robot tomato1)
+(pickupobject robot tomato1)
+(gotolocation robot red_microwave)
+(heatobject robot red_microwave tomato1)
+(gotolocation robot stainless_steel_sink)
+(putobjectinreceptacle robot tomato1 stainless_steel_sink)

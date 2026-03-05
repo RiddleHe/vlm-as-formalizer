@@ -1,0 +1,90 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object): white_slatted_coffee_table, small_white_side_table, black_leather_couch_left_seat, black_leather_couch_right_seat, open_cardboard_box_on_couch
+object: keychain_pair_black_with_red_key, keyring_gold_left_on_side_table, keyring_gold_right_on_side_table, teal_wood_chair, table_lamp_with_white_shade, gray_remote_left_on_slatted_table, gray_remote_right_on_slatted_table, small_green_object_on_slatted_table, small_dark_object_on_slatted_table
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle table_lamp_with_white_shade small_white_side_table)
+- (inReceptacle keychain_pair_black_with_red_key small_white_side_table)
+- (inReceptacle keyring_gold_left_on_side_table small_white_side_table)
+- (inReceptacle keyring_gold_right_on_side_table small_white_side_table)
+- (inReceptacle gray_remote_left_on_slatted_table white_slatted_coffee_table)
+- (inReceptacle gray_remote_right_on_slatted_table white_slatted_coffee_table)
+- (inReceptacle small_green_object_on_slatted_table white_slatted_coffee_table)
+- (inReceptacle small_dark_object_on_slatted_table white_slatted_coffee_table)
+- (inReceptacle open_cardboard_box_on_couch black_leather_couch_right_seat)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) :
+- (atLocation robot_agent white_slatted_coffee_table)
+
+PDDL problem: (define (problem put_keys_on_couch)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    white_slatted_coffee_table - receptacle
+    small_white_side_table - receptacle
+    black_leather_couch_left_seat - receptacle
+    black_leather_couch_right_seat - receptacle
+    open_cardboard_box_on_couch - receptacle
+
+    keychain_pair_black_with_red_key - object
+    keyring_gold_left_on_side_table - object
+    keyring_gold_right_on_side_table - object
+
+    teal_wood_chair - object
+    table_lamp_with_white_shade - object
+    gray_remote_left_on_slatted_table - object
+    gray_remote_right_on_slatted_table - object
+    small_green_object_on_slatted_table - object
+    small_dark_object_on_slatted_table - object
+  )
+
+  (:init
+    ;; agent location
+    (atLocation robot_agent white_slatted_coffee_table)
+
+    ;; receptacle relations
+    (inReceptacle table_lamp_with_white_shade small_white_side_table)
+    (inReceptacle keychain_pair_black_with_red_key small_white_side_table)
+    (inReceptacle keyring_gold_left_on_side_table small_white_side_table)
+    (inReceptacle keyring_gold_right_on_side_table small_white_side_table)
+
+    (inReceptacle gray_remote_left_on_slatted_table white_slatted_coffee_table)
+    (inReceptacle gray_remote_right_on_slatted_table white_slatted_coffee_table)
+    (inReceptacle small_green_object_on_slatted_table white_slatted_coffee_table)
+    (inReceptacle small_dark_object_on_slatted_table white_slatted_coffee_table)
+
+    (inReceptacle open_cardboard_box_on_couch black_leather_couch_right_seat)
+  )
+
+  (:goal
+    (and
+      ;; place both pairs of keys on the couch (either seat counts as couch)
+      (or
+        (inReceptacle keychain_pair_black_with_red_key black_leather_couch_left_seat)
+        (inReceptacle keychain_pair_black_with_red_key black_leather_couch_right_seat)
+      )
+      (or
+        (inReceptacle keyring_gold_left_on_side_table black_leather_couch_left_seat)
+        (inReceptacle keyring_gold_left_on_side_table black_leather_couch_right_seat)
+      )
+      (or
+        (inReceptacle keyring_gold_right_on_side_table black_leather_couch_left_seat)
+        (inReceptacle keyring_gold_right_on_side_table black_leather_couch_right_seat)
+      )
+    )
+  )
+)

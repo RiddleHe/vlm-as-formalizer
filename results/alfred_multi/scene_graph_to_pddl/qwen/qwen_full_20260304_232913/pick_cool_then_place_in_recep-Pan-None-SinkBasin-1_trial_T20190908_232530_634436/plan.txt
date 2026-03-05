@@ -1,0 +1,6 @@
+(gotolocation agent1 stainless_steel_pan)
+(pickupobject agent1 stainless_steel_pan)
+(gotolocation agent1 white_fridge_with_silver_handle)
+(coolobject agent1 white_fridge_with_silver_handle stainless_steel_pan)
+(gotolocation agent1 stainless_steel_sink)
+(putobjectinreceptacle agent1 stainless_steel_pan stainless_steel_sink)

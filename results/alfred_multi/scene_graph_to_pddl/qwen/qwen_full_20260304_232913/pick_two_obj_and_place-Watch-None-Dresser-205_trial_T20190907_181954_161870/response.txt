@@ -1,0 +1,59 @@
+Scene graph:
+agent: agent1
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): tv_stand, dining_table, cardboard_box1, cardboard_box2, cardboard_box3
+object: remote_control1, remote_control2, remote_control3, red_card, dining_table, cardboard_box1, cardboard_box2, cardboard_box3, tv_stand, chair1, chair2, chair3, chair4
+openable (receptacle) true if a receptacle is openable: (openable cardboard_box1), (openable cardboard_box2), (openable cardboard_box3)
+opened (receptacle) true if a receptacle is opened: (opened cardboard_box1), (opened cardboard_box2), (opened cardboard_box3)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle remote_control1 dining_table), (inReceptacle remote_control2 dining_table), (inReceptacle remote_control3 dining_table), (inReceptacle red_card dining_table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_watches_on_tv_stand)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        tv_stand - receptacle
+        dining_table - receptacle
+        cardboard_box1 - receptacle
+        cardboard_box2 - receptacle
+        cardboard_box3 - receptacle
+        remote_control1 - object
+        remote_control2 - object
+        remote_control3 - object
+        red_card - object
+        chair1 - object
+        chair2 - object
+        chair3 - object
+        chair4 - object
+    )
+    (:init
+        (openable cardboard_box1)
+        (openable cardboard_box2)
+        (openable cardboard_box3)
+        (opened cardboard_box1)
+        (opened cardboard_box2)
+        (opened cardboard_box3)
+        (inReceptacle remote_control1 dining_table)
+        (inReceptacle remote_control2 dining_table)
+        (inReceptacle remote_control3 dining_table)
+        (inReceptacle red_card dining_table)
+        (atLocation agent1 dining_table) ; assuming agent starts near table for accessibility
+    )
+    (:goal (and
+        (inReceptacle remote_control1 tv_stand)
+        (inReceptacle remote_control2 tv_stand)
+    ))
+)
+```

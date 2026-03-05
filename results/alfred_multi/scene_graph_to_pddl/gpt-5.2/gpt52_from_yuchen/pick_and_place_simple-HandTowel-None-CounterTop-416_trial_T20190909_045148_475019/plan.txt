@@ -1,0 +1,4 @@
+(gotolocation robot_agent wall_mounted_hand_towel_white)
+(pickupobject robot_agent wall_mounted_hand_towel_white)
+(gotolocation robot_agent dark_stone_bathroom_countertop)
+(putobjectinreceptacle robot_agent wall_mounted_hand_towel_white dark_stone_bathroom_countertop)

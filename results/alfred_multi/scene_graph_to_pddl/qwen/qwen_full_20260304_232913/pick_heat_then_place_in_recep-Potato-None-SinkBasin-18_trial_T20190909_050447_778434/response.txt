@@ -1,0 +1,51 @@
+Scene graph:
+agent: robot
+microwave (receptacle): brown_microwave_on_counter
+fridge (receptacle): none
+sink (receptacle): stainless_steel_sink_with_two_basins
+knife (object): knife_on_counter
+receptacle (object): none
+object: potato_in_sink, egg_in_sink, lettuce_in_sink, knife_on_counter, brown_microwave_on_counter, stainless_steel_sink_with_two_basins
+openable (receptacle) true if a receptacle is openable: (openable brown_microwave_on_counter)
+opened (receptacle) true if a receptacle is opened: (opened brown_microwave_on_counter)
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: (isClean potato_in_sink), (isClean egg_in_sink), (isClean lettuce_in_sink)
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn brown_microwave_on_counter)
+isToggled (object) true if the object has been toggled: (isToggled brown_microwave_on_counter)
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle potato_in_sink stainless_steel_sink_with_two_basins), (inReceptacle egg_in_sink stainless_steel_sink_with_two_basins), (inReceptacle lettuce_in_sink stainless_steel_sink_with_two_basins)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object): none
+
+PDDL problem: ```pddl
+(define (problem put_heated_potato_in_sink)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        brown_microwave_on_counter - microwave
+        stainless_steel_sink_with_two_basins - sink
+        potato_in_sink - object
+        egg_in_sink - object
+        lettuce_in_sink - object
+        knife_on_counter - knife
+    )
+    (:init
+        (openable brown_microwave_on_counter)
+        (opened brown_microwave_on_counter)
+        (isOn brown_microwave_on_counter)
+        (isToggled brown_microwave_on_counter)
+        (isClean potato_in_sink)
+        (isClean egg_in_sink)
+        (isClean lettuce_in_sink)
+        (inReceptacle potato_in_sink stainless_steel_sink_with_two_basins)
+        (inReceptacle egg_in_sink stainless_steel_sink_with_two_basins)
+        (inReceptacle lettuce_in_sink stainless_steel_sink_with_two_basins)
+    )
+    (:goal (and
+        (inReceptacle potato_in_sink stainless_steel_sink_with_two_basins)
+        (isHot potato_in_sink)
+    ))
+)
+```

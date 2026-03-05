@@ -1,0 +1,76 @@
+Scene graph:
+agent: robot
+microwave (receptacle): black microwave on desk
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): blue pencil on desk
+receptacle (object): black office chair, wooden desk, nightstand next to bed, trash can under desk
+object: black monitor, yellow book, blue pencil, red and black alarm clock, blue cup, brown bowl, laptop, CD, nightstand, bed
+openable (receptacle) true if a receptacle is openable: (openable black microwave on desk)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn black monitor), (isOn laptop)
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle yellow book wooden desk), (inReceptacle blue pencil wooden desk), (inReceptacle red and black alarm clock wooden desk), (inReceptacle blue cup wooden desk), (inReceptacle brown bowl wooden desk), (inReceptacle CD wooden desk), (inReceptacle laptop wooden desk), (inReceptacle black monitor wooden desk)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem put_bowl_with_pencil_on_nightstand)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        pencil - knife
+        bowl - object
+        nightstand - receptacle
+        desk - receptacle
+        chair - object
+        monitor - object
+        book - object
+        alarm_clock - object
+        cup - object
+        laptop - object
+        cd - object
+        bed - object
+    )
+    (:init
+        (openable microwave)
+        (not (opened microwave))
+        (not (holdsAny robot))
+        (not (atLocation robot microwave))
+        (not (atLocation robot desk))
+        (not (atLocation robot nightstand))
+        (not (atLocation robot chair))
+        (not (atLocation robot monitor))
+        (not (atLocation robot book))
+        (not (atLocation robot alarm_clock))
+        (not (atLocation robot cup))
+        (not (atLocation robot laptop))
+        (not (atLocation robot cd))
+        (not (atLocation robot bed))
+        (inReceptacle book desk)
+        (inReceptacle pencil desk)
+        (inReceptacle alarm_clock desk)
+        (inReceptacle cup desk)
+        (inReceptacle bowl desk)
+        (inReceptacle cd desk)
+        (inReceptacle laptop desk)
+        (inReceptacle monitor desk)
+        (isOn monitor)
+        (isOn laptop)
+    )
+    (:goal
+        (and
+            (inReceptacle bowl nightstand)
+            (inReceptacle pencil bowl)
+        )
+    )
+)
+```

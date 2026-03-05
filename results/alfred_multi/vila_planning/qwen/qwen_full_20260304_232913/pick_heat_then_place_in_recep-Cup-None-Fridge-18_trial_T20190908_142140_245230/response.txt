@@ -1,0 +1,8 @@
+(GotoLocation robot microwave)
+(PickupObject robot cup)
+(GotoLocation robot microwave)
+(HeatObject robot microwave cup)
+(GotoLocation robot fridge)
+(OpenObject robot fridge)
+(PutObjectInReceptacle robot cup fridge)
+(CloseObject robot fridge)

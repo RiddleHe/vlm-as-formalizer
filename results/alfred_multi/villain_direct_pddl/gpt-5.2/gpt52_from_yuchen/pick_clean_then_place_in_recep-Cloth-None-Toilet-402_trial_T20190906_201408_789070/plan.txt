@@ -1,0 +1,4 @@
+(gotolocation robot rag)
+(pickupobject robot rag)
+(gotolocation robot toilet)
+(putobjectinreceptacle robot rag toilet)

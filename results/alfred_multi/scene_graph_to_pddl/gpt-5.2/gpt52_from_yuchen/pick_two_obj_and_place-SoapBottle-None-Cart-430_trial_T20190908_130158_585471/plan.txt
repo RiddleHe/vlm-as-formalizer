@@ -1,0 +1,4 @@
+(gotolocation robot silver_pump_bottle_on_toilet_tank)
+(pickupobject robot silver_pump_bottle_on_toilet_tank)
+(gotolocation robot metal_rolling_rack_with_horizontal_bars)
+(putobjectinreceptacle robot silver_pump_bottle_on_toilet_tank metal_rolling_rack_with_horizontal_bars)

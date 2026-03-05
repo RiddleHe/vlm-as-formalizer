@@ -1,0 +1,4 @@
+(GotoLocation robot lamp)
+(ToggleObject robot lamp)
+(GotoLocation robot baseballbat)
+(PickupObject robot baseballbat)

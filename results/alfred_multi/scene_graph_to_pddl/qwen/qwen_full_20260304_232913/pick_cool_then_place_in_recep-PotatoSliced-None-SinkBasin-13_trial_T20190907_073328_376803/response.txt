@@ -1,0 +1,57 @@
+Scene graph:
+agent: robot
+microwave (receptacle): microwave
+fridge (receptacle): black fridge
+sink (receptacle): stainless steel sink
+knife (object): silver knife
+receptacle (object): wooden cabinet
+object: red tomato, brown potato, silver spoon, silver fork
+openable (receptacle) true if a receptacle is openable: (openable black fridge), (openable microwave), (openable wooden cabinet)
+opened (receptacle) true if a receptacle is opened: (opened wooden cabinet)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle silver fork stainless steel sink), (inReceptacle red tomato stainless steel sink), (inReceptacle silver spoon wooden cabinet), (inReceptacle brown potato wooden cabinet)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife - knife
+        cabinet - receptacle
+        tomato - object
+        potato - object
+        spoon - object
+        fork - object
+    )
+    (:init
+        (openable fridge)
+        (openable microwave)
+        (openable cabinet)
+        (opened cabinet)
+        (inReceptacle fork sink)
+        (inReceptacle tomato sink)
+        (inReceptacle spoon cabinet)
+        (inReceptacle potato cabinet)
+        (atLocation robot cabinet)  ; robot starts at cabinet based on scene
+    )
+    (:goal
+        (and
+            (inReceptacle potato sink)
+            (isCool potato)
+            (isSliced potato)
+            (inReceptacle knife fridge)
+        )
+    )
+)
+```

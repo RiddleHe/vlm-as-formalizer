@@ -1,0 +1,4 @@
+(GotoLocation agent1 pencil)
+(PickupObject agent1 pencil)
+(GotoLocation agent1 lamp)
+(ToggleObject agent1 lamp)

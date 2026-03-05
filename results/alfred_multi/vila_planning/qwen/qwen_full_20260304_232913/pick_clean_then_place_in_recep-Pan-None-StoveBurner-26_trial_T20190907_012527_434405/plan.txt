@@ -1,0 +1,4 @@
+(GotoLocation robot pan)
+(PickupObject robot pan)
+(GotoLocation robot sink)
+(CleanObject robot sink pan)

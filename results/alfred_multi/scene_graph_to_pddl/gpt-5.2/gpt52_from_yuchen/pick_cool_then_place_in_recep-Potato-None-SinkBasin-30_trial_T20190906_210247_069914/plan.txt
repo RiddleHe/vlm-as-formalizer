@@ -1,0 +1,4 @@
+(gotolocation robot brown_ball_in_recycling_bin)
+(pickupobject robot brown_ball_in_recycling_bin)
+(gotolocation robot sink_white_basins_in_counter)
+(putobjectinreceptacle robot brown_ball_in_recycling_bin sink_white_basins_in_counter)

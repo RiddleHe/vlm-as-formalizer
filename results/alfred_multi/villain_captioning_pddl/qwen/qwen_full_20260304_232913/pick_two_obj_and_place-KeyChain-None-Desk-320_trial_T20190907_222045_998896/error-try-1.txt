@@ -1,0 +1,4 @@
+Predicate argument has wrong type:
+  atLocation keys1 dresser: keys1 is not a agent
+  atLocation keys2 dresser: keys2 is not a agent
+

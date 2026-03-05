@@ -1,0 +1,8 @@
+(GotoLocation robot TVStand)
+(PickupObject robot creditcard)
+(GotoLocation robot diningtable)
+(PutObjectInReceptacle robot creditcard diningtable)
+(GotoLocation robot TVStand)
+(PickupObject robot creditcard)
+(GotoLocation robot diningtable)
+(PutObjectInReceptacle robot creditcard diningtable)

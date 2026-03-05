@@ -1,0 +1,4 @@
+(GotoLocation agent toilet_paper_roll)
+(PickupObject agent toilet_paper_roll)
+(GotoLocation agent toilet_paper_dispenser)
+(PutObjectInReceptacle agent toilet_paper_roll toilet_paper_dispenser)

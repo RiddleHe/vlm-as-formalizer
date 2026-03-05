@@ -1,0 +1,4 @@
+(gotolocation robot glass1)
+(pickupobject robot glass1)
+(gotolocation robot shelf)
+(putobjectinreceptacle robot glass1 shelf)

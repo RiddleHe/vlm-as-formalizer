@@ -1,0 +1,2 @@
+(GotoLocation robot lettuce)
+(SliceObject robot lettuce knife)

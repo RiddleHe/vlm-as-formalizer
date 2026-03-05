@@ -1,0 +1,51 @@
+Scene graph:
+agent: robot
+microwave (receptacle): brown_microwave
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): silver_knife
+receptacle (object): white_cabinet_left, white_cabinet_right, white_cabinet_middle, brown_microwave
+object: brown_microwave, silver_knife, copper_pot_on_stove, copper_pot_on_stove_right, red_tomato, brown_egg, white_table, wooden_stool, white_cabinet_left, white_cabinet_right, white_cabinet_middle
+openable (receptacle) true if a receptacle is openable: (openable white_cabinet_left), (openable white_cabinet_right), (openable white_cabinet_middle), (openable brown_microwave)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn brown_microwave)
+isToggled (object) true if the object has been toggled: (isToggled brown_microwave)
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem put_pot_with_sponge_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        brown_microwave - microwave
+        white_cabinet_left - receptacle
+        white_cabinet_right - receptacle
+        white_cabinet_middle - receptacle
+        silver_knife - knife
+        copper_pot_on_stove - object
+        copper_pot_on_stove_right - object
+        red_tomato - object
+        brown_egg - object
+        white_table - object
+        wooden_stool - object
+    )
+    (:init
+        (openable white_cabinet_left)
+        (openable white_cabinet_right)
+        (openable white_cabinet_middle)
+        (openable brown_microwave)
+        (isOn brown_microwave)
+        (isToggled brown_microwave)
+    )
+    (:goal (and
+        (inReceptacle copper_pot_on_stove white_table)
+    ))
+)
+```

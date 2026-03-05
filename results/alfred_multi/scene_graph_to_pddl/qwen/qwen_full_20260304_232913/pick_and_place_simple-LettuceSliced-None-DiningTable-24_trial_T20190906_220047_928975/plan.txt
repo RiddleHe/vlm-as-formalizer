@@ -1,0 +1,3 @@
+(gotolocation agent1 table1)
+(pickupobject agent1 knife_with_yellow_handle)
+(sliceobject agent1 lettuce1 knife_with_yellow_handle)

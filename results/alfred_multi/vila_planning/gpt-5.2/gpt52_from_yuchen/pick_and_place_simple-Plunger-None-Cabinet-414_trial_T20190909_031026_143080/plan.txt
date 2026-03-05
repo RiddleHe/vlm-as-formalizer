@@ -1,0 +1,6 @@
+(GotoLocation agent plunger)
+(PickupObject agent plunger)
+(GotoLocation agent sink_cabinet)
+(OpenObject agent sink_cabinet)
+(PutObjectInReceptacle agent plunger sink_cabinet)
+(CloseObject agent sink_cabinet)

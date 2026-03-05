@@ -1,0 +1,49 @@
+```pddl
+(define (problem put_chilled_bowl_in_sink)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        black_bowl - receptacle
+        sink - sink
+        fridge - fridge
+        tomato lettuce cup salt_shaker pepper_shaker soap_dispenser knife fork plant egg - object
+        table - object  ; not a receptacle per domain, but used for location
+    )
+    (:init
+        ; agent is not at any location initially
+        (not (atLocation agent1 black_bowl))
+        (not (atLocation agent1 sink))
+        (not (atLocation agent1 fridge))
+        (not (atLocation agent1 table))
+        ; black_bowl is on the table
+        (atLocation agent1 table)  ; assuming agent starts near table as per scene layout
+        ; black_bowl is not held
+        (not (holdsAny agent1))
+        ; black_bowl is not chilled
+        (not (isCool black_bowl))
+        ; black_bowl is not in sink
+        (not (inReceptacle black_bowl sink))
+        ; fridge is closed
+        (not (opened fridge))
+        ; fridge is openable
+        (openable fridge)
+        ; sink is not openable (not needed for this task, but for completeness)
+        ; egg is in sink (as per scene)
+        (inReceptacle egg sink)
+        ; all other objects are on table (for location context, not required for goal)
+        (atLocation agent1 tomato)
+        (atLocation agent1 lettuce)
+        (atLocation agent1 cup)
+        (atLocation agent1 salt_shaker)
+        (atLocation agent1 pepper_shaker)
+        (atLocation agent1 soap_dispenser)
+        (atLocation agent1 knife)
+        (atLocation agent1 fork)
+        (atLocation agent1 plant)
+    )
+    (:goal (and
+        (inReceptacle black_bowl sink)
+        (isCool black_bowl)
+    ))
+)
+```

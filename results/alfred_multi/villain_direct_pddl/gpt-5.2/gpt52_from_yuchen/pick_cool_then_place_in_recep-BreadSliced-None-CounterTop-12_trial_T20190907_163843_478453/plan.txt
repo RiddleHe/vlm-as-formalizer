@@ -1,0 +1,2 @@
+(pickupobject robot knife1)
+(sliceobject robot bread1 knife1)

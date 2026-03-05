@@ -1,0 +1,12 @@
+failed
+Predicate argument has wrong type:
+  atLocation spatula table: spatula is not a agent
+  atLocation tomato table: tomato is not a agent
+  atLocation chair2 table: chair2 is not a agent
+  atLocation bottle table: bottle is not a agent
+  atLocation knife table: knife is not a agent
+  atLocation chair1 table: chair1 is not a agent
+  atLocation coffee_maker table: coffee_maker is not a agent
+  atLocation bowl table: bowl is not a agent
+
+

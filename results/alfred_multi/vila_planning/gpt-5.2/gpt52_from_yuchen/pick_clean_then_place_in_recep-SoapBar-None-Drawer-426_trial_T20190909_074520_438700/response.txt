@@ -1,0 +1,8 @@
+(GotoLocation agent soapbar1)
+(PickupObject agent soapbar1)
+(GotoLocation agent sink1)
+(CleanObject agent sink1 soapbar1)
+(GotoLocation agent drawer1)
+(OpenObject agent drawer1)
+(PutObjectInReceptacle agent soapbar1 drawer1)
+(CloseObject agent drawer1)

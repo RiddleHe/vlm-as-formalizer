@@ -1,0 +1,61 @@
+(define (problem put_plate_with_candle_on_coffee_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        dining_table coffee_table cardboard_box tissue_box recycling_bin - receptacle
+        grey_plate1 grey_plate2 candle laptop remote_control newspaper1 newspaper2 potted_plant statue blue_card - object
+    )
+    (:init
+        ; Initial locations of objects
+        (atLocation robot dining_table) ; Robot starts at dining table (assumed for task initiation)
+        (inReceptacle grey_plate1 dining_table)
+        (inReceptacle grey_plate2 dining_table)
+        (inReceptacle candle dining_table)
+        (inReceptacle laptop dining_table)
+        (inReceptacle remote_control dining_table)
+        (inReceptacle newspaper1 dining_table)
+        (inReceptacle newspaper2 dining_table)
+        (inReceptacle potted_plant coffee_table)
+        (inReceptacle statue coffee_table)
+        (inReceptacle blue_card coffee_table) ; or dining_table, but we'll assume it's on coffee table for this task
+        (inReceptacle cardboard_box coffee_table)
+        (inReceptacle tissue_box dining_table)
+        (inReceptacle recycling_bin dining_table) ; or nearby, but assigned to dining_table for simplicity
+
+        ; Receptacle properties
+        (openable cardboard_box)
+        (opened cardboard_box) ; Already open as per scene description
+        (openable tissue_box)
+        (opened tissue_box) ; Assumed open as tissues are protruding
+        (openable recycling_bin)
+        ; dining_table and coffee_table are not openable (surfaces)
+
+        ; No object is held initially
+        (not (holdsAny robot))
+
+        ; No object is clean, hot, cool, sliced, or toggled
+        (not (isClean candle))
+        (not (isHot candle))
+        (not (isCool candle))
+        (not (isSliced candle))
+        (not (isToggled candle))
+        (not (isClean grey_plate1))
+        (not (isHot grey_plate1))
+        (not (isCool grey_plate1))
+        (not (isSliced grey_plate1))
+        (not (isToggled grey_plate1))
+        (not (isClean grey_plate2))
+        (not (isHot grey_plate2))
+        (not (isCool grey_plate2))
+        (not (isSliced grey_plate2))
+        (not (isToggled grey_plate2))
+    )
+    (:goal
+        (and
+            ; The candle should be on a grey plate
+            (inReceptacle candle grey_plate1) ; or grey_plate2, we choose grey_plate1 arbitrarily
+            ; The grey plate with the candle should be on the coffee table
+            (inReceptacle grey_plate1 coffee_table)
+        )
+    )
+)

@@ -1,0 +1,5 @@
+(gotolocation robot sink1)
+(pickupobject robot mug1)
+(cleanobject robot sink1 mug1)
+(gotolocation robot table1)
+(putobjectinreceptacle robot mug1 table1)

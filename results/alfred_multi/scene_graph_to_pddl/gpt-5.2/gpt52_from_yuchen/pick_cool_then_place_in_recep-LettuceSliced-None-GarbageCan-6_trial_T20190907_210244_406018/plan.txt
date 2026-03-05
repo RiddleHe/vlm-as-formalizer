@@ -1,0 +1,6 @@
+(gotolocation robot_agent green_lettuce_on_island)
+(pickupobject robot_agent green_lettuce_on_island)
+(gotolocation robot_agent black_fridge_front)
+(coolobject robot_agent black_fridge_front green_lettuce_on_island)
+(gotolocation robot_agent white_garbage_can_by_counter)
+(putobjectinreceptacle robot_agent green_lettuce_on_island white_garbage_can_by_counter)

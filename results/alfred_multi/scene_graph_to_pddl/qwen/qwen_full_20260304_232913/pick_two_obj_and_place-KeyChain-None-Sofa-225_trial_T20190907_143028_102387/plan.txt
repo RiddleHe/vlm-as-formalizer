@@ -1,0 +1,8 @@
+(gotolocation robot white_side_table)
+(pickupobject robot two_pairs_of_keys_on_white_side_table)
+(gotolocation robot open_cardboard_box_on_couch)
+(putobjectinreceptacle robot two_pairs_of_keys_on_white_side_table open_cardboard_box_on_couch)
+(gotolocation robot white_wooden_pallet)
+(pickupobject robot two_pairs_of_keys_on_white_pallet)
+(gotolocation robot open_cardboard_box_on_couch)
+(putobjectinreceptacle robot two_pairs_of_keys_on_white_pallet open_cardboard_box_on_couch)

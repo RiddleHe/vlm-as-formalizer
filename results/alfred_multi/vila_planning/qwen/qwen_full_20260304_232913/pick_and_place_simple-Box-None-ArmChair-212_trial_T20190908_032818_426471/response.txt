@@ -1,0 +1,4 @@
+(GotoLocation robot box)
+(PickupObject robot box)
+(GotoLocation robot armchair)
+(PutObjectInReceptacle robot box armchair)

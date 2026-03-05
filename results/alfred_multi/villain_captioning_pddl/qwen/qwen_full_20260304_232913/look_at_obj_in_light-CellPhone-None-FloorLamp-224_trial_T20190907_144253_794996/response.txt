@@ -1,0 +1,30 @@
+```pddl
+(define (problem examine_cell_phone)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        tall_lamp - object
+        cell_phone - object
+        side_table - receptacle
+        golden_cylinder - receptacle
+    )
+    (:init
+        (openable side_table)
+        (openable golden_cylinder)
+        (not (opened side_table))
+        (not (opened golden_cylinder))
+        (isOn tall_lamp)
+        (isToggled tall_lamp)
+        (not (holdsAny robot))
+        (not (atLocation robot tall_lamp))
+        (not (atLocation robot cell_phone))
+        (not (atLocation robot side_table))
+        (not (atLocation robot golden_cylinder))
+        (not (inReceptacle cell_phone side_table))
+        (not (inReceptacle cell_phone golden_cylinder))
+    )
+    (:goal (and
+        (atLocation robot cell_phone)
+    ))
+)
+```

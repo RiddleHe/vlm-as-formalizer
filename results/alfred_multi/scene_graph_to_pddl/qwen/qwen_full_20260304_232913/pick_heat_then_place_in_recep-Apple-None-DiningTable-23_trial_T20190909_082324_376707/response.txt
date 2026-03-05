@@ -1,0 +1,57 @@
+Scene graph:
+agent: robot
+microwave (receptacle): microwave above stove
+fridge (receptacle): none
+sink (receptacle): sink on stove
+knife (object): knife on table near cabbage, knife on table near bread
+receptacle (object): plate on table, pan on table, green sponge on table, microwave above stove, sink on stove
+object: apple on table, cabbage on table, wine bottle on table, plate on table, pan on table, green sponge on table, fork on table, spatula on table, pencil on table, bread on table, red tomato on table, knife on table near cabbage, knife on table near bread, microwave above stove, sink on stove
+openable (receptacle) true if a receptacle is openable: (openable microwave above stove), (openable sink on stove)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem heat_apple_and_place)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        sink - sink
+        apple - object
+        green_sponge - object
+        table - object
+    )
+    (:init
+        (atLocation robot table)
+        (openable microwave)
+        (openable sink)
+        (not (opened microwave))
+        (not (opened sink))
+        (not (holdsAny robot))
+        (not (isHot apple))
+        (not (isClean apple))
+        (not (isCool apple))
+        (not (isSliced apple))
+        (not (isOn microwave))
+        (not (isToggled microwave))
+        (inReceptacle apple table)
+        (inReceptacle green_sponge table)
+    )
+    (:goal
+        (and
+            (isHot apple)
+            (inReceptacle apple table)
+            (atLocation robot table)
+        )
+    )
+)
+```

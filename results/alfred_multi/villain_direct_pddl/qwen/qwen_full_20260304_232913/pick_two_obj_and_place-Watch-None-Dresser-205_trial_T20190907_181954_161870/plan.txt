@@ -1,0 +1,4 @@
+(pickupobject agent1 watch1)
+(putobjectinreceptacle agent1 watch1 tv_stand)
+(pickupobject agent1 watch2)
+(putobjectinreceptacle agent1 watch2 tv_stand)

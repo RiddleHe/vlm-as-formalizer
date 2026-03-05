@@ -1,0 +1,56 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): white_counter_drawer_unit
+object: left_bread_loaf_on_counter, right_bread_loaf_on_counter, black_pan_on_left_counter, wooden_spatula_upright_center, wooden_spatula_flat_right_counter, scattered_photos_left, scattered_photos_right, black_tongs_left_counter
+openable (receptacle) true if a receptacle is openable: (openable white_counter_drawer_unit)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: (define (problem put_task_spatulas_in_drawer)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    microwave - microwave
+    fridge - fridge
+    sink - sink
+    white_counter_drawer_unit - receptacle
+
+    wooden_spatula_upright_center - object
+    wooden_spatula_flat_right_counter - object
+
+    left_bread_loaf_on_counter - object
+    right_bread_loaf_on_counter - object
+    black_pan_on_left_counter - object
+    scattered_photos_left - object
+    scattered_photos_right - object
+    black_tongs_left_counter - object
+  )
+
+  (:init
+    (openable white_counter_drawer_unit)
+    ;; robot initially not at any object's location; no (atLocation ...) facts
+    ;; nothing is initially held; no (holdsAny ...) and no (holds ...) facts
+    ;; no objects are initially specified as in any receptacle
+  )
+
+  (:goal
+    (and
+      (inReceptacle wooden_spatula_upright_center white_counter_drawer_unit)
+      (inReceptacle wooden_spatula_flat_right_counter white_counter_drawer_unit)
+    )
+  )
+)

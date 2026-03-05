@@ -1,0 +1,5 @@
+(GotoLocation robot cd)
+(PickupObject robot cd)
+(GotoLocation robot desklamp)
+(ToggleObject robot desklamp)
+(PutObjectInReceptacle robot cd desklamp)

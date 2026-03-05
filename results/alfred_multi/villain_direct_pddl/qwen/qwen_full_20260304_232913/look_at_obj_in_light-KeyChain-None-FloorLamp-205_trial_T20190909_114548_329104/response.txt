@@ -1,0 +1,32 @@
+```pddl
+(define (problem look_at_keys_by_lamp)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        tall_lamp - object
+        keys - object
+        table - receptacle
+        chair - object
+        laptop - object
+        statue1 - object
+        statue2 - object
+        statue3 - object
+        red_card - object
+    )
+    (:init
+        (atLocation robot table)
+        (inReceptacle keys table)
+        (inReceptacle laptop table)
+        (inReceptacle statue1 table)
+        (inReceptacle statue2 table)
+        (inReceptacle statue3 table)
+        (inReceptacle red_card table)
+        (openable table)
+        (isOn tall_lamp)
+    )
+    (:goal (and
+        (atLocation robot tall_lamp)
+        (holds robot keys)
+    ))
+)
+```

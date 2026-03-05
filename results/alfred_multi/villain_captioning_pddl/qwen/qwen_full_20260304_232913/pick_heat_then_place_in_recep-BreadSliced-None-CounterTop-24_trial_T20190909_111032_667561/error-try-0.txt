@@ -1,0 +1,4 @@
+Predicate argument has wrong type:
+  atLocation bread1 sink1: bread1 is not a agent
+  atLocation knife1 sink1: knife1 is not a agent
+

@@ -1,0 +1,29 @@
+(define (problem put_chilled_plate_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        table - receptacle
+        fridge - receptacle
+        plate - object
+        bread - object
+        tomato - object
+        lettuce - object
+        knife - object
+        spoon - object
+        fork - object
+        salt_shaker - object
+        pepper_shaker - object
+    )
+    (:init
+        (openable fridge)
+        (not (opened fridge))
+        (inReceptacle plate fridge)
+        (atLocation robot fridge) ; Assuming robot starts near fridge based on image 2
+        (not (holdsAny robot))
+        (not (isCool plate))
+    )
+    (:goal (and
+        (inReceptacle plate table)
+        (isCool plate)
+    ))
+)

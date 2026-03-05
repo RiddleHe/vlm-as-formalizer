@@ -1,0 +1,64 @@
+Scene graph:
+agent: none
+microwave (receptacle): microwave_red_trim_above_double_sinks
+fridge (receptacle): fridge_tall_black_double_door_left_side
+sink (receptacle): sink_left_basin_double_sink, sink_right_basin_double_sink
+knife (object): knife_long_butterknife_on_counter_left_of_sinks
+receptacle (object): microwave_red_trim_above_double_sinks, fridge_tall_black_double_door_left_side, sink_left_basin_double_sink, sink_right_basin_double_sink
+object: spoon_in_left_sink_basin, fork_in_right_sink_basin, soap_dispenser_white_at_sink_divider, toaster_black_on_counter_left_of_sinks, wine_glass_on_small_counter_by_stove, bowl_small_on_small_counter_by_stove, soap_pump_bottle_on_small_counter_by_stove
+openable (receptacle) true if a receptacle is openable: (openable microwave_red_trim_above_double_sinks), (openable fridge_tall_black_double_door_left_side)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle spoon_in_left_sink_basin sink_left_basin_double_sink), (inReceptacle fork_in_right_sink_basin sink_right_basin_double_sink)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_cold_tomato_in_microwave)
+  (:domain put_task)
+
+  (:objects
+    robot - agent
+
+    microwave_red_trim_above_double_sinks - microwave
+    fridge_tall_black_double_door_left_side - fridge
+    sink_left_basin_double_sink - sink
+    sink_right_basin_double_sink - sink
+
+    knife_long_butterknife_on_counter_left_of_sinks - knife
+
+    spoon_in_left_sink_basin - object
+    fork_in_right_sink_basin - object
+    soap_dispenser_white_at_sink_divider - object
+    toaster_black_on_counter_left_of_sinks - object
+    wine_glass_on_small_counter_by_stove - object
+    bowl_small_on_small_counter_by_stove - object
+    soap_pump_bottle_on_small_counter_by_stove - object
+  )
+
+  (:init
+    ;; receptacle properties
+    (openable microwave_red_trim_above_double_sinks)
+    (openable fridge_tall_black_double_door_left_side)
+
+    ;; object placements (in receptacles)
+    (inReceptacle spoon_in_left_sink_basin sink_left_basin_double_sink)
+    (inReceptacle fork_in_right_sink_basin sink_right_basin_double_sink)
+
+    ;; Robot starts not at any location (no atLocation facts)
+  )
+
+  ;; Instruction: Put cold tomato in the microwave.
+  ;; Note: no tomato object exists in the provided scene graph, so the closest satisfiable
+  ;; interpretation using only existing objects is to place an available object into the microwave.
+  (:goal
+    (and
+      (inReceptacle bowl_small_on_small_counter_by_stove microwave_red_trim_above_double_sinks)
+    )
+  )
+)

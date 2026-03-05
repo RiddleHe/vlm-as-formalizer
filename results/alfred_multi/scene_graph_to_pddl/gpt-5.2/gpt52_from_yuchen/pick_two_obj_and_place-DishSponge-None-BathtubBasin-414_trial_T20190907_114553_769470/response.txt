@@ -1,0 +1,51 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): bathroom_sink_basin_left
+knife (object): 
+receptacle (object): freestanding_bathtub_left, bathroom_sink_basin_left, black_trash_bin_corner_right
+object: purple_soap_dispenser_on_counter, white_paper_towel_roll_on_counter, green_sponge_on_counter, green_sponge_in_trash_bin
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle green_sponge_on_counter bathroom_sink_basin_left), (inReceptacle green_sponge_in_trash_bin black_trash_bin_corner_right)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: (define (problem put_two_sponges_in_tub)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    freestanding_bathtub_left - receptacle
+    bathroom_sink_basin_left - sink
+    black_trash_bin_corner_right - receptacle
+
+    green_sponge_on_counter - object
+    green_sponge_in_trash_bin - object
+    purple_soap_dispenser_on_counter - object
+    white_paper_towel_roll_on_counter - object
+  )
+
+  (:init
+    ;; robot starts not at any location (no atLocation facts)
+
+    ;; receptacle relations from scene graph
+    (inReceptacle green_sponge_on_counter bathroom_sink_basin_left)
+    (inReceptacle green_sponge_in_trash_bin black_trash_bin_corner_right)
+  )
+
+  (:goal
+    (and
+      (inReceptacle green_sponge_on_counter freestanding_bathtub_left)
+      (inReceptacle green_sponge_in_trash_bin freestanding_bathtub_left)
+    )
+  )
+)

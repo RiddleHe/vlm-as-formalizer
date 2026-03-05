@@ -1,0 +1,60 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): black fridge
+sink (receptacle): kitchen sink
+knife (object): silver knife on table
+receptacle (object): metal pan, square bowl, square bowl, green table, black fridge, kitchen sink
+object: green table, metal pan, square bowl, square bowl, silver knife on table, green bottle, clear bottle, red apple, black fridge, kitchen sink
+openable (receptacle) true if a receptacle is openable: (openable black fridge), (openable kitchen sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle metal pan green table), (inReceptacle square bowl green table), (inReceptacle square bowl green table), (inReceptacle silver knife on table green table), (inReceptacle green bottle green table), (inReceptacle clear bottle green table), (inReceptacle red apple green table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem fill_pan_with_water_and_put_on_island)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        black_fridge - fridge
+        kitchen_sink - sink
+        metal_pan - receptacle
+        square_bowl1 - receptacle
+        square_bowl2 - receptacle
+        green_table - receptacle
+        silver_knife - knife
+        green_bottle - object
+        clear_bottle - object
+        red_apple - object
+    )
+    (:init
+        (openable black_fridge)
+        (openable kitchen_sink)
+        (inReceptacle metal_pan green_table)
+        (inReceptacle square_bowl1 green_table)
+        (inReceptacle square_bowl2 green_table)
+        (inReceptacle silver_knife green_table)
+        (inReceptacle green_bottle green_table)
+        (inReceptacle clear_bottle green_table)
+        (inReceptacle red_apple green_table)
+        (not (holdsAny robot))
+        (not (atLocation robot metal_pan))
+        (not (atLocation robot kitchen_sink))
+        (not (atLocation robot green_table))
+    )
+    (:goal
+        (and
+            (inReceptacle metal_pan green_table)
+            (isClean metal_pan)
+        )
+    )
+)
+```

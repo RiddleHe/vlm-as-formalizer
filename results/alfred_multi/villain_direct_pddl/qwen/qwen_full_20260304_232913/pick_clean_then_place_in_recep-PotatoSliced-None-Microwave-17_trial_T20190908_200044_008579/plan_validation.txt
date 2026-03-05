@@ -1,0 +1,6 @@
+mismatch
+Plan action counts mismatch.
+Ground truth has Counter({'gotolocation': 5, 'pickupobject': 2, 'cleanobject': 1, 'putobjectinreceptacle': 1, 'sliceobject': 1}).
+Predicted has Counter({'gotolocation': 4, 'pickupobject': 2, 'putobjectinreceptacle': 2, 'sliceobject': 1, 'cleanobject': 1}).
+
+

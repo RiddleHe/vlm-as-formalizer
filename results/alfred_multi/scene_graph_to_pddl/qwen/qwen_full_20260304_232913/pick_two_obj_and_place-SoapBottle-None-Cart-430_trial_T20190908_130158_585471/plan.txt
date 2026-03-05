@@ -1,0 +1,4 @@
+(gotolocation robot blue_bin)
+(pickupobject robot silver_spray_bottle)
+(gotolocation robot metal_rack)
+(putobjectinreceptacle robot silver_spray_bottle metal_rack)

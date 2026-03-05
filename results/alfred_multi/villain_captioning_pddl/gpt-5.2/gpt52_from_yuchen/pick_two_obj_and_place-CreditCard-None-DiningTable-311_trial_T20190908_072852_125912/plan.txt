@@ -1,0 +1,8 @@
+(gotolocation robot tv_stand)
+(pickupobject robot credit_card_1)
+(gotolocation robot table)
+(putobjectinreceptacle robot credit_card_1 table)
+(gotolocation robot tv_stand)
+(pickupobject robot credit_card_2)
+(gotolocation robot table)
+(putobjectinreceptacle robot credit_card_2 table)

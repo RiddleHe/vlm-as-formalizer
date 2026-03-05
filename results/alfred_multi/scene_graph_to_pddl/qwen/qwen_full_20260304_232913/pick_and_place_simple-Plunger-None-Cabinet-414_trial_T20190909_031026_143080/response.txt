@@ -1,0 +1,49 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): brown_marble_sink
+knife (object): 
+receptacle (object): wooden_cabinet_under_sink
+object: plunger, toilet, toilet_brush, black_toilet_paper_holder
+openable (receptacle) true if a receptacle is openable: (openable wooden_cabinet_under_sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_plunger_in_cabinet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        brown_marble_sink - sink
+        wooden_cabinet_under_sink - receptacle
+        plunger - object
+        toilet - object
+        toilet_brush - object
+        black_toilet_paper_holder - object
+    )
+    (:init
+        (openable wooden_cabinet_under_sink)
+        (not (opened wooden_cabinet_under_sink))
+        (not (atLocation robot plunger))
+        (not (atLocation robot wooden_cabinet_under_sink))
+        (not (holdsAny robot))
+        (not (inReceptacle plunger wooden_cabinet_under_sink))
+        (atLocation robot toilet) ; assuming robot starts near toilet as plunger is beside it
+    )
+    (:goal
+        (and
+            (inReceptacle plunger wooden_cabinet_under_sink)
+        )
+    )
+)
+```

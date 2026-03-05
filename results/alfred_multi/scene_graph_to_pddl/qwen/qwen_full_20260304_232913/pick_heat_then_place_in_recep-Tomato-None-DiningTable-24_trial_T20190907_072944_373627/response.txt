@@ -1,0 +1,68 @@
+Scene graph:
+agent: agent
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife_on_table, knife_on_counter
+receptacle (object): golden_trash_can, wooden_cabinet, black_stool
+object: red_tomato, brown_bread, yellow_apple, salt_shaker, fork_on_counter, green_lettuce, green_book, copper_mug, soap_dispenser, black_coffee_maker, black_plate, white_plate, red_tomato_in_microwave, brown_bread_in_microwave
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge), (openable sink)
+opened (receptacle) true if a receptacle is opened: (opened microwave)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: (isHot red_tomato_in_microwave), (isHot brown_bread_in_microwave)
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn microwave)
+isToggled (object) true if the object has been toggled: (isToggled microwave)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle red_tomato_in_microwave microwave), (inReceptacle brown_bread_in_microwave microwave)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation agent microwave)
+
+PDDL problem: ```pddl
+(define (problem put_heated_tomato_on_table)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife_on_table - knife
+        knife_on_counter - knife
+        golden_trash_can - receptacle
+        wooden_cabinet - receptacle
+        black_stool - receptacle
+        red_tomato - object
+        brown_bread - object
+        yellow_apple - object
+        salt_shaker - object
+        fork_on_counter - object
+        green_lettuce - object
+        green_book - object
+        copper_mug - object
+        soap_dispenser - object
+        black_coffee_maker - object
+        black_plate - object
+        white_plate - object
+        red_tomato_in_microwave - object
+        brown_bread_in_microwave - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (opened microwave)
+        (isOn microwave)
+        (isToggled microwave)
+        (isHot red_tomato_in_microwave)
+        (isHot brown_bread_in_microwave)
+        (inReceptacle red_tomato_in_microwave microwave)
+        (inReceptacle brown_bread_in_microwave microwave)
+        (atLocation agent microwave)
+    )
+    (:goal (and
+        (inReceptacle red_tomato_in_microwave black_stool)
+        (isHot red_tomato_in_microwave)
+    ))
+)
+```

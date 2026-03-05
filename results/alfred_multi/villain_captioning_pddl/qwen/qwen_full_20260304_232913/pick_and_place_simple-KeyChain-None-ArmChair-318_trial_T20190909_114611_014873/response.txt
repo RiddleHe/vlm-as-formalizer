@@ -1,0 +1,21 @@
+```pddl
+(define (problem move_keys_to_armchair)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        floral_armchair - receptacle
+        wooden_desk - receptacle
+        purple_cushion - object
+        keys - object
+    )
+    (:init
+        (atLocation agent1 wooden_desk) ; Assuming agent starts near the desk for efficiency, as per common practice if not specified
+        (inReceptacle keys wooden_desk)
+        (inReceptacle purple_cushion floral_armchair)
+        ; No need to specify openable for desk or armchair as they are surfaces, not containers with lids
+    )
+    (:goal (and
+        (inReceptacle keys floral_armchair)
+    ))
+)
+```

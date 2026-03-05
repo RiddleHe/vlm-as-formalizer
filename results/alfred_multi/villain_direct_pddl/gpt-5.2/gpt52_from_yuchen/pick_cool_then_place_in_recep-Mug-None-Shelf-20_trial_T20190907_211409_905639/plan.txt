@@ -1,0 +1,6 @@
+(gotolocation robot rack1)
+(pickupobject robot mug1)
+(gotolocation robot fridge1)
+(coolobject robot fridge1 mug1)
+(gotolocation robot rack1)
+(putobjectinreceptacle robot mug1 rack1)

@@ -1,0 +1,8 @@
+(gotolocation agent1 black_container)
+(pickupobject agent1 sponge1)
+(gotolocation agent1 tub)
+(putobjectinreceptacle agent1 sponge1 tub)
+(gotolocation agent1 sponge2)
+(pickupobject agent1 sponge2)
+(gotolocation agent1 tub)
+(putobjectinreceptacle agent1 sponge2 tub)

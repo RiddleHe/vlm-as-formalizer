@@ -1,0 +1,5 @@
+(gotolocation robot sink)
+(pickupobject robot spoon)
+(cleanobject robot sink spoon)
+(gotolocation robot table)
+(putobjectinreceptacle robot spoon table)

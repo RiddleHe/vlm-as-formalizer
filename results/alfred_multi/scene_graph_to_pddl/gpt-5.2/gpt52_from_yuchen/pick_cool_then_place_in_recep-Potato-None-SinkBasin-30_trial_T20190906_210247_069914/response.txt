@@ -1,0 +1,60 @@
+Scene graph:
+agent: (none visible)
+microwave (receptacle): (none visible)
+fridge (receptacle): fridge_black_with_magnets
+sink (receptacle): sink_white_basins_in_counter
+knife (object): knife_beige_handle_right, knife_beige_handle_far_right
+receptacle (object): fridge_black_with_magnets, sink_white_basins_in_counter, recycling_bin_blue_octagon
+object: copper_bowl_in_sink, bottle_silver_with_brown_cap_on_counter, fork_metal_on_counter, sponge_green_on_counter, plant_potted_white_on_counter, watermelont_picture_magnet, photo_magnet_with_smiley, fridge_dispenser_panel, brown_ball_in_recycling_bin
+openable (receptacle) true if a receptacle is openable: (openable fridge_black_with_magnets)
+opened (receptacle) true if a receptacle is opened: (none)
+holdsAny (agent) agent ?a holds an object: (none)
+isClean (object) true if the object has been clean in sink: (none)
+isHot (object) true if the object has been heated up: (none)
+isCool (object) true if the object has been cooled: (isCool brown_ball_in_recycling_bin)
+isOn (object) true if the object is on: (none)
+isToggled (object) true if the object has been toggled: (none)
+isSliced (object) true if the object is sliced: (none)
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle copper_bowl_in_sink sink_white_basins_in_counter), (inReceptacle brown_ball_in_recycling_bin recycling_bin_blue_octagon)
+holds (agent, object) object ?o is held by agent ?a: (none)
+atLocation (agent, object) : (none)
+
+PDDL problem: (define (problem put_task_cold_brown_ball_in_sink)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    fridge_black_with_magnets - fridge
+    sink_white_basins_in_counter - sink
+    recycling_bin_blue_octagon - receptacle
+
+    knife_beige_handle_right - knife
+    knife_beige_handle_far_right - knife
+
+    copper_bowl_in_sink - object
+    bottle_silver_with_brown_cap_on_counter - object
+    fork_metal_on_counter - object
+    sponge_green_on_counter - object
+    plant_potted_white_on_counter - object
+    watermelont_picture_magnet - object
+    photo_magnet_with_smiley - object
+    fridge_dispenser_panel - object
+    brown_ball_in_recycling_bin - object
+  )
+
+  (:init
+    (openable fridge_black_with_magnets)
+
+    (isCool brown_ball_in_recycling_bin)
+
+    (inReceptacle copper_bowl_in_sink sink_white_basins_in_counter)
+    (inReceptacle brown_ball_in_recycling_bin recycling_bin_blue_octagon)
+  )
+
+  (:goal
+    (and
+      (inReceptacle brown_ball_in_recycling_bin sink_white_basins_in_counter)
+      (isCool brown_ball_in_recycling_bin)
+    )
+  )
+)

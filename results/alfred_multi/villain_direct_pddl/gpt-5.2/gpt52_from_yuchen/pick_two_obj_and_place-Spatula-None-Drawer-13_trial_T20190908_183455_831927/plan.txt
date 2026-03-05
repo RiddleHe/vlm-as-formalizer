@@ -1,0 +1,8 @@
+(gotolocation robot counter)
+(pickupobject robot spatula1)
+(gotolocation robot drawer)
+(putobjectinreceptacle robot spatula1 drawer)
+(gotolocation robot spatula2)
+(pickupobject robot spatula2)
+(gotolocation robot drawer)
+(putobjectinreceptacle robot spatula2 drawer)

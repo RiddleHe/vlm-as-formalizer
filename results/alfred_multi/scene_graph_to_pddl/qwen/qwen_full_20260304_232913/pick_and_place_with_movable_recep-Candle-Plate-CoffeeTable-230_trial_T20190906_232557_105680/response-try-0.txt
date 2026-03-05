@@ -1,0 +1,61 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): grey_plate_1, grey_plate_2, tissue_box, cardboard_box, laptop, remote_control, newspaper_1, newspaper_2, green_candle, blue_card, potted_plant, vase
+object: grey_plate_1, grey_plate_2, tissue_box, cardboard_box, laptop, remote_control, newspaper_1, newspaper_2, green_candle, blue_card, potted_plant, vase, agent
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle green_candle tissue_box), (inReceptacle blue_card cardboard_box)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_plate_with_candle_on_coffee_table)
+    (:domain put_task)
+    (:objects
+        agent
+        grey_plate_1
+        grey_plate_2
+        tissue_box
+        cardboard_box
+        laptop
+        remote_control
+        newspaper_1
+        newspaper_2
+        green_candle
+        blue_card
+        potted_plant
+        vase
+        microwave
+        fridge
+        sink
+        knife
+    )
+    (:init
+        (atLocation agent grey_plate_1) ; agent starts near grey_plate_1 for simplicity
+        (inReceptacle green_candle tissue_box)
+        (inReceptacle blue_card cardboard_box)
+        (openable tissue_box)
+        (openable cardboard_box)
+        (not (opened tissue_box))
+        (not (opened cardboard_box))
+        (not (holdsAny agent))
+    )
+    (:goal
+        (and
+            (inReceptacle green_candle grey_plate_1)
+            (inReceptacle grey_plate_1 potted_plant) ; assuming potted_plant is on coffee table as per scene graph
+        )
+    )
+)
+```

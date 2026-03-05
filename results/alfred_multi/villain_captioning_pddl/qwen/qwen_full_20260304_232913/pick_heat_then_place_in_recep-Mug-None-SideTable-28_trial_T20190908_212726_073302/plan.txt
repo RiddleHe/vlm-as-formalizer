@@ -1,0 +1,6 @@
+(gotolocation robot shelves)
+(gotolocation robot microwave)
+(pickupobject robot mug)
+(heatobject robot microwave mug)
+(gotolocation robot shelves)
+(putobjectinreceptacle robot mug shelves)

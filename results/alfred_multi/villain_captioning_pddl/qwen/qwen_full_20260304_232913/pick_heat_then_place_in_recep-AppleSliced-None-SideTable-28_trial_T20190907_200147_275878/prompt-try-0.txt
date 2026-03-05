@@ -1,0 +1,299 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Cut an apple, cook a piece of the apple in a microwave, put the apple slice on the brown shelf.
+    
+
+SCENE CAPTION:
+The scene is a kitchen environment with various objects placed on countertops, tables, and inside appliances. The relevant objects for the task "Cut an apple, cook a piece of the apple in a microwave, put the apple slice on the brown shelf" are identified below, along with their types, quantities, spatial relationships, and current states as per the domain definitions.
+
+---
+
+**1. Objects and Their Types**
+
+- **Agent**: A robotic agent is present, initially not located at any object. It is capable of performing actions such as GotoLocation, PickupObject, PutObjectInReceptacle, SliceObject, HeatObject, etc.
+
+- **Receptacles** (objects that can hold things):
+  - **Microwave**: A silver microwave mounted above the stove. It is openable and currently closed. It is a receptacle for heating objects.
+  - **Sink**: A stainless steel sink with a faucet, located on the countertop. It is a receptacle for cleaning objects. A knife is inside it.
+  - **Fridge**: Not visible in any image; assumed not present or not required for this task.
+  - **Tables and Countertops**: The black round table, the white table, and the brown countertop are not explicitly defined as receptacles in the domain, but they serve as surfaces where objects rest. The domain does not define them as receptacles, so they are treated as static locations for objects.
+  - **Black side table**: A small black table with shelves, located near the white table. It holds an apple, a knife, a salt shaker, and a cup. It is not a receptacle per domain definition but holds objects.
+
+- **Objects** (non-receptacles):
+  - **Apple**: A red apple is visible in multiple locations:
+    - On the countertop near the sink (Image 3 and 6).
+    - On the black side table (Image 5).
+    - One apple is also on the black round table (Image 2), but it appears to be green (possibly a different fruit or a rendering artifact; for task purposes, we assume it is an apple).
+    - Total: At least two distinct red apples (one on countertop, one on side table); the green one may be ignored or considered a separate object.
+  - **Knife**: A silver knife is visible in the sink (Image 3) and also on the black side table (Image 5). It is an object used for slicing.
+  - **Salt Shaker**: A small white salt shaker with a gold top is on the black round table (Image 1 and 2) and on the black side table (Image 5). It is an object but not relevant to the task.
+  - **Bread Loaf**: A brown loaf of bread is on the black round table (Image 1 and 2) and on the white table (Image 5). It is an object but not relevant.
+  - **Cup**: A dark blue cup is on the black round table (Image 1 and 2) and on the black side table (Image 5). It is an object but not relevant.
+  - **Spoon**: A silver spoon is on the black round table (Image 1 and 2). It is an object but not relevant.
+  - **Fork**: A silver fork is on the countertop near the sink (Image 3 and 6). It is an object but not relevant.
+  - **Tomato**: A red tomato is on the countertop (Image 3 and 6). It is an object but not relevant to the apple task.
+  - **Toaster**: A red toaster is on the countertop (Image 6). It is an object but not relevant.
+  - **Dishwasher**: A white dishwasher is under the countertop (Image 6). It is not a receptacle in the domain.
+  - **Brown Shelf**: The “brown shelf” mentioned in the instruction is not explicitly visible as a separate object. It is likely referring to the black side table with brownish tones or the countertop. For planning, we assume the “brown shelf” is the black side table (Image 5) or the countertop surface. It is not a receptacle per domain, so placing an object on it would be via PutObjectInReceptacle if it were defined, but since it is not, we may need to interpret “put on” as placing it on the surface, which is not directly supported by the domain. Alternatively, it could be a misnomer for the black side table.
+
+---
+
+**2. Quantities of Each Object Type**
+
+- **Receptacles**: 2 (Microwave, Sink)
+- **Objects**: Multiple, including at least 2 apples, 2 knives, 1 salt shaker, 1 cup, 1 spoon, 1 fork, 1 tomato, 1 toaster, 1 bread loaf, etc.
+
+---
+
+**3. Spatial Relationships Between Objects**
+
+- **Apple on Countertop**: The red apple is on the brown countertop next to the sink (Image 3 and 6). It is not in any receptacle.
+- **Apple on Black Side Table**: Another red apple is on the black side table, next to a knife, salt shaker, and cup (Image 5). It is not in any receptacle.
+- **Knife in Sink**: A knife is inside the sink (Image 3). Predicate: (inReceptacle knife sink).
+- **Knife on Black Side Table**: Another knife is on the black side table (Image 5). It is not in a receptacle.
+- **Microwave**: The microwave is mounted above the stove and is closed. It is not openable in the current state (no predicate for opened yet).
+- **Sink**: The sink contains a knife and possibly other items (Image 3). It is a receptacle.
+- **Black Round Table**: Holds a bread loaf, cup, spoon, salt shaker, and a green apple (Image 1 and 2). None of these are in a receptacle.
+- **White Table**: Holds a bread loaf and a black vase (Image 5). Not a receptacle.
+- **Black Side Table**: Holds an apple, knife, salt shaker, and cup (Image 5). It is not a receptacle per domain, but objects are on it.
+
+---
+
+**4. Current State of Each Object Relevant to the Planning Task**
+
+- **Apple (on countertop)**: Not sliced, not clean, not hot, not cool, not on. It is an object that needs to be sliced.
+- **Apple (on black side table)**: Same as above.
+- **Knife (in sink)**: Not held, not used for slicing yet. It is clean (assumed, as it is in the sink).
+- **Knife (on black side table)**: Not held, not used for slicing yet.
+- **Microwave**: Closed, not opened, not toggled. It is a receptacle that can heat objects.
+- **Sink**: Contains a knife. It is a receptacle that can clean objects.
+- **Brown Shelf (assumed to be black side table)**: Has objects on it, but not a receptacle per domain. The task requires putting the apple slice on it, which may require reinterpreting “put on” as placing it on the surface.
+
+---
+
+**5. Colors, Positions, and Other Visual Properties**
+
+- **Apple**: Red, round, located on countertop (near sink) and on black side table.
+- **Knife**: Silver, metallic, one in sink (partially submerged), one on black side table.
+- **Microwave**: Silver with a digital keypad, mounted above stove, glass door.
+- **Sink**: Stainless steel, rectangular, with a faucet, contains a knife.
+- **Black Round Table**: Dark surface, circular, holds various items including a brown bread loaf, blue cup, silver spoon, white salt shaker.
+- **Black Side Table**: Black with shelves, holds red apple, silver knife, blue cup, white salt shaker. It is positioned next to a white table.
+- **White Table**: White surface, holds brown bread loaf and black vase.
+- **Countertop**: Brown marble-like texture, holds sink, tomato, fork, toaster, and apple.
+- **Floor**: Tiled, beige, visible in multiple images.
+
+---
+
+**Summary for Planning**
+
+The robot must:
+1. Go to the apple on the countertop or black side table.
+2. Pick up a knife (from sink or side table).
+3. Slice the apple (requires holding the knife and being at the apple’s location).
+4. Pick up the apple slice.
+5. Go to the microwave, open it, put the apple slice inside, heat it, then close the microwave.
+6. Go to the “brown shelf” (interpreted as the black side table or countertop) and put the heated apple slice on it.
+
+Note: The domain does not define tables or countertops as receptacles, so placing an object on them may require an extension or reinterpretation. For now, we assume the “brown shelf” is the black side table, and the action PutObjectInReceptacle can be used if we consider it a receptacle, or we may need to add a new action for placing on surfaces. However, per the given domain, only receptacles can hold objects, so this may be a limitation. Alternatively, the “brown shelf” could be a misnomer for a different object, but based on visuals, the black side table is the most likely candidate.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

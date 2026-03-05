@@ -1,0 +1,6 @@
+(GotoLocation agent1 sink)
+(PickupObject agent1 grey_plate)
+(PickupObject agent1 large_metal_spoon)
+(PutObjectInReceptacle agent1 large_metal_spoon grey_plate)
+(GotoLocation agent1 counter)
+(PutObjectInReceptacle agent1 grey_plate counter)

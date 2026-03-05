@@ -1,0 +1,4 @@
+(GotoLocation agent1 box)
+(GotoLocation agent1 lamp)
+(ToggleObject agent1 lamp)
+(GotoLocation agent1 box)

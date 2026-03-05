@@ -1,0 +1,6 @@
+(gotolocation robot spoon_metal_on_table)
+(pickupobject robot spoon_metal_on_table)
+(gotolocation robot sink_stainless_countertop)
+(cleanobject robot sink_stainless_countertop spoon_metal_on_table)
+(gotolocation robot table_white_center)
+(putobjectinreceptacle robot spoon_metal_on_table table_white_center)

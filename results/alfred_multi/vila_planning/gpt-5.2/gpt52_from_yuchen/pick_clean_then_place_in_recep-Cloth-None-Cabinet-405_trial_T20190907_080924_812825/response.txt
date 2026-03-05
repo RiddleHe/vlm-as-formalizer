@@ -1,0 +1,8 @@
+(GotoLocation agent0 cloth)
+(PickupObject agent0 cloth)
+(GotoLocation agent0 sink)
+(CleanObject agent0 sink cloth)
+(GotoLocation agent0 cabinet)
+(OpenObject agent0 cabinet)
+(PutObjectInReceptacle agent0 cloth cabinet)
+(CloseObject agent0 cabinet)

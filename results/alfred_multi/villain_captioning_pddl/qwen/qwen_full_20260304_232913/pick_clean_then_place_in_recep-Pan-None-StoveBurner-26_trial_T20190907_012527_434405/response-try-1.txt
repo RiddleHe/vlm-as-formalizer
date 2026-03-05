@@ -1,0 +1,50 @@
+```pddl
+(define (problem rinse_pan)
+    (:domain put_task)
+    (:objects
+        agent - agent
+        microwave - microwave
+        sink - sink
+        stove - object  ; stove is not a receptacle per domain, so treated as object
+        pan - object
+        egg - object
+        paper_bag - object
+    )
+    (:init
+        ; Agent is not at any location initially
+        (not (atLocation agent microwave))
+        (not (atLocation agent sink))
+        (not (atLocation agent stove))
+        (not (atLocation agent pan))
+        (not (atLocation agent egg))
+        (not (atLocation agent paper_bag))
+
+        ; Pan is on the stove (not in a receptacle)
+        (atLocation pan stove)
+
+        ; Sink is a receptacle but not openable
+        (not (openable sink))
+
+        ; Microwave is a receptacle and openable
+        (openable microwave)
+
+        ; Pan is not clean
+        (not (isClean pan))
+
+        ; Agent is not holding anything
+        (not (holdsAny agent))
+
+        ; Microwave is not toggled on
+        (not (isOn microwave))
+
+        ; Egg and paper bag are on counter, not relevant but present
+        (atLocation egg sink)  ; egg is near sink on counter
+        (atLocation paper_bag stove)  ; paper bag under stove
+    )
+    (:goal
+        (and
+            (isClean pan)
+        )
+    )
+)
+```

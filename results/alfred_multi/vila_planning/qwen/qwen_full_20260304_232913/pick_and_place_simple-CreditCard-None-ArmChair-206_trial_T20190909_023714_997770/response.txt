@@ -1,0 +1,4 @@
+(GotoLocation robot creditcard)
+(PickupObject robot creditcard)
+(GotoLocation robot armchair)
+(PutObjectInReceptacle robot creditcard armchair)

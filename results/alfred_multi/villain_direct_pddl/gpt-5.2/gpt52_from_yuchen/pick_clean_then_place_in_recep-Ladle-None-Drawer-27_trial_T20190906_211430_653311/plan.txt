@@ -1,0 +1,3 @@
+(pickupobject robot spoon1)
+(cleanobject robot sink1 spoon1)
+(putobjectinreceptacle robot spoon1 fridge1)

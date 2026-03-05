@@ -1,0 +1,21 @@
+(define (problem put_clean_soap_on_toilet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        sink - receptacle
+        bathtub - receptacle
+        toilet - receptacle
+        soap - object
+    )
+    (:init
+        (openable sink)
+        (not (opened sink))
+        (inReceptacle soap bathtub)
+        (not (isClean soap))
+        (atLocation robot bathtub)
+    )
+    (:goal (and
+        (inReceptacle soap toilet)
+        (isClean soap)
+    ))
+)

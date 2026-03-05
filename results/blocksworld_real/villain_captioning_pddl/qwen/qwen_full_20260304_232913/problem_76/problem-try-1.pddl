@@ -1,0 +1,28 @@
+(define (problem blocksworld_problem)
+    (:domain blocksworld)
+    (:objects
+        block-red - block
+        block-blue - block
+        block-green - block
+        block-purple - block
+        block-yellow - block
+        robot1 - robot
+    )
+    (:init
+        (ontable block-red)
+        (on block-blue block-red)
+        (on block-green block-blue)
+        (on block-purple block-green)
+        (on block-yellow block-purple)
+        (clear block-yellow)
+        (handempty robot1)
+    )
+    (:goal (and
+        (on block-red block-purple)
+        (ontable block-purple)
+        (on block-yellow block-green)
+        (on block-green block-orange)  ; This block is not present in the scene; goal is unachievable as stated.
+        (on block-orange block-blue)
+        (ontable block-blue)
+    ))
+)

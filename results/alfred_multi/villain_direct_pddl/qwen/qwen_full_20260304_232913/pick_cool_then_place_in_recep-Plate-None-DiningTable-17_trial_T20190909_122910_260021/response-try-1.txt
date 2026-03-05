@@ -1,0 +1,23 @@
+```pddl
+(define (problem put_chilled_plate_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        table - receptacle
+        fridge - receptacle
+        plate - object
+    )
+    (:init
+        (openable fridge)
+        (not (opened fridge))
+        (inReceptacle plate fridge)
+        (not (isCool plate))
+        (not (atLocation robot table))
+        (not (atLocation robot fridge))
+    )
+    (:goal (and
+        (inReceptacle plate table)
+        (isCool plate)
+    ))
+)
+```

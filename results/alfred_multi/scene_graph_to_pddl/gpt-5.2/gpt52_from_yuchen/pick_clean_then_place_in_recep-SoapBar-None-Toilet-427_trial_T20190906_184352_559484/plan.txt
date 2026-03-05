@@ -1,0 +1,6 @@
+(gotolocation robot_agent bathtub_center)
+(pickupobject robot_agent green_bar_soap_in_bathtub)
+(gotolocation robot_agent bathroom_wall_sink_left)
+(cleanobject robot_agent bathroom_wall_sink_left green_bar_soap_in_bathtub)
+(gotolocation robot_agent toilet_tank_lid_bottom)
+(putobjectinreceptacle robot_agent green_bar_soap_in_bathtub toilet_tank_lid_bottom)

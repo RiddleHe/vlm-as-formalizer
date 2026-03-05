@@ -1,0 +1,50 @@
+```pddl
+(define (problem place_pan_with_sliced_tomato)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        tomato - object
+        knife - knife
+        pan - object
+        stove - receptacle
+        island - receptacle
+        bowl - receptacle
+        salt_shaker - object
+        wine_bottle1 - object
+        wine_bottle2 - object
+        wine_bottle3 - object
+        lettuce - object
+        egg - object
+        soap_dispenser - object
+        cup - object
+    )
+    (:init
+        (atLocation robot island)
+        (inReceptacle tomato island)
+        (inReceptacle knife island)
+        (inReceptacle pan stove)
+        (inReceptacle bowl island)
+        (inReceptacle salt_shaker island)
+        (inReceptacle wine_bottle1 island)
+        (inReceptacle wine_bottle2 island)
+        (inReceptacle wine_bottle3 island)
+        (inReceptacle lettuce island)
+        (inReceptacle egg island)
+        (inReceptacle soap_dispenser island)
+        (inReceptacle cup bowl) ; assuming cup is in bowl for simplicity, or adjust if needed
+        (not (isSliced tomato))
+        (not (holdsAny robot))
+        (not (isOn stove))
+        (not (isToggled stove))
+        (openable stove)
+        (opened stove) ; assuming stove is openable and initially opened for access
+    )
+    (:goal
+        (and
+            (inReceptacle pan island)
+            (isSliced tomato)
+            (inReceptacle tomato pan)
+        )
+    )
+)
+```

@@ -1,0 +1,4 @@
+(GotoLocation agent pan)
+(PickupObject agent pan)
+(GotoLocation agent sink)
+(CleanObject agent sink pan)

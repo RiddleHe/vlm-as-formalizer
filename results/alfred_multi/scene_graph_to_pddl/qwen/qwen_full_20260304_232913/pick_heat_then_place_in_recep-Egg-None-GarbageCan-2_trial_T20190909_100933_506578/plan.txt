@@ -1,0 +1,6 @@
+(gotolocation robot black_trash_can_under_counter)
+(pickupobject robot brown_egg)
+(gotolocation robot silver_microwave_with_green_apple_inside)
+(heatobject robot silver_microwave_with_green_apple_inside brown_egg)
+(gotolocation robot black_trash_can_under_counter)
+(putobjectinreceptacle robot brown_egg black_trash_can_under_counter)

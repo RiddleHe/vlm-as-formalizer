@@ -1,0 +1,6 @@
+(gotolocation agent1 toilet)
+(gotolocation agent1 sink1)
+(pickupobject agent1 rag)
+(cleanobject agent1 sink1 rag)
+(gotolocation agent1 toilet)
+(putobjectinreceptacle agent1 rag toilet)

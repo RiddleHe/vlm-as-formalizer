@@ -1,0 +1,32 @@
+```pddl
+(define (problem move_pen_to_dresser)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        pen - object
+        hexagonal_container - object
+        dresser - receptacle
+    )
+    (:init
+        (not (atLocation robot pen))
+        (not (atLocation robot hexagonal_container))
+        (not (atLocation robot dresser))
+        (inReceptacle pen hexagonal_container)
+        (not (holdsAny robot))
+        (not (holds robot pen))
+        (not (isClean pen))
+        (not (isHot pen))
+        (not (isCool pen))
+        (not (isSliced pen))
+        (not (isToggled pen))
+        (not (opened dresser))
+        (not (openable dresser)) ; dresser is not openable as per scene description
+    )
+    (:goal
+        (and
+            (inReceptacle pen dresser)
+            (not (inReceptacle pen hexagonal_container))
+        )
+    )
+)
+```

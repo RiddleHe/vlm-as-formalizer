@@ -1,0 +1,74 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): none visible.
+fridge (receptacle): none visible.
+sink (receptacle): none visible.
+knife (object): none visible.
+receptacle (object):
+- clear_glass_dining_table_receptacle (glass-top table that can hold objects)
+object:
+- black_open_laptop_on_table
+- red_card_on_table
+- gold_trophy_statue_left_on_black_base
+- gold_trophy_statue_center_on_black_base
+- gold_trophy_statue_top_on_black_base
+- tall_table_lamp_with_white_shade
+
+openable (receptacle) true if a receptacle is openable: none.
+opened (receptacle) true if a receptacle is opened: none.
+holdsAny (agent) agent ?a holds an object: none.
+isClean (object) true if the object has been clean in sink: none.
+isHot (object) true if the object has been heated up: none.
+isCool (object) true if the object has been cooled: none.
+isOn (object) true if the object is on:
+- (isOn tall_table_lamp_with_white_shade)
+isToggled (object) true if the object has been toggled: none.
+isSliced (object) true if the object is sliced: none.
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle black_open_laptop_on_table clear_glass_dining_table_receptacle)
+- (inReceptacle red_card_on_table clear_glass_dining_table_receptacle)
+- (inReceptacle gold_trophy_statue_left_on_black_base clear_glass_dining_table_receptacle)
+- (inReceptacle gold_trophy_statue_center_on_black_base clear_glass_dining_table_receptacle)
+- (inReceptacle gold_trophy_statue_top_on_black_base clear_glass_dining_table_receptacle)
+holds (agent, object) object ?o is held by agent ?a: none.
+atLocation (agent, object) : none.
+
+PDDL problem: (define (problem look-at-keys-by-lamp)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    clear_glass_dining_table_receptacle - receptacle
+
+    black_open_laptop_on_table - object
+    red_card_on_table - object
+    gold_trophy_statue_left_on_black_base - object
+    gold_trophy_statue_center_on_black_base - object
+    gold_trophy_statue_top_on_black_base - object
+    tall_table_lamp_with_white_shade - object
+  )
+
+  (:init
+    ;; robot starts not at any object's location (no atLocation facts)
+
+    ;; receptacle relations
+    (inReceptacle black_open_laptop_on_table clear_glass_dining_table_receptacle)
+    (inReceptacle red_card_on_table clear_glass_dining_table_receptacle)
+    (inReceptacle gold_trophy_statue_left_on_black_base clear_glass_dining_table_receptacle)
+    (inReceptacle gold_trophy_statue_center_on_black_base clear_glass_dining_table_receptacle)
+    (inReceptacle gold_trophy_statue_top_on_black_base clear_glass_dining_table_receptacle)
+
+    ;; lamp state
+    (isOn tall_table_lamp_with_white_shade)
+  )
+
+  (:goal
+    (and
+      ;; interpret "keys" as the small red item on the table
+      (atLocation robot red_card_on_table)
+      ;; by the light of the lamp: be at the lamp, and the lamp is on
+      (atLocation robot tall_table_lamp_with_white_shade)
+      (isOn tall_table_lamp_with_white_shade)
+    )
+  )
+)

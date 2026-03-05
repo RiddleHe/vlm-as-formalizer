@@ -1,0 +1,4 @@
+(GotoLocation robot phone)
+(PickupObject robot phone)
+(GotoLocation robot end_table)
+(PutObjectInReceptacle robot phone end_table_shelf)

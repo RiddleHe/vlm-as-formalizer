@@ -1,0 +1,7 @@
+(GotoLocation robot metal_rack)
+(GotoLocation robot yellow_spray_bottle)
+(PickupObject robot yellow_spray_bottle)
+(PutObjectInReceptacle robot yellow_spray_bottle metal_rack)
+(GotoLocation robot silver_spray_bottle)
+(PickupObject robot silver_spray_bottle)
+(PutObjectInReceptacle robot silver_spray_bottle metal_rack)

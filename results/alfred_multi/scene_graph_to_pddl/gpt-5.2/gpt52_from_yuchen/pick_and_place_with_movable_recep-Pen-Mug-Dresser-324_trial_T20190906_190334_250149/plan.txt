@@ -1,0 +1,4 @@
+(gotolocation robot red_pen_on_dresser)
+(pickupobject robot red_pen_on_dresser)
+(gotolocation robot black_cup_on_small_bookshelf)
+(putobjectinreceptacle robot red_pen_on_dresser black_cup_on_small_bookshelf)

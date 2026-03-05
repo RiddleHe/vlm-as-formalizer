@@ -1,0 +1,59 @@
+Scene graph:
+agent: agent
+microwave (receptacle): stainless steel microwave on countertop
+fridge (receptacle): black refrigerator with smiley magnet
+sink (receptacle): none visible
+knife (object): silver knife on countertop near stove
+receptacle (object): gray trash can, black cup, frying pan
+object: red tomato in trash can, green cutting board, silver fork, silver spoon, loaf of bread, potato, frying pan, knife, black cup
+openable (receptacle) true if a receptacle is openable: (openable fridge), (openable microwave)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn microwave)
+isToggled (object) true if the object has been toggled: (isToggled microwave)
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle red tomato gray trash can), (inReceptacle silver fork black cup)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        knife - object
+        pan - object
+        potato - object
+        trash_can - receptacle
+        cup - receptacle
+        tomato - object
+        fork - object
+        spoon - object
+        bread - object
+        cutting_board - object
+    )
+    (:init
+        (openable fridge)
+        (openable microwave)
+        (isOn microwave)
+        (isToggled microwave)
+        (inReceptacle tomato trash_can)
+        (inReceptacle fork cup)
+        (atLocation agent microwave) ; assuming agent starts near microwave for planning
+    )
+    (:goal
+        (and
+            (inReceptacle pan fridge)
+            (inReceptacle knife pan)
+            (inReceptacle potato pan)
+            (isSliced potato)
+            (isHot potato)
+        )
+    )
+)
+```

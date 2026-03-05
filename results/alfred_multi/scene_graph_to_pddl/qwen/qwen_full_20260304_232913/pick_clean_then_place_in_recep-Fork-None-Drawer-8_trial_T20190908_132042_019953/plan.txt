@@ -1,0 +1,6 @@
+(gotolocation robot fork)
+(pickupobject robot fork)
+(gotolocation robot stainless_steel_sink)
+(cleanobject robot stainless_steel_sink fork)
+(gotolocation robot drawer)
+(putobjectinreceptacle robot fork drawer)

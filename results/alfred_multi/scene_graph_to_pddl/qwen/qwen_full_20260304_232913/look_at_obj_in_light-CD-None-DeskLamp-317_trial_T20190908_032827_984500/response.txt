@@ -1,0 +1,64 @@
+Scene graph:
+agent: robot
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): small red-handled knife on wooden desk
+receptacle (object): wooden desk, wooden nightstand
+object: robot, small red-handled knife, cd, lamp, bowl, red card, two black tablets, wooden desk, wooden nightstand
+openable (receptacle) true if a receptacle is openable: (openable wooden desk), (openable wooden nightstand)
+opened (receptacle) true if a receptacle is opened: (opened wooden desk), (opened wooden nightstand)
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn lamp)
+isToggled (object) true if the object has been toggled: (isToggled lamp)
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle cd wooden desk), (inReceptacle bowl wooden desk), (inReceptacle red card wooden desk), (inReceptacle black tablet 1 wooden desk), (inReceptacle black tablet 2 wooden desk), (inReceptacle small red-handled knife wooden desk), (inReceptacle lamp wooden nightstand)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object): none
+
+PDDL problem: ```pddl
+(define (problem inspect_cd_by_lamp_light)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        wooden_desk - receptacle
+        wooden_nightstand - receptacle
+        cd - object
+        lamp - object
+        bowl - object
+        red_card - object
+        black_tablet_1 - object
+        black_tablet_2 - object
+        small_red_handled_knife - object
+    )
+    (:init
+        (openable wooden_desk)
+        (openable wooden_nightstand)
+        (opened wooden_desk)
+        (opened wooden_nightstand)
+        (isOn lamp)
+        (isToggled lamp)
+        (inReceptacle cd wooden_desk)
+        (inReceptacle bowl wooden_desk)
+        (inReceptacle red_card wooden_desk)
+        (inReceptacle black_tablet_1 wooden_desk)
+        (inReceptacle black_tablet_2 wooden_desk)
+        (inReceptacle small_red_handled_knife wooden_desk)
+        (inReceptacle lamp wooden_nightstand)
+        (not (holdsAny robot))
+        (not (atLocation robot wooden_desk))
+        (not (atLocation robot wooden_nightstand))
+        (not (atLocation robot cd))
+        (not (atLocation robot lamp))
+    )
+    (:goal
+        (and
+            (atLocation robot lamp)
+            (holds robot cd)
+        )
+    )
+)
+```

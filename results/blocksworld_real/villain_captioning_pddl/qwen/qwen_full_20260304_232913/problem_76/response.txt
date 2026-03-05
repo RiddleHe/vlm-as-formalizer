@@ -1,0 +1,58 @@
+```pddl
+(define (problem blocksworld_rearrange)
+    (:domain blocksworld)
+    (:objects
+        Block_O - block  ; orange
+        Block_B - block  ; light blue
+        Block_G - block  ; green
+        Block_P - block  ; purple
+        Block_Y - block  ; yellow
+        Robot_R - robot
+    )
+    (:init
+        (ontable Block_O)
+        (on Block_B Block_O)
+        (on Block_G Block_B)
+        (on Block_P Block_G)
+        (on Block_Y Block_P)
+        (clear Block_Y)
+        (handempty Robot_R)
+    )
+    (:goal (and
+        (on Block_P Block_O)  ; purple on orange (as "red over purple" is interpreted as purple on orange since no red exists)
+        (ontable Block_O)
+        (clear Block_P)
+        (on Block_Y Block_G)
+        (on Block_G Block_B)
+        (on Block_B Block_O)
+        (clear Block_Y)
+        (ontable Block_O)  ; orange is base for both stacks? or separate? — assuming separate stacks: one is P on O, other is Y-G-B-O
+        ; But instruction says "red over purple" — since no red, we assume purple is the bottom of that stack? Or perhaps it's a typo and meant "purple over orange"?
+        ; Given ambiguity, we interpret "red over purple" as a stack with purple on bottom and red on top — but no red. So we reinterpret goal as:
+        ; Stack 1: purple on orange (as "red over purple" is unachievable, we assume it meant purple on orange as base)
+        ; Stack 2: yellow over green over orange over blue — but orange can't be in two places.
+        ; Therefore, we must reinterpret: perhaps "red" is a misnomer for "orange"?
+        ; Let's assume the instruction meant: 
+        ;   Stack 1: purple over orange (i.e., orange at bottom, purple on top)
+        ;   Stack 2: yellow over green over blue over orange — impossible.
+        ; Alternatively, perhaps "red" is meant to be "orange", so: orange over purple? But that contradicts "red over purple".
+        ; Given the ambiguity and no red block, we assume the instruction intended:
+        ;   Stack 1: purple on orange (so orange is base, purple on top)
+        ;   Stack 2: yellow on green, green on blue, blue on orange — again, orange can't be in two places.
+        ; Therefore, we must assume the instruction has a typo and meant:
+        ;   Stack 1: purple on orange
+        ;   Stack 2: yellow on green, green on blue, blue on a new base? But no other base.
+        ; Since only 5 blocks, and one must be base for each stack, we assume:
+        ;   Stack 1: purple on orange (orange is base)
+        ;   Stack 2: yellow on green, green on blue, and blue must be on table — so blue is base for second stack.
+        ; Thus, goal becomes:
+        (ontable Block_O)
+        (on Block_P Block_O)
+        (clear Block_P)
+        (ontable Block_B)
+        (on Block_G Block_B)
+        (on Block_Y Block_G)
+        (clear Block_Y)
+    ))
+)
+```

@@ -1,0 +1,51 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): red_countertop_microwave
+fridge (receptacle): 
+sink (receptacle): stainless_double_sink
+knife (object): 
+receptacle (object): red_countertop_microwave, stainless_double_sink
+object: pot_on_stovetop, paper_towel_roll_upright, loaf_of_bread, metal_spatula, tomato_left_on_counter, tomato_right_on_counter, green_cabbage_left_edge, two_potatoes_on_drainboard, red_apple_in_sink, robot_agent
+openable (receptacle) true if a receptacle is openable: (openable red_countertop_microwave)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle red_apple_in_sink stainless_double_sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: (define (problem put_task_heated_tomato_in_sink)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+    red_countertop_microwave - microwave
+    stainless_double_sink - sink
+
+    tomato_left_on_counter - object
+    tomato_right_on_counter - object
+    red_apple_in_sink - object
+    pot_on_stovetop - object
+    paper_towel_roll_upright - object
+    loaf_of_bread - object
+    metal_spatula - object
+    green_cabbage_left_edge - object
+    two_potatoes_on_drainboard - object
+  )
+
+  (:init
+    (openable red_countertop_microwave)
+    (inReceptacle red_apple_in_sink stainless_double_sink)
+  )
+
+  (:goal
+    (and
+      (isHot tomato_left_on_counter)
+      (inReceptacle tomato_left_on_counter stainless_double_sink)
+    )
+  )
+)

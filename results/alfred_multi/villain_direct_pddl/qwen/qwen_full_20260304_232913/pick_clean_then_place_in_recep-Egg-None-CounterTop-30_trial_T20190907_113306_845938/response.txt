@@ -1,0 +1,25 @@
+```pddl
+(define (problem put_clean_egg_on_counter)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        sink1 - sink
+        counter1 - receptacle
+        egg1 - object
+        knife1 - knife
+    )
+    (:init
+        (atLocation agent1 counter1)
+        (inReceptacle egg1 microwave1)
+        (openable microwave1)
+        (opened microwave1)
+        (isOn microwave1)
+        (isToggled microwave1)
+    )
+    (:goal (and
+        (inReceptacle egg1 counter1)
+        (isClean egg1)
+    ))
+)
+```

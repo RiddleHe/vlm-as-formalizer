@@ -1,0 +1,54 @@
+Scene graph:
+agent: agent
+microwave (receptacle): black microwave on countertop
+fridge (receptacle): dark fridge with double doors
+sink (receptacle): double sink with metal basin and faucets
+knife (object): silver knife on countertop near sink
+receptacle (object): wooden cabinet under sink, wooden cabinet above fridge
+object: white bowl in left sink basin, brown egg in right sink basin, wine glass on countertop left of toaster
+openable (receptacle) true if a receptacle is openable: (openable black microwave on countertop), (openable dark fridge with double doors), (openable wooden cabinet under sink), (openable wooden cabinet above fridge)
+opened (receptacle) true if a receptacle is opened: (opened wooden cabinet under sink)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle white bowl in left sink basin double sink with metal basin and faucets), (inReceptacle brown egg in right sink basin double sink with metal basin and faucets)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_cold_bowl_in_cabinet)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave
+        fridge
+        sink
+        knife
+        cabinet_under_sink
+        cabinet_above_fridge
+        bowl
+        egg
+        wine_glass
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable cabinet_under_sink)
+        (openable cabinet_above_fridge)
+        (opened cabinet_under_sink)
+        (inReceptacle bowl sink)
+        (inReceptacle egg sink)
+        (atLocation agent microwave) ; initial location can be arbitrary as long as not at target; here we pick microwave
+    )
+    (:goal
+        (and
+            (inReceptacle bowl cabinet_above_fridge)
+            (isCool bowl)
+        )
+    )
+)
+```

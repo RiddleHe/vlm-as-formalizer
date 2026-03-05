@@ -1,0 +1,271 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Carry a laptop while turning on a light
+    
+
+SCENE CAPTION:
+Scene Description:
+
+The scene depicts a bedroom environment with several objects placed on a bed and a nightstand. The relevant objects for the planning task are identified below, with their types, states, and spatial relationships described according to the domain predicates.
+
+1. Objects and Their Types:
+   - Laptop (Object): There are two laptops visible in the scene. One is gray with a visible keyboard and screen, placed on the left side of the bed. The second laptop is also gray, with a small circular logo on the lid, and is positioned on the right side of the bed. Neither laptop is defined as a receptacle.
+   - Book (Object): A hardcover book with a nature-themed cover (possibly depicting an animal) is lying on the bed near the headboard. It is not a receptacle.
+   - Smartphone (Object): A black rectangular smartphone is placed on the bed between the two laptops. It is not a receptacle.
+   - Pillow (Object): A white rectangular pillow is on the bed near the headboard. It is not a receptacle.
+   - Lamp (Object): A table lamp with a beige woven shade and a black base is on the nightstand. It is not a receptacle, but it is a toggleable object (light source).
+   - Alarm Clock (Object): A metallic twin-bell alarm clock is on the nightstand next to the lamp. It is not a receptacle.
+   - Nightstand (Receptacle): A light beige wooden nightstand with drawers is located next to the bed. It is a receptacle and is openable (has drawers that can be opened/closed).
+   - Bed (Receptacle): The bed itself, with a white sheet and a wooden headboard, is a large receptacle that currently holds multiple objects (laptops, book, phone, pillow). It is not openable.
+
+2. Quantities:
+   - Laptops: 2
+   - Books: 1
+   - Smartphones: 1
+   - Pillows: 1
+   - Lamps: 1
+   - Alarm Clocks: 1
+   - Nightstands: 1
+   - Beds: 1
+
+3. Spatial Relationships (Matching Domain Predicates):
+   - (inReceptacle ?o ?r): 
+     - The gray laptop (left) is inReceptacle the bed.
+     - The gray laptop (right) is inReceptacle the bed.
+     - The book is inReceptacle the bed.
+     - The smartphone is inReceptacle the bed.
+     - The pillow is inReceptacle the bed.
+     - The lamp is inReceptacle the nightstand.
+     - The alarm clock is inReceptacle the nightstand.
+   - (atLocation ?a ?o): 
+     - The agent is not currently at any object’s location (initial state).
+   - (isOn ?o): 
+     - The lamp is currently off (not illuminated).
+   - (isToggled ?o): 
+     - The lamp has not been toggled yet.
+   - (opened ?r): 
+     - The nightstand drawers are closed (not opened).
+   - (openable ?r): 
+     - The nightstand is openable.
+     - The bed is not openable.
+
+4. Current State of Objects Relevant to the Task:
+   - The laptops are idle and not being held by any agent.
+   - The lamp is off and needs to be toggled on.
+   - The nightstand is closed and not currently interacted with.
+   - No object is currently held by the agent (holdsAny is false).
+
+5. Visual Properties for Distinguishing Objects:
+   - The left laptop is positioned with its screen open and angled slightly toward the viewer.
+   - The right laptop has a distinct circular logo on its lid and is placed with the screen partially open.
+   - The book has a greenish cover with a dark animal image and is lying flat.
+   - The smartphone is black and rectangular, lying flat on the bedsheet.
+   - The pillow is white and rectangular, placed near the headboard.
+   - The lamp has a textured beige shade and a black base with visible support rods.
+   - The nightstand is light beige with visible drawer handles and a flat top surface.
+   - The bed has a white sheet with wrinkles and a wooden headboard with vertical slats.
+   - The floor is made of dark brown wood planks.
+   - The wall behind the bed is a deep purple color.
+
+The robot must first navigate to either laptop to pick it up, then move to the lamp to toggle it on, while carrying the laptop. The lamp is located on the nightstand, which is adjacent to the bed. The bed is the primary receptacle holding most of the objects. The nightstand is a secondary receptacle that holds the lamp and alarm clock.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

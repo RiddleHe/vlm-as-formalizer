@@ -1,0 +1,8 @@
+(gotolocation robot green_cushion)
+(pickupobject robot green_cushion)
+(gotolocation robot dark_ottoman)
+(putobjectinreceptacle robot green_cushion dark_ottoman)
+(gotolocation robot dark_armchair)
+(pickupobject robot orange_plaid_cushion)
+(gotolocation robot dark_ottoman)
+(putobjectinreceptacle robot orange_plaid_cushion dark_ottoman)

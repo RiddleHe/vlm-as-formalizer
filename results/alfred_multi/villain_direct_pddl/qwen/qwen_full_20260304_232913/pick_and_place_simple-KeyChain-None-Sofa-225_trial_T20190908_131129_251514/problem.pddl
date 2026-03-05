@@ -1,0 +1,24 @@
+(define (problem move_keys_to_loveseat)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        keys - object
+        side_table - receptacle
+        loveseat - receptacle
+        chair - object
+    )
+    (:init
+        (atLocation robot side_table)
+        (inReceptacle keys side_table)
+        (openable side_table)
+        (opened side_table)
+        (atLocation robot loveseat)
+        (openable loveseat)
+        (opened loveseat)
+    )
+    (:goal
+        (and
+            (inReceptacle keys loveseat)
+        )
+    )
+)

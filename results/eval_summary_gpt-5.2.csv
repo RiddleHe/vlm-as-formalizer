@@ -1,0 +1,13 @@
+route,dataset,model,gen_success_rate,pddl_valid_rate,task_success_rate,obj_precision,obj_recall,obj_f1,init_precision,init_recall,init_f1,goal_precision,goal_recall,goal_f1,macro_precision,macro_recall,macro_f1
+villain_direct_pddl,blocksworld_real,gpt-5.2,0.9706,1.0,0.8922,1.0,0.9661,0.9827,0.9827,0.9521,0.9671,0.9056,0.9601,0.932,0.9628,0.9594,0.9611
+vila_planning,blocksworld_real,gpt-5.2,1.0,0.0,0.2059,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+villain_captioning_pddl,blocksworld_real,gpt-5.2,0.9706,0.9804,0.902,1.0,0.9468,0.9727,0.9835,0.9289,0.9554,0.9452,0.9364,0.9408,0.9762,0.9374,0.9564
+scene_graph_to_pddl,blocksworld_real,gpt-5.2,0.8824,0.8922,0.7941,1.0,0.8669,0.9287,0.9786,0.8502,0.9099,0.9825,0.859,0.9166,0.987,0.8587,0.9184
+villain_direct_pddl,alfred_multi,gpt-5.2,0.8333,0.9867,0.2,1.0,0.5386,0.7001,0.5472,0.19,0.2821,0.9218,0.5067,0.6539,0.823,0.4117,0.5489
+vila_planning,alfred_multi,gpt-5.2,1.0,0.0,0.2267,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+villain_captioning_pddl,alfred_multi,gpt-5.2,0.8267,0.94,0.22,1.0,0.5279,0.691,0.605,0.1533,0.2447,0.9001,0.4811,0.6271,0.835,0.3875,0.5293
+scene_graph_to_pddl,alfred_multi,gpt-5.2,0.7933,0.92,0.2333,1.0,0.4682,0.6377,0.6928,0.1233,0.2094,0.85,0.3244,0.4696,0.8476,0.3053,0.4489
+villain_direct_pddl,blocksworld_sim,gpt-5.2,1.0,1.0,0.8,1.0,0.919,0.9578,1.0,0.905,0.9501,0.95,0.895,0.9217,0.9833,0.9063,0.9433
+vila_planning,blocksworld_sim,gpt-5.2,1.0,0.0,0.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+villain_captioning_pddl,blocksworld_sim,gpt-5.2,1.0,1.0,0.9,1.0,0.9667,0.9831,1.0,0.955,0.977,0.9383,0.935,0.9367,0.9794,0.9522,0.9656
+scene_graph_to_pddl,blocksworld_sim,gpt-5.2,1.0,1.0,0.8,1.0,0.9524,0.9756,0.9889,0.935,0.9612,0.9633,0.915,0.9385,0.9841,0.9341,0.9585

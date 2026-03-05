@@ -1,0 +1,7 @@
+(GotoLocation agent1 coffeemaker)
+(PickupObject agent1 cup)
+(GotoLocation agent1 fridge)
+(OpenObject agent1 fridge)
+(PutObjectInReceptacle agent1 cup fridge)
+(CloseObject agent1 fridge)
+(CoolObject agent1 fridge cup)

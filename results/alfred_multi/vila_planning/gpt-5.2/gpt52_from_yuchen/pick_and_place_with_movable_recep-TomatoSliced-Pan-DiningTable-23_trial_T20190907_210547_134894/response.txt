@@ -1,0 +1,7 @@
+(GotoLocation agent pan)
+(PickupObject agent pan)
+(GotoLocation agent tomato)
+(SliceObject agent tomato knife)
+(PutObjectInReceptacle agent tomato_slice pan)
+(GotoLocation agent island)
+(PutObjectInReceptacle agent pan island)

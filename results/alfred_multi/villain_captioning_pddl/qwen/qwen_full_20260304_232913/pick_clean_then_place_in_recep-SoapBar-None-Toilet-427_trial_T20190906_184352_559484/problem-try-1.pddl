@@ -1,0 +1,40 @@
+(define (problem put_clean_soap_on_toilet)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        sink1 - sink
+        bathtub1 - object  ; treated as a location/container for soap, not a domain receptacle
+        toilet1 - object   ; treated as a placement surface, not a domain receptacle
+        soap_red - object
+        toilet_paper - object
+        yellow_object - object
+    )
+    (:init
+        ; agent is not at any location initially
+        (not (atLocation agent1 sink1))
+        (not (atLocation agent1 bathtub1))
+        (not (atLocation agent1 toilet1))
+        
+        ; soap is in the bathtub
+        (inReceptacle soap_red bathtub1)
+        
+        ; toilet has objects on its tank (not relevant to task, but present)
+        (inReceptacle toilet_paper toilet1)
+        (inReceptacle yellow_object toilet1)
+        
+        ; sink is not openable (as per domain, sinks are receptacles but not openable)
+        (not (openable sink1))
+        
+        ; soap is not clean
+        (not (isClean soap_red))
+        
+        ; agent holds nothing
+        (not (holdsAny agent1))
+    )
+    (:goal
+        (and
+            (inReceptacle soap_red toilet1)  ; soap is placed on the toilet (tank top)
+            (isClean soap_red)             ; soap has been cleaned
+        )
+    )
+)

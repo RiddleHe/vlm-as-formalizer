@@ -1,0 +1,4 @@
+(gotolocation robot black_rubber_plunger_beside_toilet)
+(pickupobject robot black_rubber_plunger_beside_toilet)
+(gotolocation robot bathroom_sink_base_cabinet_under_countertop)
+(putobjectinreceptacle robot black_rubber_plunger_beside_toilet bathroom_sink_base_cabinet_under_countertop)

@@ -1,0 +1,29 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        apple1 - object
+        knife1 - knife
+        microwave1 - microwave
+        shelf1 - receptacle
+        sink1 - sink
+    )
+    (:init
+        (atLocation agent1 sink1)
+        (inReceptacle apple1 sink1)
+        (inReceptacle knife1 sink1)
+        (openable microwave1)
+        (not (opened microwave1))
+        (not (isSliced apple1))
+        (not (isHot apple1))
+        (not (isClean apple1))
+        (not (holdsAny agent1))
+    )
+    (:goal
+        (and
+            (isSliced apple1)
+            (isHot apple1)
+            (inReceptacle apple1 shelf1)
+        )
+    )
+)

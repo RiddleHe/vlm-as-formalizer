@@ -1,0 +1,65 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): none visible.
+fridge (receptacle): none visible.
+sink (receptacle):
+- left_square_bathroom_sink_basin
+- right_square_bathroom_sink_basin
+knife (object): none visible.
+receptacle (object):
+- left_square_bathroom_sink_basin
+- right_square_bathroom_sink_basin
+- white_toilet_tank_lid_surface
+object:
+- purple_cleaning_rag_between_sinks
+- yellow_cylindrical_item_between_sinks
+- yellow_cylindrical_item_on_toilet_tank_lid
+
+openable (receptacle) true if a receptacle is openable: none.
+opened (receptacle) true if a receptacle is opened: none.
+holdsAny (agent) agent ?a holds an object: none.
+isClean (object) true if the object has been clean in sink: none.
+isHot (object) true if the object has been heated up: none.
+isCool (object) true if the object has been cooled: none.
+isOn (object) true if the object is on: none.
+isToggled (object) true if the object has been toggled: none.
+isSliced (object) true if the object is sliced: none.
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle purple_cleaning_rag_between_sinks left_square_bathroom_sink_basin)
+- (inReceptacle yellow_cylindrical_item_between_sinks left_square_bathroom_sink_basin)
+- (inReceptacle yellow_cylindrical_item_on_toilet_tank_lid white_toilet_tank_lid_surface)
+holds (agent, object) object ?o is held by agent ?a: none.
+atLocation (agent, object) : none.
+
+PDDL problem: (define (problem put_cleaned_rag_on_toilet_tank_lid)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    left_square_bathroom_sink_basin - sink
+    right_square_bathroom_sink_basin - sink
+
+    white_toilet_tank_lid_surface - receptacle
+
+    purple_cleaning_rag_between_sinks - object
+    yellow_cylindrical_item_between_sinks - object
+    yellow_cylindrical_item_on_toilet_tank_lid - object
+  )
+
+  (:init
+    ;; Object placements (from scene graph)
+    (inReceptacle purple_cleaning_rag_between_sinks left_square_bathroom_sink_basin)
+    (inReceptacle yellow_cylindrical_item_between_sinks left_square_bathroom_sink_basin)
+    (inReceptacle yellow_cylindrical_item_on_toilet_tank_lid white_toilet_tank_lid_surface)
+
+    ;; Robot starts not holding anything and not at any location (no atLocation facts).
+    ;; No objects are initially marked clean/hot/cool/on/toggled/sliced.
+  )
+
+  (:goal
+    (and
+      (isClean purple_cleaning_rag_between_sinks)
+      (inReceptacle purple_cleaning_rag_between_sinks white_toilet_tank_lid_surface)
+    )
+  )
+)

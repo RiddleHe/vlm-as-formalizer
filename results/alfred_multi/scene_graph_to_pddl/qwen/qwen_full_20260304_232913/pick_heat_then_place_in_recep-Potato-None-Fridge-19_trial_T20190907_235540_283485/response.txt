@@ -1,0 +1,59 @@
+Scene graph:
+agent: robot
+microwave (receptacle): black microwave on countertop
+fridge (receptacle): black fridge with magnets
+sink (receptacle): sink next to microwave
+knife (object): knife on table near potato
+receptacle (object): round wooden table, black microwave, black fridge, sink
+object: potato on table, red apple on table, green book on table, loaf of bread on table, plate on table, knife on table, black coffee maker on table, black mug on coffee maker, bottle on table, fork on countertop near microwave
+openable (receptacle) true if a receptacle is openable: (openable black fridge), (openable black microwave), (openable sink)
+opened (receptacle) true if a receptacle is opened: (opened black fridge)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn black microwave), (isOn black coffee maker)
+isToggled (object) true if the object has been toggled: (isToggled black microwave), (isToggled black coffee maker)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle black mug black coffee maker)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot black microwave)
+
+PDDL problem: ```pddl
+(define (problem put_heated_potato_in_fridge)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        black_microwave - microwave
+        black_fridge - fridge
+        sink - sink
+        knife - knife
+        potato - object
+        red_apple - object
+        green_book - object
+        loaf_of_bread - object
+        plate - object
+        black_coffee_maker - object
+        black_mug - object
+        bottle - object
+        fork - object
+        round_wooden_table - receptacle
+    )
+    (:init
+        (openable black_fridge)
+        (openable black_microwave)
+        (openable sink)
+        (opened black_fridge)
+        (isOn black_microwave)
+        (isOn black_coffee_maker)
+        (isToggled black_microwave)
+        (isToggled black_coffee_maker)
+        (inReceptacle black_mug black_coffee_maker)
+        (atLocation robot black_microwave)
+    )
+    (:goal (and
+        (inReceptacle potato black_fridge)
+        (isHot potato)
+    ))
+)
+```

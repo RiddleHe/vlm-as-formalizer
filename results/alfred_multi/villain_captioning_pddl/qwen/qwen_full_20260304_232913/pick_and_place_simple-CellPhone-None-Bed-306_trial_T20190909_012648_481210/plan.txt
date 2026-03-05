@@ -1,0 +1,4 @@
+(gotolocation agent1 phone)
+(pickupobject agent1 phone)
+(gotolocation agent1 bed)
+(putobjectinreceptacle agent1 phone bed)

@@ -1,0 +1,133 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot) ; if robot is not seen in the image, it can be assumed to exist and is handempty
+        (handfull ?x - robot)
+        (holding ?x - block) ; block x is being held by the robot
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    You can always assume that at least one robot arm is available if not in the image.
+    Instruction: Create 1 stacks: blue over orange over red over purple over green over yellow
+    
+
+SCENE CAPTION:
+The scene contains a collection of six colored blocks, a metallic wrench, a black computer mouse, and a black cable on a light-colored, flat surface. For the planning task, the relevant objects are the six blocks, which are all of the type "block" as defined in the domain. A robot arm is not visible in the images but is assumed to be present and available for manipulation, as per the domain requirements.
+
+The blocks are distinguished by their unique colors and current spatial arrangements:
+
+- **Blue Block**: A cyan-blue cube. It is currently stacked on top of the purple block.
+- **Purple Block**: A magenta-purple cube. It is positioned directly under the blue block and on top of the table surface.
+- **Yellow Block**: A pale yellow cube. It is resting on the table, separate from the stack, to the left of the purple block.
+- **Orange Block**: A peach-orange cube. It is resting on the table, separate from the stack, to the left of the yellow block.
+- **Red Block**: A coral-red cube. It is resting on the table, separate from the stack, to the right of the purple block.
+- **Green Block**: A bright green cube. It is partially visible behind the red block and the wrench, also resting on the table.
+
+Based on the domain predicates, the current state is as follows:
+
+- **On Table**: The yellow, orange, red, and green blocks are all on the table (`ontable`). The purple block is also on the table, as it is the base of the existing stack.
+- **On**: The blue block is on the purple block (`on blue purple`).
+- **Clear**: The blue block is clear (`clear blue`) because nothing is on top of it. The yellow, orange, red, and green blocks are also clear, as they are single blocks on the table. The purple block is not clear (`not clear purple`) because the blue block is on top of it.
+- **Handempty**: The robot is assumed to exist and is currently handempty, as no block is being held.
+
+The wrench, mouse, and cable are present in the scene but are not relevant to the block-stacking task defined by the domain and instruction. The goal is to create a single stack with the specific order: blue over orange over red over purple over green over yellow. Currently, only a partial stack of two blocks (blue on purple) exists, and the other four blocks are scattered on the table. The robot must unstack the blue block, then pick up and stack the blocks in the correct sequence to achieve the goal.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

@@ -1,0 +1,6 @@
+(gotolocation robot pink-bar-soap-center)
+(pickupobject robot pink-bar-soap-center)
+(gotolocation robot round-dark-stone-sink-basin)
+(cleanobject robot round-dark-stone-sink-basin pink-bar-soap-center)
+(gotolocation robot long-teal-drawer-cabinet-vanity)
+(putobjectinreceptacle robot pink-bar-soap-center long-teal-drawer-cabinet-vanity)

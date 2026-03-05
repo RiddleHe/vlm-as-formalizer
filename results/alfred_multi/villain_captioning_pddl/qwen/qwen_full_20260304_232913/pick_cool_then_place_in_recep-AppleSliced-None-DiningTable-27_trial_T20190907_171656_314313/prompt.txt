@@ -1,0 +1,284 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: To chill a piece of apple and put it down on the white table.
+    
+
+SCENE CAPTION:
+The scene contains a kitchen environment with multiple objects relevant to the planning task. Below is a detailed description based on the provided images and domain definitions.
+
+---
+
+**1. Objects and Their Types:**
+
+- **Receptacles:**
+  - **Fridge**: A large dark-colored refrigerator with a visible handle, located on the right side of the scene. It is openable and currently closed. Its surface has a textured finish.
+  - **Microwave**: Not visible in the provided images; assumed not present or not in view.
+  - **Sink**: Not visible in the provided images; assumed not present or not in view.
+  - **Table (white)**: A light-colored rectangular table with metallic legs, visible in images 2 and 3. It is a flat surface and functions as a receptacle for holding objects.
+  - **Counter (marble-top)**: A brown marbled countertop visible in image 1, holding a toaster and a bottle. It is a receptacle.
+
+- **Objects (non-receptacles):**
+  - **Apple**: A single red apple is visible on the marble countertop in image 1. It is whole and unsliced.
+  - **Toaster**: A black vintage-style toaster with chrome accents, located on the marble countertop. It is an object, not a receptacle, and is currently off (not toggled on).
+  - **Bottle**: A dark green glass bottle, standing upright on the marble countertop next to the toaster. It is an object.
+  - **Knife**: A metallic knife with a dark handle, visible on the white table in images 2 and 3. It is an object and can be used for slicing.
+  - **Tomatoes**: Two red tomatoes on the white table. They are objects.
+  - **Lettuce**: A green head of lettuce on the white table. It is an object.
+  - **Salt and Pepper Shakers**: Two shakers with copper tops on the white table. They are objects.
+  - **Wine Glass**: A clear wine glass on the white table. It is an object.
+  - **Plate**: A ceramic plate with a decorative rim on the white table. It is an object.
+
+---
+
+**2. Quantities of Each Object Type:**
+
+- Receptacles: 3 (Fridge, White Table, Marble Counter)
+- Objects: 10+ (Apple, Toaster, Bottle, Knife, 2 Tomatoes, Lettuce, 2 Shakers, Wine Glass, Plate)
+- Knives: 1
+- Fridge: 1
+
+---
+
+**3. Spatial Relationships (Matching Domain Predicates):**
+
+- The **apple** is **on** the **marble counter**.
+- The **toaster** and **bottle** are **on** the **marble counter**.
+- The **knife**, **tomatoes**, **lettuce**, **shakers**, **wine glass**, and **plate** are **on** the **white table**.
+- The **fridge** is **adjacent** to the **marble counter** (visible in image 1 and 4).
+- The **agent** is not currently at any object’s location (initial state).
+- No objects are currently held by the agent.
+- No objects are currently in any receptacle (except those resting on surfaces, which are not “in” in the domain sense unless explicitly placed inside a container).
+- The **fridge** is **closed** and **not opened**.
+- The **toaster** is **off** and **not toggled**.
+- The **apple** is **not sliced**, **not cleaned**, **not heated**, and **not cooled**.
+
+---
+
+**4. Current State of Objects Relevant to the Planning Task:**
+
+- **Apple**: Whole, unprocessed, located on the marble counter. Needs to be picked up, chilled in the fridge, and placed on the white table.
+- **Fridge**: Closed. Must be opened by the agent before placing the apple inside.
+- **White Table**: Empty except for food items and utensils. It is the target location for the chilled apple.
+- **Knife**: Available on the white table, but not needed for this task since slicing is not required.
+
+---
+
+**5. Colors, Positions, and Distinguishing Features:**
+
+- **Apple**: Bright red, round, located on the right side of the marble countertop (image 1).
+- **Marble Counter**: Brown with beige veining, occupies the foreground in image 1.
+- **Toaster**: Black with silver levers and trim, positioned centrally on the counter.
+- **Bottle**: Dark green, cylindrical, behind the toaster.
+- **Fridge**: Dark brown or black, textured surface, visible on the far right (image 1 and 4).
+- **White Table**: Light beige surface, metal legs, located in the center of the room (images 2 and 3).
+- **Knife**: Silver blade, dark handle, placed vertically next to the lettuce.
+- **Tomatoes**: Bright red, round, one near the plate, one near the knife.
+- **Lettuce**: Green, leafy, placed between the tomatoes.
+- **Shakers**: Copper-topped, glass bodies, near the wine glass.
+- **Wine Glass**: Clear, stemmed, near the plate.
+- **Plate**: White with red and blue rim, near the left edge of the table.
+
+---
+
+This scene description provides all necessary information for planning the task: “To chill a piece of apple and put it down on the white table.” The apple must be picked up from the marble counter, the fridge must be opened, the apple placed inside to be cooled, then retrieved and placed on the white table. No slicing, cleaning, or heating is required.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

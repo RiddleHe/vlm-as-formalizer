@@ -1,0 +1,40 @@
+```pddl
+(define (problem put_pot_with_sponge_on_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        stove1 - object
+        table1 - object
+        cabinet1 cabinet2 cabinet3 - object
+        pot1 pot2 - object
+        knife1 - knife
+        sponge1 - object
+    )
+    (:init
+        (not (atLocation agent1 microwave1))
+        (not (atLocation agent1 stove1))
+        (not (atLocation agent1 table1))
+        (not (atLocation agent1 cabinet1))
+        (not (atLocation agent1 cabinet2))
+        (not (atLocation agent1 cabinet3))
+        (not (atLocation agent1 pot1))
+        (not (atLocation agent1 pot2))
+        (not (atLocation agent1 knife1))
+        (not (atLocation agent1 sponge1))
+        (not (holdsAny agent1))
+        (not (opened microwave1))
+        (openable microwave1)
+        (inReceptacle pot1 stove1)
+        (inReceptacle pot2 stove1)
+        (inReceptacle knife1 stove1)
+        (isOn microwave1)
+    )
+    (:goal
+        (and
+            (inReceptacle sponge1 pot1)
+            (inReceptacle pot1 table1)
+        )
+    )
+)
+```

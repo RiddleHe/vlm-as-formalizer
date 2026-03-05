@@ -1,0 +1,67 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object):
+- open_cardboard_box_on_left_side_of_coffee_table
+- glass_top_coffee_table
+- green_grid_pattern_couch
+- tissue_box_center_on_table
+object:
+- robot_agent
+- open_cardboard_box_on_left_side_of_coffee_table
+- glass_top_coffee_table
+- green_grid_pattern_couch
+- tissue_box_center_on_table
+- green_cylindrical_candle_on_table
+- left_tv_remote_on_table
+- right_tv_remote_on_table
+- blue_card_on_table
+- gold_round_cushion_on_couch
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened:
+- (opened open_cardboard_box_on_left_side_of_coffee_table)
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_box_with_remote_on_couch)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    open_cardboard_box_on_left_side_of_coffee_table - receptacle
+    glass_top_coffee_table - receptacle
+    green_grid_pattern_couch - receptacle
+    tissue_box_center_on_table - receptacle
+
+    green_cylindrical_candle_on_table - object
+    left_tv_remote_on_table - object
+    right_tv_remote_on_table - object
+    blue_card_on_table - object
+    gold_round_cushion_on_couch - object
+  )
+
+  (:init
+    ;; receptacle state
+    (opened open_cardboard_box_on_left_side_of_coffee_table)
+
+    ;; robot starts not at any location (no atLocation facts)
+  )
+
+  (:goal
+    (and
+      (inReceptacle left_tv_remote_on_table open_cardboard_box_on_left_side_of_coffee_table)
+      (inReceptacle open_cardboard_box_on_left_side_of_coffee_table green_grid_pattern_couch)
+    )
+  )
+)

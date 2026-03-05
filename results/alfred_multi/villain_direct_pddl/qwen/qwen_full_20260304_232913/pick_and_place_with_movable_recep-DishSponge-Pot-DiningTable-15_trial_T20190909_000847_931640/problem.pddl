@@ -1,0 +1,23 @@
+(define (problem put_pot_with_sponge_on_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        pot1 - object
+        sponge1 - object
+        table1 - receptacle
+    )
+    (:init
+        (atLocation agent1 microwave1)
+        (inReceptacle pot1 microwave1)
+        (inReceptacle sponge1 pot1)
+        (openable microwave1)
+        (opened microwave1)
+    )
+    (:goal
+        (and
+            (inReceptacle pot1 table1)
+            (inReceptacle sponge1 pot1)
+        )
+    )
+)

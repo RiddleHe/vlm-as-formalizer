@@ -1,0 +1,11 @@
+failed
+...O     translator command line string: /local-ssd/mh3897/envs/pddl/bin/python /home/mh3897/pddl/villain/downward/builds/release/bin/translate/translate.py /tmp/tmpj4v9kmcn/domain.pddl /tmp/tmpj4v9kmcn/problem.pddl --sas-file /tmp/tmpj4v9kmcn/output_plan.sas
+Parsing...
+Parsing task
+	->Parsing element #12 in init block
+Error in initial state specification
+Reason: Atom atlocation(agent1, pencil1) is true and false.
+translate exit code: 31
+
+Driver aborting after translate
+INFO     Planner time: 0.07s

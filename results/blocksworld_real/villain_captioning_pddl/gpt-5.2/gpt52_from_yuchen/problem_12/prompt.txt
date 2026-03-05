@@ -1,0 +1,166 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot) ; if robot is not seen in the image, it can be assumed to exist and is handempty
+        (handfull ?x - robot)
+        (holding ?x - block) ; block x is being held by the robot
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    You can always assume that at least one robot arm is available if not in the image.
+    Instruction: Create 3 stacks: yellow over orange, purple over green, red over blue
+    
+
+SCENE CAPTION:
+### Scene overview (blocksworld domain)
+The scene shows a tabletop with a **single vertical tower of 6 colored blocks**. No robot arm is visible; per domain assumption, **a robot exists and is handempty**.
+
+### Objects and types
+- **Blocks (6 total):**
+  1. **purple block** (topmost)
+  2. **green block**
+  3. **yellow block**
+  4. **blue block** (cyan/teal appearance)
+  5. **orange block**
+  6. **red block** (bottommost)
+- **Robot (1 assumed):**
+  - **robot1** (not visible)
+
+### Block identification / visual properties
+- All blocks are similarly shaped (cube-like) and stacked in one straight column.
+- **Color order from top to bottom is consistent across the images:**
+  **purple → green → yellow → blue → orange → red**.
+
+### Spatial relationships (predicates)
+Using names: `purple, green, yellow, blue, orange, red`
+
+- **On relationships (current single stack):**
+  - `on(purple, green)`
+  - `on(green, yellow)`
+  - `on(yellow, blue)`
+  - `on(blue, orange)`
+  - `on(orange, red)`
+
+- **Table relationship:**
+  - `ontable(red)` (red is the only block directly on the table)
+
+- **Clear blocks:**
+  - `clear(purple)` (nothing on top of purple)
+  - All other blocks (**green, yellow, blue, orange, red**) are **not clear** because each has a block on top.
+
+### Robot/hand state
+- `handempty(robot1)` is assumed true (no block is being held).
+- No evidence of any `holding(...)` state.
+
+### Planning-relevant current state vs. goal instruction
+**Instruction goal:** create **3 stacks**:
+1. **yellow over orange**
+2. **purple over green**
+3. **red over blue**
+
+**Currently:**
+- **purple over green** is already satisfied as part of the existing tower (`on(purple, green)`).
+- **yellow is currently on blue**, not on orange.
+- **red is currently on the table** with orange above it; red is **not** on blue (and blue is above orange).
+
+To achieve the goal, the single 6-block tower will need to be broken apart into **three separate 2-block stacks** on the table with the specified top/bottom pairings.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

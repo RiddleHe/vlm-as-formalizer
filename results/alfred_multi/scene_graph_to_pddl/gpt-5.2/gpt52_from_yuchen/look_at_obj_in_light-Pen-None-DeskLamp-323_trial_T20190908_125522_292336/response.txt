@@ -1,0 +1,94 @@
+Scene graph:
+agent: 
+- (none visible)
+
+microwave (receptacle):
+- (none visible)
+
+fridge (receptacle):
+- (none visible)
+
+sink (receptacle):
+- (none visible)
+
+knife (object):
+- black-handled kitchen knife on the top surface of the wooden nightstand (top image)
+
+receptacle (object):
+- wooden two-drawer nightstand (top image)
+- wooden two-drawer nightstand (bottom image)
+
+object:
+- yellow pencil lying horizontally on the top surface of the wooden nightstand (top image)
+- small rectangular blue card lying on the top surface of the wooden nightstand (top image)
+- small brown/black digital clock device with green display on the top surface of the wooden nightstand (bottom image)
+
+openable (receptacle) true if a receptacle is openable:
+- (none)
+
+opened (receptacle) true if a receptacle is opened:
+- (none)
+
+holdsAny (agent) agent ?a holds an object:
+- (none)
+
+isClean (object) true if the object has been clean in sink:
+- (none)
+
+isHot (object) true if the object has been heated up:
+- (none)
+
+isCool (object) true if the object has been cooled:
+- (none)
+
+isOn (object) true if the object is on:
+- (none)
+
+isToggled (object) true if the object has been toggled:
+- (none)
+
+isSliced (object) true if the object is sliced:
+- (none)
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle black_handled_knife wooden_nightstand_top)
+- (inReceptacle yellow_pencil wooden_nightstand_top)
+- (inReceptacle small_blue_card wooden_nightstand_top)
+- (inReceptacle digital_clock_device wooden_nightstand_bottom)
+
+holds (agent, object) object ?o is held by agent ?a:
+- (none)
+
+atLocation (agent, object) :
+- (none)
+
+PDDL problem: (define (problem put_task_scene1)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    wooden_nightstand_top - receptacle
+    wooden_nightstand_bottom - receptacle
+
+    black_handled_knife - knife
+    yellow_pencil - object
+    small_blue_card - object
+    digital_clock_device - object
+  )
+
+  (:init
+    ;; robot starts not at any location (no atLocation facts)
+
+    ;; receptacle contents from scene graph
+    (inReceptacle black_handled_knife wooden_nightstand_top)
+    (inReceptacle yellow_pencil wooden_nightstand_top)
+    (inReceptacle small_blue_card wooden_nightstand_top)
+    (inReceptacle digital_clock_device wooden_nightstand_bottom)
+  )
+
+  (:goal
+    (and
+      (holds robot yellow_pencil)
+    )
+  )
+)

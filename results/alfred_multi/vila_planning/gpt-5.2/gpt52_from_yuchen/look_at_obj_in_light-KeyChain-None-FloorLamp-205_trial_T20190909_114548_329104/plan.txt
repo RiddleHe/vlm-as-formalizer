@@ -1,0 +1,5 @@
+(GotoLocation robot tall_lamp)
+(ToggleObject robot tall_lamp)
+(GotoLocation robot keys)
+(PickupObject robot keys)
+(GotoLocation robot tall_lamp)

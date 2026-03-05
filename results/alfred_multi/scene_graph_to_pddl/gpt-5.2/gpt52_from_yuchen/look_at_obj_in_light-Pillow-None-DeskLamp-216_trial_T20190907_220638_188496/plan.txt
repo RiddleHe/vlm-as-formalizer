@@ -1,0 +1,4 @@
+(gotolocation robot_agent dark_wood_side_table_with_drawer)
+(toggleobject robot_agent pink_base_table_lamp_with_rectangular_shade)
+(gotolocation robot_agent patterned_rectangular_pillow_on_armchair)
+(pickupobject robot_agent patterned_rectangular_pillow_on_armchair)

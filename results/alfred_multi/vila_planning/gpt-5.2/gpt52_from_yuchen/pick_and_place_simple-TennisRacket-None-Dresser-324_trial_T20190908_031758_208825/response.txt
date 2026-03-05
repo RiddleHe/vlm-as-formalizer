@@ -1,0 +1,4 @@
+(GotoLocation robot racket)
+(PickupObject robot racket)
+(GotoLocation robot dresser)
+(PutObjectInReceptacle robot racket dresser)

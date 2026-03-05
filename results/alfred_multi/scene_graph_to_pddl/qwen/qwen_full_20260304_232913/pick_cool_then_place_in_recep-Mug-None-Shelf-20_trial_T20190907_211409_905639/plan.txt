@@ -1,0 +1,6 @@
+(gotolocation robot white_mug)
+(pickupobject robot white_mug)
+(gotolocation robot black_fridge_with_digital_display)
+(coolobject robot black_fridge_with_digital_display white_mug)
+(gotolocation robot wooden_shelf_rack)
+(putobjectinreceptacle robot white_mug wooden_shelf_rack)

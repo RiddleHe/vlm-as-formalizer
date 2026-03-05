@@ -1,0 +1,57 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): brown_cardboard_box, wooden_nightstand, wooden_table
+object: agent, brown_cardboard_box, wooden_nightstand, wooden_table, lamp, clock, tablet, pencil, cup, blue_object, tennis_racket
+openable (receptacle) true if a receptacle is openable: (openable brown_cardboard_box), (openable wooden_nightstand), (openable wooden_table)
+opened (receptacle) true if a receptacle is opened: (opened brown_cardboard_box)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn lamp)
+isToggled (object) true if the object has been toggled: (isToggled lamp)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle pencil wooden_nightstand), (inReceptacle cup wooden_nightstand), (inReceptacle clock wooden_table), (inReceptacle tablet wooden_table), (inReceptacle blue_object brown_cardboard_box)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem look_at_box_by_lamp)
+    (:domain put_task)
+    (:objects
+        agent
+        brown_cardboard_box
+        wooden_nightstand
+        wooden_table
+        lamp
+        clock
+        tablet
+        pencil
+        cup
+        blue_object
+        tennis_racket
+    )
+    (:init
+        (openable brown_cardboard_box)
+        (openable wooden_nightstand)
+        (openable wooden_table)
+        (opened brown_cardboard_box)
+        (isOn lamp)
+        (isToggled lamp)
+        (inReceptacle pencil wooden_nightstand)
+        (inReceptacle cup wooden_nightstand)
+        (inReceptacle clock wooden_table)
+        (inReceptacle tablet wooden_table)
+        (inReceptacle blue_object brown_cardboard_box)
+        (atLocation agent brown_cardboard_box)
+    )
+    (:goal (and
+        (atLocation agent brown_cardboard_box)
+        (isOn lamp)
+    ))
+)
+```

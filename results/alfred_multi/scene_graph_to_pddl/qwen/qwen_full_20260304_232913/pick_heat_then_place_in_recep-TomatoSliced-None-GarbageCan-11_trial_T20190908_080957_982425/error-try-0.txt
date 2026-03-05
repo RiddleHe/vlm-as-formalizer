@@ -1,0 +1,7 @@
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  agent
+
+Object does not have a type:
+  coffee_maker
+  agent
+

@@ -1,0 +1,20 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        pillow - object
+        lamp - object
+        side_table - receptacle
+        armchair - receptacle
+    )
+    (:init
+        (atLocation robot side_table)
+        (inReceptacle pillow armchair)
+        (inReceptacle lamp side_table)
+        (not (isOn lamp))
+    )
+    (:goal (and
+        (holds robot pillow)
+        (isOn lamp)
+    ))
+)

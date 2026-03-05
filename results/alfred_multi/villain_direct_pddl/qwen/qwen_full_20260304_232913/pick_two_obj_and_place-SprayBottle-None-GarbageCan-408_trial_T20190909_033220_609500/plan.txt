@@ -1,0 +1,8 @@
+(gotolocation robot spray_bottle1)
+(pickupobject robot spray_bottle1)
+(gotolocation robot garbage_bin)
+(putobjectinreceptacle robot spray_bottle1 garbage_bin)
+(gotolocation robot spray_bottle2)
+(pickupobject robot spray_bottle2)
+(gotolocation robot garbage_bin)
+(putobjectinreceptacle robot spray_bottle2 garbage_bin)

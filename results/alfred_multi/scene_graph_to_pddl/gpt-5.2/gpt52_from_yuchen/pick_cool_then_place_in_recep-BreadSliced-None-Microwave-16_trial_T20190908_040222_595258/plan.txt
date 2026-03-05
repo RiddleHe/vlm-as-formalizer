@@ -1,0 +1,6 @@
+(gotolocation robot_agent two_dark_bread_loaves_on_table)
+(pickupobject robot_agent two_dark_bread_loaves_on_table)
+(gotolocation robot_agent dark_fridge_with_letter_magnets)
+(coolobject robot_agent dark_fridge_with_letter_magnets two_dark_bread_loaves_on_table)
+(gotolocation robot_agent red_black_microwave_on_counter)
+(putobjectinreceptacle robot_agent two_dark_bread_loaves_on_table red_black_microwave_on_counter)

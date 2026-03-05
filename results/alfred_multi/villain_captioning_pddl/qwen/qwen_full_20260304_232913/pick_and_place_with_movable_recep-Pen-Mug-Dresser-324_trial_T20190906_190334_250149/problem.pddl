@@ -1,0 +1,27 @@
+(define (problem put_pen_in_cup)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        pen - object
+        black_cup - receptacle
+        dresser - object
+        laptop - object
+        lamp - object
+        alarm_clock - object
+    )
+    (:init
+        (atLocation robot dresser)  ; robot starts at the dresser to interact with objects
+        (not (holdsAny robot))      ; robot is not holding anything
+        (not (inReceptacle pen black_cup))  ; pen is not in the cup
+        (openable black_cup)        ; black cup is openable (assumed for placement)
+        (not (opened black_cup))    ; black cup is not opened (not necessary for cup, but included for domain consistency)
+        (isOn lamp)               ; lamp is on (from caption)
+        (isToggled alarm_clock)     ; alarm clock is toggled (displaying time)
+        ; pen is on dresser surface
+        ; black_cup is on dresser surface
+        ; laptop is on dresser surface
+    )
+    (:goal (and
+        (inReceptacle pen black_cup)  ; pen is placed inside the black cup
+    ))
+)

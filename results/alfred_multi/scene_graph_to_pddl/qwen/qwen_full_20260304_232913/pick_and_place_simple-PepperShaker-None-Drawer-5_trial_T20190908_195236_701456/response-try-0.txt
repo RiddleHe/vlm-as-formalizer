@@ -1,0 +1,66 @@
+Scene graph:
+agent: robot
+microwave (receptacle): black microwave on countertop
+fridge (receptacle): none visible
+sink (receptacle): stainless steel sink with faucet
+knife (object): yellow-handled knife on countertop near stove, fork on countertop near sink (note: fork is not a knife, so not included here)
+receptacle (object): silver toaster, brown frying pan, white egg, red apple, metal spoon, metal pot, two silver kettles, stove, cabinets (left and right under sink and stove), drawer under countertop near sink
+object: yellow-handled knife, fork, white egg, red apple, metal spoon, metal pot, two silver kettles, brown frying pan, silver toaster, stove, cabinets, drawer
+openable (receptacle) true if a receptacle is openable: (openable black microwave on countertop), (openable stainless steel sink), (openable cabinets), (openable drawer)
+opened (receptacle) true if a receptacle is opened: none (all receptacles are closed initially)
+holdsAny (agent) agent ?a holds an object: none (robot holds nothing initially)
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn silver toaster), (isOn stove), (isOn two silver kettles)
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle metal spoon stainless steel sink), (inReceptacle metal pot stainless steel sink), (inReceptacle red apple stainless steel sink)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none (robot is not at any location initially)
+
+PDDL problem: ```pddl
+(define (problem put_salt_shaker_in_drawer)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        sink - sink
+        drawer - receptacle
+        cabinets - receptacle
+        knife - knife
+        spoon - object
+        pot - object
+        apple - object
+        toaster - object
+        stove - object
+        kettle1 - object
+        kettle2 - object
+        frying_pan - object
+        egg - object
+        fork - object
+    )
+    (:init
+        (openable microwave)
+        (openable sink)
+        (openable drawer)
+        (openable cabinets)
+        (not (opened microwave))
+        (not (opened sink))
+        (not (opened drawer))
+        (not (opened cabinets))
+        (not (holdsAny robot))
+        (isOn toaster)
+        (isOn stove)
+        (isOn kettle1)
+        (isOn kettle2)
+        (inReceptacle spoon sink)
+        (inReceptacle pot sink)
+        (inReceptacle apple sink)
+        (atLocation robot microwave) ; arbitrary starting location, since robot is not at any object initially, we pick one for initialization
+    )
+    (:goal (and
+        (inReceptacle salt_shaker drawer)
+    ))
+)
+```

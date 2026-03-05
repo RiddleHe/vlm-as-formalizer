@@ -1,0 +1,65 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object): 
+- black_leather_three_seat_sofa_left
+- black_coffee_table_center
+- open_cardboard_box_on_table
+object: 
+- gray_tv_remote_on_table
+- small_gray_elephant_toy_on_table
+- scattered_photos_and_papers_on_table
+
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle gray_tv_remote_on_table black_coffee_table_center)
+- (inReceptacle small_gray_elephant_toy_on_table black_coffee_table_center)
+- (inReceptacle scattered_photos_and_papers_on_table black_coffee_table_center)
+- (inReceptacle open_cardboard_box_on_table black_coffee_table_center)
+
+holds (agent, object) object ?o is held by agent ?a: none
+
+atLocation (agent, object) :
+- (atLocation robot_agent black_leather_three_seat_sofa_left)
+
+PDDL problem: (define (problem put_task_remote_on_sofa)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    black_leather_three_seat_sofa_left - receptacle
+    black_coffee_table_center - receptacle
+    open_cardboard_box_on_table - receptacle
+
+    gray_tv_remote_on_table - object
+    small_gray_elephant_toy_on_table - object
+    scattered_photos_and_papers_on_table - object
+  )
+
+  (:init
+    (atLocation robot_agent black_leather_three_seat_sofa_left)
+
+    (inReceptacle gray_tv_remote_on_table black_coffee_table_center)
+    (inReceptacle small_gray_elephant_toy_on_table black_coffee_table_center)
+    (inReceptacle scattered_photos_and_papers_on_table black_coffee_table_center)
+    (inReceptacle open_cardboard_box_on_table black_coffee_table_center)
+  )
+
+  (:goal
+    (and
+      (inReceptacle gray_tv_remote_on_table black_leather_three_seat_sofa_left)
+    )
+  )
+)

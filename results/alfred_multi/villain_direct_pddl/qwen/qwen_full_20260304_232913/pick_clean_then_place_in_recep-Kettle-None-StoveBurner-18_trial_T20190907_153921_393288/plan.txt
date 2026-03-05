@@ -1,0 +1,6 @@
+(gotolocation robot teapot)
+(pickupobject robot teapot)
+(gotolocation robot sink)
+(cleanobject robot sink teapot)
+(gotolocation robot stove)
+(putobjectinreceptacle robot teapot stove)

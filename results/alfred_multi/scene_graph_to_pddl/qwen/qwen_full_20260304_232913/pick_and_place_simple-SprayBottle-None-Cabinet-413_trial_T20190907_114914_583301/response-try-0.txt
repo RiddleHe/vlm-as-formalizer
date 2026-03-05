@@ -1,0 +1,56 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): beige oval sink basin, second beige oval sink basin
+knife (object): 
+receptacle (object): white bathroom cabinet under sinks, red trash bin, white toilet tank
+object: green spray bottle, white toilet paper roll, white towel, black bathtub stains, beige tiled floor, beige wall, white towel rack, white window frame, white bathtub, white toilet seat, white toilet lid, white toilet bowl, white toilet tank lid, white toilet handle, white toilet base, white toilet paper holder, white sink faucet, white sink drain, white sink countertop, white sink cabinet doors, white sink cabinet drawers, white sink cabinet handles, white sink cabinet frame, white sink cabinet top, white sink cabinet bottom, white sink cabinet sides, white sink cabinet back, white sink cabinet front, white sink cabinet interior, white sink cabinet exterior, white sink cabinet surface, white sink cabinet edge, white sink cabinet corner, white sink cabinet seam, white sink cabinet joint, white sink cabinet panel, white sink cabinet door, white sink cabinet drawer, white sink cabinet handle, white sink cabinet knob, white sink cabinet latch, white sink cabinet lock, white sink cabinet hinge, white sink cabinet screw, white sink cabinet bolt, white sink cabinet nut, white sink cabinet washer, white sink cabinet gasket, white sink cabinet seal, white sink cabinet liner, white sink cabinet mat, white sink cabinet pad, white sink cabinet cushion, white sink cabinet cover, white sink cabinet lid, white sink cabinet top, white sink cabinet bottom, white sink cabinet sides, white sink cabinet back, white sink cabinet front, white sink cabinet interior, white sink cabinet exterior, white sink cabinet surface, white sink cabinet edge, white sink cabinet corner, white sink cabinet seam, white sink cabinet joint, white sink cabinet panel, white sink cabinet door, white sink cabinet drawer, white sink cabinet handle, white sink cabinet knob, white sink cabinet latch, white sink cabinet lock, white sink cabinet hinge, white sink cabinet screw, white sink cabinet bolt, white sink cabinet nut, white sink cabinet washer, white sink cabinet gasket, white sink cabinet seal, white sink cabinet liner, white sink cabinet mat, white sink cabinet pad, white sink cabinet cushion, white sink cabinet cover, white sink cabinet lid
+openable (receptacle) true if a receptacle is openable: (openable white bathroom cabinet under sinks), (openable red trash bin), (openable white toilet tank)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn green spray bottle)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle white toilet paper roll white toilet paper holder), (inReceptacle green spray bottle white toilet tank)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_spray_bottle_in_cabinet)
+    (:domain put_task)
+    (:objects
+        agent
+        sink1 - sink
+        sink2 - sink
+        cabinet - receptacle
+        trash_bin - receptacle
+        toilet_tank - receptacle
+        spray_bottle - object
+        toilet_paper - object
+    )
+    (:init
+        (openable cabinet)
+        (openable trash_bin)
+        (openable toilet_tank)
+        (not (opened cabinet))
+        (not (opened trash_bin))
+        (not (opened toilet_tank))
+        (inReceptacle spray_bottle toilet_tank)
+        (inReceptacle toilet_paper toilet_paper_holder)
+        (isOn spray_bottle)
+        (not (holdsAny agent))
+        (not (atLocation agent spray_bottle))
+        (not (atLocation agent cabinet))
+        (not (atLocation agent toilet_tank))
+    )
+    (:goal
+        (and
+            (inReceptacle spray_bottle cabinet)
+        )
+    )
+)
+```

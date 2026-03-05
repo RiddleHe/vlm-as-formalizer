@@ -1,0 +1,4 @@
+(GotoLocation robot desk)
+(PickupObject robot cellphone)
+(GotoLocation robot bed)
+(PutObjectInReceptacle robot cellphone bed)

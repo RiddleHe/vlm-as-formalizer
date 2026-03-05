@@ -1,0 +1,56 @@
+(define (problem place_pan_with_tomato)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        island - receptacle
+        stove - receptacle
+        tomato - object
+        knife - object
+        pan - object
+        salt_shaker - object
+        martini_glass - object
+        wine_bottle1 - object
+        wine_bottle2 - object
+        wine_bottle3 - object
+        lettuce1 - object
+        lettuce2 - object
+        soap_dispenser - object
+        pot - object
+    )
+    (:init
+        ; Locations
+        (inReceptacle tomato island)
+        (inReceptacle knife island)
+        (inReceptacle pan stove)
+        (inReceptacle pot stove)
+        (inReceptacle salt_shaker island)
+        (inReceptacle martini_glass island)
+        (inReceptacle wine_bottle1 island)
+        (inReceptacle wine_bottle2 island)
+        (inReceptacle wine_bottle3 island)
+        (inReceptacle lettuce1 island)
+        (inReceptacle lettuce2 island)
+        (inReceptacle soap_dispenser island)
+
+        ; States
+        (not (isSliced tomato))
+        (not (holdsAny robot))
+        (not (atLocation robot island))
+        (not (atLocation robot stove))
+        (not (isOn stove))
+        (not (isToggled stove))
+
+        ; Receptacle properties
+        (openable island)
+        (openable stove)
+        (opened island)
+        (opened stove)
+    )
+    (:goal
+        (and
+            (inReceptacle pan island)
+            (isSliced tomato)
+            (inReceptacle tomato pan)
+        )
+    )
+)

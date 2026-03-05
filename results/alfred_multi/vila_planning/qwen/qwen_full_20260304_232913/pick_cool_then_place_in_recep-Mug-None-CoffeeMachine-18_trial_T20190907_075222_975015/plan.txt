@@ -1,0 +1,6 @@
+(GotoLocation robot coffee_machine)
+(PickupObject robot mug)
+(GotoLocation robot fridge)
+(OpenObject robot fridge)
+(PutObjectInReceptacle robot mug fridge)
+(CloseObject robot fridge)

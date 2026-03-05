@@ -1,0 +1,57 @@
+Scene graph:
+agent: agent1
+microwave (receptacle): microwave1
+fridge (receptacle): fridge1
+sink (receptacle): sink1
+knife (object): knife1
+receptacle (object): small_table1, dining_table1
+object: plate1, keys1, remote1, laptop1, chair1, chair2, yellow_couch1, statue1
+openable (receptacle) true if a receptacle is openable: (openable microwave1), (openable fridge1), (openable sink1)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle plate1 dining_table1), (inReceptacle keys1 small_table1), (inReceptacle remote1 dining_table1), (inReceptacle laptop1 dining_table1)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_plate_with_keys_on_small_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        sink1 - sink
+        knife1 - knife
+        small_table1 - receptacle
+        dining_table1 - receptacle
+        plate1 - object
+        keys1 - object
+        remote1 - object
+        laptop1 - object
+        chair1 - object
+        chair2 - object
+        yellow_couch1 - object
+        statue1 - object
+    )
+    (:init
+        (openable microwave1)
+        (openable fridge1)
+        (openable sink1)
+        (inReceptacle plate1 dining_table1)
+        (inReceptacle keys1 small_table1)
+        (inReceptacle remote1 dining_table1)
+        (inReceptacle laptop1 dining_table1)
+        (not (holdsAny agent1))
+    )
+    (:goal (and
+        (inReceptacle plate1 small_table1)
+        (inReceptacle keys1 plate1)
+    ))
+)
+```

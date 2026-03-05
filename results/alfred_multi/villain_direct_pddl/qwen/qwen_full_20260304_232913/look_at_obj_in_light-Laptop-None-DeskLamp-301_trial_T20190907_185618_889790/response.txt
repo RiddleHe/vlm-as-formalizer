@@ -1,0 +1,33 @@
+```pddl
+(define (problem carry_laptop_turn_on_light)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        laptop1 laptop2 - object
+        book - object
+        phone - object
+        pillow - object
+        bed - receptacle
+        nightstand - receptacle
+        lamp - object
+        alarm_clock - object
+    )
+    (:init
+        (atLocation robot nightstand)
+        (inReceptacle lamp nightstand)
+        (inReceptacle alarm_clock nightstand)
+        (inReceptacle laptop1 bed)
+        (inReceptacle laptop2 bed)
+        (inReceptacle book bed)
+        (inReceptacle phone bed)
+        (inReceptacle pillow bed)
+        (not (isOn lamp))
+    )
+    (:goal
+        (and
+            (holds robot laptop1)
+            (isOn lamp)
+        )
+    )
+)
+```

@@ -1,0 +1,15 @@
+Predicate argument has wrong type:
+  atLocation potato1 round_table: potato1 is not a agent
+  atLocation bottle1 round_table: bottle1 is not a agent
+  atLocation paper_towel_roll1 round_table: paper_towel_roll1 is not a agent
+  atLocation cucumber2 round_table: cucumber2 is not a agent
+  atLocation knife1 round_table: knife1 is not a agent
+  atLocation spatula1 kitchen_counter: spatula1 is not a agent
+  atLocation cucumber1 round_table: cucumber1 is not a agent
+  atLocation fork1 round_table: fork1 is not a agent
+  atLocation bread1 kitchen_counter: bread1 is not a agent
+  atLocation egg1 round_table: egg1 is not a agent
+
+Object does not have a type:
+  frying_pan
+

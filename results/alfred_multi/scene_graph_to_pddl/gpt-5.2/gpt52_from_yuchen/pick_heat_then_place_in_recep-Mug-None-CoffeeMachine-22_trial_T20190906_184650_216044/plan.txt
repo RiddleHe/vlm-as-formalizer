@@ -1,0 +1,6 @@
+(gotolocation robot round-brown-item-on-counter)
+(pickupobject robot round-brown-item-on-counter)
+(gotolocation robot red-countertop-microwave)
+(heatobject robot red-countertop-microwave round-brown-item-on-counter)
+(gotolocation robot beige-coffee-maker-with-drip-tray)
+(putobjectinreceptacle robot round-brown-item-on-counter beige-coffee-maker-with-drip-tray)

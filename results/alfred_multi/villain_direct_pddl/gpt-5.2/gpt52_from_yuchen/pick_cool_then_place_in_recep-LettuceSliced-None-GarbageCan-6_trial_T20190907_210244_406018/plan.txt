@@ -1,0 +1,4 @@
+(gotolocation robot lettuce1)
+(pickupobject robot lettuce1)
+(gotolocation robot garbagecan1)
+(putobjectinreceptacle robot lettuce1 garbagecan1)

@@ -1,0 +1,18 @@
+(define (problem move_phone_to_shelf)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        end_table - receptacle
+        shelf - receptacle
+        phone - object
+    )
+    (:init
+        (atLocation robot end_table)
+        (inReceptacle phone end_table)
+        (openable end_table)
+        (opened end_table)
+    )
+    (:goal
+        (inReceptacle phone shelf)
+    )
+)

@@ -1,0 +1,4 @@
+(gotolocation robot coffeecup1)
+(pickupobject robot coffeecup1)
+(gotolocation robot coffeemaker1)
+(putobjectinreceptacle robot coffeecup1 coffeemaker1)

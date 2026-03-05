@@ -1,0 +1,61 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): none visible.
+fridge (receptacle): one tall black fridge at the left side of the sink view.
+sink (receptacle): one silver sink basin set into a green countertop with a faucet.
+knife (object): one table knife lying on the green tablecloth near the bowls.
+receptacle (object): one silver metal pan/roasting tray on the table; two square bowls on the table; one clear glass bottle/carafe on the table; one fridge (as receptacle); one sink (as receptacle).
+object: two green wine bottles on the table; one metal spoon on the table; one metal fork on the table; one red round fruit (apple/tomato-like) on the table near the carafe.
+openable (receptacle) true if a receptacle is openable: (openable black-fridge-left-of-sink)
+opened (receptacle) true if a receptacle is opened: none.
+holdsAny (agent) agent ?a holds an object: none.
+isClean (object) true if the object has been clean in sink: none.
+isHot (object) true if the object has been heated up: none.
+isCool (object) true if the object has been cooled: none.
+isOn (object) true if the object is on: none.
+isToggled (object) true if the object has been toggled: none.
+isSliced (object) true if the object is sliced: none.
+inReceptacle (object, object) object ?o is in receptacle ?r: none.
+holds (agent, object) object ?o is held by agent ?a: none.
+atLocation (agent, object) : none.
+
+PDDL problem: (define (problem put_task_pan_water_island)
+  (:domain put_task)
+
+  (:objects
+    robot - agent
+
+    black-fridge-left-of-sink - fridge
+    silver-sink-basin - sink
+
+    silver-metal-pan - receptacle
+    square-bowl-1 - receptacle
+    square-bowl-2 - receptacle
+    clear-glass-bottle-carafe - receptacle
+
+    table-knife - knife
+
+    green-wine-bottle-1 - object
+    green-wine-bottle-2 - object
+    metal-spoon - object
+    metal-fork - object
+    red-round-fruit - object
+  )
+
+  (:init
+    (openable black-fridge-left-of-sink)
+    ;; no receptacles are initially opened
+    ;; robot initially not at any location (no atLocation facts)
+    ;; nothing is initially in any receptacle (no inReceptacle facts)
+  )
+
+  (:goal
+    (and
+      ;; "fill the pan with water" modeled as having water (carafe) in the pan
+      (inReceptacle clear-glass-bottle-carafe silver-metal-pan)
+
+      ;; "put the pan on the kitchen island" modeled as pan placed in the island container (a bowl)
+      (inReceptacle silver-metal-pan square-bowl-1)
+    )
+  )
+)

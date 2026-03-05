@@ -1,0 +1,4 @@
+(gotolocation robot_agent black_coffee_table_center)
+(pickupobject robot_agent gray_tv_remote_on_table)
+(gotolocation robot_agent black_leather_three_seat_sofa_left)
+(putobjectinreceptacle robot_agent gray_tv_remote_on_table black_leather_three_seat_sofa_left)

@@ -1,0 +1,55 @@
+Scene graph:
+agent: robot
+microwave (receptacle): black toaster oven on countertop
+fridge (receptacle): black refrigerator
+sink (receptacle): white sink on left
+knife (object): silver knife on white table
+receptacle (object): black toaster oven on countertop, black refrigerator, white sink on left, white table
+object: red tomato on white table, green lettuce on white table, yellow apple on white table, red tomato on white table, silver knife on white table, brown bottle on countertop, red apple on countertop, wine glass on white table, salt shaker on white table, pepper shaker on white table, plate on white table
+openable (receptacle) true if a receptacle is openable: (openable black refrigerator), (openable black toaster oven on countertop), (openable white sink on left)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn black toaster oven on countertop)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle red apple on countertop black toaster oven on countertop)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem chill_apple)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        black_toaster_oven - microwave
+        black_refrigerator - fridge
+        white_sink - sink
+        silver_knife - knife
+        white_table - receptacle
+        red_apple_on_countertop - object
+        yellow_apple_on_table - object
+        red_tomato_on_table - object
+        green_lettuce_on_table - object
+        brown_bottle_on_countertop - object
+        wine_glass_on_table - object
+        salt_shaker_on_table - object
+        pepper_shaker_on_table - object
+        plate_on_table - object
+    )
+    (:init
+        (openable black_toaster_oven)
+        (openable black_refrigerator)
+        (openable white_sink)
+        (isOn black_toaster_oven)
+        (inReceptacle red_apple_on_countertop black_toaster_oven)
+        (atLocation robot white_table) ; Assuming robot starts near the table for simplicity, as no initial location is specified
+    )
+    (:goal (and
+        (isCool yellow_apple_on_table)
+        (inReceptacle yellow_apple_on_table white_table)
+    ))
+)
+```

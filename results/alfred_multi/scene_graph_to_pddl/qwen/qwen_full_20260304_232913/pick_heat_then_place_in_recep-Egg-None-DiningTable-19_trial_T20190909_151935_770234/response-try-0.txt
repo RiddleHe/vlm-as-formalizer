@@ -1,0 +1,57 @@
+Scene graph:
+agent: agent
+microwave (receptacle): black microwave on countertop
+fridge (receptacle): none
+sink (receptacle): beige sink with faucet
+knife (object): silver knife on table, silver knife in sink
+receptacle (object): wooden table, black coffee maker, beige bowl, black mug, beige sink, black microwave
+object: red apple on table, red apple on table near fork, green book on table, beige bowl on table, black mug on table, black mug in sink, brown egg in sink, silver fork on table, silver fork in sink, silver spatula on table, silver spatula on countertop near microwave, black coffee maker on table, beige bowl on table, green book in sink
+openable (receptacle) true if a receptacle is openable: (openable black microwave), (openable beige sink)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn black coffee maker)
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle black mug beige sink), (inReceptacle brown egg beige sink), (inReceptacle green book beige sink), (inReceptacle silver fork beige sink)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem cooked_egg_on_table)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        sink - receptacle
+        table - receptacle
+        knife - object
+        egg - object
+        fork - object
+        mug - object
+        book - object
+        bowl - object
+        coffee_maker - object
+        spatula - object
+        apple - object
+    )
+    (:init
+        (openable microwave)
+        (openable sink)
+        (not (opened microwave))
+        (not (opened sink))
+        (inReceptacle mug sink)
+        (inReceptacle egg sink)
+        (inReceptacle book sink)
+        (inReceptacle fork sink)
+        (isOn coffee_maker)
+        (atLocation agent table) ; Assuming agent starts at table as it's central
+    )
+    (:goal (and
+        (inReceptacle egg table)
+        (isHot egg)
+    ))
+)
+```

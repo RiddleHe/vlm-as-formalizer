@@ -1,0 +1,4 @@
+(gotolocation robot_agent metal_bowl_left_edge_of_table)
+(pickupobject robot_agent metal_bowl_left_edge_of_table)
+(gotolocation robot_agent green_kitchen_table)
+(putobjectinreceptacle robot_agent metal_bowl_left_edge_of_table green_kitchen_table)

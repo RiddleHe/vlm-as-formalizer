@@ -1,0 +1,6 @@
+(gotolocation robot_agent white_coffee_mug_on_coffee_maker_tray)
+(pickupobject robot_agent white_coffee_mug_on_coffee_maker_tray)
+(gotolocation robot_agent stainless_kitchen_sink_basin)
+(cleanobject robot_agent stainless_kitchen_sink_basin white_coffee_mug_on_coffee_maker_tray)
+(gotolocation robot_agent blue_coffee_maker_machine)
+(putobjectinreceptacle robot_agent white_coffee_mug_on_coffee_maker_tray blue_coffee_maker_machine)

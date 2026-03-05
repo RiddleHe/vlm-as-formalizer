@@ -1,0 +1,27 @@
+```pddl
+(define (problem put_toilet_paper_on_toilet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        toilet - object
+        trash_can - receptacle
+        full_toilet_paper_roll - object
+        empty_toilet_paper_roll - object
+        sink - sink
+    )
+    (:init
+        (atLocation robot sink) ; Initial location is arbitrary; we assume robot starts near sink for planning.
+        (inReceptacle full_toilet_paper_roll trash_can)
+        (openable trash_can)
+        (not (opened trash_can))
+        ; The empty roll's location is unknown; we assume it's not in any receptacle initially.
+        ; The toilet is not a receptacle, so we cannot use inReceptacle for it.
+        ; We will use atLocation to indicate objects are placed on it.
+    )
+    (:goal (and
+        (atLocation robot toilet)
+        (atLocation full_toilet_paper_roll toilet)
+        (atLocation empty_toilet_paper_roll toilet)
+    ))
+)
+```

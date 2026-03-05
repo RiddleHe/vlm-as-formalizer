@@ -1,0 +1,31 @@
+```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife - knife
+        pan - receptacle
+        potato - object
+        trash_can - receptacle
+    )
+    (:init
+        (openable fridge)
+        (not (opened fridge))
+        (atLocation robot trash_can)
+        (inReceptacle potato trash_can)
+        (inReceptacle knife pan)
+        (isHot potato)
+        (isSliced potato)
+    )
+    (:goal
+        (and
+            (inReceptacle pan fridge)
+            (inReceptacle knife pan)
+            (inReceptacle potato pan)
+        )
+    )
+)
+```

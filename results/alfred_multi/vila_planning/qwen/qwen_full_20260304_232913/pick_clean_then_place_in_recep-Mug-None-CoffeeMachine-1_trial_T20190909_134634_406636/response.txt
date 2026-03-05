@@ -1,0 +1,6 @@
+(GotoLocation robot coffee_machine)
+(PickupObject robot mug)
+(GotoLocation robot sink)
+(CleanObject robot sink mug)
+(GotoLocation robot coffee_machine)
+(PutObjectInReceptacle robot mug coffee_machine)

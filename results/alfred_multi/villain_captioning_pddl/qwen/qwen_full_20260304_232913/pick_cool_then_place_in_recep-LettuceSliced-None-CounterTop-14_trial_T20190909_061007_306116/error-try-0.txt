@@ -1,0 +1,11 @@
+Predicate argument has wrong type:
+  atLocation cutting_board1 counter1: cutting_board1 is not a agent
+  atLocation lettuce1 counter1: lettuce1 is not a agent
+  atLocation toaster1 counter1: toaster1 is not a agent
+  atLocation coffee_machine1 counter1: coffee_machine1 is not a agent
+  atLocation pot1 counter1: pot1 is not a agent
+  atLocation salt_shaker1 counter1: salt_shaker1 is not a agent
+  atLocation ladle1 counter1: ladle1 is not a agent
+  atLocation fork1 counter1: fork1 is not a agent
+  atLocation knife1 counter1: knife1 is not a agent
+

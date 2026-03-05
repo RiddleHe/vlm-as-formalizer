@@ -1,0 +1,6 @@
+(GotoLocation agent countertop)
+(PickupObject agent knife)
+(SliceObject agent tomato knife)
+(PickupObject agent tomato_slice)
+(GotoLocation agent trashcan)
+(PutObjectInReceptacle agent tomato_slice trashcan)

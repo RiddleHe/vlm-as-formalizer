@@ -1,0 +1,48 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        trashcan1 - receptacle
+        knife1 - knife
+        pan1 - object
+        potato1 - object
+        tomato1 - object
+    )
+    (:init
+        ; Initial locations
+        (atLocation agent1 trashcan1) ; Assuming agent starts near trashcan for simplicity, as no specific start is given
+        (atLocation knife1 trashcan1) ; Knife is on countertop next to trashcan
+        (atLocation pan1 trashcan1)   ; Pan is on countertop
+        (atLocation potato1 trashcan1) ; Potato is on countertop
+        (atLocation tomato1 trashcan1) ; Tomato is in trashcan
+
+        ; Receptacle properties
+        (openable microwave1)
+        (openable fridge1)
+        (opened trashcan1) ; Trashcan is open
+
+        ; Object states
+        (inReceptacle tomato1 trashcan1) ; Tomato is in trashcan
+        (not (isClean potato1))
+        (not (isHot potato1))
+        (not (isCool potato1))
+        (not (isSliced potato1))
+        (not (isOn microwave1))
+        (not (isToggled microwave1))
+        (not (isOn fridge1))
+        (not (isToggled fridge1))
+        (not (holdsAny agent1))
+    )
+    (:goal
+        (and
+            (inReceptacle pan1 fridge1)
+            (inReceptacle knife1 pan1)
+            (inReceptacle potato1 pan1)
+            (isSliced potato1)
+            (isHot potato1)
+            (opened fridge1)
+        )
+    )
+)

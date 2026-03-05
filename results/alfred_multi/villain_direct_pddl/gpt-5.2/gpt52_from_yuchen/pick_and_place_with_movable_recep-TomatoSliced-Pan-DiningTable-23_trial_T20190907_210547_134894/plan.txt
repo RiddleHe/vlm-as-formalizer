@@ -1,0 +1,6 @@
+(pickupobject robot pan)
+(putobjectinreceptacle robot pan island)
+(pickupobject robot tomato)
+(putobjectinreceptacle robot tomato pan)
+(pickupobject robot knife)
+(sliceobject robot tomato knife)

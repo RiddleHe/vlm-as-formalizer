@@ -1,0 +1,4 @@
+(GotoLocation agent1 watch)
+(PickupObject agent1 watch)
+(GotoLocation agent1 small_wooden_table)
+(PutObjectInReceptacle agent1 watch small_wooden_table)

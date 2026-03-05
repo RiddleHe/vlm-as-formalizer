@@ -1,0 +1,8 @@
+(GotoLocation robot stove)
+(PickupObject robot pan1)
+(GotoLocation robot counter)
+(PutObjectInReceptacle robot pan1 counter)
+(GotoLocation robot stove)
+(PickupObject robot pan2)
+(GotoLocation robot counter)
+(PutObjectInReceptacle robot pan2 counter)

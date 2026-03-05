@@ -1,0 +1,36 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        knife1 - knife
+        apple1 - object
+        plate1 - object
+    )
+    (:init
+        (openable microwave1)
+        (openable fridge1)
+        (not (opened microwave1))
+        (not (opened fridge1))
+        (inReceptacle apple1 microwave1)
+        (not (isSliced apple1))
+        (atLocation agent1 microwave1) ; Assuming agent starts near microwave for efficiency, though not specified
+        (not (holdsAny agent1))
+        (not (isHot apple1))
+        (not (isCool apple1))
+        (not (isClean apple1))
+        (not (isToggled microwave1))
+        (not (isToggled fridge1))
+        ; Knife and plate are on countertop, not in any receptacle
+        ; Since countertop is not a defined receptacle, we assume they are at their locations
+        (atLocation agent1 knife1) ; This is an assumption; agent needs to go to knife first
+        (atLocation agent1 plate1) ; This is an assumption; agent needs to go to plate first
+    )
+    (:goal (and
+        (inReceptacle plate1 fridge1)
+        (inReceptacle knife1 plate1) ; Assuming plate can hold knife
+        (inReceptacle apple1 plate1) ; Assuming plate can hold apple piece
+        (isSliced apple1)
+    ))
+)

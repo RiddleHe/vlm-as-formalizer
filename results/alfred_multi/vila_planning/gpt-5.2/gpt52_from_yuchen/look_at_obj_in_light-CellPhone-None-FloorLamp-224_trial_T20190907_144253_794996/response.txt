@@ -1,0 +1,1 @@
+(GotoLocation robot tall_lamp)

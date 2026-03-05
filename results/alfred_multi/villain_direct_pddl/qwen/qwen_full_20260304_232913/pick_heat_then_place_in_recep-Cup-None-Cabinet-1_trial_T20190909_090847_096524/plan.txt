@@ -1,0 +1,6 @@
+(gotolocation agent1 cabinet1)
+(gotolocation agent1 microwave1)
+(pickupobject agent1 glass1)
+(heatobject agent1 microwave1 glass1)
+(gotolocation agent1 cabinet1)
+(putobjectinreceptacle agent1 glass1 cabinet1)

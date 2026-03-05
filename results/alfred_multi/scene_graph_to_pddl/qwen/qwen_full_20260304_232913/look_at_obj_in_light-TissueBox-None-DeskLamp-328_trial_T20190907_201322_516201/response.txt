@@ -1,0 +1,53 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): wooden desk, tissue box, lamp base
+object: wooden desk, tissue box, lamp base, lamp shade, pencil, black chair, digital clock, keys, dumbbell, tissue paper, green lamp
+openable (receptacle) true if a receptacle is openable: (openable tissue box)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle tissue paper tissue box)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem turn_on_lamp_pick_up_tissues)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        wooden_desk - receptacle
+        tissue_box - receptacle
+        lamp_base - receptacle
+        lamp_shade - object
+        pencil - object
+        black_chair - object
+        digital_clock - object
+        keys - object
+        dumbbell - object
+        tissue_paper - object
+        green_lamp - object
+    )
+    (:init
+        (openable tissue_box)
+        (not (opened tissue_box))
+        (inReceptacle tissue_paper tissue_box)
+        (not (holdsAny robot))
+        (not (isOn green_lamp))
+        (not (isToggled green_lamp))
+        (atLocation robot wooden_desk) ; assuming robot starts near desk for accessibility
+    )
+    (:goal (and
+        (isOn green_lamp)
+        (holds robot tissue_box)
+    ))
+)
+```

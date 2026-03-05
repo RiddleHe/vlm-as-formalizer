@@ -1,0 +1,48 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): silver_countertop_microwave_on_right_counter
+fridge (receptacle): black_top_freezer_fridge_left_side
+sink (receptacle): silver_sink_with_faucet_center_counter
+knife (object): 
+receptacle (object): silver_countertop_microwave_on_right_counter, black_top_freezer_fridge_left_side, silver_sink_with_faucet_center_counter
+object: robot_agent, silver_countertop_microwave_on_right_counter, black_top_freezer_fridge_left_side, silver_sink_with_faucet_center_counter
+
+openable (receptacle) true if a receptacle is openable: (openable silver_countertop_microwave_on_right_counter), (openable black_top_freezer_fridge_left_side)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: (define (problem put_task_cooled_cup_in_microwave)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+    silver_countertop_microwave_on_right_counter - microwave
+    black_top_freezer_fridge_left_side - fridge
+    silver_sink_with_faucet_center_counter - sink
+  )
+
+  (:init
+    (openable silver_countertop_microwave_on_right_counter)
+    (openable black_top_freezer_fridge_left_side)
+    ;; Robot initially not at any object's location; no (atLocation ...) facts.
+  )
+
+  (:goal
+    (and
+      ;; No cup object exists in the provided scene graph, so the intended goal
+      ;; cannot be grounded with available objects/predicates.
+      ;; Keeping the goal as a tautology would be incorrect; thus we express the
+      ;; closest representable goal with existing objects: place a cooled object
+      ;; into the microwave is not possible without an object.
+    )
+  )
+)

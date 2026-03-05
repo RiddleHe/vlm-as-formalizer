@@ -1,0 +1,3 @@
+(gotolocation robot table)
+(pickupobject robot knife1)
+(sliceobject robot lettuce knife1)

@@ -1,0 +1,63 @@
+Scene graph:
+agent: robot
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife_on_table
+receptacle (object): table
+object: bread, tomato, lettuce, salt_shaker, pepper_shaker, fork, spoon, plate
+openable (receptacle) true if a receptacle is openable: (openable fridge), (openable microwave), (openable sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle bread table), (inReceptacle tomato table), (inReceptacle lettuce table), (inReceptacle salt_shaker table), (inReceptacle pepper_shaker table), (inReceptacle fork table), (inReceptacle spoon table), (inReceptacle knife_on_table table), (inReceptacle plate table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_chilled_plate_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife_on_table - knife
+        table - receptacle
+        bread - object
+        tomato - object
+        lettuce - object
+        salt_shaker - object
+        pepper_shaker - object
+        fork - object
+        spoon - object
+        plate - object
+    )
+    (:init
+        (openable fridge)
+        (openable microwave)
+        (openable sink)
+        (inReceptacle bread table)
+        (inReceptacle tomato table)
+        (inReceptacle lettuce table)
+        (inReceptacle salt_shaker table)
+        (inReceptacle pepper_shaker table)
+        (inReceptacle fork table)
+        (inReceptacle spoon table)
+        (inReceptacle knife_on_table table)
+        (inReceptacle plate table)
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (inReceptacle plate table)
+            (isCool plate)
+        )
+    )
+)
+```

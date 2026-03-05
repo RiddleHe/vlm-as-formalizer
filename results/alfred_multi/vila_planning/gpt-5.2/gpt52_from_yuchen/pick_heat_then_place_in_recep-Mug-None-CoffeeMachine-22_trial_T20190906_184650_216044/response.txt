@@ -1,0 +1,6 @@
+(GotoLocation agent1 coffeecup)
+(PickupObject agent1 coffeecup)
+(GotoLocation agent1 microwave)
+(HeatObject agent1 microwave coffeecup)
+(GotoLocation agent1 coffeemaker)
+(PutObjectInReceptacle agent1 coffeecup coffeemaker)

@@ -1,0 +1,4 @@
+(gotolocation robot bowl)
+(pickupobject robot bowl)
+(gotolocation robot cupboard_left_of_dishwasher)
+(putobjectinreceptacle robot bowl cupboard_left_of_dishwasher)

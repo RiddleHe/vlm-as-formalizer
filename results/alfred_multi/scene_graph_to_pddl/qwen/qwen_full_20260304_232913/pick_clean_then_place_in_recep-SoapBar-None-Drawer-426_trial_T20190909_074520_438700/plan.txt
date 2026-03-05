@@ -1,0 +1,6 @@
+(gotolocation agent1 pink_bar_of_soap_1)
+(pickupobject agent1 pink_bar_of_soap_1)
+(gotolocation agent1 brown_marble_sink)
+(cleanobject agent1 brown_marble_sink pink_bar_of_soap_1)
+(gotolocation agent1 green_cabinet_drawer)
+(putobjectinreceptacle agent1 pink_bar_of_soap_1 green_cabinet_drawer)

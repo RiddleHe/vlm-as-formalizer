@@ -1,0 +1,68 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): none visible.
+fridge (receptacle): none visible.
+sink (receptacle): none visible.
+knife (object): none visible.
+receptacle (object): 
+- wooden_desk_surface_receptacle (desk surface)
+- wooden_upper_hutch_shelf_receptacle (upper shelf/cubby of desk hutch)
+object:
+- gray_square_analog_clock (gray cube clock with white face on desk)
+- black_screen_monitor_like_object (black rectangular screen on upper hutch)
+- silver_black_table_lamp (lamp with silver base and black shade on upper hutch)
+- shiny_compact_disc (CD/DVD on desk)
+- black_white_smartphone (phone on desk)
+- black_chair (chair at desk)
+
+openable (receptacle) true if a receptacle is openable: none.
+opened (receptacle) true if a receptacle is opened: none.
+holdsAny (agent) agent ?a holds an object: none.
+isClean (object) true if the object has been clean in sink: none.
+isHot (object) true if the object has been heated up: none.
+isCool (object) true if the object has been cooled: none.
+isOn (object) true if the object is on: none.
+isToggled (object) true if the object has been toggled: none.
+isSliced (object) true if the object is sliced: none.
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle gray_square_analog_clock wooden_desk_surface_receptacle)
+- (inReceptacle shiny_compact_disc wooden_desk_surface_receptacle)
+- (inReceptacle black_white_smartphone wooden_desk_surface_receptacle)
+- (inReceptacle black_screen_monitor_like_object wooden_upper_hutch_shelf_receptacle)
+- (inReceptacle silver_black_table_lamp wooden_upper_hutch_shelf_receptacle)
+holds (agent, object) object ?o is held by agent ?a: none.
+atLocation (agent, object) : none.
+
+PDDL problem: (define (problem put_clock_on_desk)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    wooden_desk_surface_receptacle - receptacle
+    wooden_upper_hutch_shelf_receptacle - receptacle
+
+    gray_square_analog_clock - object
+    black_screen_monitor_like_object - object
+    silver_black_table_lamp - object
+    shiny_compact_disc - object
+    black_white_smartphone - object
+    black_chair - object
+  )
+
+  (:init
+    ;; initial object placements
+    (inReceptacle gray_square_analog_clock wooden_desk_surface_receptacle)
+    (inReceptacle shiny_compact_disc wooden_desk_surface_receptacle)
+    (inReceptacle black_white_smartphone wooden_desk_surface_receptacle)
+    (inReceptacle black_screen_monitor_like_object wooden_upper_hutch_shelf_receptacle)
+    (inReceptacle silver_black_table_lamp wooden_upper_hutch_shelf_receptacle)
+
+    ;; robot initially holds nothing and is not at any location (no atLocation facts)
+  )
+
+  (:goal
+    (and
+      (inReceptacle gray_square_analog_clock wooden_desk_surface_receptacle)
+    )
+  )
+)

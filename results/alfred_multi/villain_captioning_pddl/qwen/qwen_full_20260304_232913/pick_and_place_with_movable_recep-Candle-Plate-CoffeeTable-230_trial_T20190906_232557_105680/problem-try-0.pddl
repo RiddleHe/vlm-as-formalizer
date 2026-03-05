@@ -1,0 +1,58 @@
+(define (problem put_plate_with_candle_on_coffee_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        candle - object
+        plate1 plate2 - receptacle
+        tissue_box - receptacle
+        cardboard_box - receptacle
+        dining_table - object
+        coffee_table - object
+        laptop - object
+        remote - object
+        newspaper1 newspaper2 - object
+        blue_object - object
+        plant - object
+        vase - object
+    )
+    (:init
+        ; Initial locations
+        (atLocation robot dining_table)
+        (atLocation candle dining_table)
+        (atLocation plate1 dining_table)
+        (atLocation plate2 dining_table)
+        (atLocation tissue_box dining_table)
+        (atLocation cardboard_box coffee_table)
+        (atLocation laptop dining_table)
+        (atLocation remote dining_table)
+        (atLocation newspaper1 dining_table)
+        (atLocation newspaper2 dining_table)
+        (atLocation blue_object dining_table)
+        (atLocation plant coffee_table)
+        (atLocation vase coffee_table)
+
+        ; Receptacle properties
+        (openable tissue_box)
+        (openable cardboard_box)
+        (opened tissue_box) ; assuming tissue box is open as tissues are visible
+        (opened cardboard_box) ; box is open
+
+        ; No object is held initially
+        (not (holdsAny robot))
+
+        ; Object states
+        (not (isClean candle))
+        (not (isHot candle))
+        (not (isCool candle))
+        (not (isOn candle))
+        (not (isToggled candle))
+        (not (isSliced candle))
+    )
+    (:goal
+        (and
+            (atLocation candle coffee_table)
+            (atLocation plate1 coffee_table)
+            (inReceptacle candle plate1)
+        )
+    )
+)

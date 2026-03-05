@@ -1,0 +1,48 @@
+(define (problem clean_spoon_and_put_away)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        sink1 - sink
+        microwave1 - microwave
+        cabinet1 - receptacle
+        spoon1 - object
+        knife1 - knife
+        table1 - object
+    )
+    (:init
+        ; Agent is not at any location initially
+        (not (atLocation agent1 sink1))
+        (not (atLocation agent1 microwave1))
+        (not (atLocation agent1 cabinet1))
+        (not (atLocation agent1 spoon1))
+        (not (atLocation agent1 knife1))
+        (not (atLocation agent1 table1))
+
+        ; Receptacles are openable
+        (openable sink1)
+        (openable microwave1)
+        (openable cabinet1)
+
+        ; Cabinet is closed initially
+        (not (opened cabinet1))
+
+        ; Spoon is on the table, not held, not clean
+        (atLocation agent1 table1) ; Assuming agent starts near table for simplicity, as per scene
+        (inReceptacle spoon1 table1)
+        (not (holds agent1 spoon1))
+        (not (isClean spoon1))
+
+        ; Knife is on the table
+        (inReceptacle knife1 table1)
+
+        ; Microwave is off
+        (not (isOn microwave1))
+
+        ; Sink and cabinet are not being used for cleaning or storage
+        (not (isClean spoon1))
+    )
+    (:goal (and
+        (isClean spoon1)
+        (inReceptacle spoon1 cabinet1)
+    ))
+)

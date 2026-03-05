@@ -1,0 +1,6 @@
+(gotolocation robot silver-tea-kettle-with-blue-handle-on-stove)
+(pickupobject robot silver-tea-kettle-with-blue-handle-on-stove)
+(gotolocation robot double-basin-metal-sink-with-central-faucet)
+(cleanobject robot double-basin-metal-sink-with-central-faucet silver-tea-kettle-with-blue-handle-on-stove)
+(gotolocation robot stove-cooktop-surface)
+(putobjectinreceptacle robot silver-tea-kettle-with-blue-handle-on-stove stove-cooktop-surface)

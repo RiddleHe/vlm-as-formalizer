@@ -1,0 +1,35 @@
+(define (problem put_bowl_with_credit_card_on_glass_table)
+    (:domain put_task)
+    (:objects
+        agent
+        glass_table - receptacle
+        dining_table - receptacle
+        bowl - object
+        credit_card - object
+        statue - object
+        remote_control - object
+        vase - object
+        book - object
+        tissue_box - object
+        plate - object
+        cup - object
+        chair - object
+    )
+    (:init
+        (openable glass_table)
+        (openable dining_table)
+        (inReceptacle credit_card glass_table)
+        (inReceptacle bowl dining_table)
+        (inReceptacle statue dining_table)
+        (inReceptacle remote_control dining_table)
+        (inReceptacle vase dining_table)
+        (inReceptacle book dining_table)
+        (inReceptacle tissue_box glass_table)
+        (inReceptacle plate glass_table)
+        (inReceptacle cup glass_table)
+    )
+    (:goal (and
+        (inReceptacle bowl glass_table)
+        (inReceptacle credit_card bowl)
+    ))
+)

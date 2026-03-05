@@ -1,0 +1,7 @@
+(pickupobject robot candle1)
+(gotolocation robot shelf1)
+(putobjectinreceptacle robot candle1 shelf1)
+(gotolocation robot candle2)
+(pickupobject robot candle2)
+(gotolocation robot shelf1)
+(putobjectinreceptacle robot candle2 shelf1)

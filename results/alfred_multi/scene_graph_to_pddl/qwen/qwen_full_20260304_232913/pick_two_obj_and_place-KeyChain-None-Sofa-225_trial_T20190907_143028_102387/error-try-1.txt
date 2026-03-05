@@ -1,0 +1,25 @@
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  pair_of_keys_3
+  microwave
+  open_cardboard_box
+  pair_of_keys_2
+  pair_of_keys_4
+  fridge
+  white_pallet
+  knife
+  black_couch
+  sink
+  pair_of_keys_1
+  agent
+  white_side_table
+
+Object does not have a type:
+  pair_of_keys_3
+  open_cardboard_box
+  pair_of_keys_2
+  pair_of_keys_4
+  white_pallet
+  black_couch
+  pair_of_keys_1
+  white_side_table
+

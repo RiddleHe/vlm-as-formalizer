@@ -1,0 +1,5 @@
+(GotoLocation robot cushion)
+(GotoLocation robot desklamp)
+(ToggleObject robot desklamp)
+(PickupObject robot cushion)
+(PutObjectInReceptacle robot cushion desklamp)

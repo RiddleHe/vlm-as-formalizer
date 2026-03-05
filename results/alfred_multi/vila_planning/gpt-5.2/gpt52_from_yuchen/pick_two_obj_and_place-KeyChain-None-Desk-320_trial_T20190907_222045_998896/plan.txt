@@ -1,0 +1,8 @@
+(GotoLocation agent dresser)
+(PickupObject agent keys_1)
+(GotoLocation agent white_table)
+(PutObjectInReceptacle agent keys_1 white_table)
+(GotoLocation agent dresser)
+(PickupObject agent keys_2)
+(GotoLocation agent white_table)
+(PutObjectInReceptacle agent keys_2 white_table)

@@ -1,0 +1,19 @@
+Predicate argument has wrong type:
+  atLocation pepper_shaker1 table1: pepper_shaker1 is not a agent
+  atLocation bread2 table1: bread2 is not a agent
+  atLocation cup1 table1: cup1 is not a agent
+  atLocation mug1 table1: mug1 is not a agent
+  atLocation mug2 table1: mug2 is not a agent
+  atLocation microwave1 countertop1: microwave1 is not a agent
+  atLocation egg1 table1: egg1 is not a agent
+  atLocation fridge1 countertop1: fridge1 is not a agent
+  atLocation spoon1 table1: spoon1 is not a agent
+  atLocation paper_towel_roll1 table1: paper_towel_roll1 is not a agent
+  atLocation bread1 table1: bread1 is not a agent
+  atLocation tomato1 table1: tomato1 is not a agent
+  atLocation knife1 countertop1: knife1 is not a agent
+  atLocation bottle1 table1: bottle1 is not a agent
+  atLocation egg2 table1: egg2 is not a agent
+  atLocation salt_shaker1 table1: salt_shaker1 is not a agent
+  atLocation toaster1 countertop1: toaster1 is not a agent
+

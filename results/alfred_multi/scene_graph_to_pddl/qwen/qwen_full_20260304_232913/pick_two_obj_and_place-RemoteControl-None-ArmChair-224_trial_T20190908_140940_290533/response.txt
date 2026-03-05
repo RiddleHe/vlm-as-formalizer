@@ -1,0 +1,62 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): brown leather armchair, black sofa, cardboard box, dark wooden side table
+object: remote control on black sofa, remote control on black sofa with green cushion, smartphone on black sofa, newspaper on black sofa, cardboard box, green cushion, golden statue, golden cup, dark wooden side table, brown leather armchair, black sofa, fireplace, rug, wooden floor, window
+openable (receptacle) true if a receptacle is openable: (openable cardboard box)
+opened (receptacle) true if a receptacle is opened: (opened cardboard box)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle smartphone black sofa), (inReceptacle newspaper black sofa), (inReceptacle remote control on black sofa black sofa), (inReceptacle remote control on black sofa with green cushion black sofa), (inReceptacle green cushion black sofa), (inReceptacle golden statue dark wooden side table), (inReceptacle golden cup dark wooden side table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem move_remotes_to_chair)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        remote_control_1 - object
+        remote_control_2 - object
+        black_sofa - receptacle
+        brown_leather_armchair - receptacle
+        green_cushion - object
+        smartphone - object
+        newspaper - object
+        cardboard_box - receptacle
+        golden_statue - object
+        golden_cup - object
+        dark_wooden_side_table - receptacle
+        fireplace - object
+        rug - object
+        wooden_floor - object
+        window - object
+    )
+    (:init
+        (atLocation robot black_sofa)
+        (inReceptacle remote_control_1 black_sofa)
+        (inReceptacle remote_control_2 black_sofa)
+        (inReceptacle green_cushion black_sofa)
+        (inReceptacle smartphone black_sofa)
+        (inReceptacle newspaper black_sofa)
+        (inReceptacle golden_statue dark_wooden_side_table)
+        (inReceptacle golden_cup dark_wooden_side_table)
+        (openable cardboard_box)
+        (opened cardboard_box)
+    )
+    (:goal
+        (and
+            (inReceptacle remote_control_1 brown_leather_armchair)
+            (inReceptacle remote_control_2 brown_leather_armchair)
+        )
+    )
+)
+```

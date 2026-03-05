@@ -1,0 +1,3 @@
+Predicate argument has wrong type:
+  atLocation silver_spray_bottle toilet: silver_spray_bottle is not a agent
+

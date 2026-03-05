@@ -1,0 +1,4 @@
+Predicate argument has wrong type:
+  atLocation hand_towel1 towel_ring1: hand_towel1 is not a agent
+  atLocation hand_towel1 counter1: hand_towel1 is not a agent
+

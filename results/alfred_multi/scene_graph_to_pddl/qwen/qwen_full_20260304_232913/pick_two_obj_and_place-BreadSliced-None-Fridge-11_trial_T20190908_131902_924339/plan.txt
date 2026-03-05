@@ -1,0 +1,7 @@
+(gotolocation robot table)
+(pickupobject robot yellow_knife)
+(sliceobject robot loaf_of_bread yellow_knife)
+(putobjectinreceptacle robot yellow_knife table)
+(pickupobject robot loaf_of_bread)
+(gotolocation robot black_fridge)
+(putobjectinreceptacle robot loaf_of_bread black_fridge)

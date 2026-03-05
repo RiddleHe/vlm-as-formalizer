@@ -1,0 +1,5 @@
+(GotoLocation robot table)
+(PickupObject robot statue_1)
+(PutObjectInReceptacle robot statue_1 table)
+(PickupObject robot statue_2)
+(PutObjectInReceptacle robot statue_2 table)

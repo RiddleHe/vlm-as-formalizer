@@ -1,0 +1,21 @@
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  agent
+
+Object does not have a type:
+  wall
+  countertop
+  agent
+
+Predicate argument has wrong type:
+  atLocation plate table: plate is not a agent
+  atLocation knife table: knife is not a agent
+  atLocation microwave countertop: microwave is not a agent
+  atLocation bread table: bread is not a agent
+  atLocation book table: book is not a agent
+  atLocation potato table: potato is not a agent
+  atLocation sink countertop: sink is not a agent
+  atLocation apple table: apple is not a agent
+  atLocation bottle table: bottle is not a agent
+  atLocation fork countertop: fork is not a agent
+  atLocation fridge wall: fridge is not a agent
+

@@ -1,0 +1,58 @@
+Scene graph:
+agent: none visible
+microwave (receptacle): microwave_left_counter
+fridge (receptacle): none visible
+sink (receptacle): rectangular_grey_marble_sink_basin
+knife (object): yellow_handle_serrated_knife_in_sink
+receptacle (object): left_grey_countertop, right_grey_countertop, rectangular_grey_marble_sink_basin, microwave_left_counter
+object: large_metal_spoon_in_sink, green_yellow_sponge_in_sink, thin_butter_knife_in_sink, yellow_handle_serrated_knife_in_sink
+openable (receptacle) true if a receptacle is openable: 
+- (openable microwave_left_counter)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle large_metal_spoon_in_sink rectangular_grey_marble_sink_basin)
+- (inReceptacle green_yellow_sponge_in_sink rectangular_grey_marble_sink_basin)
+- (inReceptacle thin_butter_knife_in_sink rectangular_grey_marble_sink_basin)
+- (inReceptacle yellow_handle_serrated_knife_in_sink rectangular_grey_marble_sink_basin)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_grey_plate_with_spoon_on_counter)
+  (:domain put_task)
+
+  (:objects
+    robot - agent
+
+    microwave_left_counter - microwave
+    rectangular_grey_marble_sink_basin - sink
+    left_grey_countertop right_grey_countertop - receptacle
+
+    large_metal_spoon_in_sink - object
+    green_yellow_sponge_in_sink thin_butter_knife_in_sink - object
+    yellow_handle_serrated_knife_in_sink - knife
+  )
+
+  (:init
+    (openable microwave_left_counter)
+
+    (inReceptacle large_metal_spoon_in_sink rectangular_grey_marble_sink_basin)
+    (inReceptacle green_yellow_sponge_in_sink rectangular_grey_marble_sink_basin)
+    (inReceptacle thin_butter_knife_in_sink rectangular_grey_marble_sink_basin)
+    (inReceptacle yellow_handle_serrated_knife_in_sink rectangular_grey_marble_sink_basin)
+  )
+
+  (:goal
+    (and
+      ;; Interpreting the "grey plate with a large metal spoon on it" as placing the spoon onto the counter,
+      ;; since no plate object is present in the provided scene graph.
+      (inReceptacle large_metal_spoon_in_sink left_grey_countertop)
+    )
+  )
+)

@@ -1,0 +1,4 @@
+(gotolocation agent1 pot1)
+(pickupobject agent1 pot1)
+(gotolocation agent1 table1)
+(putobjectinreceptacle agent1 pot1 table1)

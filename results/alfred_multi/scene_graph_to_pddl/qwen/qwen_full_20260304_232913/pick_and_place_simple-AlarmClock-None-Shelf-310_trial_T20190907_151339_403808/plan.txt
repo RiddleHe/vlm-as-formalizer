@@ -1,0 +1,4 @@
+(gotolocation agent1 wooden_cabinet_bottom)
+(pickupobject agent1 silver_clock)
+(gotolocation agent1 wooden_desk)
+(putobjectinreceptacle agent1 silver_clock wooden_desk)

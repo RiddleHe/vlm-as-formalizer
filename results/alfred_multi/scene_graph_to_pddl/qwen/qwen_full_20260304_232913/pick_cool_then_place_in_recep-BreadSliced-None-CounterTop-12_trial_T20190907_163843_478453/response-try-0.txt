@@ -1,0 +1,196 @@
+Scene graph:
+agent: robot
+microwave (receptacle): none
+fridge (receptacle): dark brown fridge
+sink (receptacle): none
+knife (object): silver knife on counter, golden knife on counter
+receptacle (object): black toaster, black pan on stove, wooden counter, dark brown fridge
+object: loaf of bread, red apple, green cabbage, brown potato, silver knife, golden knife, black toaster, black pan, wooden counter, dark brown fridge
+openable (receptacle) true if a receptacle is openable: (openable dark brown fridge)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn black toaster), (isOn black pan)
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem cut_bread_and_fridge)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        dark_brown_fridge - fridge
+        black_toaster - receptacle
+        black_pan - receptacle
+        wooden_counter - receptacle
+        loaf_of_bread - object
+        red_apple - object
+        green_cabbage - object
+        brown_potato - object
+        silver_knife - knife
+        golden_knife - knife
+    )
+    (:init
+        (openable dark_brown_fridge)
+        (not (opened dark_brown_fridge))
+        (not (holdsAny robot))
+        (not (atLocation robot loaf_of_bread))
+        (not (atLocation robot red_apple))
+        (not (atLocation robot dark_brown_fridge))
+        (not (atLocation robot wooden_counter))
+        (not (atLocation robot silver_knife))
+        (not (atLocation robot golden_knife))
+        (isOn black_toaster)
+        (isOn black_pan)
+        (not (isSliced loaf_of_bread))
+        (not (isCool loaf_of_bread))
+        (not (inReceptacle loaf_of_bread dark_brown_fridge))
+        (not (inReceptacle loaf_of_bread wooden_counter))
+        (not (inReceptacle red_apple wooden_counter))
+        (atLocation silver_knife wooden_counter)
+        (atLocation golden_knife wooden_counter)
+        (atLocation loaf_of_bread wooden_counter)
+        (atLocation red_apple wooden_counter)
+        (atLocation green_cabbage wooden_counter)
+        (atLocation brown_potato wooden_counter)
+        (atLocation black_pan black_toaster) ; assuming black pan is on toaster? Not clear, but scene graph says "inReceptacle" not specified, so we avoid unless confirmed. Actually, scene graph says "inReceptacle" is none, so we don't assert it.
+        ; Correction: scene graph says "inReceptacle (object, object): none", so we don't assert any inReceptacle in init.
+        ; Therefore, we only assert locations as per scene graph: objects are on counter or stove.
+        ; We'll assume loaf_of_bread, red_apple, green_cabbage, brown_potato, silver_knife, golden_knife are on wooden_counter.
+        ; black_pan is on stove (which is not a receptacle in domain? But scene graph lists black_pan as receptacle? Actually, domain says receptacle types: microwave, fridge, sink. So black_pan is not a receptacle? But scene graph says "receptacle (object): black toaster, black pan on stove, wooden counter, dark brown fridge". So we must treat black_pan as receptacle? But domain doesn't define stove as receptacle. Let's stick to domain: only microwave, fridge, sink are receptacles. So black_pan is not a receptacle? But scene graph says it is. This is a conflict.
+
+        ; Since the domain file defines only microwave, fridge, sink as receptacles, we must not treat black_pan as receptacle. But the scene graph says it is. We must follow the domain. So we will not use black_pan as receptacle. Similarly, wooden_counter is not in domain as receptacle? But scene graph says it is. We must follow the domain.
+
+        ; Actually, the domain file says:
+        ; (:types
+        ;  microwave fridge sink - receptacle
+        ;  knife receptacle - object
+        ; )
+        ; This means: microwave, fridge, sink are of type receptacle. And knife and receptacle (as a type) are of type object. But then it says "receptacle - object", which is confusing.
+
+        ; Let me re-read: 
+        ; (:types
+        ;  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+        ;  knife receptacle - object           ; if not an receptacle, default to object
+        ; )
+        ; This is ambiguous. But the comment says "an object is a receptacle if it can hold things", and then lists microwave, fridge, sink as receptacle. Then it says "knife receptacle - object", meaning knife and the type "receptacle" (which is not defined as a type) are objects? This is likely a mistake.
+
+        ; Actually, looking at the domain, the types are:
+        ; microwave, fridge, sink: are of type receptacle.
+        ; knife: is of type object.
+        ; and then "receptacle - object" might mean that any object that is a receptacle (like microwave, fridge, sink) is also an object? But that's already covered.
+
+        ; Given the confusion, and since the instruction does not involve the pan or toaster (except that they are on the stove and counter), and the goal is about bread, fridge, and counter, we will only use the fridge as receptacle and the counter as a location (but not as receptacle because domain doesn't define it as such).
+
+        ; However, the goal says "place on counter next to apple", so we need to put the bread on the counter. But the domain doesn't have a receptacle for counter. So we must use the counter as a location? But the actions require putting in a receptacle.
+
+        ; This is a problem. The domain actions for PutObjectInReceptacle require a receptacle. But the counter is not a receptacle in the domain. So we cannot put the bread on the counter? 
+
+        ; But the instruction says "place on counter next to apple". So we must have a way to put it on the counter.
+
+        ; Let's look at the scene graph: it lists "wooden counter" as a receptacle. And the domain file has a type "receptacle" and then lists microwave, fridge, sink as receptacle. But then it says "knife receptacle - object", which might mean that "receptacle" is also a type? Actually, the syntax is:
+
+        ; (:types
+        ;  microwave fridge sink - receptacle
+        ;  knife receptacle - object
+        ; )
+
+        ; This means: microwave, fridge, sink are of type receptacle. And knife and the type "receptacle" (which is not defined) are of type object? That doesn't make sense.
+
+        ; Alternatively, it might be a typo and it should be:
+
+        ; (:types
+        ;  microwave fridge sink - receptacle
+        ;  knife - object
+        ;  wooden_counter - receptacle   ; but it's not listed
+        ; )
+
+        ; Given the ambiguity, and since the problem is about putting bread on the counter, and the counter is not a receptacle in the domain, we must assume that the domain intended to allow putting on the counter? But the actions don't allow it.
+
+        ; Alternatively, perhaps the counter is not a receptacle, but we can still put objects on it by not using PutObjectInReceptacle? But the domain doesn't have an action for putting on a non-receptacle.
+
+        ; This is a flaw in the domain. But we must work with what we have.
+
+        ; Let me re-read the instruction: "Cut a slice of bread, put bread in fridge, remove bread from fridge, place on counter next to apple."
+
+        ; The only receptacle we have in the domain is fridge. So we can put the bread in the fridge. Then remove it. Then we need to put it on the counter. But the counter is not a receptacle. So we cannot use PutObjectInReceptacle for the counter.
+
+        ; The domain does not have an action for placing on a non-receptacle. So we must assume that the counter is a receptacle? But it's not defined in the domain.
+
+        ; Given the scene graph says "wooden counter" is a receptacle, and the domain file might have intended to include it, we will treat wooden_counter as a receptacle. But the domain file does not list it. So we are extending the domain? But we cannot.
+
+        ; Alternatively, perhaps the domain file's type definition is meant to be:
+
+        ; (:types
+        ;  microwave fridge sink wooden_counter - receptacle
+        ;  knife - object
+        ; )
+
+        ; But it's not. So we are stuck.
+
+        ; Let's look at the example: the domain file might be incomplete. But we must follow the domain.
+
+        ; Since the goal requires placing on the counter, and the domain doesn't allow it, we must assume that the counter is a receptacle. We will add it as a receptacle in the objects and hope that the domain allows it? But the domain file doesn't define it.
+
+        ; Actually, the domain file says: "receptacle - object", which might mean that any object that is a receptacle is of type object? And then we can use it in actions? But the actions require the parameter to be of type receptacle.
+
+        ; The action PutObjectInReceptacle has parameter ?r - receptacle. So we need the counter to be of type receptacle.
+
+        ; Given the scene graph and the requirement, I will assume that wooden_counter is a receptacle and add it to the objects as type receptacle. This is a necessary extension to make the problem solvable.
+
+        ; Alternatively, we can note that the domain file might have a mistake, and we are allowed to use wooden_counter as receptacle because the scene graph says it is.
+
+        ; I will proceed by including wooden_counter as a receptacle.
+
+        ; So, in objects, we have:
+        ; wooden_counter - receptacle
+
+        ; And in init, we assert that the bread and apple are on the counter (atLocation) and not in any receptacle.
+
+        ; But the action PutObjectInReceptacle requires putting in a receptacle. So we can put the bread in the fridge (which is a receptacle) and then put it back on the counter (if we consider counter as receptacle).
+
+        ; So, let's define:
+        ; wooden_counter - receptacle
+
+        ; And then we can use PutObjectInReceptacle with wooden_counter.
+
+        ; This is the only way to satisfy the goal.
+
+        ; So, we'll do that.
+
+        ; Also, note that the scene graph says "inReceptacle" is none, so initially, nothing is in any receptacle.
+
+        ; Therefore, we assert:
+        (atLocation loaf_of_bread wooden_counter)
+        (atLocation red_apple wooden_counter)
+        (atLocation silver_knife wooden_counter)
+        (atLocation golden_knife wooden_counter)
+        (atLocation green_cabbage wooden_counter)
+        (atLocation brown_potato wooden_counter)
+        (atLocation black_pan black_toaster) ; but black_toaster is not a receptacle in domain? We'll ignore for now.
+        ; Actually, we'll not assert any inReceptacle in init because scene graph says none.
+
+        ; Also, we need to specify that the robot is not at any location initially.
+        (not (atLocation robot loaf_of_bread))
+        (not (atLocation robot red_apple))
+        (not (atLocation robot dark_brown_fridge))
+        (not (atLocation robot wooden_counter))
+        (not (atLocation robot silver_knife))
+        (not (atLocation robot golden_knife))
+    )
+    (:goal (and
+        (isSliced loaf_of_bread)
+        (inReceptacle loaf_of_bread dark_brown_fridge)
+        (not (inReceptacle loaf_of_bread dark_brown_fridge)) ; after removing, it should not be in fridge
+        (inReceptacle loaf_of_bread wooden_counter)
+        (atLocation loaf_of_bread wooden_counter) ; this might be redundant, but we want it on counter
+        ; and next to apple: we don't have a predicate for "next to", so we assume that if both are on counter, they are next to each other.
+        (atLocation red_apple wooden_counter)
+    ))
+)
+```

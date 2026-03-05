@@ -1,0 +1,8 @@
+(gotolocation robot remote_control_2)
+(pickupobject robot remote_control_2)
+(gotolocation robot brown_leather_armchair)
+(putobjectinreceptacle robot remote_control_2 brown_leather_armchair)
+(gotolocation robot black_sofa)
+(pickupobject robot remote_control_1)
+(gotolocation robot brown_leather_armchair)
+(putobjectinreceptacle robot remote_control_1 brown_leather_armchair)

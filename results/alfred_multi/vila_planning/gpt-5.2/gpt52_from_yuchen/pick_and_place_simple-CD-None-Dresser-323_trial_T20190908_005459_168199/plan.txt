@@ -1,0 +1,4 @@
+(GotoLocation agent1 desk)
+(PickupObject agent1 cd)
+(GotoLocation agent1 dresser)
+(PutObjectInReceptacle agent1 cd dresser)

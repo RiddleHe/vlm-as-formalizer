@@ -1,0 +1,35 @@
+(define (problem cook_and_chill_bread)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        knife1 - knife
+        bread1 - object
+        lettuce1 lettuce2 - object
+        saltshaker1 - object
+    )
+    (:init
+        (openable microwave1)
+        (openable fridge1)
+        (not (opened microwave1))
+        (not (opened fridge1))
+        (not (isSliced bread1))
+        (not (isHot bread1))
+        (not (isCool bread1))
+        (not (isOn microwave1))
+        (not (holdsAny agent1))
+        (atLocation agent1 knife1)  ; Assuming agent starts near knife for simplicity; adjust if needed
+        (atLocation agent1 bread1)
+        (atLocation agent1 microwave1)
+        (atLocation agent1 fridge1)
+        (atLocation agent1 saltshaker1)
+        (atLocation agent1 lettuce1)
+        (atLocation agent1 lettuce2)
+    )
+    (:goal (and
+        (isSliced bread1)
+        (isHot bread1)
+        (isCool bread1)
+    ))
+)

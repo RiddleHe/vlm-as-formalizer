@@ -1,0 +1,46 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): dark_wood_end_table, bookshelf
+object: agent, dark_wood_end_table, bookshelf, red_and_gray_cd_player, silver_cd_on_end_table, silver_cd_on_end_table_2, books_in_bookshelf
+openable (receptacle) true if a receptacle is openable: (openable dark_wood_end_table), (openable bookshelf)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn red_and_gray_cd_player)
+isToggled (object) true if the object has been toggled: (isToggled red_and_gray_cd_player)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle books_in_bookshelf bookshelf)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem move_phone_to_shelf)
+    (:domain put_task)
+    (:objects
+        agent - agent
+        dark_wood_end_table - receptacle
+        bookshelf - receptacle
+        red_and_gray_cd_player - object
+        silver_cd_on_end_table - object
+        silver_cd_on_end_table_2 - object
+        books_in_bookshelf - object
+    )
+    (:init
+        (openable dark_wood_end_table)
+        (openable bookshelf)
+        (isOn red_and_gray_cd_player)
+        (isToggled red_and_gray_cd_player)
+        (inReceptacle books_in_bookshelf bookshelf)
+        (atLocation agent dark_wood_end_table) ; assuming agent starts near end table for practicality
+    )
+    (:goal (and
+        (inReceptacle red_and_gray_cd_player bookshelf)
+    ))
+)
+```

@@ -1,0 +1,8 @@
+(gotolocation robot cushion2)
+(pickupobject robot cushion1)
+(gotolocation robot ottoman1)
+(putobjectinreceptacle robot cushion1 ottoman1)
+(gotolocation robot cushion2)
+(pickupobject robot cushion2)
+(gotolocation robot ottoman1)
+(putobjectinreceptacle robot cushion2 ottoman1)

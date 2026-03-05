@@ -1,0 +1,4 @@
+(gotolocation robot toilet_paper)
+(pickupobject robot toilet_paper)
+(gotolocation robot toilet_paper_dispenser)
+(putobjectinreceptacle robot toilet_paper toilet_paper_dispenser)

@@ -1,0 +1,5 @@
+(GotoLocation robot kitchen_island_counter)
+(PickupObject robot cup)
+(PickupObject robot fork)
+(PutObjectInReceptacle robot fork cup kitchen_island_counter)
+(PutObjectInReceptacle robot cup kitchen_island_counter)

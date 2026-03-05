@@ -1,0 +1,4 @@
+(gotolocation robot hand_towel)
+(pickupobject robot hand_towel)
+(gotolocation robot gray_marble_sink)
+(putobjectinreceptacle robot hand_towel gray_marble_sink)

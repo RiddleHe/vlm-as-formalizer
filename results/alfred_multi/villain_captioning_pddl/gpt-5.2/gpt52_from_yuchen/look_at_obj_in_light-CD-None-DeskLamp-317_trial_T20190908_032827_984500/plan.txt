@@ -1,0 +1,5 @@
+(gotolocation robot dresser)
+(pickupobject robot cd)
+(gotolocation robot nightstand)
+(putobjectinreceptacle robot cd nightstand)
+(toggleobject robot lamp)

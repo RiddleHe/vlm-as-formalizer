@@ -1,0 +1,6 @@
+(gotolocation agent1 apple1)
+(pickupobject agent1 apple1)
+(gotolocation agent1 microwave1)
+(heatobject agent1 microwave1 apple1)
+(gotolocation agent1 table1)
+(putobjectinreceptacle agent1 apple1 table1)

@@ -1,0 +1,23 @@
+(define (problem put_books_on_desk)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        book1 book2 - object
+        bed desk - receptacle
+    )
+    (:init
+        (atLocation robot bed)
+        (inReceptacle book1 bed)
+        (inReceptacle book2 bed)
+        (openable bed)
+        (opened bed)
+        (openable desk)
+        (opened desk)
+    )
+    (:goal
+        (and
+            (inReceptacle book1 desk)
+            (inReceptacle book2 desk)
+        )
+    )
+)

@@ -1,0 +1,4 @@
+(GotoLocation agent1 credit_card)
+(PickupObject agent1 credit_card)
+(GotoLocation agent1 tall_lamp)
+(ToggleObject agent1 tall_lamp)

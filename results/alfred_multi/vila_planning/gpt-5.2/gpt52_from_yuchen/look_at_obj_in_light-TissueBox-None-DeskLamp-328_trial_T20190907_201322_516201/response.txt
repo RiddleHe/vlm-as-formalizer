@@ -1,0 +1,4 @@
+(GotoLocation agent desk_lamp)
+(ToggleObject agent desk_lamp)
+(GotoLocation agent tissue_box)
+(PickupObject agent tissue_box)

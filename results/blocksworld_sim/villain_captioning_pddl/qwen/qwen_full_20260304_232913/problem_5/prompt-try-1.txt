@@ -1,0 +1,157 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot) ; if robot is not seen in the image, it can be assumed to exist and is handempty
+        (handfull ?x - robot)
+        (holding ?x - block) ; block x is being held by the robot
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    You can always assume that at least one robot arm is available if not in the image.
+    Instruction: Create a stack of blocks: yellow over red over blue over orange over green.
+
+    
+
+SCENE CAPTION:
+Scene Description:
+
+1. Objects and their types:
+   - There are five blocks, each of type "block" as defined in the domain.
+   - One robot (not visible in the image but assumed to exist and be of type "robot") is available for manipulation.
+
+2. Quantities:
+   - 5 blocks total.
+   - 1 robot (implicitly present).
+
+3. Spatial relationships (matching domain predicates):
+   - The blocks are arranged vertically in a single stack on a flat black surface (assumed to be the table).
+   - From bottom to top: yellow block, red block, blue block, orange block, green block.
+   - Predicates applicable:
+     - (on yellow red) — yellow is on red.
+     - (on red blue) — red is on blue.
+     - (on blue orange) — blue is on orange.
+     - (on orange green) — orange is on green.
+     - (ontable yellow) — yellow is on the table (since it is at the bottom of the stack).
+     - (clear green) — green is clear (nothing is on top of it).
+     - (not (clear yellow)) — yellow is not clear (red is on top of it).
+     - (not (clear red)) — red is not clear (blue is on top of it).
+     - (not (clear blue)) — blue is not clear (orange is on top of it).
+     - (not (clear orange)) — orange is not clear (green is on top of it).
+     - (handempty robot) — robot is assumed to be handempty since no block is being held.
+
+4. Current state of each object relevant to the planning task:
+   - All blocks are currently stacked in a single tower.
+   - The robot is not holding any block and is handempty.
+   - The green block is at the top and is clear.
+   - The yellow block is at the bottom and is on the table.
+   - No blocks are currently being manipulated.
+
+5. Colors, positions, and distinguishing features:
+   - Block colors (from bottom to top): yellow, red, blue, orange, green.
+   - All blocks are cube-shaped and appear to be of equal size.
+   - The stack is centered in the image against a plain black background.
+   - Each block is distinctly colored and can be uniquely identified by its color and position in the stack.
+   - The yellow block is the only one directly on the table.
+   - The green block is the topmost and is the only block with no block above it.
+
+Note: The current stack order (yellow → red → blue → orange → green) does not match the target instruction (yellow over red over blue over orange over green — which is the same as current). Therefore, no reordering is required; the goal state is already achieved. However, the instruction may imply that the current state is not the goal, suggesting a possible misinterpretation — but based strictly on the image, the stack is already in the specified order from bottom to top. If the instruction meant “green on top” as the final goal, then the current state satisfies it. If the instruction meant to build it from scratch or verify, the state is complete.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

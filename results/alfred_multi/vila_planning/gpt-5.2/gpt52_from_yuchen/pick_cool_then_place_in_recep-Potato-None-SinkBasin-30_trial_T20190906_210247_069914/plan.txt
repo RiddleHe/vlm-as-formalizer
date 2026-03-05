@@ -1,0 +1,7 @@
+(GotoLocation agent fridge)
+(OpenObject agent fridge)
+(PickupObject agent brown_ball)
+(CoolObject agent fridge brown_ball)
+(CloseObject agent fridge)
+(GotoLocation agent sink)
+(PutObjectInReceptacle agent brown_ball sink)

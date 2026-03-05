@@ -1,0 +1,8 @@
+(gotolocation robot_agent bed_top_surface)
+(pickupobject robot_agent black_phone_on_bed_left)
+(gotolocation robot_agent wooden_dresser_top_surface)
+(putobjectinreceptacle robot_agent black_phone_on_bed_left wooden_dresser_top_surface)
+(gotolocation robot_agent small_wooden_table_surface)
+(pickupobject robot_agent black_phone_on_small_table_left)
+(gotolocation robot_agent wooden_dresser_top_surface)
+(putobjectinreceptacle robot_agent black_phone_on_small_table_left wooden_dresser_top_surface)

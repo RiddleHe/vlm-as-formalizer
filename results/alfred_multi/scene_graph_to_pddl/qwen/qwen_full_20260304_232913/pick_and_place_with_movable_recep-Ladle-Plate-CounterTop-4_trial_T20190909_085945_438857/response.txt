@@ -1,0 +1,47 @@
+Scene graph:
+agent: agent
+microwave (receptacle): dark_brown_microwave
+fridge (receptacle): dark_gray_fridge
+sink (receptacle): gray_marble_sink
+knife (object): yellow_handled_knife
+receptacle (object): gray_marble_counter, wooden_cabinet
+object: large_metal_spoon, green_object, yellow_handled_knife, gray_marble_counter, wooden_cabinet, dark_brown_microwave, dark_gray_fridge, gray_marble_sink
+openable (receptacle) true if a receptacle is openable: (openable dark_gray_fridge), (openable dark_brown_microwave)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle large_metal_spoon gray_marble_sink), (inReceptacle yellow_handled_knife gray_marble_sink), (inReceptacle green_object gray_marble_sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_plate_with_spoon_on_counter)
+    (:domain put_task)
+    (:objects
+        agent
+        dark_brown_microwave - microwave
+        dark_gray_fridge - fridge
+        gray_marble_sink - sink
+        yellow_handled_knife - knife
+        gray_marble_counter - receptacle
+        wooden_cabinet - receptacle
+        large_metal_spoon - object
+        green_object - object
+    )
+    (:init
+        (openable dark_gray_fridge)
+        (openable dark_brown_microwave)
+        (inReceptacle large_metal_spoon gray_marble_sink)
+        (inReceptacle yellow_handled_knife gray_marble_sink)
+        (inReceptacle green_object gray_marble_sink)
+    )
+    (:goal (and
+        (inReceptacle large_metal_spoon gray_marble_counter)
+    ))
+)
+```

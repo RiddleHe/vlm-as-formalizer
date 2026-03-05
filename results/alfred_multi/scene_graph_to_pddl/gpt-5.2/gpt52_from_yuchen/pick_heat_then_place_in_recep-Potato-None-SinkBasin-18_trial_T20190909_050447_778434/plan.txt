@@ -1,0 +1,6 @@
+(gotolocation robot_agent double_basin_metal_sink)
+(pickupobject robot_agent brown_potato_in_left_sink_basin)
+(gotolocation robot_agent red_black_countertop_microwave_off)
+(heatobject robot_agent red_black_countertop_microwave_off brown_potato_in_left_sink_basin)
+(gotolocation robot_agent double_basin_metal_sink)
+(putobjectinreceptacle robot_agent brown_potato_in_left_sink_basin double_basin_metal_sink)

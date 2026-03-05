@@ -1,0 +1,4 @@
+(gotolocation robot watch)
+(pickupobject robot watch)
+(gotolocation robot small_wooden_table)
+(putobjectinreceptacle robot watch small_wooden_table)

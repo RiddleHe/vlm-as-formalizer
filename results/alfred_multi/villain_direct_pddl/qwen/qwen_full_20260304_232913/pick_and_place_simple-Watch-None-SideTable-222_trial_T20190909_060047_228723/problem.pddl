@@ -1,0 +1,19 @@
+(define (problem move_watch_to_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        watch1 watch2 - object
+        small_wooden_table - receptacle
+        tv_stand - receptacle
+        newspaper - object
+    )
+    (:init
+        (atLocation robot tv_stand)
+        (inReceptacle watch1 tv_stand)
+        (inReceptacle watch2 tv_stand)
+        (inReceptacle newspaper small_wooden_table)
+    )
+    (:goal
+        (inReceptacle watch1 small_wooden_table)
+    )
+)

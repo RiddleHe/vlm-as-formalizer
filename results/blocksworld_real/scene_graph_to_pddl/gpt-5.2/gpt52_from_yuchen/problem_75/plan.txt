@@ -1,0 +1,6 @@
+(pick-up blue-cube-block assumed-robot-arm)
+(stack blue-cube-block purple-cube-block assumed-robot-arm)
+(pick-up green-cube-block assumed-robot-arm)
+(stack green-cube-block yellow-cube-block assumed-robot-arm)
+(pick-up red-cube-block assumed-robot-arm)
+(stack red-cube-block orange-cube-block assumed-robot-arm)

@@ -1,0 +1,2 @@
+(gotolocation agent1 cabinet)
+(putobjectinreceptacle agent1 spray_bottle cabinet)

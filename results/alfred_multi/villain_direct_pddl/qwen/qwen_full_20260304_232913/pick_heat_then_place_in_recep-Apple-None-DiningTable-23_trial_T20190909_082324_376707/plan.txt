@@ -1,0 +1,6 @@
+(gotolocation robot apple)
+(pickupobject robot apple)
+(gotolocation robot microwave)
+(heatobject robot microwave apple)
+(gotolocation robot table)
+(putobjectinreceptacle robot apple table)

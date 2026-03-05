@@ -1,0 +1,5 @@
+(pickupobject robot coffee_mug)
+(gotolocation robot sink)
+(cleanobject robot sink coffee_mug)
+(gotolocation robot coffee_maker)
+(putobjectinreceptacle robot coffee_mug coffee_maker)

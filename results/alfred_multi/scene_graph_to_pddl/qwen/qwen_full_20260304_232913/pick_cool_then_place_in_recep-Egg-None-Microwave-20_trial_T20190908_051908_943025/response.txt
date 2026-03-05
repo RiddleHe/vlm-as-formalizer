@@ -1,0 +1,61 @@
+Scene graph:
+agent: robot
+microwave (receptacle): black microwave on countertop
+fridge (receptacle): large black fridge with digital display
+sink (receptacle): green plastic sink basin
+knife (object): silver knife on countertop near bread
+receptacle (object): white bowl, green plastic sink basin, black microwave, large black fridge
+object: whole loaf of bread, red apple, white egg, silver knife, white bowl, green plastic sink basin, black microwave, large black fridge, gray plate, gold ladle, white bottle, fork
+openable (receptacle) true if a receptacle is openable: (openable black microwave), (openable large black fridge)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot black microwave)
+
+PDDL problem: ```pddl
+(define (problem cool_egg_and_put_in_microwave)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife - knife
+        egg - object
+        bowl - object
+        apple - object
+        bread - object
+        plate - object
+        ladle - object
+        bottle - object
+        fork - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (atLocation robot microwave)
+        (not (opened microwave))
+        (not (opened fridge))
+        (not (holdsAny robot))
+        (not (isCool egg))
+        (not (isHot egg))
+        (not (isClean egg))
+        (not (isSliced egg))
+        (not (isOn microwave))
+        (not (isToggled microwave))
+    )
+    (:goal
+        (and
+            (inReceptacle egg microwave)
+            (isCool egg)
+        )
+    )
+)
+```

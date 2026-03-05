@@ -1,0 +1,6 @@
+(gotolocation robot cloth)
+(pickupobject robot cloth)
+(gotolocation robot sink)
+(cleanobject robot sink cloth)
+(gotolocation robot cabinet)
+(putobjectinreceptacle robot cloth cabinet)

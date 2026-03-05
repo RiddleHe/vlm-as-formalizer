@@ -1,0 +1,35 @@
+(define (problem wash_knife_and_return_to_shelf)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        sink - sink
+        shelf - receptacle
+        knife - knife
+        apple_yellow - object
+        fork - object
+        spoon - object
+        salt_shaker - object
+        glass - object
+        soap_dispenser - object
+        apple_red1 - object
+        apple_red2 - object
+    )
+    (:init
+        (atLocation robot shelf)
+        (inReceptacle knife shelf)
+        (inReceptacle apple_yellow shelf)
+        (inReceptacle fork shelf)
+        (inReceptacle spoon shelf)
+        (inReceptacle salt_shaker shelf)
+        (inReceptacle glass shelf)
+        (inReceptacle apple_red1 sink)
+        (inReceptacle apple_red2 sink)
+        (not (isClean knife))
+        (openable sink)
+        (not (opened sink))
+    )
+    (:goal (and
+        (inReceptacle knife shelf)
+        (isClean knife)
+    ))
+)

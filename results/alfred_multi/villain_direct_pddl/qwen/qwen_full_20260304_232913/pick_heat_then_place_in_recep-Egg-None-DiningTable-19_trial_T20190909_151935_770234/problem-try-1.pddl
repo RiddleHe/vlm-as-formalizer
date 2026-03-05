@@ -1,0 +1,48 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        table - receptacle
+        sink - receptacle
+        microwave - receptacle
+        knife1 - knife
+        apple1 - object
+        apple2 - object
+        egg1 - object
+        fork1 - object
+        bowl1 - object
+        cup1 - object
+        coffee_machine1 - object
+        bottle1 - object
+        book1 - object
+        spatula1 - object
+        spatula2 - object
+    )
+    (:init
+        (atLocation agent1 table)
+        (inReceptacle knife1 table)
+        (inReceptacle apple1 table)
+        (inReceptacle apple2 table)
+        (inReceptacle fork1 table)
+        (inReceptacle bowl1 table)
+        (inReceptacle cup1 table)
+        (inReceptacle coffee_machine1 table)
+        (inReceptacle bottle1 table)
+        (inReceptacle book1 table)
+        (inReceptacle spatula1 table)
+        (inReceptacle spatula2 table)
+        (inReceptacle egg1 sink)
+        (inReceptacle cup1 sink)
+        (inReceptacle fork1 sink)
+        (inReceptacle book1 sink)
+        (inReceptacle spatula1 microwave)
+        (openable microwave)
+        (openable sink)
+        (isOn coffee_machine1)
+        (isToggled coffee_machine1)
+    )
+    (:goal (and
+        (inReceptacle egg1 table)
+        (isHot egg1)
+    ))
+)

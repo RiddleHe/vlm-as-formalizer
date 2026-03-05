@@ -1,0 +1,24 @@
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  lettuce
+  bowl
+  egg
+  trash_bag
+  tomato
+  fridge
+  sink
+  knife
+  salt_shaker
+  black_table
+  agent
+
+Object does not have a type:
+  lettuce
+  bowl
+  tomato
+  fridge
+  sink
+  knife
+  salt_shaker
+  black_table
+  agent
+

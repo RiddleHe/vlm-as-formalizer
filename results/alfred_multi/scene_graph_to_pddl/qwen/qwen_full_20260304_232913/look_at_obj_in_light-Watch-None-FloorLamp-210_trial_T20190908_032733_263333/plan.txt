@@ -1,0 +1,4 @@
+(gotolocation robot brown_watch)
+(pickupobject robot brown_watch)
+(gotolocation robot lamp_shade)
+(toggleobject robot lamp_shade)

@@ -1,0 +1,49 @@
+Scene graph:
+agent: agent
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife_on_counter, knife_with_yellow_handle
+receptacle (object): trash_can, pan, plate1, plate2, mug
+object: tomato_in_trash_can, lettuce_on_counter, bread_on_counter, photo_on_counter, spatula_on_counter, spoon_on_counter, fork_on_counter, smiling_sticker_on_fridge
+openable (receptacle) true if a receptacle is openable: (openable fridge), (openable microwave), (openable sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle tomato_in_trash_can trash_can)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_cold_lettuce_in_trash)
+    (:domain put_task)
+    (:objects
+        agent
+        fridge - receptacle
+        trash_can - receptacle
+        lettuce_on_counter - object
+        knife_on_counter - knife
+        microwave - receptacle
+        sink - receptacle
+    )
+    (:init
+        (openable fridge)
+        (not (opened fridge))
+        (inReceptacle tomato_in_trash_can trash_can)
+        (atLocation agent lettuce_on_counter)
+        (not (holdsAny agent))
+        (not (isCool lettuce_on_counter))
+    )
+    (:goal
+        (and
+            (inReceptacle lettuce_on_counter trash_can)
+            (isCool lettuce_on_counter)
+        )
+    )
+)
+```

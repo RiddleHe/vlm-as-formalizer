@@ -1,0 +1,8 @@
+(GotoLocation agent1 plate_grey)
+(PickupObject agent1 plate_grey)
+(GotoLocation agent1 microwave)
+(HeatObject agent1 microwave plate_grey)
+(GotoLocation agent1 fridge)
+(OpenObject agent1 fridge)
+(PutObjectInReceptacle agent1 plate_grey fridge)
+(CloseObject agent1 fridge)

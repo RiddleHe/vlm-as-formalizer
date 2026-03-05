@@ -1,0 +1,4 @@
+(gotolocation robot fridge1)
+(pickupobject robot black_bowl1)
+(gotolocation robot sink1)
+(putobjectinreceptacle robot black_bowl1 sink1)

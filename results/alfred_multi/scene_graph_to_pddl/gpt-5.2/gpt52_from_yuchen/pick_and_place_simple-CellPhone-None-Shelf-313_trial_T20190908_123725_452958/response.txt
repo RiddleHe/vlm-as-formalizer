@@ -1,0 +1,52 @@
+Scene graph:
+agent: none visible
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object): 
+- black_end_table_with_open_shelf
+- tall_black_bookshelf
+object:
+- red_flip_phone_on_end_table_top
+- left_compact_disc_on_end_table_top
+- right_compact_disc_on_end_table_top
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_phone_on_end_table_shelf)
+  (:domain put_task)
+  (:objects
+    robot - agent
+    black_end_table_with_open_shelf - receptacle
+    tall_black_bookshelf - receptacle
+    red_flip_phone_on_end_table_top - object
+    left_compact_disc_on_end_table_top - object
+    right_compact_disc_on_end_table_top - object
+  )
+  (:init
+    ;; Receptacles present (no openable/opened info given)
+
+    ;; Objects initially on/at the end table (modeled as being in the receptacle)
+    (inReceptacle red_flip_phone_on_end_table_top black_end_table_with_open_shelf)
+    (inReceptacle left_compact_disc_on_end_table_top black_end_table_with_open_shelf)
+    (inReceptacle right_compact_disc_on_end_table_top black_end_table_with_open_shelf)
+
+    ;; Robot starts not at any location and holds nothing (no atLocation/holds/holdsAny facts)
+  )
+  (:goal
+    (and
+      (inReceptacle red_flip_phone_on_end_table_top black_end_table_with_open_shelf)
+    )
+  )
+)

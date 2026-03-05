@@ -1,0 +1,6 @@
+(gotolocation agent tea_pot)
+(pickupobject agent tea_pot)
+(gotolocation agent sink)
+(cleanobject agent sink tea_pot)
+(gotolocation agent stove)
+(putobjectinreceptacle agent tea_pot stove)

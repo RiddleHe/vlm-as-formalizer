@@ -1,0 +1,4 @@
+(gotolocation agent0 green_spray_bottle_on_toilet_tank)
+(pickupobject agent0 green_spray_bottle_on_toilet_tank)
+(gotolocation agent0 bathroom_vanity_cabinet_under_sinks)
+(putobjectinreceptacle agent0 green_spray_bottle_on_toilet_tank bathroom_vanity_cabinet_under_sinks)

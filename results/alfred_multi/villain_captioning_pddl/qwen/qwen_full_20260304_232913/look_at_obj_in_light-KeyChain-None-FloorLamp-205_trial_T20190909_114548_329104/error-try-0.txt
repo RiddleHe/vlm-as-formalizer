@@ -1,0 +1,4 @@
+Predicate argument has wrong type:
+  atLocation keys dining_table: keys is not a agent
+  atLocation tall_lamp side_table: tall_lamp is not a agent
+

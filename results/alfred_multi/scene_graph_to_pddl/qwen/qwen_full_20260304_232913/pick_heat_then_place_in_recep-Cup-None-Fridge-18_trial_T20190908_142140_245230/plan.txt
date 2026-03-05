@@ -1,0 +1,6 @@
+(gotolocation robot lettuce)
+(pickupobject robot lettuce)
+(gotolocation robot microwave)
+(heatobject robot microwave lettuce)
+(gotolocation robot fridge)
+(putobjectinreceptacle robot lettuce fridge)

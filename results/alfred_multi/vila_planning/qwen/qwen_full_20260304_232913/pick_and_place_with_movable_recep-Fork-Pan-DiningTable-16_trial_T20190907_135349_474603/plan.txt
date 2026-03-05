@@ -1,0 +1,7 @@
+(GotoLocation robot countertop)
+(PickupObject robot fork)
+(GotoLocation robot countertop)
+(PickupObject robot pan)
+(GotoLocation robot diningtable)
+(PutObjectInReceptacle robot pan diningtable)
+(PutObjectInReceptacle robot fork pan)

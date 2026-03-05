@@ -1,0 +1,8 @@
+(gotolocation agent1 keys2)
+(pickupobject agent1 keys2)
+(gotolocation agent1 white_table)
+(putobjectinreceptacle agent1 keys2 white_table)
+(gotolocation agent1 dresser)
+(pickupobject agent1 keys1)
+(gotolocation agent1 white_table)
+(putobjectinreceptacle agent1 keys1 white_table)

@@ -1,0 +1,4 @@
+(gotolocation robot black_bookshelf)
+(pickupobject robot silver_cup)
+(gotolocation robot black_desk)
+(putobjectinreceptacle robot silver_cup black_desk)

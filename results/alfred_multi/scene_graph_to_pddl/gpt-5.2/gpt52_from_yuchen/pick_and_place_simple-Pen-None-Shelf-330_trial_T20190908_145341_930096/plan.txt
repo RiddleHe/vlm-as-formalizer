@@ -1,0 +1,4 @@
+(gotolocation robot blue_hexagonal_trash_bin_receptacle)
+(pickupobject robot black_pen_like_object)
+(gotolocation robot dark_wood_dresser_top_surface_receptacle)
+(putobjectinreceptacle robot black_pen_like_object dark_wood_dresser_top_surface_receptacle)

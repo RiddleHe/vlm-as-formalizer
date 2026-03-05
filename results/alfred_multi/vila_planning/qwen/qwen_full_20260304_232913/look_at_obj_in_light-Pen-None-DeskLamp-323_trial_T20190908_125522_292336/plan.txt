@@ -1,0 +1,4 @@
+(GotoLocation robot bedside_table)
+(PickupObject robot pencil)
+(GotoLocation robot desklamp)
+(ToggleObject robot desklamp)

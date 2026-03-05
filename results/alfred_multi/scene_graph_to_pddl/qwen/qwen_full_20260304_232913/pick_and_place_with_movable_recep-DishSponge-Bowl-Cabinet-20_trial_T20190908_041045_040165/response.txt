@@ -1,0 +1,57 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): sink
+knife (object): knife_on_countertop
+receptacle (object): stove, countertop, dishwasher, cupboard_left_of_dishwasher
+object: bowl, mug, fork, knife_on_countertop, toaster, egg, coffee_maker, sink, stove, countertop, dishwasher, cupboard_left_of_dishwasher
+openable (receptacle) true if a receptacle is openable: (openable dishwasher), (openable cupboard_left_of_dishwasher)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn stove), (isOn toaster)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle bowl stove), (inReceptacle mug countertop), (inReceptacle knife_on_countertop countertop), (inReceptacle fork countertop), (inReceptacle toaster countertop), (inReceptacle egg countertop), (inReceptacle coffee_maker countertop)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_bowl_in_cupboard)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        stove - receptacle
+        countertop - receptacle
+        dishwasher - receptacle
+        cupboard_left_of_dishwasher - receptacle
+        bowl - object
+        mug - object
+        fork - object
+        toaster - object
+        egg - object
+        coffee_maker - object
+    )
+    (:init
+        (openable dishwasher)
+        (openable cupboard_left_of_dishwasher)
+        (isOn stove)
+        (isOn toaster)
+        (inReceptacle bowl stove)
+        (inReceptacle mug countertop)
+        (inReceptacle knife countertop)
+        (inReceptacle fork countertop)
+        (inReceptacle toaster countertop)
+        (inReceptacle egg countertop)
+        (inReceptacle coffee_maker countertop)
+    )
+    (:goal (and (inReceptacle bowl cupboard_left_of_dishwasher)))
+)
+```

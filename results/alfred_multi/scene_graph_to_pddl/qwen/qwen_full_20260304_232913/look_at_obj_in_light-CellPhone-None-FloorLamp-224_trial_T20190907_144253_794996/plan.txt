@@ -1,0 +1,3 @@
+(gotolocation agent1 cell_phone)
+(pickupobject agent1 cell_phone)
+(gotolocation agent1 tall_lamp_with_green_shade)

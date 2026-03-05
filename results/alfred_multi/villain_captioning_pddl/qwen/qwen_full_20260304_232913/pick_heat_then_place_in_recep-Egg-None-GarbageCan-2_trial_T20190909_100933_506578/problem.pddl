@@ -1,0 +1,32 @@
+(define (problem heat_egg_trash)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        egg - object
+        microwave - microwave
+        trash_can - receptacle
+        apple - object
+    )
+    (:init
+        (not (atLocation robot egg))
+        (not (atLocation robot microwave))
+        (not (atLocation robot trash_can))
+        (not (holdsAny robot))
+        (not (isHot egg))
+        (not (isSliced egg))
+        (not (isOn microwave))
+        (not (opened microwave))
+        (openable microwave)
+        (openable trash_can)
+        (opened trash_can)
+        (inReceptacle apple microwave)
+        (not (inReceptacle egg microwave))
+        (not (inReceptacle egg trash_can))
+    )
+    (:goal
+        (and
+            (inReceptacle egg trash_can)
+            (isHot egg)
+        )
+    )
+)

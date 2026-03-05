@@ -1,0 +1,247 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Move some keys from a desk to the floral armchair.
+    
+
+SCENE CAPTION:
+Scene Description:
+
+The scene contains a floral armchair and a wooden desk, which are the primary objects relevant to the instruction. The domain types "receptacle" and "object" are applicable here.
+
+1. Objects and their types:
+   - The floral armchair is a receptacle because it can hold objects (e.g., the purple cushion is currently on it). It has a floral pattern with white and yellow flowers on a green background, and it features three black buttons on the backrest. The armchair is positioned on a light wooden floor, near an orange wall on the left and a dark wooden desk on the right.
+   - The wooden desk is also a receptacle, as it can hold objects (e.g., a small pink lamp is on its surface). The desk has a dark brown wood grain finish and is situated to the right of the armchair. A wooden chair is tucked under the desk.
+   - A small purple cushion with tufted buttons is currently on the floral armchair. This cushion is an object (not a receptacle) and is placed centrally on the seat of the armchair.
+   - A set of keys is visible on the desk. These keys are small, metallic, and lie flat on the desk surface near the center. They are an object (not a receptacle) and are the target of the instruction.
+
+2. Quantities:
+   - One floral armchair (receptacle)
+   - One wooden desk (receptacle)
+   - One purple cushion (object)
+   - One set of keys (object)
+   - One wooden chair (not a receptacle, not relevant to domain types)
+   - One pink lamp (object, not relevant to instruction)
+
+3. Spatial relationships:
+   - The keys are currently in the desk (inReceptacle keys desk).
+   - The purple cushion is on the floral armchair (inReceptacle cushion armchair).
+   - The desk is to the right of the armchair.
+   - The wooden chair is under the desk.
+   - The lamp is on the desk.
+
+4. Current state relevant to the planning task:
+   - The keys are not being held by any agent and are resting on the desk.
+   - The armchair is empty except for the cushion, meaning it has space to receive the keys.
+   - The desk is not openable (it is a surface, not a container with a lid or door), so no OpenObject action is needed for it.
+   - The armchair is not openable either; it is a seating surface, so no OpenObject action is needed for it.
+   - The agent is not currently at any object’s location and must first navigate to the desk to pick up the keys.
+
+5. Visual properties:
+   - The floral armchair has a light-colored fabric with a floral pattern and black buttons. It is positioned with its back against the wall and its seat facing forward.
+   - The desk is dark brown with a smooth surface and has two small white lines (possibly inlays or scratches) running horizontally near the center.
+   - The keys are metallic and appear to be a standard house key set, lying flat on the desk.
+   - The purple cushion is square, tufted, and bright purple, contrasting with the floral pattern of the armchair.
+   - The floor is light wood laminate, and part of a patterned rug (maroon and green) is visible under the desk.
+
+This description provides all necessary information for the robot to plan the task of moving the keys from the desk to the floral armchair.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

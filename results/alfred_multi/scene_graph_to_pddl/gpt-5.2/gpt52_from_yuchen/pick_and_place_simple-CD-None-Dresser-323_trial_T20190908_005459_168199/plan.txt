@@ -1,0 +1,4 @@
+(gotolocation robot_agent cd_disc_left_on_desk)
+(pickupobject robot_agent cd_disc_left_on_desk)
+(gotolocation robot_agent tall_wooden_dresser_top_receptacle)
+(putobjectinreceptacle robot_agent cd_disc_left_on_desk tall_wooden_dresser_top_receptacle)

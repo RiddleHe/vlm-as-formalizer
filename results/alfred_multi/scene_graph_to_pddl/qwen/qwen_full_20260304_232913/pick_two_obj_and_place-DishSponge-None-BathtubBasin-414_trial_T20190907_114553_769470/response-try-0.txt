@@ -1,0 +1,50 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): white_bathtub
+knife (object): 
+receptacle (object): black_trash_can, wooden_cabinet
+object: green_sponge, white_sponge, brown_soap_bottle, white_toilet_paper_roll, black_trash_can, wooden_cabinet, white_bathtub
+openable (receptacle) true if a receptacle is openable: (openable black_trash_can), (openable wooden_cabinet)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle green_sponge black_trash_can), (inReceptacle white_sponge wooden_cabinet)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent
+        white_bathtub - sink
+        black_trash_can - receptacle
+        wooden_cabinet - receptacle
+        green_sponge - object
+        white_sponge - object
+        brown_soap_bottle - object
+        white_toilet_paper_roll - object
+    )
+    (:init
+        (openable black_trash_can)
+        (openable wooden_cabinet)
+        (inReceptacle green_sponge black_trash_can)
+        (inReceptacle white_sponge wooden_cabinet)
+        (not (atLocation agent white_bathtub))
+        (not (atLocation agent black_trash_can))
+        (not (atLocation agent wooden_cabinet))
+        (not (holdsAny agent))
+    )
+    (:goal (and
+        (inReceptacle green_sponge white_bathtub)
+        (inReceptacle white_sponge white_bathtub)
+    ))
+)
+```

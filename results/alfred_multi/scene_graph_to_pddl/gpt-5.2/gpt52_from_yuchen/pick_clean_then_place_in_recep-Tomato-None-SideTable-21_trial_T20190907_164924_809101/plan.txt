@@ -1,0 +1,5 @@
+(gotolocation robot_agent white_sink_with_faucet_center_right)
+(pickupobject robot_agent green_tomato_like_vegetable_in_sink_basin)
+(cleanobject robot_agent white_sink_with_faucet_center_right green_tomato_like_vegetable_in_sink_basin)
+(gotolocation robot_agent black_table_left_of_sink)
+(putobjectinreceptacle robot_agent green_tomato_like_vegetable_in_sink_basin black_table_left_of_sink)

@@ -1,0 +1,954 @@
+{
+  "result_dir": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913",
+  "data_dir": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim",
+  "summary": {
+    "tasks_total": 10,
+    "tasks_with_plan": 2,
+    "successes": 2,
+    "failures": 8,
+    "success_rate": 0.2,
+    "avg_steps_planned": 12.0,
+    "avg_steps_executed": 12.0,
+    "by_section": {
+      "objects": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 50,
+        "macro_precision": 1.0,
+        "macro_recall": 0.2,
+        "micro_precision": 1.0,
+        "micro_recall": 0.1935483870967742
+      },
+      "init": {
+        "tp": 18,
+        "fp": 0,
+        "fn": 73,
+        "macro_precision": 1.0,
+        "macro_recall": 0.2,
+        "micro_precision": 1.0,
+        "micro_recall": 0.1978021978021978
+      },
+      "goal": {
+        "tp": 8,
+        "fp": 4,
+        "fn": 31,
+        "macro_precision": 0.9314285714285715,
+        "macro_recall": 0.2,
+        "micro_precision": 0.6666666666666666,
+        "micro_recall": 0.20512820512820512
+      }
+    },
+    "overall": {
+      "tp": 38,
+      "fp": 4,
+      "fn": 154,
+      "macro_precision": 0.9771428571428572,
+      "macro_recall": 0.20000000000000004,
+      "micro_precision": 0.9047619047619048,
+      "micro_recall": 0.19791666666666666
+    },
+    "types": {
+      "objects_checked": 12,
+      "mismatches": 0,
+      "macro_agreement": 1.0,
+      "micro_agreement": 1.0
+    },
+    "counts": {
+      "task_total": 10,
+      "task_scored": 10,
+      "task_missing_pred_problem": 0,
+      "task_missing_gt_problem": 0,
+      "task_with_parse_error": 0,
+      "task_missing_mapping": 0,
+      "task_other_error": 0
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "problem_1",
+      "has_plan": true,
+      "mapping": {
+        "green_block": "green_block",
+        "pink_block": "pink_block",
+        "red_block": "red_block",
+        "robot1": "robot",
+        "yellow_block": "yellow_block"
+      },
+      "plan_len": 6,
+      "success": true,
+      "stopped_step": 6,
+      "total_steps": 6,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "green_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "red_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "yellow_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "green_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": null,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_1/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/problem_1/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 5,
+              "pred_mapped": 5
+            },
+            "true_positives": 5,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 9,
+              "pred_mapped": 9
+            },
+            "true_positives": 9,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 3,
+              "pred_mapped": 5
+            },
+            "true_positives": 3,
+            "false_positives": 2,
+            "false_negatives": 0,
+            "precision": 0.6,
+            "recall": 1.0
+          },
+          "type": {
+            "objects_checked": 5,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 0.8666666666666667,
+            "recall": 1.0
+          },
+          "micro": {
+            "true_positives": 17,
+            "false_positives": 2,
+            "false_negatives": 0,
+            "precision": 0.8947368421052632,
+            "recall": 1.0
+          }
+        },
+        "unmapped": {
+          "object_count": 0,
+          "init_count": 0,
+          "goal_count": 0
+        }
+      }
+    },
+    {
+      "task_id": "problem_10",
+      "has_plan": false,
+      "mapping": {},
+      "plan_len": 0,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_10/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/problem_10/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 7,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 7,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 13,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 13,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 4,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 4,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "type": {
+            "objects_checked": 0,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "micro": {
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 24,
+            "precision": 1.0,
+            "recall": 0.0
+          }
+        },
+        "unmapped": {
+          "object_count": 7,
+          "init_count": 13,
+          "goal_count": 8
+        }
+      }
+    },
+    {
+      "task_id": "problem_2",
+      "has_plan": false,
+      "mapping": {},
+      "plan_len": 0,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_2/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/problem_2/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 5,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 5,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 7,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 7,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 3,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 3,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "type": {
+            "objects_checked": 0,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "micro": {
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 15,
+            "precision": 1.0,
+            "recall": 0.0
+          }
+        },
+        "unmapped": {
+          "object_count": 5,
+          "init_count": 8,
+          "goal_count": 5
+        }
+      }
+    },
+    {
+      "task_id": "problem_3",
+      "has_plan": false,
+      "mapping": {},
+      "plan_len": 0,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_3/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/problem_3/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 6,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 6,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 10,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 10,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 5,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 5,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "type": {
+            "objects_checked": 0,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "micro": {
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 21,
+            "precision": 1.0,
+            "recall": 0.0
+          }
+        },
+        "unmapped": {
+          "object_count": 6,
+          "init_count": 10,
+          "goal_count": 5
+        }
+      }
+    },
+    {
+      "task_id": "problem_4",
+      "has_plan": false,
+      "mapping": {},
+      "plan_len": 0,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_4/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/problem_4/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 6,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 6,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 10,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 10,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 4,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 4,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "type": {
+            "objects_checked": 0,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "micro": {
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 20,
+            "precision": 1.0,
+            "recall": 0.0
+          }
+        },
+        "unmapped": {
+          "object_count": 6,
+          "init_count": 11,
+          "goal_count": 6
+        }
+      }
+    },
+    {
+      "task_id": "problem_5",
+      "has_plan": false,
+      "mapping": {},
+      "plan_len": 0,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_5/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/problem_5/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 6,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 6,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 7,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 7,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 4,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 4,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "type": {
+            "objects_checked": 0,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "micro": {
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 17,
+            "precision": 1.0,
+            "recall": 0.0
+          }
+        },
+        "unmapped": {
+          "object_count": 6,
+          "init_count": 7,
+          "goal_count": 6
+        }
+      }
+    },
+    {
+      "task_id": "problem_6",
+      "has_plan": false,
+      "mapping": {},
+      "plan_len": 0,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_6/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/problem_6/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 6,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 6,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 8,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 8,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 2,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 2,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "type": {
+            "objects_checked": 0,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "micro": {
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 16,
+            "precision": 1.0,
+            "recall": 0.0
+          }
+        },
+        "unmapped": {
+          "object_count": 6,
+          "init_count": 9,
+          "goal_count": 2
+        }
+      }
+    },
+    {
+      "task_id": "problem_7",
+      "has_plan": false,
+      "mapping": {},
+      "plan_len": 0,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_7/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/problem_7/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 7,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 7,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 10,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 10,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 5,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 5,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "type": {
+            "objects_checked": 0,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "micro": {
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 22,
+            "precision": 1.0,
+            "recall": 0.0
+          }
+        },
+        "unmapped": {
+          "object_count": 7,
+          "init_count": 12,
+          "goal_count": 5
+        }
+      }
+    },
+    {
+      "task_id": "problem_8",
+      "has_plan": false,
+      "mapping": {},
+      "plan_len": 0,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_8/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/problem_8/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 7,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 7,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 8,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 8,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 4,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 4,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "type": {
+            "objects_checked": 0,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "micro": {
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 19,
+            "precision": 1.0,
+            "recall": 0.0
+          }
+        },
+        "unmapped": {
+          "object_count": 7,
+          "init_count": 8,
+          "goal_count": 8
+        }
+      }
+    },
+    {
+      "task_id": "problem_9",
+      "has_plan": true,
+      "mapping": {
+        "blue_block": "blue_block",
+        "green_block": "green_block",
+        "orange_block": "orange_block",
+        "purple_block": "purple_block",
+        "red_block": "red_block",
+        "robot1": "robot",
+        "yellow_block": "yellow_block"
+      },
+      "plan_len": 18,
+      "success": true,
+      "stopped_step": 18,
+      "total_steps": 18,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "green_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "orange_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "blue_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "green_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "green_block",
+            "yellow_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "red_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "orange_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": null,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_9/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/scene_graph_to_pddl/qwen/qwen_full_20260304_232913/problem_9/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 7,
+              "pred_mapped": 7
+            },
+            "true_positives": 7,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 9,
+              "pred_mapped": 9
+            },
+            "true_positives": 9,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 5,
+              "pred_mapped": 7
+            },
+            "true_positives": 5,
+            "false_positives": 2,
+            "false_negatives": 0,
+            "precision": 0.7142857142857143,
+            "recall": 1.0
+          },
+          "type": {
+            "objects_checked": 7,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 0.9047619047619048,
+            "recall": 1.0
+          },
+          "micro": {
+            "true_positives": 21,
+            "false_positives": 2,
+            "false_negatives": 0,
+            "precision": 0.9130434782608695,
+            "recall": 1.0
+          }
+        },
+        "unmapped": {
+          "object_count": 0,
+          "init_count": 0,
+          "goal_count": 0
+        }
+      }
+    }
+  ]
+}

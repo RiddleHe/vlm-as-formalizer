@@ -1,0 +1,84 @@
+Scene graph:
+agent: agent
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife_on_sink, knife_on_table
+receptacle (object): black_table, white_table, black_cup, gray_plate, salt_shaker, brown_bread, green_apple, red_apple, tomato, black_bowl, toaster, dishwasher, cabinet
+object: black_table, white_table, black_cup, gray_plate, salt_shaker, brown_bread, green_apple, red_apple, tomato, black_bowl, toaster, dishwasher, cabinet, knife_on_sink, knife_on_table, fork, spoon, microwave, fridge, sink
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge), (openable sink), (openable dishwasher), (openable cabinet)
+opened (receptacle) true if a receptacle is opened: (opened microwave), (opened fridge), (opened sink), (opened dishwasher), (opened cabinet)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn toaster), (isOn dishwasher)
+isToggled (object) true if the object has been toggled: (isToggled toaster), (isToggled dishwasher)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle knife_on_sink sink), (inReceptacle fork sink), (inReceptacle black_cup black_table), (inReceptacle gray_plate black_table), (inReceptacle salt_shaker black_table), (inReceptacle brown_bread black_table), (inReceptacle green_apple black_table), (inReceptacle red_apple black_table), (inReceptacle tomato sink), (inReceptacle black_bowl white_table), (inReceptacle brown_bread white_table), (inReceptacle red_apple sink), (inReceptacle knife_on_table black_table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation agent black_table)
+
+PDDL problem: ```pddl
+(define (problem cut_cook_apple)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave
+        fridge
+        sink
+        knife_on_sink
+        knife_on_table
+        black_table
+        white_table
+        black_cup
+        gray_plate
+        salt_shaker
+        brown_bread
+        green_apple
+        red_apple
+        tomato
+        black_bowl
+        toaster
+        dishwasher
+        cabinet
+        fork
+        spoon
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (openable dishwasher)
+        (openable cabinet)
+        (opened microwave)
+        (opened fridge)
+        (opened sink)
+        (opened dishwasher)
+        (opened cabinet)
+        (isOn toaster)
+        (isOn dishwasher)
+        (isToggled toaster)
+        (isToggled dishwasher)
+        (inReceptacle knife_on_sink sink)
+        (inReceptacle fork sink)
+        (inReceptacle black_cup black_table)
+        (inReceptacle gray_plate black_table)
+        (inReceptacle salt_shaker black_table)
+        (inReceptacle brown_bread black_table)
+        (inReceptacle green_apple black_table)
+        (inReceptacle red_apple black_table)
+        (inReceptacle tomato sink)
+        (inReceptacle black_bowl white_table)
+        (inReceptacle brown_bread white_table)
+        (inReceptacle red_apple sink)
+        (inReceptacle knife_on_table black_table)
+        (atLocation agent black_table)
+    )
+    (:goal (and
+        (isSliced red_apple)
+        (isHot red_apple)
+        (inReceptacle red_apple white_table)
+    ))
+)
+```

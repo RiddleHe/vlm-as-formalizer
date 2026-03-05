@@ -1,0 +1,10 @@
+Predicate argument has wrong type:
+  atLocation yellow_spray_bottle metal_rack: yellow_spray_bottle is not a agent
+  atLocation silver_dispenser toilet: silver_dispenser is not a agent
+  atLocation plunger floor: plunger is not a agent
+  atLocation white_spray_bottle blue_bin: white_spray_bottle is not a agent
+
+Object does not have a type:
+  floor
+  toilet
+

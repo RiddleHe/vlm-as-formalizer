@@ -1,0 +1,253 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot) ; if robot is not seen in the image, it can be assumed to exist and is handempty
+        (handfull ?x - robot)
+        (holding ?x - block) ; block x is being held by the robot
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    You can always assume that at least one robot arm is available if not in the image.
+    Instruction: Create 2 stacks: yellow over orange over red over purple, blue over green
+    
+
+SCENE CAPTION:
+The scene contains several colored blocks on a light-colored table surface, along with some background office items like a marker, a wrench, and a box, which are not relevant to the blocksworld domain.
+
+Relevant objects (blocks) and their properties:
+
+- There are five distinct blocks, each a different color: blue, green, orange, yellow, and purple.
+- In the initial image (Image 1), the blocks are arranged as follows:
+  - A stack of three blocks is visible on the right: yellow on bottom, orange in the middle, and purple on top. This means:
+    - (on purple orange) is true.
+    - (on orange yellow) is true.
+    - (ontable yellow) is true.
+    - (clear purple) is true.
+    - (clear yellow) is false (because orange is on it).
+    - (clear orange) is false (because purple is on it).
+  - Three individual blocks are on the table to the left of the stack:
+    - A blue block: (ontable blue) and (clear blue) are true.
+    - A green block: (ontable green) and (clear green) are true.
+    - An orange block: (ontable orange) and (clear orange) is true. (Note: There are two orange blocks — one in the stack and one on the table. For clarity, we’ll refer to them as “orange-stack” and “orange-table”. The orange block in the stack is not on the table, while the orange block on the table is separate. However, based on visual inspection, there is only one orange block, which is part of the stack. The block described as “orange” in the foreground is actually red in the instruction but appears orange in the image — we will treat it as the “red” block per the instruction, since the instruction specifies a red block and the image shows a reddish-orange block. To resolve this, we will assume the block in the foreground is “red” for the purpose of the task, even though it visually appears orange. Alternatively, if the instruction is to be taken literally, the block in the foreground must be red, and the one in the stack must be orange. Given the ambiguity, we will proceed by labeling the blocks as per their visual appearance and the instruction’s color sequence. Let’s redefine for clarity:)
+
+Revised block identification based on instruction and visual:
+
+- Block colors present: blue, green, orange (in stack), yellow (in stack), purple (in stack), and a reddish-orange block on the table. Since the instruction calls for red, and the block on the table is not yellow, orange, or purple, we will designate it as “red” for the task.
+
+Thus, we have:
+
+- Block “blue”: on table, clear.
+- Block “green”: on table, clear.
+- Block “red”: on table, clear. (This is the reddish-orange block in the foreground.)
+- Block “yellow”: on table, but has orange on top (so not clear).
+- Block “orange”: on yellow, has purple on top (so not clear).
+- Block “purple”: on orange, clear.
+
+So, the initial state is:
+
+- (ontable blue)
+- (ontable green)
+- (ontable red)
+- (ontable yellow)
+- (on orange yellow)
+- (on purple orange)
+- (clear blue)
+- (clear green)
+- (clear red)
+- (clear purple)
+- (handempty robot) — assumed, as no robot is visible.
+
+The goal is to create two stacks:
+
+1. yellow over orange over red over purple — this is impossible as stated because purple is currently on top of orange, and we cannot have purple under red. The instruction likely means: purple over red over orange over yellow, or a different order. Let’s re-read: “yellow over orange over red over purple” — this would mean yellow is on top, then orange, then red, then purple at bottom. But that contradicts the current stack. Alternatively, it may mean: purple at bottom, then red, then orange, then yellow on top. But the instruction says “yellow over orange over red over purple”, which typically means yellow is on top of orange, which is on top of red, which is on top of purple — so purple is at the bottom.
+
+Given the current stack is purple on orange on yellow, to achieve “yellow over orange over red over purple”, we would need to disassemble the current stack and rebuild with purple at bottom, then red, then orange, then yellow on top. But we only have one yellow, one orange, one purple, and one red. So the instruction must be interpreted as: create a stack with purple at the bottom, then red, then orange, then yellow on top. But the instruction says “yellow over orange over red over purple”, which implies yellow is on top.
+
+Alternatively, the instruction may have a typo, and it should be “purple over red over orange over yellow” to match the current stack’s colors. But since we must follow the instruction as given, we will assume the goal is to have a stack where purple is at the bottom, then red, then orange, then yellow on top.
+
+But we only have one of each color, and currently, yellow, orange, and purple are stacked. So to achieve “yellow over orange over red over purple”, we need to move the current stack and place red under orange, and yellow on top of orange, with purple at the bottom. But that would require purple to be under red, which is not currently the case.
+
+Given the ambiguity, we will proceed with the following interpretation for the goal:
+
+Goal Stack 1: purple at bottom, then red, then orange, then yellow on top. (This matches the instruction “yellow over orange over red over purple” if read from top to bottom.)
+
+Goal Stack 2: blue over green — so green at bottom, blue on top.
+
+Current state summary:
+
+- Blocks on table: blue, green, red (the reddish-orange one), and yellow (but yellow is not on table, it’s under orange). Actually, yellow is on table with orange on it, so (ontable yellow) is true, but (clear yellow) is false.
+
+To clarify, let’s list all blocks and their current state:
+
+- Block “blue”: (ontable blue), (clear blue)
+- Block “green”: (ontable green), (clear green)
+- Block “red”: (ontable red), (clear red) — this is the block in the foreground, which we are calling “red” for the task.
+- Block “yellow”: (ontable yellow), (not clear yellow) — because orange is on it.
+- Block “orange”: (not ontable orange), (on orange yellow), (not clear orange) — because purple is on it.
+- Block “purple”: (not ontable purple), (on purple orange), (clear purple)
+
+So, to achieve the goal:
+
+1. We need to unstack purple from orange, then unstack orange from yellow.
+2. Then, we need to put purple on table (it’s already on table via yellow, but we need it clear).
+3. Then, stack red on purple, then orange on red, then yellow on orange.
+4. Also, stack blue on green.
+
+But the instruction says “yellow over orange over red over purple”, which would be yellow on top, then orange, then red, then purple at bottom. So the stack should be: purple (bottom), red, orange, yellow (top).
+
+Yes.
+
+So, the current state has yellow, orange, purple stacked, with yellow on table, orange on yellow, purple on orange.
+
+We need to:
+
+- Unstack purple from orange.
+- Unstack orange from yellow.
+- Put purple on table (it’s already on table via yellow, but we need it as a base).
+- Then, stack red on purple.
+- Then, stack orange on red.
+- Then, stack yellow on orange.
+- And stack blue on green.
+
+But we have only one red block, which is on the table, clear.
+
+So, the plan is feasible.
+
+Detailed scene description:
+
+Objects: 5 blocks — blue, green, red (reddish-orange), yellow, orange, purple. (Note: we have six blocks? No, we have five: blue, green, red, yellow, and the stack has orange and purple, so that’s five. The block in the stack is orange, and the one on table is red. So blocks are: blue, green, red, yellow, orange, purple — that’s six. But in the image, there are only five blocks visible: three on table (blue, green, red) and two in the stack (yellow and orange and purple — that’s three, so total six? Let’s count: in image 1, there are three blocks on table: blue, green, and a reddish-orange (which we call red). And a stack of three: yellow, orange, purple. So six blocks. But the instruction mentions only five colors: yellow, orange, red, purple, blue, green — that’s six colors. So we have six blocks.
+
+Blocks:
+
+- blue: on table, clear.
+- green: on table, clear.
+- red: on table, clear. (reddish-orange block)
+- yellow: on table, with orange on it — so (ontable yellow), (not clear yellow)
+- orange: on yellow, with purple on it — so (on orange yellow), (not clear orange)
+- purple: on orange, clear — so (on purple orange), (clear purple)
+
+So, six blocks.
+
+Current state:
+
+- (ontable blue)
+- (ontable green)
+- (ontable red)
+- (ontable yellow)
+- (on orange yellow)
+- (on purple orange)
+- (clear blue)
+- (clear green)
+- (clear red)
+- (clear purple)
+- (handempty robot)
+
+The goal is to create two stacks:
+
+1. Stack 1: yellow over orange over red over purple — meaning purple at bottom, then red, then orange, then yellow on top. So (on yellow orange), (on orange red), (on red purple), and (ontable purple).
+
+2. Stack 2: blue over green — so (on blue green), and (ontable green).
+
+We need to disassemble the current stack and rebuild.
+
+This is the detailed scene description.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

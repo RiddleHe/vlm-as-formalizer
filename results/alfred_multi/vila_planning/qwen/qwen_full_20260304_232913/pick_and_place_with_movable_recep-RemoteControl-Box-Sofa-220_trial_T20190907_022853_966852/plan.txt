@@ -1,0 +1,8 @@
+(GotoLocation robot remotecontrol)
+(PickupObject robot remotecontrol)
+(GotoLocation robot box)
+(PutObjectInReceptacle robot remotecontrol box)
+(GotoLocation robot box)
+(PickupObject robot box)
+(GotoLocation robot sofa)
+(PutObjectInReceptacle robot box sofa)

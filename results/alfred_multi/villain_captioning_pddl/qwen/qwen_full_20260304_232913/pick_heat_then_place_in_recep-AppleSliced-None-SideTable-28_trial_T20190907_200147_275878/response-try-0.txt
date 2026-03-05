@@ -1,0 +1,51 @@
+```pddl
+(define (problem cut_cook_apple)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        sink - sink
+        apple1 - object
+        apple2 - object
+        knife1 - knife
+        knife2 - knife
+        black_side_table - object
+        countertop - object
+    )
+    (:init
+        ; Agent is not at any location initially
+        (not (atLocation robot apple1))
+        (not (atLocation robot apple2))
+        (not (atLocation robot knife1))
+        (not (atLocation robot knife2))
+        (not (atLocation robot microwave))
+        (not (atLocation robot sink))
+        (not (atLocation robot black_side_table))
+        (not (atLocation robot countertop))
+
+        ; Objects are on surfaces (not in receptacles, as per domain, surfaces are not receptacles)
+        (atLocation robot countertop) ; Assume robot starts near countertop for simplicity
+        (atLocation apple1 countertop)
+        (atLocation apple2 black_side_table)
+        (atLocation knife1 sink)
+        (atLocation knife2 black_side_table)
+        (inReceptacle knife1 sink) ; knife1 is in sink
+        (openable microwave)
+        (not (opened microwave))
+        (not (isSliced apple1))
+        (not (isSliced apple2))
+        (not (isHot apple1))
+        (not (isHot apple2))
+        (not (isClean knife1))
+        (not (isClean knife2))
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (isSliced apple1) ; apple1 is sliced
+            (isHot apple1) ; apple1 is heated
+            (atLocation apple1 black_side_table) ; apple1 is on the brown shelf (interpreted as black_side_table)
+        )
+    )
+)
+```

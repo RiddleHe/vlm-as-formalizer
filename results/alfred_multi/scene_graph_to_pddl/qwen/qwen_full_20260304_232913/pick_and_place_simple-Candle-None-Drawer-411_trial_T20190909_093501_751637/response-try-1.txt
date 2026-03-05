@@ -1,0 +1,59 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): beige_sink
+knife (object): 
+receptacle (object): beige_sink
+object: small_pink_candle, black_soap_dispenser, pink_bar_of_soap, beige_sink
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle pink_bar_of_soap beige_sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_candle_in_drawer)
+    (:domain put_task)
+    (:objects
+        agent
+        beige_sink - sink
+        small_pink_candle - object
+        black_soap_dispenser - object
+        pink_bar_of_soap - object
+    )
+    (:init
+        (atLocation agent beige_sink) ; assuming agent starts near sink as it's the main interaction point
+        (inReceptacle pink_bar_of_soap beige_sink)
+        ; No objects are held initially
+        (not (holdsAny agent))
+        ; No receptacles are opened initially (since no drawers or cabinets are explicitly mentioned as openable)
+        ; No objects are clean, hot, cool, on, toggled, or sliced
+        (not (isClean small_pink_candle))
+        (not (isHot small_pink_candle))
+        (not (isCool small_pink_candle))
+        (not (isOn small_pink_candle))
+        (not (isToggled small_pink_candle))
+        (not (isSliced small_pink_candle))
+    )
+    (:goal
+        (and
+            ; The instruction is to put the candle in a drawer.
+            ; However, no drawer is present in the scene graph or images.
+            ; Since no drawer is available, the goal cannot be achieved as stated.
+            ; We must interpret the instruction based on available objects.
+            ; The only receptacle shown is the sink, but the candle is not in it.
+            ; The most plausible interpretation is to put the candle in the sink (as it's the only receptacle).
+            ; Alternatively, if "drawer" is a misnomer and refers to the sink, then:
+            (inReceptacle small_pink_candle beige_sink)
+        )
+    )
+)
+```

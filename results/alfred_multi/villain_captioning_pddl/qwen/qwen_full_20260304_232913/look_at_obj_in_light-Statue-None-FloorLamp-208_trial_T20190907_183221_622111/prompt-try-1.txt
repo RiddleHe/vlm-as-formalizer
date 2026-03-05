@@ -1,0 +1,249 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: examine a trophy with a lamp
+    
+
+SCENE CAPTION:
+The provided images depict a scene with several objects, but none of them match the types defined in the given PDDL domain file (`microwave`, `fridge`, `sink`, `knife`, `receptacle`, or `agent`). The domain is focused on kitchen-related tasks involving heating, cooling, cleaning, slicing, and placing objects in receptacles. The instruction "examine a trophy with a lamp" also does not align with the domain's predicates or actions.
+
+Here is a detailed description of the visible objects in the images, noting their incompatibility with the domain:
+
+1.  **Objects and their types (Domain Relevance):**
+    *   **Trophy:** A small, dark, glossy statuette of a human figure is visible on a black table. It is mounted on a dark rectangular base. This object is not defined in the domain.
+    *   **Lamp:** A lamp with a brownish-orange, possibly wooden, base and a dark, angled lampshade is visible on the right side of the scene. The lamp is on a black table. This object is not defined in the domain.
+    *   **Table:** A black, rectangular table with thin, angled legs is present. It holds the trophy and the lamp. This object is not defined as a `receptacle` in the domain, although it functions as a surface. The domain does not have a generic "table" type.
+    *   **Floor and Walls:** The scene has a brown, textured floor and plain brown walls. These are not objects in the domain.
+    *   **Grid Panel:** A brown, gridded panel is visible on the right wall. This is not an object in the domain.
+
+2.  **Quantities of each object type:**
+    *   1 Trophy
+    *   1 Lamp
+    *   1 Table
+    *   1 Grid Panel
+    *   0 Objects of type `microwave`, `fridge`, `sink`, `knife`, or `agent`.
+
+3.  **Spatial Relationships (Domain Predicate Relevance):**
+    *   The trophy is `on` the table. (The domain has no `isOn` predicate for objects on surfaces, only for toggled objects or objects in receptacles).
+    *   The lamp is `on` the table. (Same as above).
+    *   The table is `on` the floor.
+    *   The grid panel is `on` the wall.
+    *   No objects are `inReceptacle` as there are no defined receptacles.
+    *   No agent is present, so `holds`, `holdsAny`, `atLocation` for an agent are all false or undefined.
+    *   No objects are `opened`, `isClean`, `isHot`, `isCool`, `isSliced`, or `isToggled` as per the domain's predicates, as these states are not applicable to the visible objects or the scene context.
+
+4.  **Current State of each object relevant to the planning task:**
+    *   The trophy is stationary on the table.
+    *   The lamp is stationary on the table. Its state (on/off) is not visually discernible, and the domain's `isOn` predicate does not apply to lamps in this context.
+    *   The table is stationary.
+    *   No actions from the domain (GotoLocation, OpenObject, PickupObject, etc.) can be performed as the required objects and agent are not present or defined.
+
+5.  **Colors, positions, and other visual properties:**
+    *   **Trophy:** Dark, almost black, glossy finish. Positioned on the left side of the black table.
+    *   **Lamp:** Base is brownish-orange, lampshade is dark. Positioned on the right side of the black table.
+    *   **Table:** Black, rectangular, with thin, angled legs. Positioned in the center of the visible floor area.
+    *   **Floor:** Brown, textured, possibly carpeted.
+    *   **Walls:** Plain, solid brown.
+    *   **Grid Panel:** Brown, with a visible grid pattern, mounted vertically on the right wall.
+
+In summary, the scene contains a trophy and a lamp on a table, but these objects and the overall environment do not conform to the PDDL domain `put_task`. The domain's predicates and actions are inapplicable to this scene. The instruction to "examine a trophy with a lamp" cannot be translated into a sequence of actions within the given domain.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

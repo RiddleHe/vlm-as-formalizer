@@ -1,0 +1,4 @@
+(gotolocation robot black_bookshelf_top_surface_receptacle)
+(pickupobject robot silver_metal_mug_cup)
+(gotolocation robot black_office_desk_tabletop_receptacle)
+(putobjectinreceptacle robot silver_metal_mug_cup black_office_desk_tabletop_receptacle)

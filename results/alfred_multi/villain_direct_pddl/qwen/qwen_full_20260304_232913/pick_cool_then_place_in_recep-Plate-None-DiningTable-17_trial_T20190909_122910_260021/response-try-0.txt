@@ -1,0 +1,37 @@
+```pddl
+(define (problem put_chilled_plate_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        table - receptacle
+        fridge - receptacle
+        plate - object
+        knife - knife
+        tomato - object
+        lettuce - object
+        fork - object
+        spoon - object
+        saltshaker - object
+        peppershaker - object
+    )
+    (:init
+        (openable fridge)
+        (not (opened fridge))
+        (atLocation robot table)
+        (inReceptacle plate fridge)
+        (inReceptacle knife table)
+        (inReceptacle tomato table)
+        (inReceptacle lettuce table)
+        (inReceptacle fork table)
+        (inReceptacle spoon table)
+        (inReceptacle saltshaker table)
+        (inReceptacle peppershaker table)
+        (not (holdsAny robot))
+        (not (isCool plate))
+    )
+    (:goal (and
+        (inReceptacle plate table)
+        (isCool plate)
+    ))
+)
+```

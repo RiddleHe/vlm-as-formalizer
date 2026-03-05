@@ -1,0 +1,7 @@
+(pickupobject robot saltshaker1)
+(gotolocation robot cabinet)
+(putobjectinreceptacle robot saltshaker1 cabinet)
+(gotolocation robot saltshaker2)
+(pickupobject robot saltshaker2)
+(gotolocation robot cabinet)
+(putobjectinreceptacle robot saltshaker2 cabinet)

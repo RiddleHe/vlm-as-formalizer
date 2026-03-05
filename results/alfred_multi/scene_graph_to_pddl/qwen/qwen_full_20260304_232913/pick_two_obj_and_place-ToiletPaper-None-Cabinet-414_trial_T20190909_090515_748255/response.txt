@@ -1,0 +1,51 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): gray_sink
+knife (object): 
+receptacle (object): wooden_cabinet_second_from_left_under_sink, black_trash_can
+object: roll_of_toilet_paper, empty_roll_of_toilet_paper, purple_cloth, green_spray_bottle_1, green_spray_bottle_2, white_toilet, gray_sink, wooden_cabinet_second_from_left_under_sink, black_trash_can
+openable (receptacle) true if a receptacle is openable: (openable wooden_cabinet_second_from_left_under_sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle roll_of_toilet_paper gray_sink), (inReceptacle empty_roll_of_toilet_paper gray_sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_toilet_paper_in_cabinet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        gray_sink - sink
+        wooden_cabinet_second_from_left_under_sink - receptacle
+        black_trash_can - receptacle
+        roll_of_toilet_paper - object
+        empty_roll_of_toilet_paper - object
+        purple_cloth - object
+        green_spray_bottle_1 - object
+        green_spray_bottle_2 - object
+        white_toilet - object
+    )
+    (:init
+        (openable wooden_cabinet_second_from_left_under_sink)
+        (not (opened wooden_cabinet_second_from_left_under_sink))
+        (inReceptacle roll_of_toilet_paper gray_sink)
+        (inReceptacle empty_roll_of_toilet_paper gray_sink)
+        (not (holdsAny robot))
+        (not (atLocation robot gray_sink))
+        (not (atLocation robot wooden_cabinet_second_from_left_under_sink))
+    )
+    (:goal (and
+        (inReceptacle roll_of_toilet_paper wooden_cabinet_second_from_left_under_sink)
+        (inReceptacle empty_roll_of_toilet_paper wooden_cabinet_second_from_left_under_sink)
+    ))
+)
+```

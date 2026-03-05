@@ -1,0 +1,3 @@
+(gotolocation robot kitchen_island_counter)
+(pickupobject robot fork)
+(putobjectinreceptacle robot fork cup)

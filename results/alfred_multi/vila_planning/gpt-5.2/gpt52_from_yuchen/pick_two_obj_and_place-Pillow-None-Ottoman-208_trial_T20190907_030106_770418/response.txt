@@ -1,0 +1,8 @@
+(GotoLocation agent1 cushion1)
+(PickupObject agent1 cushion1)
+(GotoLocation agent1 ottoman1)
+(PutObjectInReceptacle agent1 cushion1 ottoman1)
+(GotoLocation agent1 cushion2)
+(PickupObject agent1 cushion2)
+(GotoLocation agent1 ottoman1)
+(PutObjectInReceptacle agent1 cushion2 ottoman1)

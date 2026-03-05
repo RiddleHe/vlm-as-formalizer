@@ -1,0 +1,8 @@
+(GotoLocation robot diningtable)
+(PickupObject robot plate)
+(GotoLocation robot coffeetable)
+(PutObjectInReceptacle robot plate coffeetable)
+(GotoLocation robot diningtable)
+(PickupObject robot candle)
+(GotoLocation robot coffeetable)
+(PutObjectInReceptacle robot candle plate)

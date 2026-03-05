@@ -1,0 +1,4 @@
+(gotolocation robot sponge)
+(pickupobject robot sponge)
+(gotolocation robot bathtub)
+(putobjectinreceptacle robot sponge bathtub)

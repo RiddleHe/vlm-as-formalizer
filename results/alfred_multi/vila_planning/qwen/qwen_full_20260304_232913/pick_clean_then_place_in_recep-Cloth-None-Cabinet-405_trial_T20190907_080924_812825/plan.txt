@@ -1,0 +1,8 @@
+(GotoLocation robot cloth)
+(PickupObject robot cloth)
+(GotoLocation robot sinkbasin)
+(CleanObject robot sinkbasin cloth)
+(GotoLocation robot cabinet)
+(OpenObject robot cabinet)
+(PutObjectInReceptacle robot cloth cabinet)
+(CloseObject robot cabinet)

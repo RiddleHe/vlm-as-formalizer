@@ -1,0 +1,54 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): wooden_nightstand, bed
+object: robot, wooden_nightstand, bed, green_lamp, blue_book, gray_laptop, white_pillow_1, white_pillow_2, yellow_pencil, small_glass, bed_frame
+openable (receptacle) true if a receptacle is openable: (openable wooden_nightstand)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn green_lamp)
+isToggled (object) true if the object has been toggled: (isToggled green_lamp)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle yellow_pencil wooden_nightstand), (inReceptacle small_glass wooden_nightstand), (inReceptacle blue_book bed), (inReceptacle gray_laptop bed), (inReceptacle white_pillow_1 bed), (inReceptacle white_pillow_2 bed)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem inspect_book_with_light)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        wooden_nightstand - receptacle
+        bed - receptacle
+        green_lamp - object
+        blue_book - object
+        gray_laptop - object
+        white_pillow_1 - object
+        white_pillow_2 - object
+        yellow_pencil - object
+        small_glass - object
+        bed_frame - object
+    )
+    (:init
+        (openable wooden_nightstand)
+        (isOn green_lamp)
+        (isToggled green_lamp)
+        (inReceptacle yellow_pencil wooden_nightstand)
+        (inReceptacle small_glass wooden_nightstand)
+        (inReceptacle blue_book bed)
+        (inReceptacle gray_laptop bed)
+        (inReceptacle white_pillow_1 bed)
+        (inReceptacle white_pillow_2 bed)
+    )
+    (:goal (and
+        (atLocation robot blue_book)
+        (atLocation robot green_lamp)
+    ))
+)
+```

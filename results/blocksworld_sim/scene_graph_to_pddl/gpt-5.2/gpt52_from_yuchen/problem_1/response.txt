@@ -1,0 +1,44 @@
+Scene graph:
+block: green block (leftmost), yellow block (second from left), pink block (third from left), red block (rightmost).
+robot: one robot arm (assumed, not visible).
+ontable (block) block x is on table, not on another block: (ontable green-block-leftmost), (ontable yellow-block-second-from-left), (ontable pink-block-third-from-left), (ontable red-block-rightmost).
+clear (block) there is no block on top of block x: (clear green-block-leftmost), (clear yellow-block-second-from-left), (clear pink-block-third-from-left), (clear red-block-rightmost).
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty: (handempty robot-arm-1).
+handfull (robot) : 
+holding (block) block x is being held by the robot: 
+on (block, block) block x is on block y:
+
+PDDL problem: ```lisp
+(define (problem stack-pink-red-yellow-green)
+  (:domain blocksworld)
+  (:objects
+    green-block-leftmost - block
+    yellow-block-second-from-left - block
+    pink-block-third-from-left - block
+    red-block-rightmost - block
+    robot-arm-1 - robot
+  )
+
+  (:init
+    (ontable green-block-leftmost)
+    (ontable yellow-block-second-from-left)
+    (ontable pink-block-third-from-left)
+    (ontable red-block-rightmost)
+
+    (clear green-block-leftmost)
+    (clear yellow-block-second-from-left)
+    (clear pink-block-third-from-left)
+    (clear red-block-rightmost)
+
+    (handempty robot-arm-1)
+  )
+
+  (:goal
+    (and
+      (on red-block-rightmost yellow-block-second-from-left)
+      (on yellow-block-second-from-left green-block-leftmost)
+      (on pink-block-third-from-left red-block-rightmost)
+    )
+  )
+)
+```

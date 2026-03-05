@@ -1,0 +1,23 @@
+```pddl
+(define (problem put_wet_soap_in_cabinet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        soap - object
+        sink - sink
+        cabinet - receptacle
+    )
+    (:init
+        (openable cabinet)
+        (not (opened cabinet))
+        (atLocation robot sink)
+        (holds robot soap)
+    )
+    (:goal
+        (and
+            (inReceptacle soap cabinet)
+            (isClean soap)
+        )
+    )
+)
+```

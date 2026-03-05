@@ -1,0 +1,6 @@
+(gotolocation robot cabinet)
+(gotolocation robot coffee_maker)
+(pickupobject robot mug)
+(heatobject robot coffee_maker mug)
+(gotolocation robot cabinet)
+(putobjectinreceptacle robot mug cabinet)

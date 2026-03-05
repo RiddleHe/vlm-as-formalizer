@@ -1,0 +1,6 @@
+(gotolocation robot_agent round_ridged_pan_on_counter_center)
+(pickupobject robot_agent round_ridged_pan_on_counter_center)
+(gotolocation robot_agent white_curved_front_fridge_right_edge)
+(coolobject robot_agent white_curved_front_fridge_right_edge round_ridged_pan_on_counter_center)
+(gotolocation robot_agent stainless_single_basin_sink_under_window)
+(putobjectinreceptacle robot_agent round_ridged_pan_on_counter_center stainless_single_basin_sink_under_window)

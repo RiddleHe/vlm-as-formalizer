@@ -1,0 +1,23 @@
+```pddl
+(define (problem put_pen_in_bowl)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        pen - object
+        bowl1 bowl2 - receptacle
+        desk1 desk2 - object
+    )
+    (:init
+        (atLocation agent1 desk1)
+        (inReceptacle pen desk1)
+        (inReceptacle bowl1 desk2)
+        (inReceptacle bowl2 desk2)
+    )
+    (:goal
+        (and
+            (inReceptacle pen bowl1)
+            (inReceptacle bowl1 desk1)
+        )
+    )
+)
+```

@@ -1,0 +1,3 @@
+(gotolocation robot glass_table)
+(pickupobject robot credit_card)
+(putobjectinreceptacle robot credit_card bowl)

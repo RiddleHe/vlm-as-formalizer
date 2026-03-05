@@ -1,0 +1,3 @@
+(pickupobject agent1 bowl)
+(gotolocation agent1 cupboard_left_of_dishwasher)
+(putobjectinreceptacle agent1 bowl cupboard_left_of_dishwasher)

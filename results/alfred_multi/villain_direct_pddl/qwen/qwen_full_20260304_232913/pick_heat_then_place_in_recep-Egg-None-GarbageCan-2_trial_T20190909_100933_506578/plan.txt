@@ -1,0 +1,6 @@
+(gotolocation agent1 trashcan1)
+(gotolocation agent1 microwave1)
+(pickupobject agent1 egg1)
+(heatobject agent1 microwave1 egg1)
+(gotolocation agent1 trashcan1)
+(putobjectinreceptacle agent1 egg1 trashcan1)

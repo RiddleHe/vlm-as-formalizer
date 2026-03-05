@@ -1,0 +1,2 @@
+(gotolocation robot dresser)
+(toggleobject robot lamp)

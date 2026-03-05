@@ -1,0 +1,3 @@
+(pickupobject robot open_brown_cardboard_box)
+(gotolocation robot green_chair)
+(putobjectinreceptacle robot open_brown_cardboard_box green_chair)

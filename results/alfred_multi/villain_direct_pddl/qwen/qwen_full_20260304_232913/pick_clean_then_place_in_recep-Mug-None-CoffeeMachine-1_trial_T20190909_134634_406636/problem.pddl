@@ -1,0 +1,23 @@
+(define (problem wash_mug_and_place_in_coffee_maker)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        coffee_mug - object
+        coffee_maker - receptacle
+        sink - sink
+        wine_bottle fork - object
+        toaster - object
+    )
+    (:init
+        (atLocation robot coffee_mug)
+        (inReceptacle coffee_mug coffee_maker)
+        (not (isClean coffee_mug))
+        (not (isOn coffee_maker))
+    )
+    (:goal
+        (and
+            (isClean coffee_mug)
+            (inReceptacle coffee_mug coffee_maker)
+        )
+    )
+)

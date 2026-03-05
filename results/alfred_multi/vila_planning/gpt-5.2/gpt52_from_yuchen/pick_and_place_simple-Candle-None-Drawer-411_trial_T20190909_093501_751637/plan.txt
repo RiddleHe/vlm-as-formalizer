@@ -1,0 +1,6 @@
+(GotoLocation agent candle)
+(PickupObject agent candle)
+(GotoLocation agent drawer)
+(OpenObject agent drawer)
+(PutObjectInReceptacle agent candle drawer)
+(CloseObject agent drawer)

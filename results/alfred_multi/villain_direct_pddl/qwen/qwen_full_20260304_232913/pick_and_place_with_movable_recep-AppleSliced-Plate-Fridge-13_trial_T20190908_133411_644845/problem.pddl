@@ -1,0 +1,46 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        sink1 - sink
+        knife1 - knife
+        plate1 - object
+        apple1 - object
+        bowl1 - object
+        lettuce1 - object
+        bread1 - object
+        cup1 - object
+        cup2 - object
+        saltshaker1 - object
+        pan1 - object
+    )
+    (:init
+        (atLocation agent1 microwave1)
+        (openable microwave1)
+        (opened microwave1)
+        (inReceptacle cup1 microwave1)
+        (inReceptacle cup2 microwave1)
+        (inReceptacle apple1 microwave1)
+        (openable fridge1)
+        (not (opened fridge1))
+        (openable sink1)
+        (not (opened sink1))
+        (inReceptacle plate1 sink1)
+        (inReceptacle knife1 sink1)
+        (inReceptacle bowl1 sink1)
+        (inReceptacle lettuce1 sink1)
+        (inReceptacle bread1 sink1)
+        (inReceptacle saltshaker1 sink1)
+        (inReceptacle pan1 sink1)
+        (isSliced apple1)
+    )
+    (:goal
+        (and
+            (inReceptacle plate1 fridge1)
+            (inReceptacle knife1 fridge1)
+            (inReceptacle apple1 fridge1)
+        )
+    )
+)

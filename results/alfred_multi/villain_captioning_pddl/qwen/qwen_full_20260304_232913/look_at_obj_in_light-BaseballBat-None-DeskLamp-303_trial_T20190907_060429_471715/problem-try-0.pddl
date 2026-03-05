@@ -1,0 +1,44 @@
+(define (problem turn_on_lamp_to_examine_bat)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        lamp - object
+        baseball_bat - object
+        table - receptacle
+        nightstand - receptacle
+        book - object
+        cup - object
+        trash_bag - object
+        red_chair - object
+        bed - receptacle
+        circular_object - object
+    )
+    (:init
+        ; Objects are placed in their initial locations
+        (inReceptacle lamp table)
+        (inReceptacle cup table)
+        (inReceptacle book bed)
+        (inReceptacle circular_object nightstand)
+        ; Lamp is initially off
+        (not (isOn lamp))
+        (not (isToggled lamp))
+        ; Robot is not at any location initially
+        (forall (?o - object)
+            (not (atLocation robot ?o))
+        )
+        ; The baseball bat is on the floor (not in any receptacle)
+        ; The trash bag is on the floor (not in any receptacle)
+        ; The red chair is under the table (not relevant for toggling)
+        ; The nightstand is openable (as per description)
+        (openable nightstand)
+        ; The table is not openable (as per description)
+        ; No object is held by the robot
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (isOn lamp)
+            (isToggled lamp)
+        )
+    )
+)

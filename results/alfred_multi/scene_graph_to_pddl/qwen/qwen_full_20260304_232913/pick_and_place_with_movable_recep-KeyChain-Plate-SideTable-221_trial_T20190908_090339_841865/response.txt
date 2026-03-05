@@ -1,0 +1,55 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): white_table, white_chair, yellow_couch, black_monitor
+object: brown_plate, black_keys, blue_book, gray_remote, silver_laptop, white_table, white_chair, yellow_couch, black_monitor
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle brown_plate white_table), (inReceptacle black_keys white_table), (inReceptacle blue_book white_table), (inReceptacle gray_remote white_table), (inReceptacle silver_laptop white_table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_plate_with_keys_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        white_table - receptacle
+        white_chair - receptacle
+        yellow_couch - receptacle
+        black_monitor - receptacle
+        brown_plate - object
+        black_keys - object
+        blue_book - object
+        gray_remote - object
+        silver_laptop - object
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+    )
+    (:init
+        (inReceptacle brown_plate white_table)
+        (inReceptacle black_keys white_table)
+        (inReceptacle blue_book white_table)
+        (inReceptacle gray_remote white_table)
+        (inReceptacle silver_laptop white_table)
+    )
+    (:goal
+        (and
+            (inReceptacle brown_plate white_table)
+            (inReceptacle black_keys brown_plate)
+        )
+    )
+)
+```

@@ -1,0 +1,44 @@
+```pddl
+(define (problem put_two_pencils_on_desk)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        desk - receptacle
+        shelf - receptacle
+        bowl - receptacle
+        pencil - object
+        keys - object
+        cd - object
+        cabinet - receptacle
+    )
+    (:init
+        (openable shelf)
+        (openable cabinet)
+        (openable desk)
+        (not (opened shelf))
+        (not (opened cabinet))
+        (not (opened desk))
+        (not (holdsAny robot))
+        (not (atLocation robot desk))
+        (not (atLocation robot shelf))
+        (not (atLocation robot bowl))
+        (not (atLocation robot pencil))
+        (not (atLocation robot keys))
+        (not (atLocation robot cd))
+        (inReceptacle cd shelf)
+        (inReceptacle pencil shelf)
+        (inReceptacle keys shelf)
+        (inReceptacle bowl desk)
+        (not (isClean pencil))
+        (not (isHot pencil))
+        (not (isCool pencil))
+        (not (isSliced pencil))
+        (not (isToggled pencil))
+    )
+    (:goal (and
+        (inReceptacle pencil desk)
+        ; Note: Only one pencil exists in the scene. The goal of "two pencils" cannot be fully satisfied.
+        ; This PDDL reflects the best possible state given the scene.
+    ))
+)
+```

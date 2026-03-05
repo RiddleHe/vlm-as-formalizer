@@ -1,0 +1,75 @@
+Scene graph:
+agent: none visible
+microwave (receptacle): none visible
+fridge (receptacle): none visible
+sink (receptacle):
+- dark-gray rectangular sink-basin-left on wooden countertop
+- dark-gray rectangular sink-basin-right on wooden countertop
+knife (object): none visible
+receptacle (object):
+- white under-sink cabinet-left (two-door) beneath left sink
+- white under-sink cabinet-right (two-door) beneath right sink
+object:
+- pink bar-soap on right side of countertop (near toilet)
+- brown cylindrical container/cup on countertop between sinks
+- white toilet (including tank and seat)
+- gold candle-holder on top of toilet tank
+- purple soap-dispenser bottle on top of toilet tank
+- white toilet-paper roll near toilet
+
+openable (receptacle) true if a receptacle is openable:
+- (openable white_under_sink_cabinet_left)
+- (openable white_under_sink_cabinet_right)
+
+opened (receptacle) true if a receptacle is opened: none
+
+holdsAny (agent) agent ?a holds an object: none
+
+isClean (object) true if the object has been clean in sink: none
+
+isHot (object) true if the object has been heated up: none
+
+isCool (object) true if the object has been cooled: none
+
+isOn (object) true if the object is on: none
+
+isToggled (object) true if the object has been toggled: none
+
+isSliced (object) true if the object is sliced: none
+
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+
+holds (agent, object) object ?o is held by agent ?a: none
+
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_wet_soap_in_white_cabinet)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    dark_gray_rectangular_sink_basin_left - sink
+    dark_gray_rectangular_sink_basin_right - sink
+
+    white_under_sink_cabinet_left - receptacle
+    white_under_sink_cabinet_right - receptacle
+
+    pink_bar_soap - object
+    brown_cylindrical_container_cup - object
+    white_toilet - object
+    gold_candle_holder - object
+    purple_soap_dispenser_bottle - object
+    white_toilet_paper_roll - object
+  )
+
+  (:init
+    (openable white_under_sink_cabinet_left)
+    (openable white_under_sink_cabinet_right)
+  )
+
+  (:goal
+    (and
+      (inReceptacle pink_bar_soap white_under_sink_cabinet_left)
+    )
+  )
+)

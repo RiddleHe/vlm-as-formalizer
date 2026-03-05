@@ -1,0 +1,8 @@
+(gotolocation agent1 toilet_paper1)
+(pickupobject agent1 toilet_paper1)
+(gotolocation agent1 cabinet2)
+(putobjectinreceptacle agent1 toilet_paper1 cabinet2)
+(gotolocation agent1 sink1)
+(pickupobject agent1 toilet_paper2)
+(gotolocation agent1 cabinet2)
+(putobjectinreceptacle agent1 toilet_paper2 cabinet2)

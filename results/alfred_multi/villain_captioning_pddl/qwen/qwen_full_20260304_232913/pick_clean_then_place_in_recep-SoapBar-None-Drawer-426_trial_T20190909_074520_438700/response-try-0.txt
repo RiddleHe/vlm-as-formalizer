@@ -1,0 +1,49 @@
+```pddl
+(define (problem place_rinsed_soap_in_drawer)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        cabinet - receptacle
+        sink - receptacle
+        soap1 soap2 - object
+        bottle - object
+        toilet_paper - object
+    )
+    (:init
+        ; Agent is not at any location initially
+        (not (atLocation robot cabinet))
+        (not (atLocation robot sink))
+        (not (atLocation robot soap1))
+        (not (atLocation robot soap2))
+        (not (atLocation robot bottle))
+        (not (atLocation robot toilet_paper))
+
+        ; Receptacles are openable
+        (openable cabinet)
+        (openable sink)
+
+        ; Drawers are closed initially
+        (not (opened cabinet))
+
+        ; Soap bars are on the countertop (not in any receptacle)
+        (not (inReceptacle soap1 cabinet))
+        (not (inReceptacle soap2 cabinet))
+        (not (inReceptacle soap1 sink))
+        (not (inReceptacle soap2 sink))
+
+        ; Soap bars are not clean
+        (not (isClean soap1))
+        (not (isClean soap2))
+
+        ; Agent is not holding anything
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            ; One bar of soap is clean and in the cabinet
+            (isClean soap1)
+            (inReceptacle soap1 cabinet)
+        )
+    )
+)
+```

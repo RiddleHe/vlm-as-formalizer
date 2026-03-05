@@ -1,0 +1,7 @@
+(GotoLocation agent mug)
+(PickupObject agent mug)
+(GotoLocation agent spoon)
+(PickupObject agent spoon)
+(PutObjectInReceptacle agent spoon mug)
+(GotoLocation agent table)
+(PutObjectInReceptacle agent mug table)

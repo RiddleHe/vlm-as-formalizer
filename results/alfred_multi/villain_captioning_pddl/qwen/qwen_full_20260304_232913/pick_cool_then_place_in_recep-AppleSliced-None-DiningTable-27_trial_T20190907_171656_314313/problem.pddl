@@ -1,0 +1,47 @@
+(define (problem chill_apple)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        fridge1 - fridge
+        marble_counter1 - receptacle
+        white_table1 - receptacle
+        apple1 - object
+        knife1 - knife
+        toaster1 - object
+        bottle1 - object
+        tomato1 - object
+        tomato2 - object
+        lettuce1 - object
+        salt_shaker1 - object
+        pepper_shaker1 - object
+        wine_glass1 - object
+        plate1 - object
+    )
+    (:init
+        (openable fridge1)
+        (not (opened fridge1))
+        (atLocation agent1 marble_counter1) ; assuming agent starts near the counter for efficiency, though instruction says not at any location; we'll use this to start the plan
+        (inReceptacle apple1 marble_counter1)
+        (inReceptacle toaster1 marble_counter1)
+        (inReceptacle bottle1 marble_counter1)
+        (inReceptacle knife1 white_table1)
+        (inReceptacle tomato1 white_table1)
+        (inReceptacle tomato2 white_table1)
+        (inReceptacle lettuce1 white_table1)
+        (inReceptacle salt_shaker1 white_table1)
+        (inReceptacle pepper_shaker1 white_table1)
+        (inReceptacle wine_glass1 white_table1)
+        (inReceptacle plate1 white_table1)
+        (not (holdsAny agent1))
+        (not (isCool apple1))
+        (not (isSliced apple1))
+        (not (isClean apple1))
+        (not (isHot apple1))
+        (not (isOn toaster1))
+        (not (isToggled toaster1))
+    )
+    (:goal (and
+        (inReceptacle apple1 white_table1)
+        (isCool apple1)
+    ))
+)

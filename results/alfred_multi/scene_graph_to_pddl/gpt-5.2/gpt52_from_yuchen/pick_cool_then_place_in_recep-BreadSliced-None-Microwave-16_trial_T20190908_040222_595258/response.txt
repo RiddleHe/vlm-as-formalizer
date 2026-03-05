@@ -1,0 +1,48 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): red_black_microwave_on_counter
+fridge (receptacle): dark_fridge_with_letter_magnets
+sink (receptacle): sink_basin_in_counter
+knife (object): yellow_handle_kitchen_knife_on_counter
+receptacle (object): round_glass_table, red_black_microwave_on_counter, dark_fridge_with_letter_magnets, sink_basin_in_counter
+object: robot_agent, yellow_handle_kitchen_knife_on_counter, metal_fork_on_counter, black_two_slot_toaster_on_counter, red_tomato_on_counter, red_tomato_on_table, two_dark_bread_loaves_on_table, white_salt_shaker_on_counter, white_salt_shaker_on_table, gray_paper_towel_roll_on_table, green_sponge_on_table, metal_spoon_on_table, dark_wine_bottle_on_table, three_brown_eggs_on_table, metal_mugs_on_table, white_cup_on_table
+openable (receptacle) true if a receptacle is openable: (openable red_black_microwave_on_counter), (openable dark_fridge_with_letter_magnets)
+opened (receptacle) true if a receptacle is opened:
+holdsAny (agent) agent ?a holds an object:
+isClean (object) true if the object has been clean in sink:
+isHot (object) true if the object has been heated up:
+isCool (object) true if the object has been cooled:
+isOn (object) true if the object is on:
+isToggled (object) true if the object has been toggled:
+isSliced (object) true if the object is sliced:
+inReceptacle (object, object) object ?o is in receptacle ?r:
+holds (agent, object) object ?o is held by agent ?a:
+atLocation (agent, object) :
+
+PDDL problem: (define (problem put_task_cooled_bread_to_microwave)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+
+    red_black_microwave_on_counter - microwave
+    dark_fridge_with_letter_magnets - fridge
+
+    two_dark_bread_loaves_on_table - object
+  )
+
+  (:init
+    ;; receptacle properties from scene graph
+    (openable red_black_microwave_on_counter)
+    (openable dark_fridge_with_letter_magnets)
+
+    ;; robot initially holds nothing and is not at any location (no atLocation facts)
+  )
+
+  (:goal
+    (and
+      (isCool two_dark_bread_loaves_on_table)
+      (inReceptacle two_dark_bread_loaves_on_table red_black_microwave_on_counter)
+    )
+  )
+)

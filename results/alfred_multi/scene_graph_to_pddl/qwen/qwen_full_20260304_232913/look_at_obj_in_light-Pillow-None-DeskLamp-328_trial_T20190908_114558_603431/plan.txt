@@ -1,0 +1,6 @@
+(gotolocation robot blue_bed)
+(pickupobject robot pink_patterned_cushion)
+(gotolocation robot wooden_desk)
+(putobjectinreceptacle robot pink_patterned_cushion wooden_desk)
+(gotolocation robot pink_patterned_cushion)
+(gotolocation robot wooden_desk)

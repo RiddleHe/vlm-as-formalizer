@@ -1,0 +1,4 @@
+(GotoLocation agent desk)
+(PickupObject agent keys)
+(GotoLocation agent floral_armchair)
+(PutObjectInReceptacle agent keys floral_armchair)

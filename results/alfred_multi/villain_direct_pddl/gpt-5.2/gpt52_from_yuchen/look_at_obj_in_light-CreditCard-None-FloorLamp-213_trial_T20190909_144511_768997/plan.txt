@@ -1,0 +1,3 @@
+(gotolocation robot coffee_table)
+(pickupobject robot credit_card)
+(gotolocation robot tall_lamp)

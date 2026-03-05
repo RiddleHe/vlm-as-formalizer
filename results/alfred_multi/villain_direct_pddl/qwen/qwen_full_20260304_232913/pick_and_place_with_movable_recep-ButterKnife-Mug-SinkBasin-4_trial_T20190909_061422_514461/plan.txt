@@ -1,0 +1,5 @@
+(gotolocation robot sink)
+(cleanobject robot sink knife)
+(putobjectinreceptacle robot knife sink)
+(cleanobject robot sink mug)
+(putobjectinreceptacle robot mug sink)

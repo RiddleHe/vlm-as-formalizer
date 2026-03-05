@@ -1,0 +1,246 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Put a cardboard box on the green chair.
+    
+
+SCENE CAPTION:
+Scene Description:
+
+1. Objects and their types:
+   - There is one agent (robot) present in the scene, though not visually depicted, it is implied as the actor performing tasks.
+   - There is one cardboard box, which is an object (not a receptacle in the domain’s defined types, but visually it is open and can hold items; however, for domain compliance, it is treated as a generic object).
+   - There is one green chair, which is not defined as a receptacle in the domain file. Therefore, it cannot be used as a target for PutObjectInReceptacle actions. However, visually, it is a piece of furniture that can hold objects on its seat.
+   - There is a wooden table or shelf unit (not defined in the domain), which holds the cardboard box and some books and a blue card. This is not a receptacle per domain definitions.
+   - There is a yellow sofa partially visible to the right of the green chair — also not a receptacle per domain.
+
+2. Quantities:
+   - 1 agent (implied)
+   - 1 cardboard box
+   - 1 green chair
+   - 1 wooden table/shelf
+   - 1 yellow sofa (partial view)
+   - 2 books and 1 blue card on the table (not relevant to domain types)
+
+3. Spatial relationships:
+   - The cardboard box is currently resting on the wooden table/shelf, which is positioned near the green chair.
+   - The green chair is located on a wooden floor, adjacent to the table and to the left of the yellow sofa.
+   - The agent is not currently at any object’s location (initial state).
+   - The cardboard box is not inside any receptacle as defined in the domain (microwave, fridge, sink).
+   - The green chair is not a receptacle per domain definitions, so the action PutObjectInReceptacle cannot be applied to it.
+
+4. Current state of objects relevant to the planning task:
+   - The cardboard box is not held by the agent.
+   - The cardboard box is not in any receptacle.
+   - The green chair is not a receptacle, so it cannot be the target of a PutObjectInReceptacle action.
+   - The agent has not yet moved to any object location.
+   - No object has been cleaned, heated, cooled, sliced, or toggled.
+
+5. Visual properties:
+   - The green chair has a light green fabric seat and backrest, with dark gray armrests and frame. It is positioned upright on a light brown wooden floor.
+   - The cardboard box is brown, open, and placed on a dark reddish-brown wooden table/shelf.
+   - The table/shelf has a lower shelf containing a metallic hand sculpture and a yellow object (possibly a pen or tool), and some stacked books with a blue card on top.
+   - The yellow sofa is partially visible on the right, with a textured fabric surface.
+   - The floor is light wood grain, with a reflection spot indicating a light source above.
+
+Note: The instruction “Put a cardboard box on the green chair” cannot be directly executed under the given domain because the green chair is not classified as a receptacle. The domain only allows placing objects into receptacles (microwave, fridge, sink). Therefore, the task as stated is not achievable under current domain constraints unless the green chair is reclassified or a new action is introduced.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

@@ -1,0 +1,109 @@
+Scene graph:
+agent: 
+- robot_agent (agent)
+
+microwave (receptacle): 
+- none
+
+fridge (receptacle): 
+- none
+
+sink (receptacle): 
+- none
+
+knife (object): 
+- yellow_handle_kitchen_knife_on_table (knife)
+
+receptacle (object): 
+- black_coffee_machine_base_on_table (receptacle)
+- black_round_tray_under_mug (receptacle)
+- beige_ceramic_mug_on_tray (receptacle)
+- clear_wine_glass_right_side (receptacle)
+
+object: 
+- green_lettuce_head_right_side_on_table (object)
+- red_tomato_left_side_on_table (object)
+- golden_brown_onion_left_side_on_table (object)
+- small_salt_shaker_near_tomato (object)
+- green_frying_pan_left_back_on_table (object)
+- small_pinkish_bottle_left_back_on_table (object)
+- tall_black_cylindrical_appliance_back_right_on_table (object)
+- red_apple_back_right_near_wall (object)
+
+openable (receptacle) true if a receptacle is openable:
+- (none)
+
+opened (receptacle) true if a receptacle is opened:
+- (none)
+
+holdsAny (agent) agent ?a holds an object:
+- (none)
+
+isClean (object) true if the object has been clean in sink:
+- (none)
+
+isHot (object) true if the object has been heated up:
+- (none)
+
+isCool (object) true if the object has been cooled:
+- (none)
+
+isOn (object) true if the object is on:
+- (none)
+
+isToggled (object) true if the object has been toggled:
+- (none)
+
+isSliced (object) true if the object is sliced:
+- (none)
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle beige_ceramic_mug_on_tray black_round_tray_under_mug)
+
+holds (agent, object) object ?o is held by agent ?a:
+- (none)
+
+atLocation (agent, object) :
+- (none)
+
+PDDL problem: (define (problem slice_lettuce_table)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    yellow_handle_kitchen_knife_on_table - knife
+
+    black_coffee_machine_base_on_table - receptacle
+    black_round_tray_under_mug - receptacle
+    beige_ceramic_mug_on_tray - receptacle
+    clear_wine_glass_right_side - receptacle
+
+    green_lettuce_head_right_side_on_table - object
+    red_tomato_left_side_on_table - object
+    golden_brown_onion_left_side_on_table - object
+    small_salt_shaker_near_tomato - object
+    green_frying_pan_left_back_on_table - object
+    small_pinkish_bottle_left_back_on_table - object
+    tall_black_cylindrical_appliance_back_right_on_table - object
+    red_apple_back_right_near_wall - object
+
+    microwave - microwave
+    fridge - fridge
+    sink - sink
+  )
+
+  (:init
+    ;; robot initially not at any location, and holds nothing
+    ;; (no atLocation facts)
+    ;; (no holds / holdsAny facts)
+
+    ;; receptacle relations from scene graph
+    (inReceptacle beige_ceramic_mug_on_tray black_round_tray_under_mug)
+  )
+
+  (:goal
+    (and
+      (isSliced green_lettuce_head_right_side_on_table)
+    )
+  )
+)

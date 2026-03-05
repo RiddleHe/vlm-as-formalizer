@@ -1,0 +1,1514 @@
+{
+  "result_dir": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913",
+  "data_dir": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim",
+  "summary": {
+    "tasks_total": 10,
+    "tasks_with_plan": 8,
+    "successes": 6,
+    "failures": 4,
+    "success_rate": 0.6,
+    "avg_steps_planned": 7.5,
+    "avg_steps_executed": 6.5,
+    "by_section": {
+      "objects": {
+        "tp": 46,
+        "fp": 0,
+        "fn": 16,
+        "macro_precision": 1.0,
+        "macro_recall": 0.7666666666666667,
+        "micro_precision": 1.0,
+        "micro_recall": 0.7419354838709677
+      },
+      "init": {
+        "tp": 65,
+        "fp": 7,
+        "fn": 26,
+        "macro_precision": 0.9262626262626263,
+        "macro_recall": 0.72,
+        "micro_precision": 0.9027777777777778,
+        "micro_recall": 0.7142857142857143
+      },
+      "goal": {
+        "tp": 26,
+        "fp": 16,
+        "fn": 13,
+        "macro_precision": 0.7366666666666666,
+        "macro_recall": 0.735,
+        "micro_precision": 0.6190476190476191,
+        "micro_recall": 0.6666666666666666
+      }
+    },
+    "overall": {
+      "tp": 137,
+      "fp": 23,
+      "fn": 55,
+      "macro_precision": 0.8876430976430977,
+      "macro_recall": 0.7405555555555555,
+      "micro_precision": 0.85625,
+      "micro_recall": 0.7135416666666666
+    },
+    "types": {
+      "objects_checked": 46,
+      "mismatches": 0,
+      "macro_agreement": 1.0,
+      "micro_agreement": 1.0
+    },
+    "counts": {
+      "task_total": 10,
+      "task_scored": 10,
+      "task_missing_pred_problem": 0,
+      "task_missing_gt_problem": 0,
+      "task_with_parse_error": 0,
+      "task_missing_mapping": 0,
+      "task_other_error": 0
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "problem_1",
+      "has_plan": true,
+      "mapping": {
+        "green_block": "green_block",
+        "pink_block": "pink_block",
+        "red_block": "red_block",
+        "robot1": "robot",
+        "yellow_block": "yellow_block"
+      },
+      "plan_len": 6,
+      "success": true,
+      "stopped_step": 6,
+      "total_steps": 6,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "green_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "red_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "yellow_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "green_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": null,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_1/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913/problem_1/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 5,
+              "pred_mapped": 5
+            },
+            "true_positives": 5,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 9,
+              "pred_mapped": 9
+            },
+            "true_positives": 9,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 3,
+              "pred_mapped": 4
+            },
+            "true_positives": 3,
+            "false_positives": 1,
+            "false_negatives": 0,
+            "precision": 0.75,
+            "recall": 1.0
+          },
+          "type": {
+            "objects_checked": 5,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 0.9166666666666666,
+            "recall": 1.0
+          },
+          "micro": {
+            "true_positives": 17,
+            "false_positives": 1,
+            "false_negatives": 0,
+            "precision": 0.9444444444444444,
+            "recall": 1.0
+          }
+        },
+        "unmapped": {
+          "object_count": 0,
+          "init_count": 0,
+          "goal_count": 0
+        }
+      }
+    },
+    {
+      "task_id": "problem_10",
+      "has_plan": true,
+      "mapping": {
+        "blue_block": "blue_block",
+        "green_block": "green_block",
+        "orange_block": "orange_block",
+        "pink_block": "pink_block",
+        "red_block": "red_block",
+        "robot1": "robot",
+        "yellow_block": "yellow_block"
+      },
+      "plan_len": 8,
+      "success": true,
+      "stopped_step": 8,
+      "total_steps": 8,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "red_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "pink_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "red_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "orange_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "green_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": null,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_10/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913/problem_10/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 7,
+              "pred_mapped": 7
+            },
+            "true_positives": 7,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 13,
+              "pred_mapped": 13
+            },
+            "true_positives": 13,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 4,
+              "pred_mapped": 8
+            },
+            "true_positives": 4,
+            "false_positives": 4,
+            "false_negatives": 0,
+            "precision": 0.5,
+            "recall": 1.0
+          },
+          "type": {
+            "objects_checked": 7,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 0.8333333333333334,
+            "recall": 1.0
+          },
+          "micro": {
+            "true_positives": 24,
+            "false_positives": 4,
+            "false_negatives": 0,
+            "precision": 0.8571428571428571,
+            "recall": 1.0
+          }
+        },
+        "unmapped": {
+          "object_count": 0,
+          "init_count": 0,
+          "goal_count": 0
+        }
+      }
+    },
+    {
+      "task_id": "problem_2",
+      "has_plan": true,
+      "mapping": {
+        "blue_block": "blue_block",
+        "pink_block": "pink_block",
+        "purple_block": "purple_block",
+        "red_block": "red_block",
+        "robot1": "robot"
+      },
+      "plan_len": 8,
+      "success": true,
+      "stopped_step": 8,
+      "total_steps": 8,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "pink_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "blue_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "purple_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "pink_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": null,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_2/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913/problem_2/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 5,
+              "pred_mapped": 5
+            },
+            "true_positives": 5,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 7,
+              "pred_mapped": 7
+            },
+            "true_positives": 7,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 3,
+              "pred_mapped": 5
+            },
+            "true_positives": 3,
+            "false_positives": 2,
+            "false_negatives": 0,
+            "precision": 0.6,
+            "recall": 1.0
+          },
+          "type": {
+            "objects_checked": 5,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 0.8666666666666667,
+            "recall": 1.0
+          },
+          "micro": {
+            "true_positives": 15,
+            "false_positives": 2,
+            "false_negatives": 0,
+            "precision": 0.8823529411764706,
+            "recall": 1.0
+          }
+        },
+        "unmapped": {
+          "object_count": 0,
+          "init_count": 0,
+          "goal_count": 0
+        }
+      }
+    },
+    {
+      "task_id": "problem_3",
+      "has_plan": true,
+      "mapping": {
+        "green_block": "green_block",
+        "pink_block": "pink_block",
+        "purple_block": "purple_block",
+        "red_block": "red_block",
+        "robot1": "robot",
+        "yellow_block": "yellow_block"
+      },
+      "plan_len": 6,
+      "success": false,
+      "stopped_step": 1,
+      "total_steps": 6,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "yellow_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "green_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "green_block",
+            "pink_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "purple_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "red_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "yellow_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": "Precondition failed at step 1: (pick-up red_block robot)",
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_3/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913/problem_3/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 6,
+              "pred_mapped": 6
+            },
+            "true_positives": 6,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 10,
+              "pred_mapped": 11
+            },
+            "true_positives": 9,
+            "false_positives": 2,
+            "false_negatives": 1,
+            "precision": 0.8181818181818182,
+            "recall": 0.9
+          },
+          "goal": {
+            "sizes": {
+              "gt": 5,
+              "pred_mapped": 5
+            },
+            "true_positives": 3,
+            "false_positives": 2,
+            "false_negatives": 2,
+            "precision": 0.6,
+            "recall": 0.6
+          },
+          "type": {
+            "objects_checked": 6,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 0.806060606060606,
+            "recall": 0.8333333333333334
+          },
+          "micro": {
+            "true_positives": 18,
+            "false_positives": 4,
+            "false_negatives": 3,
+            "precision": 0.8181818181818182,
+            "recall": 0.8571428571428571
+          }
+        },
+        "unmapped": {
+          "object_count": 0,
+          "init_count": 0,
+          "goal_count": 0
+        }
+      }
+    },
+    {
+      "task_id": "problem_4",
+      "has_plan": true,
+      "mapping": {
+        "blue_block": "blue_block",
+        "orange_block": "orange_block",
+        "purple_block": "purple_block",
+        "robot1": "robot",
+        "yellow_block": "yellow_block"
+      },
+      "plan_len": 6,
+      "success": true,
+      "stopped_step": 6,
+      "total_steps": 6,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "red_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "yellow_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "blue_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "purple_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "red_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": null,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_4/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913/problem_4/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 6,
+              "pred_mapped": 5
+            },
+            "true_positives": 5,
+            "false_positives": 0,
+            "false_negatives": 1,
+            "precision": 1.0,
+            "recall": 0.8333333333333334
+          },
+          "init": {
+            "sizes": {
+              "gt": 10,
+              "pred_mapped": 8
+            },
+            "true_positives": 8,
+            "false_positives": 0,
+            "false_negatives": 2,
+            "precision": 1.0,
+            "recall": 0.8
+          },
+          "goal": {
+            "sizes": {
+              "gt": 4,
+              "pred_mapped": 4
+            },
+            "true_positives": 3,
+            "false_positives": 1,
+            "false_negatives": 1,
+            "precision": 0.75,
+            "recall": 0.75
+          },
+          "type": {
+            "objects_checked": 5,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 0.9166666666666666,
+            "recall": 0.7944444444444444
+          },
+          "micro": {
+            "true_positives": 16,
+            "false_positives": 1,
+            "false_negatives": 4,
+            "precision": 0.9411764705882353,
+            "recall": 0.8
+          }
+        },
+        "unmapped": {
+          "object_count": 1,
+          "init_count": 2,
+          "goal_count": 1
+        }
+      }
+    },
+    {
+      "task_id": "problem_5",
+      "has_plan": true,
+      "mapping": {
+        "blue_block": "blue_block",
+        "green_block": "green_block",
+        "orange_block": "orange_block",
+        "red_block": "red_block",
+        "robot1": "robot",
+        "yellow_block": "yellow_block"
+      },
+      "plan_len": 10,
+      "success": true,
+      "stopped_step": 10,
+      "total_steps": 10,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "green_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "red_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "blue_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "orange_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "green_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": null,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_5/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913/problem_5/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 6,
+              "pred_mapped": 6
+            },
+            "true_positives": 6,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 7,
+              "pred_mapped": 7
+            },
+            "true_positives": 7,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 4,
+              "pred_mapped": 6
+            },
+            "true_positives": 4,
+            "false_positives": 2,
+            "false_negatives": 0,
+            "precision": 0.6666666666666666,
+            "recall": 1.0
+          },
+          "type": {
+            "objects_checked": 6,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 0.8888888888888888,
+            "recall": 1.0
+          },
+          "micro": {
+            "true_positives": 17,
+            "false_positives": 2,
+            "false_negatives": 0,
+            "precision": 0.8947368421052632,
+            "recall": 1.0
+          }
+        },
+        "unmapped": {
+          "object_count": 0,
+          "init_count": 0,
+          "goal_count": 0
+        }
+      }
+    },
+    {
+      "task_id": "problem_6",
+      "has_plan": true,
+      "mapping": {
+        "orange_block": "orange_block",
+        "pink_block": "pink_block",
+        "purple_block": "purple_block",
+        "robot1": "robot",
+        "yellow_block": "yellow_block"
+      },
+      "plan_len": 4,
+      "success": false,
+      "stopped_step": 1,
+      "total_steps": 4,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "yellow_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "purple_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "orange_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": "Precondition failed at step 1: (pick-up pink_block robot)",
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_6/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913/problem_6/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 6,
+              "pred_mapped": 5
+            },
+            "true_positives": 5,
+            "false_positives": 0,
+            "false_negatives": 1,
+            "precision": 1.0,
+            "recall": 0.8333333333333334
+          },
+          "init": {
+            "sizes": {
+              "gt": 8,
+              "pred_mapped": 9
+            },
+            "true_positives": 4,
+            "false_positives": 5,
+            "false_negatives": 4,
+            "precision": 0.4444444444444444,
+            "recall": 0.5
+          },
+          "goal": {
+            "sizes": {
+              "gt": 2,
+              "pred_mapped": 2
+            },
+            "true_positives": 2,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "type": {
+            "objects_checked": 5,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 0.8148148148148149,
+            "recall": 0.7777777777777778
+          },
+          "micro": {
+            "true_positives": 11,
+            "false_positives": 5,
+            "false_negatives": 5,
+            "precision": 0.6875,
+            "recall": 0.6875
+          }
+        },
+        "unmapped": {
+          "object_count": 1,
+          "init_count": 2,
+          "goal_count": 0
+        }
+      }
+    },
+    {
+      "task_id": "problem_7",
+      "has_plan": false,
+      "mapping": {},
+      "plan_len": 0,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_7/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913/problem_7/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 7,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 7,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 10,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 10,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 5,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 5,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "type": {
+            "objects_checked": 0,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "micro": {
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 22,
+            "precision": 1.0,
+            "recall": 0.0
+          }
+        },
+        "unmapped": {
+          "object_count": 7,
+          "init_count": 10,
+          "goal_count": 5
+        }
+      }
+    },
+    {
+      "task_id": "problem_8",
+      "has_plan": true,
+      "mapping": {
+        "green_block": "green_block",
+        "orange_block": "orange_block",
+        "pink_block": "pink_block",
+        "purple_block": "purple_block",
+        "red_block": "red_block",
+        "robot1": "robot",
+        "yellow_block": "yellow_block"
+      },
+      "plan_len": 12,
+      "success": true,
+      "stopped_step": 12,
+      "total_steps": 12,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "green_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "red_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "green_block",
+            "yellow_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "pink_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "orange_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "red_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": null,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_8/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913/problem_8/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 7,
+              "pred_mapped": 7
+            },
+            "true_positives": 7,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 8,
+              "pred_mapped": 8
+            },
+            "true_positives": 8,
+            "false_positives": 0,
+            "false_negatives": 0,
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 4,
+              "pred_mapped": 8
+            },
+            "true_positives": 4,
+            "false_positives": 4,
+            "false_negatives": 0,
+            "precision": 0.5,
+            "recall": 1.0
+          },
+          "type": {
+            "objects_checked": 7,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 0.8333333333333334,
+            "recall": 1.0
+          },
+          "micro": {
+            "true_positives": 19,
+            "false_positives": 4,
+            "false_negatives": 0,
+            "precision": 0.8260869565217391,
+            "recall": 1.0
+          }
+        },
+        "unmapped": {
+          "object_count": 0,
+          "init_count": 0,
+          "goal_count": 0
+        }
+      }
+    },
+    {
+      "task_id": "problem_9",
+      "has_plan": false,
+      "mapping": {},
+      "plan_len": 0,
+      "problem_eval": {
+        "config": {
+          "gt_problem_path": "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim/problem_9/problem.pddl",
+          "pred_problem_path": "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/villain_direct_pddl/qwen/qwen_full_20260304_232913/problem_9/problem.pddl"
+        },
+        "sections": {
+          "objects": {
+            "sizes": {
+              "gt": 7,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 7,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "init": {
+            "sizes": {
+              "gt": 9,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 9,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "goal": {
+            "sizes": {
+              "gt": 5,
+              "pred_mapped": 0
+            },
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 5,
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "type": {
+            "objects_checked": 0,
+            "mismatches": 0,
+            "agreement": 1.0
+          }
+        },
+        "overall": {
+          "macro": {
+            "precision": 1.0,
+            "recall": 0.0
+          },
+          "micro": {
+            "true_positives": 0,
+            "false_positives": 0,
+            "false_negatives": 21,
+            "precision": 1.0,
+            "recall": 0.0
+          }
+        },
+        "unmapped": {
+          "object_count": 7,
+          "init_count": 13,
+          "goal_count": 6
+        }
+      }
+    }
+  ]
+}

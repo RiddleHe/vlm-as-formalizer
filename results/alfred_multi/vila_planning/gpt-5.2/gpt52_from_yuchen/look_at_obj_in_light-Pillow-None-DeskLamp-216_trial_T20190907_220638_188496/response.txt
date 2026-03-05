@@ -1,0 +1,4 @@
+(GotoLocation agent1 pillow)
+(PickupObject agent1 pillow)
+(GotoLocation agent1 lamp)
+(ToggleObject agent1 lamp)

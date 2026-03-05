@@ -1,0 +1,4 @@
+(gotolocation agent1 candle1)
+(pickupobject agent1 candle1)
+(gotolocation agent1 sink1)
+(putobjectinreceptacle agent1 candle1 sink1)

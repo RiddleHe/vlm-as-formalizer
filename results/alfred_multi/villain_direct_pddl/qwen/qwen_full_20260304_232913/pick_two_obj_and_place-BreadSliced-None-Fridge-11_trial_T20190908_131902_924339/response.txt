@@ -1,0 +1,44 @@
+```pddl
+(define (problem put_sliced_bread_in_fridge)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        bread - object
+        knife - knife
+        fridge - fridge
+        countertop - receptacle
+        table - receptacle
+        microwave - microwave
+        sink - sink
+        stove - object
+        pan - object
+        kettle - object
+        bowl - object
+        tomato - object
+        apple - object
+        egg - object
+        cup - object
+        saltshaker - object
+        fork - object
+        paperroll - object
+        greenbook - object
+        stool - object
+    )
+    (:init
+        (atLocation robot countertop)
+        (inReceptacle bread countertop)
+        (inReceptacle knife countertop)
+        (openable fridge)
+        (not (opened fridge))
+        (not (holdsAny robot))
+        (not (isSliced bread))
+        (not (isCool bread))
+    )
+    (:goal
+        (and
+            (inReceptacle bread fridge)
+            (isSliced bread)
+        )
+    )
+)
+```

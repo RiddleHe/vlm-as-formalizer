@@ -1,0 +1,65 @@
+Scene graph:
+agent: robot
+microwave (receptacle): microwave oven with red knobs and digital display
+fridge (receptacle): black refrigerator with double doors
+sink (receptacle): double-basin stainless steel sink with faucets
+knife (object): knife on countertop near toaster
+receptacle (object): wooden cabinet under sink, countertop near sink, countertop near stove
+object: tomato (inside microwave), fork (in sink), spoon (in sink), wine glass (on countertop near stove), soap dispenser (on countertop near sink), toaster (on countertop), salt shaker (on countertop), pan (on countertop near stove), trash can (gold-colored near countertop)
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge)
+opened (receptacle) true if a receptacle is opened: (opened microwave)  ; microwave door is open as seen in image
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn microwave)  ; microwave display shows "OFF" but it is powered on as it's displaying
+isToggled (object) true if the object has been toggled: (isToggled microwave)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle tomato microwave), (inReceptacle fork sink), (inReceptacle spoon sink), (inReceptacle wine glass countertop near stove), (inReceptacle soap dispenser countertop near sink), (inReceptacle toaster countertop), (inReceptacle salt shaker countertop), (inReceptacle pan countertop near stove)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_cold_tomato_in_microwave)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        tomato - object
+        fork - object
+        spoon - object
+        wine_glass - object
+        soap_dispenser - object
+        toaster - object
+        salt_shaker - object
+        pan - object
+        trash_can - object
+        countertop_near_sink - object
+        countertop_near_stove - object
+        wooden_cabinet_under_sink - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (opened microwave)
+        (isOn microwave)
+        (isToggled microwave)
+        (inReceptacle tomato microwave)
+        (inReceptacle fork sink)
+        (inReceptacle spoon sink)
+        (inReceptacle wine_glass countertop_near_stove)
+        (inReceptacle soap_dispenser countertop_near_sink)
+        (inReceptacle toaster countertop_near_sink)
+        (inReceptacle salt_shaker countertop_near_sink)
+        (inReceptacle pan countertop_near_stove)
+        (atLocation robot microwave)  ; robot starts at microwave as per scene context
+    )
+    (:goal (and
+        (inReceptacle tomato microwave)
+        (isCool tomato)
+    ))
+)
+```

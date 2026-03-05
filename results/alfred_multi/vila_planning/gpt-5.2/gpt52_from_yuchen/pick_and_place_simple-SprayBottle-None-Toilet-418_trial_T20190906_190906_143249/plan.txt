@@ -1,0 +1,4 @@
+(GotoLocation agent spray_bottle)
+(PickupObject agent spray_bottle)
+(GotoLocation agent toilet)
+(PutObjectInReceptacle agent spray_bottle toilet)

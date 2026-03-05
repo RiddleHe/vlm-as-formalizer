@@ -1,0 +1,56 @@
+Scene graph:
+agent: robot
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife
+receptacle (object): openable_box, dining_table
+object: plate, golden_statue, newspaper, keys, openable_box, dining_table
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge), (openable sink), (openable openable_box)
+opened (receptacle) true if a receptacle is opened: (opened openable_box)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle plate dining_table), (inReceptacle golden_statue dining_table), (inReceptacle newspaper dining_table), (inReceptacle keys dining_table), (inReceptacle openable_box dining_table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot dining_table)
+
+PDDL problem: ```pddl
+(define (problem put_box_with_plate_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        openable_box - receptacle
+        dining_table - receptacle
+        plate - object
+        golden_statue - object
+        newspaper - object
+        keys - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (openable openable_box)
+        (opened openable_box)
+        (inReceptacle plate dining_table)
+        (inReceptacle golden_statue dining_table)
+        (inReceptacle newspaper dining_table)
+        (inReceptacle keys dining_table)
+        (inReceptacle openable_box dining_table)
+        (atLocation robot dining_table)
+    )
+    (:goal (and
+        (inReceptacle plate openable_box)
+        (inReceptacle openable_box dining_table)
+    ))
+)
+```

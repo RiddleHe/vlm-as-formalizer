@@ -1,0 +1,3 @@
+(GotoLocation agent1 table)
+(PickupObject agent1 knife)
+(SliceObject agent1 lettuce knife)

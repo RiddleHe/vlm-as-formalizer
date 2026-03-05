@@ -1,0 +1,54 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): wooden_counter_drawer
+object: spatula_on_counter_left, spatula_on_counter_right, loaf_of_bread_left, loaf_of_bread_right, photos_on_counter_left, photos_on_counter_right
+openable (receptacle) true if a receptacle is openable: (openable wooden_counter_drawer)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot wooden_counter_drawer)
+
+PDDL problem: ```pddl
+(define (problem put_spatulas_in_drawer)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        wooden_counter_drawer - receptacle
+        spatula_on_counter_left - object
+        spatula_on_counter_right - object
+        loaf_of_bread_left - object
+        loaf_of_bread_right - object
+        photos_on_counter_left - object
+        photos_on_counter_right - object
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+    )
+    (:init
+        (openable wooden_counter_drawer)
+        (not (opened wooden_counter_drawer))
+        (atLocation robot wooden_counter_drawer)
+        (not (holdsAny robot))
+        (not (inReceptacle spatula_on_counter_left wooden_counter_drawer))
+        (not (inReceptacle spatula_on_counter_right wooden_counter_drawer))
+    )
+    (:goal
+        (and
+            (inReceptacle spatula_on_counter_left wooden_counter_drawer)
+            (inReceptacle spatula_on_counter_right wooden_counter_drawer)
+        )
+    )
+)
+```

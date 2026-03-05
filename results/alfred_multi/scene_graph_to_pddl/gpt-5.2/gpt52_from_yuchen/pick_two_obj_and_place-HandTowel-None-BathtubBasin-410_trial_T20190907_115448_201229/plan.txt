@@ -1,0 +1,8 @@
+(gotolocation robot white_towel_hanging_on_left_wall_ring)
+(pickupobject robot white_towel_hanging_on_left_wall_ring)
+(gotolocation robot freestanding_white_bathtub_right_side)
+(putobjectinreceptacle robot white_towel_hanging_on_left_wall_ring freestanding_white_bathtub_right_side)
+(gotolocation robot white_towel_hanging_on_right_wall_ring)
+(pickupobject robot white_towel_hanging_on_right_wall_ring)
+(gotolocation robot freestanding_white_bathtub_right_side)
+(putobjectinreceptacle robot white_towel_hanging_on_right_wall_ring freestanding_white_bathtub_right_side)

@@ -1,0 +1,8 @@
+(gotolocation robot pepper_shaker)
+(pickupobject robot pepper_shaker)
+(gotolocation robot black_cabinet_under_counter)
+(putobjectinreceptacle robot pepper_shaker black_cabinet_under_counter)
+(gotolocation robot salt_shaker)
+(pickupobject robot salt_shaker)
+(gotolocation robot black_cabinet_under_counter)
+(putobjectinreceptacle robot salt_shaker black_cabinet_under_counter)

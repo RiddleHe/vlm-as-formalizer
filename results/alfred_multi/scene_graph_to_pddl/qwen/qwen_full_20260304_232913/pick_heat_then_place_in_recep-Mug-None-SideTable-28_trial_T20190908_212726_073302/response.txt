@@ -1,0 +1,58 @@
+Scene graph:
+agent: robot
+microwave (receptacle): silver microwave with digital keypad
+fridge (receptacle): not visible
+sink (receptacle): not visible
+knife (object): silver knife on countertop near coffee machine
+receptacle (object): black shelf unit with two levels, brown countertop, silver microwave
+object: brown pan on stove, red toaster, black coffee machine, brown loaf of bread, red apple, brown egg, silver spoon, silver knife, black shelf unit, brown countertop, silver microwave
+openable (receptacle) true if a receptacle is openable: (openable silver microwave with digital keypad)
+opened (receptacle) true if a receptacle is opened: (opened silver microwave with digital keypad)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn black coffee machine), (isOn red toaster)
+isToggled (object) true if the object has been toggled: (isToggled black coffee machine), (isToggled red toaster)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle brown pan on stove silver microwave with digital keypad), (inReceptacle red apple black shelf unit), (inReceptacle brown egg black shelf unit), (inReceptacle silver spoon black shelf unit)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot black shelf unit)
+
+PDDL problem: ```pddl
+(define (problem place_microwaved_mug_on_shelves)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife - knife
+        pan - object
+        toaster - object
+        coffee_machine - object
+        bread - object
+        apple - object
+        egg - object
+        spoon - object
+        shelf - receptacle
+        countertop - object
+    )
+    (:init
+        (openable microwave)
+        (opened microwave)
+        (isOn coffee_machine)
+        (isOn toaster)
+        (isToggled coffee_machine)
+        (isToggled toaster)
+        (inReceptacle pan microwave)
+        (inReceptacle apple shelf)
+        (inReceptacle egg shelf)
+        (inReceptacle spoon shelf)
+        (atLocation robot shelf)
+    )
+    (:goal (and
+        (inReceptacle pan shelf)
+    ))
+)
+```

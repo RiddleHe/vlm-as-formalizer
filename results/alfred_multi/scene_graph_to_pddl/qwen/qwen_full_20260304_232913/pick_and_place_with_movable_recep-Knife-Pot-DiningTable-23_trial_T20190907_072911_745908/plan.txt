@@ -1,0 +1,7 @@
+(gotolocation robot dining_table)
+(pickupobject robot knife_on_table)
+(gotolocation robot pan_on_table)
+(putobjectinreceptacle robot knife_on_table pan_on_table)
+(pickupobject robot pan_on_table)
+(gotolocation robot dining_table)
+(putobjectinreceptacle robot pan_on_table dining_table)

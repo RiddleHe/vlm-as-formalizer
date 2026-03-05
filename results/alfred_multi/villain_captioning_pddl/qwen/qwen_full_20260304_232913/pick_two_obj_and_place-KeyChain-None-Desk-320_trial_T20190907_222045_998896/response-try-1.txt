@@ -1,0 +1,27 @@
+```pddl
+(define (problem move_keys)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        dresser - receptacle
+        white_table - receptacle
+        keys1 - object
+        keys2 - object
+    )
+    (:init
+        (not (atLocation agent1 dresser))
+        (not (atLocation agent1 white_table))
+        (atLocation keys1 dresser)
+        (atLocation keys2 dresser)
+        (not (holdsAny agent1))
+        (not (holds agent1 keys1))
+        (not (holds agent1 keys2))
+        (not (inReceptacle keys1 white_table))
+        (not (inReceptacle keys2 white_table))
+    )
+    (:goal (and
+        (inReceptacle keys1 white_table)
+        (inReceptacle keys2 white_table)
+    ))
+)
+```

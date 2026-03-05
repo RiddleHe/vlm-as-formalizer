@@ -1,0 +1,8 @@
+(gotolocation agent1 tomato1)
+(pickupobject agent1 tomato1)
+(gotolocation agent1 trash_can1)
+(putobjectinreceptacle agent1 tomato1 trash_can1)
+(gotolocation agent1 knife1)
+(pickupobject agent1 knife1)
+(gotolocation agent1 tomato1)
+(sliceobject agent1 tomato1 knife1)

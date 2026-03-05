@@ -1,0 +1,61 @@
+Scene graph:
+agent: robot
+microwave (receptacle): black microwave on countertop
+fridge (receptacle): black fridge on countertop
+sink (receptacle): sink (not visible in images, assumed not present or not interactable)
+knife (object): spatula on countertop, knife on cabinet door
+receptacle (object): silver toaster on countertop, oven with pots on stovetop, cabinet under countertop
+object: gray dog figurine on countertop, silver cup on countertop, copper pot on stovetop, silver pot on stovetop, spatula on countertop, knife on cabinet door, black microwave, black fridge, silver toaster, oven, cabinet
+openable (receptacle) true if a receptacle is openable: (openable black fridge), (openable black microwave), (openable silver toaster), (openable oven), (openable cabinet)
+opened (receptacle) true if a receptacle is opened: (opened cabinet)  ; cabinet door is open in image 1
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn silver toaster), (isOn oven)
+isToggled (object) true if the object has been toggled: (isToggled silver toaster), (isToggled oven)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle gray dog figurine silver toaster), (inReceptacle silver cup silver toaster), (inReceptacle copper pot oven), (inReceptacle silver pot oven)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot cabinet)  ; robot is near open cabinet in image 1
+
+PDDL problem: ```pddl
+(define (problem put_chilled_tomato_in_microwave)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        black_microwave - microwave
+        black_fridge - fridge
+        silver_toaster - receptacle
+        oven - receptacle
+        cabinet - receptacle
+        gray_dog_figurine - object
+        silver_cup - object
+        copper_pot - object
+        silver_pot - object
+        spatula - object
+        knife - knife
+    )
+    (:init
+        (openable black_microwave)
+        (openable black_fridge)
+        (openable silver_toaster)
+        (openable oven)
+        (openable cabinet)
+        (opened cabinet)
+        (isOn silver_toaster)
+        (isOn oven)
+        (isToggled silver_toaster)
+        (isToggled oven)
+        (inReceptacle gray_dog_figurine silver_toaster)
+        (inReceptacle silver_cup silver_toaster)
+        (inReceptacle copper_pot oven)
+        (inReceptacle silver_pot oven)
+        (atLocation robot cabinet)
+    )
+    (:goal (and
+        (inReceptacle tomato black_microwave)
+        (isCool tomato)
+    ))
+)
+```

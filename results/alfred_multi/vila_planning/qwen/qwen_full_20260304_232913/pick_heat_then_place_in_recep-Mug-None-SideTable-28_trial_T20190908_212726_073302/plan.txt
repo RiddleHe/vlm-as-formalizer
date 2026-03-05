@@ -1,0 +1,6 @@
+(GotoLocation robot microwave)
+(OpenObject robot microwave)
+(PickupObject robot mug)
+(CloseObject robot microwave)
+(GotoLocation robot shelf)
+(PutObjectInReceptacle robot mug shelf)

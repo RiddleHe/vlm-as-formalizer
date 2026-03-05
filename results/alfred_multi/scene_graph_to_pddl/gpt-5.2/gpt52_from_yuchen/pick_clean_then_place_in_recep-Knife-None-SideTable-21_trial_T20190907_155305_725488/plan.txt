@@ -1,0 +1,6 @@
+(gotolocation robot black-side-table)
+(pickupobject robot silver-knife_black-table)
+(gotolocation robot white-sink-basin)
+(cleanobject robot white-sink-basin silver-knife_black-table)
+(gotolocation robot black-side-table)
+(putobjectinreceptacle robot silver-knife_black-table black-side-table)

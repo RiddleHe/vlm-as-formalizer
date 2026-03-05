@@ -1,0 +1,4 @@
+(gotolocation robot phone_1)
+(pickupobject robot phone_1)
+(gotolocation robot end_table_1)
+(putobjectinreceptacle robot phone_1 end_table_1)

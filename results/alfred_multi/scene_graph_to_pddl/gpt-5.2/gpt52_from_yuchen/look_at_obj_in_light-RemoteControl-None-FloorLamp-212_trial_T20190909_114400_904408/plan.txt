@@ -1,0 +1,2 @@
+(gotolocation robot white_tv_remote_control_with_buttons)
+(toggleobject robot white_tv_remote_control_with_buttons)

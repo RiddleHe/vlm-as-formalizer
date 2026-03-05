@@ -1,0 +1,27 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        lettuce - object
+        knife - knife
+        fridge - fridge
+        counter - receptacle
+        sink - sink
+    )
+    (:init
+        (atLocation robot counter)
+        (inReceptacle lettuce counter)
+        (inReceptacle knife counter)
+        (openable fridge)
+        (not (opened fridge))
+        (not (isCool lettuce))
+        (not (isSliced lettuce))
+    )
+    (:goal
+        (and
+            (inReceptacle lettuce counter)
+            (isCool lettuce)
+            (isSliced lettuce)
+        )
+    )
+)

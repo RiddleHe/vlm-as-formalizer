@@ -1,0 +1,6 @@
+(gotolocation agent1 mug)
+(pickupobject agent1 mug)
+(gotolocation agent1 fridge)
+(coolobject agent1 fridge mug)
+(gotolocation agent1 rack)
+(putobjectinreceptacle agent1 mug rack)

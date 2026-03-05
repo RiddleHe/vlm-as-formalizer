@@ -1,0 +1,21 @@
+(define (problem put_plate_with_keys_on_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        table - receptacle
+        plate - object
+        keys - object
+    )
+    (:init
+        (atLocation agent1 table)
+        (inReceptacle plate table)
+        (inReceptacle keys table)
+        (not (holdsAny agent1))
+    )
+    (:goal
+        (and
+            (inReceptacle keys plate)
+            (inReceptacle plate table)
+        )
+    )
+)

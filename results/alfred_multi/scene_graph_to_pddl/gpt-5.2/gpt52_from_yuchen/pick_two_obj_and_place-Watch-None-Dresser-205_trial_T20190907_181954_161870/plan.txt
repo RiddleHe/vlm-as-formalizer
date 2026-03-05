@@ -1,0 +1,8 @@
+(gotolocation robot watch_remote_center_on_table)
+(pickupobject robot watch_remote_center_on_table)
+(gotolocation robot dark_wood_tv_stand_receptacle)
+(putobjectinreceptacle robot watch_remote_center_on_table dark_wood_tv_stand_receptacle)
+(gotolocation robot transparent_glass_dining_table_receptacle)
+(pickupobject robot watch_remote_left_on_table)
+(gotolocation robot dark_wood_tv_stand_receptacle)
+(putobjectinreceptacle robot watch_remote_left_on_table dark_wood_tv_stand_receptacle)

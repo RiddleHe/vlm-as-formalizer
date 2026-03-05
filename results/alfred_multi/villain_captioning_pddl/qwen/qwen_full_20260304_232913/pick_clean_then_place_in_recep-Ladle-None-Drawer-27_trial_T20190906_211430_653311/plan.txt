@@ -1,0 +1,6 @@
+(gotolocation agent1 spoon1)
+(pickupobject agent1 spoon1)
+(gotolocation agent1 sink1)
+(cleanobject agent1 sink1 spoon1)
+(gotolocation agent1 cabinet1)
+(putobjectinreceptacle agent1 spoon1 cabinet1)

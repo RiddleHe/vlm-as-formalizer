@@ -1,0 +1,282 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Place two sponges in the tub.
+    
+
+SCENE CAPTION:
+### Scene overview (bathroom)
+The images show a bathroom with a **freestanding bathtub (tub)** on the left, a **wood vanity with a sink/countertop** area, a **toilet** on the right, and a **small black bin/trash can** near the tub along the wall.
+
+The instruction is: **place two sponges in the tub**.
+
+---
+
+## 1) Objects and domain-relevant types
+
+### Receptacles (can hold objects)
+- **Tub / bathtub** (treat as a **receptacle** for the task):  
+  - Large white oval freestanding tub on the left side of the scene.
+  - Currently appears **empty** (no sponge visible inside).
+- **Sink** (domain type: `sink`):  
+  - Partly visible at the vanity countertop (left edge of the vanity view).  
+  - Not clearly showing water state; used as a cleaning receptacle in the domain.
+- **Black bin/trash can** (receptacle-like container, but not a declared domain receptacle type; still visible):  
+  - Small, black, square-top container near the tub along the wall; contains/has a small item visible at the bottom in one view.
+
+*(No microwave or fridge are visible in these images.)*
+
+### Other objects (movable items)
+- **Sponges (2 total)**:
+  1. **Green rectangular sponge** on the vanity countertop, near the sink area (clearly visible; bright green).  
+  2. **Small green sponge/scrubber** inside the small **black bin** near the tub (green piece visible at the bottom of the bin in the close-up/top-down view).
+
+### Additional visible items (not central to the instruction)
+- **Soap/lotion dispenser bottle** (purple container with a pump) on the countertop near the sink.
+- **Paper towel roll** (white) on the countertop near the sink.
+- **Toilet** on the right side (not a domain receptacle type here, but present).
+- **Cabinets/drawers** (wooden vanity fronts) visible; whether they are openable is not shown.
+
+---
+
+## 2) Quantities (domain-focused)
+- **Tub**: 1
+- **Sink**: 1
+- **Sponges**: 2 (both green; one on counter, one inside black bin)
+- **Agent/robot**: 1 (not currently at any object location per task statement)
+
+---
+
+## 3) Spatial relationships (useful for planning predicates)
+
+### Sponge locations
+- **Green sponge #1 (counter sponge)**:
+  - Located **on the vanity countertop**, adjacent to the sink area.
+  - It is **not** in the tub.
+- **Green sponge #2 (bin sponge)**:
+  - Located **inside the small black bin** near the tub (i.e., it is *in a receptacle-like container*).
+  - It is **not** in the tub.
+
+### Tub relationships
+- The **tub** is positioned left of the toilet and near the wall.
+- The tub interior appears empty; neither sponge is currently **in the tub**.
+
+### Black bin
+- The **black bin** sits on the floor near the tub along the wall corner.
+- The small green sponge/scrubber is **in the bin** (visibly at the bottom).
+
+---
+
+## 4) Current relevant states (for predicates)
+- **No objects are being held** by the agent (robot starts not holding anything).
+- **Neither sponge is in the tub** initially.
+- **Open/closed states**: no clear evidence of any receptacle being openable/opened (no doors/drawers shown open; tub is inherently open at the top).
+- **Clean/Hot/Cool/Sliced/On/Toggled**: no visible cues indicating either sponge is clean/hot/cool/sliced, and no relevant devices (microwave/fridge) are present.
+
+---
+
+## 5) Visual identifiers to distinguish objects
+- **Tub**: large white oval freestanding tub with a bronze/copper freestanding faucet fixture next to it.
+- **Sponge #1**: bright **green rectangular** sponge lying on the countertop near the sink (next to paper towel roll/dispenser).
+- **Sponge #2**: small **green** piece visible inside the **black square-top bin** on the floor near the tub.
+- **Flooring**: beige/tan square tiles; helpful for orienting (bin is on tile floor; tub adjacent to tile floor).
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

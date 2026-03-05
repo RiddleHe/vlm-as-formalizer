@@ -1,0 +1,55 @@
+Scene graph:
+agent: robot
+microwave (receptacle): red microwave on countertop
+fridge (receptacle): black fridge on left side
+sink (receptacle): stainless steel sink with faucet
+knife (object): yellow-handled knife on countertop near sink, silver knife on countertop near microwave
+receptacle (object): black pot on stove, black pan on stove, green book on countertop, brown potted plant on countertop, black stool near counter, black stool near counter
+object: red microwave on countertop, black fridge on left side, stainless steel sink with faucet, yellow-handled knife on countertop near sink, silver knife on countertop near microwave, black pot on stove, black pan on stove, green book on countertop, brown potted plant on countertop, black stool near counter, black stool near counter, tomato in sink, egg in sink, glass in sink, spoon in sink, cabbage in sink
+openable (receptacle) true if a receptacle is openable: (openable red microwave on countertop), (openable black fridge on left side)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle tomato in sink, stainless steel sink with faucet), (inReceptacle egg in sink, stainless steel sink with faucet), (inReceptacle glass in sink, stainless steel sink with faucet), (inReceptacle spoon in sink, stainless steel sink with faucet), (inReceptacle cabbage in sink, stainless steel sink with faucet)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife - knife
+        tomato - object
+        egg - object
+        glass - object
+        spoon - object
+        cabbage - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (inReceptacle tomato sink)
+        (inReceptacle egg sink)
+        (inReceptacle glass sink)
+        (inReceptacle spoon sink)
+        (inReceptacle cabbage sink)
+        (not (isSliced tomato))
+        (not (isHot tomato))
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (inReceptacle tomato sink)
+        (isSliced tomato)
+        (isHot tomato)
+    ))
+)
+```

@@ -1,0 +1,266 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: warm up the mug and put it in the cabinet
+    
+
+SCENE CAPTION:
+Scene Description:
+
+The scene depicts a kitchen environment with several objects relevant to the planning task. The primary objects of interest are a mug, a coffee maker (which serves as a heating appliance), a cabinet (acting as a receptacle), and a sink (also a receptacle).
+
+1. Objects and Their Types:
+   - Mug: A white ceramic mug, currently placed on the drip tray of the coffee maker. It is classified as an "object" in the domain.
+   - Coffee Maker: A blue appliance with a "Serve" indicator light. It is not explicitly defined as a microwave in the domain, but for the purpose of this task, it is treated as a heating device (microwave equivalent) since it can warm the mug. It is classified as a "receptacle" in the domain because it can hold the mug.
+   - Cabinet: Wooden cabinets with brown wood grain texture and silver knobs. The upper cabinet is closed and is a "receptacle". The lower cabinets are also present and serve as receptacles. The cabinet under the sink is directly below the countertop where the mug will be placed after heating.
+   - Sink: A double-basin stainless steel sink embedded in a dark countertop. It is a "receptacle" and is positioned to the right of the coffee maker.
+   - Knife: A yellow-handled knife is visible on the countertop near the sink. It is classified as a "knife" in the domain.
+   - Fork: A metal fork is on the countertop near the sink.
+   - Bread: A loaf of bread is on the countertop next to the coffee maker.
+   - Salt and Pepper Shakers: Two metallic shakers are on the countertop near the sink.
+   - Wine Glass: A wine glass is on the windowsill above the sink.
+   - Agent: The robot agent is not visible in the scene and is initially not at any object's location.
+
+2. Quantities of Each Object Type:
+   - Receptacles: 3 (coffee maker, sink, and cabinet — specifically the lower cabinet under the sink is the target for placing the mug).
+   - Objects: 5 (mug, knife, fork, bread, wine glass).
+   - Knives: 1 (yellow-handled knife).
+
+3. Spatial Relationships:
+   - The mug is currently inside the coffee maker (inReceptacle mug coffee_maker).
+   - The coffee maker is on the countertop to the left of the sink.
+   - The sink is to the right of the coffee maker.
+   - The lower cabinet is directly below the sink and the countertop area.
+   - The knife is on the countertop near the sink.
+   - The fork is on the countertop near the sink, next to the knife.
+   - The bread is on the countertop next to the coffee maker.
+   - The salt and pepper shakers are on the countertop near the sink.
+   - The wine glass is on the windowsill above the sink.
+
+4. Current State of Each Object Relevant to the Planning Task:
+   - Mug: Currently in the coffee maker. It is not heated yet (not isHot). It is not being held by the agent.
+   - Coffee Maker: The coffee maker is not turned on (not isOn). It is a receptacle and can be toggled to heat the mug.
+   - Cabinet: The cabinet is closed (not opened). It is a receptacle and can be opened to place the mug inside.
+   - Sink: The sink is not being used for cleaning in this task. It is a receptacle but not relevant for the current instruction.
+   - Knife: The knife is on the countertop and not being held by the agent. It is not relevant for this task.
+   - Fork: The fork is on the countertop and not being held by the agent. It is not relevant for this task.
+   - Bread: The bread is on the countertop and not being held by the agent. It is not relevant for this task.
+   - Salt and Pepper Shakers: They are on the countertop and not being held by the agent. They are not relevant for this task.
+   - Wine Glass: The wine glass is on the windowsill and not being held by the agent. It is not relevant for this task.
+
+5. Colors, Positions, and Other Visual Properties:
+   - The mug is white and cylindrical, sitting on the blue coffee maker's drip tray.
+   - The coffee maker is blue with a black top and a yellow "Serve" light.
+   - The sink is stainless steel with a modern design, embedded in a dark countertop.
+   - The cabinets are made of brown wood with a visible grain pattern and have silver knobs.
+   - The knife has a yellow handle and a metallic blade.
+   - The fork is metallic and has four tines.
+   - The bread is a golden-brown loaf.
+   - The salt and pepper shakers are metallic with a brushed finish.
+   - The wine glass is clear glass with a stem and base.
+   - The countertop is dark with a speckled pattern.
+   - The floor is tiled with light brown tiles in a diamond pattern.
+   - The walls are tiled with brown tiles.
+   - The window above the sink has a view of a cloudy sky.
+
+The robot agent needs to first go to the coffee maker to interact with the mug, then toggle the coffee maker to heat the mug, pick up the heated mug, go to the cabinet, open the cabinet, and put the mug inside the cabinet.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

@@ -1,0 +1,24 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate a step-by-step plan for the robot(s).
+    All the possible actions and their arguments are given below:
+    ['GotoLocation (?a - agent ?lEnd - object)', 'OpenObject (?a - agent ?r - receptacle)', 'CloseObject (?a - agent ?r - receptacle)', 'PickupObject (?a - agent ?o - object)', 'PutObjectInReceptacle (?a - agent ?o - object ?r - receptacle)', 'CleanObject (?a - agent ?r - sink ?o - object)', 'HeatObject (?a - agent ?r - microwave ?o - object)', 'CoolObject (?a - agent ?r - fridge ?o - object)', 'ToggleObject (?a - agent ?o - object)', 'SliceObject (?a - agent ?co - object ?ko - knife)']
+
+    You must first reason what objects are in the scene that can be the arguments of the actions.
+    Then you must reason what actions to take in the plan. Be mindful of the preconditions and effects of the actions.
+    Each action should take one line in the plan.
+    The plan should be in the following format:
+    (action1 arg1 arg2 arg3)
+    (action2 arg1 arg2 arg3)
+    ...
+    
+    For the current domain,
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the plan.
+        Do not generate anything after the plan.
+        
+    Instruction: Place a rinsed bar of soap in a drawer.
+    Please generate the plan for the robot. Do not generate anything after the plan.
+    

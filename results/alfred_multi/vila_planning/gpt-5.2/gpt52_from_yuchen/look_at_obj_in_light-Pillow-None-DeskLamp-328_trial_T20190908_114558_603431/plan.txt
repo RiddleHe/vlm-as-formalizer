@@ -1,0 +1,3 @@
+(GotoLocation robot lamp)
+(ToggleObject robot lamp)
+(GotoLocation robot cushion)

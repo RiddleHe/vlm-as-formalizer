@@ -1,0 +1,8 @@
+(GotoLocation robot towel)
+(PickupObject robot towel)
+(GotoLocation robot bathtub)
+(PutObjectInReceptacle robot towel bathtub)
+(GotoLocation robot towel)
+(PickupObject robot towel)
+(GotoLocation robot bathtub)
+(PutObjectInReceptacle robot towel bathtub)

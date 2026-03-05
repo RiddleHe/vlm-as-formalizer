@@ -1,0 +1,4 @@
+(pickupobject robot coffee_cup)
+(heatobject robot microwave coffee_cup)
+(gotolocation robot coffee_maker)
+(putobjectinreceptacle robot coffee_cup coffee_maker)

@@ -1,0 +1,248 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Put two cushions on an ottoman.
+    
+
+SCENE CAPTION:
+The provided domain file defines actions for interacting with receptacles (microwave, fridge, sink) and objects (knife, receptacle), but the instruction "Put two cushions on an ottoman" involves objects (cushions, ottoman) that are not defined as types or receptacles in the domain. Therefore, the domain is not applicable to this task. The scene description below focuses on the visual elements relevant to the instruction, as requested.
+
+---
+
+**Scene Description for "Put two cushions on an ottoman":**
+
+1.  **Objects and their types (based on visual context, not domain types):**
+    *   **Cushions:** There are two distinct cushions visible in the scene.
+        *   **Cushion 1 (Plaid):** An elongated, cylindrical cushion with a prominent orange and black plaid pattern. It is the most consistently visible cushion across all images.
+        *   **Cushion 2 (Green):** A rectangular, dark green cushion. It is partially visible on the sofa in images 3 and 5, tucked behind the plaid cushion.
+    *   **Furniture:**
+        *   **Armchair:** A dark brown, upholstered armchair. It is visible in images 1, 2, and 4. The plaid cushion is resting on its seat in these views.
+        *   **Sofa:** A dark brown, upholstered sofa. It is visible in images 3 and 5. Both the plaid and green cushions are resting on its seat in these views.
+        *   **Ottoman:** A dark brown, upholstered ottoman with a flat top surface. It is visible in images 1, 2, and 4, positioned next to the armchair. In image 2, it has two remote controls on its surface.
+
+2.  **Quantities:**
+    *   Cushions: 2 (one plaid, one green).
+    *   Armchairs: 1.
+    *   Sofas: 1.
+    *   Ottomans: 1.
+
+3.  **Spatial Relationships:**
+    *   The **plaid cushion** is initially located on the **armchair** (images 1, 2, 4) and later on the **sofa** (images 3, 5).
+    *   The **green cushion** is initially located on the **sofa** (images 3, 5).
+    *   The **ottoman** is positioned adjacent to the **armchair** (images 1, 2, 4).
+    *   The **sofa** is positioned adjacent to the **armchair** (images 3, 5).
+    *   The **remote controls** are located on the **ottoman** (image 2).
+
+4.  **Current State (relevant to the instruction):**
+    *   The **plaid cushion** is currently resting on the **armchair** (as seen in the first image, which is the initial state for planning).
+    *   The **green cushion** is currently resting on the **sofa**.
+    *   The **ottoman** is currently empty (in the initial state shown in image 1, before the remotes are placed on it in image 2). The instruction requires it to hold two cushions.
+
+5.  **Visual Properties for Distinction:**
+    *   **Plaid Cushion:** Unique orange and black plaid pattern, cylindrical shape. Easily distinguishable by its color and pattern.
+    *   **Green Cushion:** Solid dark green color, rectangular shape. Distinguishable by its color and shape from the plaid cushion.
+    *   **Furniture:** All furniture (armchair, sofa, ottoman) is a uniform dark brown color and appears to be upholstered. They are distinguished by their shape and size: the armchair is smaller with defined arms, the sofa is larger and longer, and the ottoman is low and rectangular with a flat top. The ottoman's flat top surface is clearly intended as a place to put items.
+
+--- 
+
+**Note:** The domain file's predicates and actions (e.g., `inReceptacle`, `holds`, `GotoLocation`, `PickupObject`, `PutObjectInReceptacle`) are designed for interactions with specific types of objects (receptacles like microwaves, fridges) and actions like cleaning or heating. The objects in this scene (cushions, armchair, sofa, ottoman) do not fit these defined types or actions. The ottoman is not defined as a `receptacle` in the domain, so the robot cannot be instructed to `PutObjectInReceptacle` on it according to the given domain rules. The task as stated cannot be executed using the provided PDDL domain.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

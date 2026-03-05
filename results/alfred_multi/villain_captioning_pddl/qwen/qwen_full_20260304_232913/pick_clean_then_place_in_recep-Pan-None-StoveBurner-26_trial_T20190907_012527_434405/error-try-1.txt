@@ -1,0 +1,5 @@
+Predicate argument has wrong type:
+  atLocation pan stove: pan is not a agent
+  atLocation egg sink: egg is not a agent
+  atLocation paper_bag stove: paper_bag is not a agent
+

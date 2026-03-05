@@ -1,0 +1,3 @@
+(pickupobject robot egg1)
+(coolobject robot fridge1 egg1)
+(putobjectinreceptacle robot egg1 microwave1)

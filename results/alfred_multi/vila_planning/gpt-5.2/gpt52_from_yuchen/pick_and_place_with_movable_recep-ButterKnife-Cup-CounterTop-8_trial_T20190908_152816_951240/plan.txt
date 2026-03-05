@@ -1,0 +1,5 @@
+(GotoLocation robot kitchen_shelf)
+(PickupObject robot glass)
+(PutObjectInReceptacle robot glass kitchen_shelf)
+(PickupObject robot knife)
+(PutObjectInReceptacle robot knife kitchen_shelf)

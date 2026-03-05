@@ -1,0 +1,41 @@
+```pddl
+(define (problem put_plate_with_candle_on_coffee_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        plate1 plate2 plate3 - receptacle
+        candle1 - object
+        coffee_table - receptacle
+        dining_table - receptacle
+        tissue_box - receptacle
+        laptop - object
+        remote - object
+        newspaper1 newspaper2 - object
+        box - receptacle
+        plant - object
+        statue - object
+    )
+    (:init
+        (atLocation agent1 dining_table)
+        (inReceptacle plate1 dining_table)
+        (inReceptacle plate2 dining_table)
+        (inReceptacle plate3 dining_table)
+        (inReceptacle candle1 tissue_box)
+        (inReceptacle remote dining_table)
+        (inReceptacle newspaper1 dining_table)
+        (inReceptacle newspaper2 dining_table)
+        (inReceptacle laptop dining_table)
+        (inReceptacle box coffee_table)
+        (inReceptacle plant coffee_table)
+        (inReceptacle statue coffee_table)
+        (openable tissue_box)
+        (opened tissue_box)
+    )
+    (:goal
+        (and
+            (inReceptacle candle1 plate1)
+            (inReceptacle plate1 coffee_table)
+        )
+    )
+)
+```

@@ -1,0 +1,74 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): black fridge
+sink (receptacle): kitchen sink
+knife (object): knife on table, knife near pan
+receptacle (object): metal pan, square bowl, square bowl, glass bottle, wine bottle, wine bottle, kitchen sink, black fridge
+object: metal pan, square bowl, square bowl, glass bottle, wine bottle, wine bottle, knife on table, knife near pan, fork, apple, green cup, kitchen sink, black fridge
+openable (receptacle) true if a receptacle is openable: (openable black fridge), (openable kitchen sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle metal pan table), (inReceptacle square bowl table), (inReceptacle square bowl table), (inReceptacle glass bottle table), (inReceptacle wine bottle table), (inReceptacle wine bottle table), (inReceptacle knife on table table), (inReceptacle knife near pan table), (inReceptacle fork table), (inReceptacle apple table), (inReceptacle green cup table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem fill_pan_with_water_and_place_on_island)
+    (:domain put_task)
+    (:objects
+        agent
+        black_fridge - fridge
+        kitchen_sink - sink
+        metal_pan - receptacle
+        square_bowl1 - receptacle
+        square_bowl2 - receptacle
+        glass_bottle - receptacle
+        wine_bottle1 - receptacle
+        wine_bottle2 - receptacle
+        knife_on_table - knife
+        knife_near_pan - knife
+        fork - object
+        apple - object
+        green_cup - object
+        table - object
+    )
+    (:init
+        (openable black_fridge)
+        (openable kitchen_sink)
+        (not (opened black_fridge))
+        (not (opened kitchen_sink))
+        (inReceptacle metal_pan table)
+        (inReceptacle square_bowl1 table)
+        (inReceptacle square_bowl2 table)
+        (inReceptacle glass_bottle table)
+        (inReceptacle wine_bottle1 table)
+        (inReceptacle wine_bottle2 table)
+        (inReceptacle knife_on_table table)
+        (inReceptacle knife_near_pan table)
+        (inReceptacle fork table)
+        (inReceptacle apple table)
+        (inReceptacle green_cup table)
+        (not (holdsAny agent))
+        (not (atLocation agent table))
+        (not (isClean metal_pan))
+        (not (isHot metal_pan))
+        (not (isCool metal_pan))
+        (not (isOn metal_pan))
+        (not (isToggled metal_pan))
+        (not (isSliced metal_pan))
+    )
+    (:goal
+        (and
+            (inReceptacle metal_pan table)
+            (isClean metal_pan)
+        )
+    )
+)
+```

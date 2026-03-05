@@ -1,0 +1,4 @@
+(gotolocation robot_agent small_white_credit_card_like_card)
+(pickupobject robot_agent small_white_credit_card_like_card)
+(gotolocation robot_agent dark_blue_leather_armchair)
+(putobjectinreceptacle robot_agent small_white_credit_card_like_card dark_blue_leather_armchair)

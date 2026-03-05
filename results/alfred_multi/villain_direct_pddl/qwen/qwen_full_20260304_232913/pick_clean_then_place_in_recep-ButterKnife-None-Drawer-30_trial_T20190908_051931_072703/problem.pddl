@@ -1,0 +1,21 @@
+(define (problem put_clean_knife_in_cabinet_drawer)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        knife1 - knife
+        sink1 - sink
+        cabinet_drawer1 - receptacle
+    )
+    (:init
+        (atLocation agent1 sink1)
+        (inReceptacle knife1 sink1)
+        (openable cabinet_drawer1)
+        (not (opened cabinet_drawer1))
+    )
+    (:goal
+        (and
+            (inReceptacle knife1 cabinet_drawer1)
+            (isClean knife1)
+        )
+    )
+)

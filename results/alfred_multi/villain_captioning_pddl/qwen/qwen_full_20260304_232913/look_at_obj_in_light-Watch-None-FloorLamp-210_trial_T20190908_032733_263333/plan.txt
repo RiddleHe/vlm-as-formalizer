@@ -1,0 +1,4 @@
+(gotolocation robot lamp)
+(toggleobject robot lamp)
+(gotolocation robot wristwatch)
+(pickupobject robot wristwatch)

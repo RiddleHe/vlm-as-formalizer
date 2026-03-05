@@ -1,0 +1,8 @@
+(GotoLocation robot shelf)
+(PickupObject robot pencil)
+(GotoLocation robot desk)
+(PutObjectInReceptacle robot pencil desk)
+(GotoLocation robot shelf)
+(PickupObject robot pencil)
+(GotoLocation robot desk)
+(PutObjectInReceptacle robot pencil desk)

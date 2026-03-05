@@ -1,0 +1,7 @@
+(GotoLocation robot fridge)
+(OpenObject robot fridge)
+(PickupObject robot bowl)
+(CoolObject robot fridge bowl)
+(CloseObject robot fridge)
+(GotoLocation robot table)
+(PutObjectInReceptacle robot bowl table)

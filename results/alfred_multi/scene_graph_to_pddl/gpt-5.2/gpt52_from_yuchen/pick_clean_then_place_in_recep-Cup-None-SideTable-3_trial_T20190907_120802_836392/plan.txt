@@ -1,0 +1,6 @@
+(gotolocation robot_agent black_stove_counter_unit_right)
+(pickupobject robot_agent clear_glass_cup_left_of_microwave)
+(gotolocation robot_agent stainless_double_sink_left_counter)
+(cleanobject robot_agent stainless_double_sink_left_counter clear_glass_cup_left_of_microwave)
+(gotolocation robot_agent wooden_countertop_left)
+(putobjectinreceptacle robot_agent clear_glass_cup_left_of_microwave wooden_countertop_left)

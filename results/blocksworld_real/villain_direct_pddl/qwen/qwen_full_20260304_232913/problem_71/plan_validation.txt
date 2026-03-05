@@ -1,0 +1,6 @@
+mismatch
+Plan action counts mismatch.
+Ground truth has Counter({'pick-up': 2, 'stack': 2, 'unstack': 1, 'put-down': 1}).
+Predicted has Counter({'pick-up': 3, 'stack': 3}).
+
+

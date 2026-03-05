@@ -1,0 +1,52 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): wooden_cabinet, desk, shelf
+object: agent, wooden_cabinet, desk, shelf, pencil1, pencil2, cd, basketball, keys, bowl, chair
+openable (receptacle) true if a receptacle is openable: (openable wooden_cabinet)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle pencil1 shelf), (inReceptacle pencil2 shelf), (inReceptacle cd shelf), (inReceptacle keys shelf), (inReceptacle bowl desk)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_two_pencils_on_desk)
+    (:domain put_task)
+    (:objects
+        agent
+        wooden_cabinet - receptacle
+        desk - receptacle
+        shelf - receptacle
+        pencil1 - object
+        pencil2 - object
+        cd - object
+        basketball - object
+        keys - object
+        bowl - object
+        chair - object
+    )
+    (:init
+        (openable wooden_cabinet)
+        (inReceptacle pencil1 shelf)
+        (inReceptacle pencil2 shelf)
+        (inReceptacle cd shelf)
+        (inReceptacle keys shelf)
+        (inReceptacle bowl desk)
+        (not (holdsAny agent))
+    )
+    (:goal (and
+        (inReceptacle pencil1 desk)
+        (inReceptacle pencil2 desk)
+    ))
+)
+```

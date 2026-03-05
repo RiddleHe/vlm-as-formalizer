@@ -1,0 +1,8 @@
+(gotolocation agent1 soap2)
+(pickupobject agent1 soap2)
+(gotolocation agent1 steel_rack)
+(putobjectinreceptacle agent1 soap2 steel_rack)
+(gotolocation agent1 sink)
+(pickupobject agent1 soap1)
+(gotolocation agent1 steel_rack)
+(putobjectinreceptacle agent1 soap1 steel_rack)

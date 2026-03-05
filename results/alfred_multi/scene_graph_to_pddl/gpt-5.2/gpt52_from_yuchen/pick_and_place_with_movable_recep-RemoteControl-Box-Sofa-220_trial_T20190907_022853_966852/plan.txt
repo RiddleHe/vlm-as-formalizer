@@ -1,0 +1,7 @@
+(gotolocation robot_agent left_tv_remote_on_table)
+(pickupobject robot_agent left_tv_remote_on_table)
+(gotolocation robot_agent open_cardboard_box_on_left_side_of_coffee_table)
+(putobjectinreceptacle robot_agent left_tv_remote_on_table open_cardboard_box_on_left_side_of_coffee_table)
+(pickupobject robot_agent open_cardboard_box_on_left_side_of_coffee_table)
+(gotolocation robot_agent green_grid_pattern_couch)
+(putobjectinreceptacle robot_agent open_cardboard_box_on_left_side_of_coffee_table green_grid_pattern_couch)

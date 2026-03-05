@@ -1,0 +1,6 @@
+(gotolocation robot red_tomato_on_counter_edge)
+(pickupobject robot red_tomato_on_counter_edge)
+(gotolocation robot microwave_with_red_trim_and_right_dial_panel)
+(heatobject robot microwave_with_red_trim_and_right_dial_panel red_tomato_on_counter_edge)
+(gotolocation robot white_table_with_metal_legs)
+(putobjectinreceptacle robot red_tomato_on_counter_edge white_table_with_metal_legs)

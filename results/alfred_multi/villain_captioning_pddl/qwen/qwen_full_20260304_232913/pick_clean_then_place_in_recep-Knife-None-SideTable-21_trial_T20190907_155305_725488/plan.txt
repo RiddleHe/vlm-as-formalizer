@@ -1,0 +1,6 @@
+(gotolocation robot knife)
+(pickupobject robot knife)
+(gotolocation robot sink)
+(cleanobject robot sink knife)
+(gotolocation robot shelf)
+(putobjectinreceptacle robot knife shelf)

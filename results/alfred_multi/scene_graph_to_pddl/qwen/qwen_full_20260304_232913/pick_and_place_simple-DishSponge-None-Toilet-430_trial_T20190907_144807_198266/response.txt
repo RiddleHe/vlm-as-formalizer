@@ -1,0 +1,45 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): white oval bathtub with chrome faucet
+knife (object): 
+receptacle (object): white oval bathtub with chrome faucet, white toilet with tank, glass shower enclosure
+object: white oval bathtub with chrome faucet, white toilet with tank, glass shower enclosure, green sponge, wooden stool leg
+openable (receptacle) true if a receptacle is openable: (openable white toilet with tank), (openable glass shower enclosure)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem place_green_sponge_on_toilet_tank)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        green_sponge - object
+        white_toilet_with_tank - receptacle
+        white_oval_bathtub_with_chrome_faucet - receptacle
+        glass_shower_enclosure - receptacle
+        wooden_stool_leg - object
+    )
+    (:init
+        (openable white_toilet_with_tank)
+        (openable glass_shower_enclosure)
+        (atLocation robot white_oval_bathtub_with_chrome_faucet) ; assuming robot starts near bathtub
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (inReceptacle green_sponge white_toilet_with_tank)
+        )
+    )
+)
+```

@@ -1,0 +1,10 @@
+Predicate argument has wrong type:
+  atLocation black_rect_object counter2: black_rect_object is not a agent
+  atLocation apple_gold counter2: apple_gold is not a agent
+  atLocation knife_black counter2: knife_black is not a agent
+  atLocation knife_yellow counter1: knife_yellow is not a agent
+  atLocation salt_shaker counter2: salt_shaker is not a agent
+  atLocation trash_can counter2: trash_can is not a agent
+  atLocation wine_glass counter2: wine_glass is not a agent
+  atLocation toaster1 counter3: toaster1 is not a agent
+

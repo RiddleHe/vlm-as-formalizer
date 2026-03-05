@@ -1,0 +1,2 @@
+route,dataset,model,gen_success_rate,pddl_valid_rate,task_success_rate,obj_precision,obj_recall,obj_f1,init_precision,init_recall,init_f1,goal_precision,goal_recall,goal_f1,macro_precision,macro_recall,macro_f1
+villain_direct_pddl,blocksworld_sim,qwen,0.8,0.8,0.6,1.0,0.7667,0.8679,0.9263,0.72,0.8102,0.7367,0.735,0.7358,0.8876,0.7406,0.8075

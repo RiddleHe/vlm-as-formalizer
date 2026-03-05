@@ -1,0 +1,4 @@
+(gotolocation robot_agent orange_tennis_racket_on_floor)
+(pickupobject robot_agent orange_tennis_racket_on_floor)
+(gotolocation robot_agent wooden_brown_dresser_with_drawers)
+(putobjectinreceptacle robot_agent orange_tennis_racket_on_floor wooden_brown_dresser_with_drawers)

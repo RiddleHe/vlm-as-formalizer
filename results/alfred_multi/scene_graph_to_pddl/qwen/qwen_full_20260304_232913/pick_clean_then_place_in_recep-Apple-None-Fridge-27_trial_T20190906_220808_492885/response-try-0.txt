@@ -1,0 +1,74 @@
+Scene graph:
+agent: agent
+microwave (receptacle): dark red microwave
+fridge (receptacle): none visible
+sink (receptacle): double sink with faucet
+knife (object): none visible
+receptacle (object): dark red microwave, double sink with faucet
+object: apple on table, apple in microwave, cup in sink, bowl in sink, egg in sink
+openable (receptacle) true if a receptacle is openable: (openable dark red microwave), (openable double sink with faucet)
+opened (receptacle) true if a receptacle is opened: (opened dark red microwave) is false, (opened double sink with faucet) is false
+holdsAny (agent) agent ?a holds an object: (holdsAny agent) is false
+isClean (object) true if the object has been clean in sink: (isClean apple on table) is false, (isClean apple in microwave) is false, (isClean cup in sink) is false, (isClean bowl in sink) is false, (isClean egg in sink) is false
+isHot (object) true if the object has been heated up: (isHot apple in microwave) is false
+isCool (object) true if the object has been cooled: (isCool apple on table) is false, (isCool apple in microwave) is false
+isOn (object) true if the object is on: (isOn dark red microwave) is false
+isToggled (object) true if the object has been toggled: (isToggled dark red microwave) is false
+isSliced (object) true if the object is sliced: (isSliced apple on table) is false, (isSliced apple in microwave) is false
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle apple in microwave dark red microwave), (inReceptacle cup in sink double sink with faucet), (inReceptacle bowl in sink double sink with faucet), (inReceptacle egg in sink double sink with faucet)
+holds (agent, object) object ?o is held by agent ?a: (holds agent apple on table) is false, (holds agent apple in microwave) is false
+atLocation (agent, object): (atLocation agent dark red microwave) is false, (atLocation agent double sink with faucet) is false, (atLocation agent apple on table) is false, (atLocation agent apple in microwave) is false, (atLocation agent cup in sink) is false, (atLocation agent bowl in sink) is false, (atLocation agent egg in sink) is false
+
+PDDL problem: ```pddl
+(define (problem put_cleaned_apple_in_fridge)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave
+        fridge
+        sink
+        knife
+        apple_on_table
+        apple_in_microwave
+        cup_in_sink
+        bowl_in_sink
+        egg_in_sink
+    )
+    (:init
+        (openable microwave)
+        (openable sink)
+        (not (opened microwave))
+        (not (opened sink))
+        (not (holdsAny agent))
+        (not (isClean apple_on_table))
+        (not (isClean apple_in_microwave))
+        (not (isClean cup_in_sink))
+        (not (isClean bowl_in_sink))
+        (not (isClean egg_in_sink))
+        (not (isHot apple_in_microwave))
+        (not (isCool apple_on_table))
+        (not (isCool apple_in_microwave))
+        (not (isOn microwave))
+        (not (isToggled microwave))
+        (not (isSliced apple_on_table))
+        (not (isSliced apple_in_microwave))
+        (inReceptacle apple_in_microwave microwave)
+        (inReceptacle cup_in_sink sink)
+        (inReceptacle bowl_in_sink sink)
+        (inReceptacle egg_in_sink sink)
+        (not (holds agent apple_on_table))
+        (not (holds agent apple_in_microwave))
+        (not (atLocation agent microwave))
+        (not (atLocation agent sink))
+        (not (atLocation agent apple_on_table))
+        (not (atLocation agent apple_in_microwave))
+        (not (atLocation agent cup_in_sink))
+        (not (atLocation agent bowl_in_sink))
+        (not (atLocation agent egg_in_sink))
+    )
+    (:goal (and
+        (inReceptacle apple_on_table fridge)
+        (isClean apple_on_table)
+    ))
+)
+```

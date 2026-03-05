@@ -1,0 +1,3 @@
+(gotolocation robot cell_phone)
+(pickupobject robot cell_phone)
+(gotolocation robot tall_lamp)

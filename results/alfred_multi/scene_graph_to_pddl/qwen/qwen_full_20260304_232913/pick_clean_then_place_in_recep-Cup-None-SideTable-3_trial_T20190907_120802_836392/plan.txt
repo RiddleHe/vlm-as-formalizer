@@ -1,0 +1,6 @@
+(gotolocation robot clear_glass)
+(pickupobject robot clear_glass)
+(gotolocation robot sink)
+(cleanobject robot sink clear_glass)
+(gotolocation robot wooden_countertop)
+(putobjectinreceptacle robot clear_glass wooden_countertop)

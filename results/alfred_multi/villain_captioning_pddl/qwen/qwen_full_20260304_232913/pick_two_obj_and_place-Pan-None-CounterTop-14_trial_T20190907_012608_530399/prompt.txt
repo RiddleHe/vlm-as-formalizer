@@ -1,0 +1,248 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Place two pans on a counter.
+    
+
+SCENE CAPTION:
+Scene Description:
+
+The scene depicts a kitchen environment with a focus on a stovetop and adjacent counter area. The primary objects relevant to the domain and instruction are two metal frying pans, a stainless steel mixing bowl, a black microwave, and a white oven/stove unit with a black cooktop. The floor has a brown and gray octagonal tile pattern, and the wall behind the stove is covered with light gray diamond-patterned tiles.
+
+1. Objects and their types:
+   - Pans: There are two identical metal frying pans. They are circular with flat bottoms and long handles. According to the domain, these are “object” types (not receptacles) since they are not defined as receptacles in the domain file and are typically used for cooking, not storage. However, for the purpose of this task, they are the target objects to be moved.
+   - Mixing Bowl: A large stainless steel bowl with a brown rim, sitting on the stovetop. It is an “object” type.
+   - Microwave: A black microwave oven positioned to the right of the stovetop. It is a “receptacle” as per the domain, and it is “openable” (though not currently opened).
+   - Stove/Oven: The white appliance with a black cooktop and control knobs. It is not explicitly defined as a receptacle in the domain, but the cooktop surface can be considered a location where objects (like pans) are placed. The oven door is closed and not currently opened.
+   - Counter: The surface to the right of the stove (adjacent to the microwave) is a flat, light gray countertop. It is not explicitly defined as a receptacle in the domain, but for the purpose of this task, it is the target location for placing the pans.
+
+2. Quantities:
+   - Pans: 2
+   - Mixing Bowl: 1
+   - Microwave: 1
+   - Stove/Oven: 1
+
+3. Spatial relationships:
+   - Both pans are currently resting on the black cooktop of the stove. One pan is on the front right burner, and the other is on the back right burner.
+   - The mixing bowl is on the front left burner of the stove.
+   - The microwave is on the countertop to the right of the stove.
+   - The countertop area to the right of the stove (next to the microwave) is empty and available for placing objects.
+   - The robot is not currently at any object’s location (initial state).
+
+4. Current state of objects relevant to the planning task:
+   - The pans are not being held by the agent and are not in any receptacle; they are on the stove.
+   - The microwave is not opened.
+   - The stove is not toggled on (no indication of heat).
+   - The pans are not sliced, cleaned, heated, or cooled.
+   - The agent does not hold any object and is not at any location.
+
+5. Visual properties:
+   - Pans: Metallic silver with black handles; reflective surface.
+   - Mixing Bowl: Stainless steel with a brown rim; large and deep.
+   - Microwave: Black with a glass door; positioned on the countertop.
+   - Stove: White with a black cooktop; control knobs are visible on the front panel.
+   - Counter: Light gray, smooth surface; adjacent to the microwave and stove.
+   - Floor: Brown and gray octagonal tiles.
+   - Wall: Light gray diamond-patterned tiles.
+
+The task is to move the two pans from the stove to the counter. The robot must first go to the stove, pick up each pan, and then place them on the counter. The counter is not defined as a receptacle in the domain, but for the purpose of this task, it can be treated as a location where objects can be placed. The robot must perform a series of actions: GotoLocation (stove), PickupObject (pan), GotoLocation (counter), PutObjectInReceptacle (counter), and repeat for the second pan. However, since the counter is not a receptacle in the domain, the PutObjectInReceptacle action may not be applicable. An alternative interpretation is that the counter is a location, and the robot can place objects there without using the PutObjectInReceptacle action. This would require modifying the domain or interpreting the counter as a receptacle for the purpose of this task.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

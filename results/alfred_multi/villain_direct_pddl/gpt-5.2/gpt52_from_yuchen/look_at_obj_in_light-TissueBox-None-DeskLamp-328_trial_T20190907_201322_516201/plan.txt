@@ -1,0 +1,4 @@
+(gotolocation robot tissuebox1)
+(pickupobject robot tissuebox1)
+(gotolocation robot lamp)
+(toggleobject robot lamp)

@@ -1,0 +1,8 @@
+(GotoLocation robot armchair)
+(PickupObject robot pillow)
+(GotoLocation robot ottoman)
+(PutObjectInReceptacle robot pillow ottoman)
+(GotoLocation robot sofa)
+(PickupObject robot pillow)
+(GotoLocation robot ottoman)
+(PutObjectInReceptacle robot pillow ottoman)

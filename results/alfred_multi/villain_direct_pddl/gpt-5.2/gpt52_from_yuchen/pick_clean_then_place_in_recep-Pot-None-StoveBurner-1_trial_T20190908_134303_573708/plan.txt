@@ -1,0 +1,4 @@
+(gotolocation robot pot_with_water)
+(pickupobject robot pot_with_water)
+(gotolocation robot stove)
+(putobjectinreceptacle robot pot_with_water stove)

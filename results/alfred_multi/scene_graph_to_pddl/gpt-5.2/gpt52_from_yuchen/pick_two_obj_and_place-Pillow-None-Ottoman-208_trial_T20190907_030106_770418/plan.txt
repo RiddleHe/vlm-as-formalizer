@@ -1,0 +1,8 @@
+(gotolocation robot orange_plaid_cylindrical_cushion_on_armchair)
+(pickupobject robot orange_plaid_cylindrical_cushion_on_armchair)
+(gotolocation robot dark_rectangular_ottoman_coffee_table)
+(putobjectinreceptacle robot orange_plaid_cylindrical_cushion_on_armchair dark_rectangular_ottoman_coffee_table)
+(gotolocation robot dark_two_seat_sofa)
+(pickupobject robot orange_plaid_cylindrical_cushion_on_sofa)
+(gotolocation robot dark_rectangular_ottoman_coffee_table)
+(putobjectinreceptacle robot orange_plaid_cylindrical_cushion_on_sofa dark_rectangular_ottoman_coffee_table)

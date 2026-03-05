@@ -1,0 +1,66 @@
+Scene graph:
+agent: agent
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife_on_counter, knife_in_cabinet
+receptacle (object): toaster, stove, cabinet_left, cabinet_right
+object: tomato, cup, pot, spatula, dog_statue
+openable (receptacle) true if a receptacle is openable: (openable fridge), (openable microwave), (openable sink), (openable cabinet_left), (openable cabinet_right)
+opened (receptacle) true if a receptacle is opened: (opened cabinet_left), (opened cabinet_right)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn toaster), (isOn stove)
+isToggled (object) true if the object has been toggled: (isToggled toaster), (isToggled stove)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle pot stove), (inReceptacle cup counter), (inReceptacle knife_in_cabinet cabinet_left), (inReceptacle dog_statue counter)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation agent counter)
+
+PDDL problem: ```pddl
+(define (problem put_chilled_tomato_in_microwave)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave
+        fridge
+        sink
+        knife_on_counter
+        knife_in_cabinet
+        toaster
+        stove
+        cabinet_left
+        cabinet_right
+        tomato
+        cup
+        pot
+        spatula
+        dog_statue
+        counter
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (openable cabinet_left)
+        (openable cabinet_right)
+        (opened cabinet_left)
+        (opened cabinet_right)
+        (isOn toaster)
+        (isOn stove)
+        (isToggled toaster)
+        (isToggled stove)
+        (inReceptacle pot stove)
+        (inReceptacle cup counter)
+        (inReceptacle knife_in_cabinet cabinet_left)
+        (inReceptacle dog_statue counter)
+        (atLocation agent counter)
+    )
+    (:goal (and
+        (inReceptacle tomato microwave)
+        (isCool tomato)
+    ))
+)
+```

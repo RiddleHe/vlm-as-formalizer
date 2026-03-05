@@ -1,0 +1,8 @@
+(gotolocation agent1 knife)
+(pickupobject agent1 knife)
+(gotolocation agent1 shelf)
+(putobjectinreceptacle agent1 knife shelf)
+(gotolocation agent1 microwave)
+(pickupobject agent1 glass)
+(gotolocation agent1 shelf)
+(putobjectinreceptacle agent1 glass shelf)

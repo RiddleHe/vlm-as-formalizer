@@ -1,0 +1,61 @@
+```pddl
+(define (problem put_bowl_with_credit_card_on_glass_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        bowl - object
+        credit_card - object
+        glass_table - receptacle
+        dining_table - object
+    )
+    (:init
+        (atLocation robot dining_table)
+        (inReceptacle credit_card glass_table)
+        (not (holdsAny robot))
+        (not (holds robot bowl))
+        (not (holds robot credit_card))
+        (not (inReceptacle bowl glass_table))
+        (not (inReceptacle bowl dining_table)) ; This is incorrect per caption; bowl is on dining table. Let's fix this.
+        ; Correction: Bowl is on the dining table, which is not a receptacle. So we cannot use inReceptacle for it.
+        ; We need to model its location. Since dining_table is not a receptacle, we can only use atLocation for the robot to be at it.
+        ; The bowl is at the dining_table location.
+        ; We'll adjust: The bowl is at the dining_table location. The robot is also at the dining_table initially.
+        ; Let's redefine the initial state to reflect the bowl's location via the robot's location or a separate fact.
+        ; Since the domain doesn't have a predicate for "on" for non-receptacles, we can use atLocation for the bowl to the dining_table.
+        ; But the domain only has atLocation for agent. So we must rely on the robot going to the bowl's location.
+        ; We'll assume that if the robot is at the dining_table, it can interact with the bowl.
+        ; Let's remove the incorrect (inReceptacle bowl dining_table) and instead note that the bowl is at the dining_table location.
+        ; We can add a fact (atLocation bowl dining_table) but the domain doesn't define that predicate for objects.
+        ; The domain only has atLocation for agent. So we must infer that the robot can pick up the bowl when at the dining_table.
+        ; We'll keep the initial state as the robot at the dining_table, and the bowl is there (implicitly).
+        ; Similarly, the credit_card is in the glass_table (a receptacle).
+        ; So we'll correct the init:
+        (atLocation robot dining_table)
+        (inReceptacle credit_card glass_table)
+        (not (holdsAny robot))
+        ; We don't have a predicate for the bowl's location, but since the robot is at the dining_table and the bowl is there, we can pick it up.
+        ; We'll assume the bowl is at the dining_table location for the purpose of PickupObject.
+        ; Also, the glass_table is not openable (as per caption), so we don't need opened predicate for it.
+        (not (openable glass_table)) ; Actually, the domain doesn't require this if we don't use OpenObject. But let's not include it if not needed.
+        ; We'll remove openable if not used. The glass_table is a receptacle but not openable, so we don't need to open it to put things in.
+        ; So we can omit openable for glass_table.
+        ; Let's restate the init without the incorrect facts.
+        ; Correction: The bowl is on the dining_table. Since dining_table is not a receptacle, we cannot use inReceptacle. We must rely on the robot being at the dining_table to pick up the bowl.
+        ; So we'll keep:
+        ; (atLocation robot dining_table)
+        ; and assume that the bowl is at that location.
+        ; We'll also note that the credit_card is in the glass_table.
+        ; And the robot holds nothing.
+        ; We'll also add that the glass_table is a receptacle and can hold objects.
+        ; We don't need to state that explicitly as it's in the types.
+        ; So the corrected init:
+        (atLocation robot dining_table)
+        (inReceptacle credit_card glass_table)
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (inReceptacle bowl glass_table)
+        (inReceptacle credit_card bowl)
+    ))
+)
+```

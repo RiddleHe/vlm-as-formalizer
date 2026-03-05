@@ -1,0 +1,4 @@
+(GotoLocation robot spraybottle)
+(PickupObject robot spraybottle)
+(GotoLocation robot toilet)
+(PutObjectInReceptacle robot spraybottle toilet)

@@ -1,0 +1,22 @@
+(define (problem put_spray_bottles_on_rack)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        spray_bottle_yellow - object
+        spray_bottle_blue - object
+        metal_rack - receptacle
+    )
+    (:init
+        (atLocation robot spray_bottle_yellow)
+        (atLocation robot spray_bottle_blue)
+        (atLocation robot metal_rack)
+        (openable metal_rack)
+        (opened metal_rack)
+    )
+    (:goal
+        (and
+            (inReceptacle spray_bottle_yellow metal_rack)
+            (inReceptacle spray_bottle_blue metal_rack)
+        )
+    )
+)

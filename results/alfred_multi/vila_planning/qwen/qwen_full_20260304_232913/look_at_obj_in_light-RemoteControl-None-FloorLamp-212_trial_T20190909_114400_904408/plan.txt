@@ -1,0 +1,4 @@
+(GotoLocation robot remote_control)
+(PickupObject robot remote_control)
+(GotoLocation robot floor_lamp)
+(ToggleObject robot floor_lamp)

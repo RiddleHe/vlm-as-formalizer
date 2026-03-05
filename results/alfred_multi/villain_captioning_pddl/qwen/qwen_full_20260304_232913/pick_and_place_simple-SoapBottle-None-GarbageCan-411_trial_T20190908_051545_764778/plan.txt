@@ -1,0 +1,4 @@
+(gotolocation agent1 pump_bottle)
+(pickupobject agent1 pump_bottle)
+(gotolocation agent1 garbage_can)
+(putobjectinreceptacle agent1 pump_bottle garbage_can)

@@ -1,0 +1,8 @@
+(GotoLocation robot keychain)
+(PickupObject robot keychain)
+(GotoLocation robot sofa)
+(PutObjectInReceptacle robot keychain sofa)
+(GotoLocation robot keychain)
+(PickupObject robot keychain)
+(GotoLocation robot sofa)
+(PutObjectInReceptacle robot keychain sofa)

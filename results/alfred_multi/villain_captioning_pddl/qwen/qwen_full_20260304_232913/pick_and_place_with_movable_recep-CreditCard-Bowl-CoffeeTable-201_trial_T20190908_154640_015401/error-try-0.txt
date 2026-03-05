@@ -1,0 +1,3 @@
+Predicate argument has wrong type:
+  atLocation bowl_gray dining_table: bowl_gray is not a agent
+

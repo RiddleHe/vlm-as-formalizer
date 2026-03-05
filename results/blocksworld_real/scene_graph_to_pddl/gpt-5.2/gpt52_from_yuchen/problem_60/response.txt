@@ -1,0 +1,46 @@
+Scene graph:
+block: purple-top-stack-block (purple block at top of the tall stack), yellow-stack-block (yellow block in the tall stack), blue-stack-block (blue block in the tall stack), orange-bottom-stack-block (orange block at bottom of the tall stack), green-topmost-block (green block at very top in the closest view), red-single-block (red block sitting alone on the table)
+robot: robot-arm
+ontable (block) block x is on table, not on another block: (ontable orange-bottom-stack-block), (ontable red-single-block)
+clear (block) there is no block on top of block x: (clear green-topmost-block), (clear red-single-block)
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty: (handempty robot-arm)
+handfull (robot) : 
+holding (block) block x is being held by the robot: 
+on (block, block) block x is on block y: (on blue-stack-block orange-bottom-stack-block), (on yellow-stack-block blue-stack-block), (on purple-top-stack-block yellow-stack-block), (on green-topmost-block purple-top-stack-block)
+
+PDDL problem: ```lisp
+(define (problem blocksworld_stacks_2)
+  (:domain blocksworld)
+  (:objects
+    purple-top-stack-block
+    yellow-stack-block
+    blue-stack-block
+    orange-bottom-stack-block
+    green-topmost-block
+    red-single-block
+    robot-arm - robot
+  )
+  (:init
+    (ontable orange-bottom-stack-block)
+    (ontable red-single-block)
+
+    (on blue-stack-block orange-bottom-stack-block)
+    (on yellow-stack-block blue-stack-block)
+    (on purple-top-stack-block yellow-stack-block)
+    (on green-topmost-block purple-top-stack-block)
+
+    (clear green-topmost-block)
+    (clear red-single-block)
+
+    (handempty robot-arm)
+  )
+  (:goal
+    (and
+      (on red-single-block green-topmost-block)
+      (on orange-bottom-stack-block blue-stack-block)
+      (on blue-stack-block purple-top-stack-block)
+      (on purple-top-stack-block yellow-stack-block)
+    )
+  )
+)
+```

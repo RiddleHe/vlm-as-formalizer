@@ -1,0 +1,93 @@
+Scene graph:
+agent: none visible
+microwave (receptacle): none visible
+fridge (receptacle): none visible
+sink (receptacle):
+- white kitchen sink basin on right counter
+knife (object):
+- silver table knife on black side table (top right of black table surface)
+- silver table knife inside sink (horizontal under yellow apple)
+receptacle (object):
+- black side table next to sink (holds utensils and an apple)
+- white sink basin on right counter
+object:
+- silver fork on black side table
+- silver spoon on black side table
+- clear salt shaker on black side table
+- yellow apple on black side table
+- silver spoon on white counter (left of soap dispenser)
+- soap dispenser bottle on white counter (left of sink)
+- yellow apple in sink (center)
+- red/purple apple in sink (top)
+- red/purple apple in sink (bottom)
+
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle silver-fork_black-table black-side-table)
+- (inReceptacle silver-spoon_black-table black-side-table)
+- (inReceptacle clear-salt-shaker_black-table black-side-table)
+- (inReceptacle yellow-apple_black-table black-side-table)
+- (inReceptacle silver-knife_black-table black-side-table)
+- (inReceptacle yellow-apple_sink white-sink-basin)
+- (inReceptacle red-apple_top_sink white-sink-basin)
+- (inReceptacle red-apple_bottom_sink white-sink-basin)
+- (inReceptacle silver-knife_sink white-sink-basin)
+
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem wash_knife_return_shelf)
+  (:domain put_task)
+
+  (:objects
+    robot - agent
+
+    white-sink-basin - sink
+
+    black-side-table - receptacle
+
+    silver-knife_black-table - knife
+    silver-knife_sink - knife
+
+    silver-fork_black-table - object
+    silver-spoon_black-table - object
+    clear-salt-shaker_black-table - object
+    yellow-apple_black-table - object
+    yellow-apple_sink - object
+    red-apple_top_sink - object
+    red-apple_bottom_sink - object
+    silver-spoon_counter - object
+    soap-dispenser-bottle - object
+  )
+
+  (:init
+    ;; receptacle contents
+    (inReceptacle silver-fork_black-table black-side-table)
+    (inReceptacle silver-spoon_black-table black-side-table)
+    (inReceptacle clear-salt-shaker_black-table black-side-table)
+    (inReceptacle yellow-apple_black-table black-side-table)
+    (inReceptacle silver-knife_black-table black-side-table)
+
+    (inReceptacle yellow-apple_sink white-sink-basin)
+    (inReceptacle red-apple_top_sink white-sink-basin)
+    (inReceptacle red-apple_bottom_sink white-sink-basin)
+    (inReceptacle silver-knife_sink white-sink-basin)
+
+    ;; robot starts not holding anything and not at any location (no atLocation facts)
+  )
+
+  (:goal
+    (and
+      (isClean silver-knife_black-table)
+      (inReceptacle silver-knife_black-table black-side-table)
+    )
+  )
+)

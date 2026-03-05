@@ -1,0 +1,21 @@
+invalid
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  agent
+
+Problem object redefined:
+  bar was object but is now object
+  toilet was receptacle but is now object
+  soap was object but is now object
+
+Predicate expects wrong number of arguments:
+  inReceptacle pink soap bar toilet tank: should have 2 arguments
+  inReceptacle green soap bar bathtub: should have 2 arguments
+  isClean pink soap bar: should have 1 arguments
+  inReceptacle yellow toothbrush toilet tank: should have 2 arguments
+  inReceptacle pink soap bar bathtub: should have 2 arguments
+  inReceptacle white toilet paper roll toilet tank: should have 2 arguments
+
+Object does not have a type:
+  agent
+
+

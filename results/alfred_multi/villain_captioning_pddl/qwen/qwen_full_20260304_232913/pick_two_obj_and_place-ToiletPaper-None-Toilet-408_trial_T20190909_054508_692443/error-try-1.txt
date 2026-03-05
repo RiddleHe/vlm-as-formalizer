@@ -1,0 +1,4 @@
+Predicate argument has wrong type:
+  atLocation empty_toilet_paper_roll toilet: empty_toilet_paper_roll is not a agent
+  atLocation full_toilet_paper_roll toilet: full_toilet_paper_roll is not a agent
+

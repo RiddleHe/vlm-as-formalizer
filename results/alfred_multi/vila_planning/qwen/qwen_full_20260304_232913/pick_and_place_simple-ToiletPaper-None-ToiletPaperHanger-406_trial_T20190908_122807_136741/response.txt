@@ -1,0 +1,4 @@
+(GotoLocation robot toiletpaper)
+(PickupObject robot toiletpaper)
+(GotoLocation robot toiletpaperhanger)
+(PutObjectInReceptacle robot toiletpaper toiletpaperhanger)

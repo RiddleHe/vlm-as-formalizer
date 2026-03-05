@@ -1,0 +1,49 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): white_table, wooden_dresser
+object: robot, white_table, wooden_dresser, black_smartphone_on_white_table, yellow_pencil_on_white_table, brown_alarm_clock_on_white_table, cd_on_white_table, black_smartphone_on_wooden_dresser, blue_card_on_wooden_dresser, checkerboard_on_wooden_dresser
+openable (receptacle) true if a receptacle is openable: (openable white_table), (openable wooden_dresser)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn brown_alarm_clock_on_white_table)
+isToggled (object) true if the object has been toggled: (isToggled brown_alarm_clock_on_white_table)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle black_smartphone_on_white_table white_table), (inReceptacle yellow_pencil_on_white_table white_table), (inReceptacle brown_alarm_clock_on_white_table white_table), (inReceptacle cd_on_white_table white_table), (inReceptacle black_smartphone_on_wooden_dresser wooden_dresser), (inReceptacle blue_card_on_wooden_dresser wooden_dresser), (inReceptacle checkerboard_on_wooden_dresser wooden_dresser)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem move_keys)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        white_table wooden_dresser - receptacle
+        black_smartphone_on_white_table yellow_pencil_on_white_table brown_alarm_clock_on_white_table cd_on_white_table - object
+        black_smartphone_on_wooden_dresser blue_card_on_wooden_dresser checkerboard_on_wooden_dresser - object
+    )
+    (:init
+        (openable white_table)
+        (openable wooden_dresser)
+        (inReceptacle black_smartphone_on_white_table white_table)
+        (inReceptacle yellow_pencil_on_white_table white_table)
+        (inReceptacle brown_alarm_clock_on_white_table white_table)
+        (inReceptacle cd_on_white_table white_table)
+        (inReceptacle black_smartphone_on_wooden_dresser wooden_dresser)
+        (inReceptacle blue_card_on_wooden_dresser wooden_dresser)
+        (inReceptacle checkerboard_on_wooden_dresser wooden_dresser)
+        (isOn brown_alarm_clock_on_white_table)
+        (isToggled brown_alarm_clock_on_white_table)
+    )
+    (:goal (and
+        (inReceptacle black_smartphone_on_wooden_dresser white_table)
+        (inReceptacle blue_card_on_wooden_dresser white_table)
+    ))
+)
+```

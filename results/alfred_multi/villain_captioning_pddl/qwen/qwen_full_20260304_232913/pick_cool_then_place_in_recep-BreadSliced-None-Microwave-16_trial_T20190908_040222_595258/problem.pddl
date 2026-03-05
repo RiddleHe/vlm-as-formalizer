@@ -1,0 +1,40 @@
+(define (problem place_cooled_bread_slice_in_microwave)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        sink1 - sink
+        knife1 - knife
+        bread1 bread2 - object
+        table1 counter1 - object
+    )
+    (:init
+        (openable microwave1)
+        (openable fridge1)
+        (not (opened microwave1))
+        (not (opened fridge1))
+        (not (isSliced bread1))
+        (not (isSliced bread2))
+        (not (isCool bread1))
+        (not (isCool bread2))
+        (not (isHot bread1))
+        (not (isHot bread2))
+        (not (isClean bread1))
+        (not (isClean bread2))
+        (not (isOn microwave1))
+        (not (isToggled microwave1))
+        (not (holdsAny agent1))
+        (atLocation agent1 table1)
+        (inReceptacle bread1 table1)
+        (inReceptacle bread2 table1)
+        (inReceptacle knife1 counter1)
+        (inReceptacle microwave1 counter1)
+        (inReceptacle fridge1 counter1)
+    )
+    (:goal (and
+        (inReceptacle bread1 microwave1)
+        (isSliced bread1)
+        (isCool bread1)
+    ))
+)

@@ -1,0 +1,4 @@
+(gotolocation robot hexagonal_bin)
+(pickupobject robot pen)
+(gotolocation robot dark_wooden_dresser)
+(putobjectinreceptacle robot pen dark_wooden_dresser)

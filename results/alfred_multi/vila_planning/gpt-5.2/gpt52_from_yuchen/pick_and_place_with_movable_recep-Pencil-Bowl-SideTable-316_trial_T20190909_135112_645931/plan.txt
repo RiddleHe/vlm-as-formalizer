@@ -1,0 +1,8 @@
+(GotoLocation agent1 pencil)
+(PickupObject agent1 pencil)
+(GotoLocation agent1 bowl)
+(PutObjectInReceptacle agent1 pencil bowl)
+(GotoLocation agent1 bowl)
+(PickupObject agent1 bowl)
+(GotoLocation agent1 nightstand)
+(PutObjectInReceptacle agent1 bowl nightstand)

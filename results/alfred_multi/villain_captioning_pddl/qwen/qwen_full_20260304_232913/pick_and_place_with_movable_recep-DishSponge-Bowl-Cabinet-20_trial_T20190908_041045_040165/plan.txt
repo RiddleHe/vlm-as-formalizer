@@ -1,0 +1,2 @@
+(pickupobject agent1 bowl)
+(putobjectinreceptacle agent1 bowl cupboard)

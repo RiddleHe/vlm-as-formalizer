@@ -1,0 +1,8 @@
+(gotolocation robot black_keys)
+(pickupobject robot black_keys)
+(gotolocation robot couch)
+(putobjectinreceptacle robot black_keys couch)
+(gotolocation robot side_table)
+(pickupobject robot silver_keys)
+(gotolocation robot couch)
+(putobjectinreceptacle robot silver_keys couch)

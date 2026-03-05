@@ -1,0 +1,8 @@
+(GotoLocation agent1 potato)
+(PickupObject agent1 potato)
+(GotoLocation agent1 microwave)
+(HeatObject agent1 microwave potato)
+(GotoLocation agent1 fridge)
+(OpenObject agent1 fridge)
+(PutObjectInReceptacle agent1 potato fridge)
+(CloseObject agent1 fridge)

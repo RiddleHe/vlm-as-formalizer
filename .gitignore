@@ -21,9 +21,6 @@ LASER/
 GroundingDINO/
 InternVL/
 
-results/
 downward
 
 **/.env
-
-results/

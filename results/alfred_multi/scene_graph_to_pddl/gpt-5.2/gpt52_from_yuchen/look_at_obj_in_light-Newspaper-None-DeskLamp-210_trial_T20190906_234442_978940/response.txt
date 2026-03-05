@@ -1,0 +1,62 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object): round_white_side_table_with_lamp, brown_sofa
+object: green_corner_table_lamp, newspaper_on_sofa_left, black_laptop_on_sofa_center, calculator_remote_on_sofa_center_right, keyring_with_keys_on_sofa_right, black_back_cushion_on_sofa, patterned_cylindrical_pillow_on_sofa_left
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+- (inReceptacle green_corner_table_lamp round_white_side_table_with_lamp)
+- (inReceptacle newspaper_on_sofa_left brown_sofa)
+- (inReceptacle black_laptop_on_sofa_center brown_sofa)
+- (inReceptacle calculator_remote_on_sofa_center_right brown_sofa)
+- (inReceptacle keyring_with_keys_on_sofa_right brown_sofa)
+- (inReceptacle black_back_cushion_on_sofa brown_sofa)
+- (inReceptacle patterned_cylindrical_pillow_on_sofa_left brown_sofa)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_task_scene1)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    round_white_side_table_with_lamp - receptacle
+    brown_sofa - receptacle
+
+    green_corner_table_lamp - object
+    newspaper_on_sofa_left - object
+    black_laptop_on_sofa_center - object
+    calculator_remote_on_sofa_center_right - object
+    keyring_with_keys_on_sofa_right - object
+    black_back_cushion_on_sofa - object
+    patterned_cylindrical_pillow_on_sofa_left - object
+  )
+
+  (:init
+    (inReceptacle green_corner_table_lamp round_white_side_table_with_lamp)
+    (inReceptacle newspaper_on_sofa_left brown_sofa)
+    (inReceptacle black_laptop_on_sofa_center brown_sofa)
+    (inReceptacle calculator_remote_on_sofa_center_right brown_sofa)
+    (inReceptacle keyring_with_keys_on_sofa_right brown_sofa)
+    (inReceptacle black_back_cushion_on_sofa brown_sofa)
+    (inReceptacle patterned_cylindrical_pillow_on_sofa_left brown_sofa)
+  )
+
+  (:goal
+    (and
+      (holds robot_agent newspaper_on_sofa_left)
+      (isOn green_corner_table_lamp)
+    )
+  )
+)

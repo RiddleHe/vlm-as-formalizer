@@ -1,0 +1,6 @@
+(gotolocation robot_agent brown_egg_in_sink)
+(pickupobject robot_agent brown_egg_in_sink)
+(gotolocation robot_agent black_countertop_microwave_right)
+(heatobject robot_agent black_countertop_microwave_right brown_egg_in_sink)
+(gotolocation robot_agent round_wooden_table)
+(putobjectinreceptacle robot_agent brown_egg_in_sink round_wooden_table)

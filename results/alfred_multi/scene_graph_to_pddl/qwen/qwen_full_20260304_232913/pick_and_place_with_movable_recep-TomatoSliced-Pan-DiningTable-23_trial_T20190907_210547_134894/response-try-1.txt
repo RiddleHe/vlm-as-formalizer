@@ -1,0 +1,58 @@
+Scene graph:
+agent: agent
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife_on_table, knife_on_stove
+receptacle (object): bowl_on_table, pan_on_stove, pot_on_stove, island_table, shelf_under_table
+object: tomato_on_table, tomato_sliced, lettuce_on_table, bottle_wine, bottle_oil, salt_shaker, pepper_shaker, egg, wine_glass, bowl_on_table, pan_on_stove, pot_on_stove, island_table, shelf_under_table, knife_on_table, knife_on_stove
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge), (openable sink), (openable bowl_on_table), (openable pan_on_stove), (openable pot_on_stove), (openable island_table), (openable shelf_under_table)
+opened (receptacle) true if a receptacle is opened: (opened bowl_on_table), (opened pan_on_stove), (opened pot_on_stove), (opened island_table), (opened shelf_under_table)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn pan_on_stove), (isOn pot_on_stove)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle tomato_on_table island_table), (inReceptacle knife_on_table island_table), (inReceptacle bowl_on_table island_table), (inReceptacle pan_on_stove stove), (inReceptacle pot_on_stove stove)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave fridge sink - receptacle
+        knife_on_table knife_on_stove - knife
+        tomato_on_table tomato_sliced lettuce_on_table bottle_wine bottle_oil salt_shaker pepper_shaker egg wine_glass bowl_on_table pan_on_stove pot_on_stove island_table shelf_under_table - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (openable bowl_on_table)
+        (openable pan_on_stove)
+        (openable pot_on_stove)
+        (openable island_table)
+        (openable shelf_under_table)
+        (opened bowl_on_table)
+        (opened pan_on_stove)
+        (opened pot_on_stove)
+        (opened island_table)
+        (opened shelf_under_table)
+        (isOn pan_on_stove)
+        (isOn pot_on_stove)
+        (inReceptacle tomato_on_table island_table)
+        (inReceptacle knife_on_table island_table)
+        (inReceptacle bowl_on_table island_table)
+        (inReceptacle pan_on_stove stove)
+        (inReceptacle pot_on_stove stove)
+    )
+    (:goal (and
+        (inReceptacle tomato_sliced pan_on_stove)
+        (inReceptacle pan_on_stove island_table)
+    ))
+)
+```

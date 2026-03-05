@@ -1,0 +1,4 @@
+(GotoLocation robot box)
+(GotoLocation robot desklamp)
+(ToggleObject robot desklamp)
+(GotoLocation robot box)

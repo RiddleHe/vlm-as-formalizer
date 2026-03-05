@@ -1,0 +1,4 @@
+Predicate argument has wrong type:
+  atLocation lamp end_table: lamp is not a agent
+  atLocation pillow armchair: pillow is not a agent
+

@@ -1,0 +1,3 @@
+(gotolocation agent1 countertop)
+(pickupobject agent1 small_yellow_object)
+(putobjectinreceptacle agent1 small_yellow_object sink)

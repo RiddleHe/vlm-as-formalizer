@@ -1,0 +1,8 @@
+(gotolocation robot gray_sink)
+(pickupobject robot empty_roll_of_toilet_paper)
+(gotolocation robot wooden_cabinet_second_from_left_under_sink)
+(putobjectinreceptacle robot empty_roll_of_toilet_paper wooden_cabinet_second_from_left_under_sink)
+(gotolocation robot roll_of_toilet_paper)
+(pickupobject robot roll_of_toilet_paper)
+(gotolocation robot wooden_cabinet_second_from_left_under_sink)
+(putobjectinreceptacle robot roll_of_toilet_paper wooden_cabinet_second_from_left_under_sink)

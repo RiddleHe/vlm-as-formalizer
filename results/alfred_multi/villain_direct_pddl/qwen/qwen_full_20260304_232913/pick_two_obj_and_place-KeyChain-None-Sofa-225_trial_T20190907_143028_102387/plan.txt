@@ -1,0 +1,8 @@
+(gotolocation agent1 keychain1)
+(pickupobject agent1 keychain1)
+(gotolocation agent1 couch)
+(putobjectinreceptacle agent1 keychain1 couch)
+(gotolocation agent1 table2)
+(pickupobject agent1 keychain2)
+(gotolocation agent1 couch)
+(putobjectinreceptacle agent1 keychain2 couch)

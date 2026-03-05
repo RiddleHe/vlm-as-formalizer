@@ -1,0 +1,4 @@
+(GotoLocation robot armchair)
+(PickupObject robot pillow)
+(GotoLocation robot sidetable)
+(ToggleObject robot desklamp)

@@ -1,0 +1,4 @@
+(gotolocation robot mug)
+(pickupobject robot mug)
+(gotolocation robot desk)
+(putobjectinreceptacle robot mug desk)

@@ -1,0 +1,4 @@
+(pickupobject agent1 statue1)
+(putobjectinreceptacle agent1 statue1 coffee_table)
+(pickupobject agent1 statue2)
+(putobjectinreceptacle agent1 statue2 coffee_table)

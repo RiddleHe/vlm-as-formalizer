@@ -1,0 +1,14 @@
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  orange_block_top_right_stack
+  pink_block_middle_left_stack
+  purple_block_top_left_stack
+  yellow_block_bottom_left_stack
+  red_block_bottom_right_stack
+
+Object does not have a type:
+  orange_block_top_right_stack
+  pink_block_middle_left_stack
+  yellow_block_bottom_left_stack
+  purple_block_top_left_stack
+  red_block_bottom_right_stack
+

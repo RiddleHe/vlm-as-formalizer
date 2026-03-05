@@ -1,0 +1,3 @@
+(pickupobject robot tomato1)
+(heatobject robot microwave1 tomato1)
+(putobjectinreceptacle robot tomato1 sink1)

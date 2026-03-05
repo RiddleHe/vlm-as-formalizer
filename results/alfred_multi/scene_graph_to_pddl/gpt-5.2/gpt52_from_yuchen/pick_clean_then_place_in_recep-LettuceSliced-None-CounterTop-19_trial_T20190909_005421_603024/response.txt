@@ -1,0 +1,63 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): (none visible)
+fridge (receptacle): black_fridge_right_of_counter
+sink (receptacle): stainless_sink_in_counter
+knife (object): yellow_handle_knife_on_round_table, yellow_handle_knife_upright_near_sink_counter
+receptacle (object): black_fridge_right_of_counter, stainless_sink_in_counter
+object: robot_agent, yellow_handle_knife_on_round_table, yellow_handle_knife_upright_near_sink_counter, lettuce_green_head_on_round_table_center, lettuce_green_head_on_round_table_right, tomato_red_on_round_table, small_red_tomato_on_round_table_back, potato_brown_in_sink, onion_brown_in_sink, coffee_machine_on_round_table, soap_dispenser_gray_left_on_round_table, soap_dispenser_gray_right_on_round_table, salt_shaker_on_round_table, round_wood_table, counter_by_sink
+
+openable (receptacle) true if a receptacle is openable: (openable black_fridge_right_of_counter)
+opened (receptacle) true if a receptacle is opened: (none)
+holdsAny (agent) agent ?a holds an object: (none)
+isClean (object) true if the object has been clean in sink: (none)
+isHot (object) true if the object has been heated up: (none)
+isCool (object) true if the object has been cooled: (none)
+isOn (object) true if the object is on: (none)
+isToggled (object) true if the object has been toggled: (none)
+isSliced (object) true if the object is sliced: (none)
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle potato_brown_in_sink stainless_sink_in_counter), (inReceptacle onion_brown_in_sink stainless_sink_in_counter)
+holds (agent, object) object ?o is held by agent ?a: (none)
+atLocation (agent, object) : (none)
+
+PDDL problem: (define (problem put_task_lettuce_washed_slice_on_counter)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+
+    black_fridge_right_of_counter - fridge
+    stainless_sink_in_counter - sink
+    counter_by_sink - receptacle
+
+    yellow_handle_knife_on_round_table - knife
+    yellow_handle_knife_upright_near_sink_counter - knife
+
+    lettuce_green_head_on_round_table_center - object
+    lettuce_green_head_on_round_table_right - object
+    tomato_red_on_round_table - object
+    small_red_tomato_on_round_table_back - object
+    potato_brown_in_sink - object
+    onion_brown_in_sink - object
+    coffee_machine_on_round_table - object
+    soap_dispenser_gray_left_on_round_table - object
+    soap_dispenser_gray_right_on_round_table - object
+    salt_shaker_on_round_table - object
+    round_wood_table - object
+  )
+
+  (:init
+    (openable black_fridge_right_of_counter)
+
+    (inReceptacle potato_brown_in_sink stainless_sink_in_counter)
+    (inReceptacle onion_brown_in_sink stainless_sink_in_counter)
+  )
+
+  (:goal
+    (and
+      (isSliced lettuce_green_head_on_round_table_center)
+      (isClean lettuce_green_head_on_round_table_center)
+      (inReceptacle lettuce_green_head_on_round_table_center counter_by_sink)
+    )
+  )
+)

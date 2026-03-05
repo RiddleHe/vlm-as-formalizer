@@ -1,0 +1,69 @@
+Scene graph:
+agent: agent
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife on table
+receptacle (object): table
+object: head of lettuce on left, head of lettuce on right, salt shaker, pepper shaker, green book, spoon, wine glass, mug, knife on table, table, microwave, fridge, sink
+openable (receptacle) true if a receptacle is openable: (openable fridge), (openable microwave), (openable sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem chill_lettuce)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave
+        fridge
+        sink
+        knife
+        table
+        lettuce_left
+        lettuce_right
+        salt_shaker
+        pepper_shaker
+        green_book
+        spoon
+        wine_glass
+        mug
+    )
+    (:init
+        (openable fridge)
+        (openable microwave)
+        (openable sink)
+        (atLocation agent table)
+        (inReceptacle lettuce_left table)
+        (inReceptacle lettuce_right table)
+        (inReceptacle knife table)
+        (inReceptacle salt_shaker table)
+        (inReceptacle pepper_shaker table)
+        (inReceptacle green_book table)
+        (inReceptacle spoon table)
+        (inReceptacle wine_glass table)
+        (inReceptacle mug table)
+        (not (opened fridge))
+        (not (opened microwave))
+        (not (opened sink))
+        (not (holdsAny agent))
+        (not (isCool lettuce_left))
+        (not (isCool lettuce_right))
+    )
+    (:goal
+        (and
+            (isCool lettuce_left)
+            (inReceptacle lettuce_left table)
+        )
+    )
+)
+```

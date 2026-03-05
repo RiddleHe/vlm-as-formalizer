@@ -1,0 +1,5 @@
+(GotoLocation robot endtable)
+(OpenObject robot endtable)
+(PickupObject robot phone)
+(PutObjectInReceptacle robot phone endtable)
+(CloseObject robot endtable)

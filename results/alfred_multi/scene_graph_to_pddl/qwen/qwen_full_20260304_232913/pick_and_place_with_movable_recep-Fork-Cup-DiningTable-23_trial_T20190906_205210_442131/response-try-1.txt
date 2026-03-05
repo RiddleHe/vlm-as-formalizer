@@ -1,0 +1,70 @@
+Scene graph:
+agent: robot
+microwave (receptacle): none
+fridge (receptacle): black fridge on left side
+sink (receptacle): silver sink with faucet on countertop
+knife (object): knife on dining table, knife on countertop near cabbage
+receptacle (object): white stove with two pots, silver sink, black fridge, white dishwasher under counter, brown cabinets, dining table
+object: red coffee maker, two green cabbages, two silver pots on stove, silver spoon in sink, white egg in sink, silver funnel in sink, two forks on dining table, knife on dining table, knife on countertop, brown pan on dining table, white cup under dining table, brown chairs, wooden floor, green countertop
+openable (receptacle) true if a receptacle is openable: (openable black fridge), (openable white dishwasher), (openable brown cabinets)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn white stove), (isOn red coffee maker)
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle silver spoon silver sink), (inReceptacle white egg silver sink), (inReceptacle silver funnel silver sink), (inReceptacle white cup under dining table)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        black_fridge - fridge
+        silver_sink - sink
+        white_dishwasher - receptacle
+        brown_cabinets - receptacle
+        white_stove - receptacle
+        dining_table - receptacle
+        red_coffee_maker - object
+        green_cabbage1 - object
+        green_cabbage2 - object
+        silver_pot1 - object
+        silver_pot2 - object
+        silver_spoon - object
+        white_egg - object
+        silver_funnel - object
+        fork1 - object
+        fork2 - object
+        knife1 - knife
+        knife2 - knife
+        brown_pan - object
+        white_cup - object
+        brown_chairs - object
+        wooden_floor - object
+        green_countertop - object
+    )
+    (:init
+        (openable black_fridge)
+        (openable white_dishwasher)
+        (openable brown_cabinets)
+        (isOn white_stove)
+        (isOn red_coffee_maker)
+        (inReceptacle silver_spoon silver_sink)
+        (inReceptacle white_egg silver_sink)
+        (inReceptacle silver_funnel silver_sink)
+        (inReceptacle white_cup dining_table)
+        (atLocation robot black_fridge) ; initial location can be arbitrary as robot is not at any object initially, we pick one for grounding
+    )
+    (:goal
+        (and
+            (inReceptacle fork1 white_cup)
+            (inReceptacle white_cup dining_table)
+        )
+    )
+)
+```

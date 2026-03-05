@@ -1,0 +1,7 @@
+(GotoLocation robot sink)
+(PickupObject robot fork)
+(CleanObject robot sink fork)
+(GotoLocation robot drawer)
+(OpenObject robot drawer)
+(PutObjectInReceptacle robot fork drawer)
+(CloseObject robot drawer)

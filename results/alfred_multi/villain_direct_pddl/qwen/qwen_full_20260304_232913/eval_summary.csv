@@ -1,0 +1,2 @@
+route,dataset,model,gen_success_rate,pddl_valid_rate,task_success_rate,obj_precision,obj_recall,obj_f1,init_precision,init_recall,init_f1,goal_precision,goal_recall,goal_f1,macro_precision,macro_recall,macro_f1
+villain_direct_pddl,alfred_multi,qwen,0.92,1.0,0.26,1.0,0.6173,0.7634,0.4057,0.1372,0.2051,0.8689,0.5911,0.7036,0.7582,0.4486,0.5636

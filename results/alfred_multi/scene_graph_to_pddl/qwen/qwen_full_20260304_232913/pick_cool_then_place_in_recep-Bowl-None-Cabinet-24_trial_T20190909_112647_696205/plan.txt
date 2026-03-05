@@ -1,0 +1,6 @@
+(gotolocation robot silver_bowl)
+(pickupobject robot silver_bowl)
+(gotolocation robot dark_refrigerator)
+(coolobject robot dark_refrigerator silver_bowl)
+(gotolocation robot wooden_cabinet_above_fridge)
+(putobjectinreceptacle robot silver_bowl wooden_cabinet_above_fridge)

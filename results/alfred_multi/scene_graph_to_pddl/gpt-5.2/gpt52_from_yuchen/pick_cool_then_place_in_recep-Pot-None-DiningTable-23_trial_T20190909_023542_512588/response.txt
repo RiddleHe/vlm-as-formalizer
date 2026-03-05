@@ -1,0 +1,52 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): none
+fridge (receptacle): tall_black_fridge_front_view
+sink (receptacle): none
+knife (object): none
+receptacle (object): green_kitchen_table, tall_black_fridge_front_view, white_stove_with_burners_top, shiny_metal_trash_can_right_of_stove
+object: green_cabbage_on_table, small_red_fruit_on_table, brown_frying_pan_on_table_right, wooden_utensil_on_table_right, metal_bowl_left_edge_of_table, silver_rectangular_box_under_table_shelf, black_pot_under_table_shelf, small_white_cup_under_table_shelf, white_stove_with_burners_top, shiny_metal_trash_can_right_of_stove
+openable (receptacle) true if a receptacle is openable: (openable tall_black_fridge_front_view)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_task_chilled_bowl_on_table)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    green_kitchen_table - receptacle
+    tall_black_fridge_front_view - fridge
+    white_stove_with_burners_top - receptacle
+    shiny_metal_trash_can_right_of_stove - receptacle
+
+    metal_bowl_left_edge_of_table - object
+    green_cabbage_on_table - object
+    small_red_fruit_on_table - object
+    brown_frying_pan_on_table_right - object
+    wooden_utensil_on_table_right - object
+    silver_rectangular_box_under_table_shelf - object
+    black_pot_under_table_shelf - object
+    small_white_cup_under_table_shelf - object
+  )
+
+  (:init
+    (openable tall_black_fridge_front_view)
+    (isCool metal_bowl_left_edge_of_table)
+  )
+
+  (:goal
+    (and
+      (inReceptacle metal_bowl_left_edge_of_table green_kitchen_table)
+    )
+  )
+)

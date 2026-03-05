@@ -1,0 +1,8 @@
+(GotoLocation agent sink)
+(PickupObject agent soapbar_1)
+(GotoLocation agent steel_rack)
+(PutObjectInReceptacle agent soapbar_1 steel_rack)
+(GotoLocation agent sink)
+(PickupObject agent soapbar_2)
+(GotoLocation agent steel_rack)
+(PutObjectInReceptacle agent soapbar_2 steel_rack)

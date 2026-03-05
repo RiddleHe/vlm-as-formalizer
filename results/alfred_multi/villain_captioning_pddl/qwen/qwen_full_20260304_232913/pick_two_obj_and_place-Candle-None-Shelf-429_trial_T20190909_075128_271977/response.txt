@@ -1,0 +1,32 @@
+```pddl
+(define (problem put_candles_on_shelf)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        candle1 candle2 - object
+        shelf - receptacle
+        toilet - object
+    )
+    (:init
+        (atLocation agent1 toilet)
+        (inReceptacle candle1 toilet)
+        (inReceptacle candle2 toilet)
+        (not (holdsAny agent1))
+        (not (opened shelf))
+        (not (isClean candle1))
+        (not (isClean candle2))
+        (not (isHot candle1))
+        (not (isHot candle2))
+        (not (isCool candle1))
+        (not (isCool candle2))
+        (not (isSliced candle1))
+        (not (isSliced candle2))
+        (not (isOn shelf))
+        (not (isToggled shelf))
+    )
+    (:goal (and
+        (inReceptacle candle1 shelf)
+        (inReceptacle candle2 shelf)
+    ))
+)
+```

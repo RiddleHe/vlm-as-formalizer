@@ -1,0 +1,6 @@
+(GotoLocation agent coffee_mug)
+(PickupObject agent coffee_mug)
+(GotoLocation agent sink)
+(CleanObject agent sink coffee_mug)
+(GotoLocation agent coffee_maker)
+(PutObjectInReceptacle agent coffee_mug coffee_maker)

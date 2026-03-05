@@ -1,0 +1,8 @@
+(GotoLocation robot bed)
+(PickupObject robot cellphone)
+(GotoLocation robot dresser)
+(PutObjectInReceptacle robot cellphone dresser)
+(GotoLocation robot bed)
+(PickupObject robot cellphone)
+(GotoLocation robot dresser)
+(PutObjectInReceptacle robot cellphone dresser)

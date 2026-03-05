@@ -1,0 +1,27 @@
+```pddl
+(define (problem put_heated_tomato_on_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        tomato - object
+        microwave - microwave
+        countertop - receptacle
+        table - receptacle
+        knife - knife
+        sink - sink
+    )
+    (:init
+        (atLocation agent1 countertop)
+        (inReceptacle tomato countertop)
+        (openable microwave)
+        (not (opened microwave))
+        (not (isHot tomato))
+        (not (holdsAny agent1))
+        (not (isOn microwave))
+    )
+    (:goal (and
+        (inReceptacle tomato table)
+        (isHot tomato)
+    ))
+)
+```

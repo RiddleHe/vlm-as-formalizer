@@ -1,0 +1,4 @@
+(gotolocation robot watch_on_tv_stand)
+(pickupobject robot watch_on_tv_stand)
+(gotolocation robot small_wooden_table)
+(putobjectinreceptacle robot watch_on_tv_stand small_wooden_table)

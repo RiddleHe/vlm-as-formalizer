@@ -1,0 +1,8 @@
+(gotolocation robot book1)
+(pickupobject robot book1)
+(gotolocation robot desk1)
+(putobjectinreceptacle robot book1 desk1)
+(gotolocation robot book2)
+(pickupobject robot book2)
+(gotolocation robot desk1)
+(putobjectinreceptacle robot book2 desk1)

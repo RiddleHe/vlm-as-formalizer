@@ -1,0 +1,63 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): red_trim_microwave_above_sinks
+fridge (receptacle): white_fridge_right_of_counter
+sink (receptacle): left_metal_sink_basin, right_metal_sink_basin
+knife (object): yellow_handle_serrated_knife_on_counter
+receptacle (object): red_trim_microwave_above_sinks, white_fridge_right_of_counter, left_metal_sink_basin, right_metal_sink_basin, round_black_bowl_on_right_counter, tall_clear_wine_glass_on_right_counter, gold_trash_can_left_of_right_counter
+object: robot_agent, yellow_handle_serrated_knife_on_counter, thin_metal_spreader_left_of_knife, black_toaster_left_of_sinks, salt_shaker_on_right_counter, round_gold_bun_on_right_counter, red_trim_microwave_above_sinks, white_fridge_right_of_counter, left_metal_sink_basin, right_metal_sink_basin, round_black_bowl_on_right_counter, tall_clear_wine_glass_on_right_counter, gold_trash_can_left_of_right_counter
+openable (receptacle) true if a receptacle is openable: (openable red_trim_microwave_above_sinks), (openable white_fridge_right_of_counter)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle salt_shaker_on_right_counter round_black_bowl_on_right_counter), (inReceptacle round_gold_bun_on_right_counter round_black_bowl_on_right_counter), (inReceptacle tall_clear_wine_glass_on_right_counter round_black_bowl_on_right_counter)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: (define (problem put_task_warm_slice_bread_on_counter)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    red_trim_microwave_above_sinks - microwave
+    white_fridge_right_of_counter - fridge
+    left_metal_sink_basin - sink
+    right_metal_sink_basin - sink
+
+    yellow_handle_serrated_knife_on_counter - knife
+
+    round_black_bowl_on_right_counter - receptacle
+    tall_clear_wine_glass_on_right_counter - receptacle
+    gold_trash_can_left_of_right_counter - receptacle
+
+    salt_shaker_on_right_counter - object
+    thin_metal_spreader_left_of_knife - object
+    black_toaster_left_of_sinks - object
+    round_gold_bun_on_right_counter - object
+  )
+
+  (:init
+    ;; openable receptacles
+    (openable red_trim_microwave_above_sinks)
+    (openable white_fridge_right_of_counter)
+
+    ;; objects currently in receptacles
+    (inReceptacle salt_shaker_on_right_counter round_black_bowl_on_right_counter)
+    (inReceptacle round_gold_bun_on_right_counter round_black_bowl_on_right_counter)
+    (inReceptacle tall_clear_wine_glass_on_right_counter round_black_bowl_on_right_counter)
+  )
+
+  (:goal
+    (and
+      (isHot round_gold_bun_on_right_counter)
+      (isSliced round_gold_bun_on_right_counter)
+      (atLocation robot_agent left_metal_sink_basin)
+      (inReceptacle round_gold_bun_on_right_counter left_metal_sink_basin)
+    )
+  )
+)

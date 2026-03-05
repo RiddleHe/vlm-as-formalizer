@@ -1,0 +1,8 @@
+(gotolocation agent1 pan1)
+(pickupobject agent1 pan1)
+(gotolocation agent1 counter)
+(putobjectinreceptacle agent1 pan1 counter)
+(gotolocation agent1 stove)
+(pickupobject agent1 pan2)
+(gotolocation agent1 counter)
+(putobjectinreceptacle agent1 pan2 counter)

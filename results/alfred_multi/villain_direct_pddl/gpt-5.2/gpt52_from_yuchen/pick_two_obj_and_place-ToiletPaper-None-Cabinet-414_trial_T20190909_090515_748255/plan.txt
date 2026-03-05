@@ -1,0 +1,4 @@
+(gotolocation robot cabinet1)
+(pickupobject robot empty_roll1)
+(gotolocation robot cabinet2)
+(putobjectinreceptacle robot empty_roll1 cabinet2)

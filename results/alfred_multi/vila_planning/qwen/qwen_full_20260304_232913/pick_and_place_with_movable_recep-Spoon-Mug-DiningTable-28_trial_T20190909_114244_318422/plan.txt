@@ -1,0 +1,7 @@
+(GotoLocation robot Mug)
+(PickupObject robot Mug)
+(GotoLocation robot Spoon)
+(PickupObject robot Spoon)
+(PutObjectInReceptacle robot Spoon Mug)
+(GotoLocation robot DiningTable)
+(PutObjectInReceptacle robot Mug DiningTable)

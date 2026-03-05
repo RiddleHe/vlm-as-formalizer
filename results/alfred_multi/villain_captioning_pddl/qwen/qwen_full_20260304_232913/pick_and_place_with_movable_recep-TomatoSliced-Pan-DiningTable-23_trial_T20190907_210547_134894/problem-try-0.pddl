@@ -1,0 +1,45 @@
+(define (problem place_pan_with_tomato)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        island - receptacle
+        stove - receptacle
+        tomato - object
+        knife - object
+        pan - object
+        salt_shaker - object
+        wine_bottle1 - object
+        wine_bottle2 - object
+        wine_bottle3 - object
+        lettuce1 - object
+        lettuce2 - object
+        egg - object
+        martini_glass - object
+        black_bowl - object
+    )
+    (:init
+        (atLocation robot island) ; Assuming robot starts near island for efficiency, though caption says not at any location; this is a practical starting point.
+        (inReceptacle tomato island)
+        (inReceptacle knife island)
+        (inReceptacle pan stove)
+        (inReceptacle salt_shaker island)
+        (inReceptacle wine_bottle1 island)
+        (inReceptacle wine_bottle2 island)
+        (inReceptacle wine_bottle3 island)
+        (inReceptacle lettuce1 island)
+        (inReceptacle lettuce2 island)
+        (inReceptacle egg island)
+        (inReceptacle martini_glass island)
+        (inReceptacle black_bowl island)
+        (not (isSliced tomato))
+        (not (holdsAny robot))
+        (not (isOn stove))
+    )
+    (:goal
+        (and
+            (inReceptacle pan island)
+            (inReceptacle tomato pan)
+            (isSliced tomato)
+        )
+    )
+)

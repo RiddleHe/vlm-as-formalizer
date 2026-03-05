@@ -1,0 +1,7 @@
+(pickupobject robot phone_1)
+(gotolocation robot dresser_foot)
+(putobjectinreceptacle robot phone_1 dresser_foot)
+(gotolocation robot phone_2)
+(pickupobject robot phone_2)
+(gotolocation robot dresser_foot)
+(putobjectinreceptacle robot phone_2 dresser_foot)

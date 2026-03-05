@@ -1,0 +1,26 @@
+(define (problem put_cleaned_apple_in_fridge)
+    (:domain put_task)
+    (:objects
+        agent - agent
+        microwave - microwave
+        sink - sink
+        fridge - fridge
+        apple - object
+    )
+    (:init
+        (openable microwave)
+        (not (opened microwave))
+        (inReceptacle apple microwave)
+        (not (isClean apple))
+        (not (isOn microwave))
+        (not (holds agent apple))
+        (not (holdsAny agent))
+        (not (atLocation agent microwave))
+        (not (atLocation agent sink))
+        (not (atLocation agent fridge))
+    )
+    (:goal (and
+        (inReceptacle apple fridge)
+        (isClean apple)
+    ))
+)

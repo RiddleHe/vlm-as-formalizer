@@ -1,0 +1,4 @@
+(gotolocation robot racket1)
+(pickupobject robot racket1)
+(gotolocation robot dresser1)
+(putobjectinreceptacle robot racket1 dresser1)

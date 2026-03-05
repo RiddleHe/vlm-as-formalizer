@@ -1,0 +1,30 @@
+```pddl
+(define (problem cook_and_chill_bread)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        knife1 - knife
+        bread1 - object
+    )
+    (:init
+        (openable microwave1)
+        (openable fridge1)
+        (not (opened microwave1))
+        (not (opened fridge1))
+        (not (holdsAny agent1))
+        (not (isSliced bread1))
+        (not (isHot bread1))
+        (not (isCool bread1))
+        (atLocation agent1 microwave1) ; Starting location can be arbitrary; we'll assume microwave for simplicity.
+        (atLocation knife1 microwave1) ; Knife is on the countertop near microwave.
+        (atLocation bread1 microwave1) ; Bread is on the countertop near microwave.
+    )
+    (:goal (and
+        (isSliced bread1)
+        (isHot bread1)
+        (isCool bread1)
+    ))
+)
+```

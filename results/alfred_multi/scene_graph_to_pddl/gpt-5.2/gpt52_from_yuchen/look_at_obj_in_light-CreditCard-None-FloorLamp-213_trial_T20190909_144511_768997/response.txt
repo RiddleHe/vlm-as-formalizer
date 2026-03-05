@@ -1,0 +1,90 @@
+Scene graph:
+agent: 
+- (none visible)
+
+microwave (receptacle): 
+- (none visible)
+
+fridge (receptacle): 
+- (none visible)
+
+sink (receptacle): 
+- (none visible)
+
+knife (object): 
+- (none visible)
+
+receptacle (object): 
+- wooden_coffee_table_rectangular (a wooden rectangular coffee table surface holding items)
+
+object:
+- red_credit_card_on_table (a small red credit card on the coffee table)
+- black_hair_tie_left_on_table (a black ring/hair-tie on the left side of the coffee table)
+- black_hair_tie_right_on_table (a black ring/hair-tie on the right side of the coffee table)
+- tall_floor_lamp_green_shade (a tall lamp with a green shade)
+
+openable (receptacle) true if a receptacle is openable:
+- (none)
+
+opened (receptacle) true if a receptacle is opened:
+- (none)
+
+holdsAny (agent) agent ?a holds an object:
+- (none)
+
+isClean (object) true if the object has been clean in sink:
+- (none)
+
+isHot (object) true if the object has been heated up:
+- (none)
+
+isCool (object) true if the object has been cooled:
+- (none)
+
+isOn (object) true if the object is on:
+- (none)
+
+isToggled (object) true if the object has been toggled:
+- (none)
+
+isSliced (object) true if the object is sliced:
+- (none)
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle red_credit_card_on_table wooden_coffee_table_rectangular)
+- (inReceptacle black_hair_tie_left_on_table wooden_coffee_table_rectangular)
+- (inReceptacle black_hair_tie_right_on_table wooden_coffee_table_rectangular)
+
+holds (agent, object) object ?o is held by agent ?a:
+- (none)
+
+atLocation (agent, object) :
+- (none)
+
+PDDL problem: (define (problem examine-credit-card-by-lamp)
+  (:domain put_task)
+  (:objects
+    robot - agent
+    wooden_coffee_table_rectangular - receptacle
+    red_credit_card_on_table - object
+    black_hair_tie_left_on_table - object
+    black_hair_tie_right_on_table - object
+    tall_floor_lamp_green_shade - object
+  )
+  (:init
+    ;; robot starts not at any location and holding nothing
+    (not (holdsAny robot))
+
+    ;; objects on the coffee table
+    (inReceptacle red_credit_card_on_table wooden_coffee_table_rectangular)
+    (inReceptacle black_hair_tie_left_on_table wooden_coffee_table_rectangular)
+    (inReceptacle black_hair_tie_right_on_table wooden_coffee_table_rectangular)
+  )
+  (:goal
+    (and
+      ;; to examine the credit card by the lamp, bring the card to the lamp's location
+      (atLocation robot tall_floor_lamp_green_shade)
+      (holds robot red_credit_card_on_table)
+    )
+  )
+)

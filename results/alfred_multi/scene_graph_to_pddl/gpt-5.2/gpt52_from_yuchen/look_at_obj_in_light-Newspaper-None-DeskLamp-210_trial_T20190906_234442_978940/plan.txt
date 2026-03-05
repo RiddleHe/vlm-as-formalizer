@@ -1,0 +1,4 @@
+(gotolocation robot_agent brown_sofa)
+(pickupobject robot_agent newspaper_on_sofa_left)
+(gotolocation robot_agent green_corner_table_lamp)
+(toggleobject robot_agent green_corner_table_lamp)

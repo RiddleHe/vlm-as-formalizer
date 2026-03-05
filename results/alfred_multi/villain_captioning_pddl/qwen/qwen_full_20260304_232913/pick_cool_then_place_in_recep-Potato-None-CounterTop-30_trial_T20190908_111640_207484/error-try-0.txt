@@ -1,0 +1,9 @@
+Predicate argument has wrong type:
+  atLocation green_vegetable island: green_vegetable is not a agent
+  atLocation bottle island: bottle is not a agent
+  atLocation knife island: knife is not a agent
+  atLocation potato island: potato is not a agent
+  atLocation bowl island: bowl is not a agent
+  atLocation bread island: bread is not a agent
+  atLocation tray microwave: tray is not a agent
+

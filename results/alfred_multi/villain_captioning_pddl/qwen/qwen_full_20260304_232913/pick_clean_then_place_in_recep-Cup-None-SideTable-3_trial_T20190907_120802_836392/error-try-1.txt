@@ -1,0 +1,14 @@
+Predicate argument has wrong type:
+  atLocation bread_loaf1 countertop1: bread_loaf1 is not a agent
+  atLocation mug1 countertop1: mug1 is not a agent
+  atLocation green_glass1 countertop1: green_glass1 is not a agent
+  atLocation fridge1 countertop1: fridge1 is not a agent
+  atLocation plant_pot1 countertop1: plant_pot1 is not a agent
+  atLocation pepper_grinder1 cabinet1: pepper_grinder1 is not a agent
+  atLocation microwave1 cabinet1: microwave1 is not a agent
+  atLocation bread_loaf2 countertop1: bread_loaf2 is not a agent
+  atLocation toaster1 countertop1: toaster1 is not a agent
+
+Object does not have a type:
+  ?o
+

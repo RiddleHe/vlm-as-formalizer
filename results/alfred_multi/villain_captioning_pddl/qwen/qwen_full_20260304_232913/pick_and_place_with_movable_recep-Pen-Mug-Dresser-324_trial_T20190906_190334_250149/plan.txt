@@ -1,0 +1,4 @@
+(gotolocation robot pen)
+(pickupobject robot pen)
+(gotolocation robot black_cup)
+(putobjectinreceptacle robot pen black_cup)

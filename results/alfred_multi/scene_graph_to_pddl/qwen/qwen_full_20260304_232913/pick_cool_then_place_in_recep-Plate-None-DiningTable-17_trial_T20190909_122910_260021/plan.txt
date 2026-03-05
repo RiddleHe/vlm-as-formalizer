@@ -1,0 +1,6 @@
+(gotolocation robot plate)
+(pickupobject robot plate)
+(gotolocation robot fridge)
+(coolobject robot fridge plate)
+(gotolocation robot table)
+(putobjectinreceptacle robot plate table)

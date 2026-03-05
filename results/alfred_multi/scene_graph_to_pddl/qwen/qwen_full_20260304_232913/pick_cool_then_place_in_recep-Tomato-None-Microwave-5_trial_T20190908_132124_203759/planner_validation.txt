@@ -1,0 +1,38 @@
+failed
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  microwave
+  wall
+  knife_on_counter
+  knife_in_cabinet
+  pot_on_stove
+  floor
+  cabinet_left
+  cabinet_right
+  sink
+  countertop
+  spatula
+  cup
+  agent
+  fridge
+  oven
+  toaster
+  pot_on_counter
+  dog_statue
+
+Object does not have a type:
+  microwave
+  knife_in_cabinet
+  pot_on_stove
+  tomato
+  cabinet_right
+  cabinet_left
+  sink
+  cup
+  spatula
+  countertop
+  fridge
+  oven
+  toaster
+  dog_statue
+
+

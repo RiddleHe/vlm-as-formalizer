@@ -1,0 +1,59 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): bathroom_wall_sink_left
+knife (object): 
+receptacle (object): bathroom_wall_sink_left, bathtub_center, toilet_tank_lid_bottom
+object: pink_bar_soap_in_bathtub, green_bar_soap_in_bathtub, toilet_paper_roll_on_toilet, yellow_toothbrush_on_toilet
+
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle pink_bar_soap_in_bathtub bathtub_center)
+- (inReceptacle green_bar_soap_in_bathtub bathtub_center)
+- (inReceptacle toilet_paper_roll_on_toilet toilet_tank_lid_bottom)
+- (inReceptacle yellow_toothbrush_on_toilet toilet_tank_lid_bottom)
+
+holds (agent, object) object ?o is held by agent ?a: 
+
+atLocation (agent, object) :
+- (atLocation robot_agent bathroom_wall_sink_left)
+
+PDDL problem: (define (problem put_task_bathroom_soap_to_toilet)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+    bathroom_wall_sink_left - sink
+    bathtub_center - receptacle
+    toilet_tank_lid_bottom - receptacle
+    pink_bar_soap_in_bathtub - object
+    green_bar_soap_in_bathtub - object
+    toilet_paper_roll_on_toilet - object
+    yellow_toothbrush_on_toilet - object
+  )
+  (:init
+    ;; robot initial location (given by scene graph)
+    (atLocation robot_agent bathroom_wall_sink_left)
+
+    ;; object placements
+    (inReceptacle pink_bar_soap_in_bathtub bathtub_center)
+    (inReceptacle green_bar_soap_in_bathtub bathtub_center)
+    (inReceptacle toilet_paper_roll_on_toilet toilet_tank_lid_bottom)
+    (inReceptacle yellow_toothbrush_on_toilet toilet_tank_lid_bottom)
+  )
+  (:goal
+    (and
+      (isClean green_bar_soap_in_bathtub)
+      (inReceptacle green_bar_soap_in_bathtub toilet_tank_lid_bottom)
+    )
+  )
+)

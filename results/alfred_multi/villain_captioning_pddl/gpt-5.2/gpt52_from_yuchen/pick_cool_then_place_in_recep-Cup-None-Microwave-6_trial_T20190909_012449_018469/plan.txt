@@ -1,0 +1,4 @@
+(gotolocation robot cup1)
+(pickupobject robot cup1)
+(gotolocation robot microwave1)
+(putobjectinreceptacle robot cup1 microwave1)

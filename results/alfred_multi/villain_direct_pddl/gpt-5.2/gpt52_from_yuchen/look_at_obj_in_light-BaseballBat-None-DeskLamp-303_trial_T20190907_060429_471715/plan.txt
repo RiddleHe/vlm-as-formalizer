@@ -1,0 +1,2 @@
+(gotolocation agent1 desk1)
+(toggleobject agent1 lamp1)

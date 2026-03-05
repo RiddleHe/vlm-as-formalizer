@@ -1,0 +1,5 @@
+(gotolocation robot potato1)
+(pickupobject robot potato1)
+(gotolocation robot island1)
+(coolobject robot fridge1 potato1)
+(putobjectinreceptacle robot potato1 island1)

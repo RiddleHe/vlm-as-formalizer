@@ -1,0 +1,6 @@
+(gotolocation robot egg)
+(pickupobject robot egg)
+(gotolocation robot microwave)
+(heatobject robot microwave egg)
+(gotolocation robot table)
+(putobjectinreceptacle robot egg table)

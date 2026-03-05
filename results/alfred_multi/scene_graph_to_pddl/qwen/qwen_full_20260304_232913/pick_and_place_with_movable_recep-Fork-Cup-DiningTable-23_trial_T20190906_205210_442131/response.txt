@@ -1,0 +1,65 @@
+Scene graph:
+agent: robot
+microwave (receptacle): microwave oven on top of stove
+fridge (receptacle): black refrigerator on left side
+sink (receptacle): stainless steel sink with faucet
+knife (object): knife on kitchen island counter
+receptacle (object): stainless steel bowl on stove, stainless steel bowl on kitchen island, cup on kitchen island, cup under kitchen island
+object: head of lettuce on counter, head of lettuce on counter near stove, spoon in sink, egg in sink, fork on kitchen island, knife on kitchen island, cup on kitchen island, cup under kitchen island, stainless steel bowl on stove, stainless steel bowl on kitchen island
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge), (openable sink)
+opened (receptacle) true if a receptacle is opened: (opened fridge)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn microwave), (isOn stove)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle spoon sink), (inReceptacle egg sink), (inReceptacle cup "under kitchen island"), (inReceptacle "stainless steel bowl" stove), (inReceptacle "stainless steel bowl" "kitchen island")
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot "kitchen island")
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife - knife
+        lettuce1 - object
+        lettuce2 - object
+        spoon - object
+        egg - object
+        fork - object
+        cup1 - object
+        cup2 - object
+        bowl1 - object
+        bowl2 - object
+        stove - object
+        kitchen_island - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (opened fridge)
+        (isOn microwave)
+        (isOn stove)
+        (atLocation robot kitchen_island)
+        (inReceptacle spoon sink)
+        (inReceptacle egg sink)
+        (inReceptacle cup2 kitchen_island) ; cup under kitchen island
+        (inReceptacle bowl1 stove)
+        (inReceptacle bowl2 kitchen_island)
+        (atLocation robot kitchen_island)
+    )
+    (:goal
+        (and
+            (inReceptacle fork cup1)
+            (inReceptacle cup1 kitchen_island)
+        )
+    )
+)
+```

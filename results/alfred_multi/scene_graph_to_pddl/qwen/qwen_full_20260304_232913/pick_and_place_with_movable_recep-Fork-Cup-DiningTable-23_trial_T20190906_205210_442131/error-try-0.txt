@@ -1,0 +1,11 @@
+Object does not have a type:
+  stove
+  dining_table
+  fork
+  countertop
+  under_dining_table
+
+Predicate expects wrong number of arguments:
+  isToggled coffee maker: should have 1 arguments
+  isOn coffee maker: should have 1 arguments
+

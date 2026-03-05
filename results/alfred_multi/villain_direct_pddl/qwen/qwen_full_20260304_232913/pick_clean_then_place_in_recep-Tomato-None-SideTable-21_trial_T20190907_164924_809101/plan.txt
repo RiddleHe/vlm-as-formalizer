@@ -1,0 +1,6 @@
+(gotolocation agent1 table)
+(gotolocation agent1 sink)
+(pickupobject agent1 tomato)
+(cleanobject agent1 sink tomato)
+(gotolocation agent1 table)
+(putobjectinreceptacle agent1 tomato table)

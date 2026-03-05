@@ -1,0 +1,112 @@
+Scene graph:
+agent: 
+- agent_robot
+
+microwave (receptacle): 
+- microwave_black_countertop_right
+
+fridge (receptacle): 
+- (none visible)
+
+sink (receptacle): 
+- sink_white_basins_left
+
+knife (object): 
+- (none visible)
+
+receptacle (object): 
+- microwave_black_countertop_right
+- sink_white_basins_left
+- counter_brown_marble_surface
+
+object: 
+- green_sponge_rectangular_by_sink
+- white_planter_with_green_plant_on_wood_stand
+- brown_paper_bag_loaf_shape_right_of_plant
+- black_mug_right_edge
+- metal_kettle_in_sink
+- egg_light_brown_inside_microwave
+- egg_orange_inside_microwave
+
+openable (receptacle) true if a receptacle is openable:
+- (openable microwave_black_countertop_right)
+
+opened (receptacle) true if a receptacle is opened:
+- (none)
+
+holdsAny (agent) agent ?a holds an object:
+- (none)
+
+isClean (object) true if the object has been clean in sink:
+- (none)
+
+isHot (object) true if the object has been heated up:
+- (none)
+
+isCool (object) true if the object has been cooled:
+- (none)
+
+isOn (object) true if the object is on:
+- (none)
+
+isToggled (object) true if the object has been toggled:
+- (none)
+
+isSliced (object) true if the object is sliced:
+- (none)
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle green_sponge_rectangular_by_sink counter_brown_marble_surface)
+- (inReceptacle white_planter_with_green_plant_on_wood_stand counter_brown_marble_surface)
+- (inReceptacle brown_paper_bag_loaf_shape_right_of_plant counter_brown_marble_surface)
+- (inReceptacle black_mug_right_edge counter_brown_marble_surface)
+- (inReceptacle microwave_black_countertop_right counter_brown_marble_surface)
+- (inReceptacle metal_kettle_in_sink sink_white_basins_left)
+- (inReceptacle egg_light_brown_inside_microwave microwave_black_countertop_right)
+- (inReceptacle egg_orange_inside_microwave microwave_black_countertop_right)
+
+holds (agent, object) object ?o is held by agent ?a:
+- (none)
+
+atLocation (agent, object) :
+- (none)
+
+PDDL problem: (define (problem put_task_clean_egg_on_counter)
+  (:domain put_task)
+  (:objects
+    agent_robot - agent
+
+    microwave_black_countertop_right - microwave
+    sink_white_basins_left - sink
+    counter_brown_marble_surface - receptacle
+
+    green_sponge_rectangular_by_sink - object
+    white_planter_with_green_plant_on_wood_stand - object
+    brown_paper_bag_loaf_shape_right_of_plant - object
+    black_mug_right_edge - object
+    metal_kettle_in_sink - object
+    egg_light_brown_inside_microwave - object
+    egg_orange_inside_microwave - object
+  )
+
+  (:init
+    (openable microwave_black_countertop_right)
+
+    ;; objects in receptacles
+    (inReceptacle green_sponge_rectangular_by_sink counter_brown_marble_surface)
+    (inReceptacle white_planter_with_green_plant_on_wood_stand counter_brown_marble_surface)
+    (inReceptacle brown_paper_bag_loaf_shape_right_of_plant counter_brown_marble_surface)
+    (inReceptacle black_mug_right_edge counter_brown_marble_surface)
+    (inReceptacle microwave_black_countertop_right counter_brown_marble_surface)
+    (inReceptacle metal_kettle_in_sink sink_white_basins_left)
+    (inReceptacle egg_light_brown_inside_microwave microwave_black_countertop_right)
+    (inReceptacle egg_orange_inside_microwave microwave_black_countertop_right)
+  )
+
+  (:goal
+    (and
+      (isClean egg_light_brown_inside_microwave)
+      (inReceptacle egg_light_brown_inside_microwave counter_brown_marble_surface)
+    )
+  )
+)

@@ -1,0 +1,4 @@
+(GotoLocation robot CD)
+(PickupObject robot CD)
+(GotoLocation robot dresser)
+(PutObjectInReceptacle robot CD dresser)

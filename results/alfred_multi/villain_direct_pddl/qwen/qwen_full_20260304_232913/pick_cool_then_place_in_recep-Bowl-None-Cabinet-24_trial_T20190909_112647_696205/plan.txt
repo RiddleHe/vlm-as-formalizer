@@ -1,0 +1,5 @@
+(pickupobject agent1 bowl)
+(gotolocation agent1 fridge)
+(coolobject agent1 fridge bowl)
+(gotolocation agent1 cabinet_above_fridge)
+(putobjectinreceptacle agent1 bowl cabinet_above_fridge)

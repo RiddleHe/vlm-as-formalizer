@@ -1,0 +1,7 @@
+(GotoLocation robot cupboard_left_of_dishwasher)
+(OpenObject robot cupboard_left_of_dishwasher)
+(GotoLocation robot bowl)
+(PickupObject robot bowl)
+(GotoLocation robot cupboard_left_of_dishwasher)
+(PutObjectInReceptacle robot bowl cupboard_left_of_dishwasher)
+(CloseObject robot cupboard_left_of_dishwasher)

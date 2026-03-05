@@ -1,0 +1,3 @@
+(gotolocation robot wooden_dresser_with_drawers)
+(pickupobject robot yellow_pen_on_dresser)
+(putobjectinreceptacle robot yellow_pen_on_dresser black_cup_on_dresser)

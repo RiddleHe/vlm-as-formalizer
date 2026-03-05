@@ -1,0 +1,73 @@
+Scene graph:
+block: 
+- purple_block (purple cube, left side of scene)
+- blue_block (blue cube, near top/center area)
+- red_block (red cube, stacked on top of blue in later views)
+- orange_block (orange cube, right side of scene)
+- yellow_block (yellow cube, lower-left area)
+- green_block (green cube, lower-center/right area)
+
+robot:
+- robot_arm (robot, assumed present)
+
+ontable (block) block x is on table, not on another block:
+- (ontable purple_block)
+- (ontable yellow_block)
+- (ontable green_block)
+- (ontable orange_block)
+- (ontable blue_block)
+
+clear (block) there is no block on top of block x:
+- (clear purple_block)
+- (clear yellow_block)
+- (clear green_block)
+- (clear orange_block)
+- (clear red_block)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot_arm)
+
+handfull (robot) :
+- none
+
+holding (block) block x is being held by the robot:
+- none
+
+on (block, block) block x is on block y:
+- (on red_block blue_block)
+
+PDDL problem: (define (problem blocksworld-stacks-3)
+  (:domain blocksworld)
+  (:objects
+    purple_block blue_block red_block orange_block yellow_block green_block - block
+    robot_arm - robot
+  )
+  (:init
+    ;; blocks on table
+    (ontable purple_block)
+    (ontable yellow_block)
+    (ontable green_block)
+    (ontable orange_block)
+    (ontable blue_block)
+
+    ;; existing stack
+    (on red_block blue_block)
+
+    ;; clear conditions
+    (clear purple_block)
+    (clear yellow_block)
+    (clear green_block)
+    (clear orange_block)
+    (clear red_block)
+
+    ;; robot state
+    (handempty robot_arm)
+  )
+  (:goal
+    (and
+      (on red_block green_block)
+      (on yellow_block purple_block)
+      (on blue_block orange_block)
+    )
+  )
+)

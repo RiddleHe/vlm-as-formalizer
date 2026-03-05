@@ -1,0 +1,3 @@
+Predicate argument has wrong type:
+  atLocation wooden_table cardboard_box: wooden_table is not a agent
+

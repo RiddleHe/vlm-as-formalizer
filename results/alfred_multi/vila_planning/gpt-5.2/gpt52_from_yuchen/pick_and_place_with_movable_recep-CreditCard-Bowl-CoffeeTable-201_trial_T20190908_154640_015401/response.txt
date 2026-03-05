@@ -1,0 +1,8 @@
+(GotoLocation agent1 credit_card)
+(PickupObject agent1 credit_card)
+(GotoLocation agent1 bowl)
+(PutObjectInReceptacle agent1 credit_card bowl)
+(GotoLocation agent1 bowl)
+(PickupObject agent1 bowl)
+(GotoLocation agent1 glass_table)
+(PutObjectInReceptacle agent1 bowl glass_table)

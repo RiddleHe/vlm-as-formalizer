@@ -1,0 +1,65 @@
+```pddl
+(define (problem clean_fork_and_put_in_drawer)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        sink - sink
+        drawer - receptacle
+        fork - object
+        knife - knife
+        bread - object
+        lettuce - object
+        plate - object
+        egg - object
+        soap_dispenser - object
+    )
+    (:init
+        ; Agent is not at any location initially
+        (not (atLocation robot sink))
+        (not (atLocation robot drawer))
+        (not (atLocation robot fork))
+        (not (atLocation robot knife))
+        (not (atLocation robot bread))
+        (not (atLocation robot lettuce))
+        (not (atLocation robot plate))
+        (not (atLocation robot egg))
+        (not (atLocation robot soap_dispenser))
+
+        ; Fork is on countertop (not in any receptacle, not held)
+        (not (inReceptacle fork sink))
+        (not (inReceptacle fork drawer))
+        (not (holds robot fork))
+        (not (holdsAny robot))
+        (not (isClean fork))
+
+        ; Sink is not opened (if it were openable, but sink is not specified as openable in domain, so skip)
+        ; Drawer is closed (assuming it's openable as per typical drawer behavior)
+        (openable drawer)
+        (not (opened drawer))
+
+        ; Egg is in sink (as per scene)
+        (inReceptacle egg sink)
+
+        ; Knife, bread, lettuce, plate, soap dispenser are on countertop (not held, not in receptacle)
+        (not (holds robot knife))
+        (not (inReceptacle knife sink))
+        (not (inReceptacle knife drawer))
+        (not (holds robot bread))
+        (not (inReceptacle bread sink))
+        (not (inReceptacle bread drawer))
+        (not (holds robot lettuce))
+        (not (inReceptacle lettuce sink))
+        (not (inReceptacle lettuce drawer))
+        (not (holds robot plate))
+        (not (inReceptacle plate sink))
+        (not (inReceptacle plate drawer))
+        (not (holds robot soap_dispenser))
+        (not (inReceptacle soap_dispenser sink))
+        (not (inReceptacle soap_dispenser drawer))
+    )
+    (:goal (and
+        (inReceptacle fork drawer)
+        (isClean fork)
+    ))
+)
+```

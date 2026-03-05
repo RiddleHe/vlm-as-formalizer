@@ -1,0 +1,4 @@
+(gotolocation robot metal_fork_near_front_left_on_kitchen_island)
+(pickupobject robot metal_fork_near_front_left_on_kitchen_island)
+(gotolocation robot green_kitchen_island_countertop)
+(putobjectinreceptacle robot metal_fork_near_front_left_on_kitchen_island green_kitchen_island_countertop)

@@ -1,0 +1,36 @@
+(define (problem put_task_heat_apple_left_of_sponge)
+  (:domain put_task)
+
+  (:objects
+    robot - agent
+
+    microwave1 - microwave
+    table1 - receptacle
+
+    apple1 - object
+    sponge1 - object
+    knife1 - knife
+  )
+
+  (:init
+    ;; receptacle properties
+    (openable microwave1)
+    ;; microwave appears closed in the image -> not (opened microwave1)
+
+    ;; object locations (all items are on/at the table area)
+    (inReceptacle apple1 table1)
+    (inReceptacle sponge1 table1)
+    (inReceptacle knife1 table1)
+
+    ;; robot initially not at any object's location (no atLocation facts)
+  )
+
+  (:goal
+    (and
+      (isHot apple1)
+      (inReceptacle apple1 table1)
+      ;; "left of the sponge" is not representable in this domain;
+      ;; we satisfy the achievable part: heated apple placed on the table.
+    )
+  )
+)

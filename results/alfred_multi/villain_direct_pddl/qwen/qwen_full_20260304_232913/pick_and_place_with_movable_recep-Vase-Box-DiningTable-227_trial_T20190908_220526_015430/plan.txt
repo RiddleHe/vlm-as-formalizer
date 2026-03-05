@@ -1,0 +1,7 @@
+(pickupobject agent1 box)
+(gotolocation agent1 table)
+(putobjectinreceptacle agent1 box table)
+(gotolocation agent1 box)
+(pickupobject agent1 plate)
+(gotolocation agent1 table)
+(putobjectinreceptacle agent1 plate table)

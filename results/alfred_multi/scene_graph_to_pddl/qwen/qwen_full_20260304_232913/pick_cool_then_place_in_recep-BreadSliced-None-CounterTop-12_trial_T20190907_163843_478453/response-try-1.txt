@@ -1,0 +1,67 @@
+Scene graph:
+agent: robot
+microwave (receptacle): none
+fridge (receptacle): dark brown fridge
+sink (receptacle): none
+knife (object): silver knife on counter
+receptacle (object): black toaster, black pot on stove, wooden cabinet under counter
+object: loaf of bread, red apple, silver spoon, green cabbage, brown potato, silver knife, black toaster, black pot on stove, wooden cabinet under counter, dark brown fridge
+openable (receptacle) true if a receptacle is openable: (openable dark brown fridge)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn black toaster), (isOn black pot on stove)
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem cut_bread_and_fridge)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        dark_brown_fridge - fridge
+        black_toaster - receptacle
+        black_pot_on_stove - receptacle
+        wooden_cabinet_under_counter - receptacle
+        loaf_of_bread - object
+        red_apple - object
+        silver_knife - knife
+        silver_spoon - object
+        green_cabbage - object
+        brown_potato - object
+    )
+    (:init
+        (openable dark_brown_fridge)
+        (not (opened dark_brown_fridge))
+        (not (holdsAny robot))
+        (not (atLocation robot loaf_of_bread))
+        (not (atLocation robot red_apple))
+        (not (atLocation robot silver_knife))
+        (not (atLocation robot dark_brown_fridge))
+        (isOn black_toaster)
+        (isOn black_pot_on_stove)
+        (not (isSliced loaf_of_bread))
+        (not (isCool loaf_of_bread))
+        (not (inReceptacle loaf_of_bread dark_brown_fridge))
+        (not (inReceptacle loaf_of_bread black_toaster))
+        (not (inReceptacle loaf_of_bread black_pot_on_stove))
+        (not (inReceptacle loaf_of_bread wooden_cabinet_under_counter))
+        (atLocation robot silver_knife) ; assuming robot starts near knife for task initiation
+    )
+    (:goal
+        (and
+            (isSliced loaf_of_bread)
+            (inReceptacle loaf_of_bread dark_brown_fridge)
+            (not (inReceptacle loaf_of_bread dark_brown_fridge)) ; removed from fridge
+            (atLocation robot loaf_of_bread)
+            (atLocation robot red_apple)
+            (not (holdsAny robot))
+        )
+    )
+)
+```

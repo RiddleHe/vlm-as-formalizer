@@ -1,0 +1,5 @@
+(GotoLocation robot garbagebin)
+(OpenObject robot garbagebin)
+(PutObjectInReceptacle robot spraybottle garbagebin)
+(PutObjectInReceptacle robot spraybottle garbagebin)
+(CloseObject robot garbagebin)

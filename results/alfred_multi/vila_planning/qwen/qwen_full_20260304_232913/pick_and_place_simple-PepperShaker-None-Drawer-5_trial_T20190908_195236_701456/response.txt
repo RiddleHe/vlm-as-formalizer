@@ -1,0 +1,6 @@
+(GotoLocation robot countertop)
+(PickupObject robot saltshaker)
+(GotoLocation robot drawer)
+(OpenObject robot drawer)
+(PutObjectInReceptacle robot saltshaker drawer)
+(CloseObject robot drawer)

@@ -1,0 +1,6 @@
+(pickupobject robot toilet_paper_roll1)
+(putobjectinreceptacle robot toilet_paper_roll1 cabinet2_under_sink)
+(gotolocation robot empty_toilet_paper_roll)
+(pickupobject robot empty_toilet_paper_roll)
+(gotolocation robot cabinet2_under_sink)
+(putobjectinreceptacle robot empty_toilet_paper_roll cabinet2_under_sink)

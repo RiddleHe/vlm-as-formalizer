@@ -1,0 +1,20 @@
+(define (problem inspect_cd_by_lamp_light)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        cd - object
+        lamp - object
+        table - receptacle
+        nightstand - receptacle
+    )
+    (:init
+        (atLocation robot table)
+        (inReceptacle cd table)
+        (atLocation lamp nightstand)
+        (isOn lamp)
+    )
+    (:goal (and
+        (atLocation robot lamp)
+        (holds robot cd)
+    ))
+)

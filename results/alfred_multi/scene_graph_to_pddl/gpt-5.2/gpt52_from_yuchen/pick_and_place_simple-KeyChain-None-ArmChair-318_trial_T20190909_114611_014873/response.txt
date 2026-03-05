@@ -1,0 +1,68 @@
+Scene graph:
+agent: 
+- robot_agent (agent)
+
+microwave (receptacle): 
+- none
+
+fridge (receptacle): 
+- none
+
+sink (receptacle): 
+- none
+
+knife (object): 
+- none
+
+receptacle (object): 
+- dark_wood_desk_with_drawers (receptacle)
+- floral_upholstered_armchair (receptacle)
+
+object: 
+- purple_square_throw_pillow_on_armchair (object)
+- black_smartphone_on_armchair_seat_right (object)
+- white_keys_left_on_desk_surface (object)
+- white_keys_right_on_desk_surface (object)
+- pink_table_lamp_on_desk_left (object)
+- wooden_desk_chair_tucked_in (object)
+
+openable (receptacle) true if a receptacle is openable:
+
+PDDL problem: (define (problem put_task_keys_desk_to_armchair)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+
+    dark_wood_desk_with_drawers - receptacle
+    floral_upholstered_armchair - receptacle
+
+    purple_square_throw_pillow_on_armchair - object
+    black_smartphone_on_armchair_seat_right - object
+    white_keys_left_on_desk_surface - object
+    white_keys_right_on_desk_surface - object
+    pink_table_lamp_on_desk_left - object
+    wooden_desk_chair_tucked_in - object
+  )
+
+  (:init
+    ;; Robot initially not at any object's location (no atLocation facts)
+
+    ;; Object placements (using inReceptacle to indicate "on/in" a receptacle)
+    (inReceptacle purple_square_throw_pillow_on_armchair floral_upholstered_armchair)
+    (inReceptacle black_smartphone_on_armchair_seat_right floral_upholstered_armchair)
+
+    (inReceptacle white_keys_left_on_desk_surface dark_wood_desk_with_drawers)
+    (inReceptacle white_keys_right_on_desk_surface dark_wood_desk_with_drawers)
+    (inReceptacle pink_table_lamp_on_desk_left dark_wood_desk_with_drawers)
+
+    ;; No receptacles marked openable/opened per scene graph
+  )
+
+  (:goal
+    (and
+      (inReceptacle white_keys_left_on_desk_surface floral_upholstered_armchair)
+      (inReceptacle white_keys_right_on_desk_surface floral_upholstered_armchair)
+    )
+  )
+)

@@ -1,0 +1,82 @@
+Scene graph:
+agent: agent_robot
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object):
+- receptacle_black_hexagon_bin_on_floor
+- receptacle_white_shelf_ledge_left (top surface/ledge visible at left, holding items)
+- receptacle_wall_shelf_right (small wall-mounted shelf/cabinet top on right with tissue box)
+object:
+- object_left_candle_1_on_left_shelf (tan candle in copper holder)
+- object_left_candle_2_on_left_shelf (tan candle in copper holder)
+- object_left_candle_3_on_left_shelf (tan candle in copper holder)
+- object_toilet_paper_roll_on_left_shelf
+- object_tissue_box_on_right_shelf
+- object_green_plunger_on_floor_right
+- object_toilet (large white fixture)
+- object_shower_curtain
+- object_window
+- object_door
+
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle object_left_candle_1_on_left_shelf receptacle_white_shelf_ledge_left)
+- (inReceptacle object_left_candle_2_on_left_shelf receptacle_white_shelf_ledge_left)
+- (inReceptacle object_left_candle_3_on_left_shelf receptacle_white_shelf_ledge_left)
+- (inReceptacle object_toilet_paper_roll_on_left_shelf receptacle_white_shelf_ledge_left)
+- (inReceptacle object_tissue_box_on_right_shelf receptacle_wall_shelf_right)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) :
+- (atLocation agent_robot receptacle_white_shelf_ledge_left)
+
+PDDL problem: (define (problem put_two_candles_on_shelf)
+  (:domain put_task)
+  (:objects
+    agent_robot - agent
+
+    receptacle_black_hexagon_bin_on_floor - receptacle
+    receptacle_white_shelf_ledge_left - receptacle
+    receptacle_wall_shelf_right - receptacle
+
+    object_left_candle_1_on_left_shelf - object
+    object_left_candle_2_on_left_shelf - object
+    object_left_candle_3_on_left_shelf - object
+    object_toilet_paper_roll_on_left_shelf - object
+    object_tissue_box_on_right_shelf - object
+    object_green_plunger_on_floor_right - object
+    object_toilet - object
+    object_shower_curtain - object
+    object_window - object
+    object_door - object
+  )
+
+  (:init
+    ;; agent location (as given by scene graph)
+    (atLocation agent_robot receptacle_white_shelf_ledge_left)
+
+    ;; object placements (as given by scene graph)
+    (inReceptacle object_left_candle_1_on_left_shelf receptacle_white_shelf_ledge_left)
+    (inReceptacle object_left_candle_2_on_left_shelf receptacle_white_shelf_ledge_left)
+    (inReceptacle object_left_candle_3_on_left_shelf receptacle_white_shelf_ledge_left)
+    (inReceptacle object_toilet_paper_roll_on_left_shelf receptacle_white_shelf_ledge_left)
+    (inReceptacle object_tissue_box_on_right_shelf receptacle_wall_shelf_right)
+  )
+
+  (:goal
+    (and
+      ;; Put two candles on a shelf (use the right wall shelf as the target shelf)
+      (inReceptacle object_left_candle_1_on_left_shelf receptacle_wall_shelf_right)
+      (inReceptacle object_left_candle_2_on_left_shelf receptacle_wall_shelf_right)
+    )
+  )
+)

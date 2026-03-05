@@ -1,0 +1,56 @@
+Scene graph:
+agent: agent
+microwave (receptacle): black microwave on table
+fridge (receptacle): dark brown fridge under counter
+sink (receptacle): marble sink with copper faucet
+knife (object): silver knife on table
+receptacle (object): wooden table, marble countertop
+object: green lettuce on table, brown potato on table, gray mug on table, silver salt shaker on table, gray plate on table, black frying pan on table, silver ladle on table, white spatula on table, brown loaf of bread on table, gray coffee maker on table, silver spoon on table, brown egg on table
+openable (receptacle) true if a receptacle is openable: (openable black microwave on table), (openable dark brown fridge under counter)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem cleanup_knife_mug)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave
+        fridge
+        sink
+        knife
+        mug
+        table
+        countertop
+    )
+    (:init
+        (atLocation agent table)
+        (inReceptacle knife table)
+        (inReceptacle mug table)
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (not (opened microwave))
+        (not (opened fridge))
+        (not (opened sink))
+        (not (holdsAny agent))
+        (not (isClean knife))
+        (not (isClean mug))
+    )
+    (:goal (and
+        (isClean knife)
+        (isClean mug)
+        (inReceptacle knife sink)
+        (inReceptacle mug sink)
+    ))
+)
+```

@@ -1,0 +1,4 @@
+(gotolocation robot_agent dark_marble_bathroom_countertop_surface)
+(pickupobject robot_agent toilet_paper_roll_on_right_counter)
+(gotolocation robot_agent wall_mounted_toilet_paper_dispenser_left_of_toilet)
+(putobjectinreceptacle robot_agent toilet_paper_roll_on_right_counter wall_mounted_toilet_paper_dispenser_left_of_toilet)

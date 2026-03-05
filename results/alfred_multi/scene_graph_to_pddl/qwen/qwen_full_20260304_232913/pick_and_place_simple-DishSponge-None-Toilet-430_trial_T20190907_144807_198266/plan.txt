@@ -1,0 +1,4 @@
+(gotolocation robot green_sponge)
+(pickupobject robot green_sponge)
+(gotolocation robot white_toilet_with_tank)
+(putobjectinreceptacle robot green_sponge white_toilet_with_tank)

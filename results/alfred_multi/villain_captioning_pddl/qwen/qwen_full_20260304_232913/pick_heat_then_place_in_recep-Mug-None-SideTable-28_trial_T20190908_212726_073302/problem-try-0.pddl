@@ -1,0 +1,77 @@
+(define (problem microwave_mug_shelf)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        shelves - receptacle
+        mug - object
+        apple - object
+        egg - object
+        spoon - object
+        loaf - object
+        pan - object
+        coffee_machine - object
+        toaster - object
+        stove - object
+        counter - object
+        table - object
+    )
+    (:init
+        ; Agent is not at any location initially
+        (not (atLocation agent microwave))
+        (not (atLocation agent shelves))
+        (not (atLocation agent mug))
+        (not (atLocation agent apple))
+        (not (atLocation agent egg))
+        (not (atLocation agent spoon))
+        (not (atLocation agent loaf))
+        (not (atLocation agent pan))
+        (not (atLocation agent coffee_machine))
+        (not (atLocation agent toaster))
+        (not (atLocation agent stove))
+        (not (atLocation agent counter))
+        (not (atLocation agent table))
+
+        ; Microwave is openable and currently closed
+        (openable microwave)
+        (not (opened microwave))
+
+        ; Shelves are not openable
+        (not (openable shelves))
+
+        ; Mug is inside microwave
+        (inReceptacle mug microwave)
+
+        ; Mug is not heated, not clean, not held
+        (not (isHot mug))
+        (not (isClean mug))
+        (not (holds agent mug))
+        (not (holdsAny agent))
+
+        ; Apple, egg, spoon are on shelves (top shelf)
+        (inReceptacle apple shelves)
+        (inReceptacle egg shelves)
+        (inReceptacle spoon shelves)
+
+        ; Loaf is on table
+        (inReceptacle loaf table)
+
+        ; Pan is on stove
+        (inReceptacle pan stove)
+
+        ; Microwave is not toggled on
+        (not (isOn microwave))
+
+        ; Other objects are not relevant for heating/cleaning/slicing
+    )
+    (:goal
+        (and
+            ; Mug must be heated
+            (isHot mug)
+            ; Mug must be placed on shelves (bottom shelf, which is empty)
+            (inReceptacle mug shelves)
+            ; Mug is no longer in microwave
+            (not (inReceptacle mug microwave))
+        )
+    )
+)

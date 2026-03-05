@@ -1,0 +1,8 @@
+(GotoLocation agent remote1)
+(PickupObject agent remote1)
+(GotoLocation agent chair)
+(PutObjectInReceptacle agent remote1 chair_seat)
+(GotoLocation agent remote2)
+(PickupObject agent remote2)
+(GotoLocation agent chair)
+(PutObjectInReceptacle agent remote2 chair_seat)

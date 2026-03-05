@@ -1,0 +1,8 @@
+(gotolocation agent1 red_credit_card_near_tv_base_left)
+(pickupobject agent1 red_credit_card_near_tv_base_left)
+(gotolocation agent1 dark_wood_table_desk)
+(putobjectinreceptacle agent1 red_credit_card_near_tv_base_left dark_wood_table_desk)
+(gotolocation agent1 white_tv_stand_with_drawers)
+(pickupobject agent1 red_credit_card_near_tv_base_right)
+(gotolocation agent1 dark_wood_table_desk)
+(putobjectinreceptacle agent1 red_credit_card_near_tv_base_right dark_wood_table_desk)

@@ -1,0 +1,6 @@
+(GotoLocation agent1 coffee_table)
+(PickupObject agent1 remote)
+(PutObjectInReceptacle agent1 remote box)
+(PickupObject agent1 box)
+(GotoLocation agent1 couch)
+(PutObjectInReceptacle agent1 box couch)

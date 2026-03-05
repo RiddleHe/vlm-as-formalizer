@@ -1,0 +1,7 @@
+(GotoLocation robot pan)
+(PickupObject robot pan)
+(GotoLocation robot knife)
+(PickupObject robot knife)
+(PutObjectInReceptacle robot knife pan)
+(GotoLocation robot table)
+(PutObjectInReceptacle robot pan table)

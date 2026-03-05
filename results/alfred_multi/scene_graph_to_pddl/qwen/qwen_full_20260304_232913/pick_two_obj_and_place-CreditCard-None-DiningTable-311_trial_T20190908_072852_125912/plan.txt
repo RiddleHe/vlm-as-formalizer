@@ -1,0 +1,6 @@
+(gotolocation robot beige_tv_stand_with_drawers)
+(pickupobject robot red_credit_card_1_on_tv_stand)
+(gotolocation robot robot)
+(putobjectinreceptacle robot red_credit_card_1_on_tv_stand robot)
+(gotolocation robot red_credit_card_2_on_tv_stand)
+(pickupobject robot red_credit_card_2_on_tv_stand)

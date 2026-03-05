@@ -1,0 +1,6 @@
+(gotolocation robot brown_bread_slice)
+(pickupobject robot brown_bread_slice)
+(gotolocation robot dark_grey_fridge)
+(coolobject robot dark_grey_fridge brown_bread_slice)
+(gotolocation robot red_microwave)
+(putobjectinreceptacle robot brown_bread_slice red_microwave)

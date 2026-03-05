@@ -1,0 +1,9 @@
+Predicate argument has wrong type:
+  atLocation pot1 stove: pot1 is not a agent
+  atLocation knife stove: knife is not a agent
+  atLocation pot2 stove: pot2 is not a agent
+  atLocation sponge sink: sponge is not a agent
+
+Object does not have a type:
+  sink
+

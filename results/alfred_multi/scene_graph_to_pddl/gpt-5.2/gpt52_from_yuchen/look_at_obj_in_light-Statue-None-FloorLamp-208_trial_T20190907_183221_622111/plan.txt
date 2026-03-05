@@ -1,0 +1,4 @@
+(gotolocation agent_robot tall_lamp_with_square_base_and_rectangular_shade)
+(pickupobject agent_robot tall_lamp_with_square_base_and_rectangular_shade)
+(gotolocation agent_robot black_console_table_with_two_drawers)
+(putobjectinreceptacle agent_robot tall_lamp_with_square_base_and_rectangular_shade black_console_table_with_two_drawers)

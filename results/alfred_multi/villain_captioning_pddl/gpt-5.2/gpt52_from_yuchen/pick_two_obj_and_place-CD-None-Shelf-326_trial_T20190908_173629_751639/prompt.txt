@@ -1,0 +1,256 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: To move two disks on the desk to the shelf on the bottom right of the desk.
+    
+
+SCENE CAPTION:
+Scene overview (desk area):
+- The scene shows a wooden desk made of multiple tabletop panels with a laptop and a blue book on top. There is a lower open shelf/cubby on the bottom-right side of the desk (integrated into the right desk support). A black rolling chair is in front of the desk.
+- Two small optical disks (CD/DVD-like, iridescent purple/silver) are present on the desktop surface.
+
+Relevant object types from the domain
+- agent: 1 robot agent (not visible directly; assumed present in the environment). The agent is initially **not at any object’s location**.
+- receptacle (domain-defined): The “shelf on the bottom right of the desk” should be treated as a **receptacle** because it can hold objects.
+  - bottom_right_shelf (receptacle): 1 (open cubby/shelf in the bottom-right desk unit).
+- object (movable items in the scene):
+  - disk_1 (object): 1 optical disk on the desktop.
+  - disk_2 (object): 1 optical disk on the desktop.
+  - laptop (object): 1 (silver/gray) on the right side of the desktop.
+  - book (object): 1 (blue “PURPOSE 8” textbook) on the left/middle desktop.
+  - (Other furniture like desk panels/legs/chair exist, but are not needed for the instructed disk-moving task and are not domain types.)
+
+Quantities (by relevant type)
+- receptacles: 1 (bottom_right_shelf).
+- disks/loose objects to move: 2 (disk_1, disk_2).
+- other notable objects: 1 laptop, 1 book.
+
+Object identities and visual details (to distinguish)
+- disk_1: A small circular optical disk with an iridescent purple/silver sheen. It is on the desktop near the seam between two tabletop panels, roughly between the book area (left) and the laptop area (right).
+- disk_2: Another similar iridescent disk. It is on the desktop more toward the right side of the overall desk (visible in the wider view with the lamp/book), also resting flat on the tabletop.
+- bottom_right_shelf: The open rectangular cubby/shelf in the bottom-right desk unit (below the right tabletop section). It is empty/visibly open, suitable for placing items inside.
+- laptop: Silver laptop on the right tabletop; open lid with a dark screen.
+- book: Blue textbook on the left tabletop, titled “PURPOSE 8” (large “8” on cover).
+
+Spatial relationships (predicate-relevant)
+- Current disk placements:
+  - disk_1 is **on the desktop surface**, positioned near the boundary between the left and right tabletop panels, slightly left of the laptop.
+  - disk_2 is **on the desktop surface** toward the right side of the desk (separate from disk_1), also lying flat.
+- Target receptacle placement:
+  - bottom_right_shelf is **below** the right tabletop and **directly under/near** the laptop area (bottom-right of the desk). It is the intended destination receptacle for both disks.
+
+Current state relevant to planning predicates
+- Agent location:
+  - The agent starts with **no (atLocation agent X)** true (it is “not at any object’s location” initially).
+- Holding state:
+  - The agent is not shown holding anything; assume **(not holdsAny)** initially (no object is in the agent’s grasp at start).
+- Receptacle openness:
+  - bottom_right_shelf is an open cubby (no door). It does not appear “openable” and does not have an opened/closed state in the scene.
+- inReceptacle relations (important for the task):
+  - Neither disk is currently in the bottom_right_shelf.
+  - Both disks are currently on the desktop (i.e., not contained in any receptacle).
+- Other state predicates:
+  - No evidence of toggled/on/hot/cool/clean/sliced states for the disks; they appear to be ordinary disks resting on the table.
+
+Task-relevant summary
+- Two movable disks (disk_1 and disk_2) must be transported from the desktop into the bottom_right_shelf receptacle (the open shelf/cubby at the bottom right of the desk). The shelf appears empty and accessible.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

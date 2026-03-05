@@ -1,0 +1,14 @@
+failed
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  purple_block
+  blue_block
+  red_block
+  pink_block
+
+Object does not have a type:
+  red_block
+  blue_block
+  pink_block
+  purple_block
+
+

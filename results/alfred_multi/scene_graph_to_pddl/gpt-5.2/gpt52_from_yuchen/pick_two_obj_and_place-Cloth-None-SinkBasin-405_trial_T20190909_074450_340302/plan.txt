@@ -1,0 +1,4 @@
+(gotolocation agent_robot rag_red_in_bathtub)
+(pickupobject agent_robot rag_red_in_bathtub)
+(gotolocation agent_robot sink_bathroom_oval_basin)
+(putobjectinreceptacle agent_robot rag_red_in_bathtub sink_bathroom_oval_basin)

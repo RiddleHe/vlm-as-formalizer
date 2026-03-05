@@ -1,0 +1,5 @@
+failed
+Predicate not defined in domain:
+  forall
+
+

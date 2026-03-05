@@ -1,0 +1,56 @@
+(define (problem put_slice_cold_lettuce_on_counter)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        sink1 - sink
+        fridge1 - fridge
+        lettuce1 - object
+        knife1 - knife
+        counter1 - object  ; treated as a surface/object for placement, not a receptacle per domain
+        dining_table1 - object
+        stovetop1 - object
+    )
+    (:init
+        ; Receptacles and their properties
+        (openable sink1)
+        (openable fridge1)
+        (not (opened fridge1))  ; fridge is closed initially
+        ; Objects and their locations
+        (atLocation agent1 dining_table1)  ; robot starts near the lettuce for efficiency, though not specified, we assume it can start there to begin task
+        (inReceptacle egg1 sink1)  ; from scene, but not needed for goal
+        (inReceptacle spoon1 sink1)  ; from scene, but not needed for goal
+        (atLocation lettuce1 dining_table1)
+        (atLocation knife1 stovetop1)
+        ; States of objects
+        (not (holdsAny agent1))
+        (not (isSliced lettuce1))
+        (not (isCool lettuce1))
+        (not (isClean lettuce1))
+        (not (isHot lettuce1))
+        (not (isOn knife1))
+        (not (isToggled knife1))
+        ; Note: counter1 is not a receptacle, so we cannot use PutObjectInReceptacle on it. We will use the fact that placing on counter is implied by not being in a receptacle and agent being at counter.
+    )
+    (:goal (and
+        (isSliced lettuce1)
+        (isCool lettuce1)
+        (atLocation agent1 counter1)  ; agent must be at counter to place the lettuce there
+        (not (holds agent1 lettuce1))  ; lettuce is no longer held
+        ; The lettuce should be on the counter. Since counter is not a receptacle, we cannot use inReceptacle. We rely on the agent placing it there by being at counter and not holding it.
+        ; We can add a predicate to represent "on counter" if needed, but domain doesn't have it. So we assume that if agent is at counter and not holding lettuce, and lettuce is not in any receptacle, it is on counter.
+        ; To be precise, we can only ensure it's not in any receptacle and agent is at counter. We'll add a predicate for "on counter" if domain allowed, but it doesn't. So we must rely on the action of placing it on counter being the final step.
+        ; However, the domain does not have an action for putting on a non-receptacle. So we must interpret "on counter" as the lettuce being at the counter location and not held and not in a receptacle.
+        ; We'll add a dummy predicate or use existing. Since we cannot, we will assume that after cooling, the agent goes to counter and the lettuce is placed there by the action of not holding it and being at counter.
+        ; But the domain doesn't have an action for putting on a non-receptacle. This is a limitation.
+        ; Given the domain, we must use PutObjectInReceptacle only for receptacles. So we cannot put lettuce on counter if counter is not a receptacle.
+        ; This is a problem. Let me re-read the domain: it defines only microwave, fridge, sink as receptacles. Counter is not a receptacle.
+        ; Therefore, we cannot put the lettuce on the counter using the provided actions.
+        ; We must reinterpret: perhaps the goal is to have the lettuce sliced and cooled and then the agent is at the counter with the lettuce? But the instruction says "on a counter".
+        ; Since the domain does not support placing on non-receptacles, we might need to adjust.
+        ; Alternatively, we can consider that after cooling, the agent puts the lettuce on the counter by simply not holding it and being at the counter, and we assume that is "on counter".
+        ; But the domain doesn't have a predicate for that.
+        ; Given the constraints, I will assume that the goal is to have the lettuce sliced and cooled and the agent at the counter, and the lettuce is not held and not in any receptacle, which implies it is on the counter.
+        ; So we add: (not (inReceptacle lettuce1 ?r)) for all receptacles, and (atLocation agent1 counter1), and not holding.
+        (forall (?r - receptacle) (not (inReceptacle lettuce1 ?r)))
+    ))
+)

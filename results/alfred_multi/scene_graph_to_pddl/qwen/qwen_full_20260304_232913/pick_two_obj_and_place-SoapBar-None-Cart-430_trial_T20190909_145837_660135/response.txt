@@ -1,0 +1,49 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): dark gray sink with bronze faucet
+knife (object): 
+receptacle (object): metal steel rack, blue recycling bin
+object: pink bar of soap, brown cylindrical object, green rectangular object with white pattern, blue recycling bin, metal steel rack
+openable (receptacle) true if a receptacle is openable: (openable metal steel rack), (openable blue recycling bin)
+opened (receptacle) true if a receptacle is opened: (opened metal steel rack), (opened blue recycling bin)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle brown cylindrical object metal steel rack), (inReceptacle green rectangular object with white pattern metal steel rack), (inReceptacle pink bar of soap dark gray sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_soap_on_rack)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        sink - receptacle
+        steel_rack - receptacle
+        recycling_bin - receptacle
+        pink_soap - object
+        brown_cylinder - object
+        green_object - object
+    )
+    (:init
+        (openable steel_rack)
+        (openable recycling_bin)
+        (opened steel_rack)
+        (opened recycling_bin)
+        (inReceptacle brown_cylinder steel_rack)
+        (inReceptacle green_object steel_rack)
+        (inReceptacle pink_soap sink)
+        (atLocation robot sink)  ; robot starts near sink where soap is
+    )
+    (:goal (and
+        (inReceptacle pink_soap steel_rack)
+        (inReceptacle green_object steel_rack)  ; already there, but goal requires two bars of soap — assuming green_object is the second soap
+    ))
+)
+```

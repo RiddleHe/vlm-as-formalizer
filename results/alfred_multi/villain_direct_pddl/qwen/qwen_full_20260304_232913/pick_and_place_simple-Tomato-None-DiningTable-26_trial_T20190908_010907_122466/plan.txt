@@ -1,0 +1,4 @@
+(gotolocation agent1 tomato1)
+(pickupobject agent1 tomato1)
+(gotolocation agent1 table1)
+(putobjectinreceptacle agent1 tomato1 table1)

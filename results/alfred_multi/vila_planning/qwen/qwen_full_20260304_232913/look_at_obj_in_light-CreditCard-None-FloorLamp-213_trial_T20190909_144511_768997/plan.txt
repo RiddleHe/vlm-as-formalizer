@@ -1,0 +1,5 @@
+(GotoLocation robot creditcard)
+(PickupObject robot creditcard)
+(GotoLocation robot floorlamp)
+(ToggleObject robot floorlamp)
+(PutObjectInReceptacle robot creditcard floorlamp)

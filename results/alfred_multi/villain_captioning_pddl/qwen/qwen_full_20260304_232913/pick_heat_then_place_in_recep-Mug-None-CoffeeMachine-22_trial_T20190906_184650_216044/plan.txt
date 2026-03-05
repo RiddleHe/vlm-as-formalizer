@@ -1,0 +1,6 @@
+(gotolocation agent1 coffee_cup1)
+(pickupobject agent1 coffee_cup1)
+(gotolocation agent1 microwave1)
+(heatobject agent1 microwave1 coffee_cup1)
+(gotolocation agent1 coffee_maker1)
+(putobjectinreceptacle agent1 coffee_cup1 coffee_maker1)

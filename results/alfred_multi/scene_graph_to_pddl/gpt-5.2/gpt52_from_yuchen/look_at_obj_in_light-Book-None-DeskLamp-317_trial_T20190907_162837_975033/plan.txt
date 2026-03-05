@@ -1,0 +1,3 @@
+(gotolocation robot table_lamp_with_green_shade_on_nightstand)
+(toggleobject robot table_lamp_with_green_shade_on_nightstand)
+(gotolocation robot teal_blue_book_on_bed)

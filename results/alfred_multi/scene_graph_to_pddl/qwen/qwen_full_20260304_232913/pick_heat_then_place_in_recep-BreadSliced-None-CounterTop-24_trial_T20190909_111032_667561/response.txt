@@ -1,0 +1,59 @@
+Scene graph:
+agent: robot
+microwave (receptacle): red microwave
+fridge (receptacle): white fridge
+sink (receptacle): left sink basin, right sink basin
+knife (object): yellow-handled knife, black-handled knife
+receptacle (object): golden trash can, wooden cabinet under sink
+object: red microwave, white fridge, left sink basin, right sink basin, golden trash can, wooden cabinet under sink, yellow-handled knife, black-handled knife, wine glass, salt shaker, apple, toaster, plate inside microwave
+openable (receptacle) true if a receptacle is openable: (openable red microwave), (openable white fridge), (openable golden trash can)
+opened (receptacle) true if a receptacle is opened: (opened red microwave)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn red microwave)
+isToggled (object) true if the object has been toggled: (isToggled red microwave)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle plate inside microwave red microwave)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot red microwave)
+
+PDDL problem: ```pddl
+(define (problem put_warm_slice_of_bread)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        red_microwave - microwave
+        white_fridge - fridge
+        left_sink_basin - sink
+        right_sink_basin - sink
+        golden_trash_can - receptacle
+        wooden_cabinet_under_sink - receptacle
+        yellow_handled_knife - knife
+        black_handled_knife - knife
+        wine_glass - object
+        salt_shaker - object
+        apple - object
+        toaster - object
+        plate_inside_microwave - object
+    )
+    (:init
+        (openable red_microwave)
+        (openable white_fridge)
+        (openable golden_trash_can)
+        (opened red_microwave)
+        (isOn red_microwave)
+        (isToggled red_microwave)
+        (inReceptacle plate_inside_microwave red_microwave)
+        (atLocation robot red_microwave)
+    )
+    (:goal
+        (and
+            (inReceptacle apple wooden_cabinet_under_sink)
+            (isSliced apple)
+            (isHot apple)
+        )
+    )
+)
+```

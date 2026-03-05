@@ -1,0 +1,6 @@
+(gotolocation agent1 table)
+(gotolocation agent1 sink)
+(pickupobject agent1 mug)
+(cleanobject agent1 sink mug)
+(gotolocation agent1 table)
+(putobjectinreceptacle agent1 mug table)

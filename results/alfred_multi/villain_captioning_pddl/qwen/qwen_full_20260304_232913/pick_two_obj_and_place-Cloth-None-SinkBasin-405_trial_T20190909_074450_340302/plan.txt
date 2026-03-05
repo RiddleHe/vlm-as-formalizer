@@ -1,0 +1,8 @@
+(gotolocation agent1 bathtub)
+(pickupobject agent1 rag_brown)
+(gotolocation agent1 sink)
+(putobjectinreceptacle agent1 rag_brown sink)
+(gotolocation agent1 bathtub)
+(pickupobject agent1 rag_red)
+(gotolocation agent1 sink)
+(putobjectinreceptacle agent1 rag_red sink)

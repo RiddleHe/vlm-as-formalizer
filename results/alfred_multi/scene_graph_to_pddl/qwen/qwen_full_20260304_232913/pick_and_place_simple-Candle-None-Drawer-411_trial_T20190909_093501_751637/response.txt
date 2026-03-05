@@ -1,0 +1,45 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): beige sink
+knife (object): 
+receptacle (object): beige sink, green countertop, white cabinet under sink
+object: small pink candle, black soap dispenser, pink bar of soap, beige sink, green countertop, white cabinet under sink
+openable (receptacle) true if a receptacle is openable: (openable beige sink), (openable white cabinet under sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle pink bar of soap beige sink), (inReceptacle small pink candle green countertop), (inReceptacle black soap dispenser green countertop)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_candle_in_drawer)
+    (:domain put_task)
+    (:objects
+        agent
+        beige_sink - sink
+        green_countertop - receptacle
+        white_cabinet_under_sink - receptacle
+        small_pink_candle - object
+        black_soap_dispenser - object
+        pink_bar_of_soap - object
+    )
+    (:init
+        (openable beige_sink)
+        (openable white_cabinet_under_sink)
+        (inReceptacle pink_bar_of_soap beige_sink)
+        (inReceptacle small_pink_candle green_countertop)
+        (inReceptacle black_soap_dispenser green_countertop)
+    )
+    (:goal
+        (inReceptacle small_pink_candle white_cabinet_under_sink)
+    )
+)
+```

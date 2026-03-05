@@ -1,0 +1,6 @@
+(gotolocation robot_agent tomato_left_on_counter)
+(pickupobject robot_agent tomato_left_on_counter)
+(gotolocation robot_agent red_countertop_microwave)
+(heatobject robot_agent red_countertop_microwave tomato_left_on_counter)
+(gotolocation robot_agent stainless_double_sink)
+(putobjectinreceptacle robot_agent tomato_left_on_counter stainless_double_sink)

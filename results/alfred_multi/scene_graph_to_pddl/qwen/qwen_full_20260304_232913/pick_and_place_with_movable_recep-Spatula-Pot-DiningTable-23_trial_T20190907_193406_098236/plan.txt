@@ -1,0 +1,8 @@
+(gotolocation robot shelf)
+(pickupobject robot pot1)
+(gotolocation robot table)
+(putobjectinreceptacle robot pot1 table)
+(gotolocation robot tray)
+(pickupobject robot tray)
+(gotolocation robot table)
+(putobjectinreceptacle robot tray table)

@@ -1,0 +1,281 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Place a bowl with a pencil in it on a nightstand.
+    
+
+SCENE CAPTION:
+Scene Description:
+
+The provided images depict a room with several pieces of furniture and objects. The goal is to place a bowl with a pencil in it on a nightstand. Based on the domain definition and visual analysis, here is a detailed description:
+
+1. Objects and their types:
+   - Receptacles: There are several receptacles in the scene:
+     - A desk (L-shaped wooden desk) — functions as a surface for holding objects, but not explicitly openable; not a receptacle per domain definition.
+     - A nightstand (dark wood, next to the bed) — a small cabinet with a top surface and a drawer; the drawer is openable.
+     - A trash can (gray, cylindrical, next to the desk) — open-top, can hold objects.
+     - A bed (with blue blanket and pillow) — not a receptacle per domain.
+     - A laptop (on the desk) — not a receptacle.
+     - A monitor (on the desk) — not a receptacle.
+     - A book (on the desk and on the bed) — not a receptacle.
+     - A CD (on the desk) — not a receptacle.
+     - A blue can (on the desk) — not a receptacle.
+     - A black box (on the desk, possibly a speaker or alarm clock) — not a receptacle.
+     - A bowl (not visible in any image) — not present in the scene.
+     - A pencil (blue, on the desk) — object, not a receptacle.
+
+   - Objects (non-receptacles):
+     - Pencil: One blue pencil is visible on the desk surface.
+     - Book: One book with a yellow cover is on the desk; another book is on the bed.
+     - CD: One CD is on the desk.
+     - Can: One blue can with a white top is on the desk.
+     - Laptop: One black laptop is on the desk.
+     - Monitor: Two black monitors are on the desk.
+     - Nightstand: One dark wood nightstand is next to the bed.
+     - Trash can: One gray trash can is next to the desk.
+     - Bed: One bed with a blue blanket and a patterned pillow.
+
+2. Quantities:
+   - Pencils: 1 (blue, on the desk)
+   - Bowls: 0 (none visible in any image)
+   - Nightstands: 1 (dark wood, next to the bed)
+   - Trash cans: 1 (gray, next to the desk)
+   - Books: 2 (one on desk, one on bed)
+   - CDs: 1 (on desk)
+   - Cans: 1 (blue, on desk)
+   - Laptops: 1 (on desk)
+   - Monitors: 2 (on desk)
+
+3. Spatial relationships:
+   - The blue pencil is on the desk surface.
+   - The book with the yellow cover is on the desk, near the pencil.
+   - The CD is on the desk, near the book.
+   - The blue can is on the desk, near the monitors.
+   - The laptop is on the desk.
+   - The monitors are on the desk.
+   - The trash can is on the floor next to the desk.
+   - The nightstand is next to the bed, with its drawer open.
+   - The book is also on the bed, near the pillow.
+   - No bowl is present in the scene.
+
+4. Current state of objects relevant to the task:
+   - The pencil is on the desk and is not currently held by any agent.
+   - There is no bowl in the scene; therefore, it cannot be placed with the pencil in it.
+   - The nightstand is a receptacle (with an openable drawer) and is located next to the bed.
+   - The drawer of the nightstand is open (based on visual inspection).
+
+5. Colors and positions:
+   - Pencil: Blue, lying horizontally on the desk surface.
+   - Desk: Light wood, L-shaped, occupies the center of the room.
+   - Nightstand: Dark wood, rectangular, positioned to the right of the bed.
+   - Trash can: Gray, cylindrical, positioned on the floor to the left of the desk.
+   - Book (desk): Yellow cover, lying flat on the desk.
+   - Book (bed): Same as above, lying on the blue blanket.
+   - CD: Silver with a colorful label, on the desk.
+   - Can: Blue body with a white top, standing upright on the desk.
+   - Laptop: Black, open, on the desk.
+   - Monitors: Black, two of them, side by side on the desk.
+   - Bed: Blue blanket, patterned pillow, positioned against the wall.
+   - Floor: Beige carpet.
+
+Note: The instruction requires placing a bowl with a pencil in it on a nightstand. However, no bowl is present in the scene. Therefore, the task cannot be completed as specified without introducing a bowl into the environment. The pencil is on the desk and can be picked up, but there is no container to put it in before placing it on the nightstand.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

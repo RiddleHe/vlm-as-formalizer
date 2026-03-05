@@ -1,0 +1,22 @@
+```pddl
+(define (problem examine_cell_phone)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        cell_phone - object
+        tall_lamp - object
+        nightstand - receptacle
+    )
+    (:init
+        (atLocation robot nightstand)
+        (inReceptacle cell_phone nightstand)
+        (isOn tall_lamp)
+    )
+    (:goal
+        (and
+            (atLocation robot tall_lamp)
+            (holds robot cell_phone)
+        )
+    )
+)
+```

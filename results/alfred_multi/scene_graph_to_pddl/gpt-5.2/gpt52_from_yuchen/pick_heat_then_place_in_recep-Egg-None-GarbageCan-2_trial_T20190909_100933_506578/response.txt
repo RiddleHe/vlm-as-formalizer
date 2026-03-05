@@ -1,0 +1,59 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): red_front_microwave_on_counter
+fridge (receptacle): stainless_front_fridge_door_center
+sink (receptacle): right_counter_sink_basin
+knife (object): (none visible)
+receptacle (object): red_front_microwave_on_counter, stainless_front_fridge_door_center, right_counter_sink_basin
+object: small_brown_egg_on_counter, silver_kettle_with_blue_handle_on_counter, tall_pinkish_bottle_on_counter, black_toaster_left_of_microwave, green_apple_on_blue_plate_in_microwave, black_pot_on_stove_left, black_pot_in_sink_right, cardboard_box_stack_near_sink, small_salt_shaker_on_island_counter, white_trash_bin_floor_corner
+
+openable (receptacle) true if a receptacle is openable: (openable red_front_microwave_on_counter), (openable stainless_front_fridge_door_center)
+opened (receptacle) true if a receptacle is opened: (opened stainless_front_fridge_door_center)
+holdsAny (agent) agent ?a holds an object: (none)
+isClean (object) true if the object has been clean in sink: (none)
+isHot (object) true if the object has been heated up: (none)
+isCool (object) true if the object has been cooled: (none)
+isOn (object) true if the object is on: (none)
+isToggled (object) true if the object has been toggled: (none)
+isSliced (object) true if the object is sliced: (none)
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle green_apple_on_blue_plate_in_microwave red_front_microwave_on_counter), (inReceptacle black_pot_in_sink_right right_counter_sink_basin)
+holds (agent, object) object ?o is held by agent ?a: (none)
+atLocation (agent, object) : (none)
+
+PDDL problem: (define (problem heat_egg_and_trash)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    red_front_microwave_on_counter - microwave
+    stainless_front_fridge_door_center - fridge
+    right_counter_sink_basin - sink
+
+    small_brown_egg_on_counter - object
+    silver_kettle_with_blue_handle_on_counter - object
+    tall_pinkish_bottle_on_counter - object
+    black_toaster_left_of_microwave - object
+    green_apple_on_blue_plate_in_microwave - object
+    black_pot_on_stove_left - object
+    black_pot_in_sink_right - object
+    cardboard_box_stack_near_sink - object
+    small_salt_shaker_on_island_counter - object
+    white_trash_bin_floor_corner - receptacle
+  )
+
+  (:init
+    (openable red_front_microwave_on_counter)
+    (openable stainless_front_fridge_door_center)
+    (opened stainless_front_fridge_door_center)
+
+    (inReceptacle green_apple_on_blue_plate_in_microwave red_front_microwave_on_counter)
+    (inReceptacle black_pot_in_sink_right right_counter_sink_basin)
+  )
+
+  (:goal
+    (and
+      (isHot small_brown_egg_on_counter)
+      (inReceptacle small_brown_egg_on_counter white_trash_bin_floor_corner)
+    )
+  )
+)

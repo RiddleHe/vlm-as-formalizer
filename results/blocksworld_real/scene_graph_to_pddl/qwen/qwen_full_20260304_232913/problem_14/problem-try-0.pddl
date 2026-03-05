@@ -1,0 +1,35 @@
+(define (problem block_stacking)
+    (:domain blocksworld)
+    (:objects
+        orange_block
+        red_block
+        green_block
+        purple_block
+        yellow_block
+        blue_block
+        robot_arm - robot
+    )
+    (:init
+        (ontable orange_block)
+        (ontable red_block)
+        (ontable green_block)
+        (ontable purple_block)
+        (ontable yellow_block)
+        (ontable blue_block)
+        (clear orange_block)
+        (clear red_block)
+        (clear green_block)
+        (clear purple_block)
+        (clear yellow_block)
+        (clear blue_block)
+        (handempty robot_arm)
+    )
+    (:goal (and
+        (on purple_block yellow_block)
+        (on yellow_block orange_block)
+        (on blue_block red_block)
+        (on red_block green_block)
+        (clear purple_block)
+        (clear blue_block)
+    ))
+)

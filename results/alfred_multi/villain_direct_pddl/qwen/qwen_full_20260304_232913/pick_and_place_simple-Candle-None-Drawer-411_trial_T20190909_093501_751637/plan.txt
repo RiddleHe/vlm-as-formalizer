@@ -1,0 +1,4 @@
+(gotolocation agent1 candle)
+(pickupobject agent1 candle)
+(gotolocation agent1 drawer)
+(putobjectinreceptacle agent1 candle drawer)

@@ -1,0 +1,8 @@
+(gotolocation robot towel1)
+(pickupobject robot towel1)
+(gotolocation robot bathtub)
+(putobjectinreceptacle robot towel1 bathtub)
+(gotolocation robot towel_rack)
+(pickupobject robot towel2)
+(gotolocation robot bathtub)
+(putobjectinreceptacle robot towel2 bathtub)

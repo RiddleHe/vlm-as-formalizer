@@ -1,0 +1,8 @@
+(GotoLocation robot remote)
+(PickupObject robot remote)
+(GotoLocation robot armchair)
+(PutObjectInReceptacle robot remote armchair)
+(GotoLocation robot remote)
+(PickupObject robot remote)
+(GotoLocation robot armchair)
+(PutObjectInReceptacle robot remote armchair)

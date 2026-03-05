@@ -1,0 +1,6 @@
+(gotolocation robot knife_gray_handle_on_island_counter)
+(pickupobject robot knife_gray_handle_on_island_counter)
+(gotolocation robot sink_basin_left_counter)
+(cleanobject robot sink_basin_left_counter knife_gray_handle_on_island_counter)
+(gotolocation robot cabinet_drawers_white_under_counter)
+(putobjectinreceptacle robot knife_gray_handle_on_island_counter cabinet_drawers_white_under_counter)

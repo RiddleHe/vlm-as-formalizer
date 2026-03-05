@@ -1,0 +1,8 @@
+(GotoLocation agent television_stand)
+(PickupObject agent credit_card_1)
+(GotoLocation agent table)
+(PutObjectInReceptacle agent credit_card_1 table)
+(GotoLocation agent television_stand)
+(PickupObject agent credit_card_2)
+(GotoLocation agent table)
+(PutObjectInReceptacle agent credit_card_2 table)

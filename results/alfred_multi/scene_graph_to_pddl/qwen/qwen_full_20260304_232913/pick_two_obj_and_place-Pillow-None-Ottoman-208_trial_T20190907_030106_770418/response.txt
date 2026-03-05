@@ -1,0 +1,47 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): dark_ottoman, dark_armchair, dark_sofa
+object: orange_plaid_cushion, green_cushion, remote_control
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle orange_plaid_cushion dark_armchair), (inReceptacle remote_control dark_ottoman), (inReceptacle orange_plaid_cushion dark_sofa), (inReceptacle green_cushion dark_sofa), (inReceptacle remote_control dark_sofa)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_cushions_on_ottoman)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        dark_ottoman - receptacle
+        dark_armchair - receptacle
+        dark_sofa - receptacle
+        orange_plaid_cushion - object
+        green_cushion - object
+        remote_control - object
+    )
+    (:init
+        (atLocation robot dark_armchair)
+        (inReceptacle orange_plaid_cushion dark_armchair)
+        (inReceptacle remote_control dark_ottoman)
+        (inReceptacle orange_plaid_cushion dark_sofa)
+        (inReceptacle green_cushion dark_sofa)
+        (inReceptacle remote_control dark_sofa)
+    )
+    (:goal (and
+        (inReceptacle orange_plaid_cushion dark_ottoman)
+        (inReceptacle green_cushion dark_ottoman)
+    ))
+)
+```

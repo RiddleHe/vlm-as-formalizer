@@ -1,0 +1,6 @@
+(unstack purple_block_top_left_stack pink_block_middle_left_stack robot_arm)
+(put-down purple_block_top_left_stack robot_arm)
+(unstack pink_block_middle_left_stack yellow_block_bottom_left_stack robot_arm)
+(stack pink_block_middle_left_stack purple_block_top_left_stack robot_arm)
+(pick-up yellow_block_bottom_left_stack robot_arm)
+(stack yellow_block_bottom_left_stack orange_block_top_right_stack robot_arm)

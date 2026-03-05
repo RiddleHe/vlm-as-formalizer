@@ -1,0 +1,6 @@
+Predicate argument has wrong type:
+  atLocation apple microwave: apple is not a agent
+  atLocation fridge microwave: fridge is not a agent
+  atLocation knife apple: knife is not a agent
+  atLocation white_bin apple: white_bin is not a agent
+

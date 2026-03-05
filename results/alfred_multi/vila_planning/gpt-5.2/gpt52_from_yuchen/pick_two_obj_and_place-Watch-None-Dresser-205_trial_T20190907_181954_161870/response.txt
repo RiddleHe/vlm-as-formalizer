@@ -1,0 +1,8 @@
+(GotoLocation agent1 remotecontrol1)
+(PickupObject agent1 remotecontrol1)
+(GotoLocation agent1 tvstand1)
+(PutObjectInReceptacle agent1 remotecontrol1 tvstand1)
+(GotoLocation agent1 remotecontrol2)
+(PickupObject agent1 remotecontrol2)
+(GotoLocation agent1 tvstand1)
+(PutObjectInReceptacle agent1 remotecontrol2 tvstand1)

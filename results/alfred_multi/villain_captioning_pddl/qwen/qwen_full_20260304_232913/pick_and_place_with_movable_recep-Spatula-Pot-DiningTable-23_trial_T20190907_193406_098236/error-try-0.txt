@@ -1,0 +1,8 @@
+Predicate argument has wrong type:
+  atLocation frying_pan table: frying_pan is not a agent
+  atLocation pot2 stove: pot2 is not a agent
+  atLocation pot1 table: pot1 is not a agent
+  atLocation pot1 stove: pot1 is not a agent
+  atLocation shelf table: shelf is not a agent
+  atLocation knife table: knife is not a agent
+

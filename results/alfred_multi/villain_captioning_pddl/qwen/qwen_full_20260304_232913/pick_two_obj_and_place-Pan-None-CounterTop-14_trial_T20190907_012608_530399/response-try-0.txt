@@ -1,0 +1,36 @@
+```pddl
+(define (problem place_pans_on_counter)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - receptacle
+        stove - receptacle
+        pan1 pan2 - object
+        counter - object
+    )
+    (:init
+        (openable microwave)
+        (openable stove)
+        (not (opened microwave))
+        (not (opened stove))
+        (atLocation robot stove)
+        (inReceptacle pan1 stove)
+        (inReceptacle pan2 stove)
+        (not (holdsAny robot))
+        (not (isClean pan1))
+        (not (isClean pan2))
+        (not (isHot pan1))
+        (not (isHot pan2))
+        (not (isCool pan1))
+        (not (isCool pan2))
+        (not (isSliced pan1))
+        (not (isSliced pan2))
+        (not (isOn stove))
+        (not (isToggled stove))
+    )
+    (:goal (and
+        (inReceptacle pan1 counter)
+        (inReceptacle pan2 counter)
+    ))
+)
+```

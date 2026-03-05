@@ -1,0 +1,8 @@
+(GotoLocation agent1 green_sponge_counter)
+(PickupObject agent1 green_sponge)
+(GotoLocation agent1 bathtub)
+(PutObjectInReceptacle agent1 green_sponge bathtub)
+(GotoLocation agent1 green_sponge_trashcan)
+(PickupObject agent1 green_sponge_2)
+(GotoLocation agent1 bathtub)
+(PutObjectInReceptacle agent1 green_sponge_2 bathtub)

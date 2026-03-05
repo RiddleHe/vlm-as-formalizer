@@ -1,0 +1,22 @@
+(define (problem put_bowl_with_credit_card_on_glass_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        bowl1 - object
+        creditcard1 - object
+        diningtable1 - receptacle
+        coffeetable1 - receptacle
+    )
+    (:init
+        (atLocation agent1 diningtable1)
+        (inReceptacle bowl1 diningtable1)
+        (inReceptacle creditcard1 diningtable1)
+        (not (holdsAny agent1))
+    )
+    (:goal
+        (and
+            (inReceptacle bowl1 coffeetable1)
+            (inReceptacle creditcard1 bowl1)
+        )
+    )
+)

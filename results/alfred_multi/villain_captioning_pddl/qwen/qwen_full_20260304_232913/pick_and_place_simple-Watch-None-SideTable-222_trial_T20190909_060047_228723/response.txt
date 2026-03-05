@@ -1,0 +1,43 @@
+```pddl
+(define (problem move_watch_to_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        tv_stand - receptacle
+        small_wooden_table - receptacle
+        watch1 watch2 - object
+        statuette - object
+        card - object
+        remote - object
+        newspaper - object
+    )
+    (:init
+        (atLocation robot tv_stand)
+        (inReceptacle watch1 tv_stand)
+        (inReceptacle watch2 tv_stand)
+        (inReceptacle statuette tv_stand)
+        (inReceptacle card tv_stand)
+        (inReceptacle remote tv_stand)
+        (inReceptacle newspaper small_wooden_table)
+        (not (holdsAny robot))
+        (not (opened tv_stand))
+        (not (opened small_wooden_table))
+        (not (isClean watch1))
+        (not (isClean watch2))
+        (not (isHot watch1))
+        (not (isHot watch2))
+        (not (isCool watch1))
+        (not (isCool watch2))
+        (not (isOn watch1))
+        (not (isOn watch2))
+        (not (isToggled watch1))
+        (not (isToggled watch2))
+        (not (isSliced watch1))
+        (not (isSliced watch2))
+    )
+    (:goal (and
+        (inReceptacle watch1 small_wooden_table)
+        (not (inReceptacle watch1 tv_stand))
+    ))
+)
+```

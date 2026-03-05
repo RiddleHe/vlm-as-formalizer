@@ -1,0 +1,61 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): (none)
+fridge (receptacle): (none)
+sink (receptacle): white_rectangular_sink_basin_right_counter
+knife (object): (none)
+receptacle (object): dark_marble_bathroom_countertop_surface, white_rectangular_sink_basin_right_counter, wall_mounted_toilet_paper_dispenser_left_of_toilet
+object: toilet_paper_roll_on_right_counter, crumpled_white_tissue_on_counter, teal_toothbrush_on_counter, toilet_with_tank_and_lid, black_rubber_plunger_on_floor, toilet_brush_in_holder_on_floor, small_pink_item_in_sink
+
+openable (receptacle) true if a receptacle is openable: (none)
+opened (receptacle) true if a receptacle is opened: (none)
+holdsAny (agent) agent ?a holds an object: (none)
+isClean (object) true if the object has been clean in sink: (none)
+isHot (object) true if the object has been heated up: (none)
+isCool (object) true if the object has been cooled: (none)
+isOn (object) true if the object is on: (none)
+isToggled (object) true if the object has been toggled: (none)
+isSliced (object) true if the object is sliced: (none)
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle toilet_paper_roll_on_right_counter dark_marble_bathroom_countertop_surface)
+- (inReceptacle crumpled_white_tissue_on_counter dark_marble_bathroom_countertop_surface)
+- (inReceptacle teal_toothbrush_on_counter dark_marble_bathroom_countertop_surface)
+- (inReceptacle small_pink_item_in_sink white_rectangular_sink_basin_right_counter)
+
+holds (agent, object) object ?o is held by agent ?a: (none)
+
+atLocation (agent, object) :
+- (none)
+
+PDDL problem: (define (problem move_toilet_paper_to_dispenser)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    dark_marble_bathroom_countertop_surface - receptacle
+    white_rectangular_sink_basin_right_counter - sink
+    wall_mounted_toilet_paper_dispenser_left_of_toilet - receptacle
+
+    toilet_paper_roll_on_right_counter - object
+    crumpled_white_tissue_on_counter - object
+    teal_toothbrush_on_counter - object
+    small_pink_item_in_sink - object
+    toilet_with_tank_and_lid - object
+    black_rubber_plunger_on_floor - object
+    toilet_brush_in_holder_on_floor - object
+  )
+
+  (:init
+    (inReceptacle toilet_paper_roll_on_right_counter dark_marble_bathroom_countertop_surface)
+    (inReceptacle crumpled_white_tissue_on_counter dark_marble_bathroom_countertop_surface)
+    (inReceptacle teal_toothbrush_on_counter dark_marble_bathroom_countertop_surface)
+    (inReceptacle small_pink_item_in_sink white_rectangular_sink_basin_right_counter)
+  )
+
+  (:goal
+    (and
+      (inReceptacle toilet_paper_roll_on_right_counter wall_mounted_toilet_paper_dispenser_left_of_toilet)
+    )
+  )
+)

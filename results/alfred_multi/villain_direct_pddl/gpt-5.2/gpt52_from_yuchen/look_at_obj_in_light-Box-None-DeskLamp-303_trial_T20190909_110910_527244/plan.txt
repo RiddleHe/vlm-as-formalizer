@@ -1,0 +1,7 @@
+(gotolocation robot lamp)
+(pickupobject robot lamp)
+(toggleobject robot lamp)
+(gotolocation robot box)
+(putobjectinreceptacle robot lamp box)
+(gotolocation robot lamp)
+(gotolocation robot box)

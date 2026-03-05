@@ -1,0 +1,52 @@
+Scene graph:
+agent: none visible
+microwave (receptacle): none visible
+fridge (receptacle): none visible
+sink (receptacle): white rectangular sink basin embedded in green countertop
+knife (object): none visible
+receptacle (object): white rectangular sink basin embedded in green countertop
+object: small beige candle in gold holder (left of sink on countertop); pink soap bar inside sink; pink soap dispenser with dark green pump (left side of sink); pink soap dispenser with dark green pump (right side of sink)
+
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle pink-soap-bar white-rectangular-sink-basin)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_task_candle_in_drawer)
+  (:domain put_task)
+
+  (:objects
+    agent1 - agent
+
+    white-rectangular-sink-basin - sink
+
+    small-beige-candle-in-gold-holder - object
+    pink-soap-bar - object
+    pink-soap-dispenser-left - object
+    pink-soap-dispenser-right - object
+  )
+
+  (:init
+    ;; robot starts not at any location (no atLocation facts)
+
+    ;; scene state
+    (inReceptacle pink-soap-bar white-rectangular-sink-basin)
+  )
+
+  ;; Instruction: Putting a candle in a drawer
+  ;; Note: no drawer (openable receptacle) exists in the provided scene graph,
+  ;; so this goal cannot be expressed with available objects.
+  (:goal
+    (and
+      ;; impossible to specify "in a drawer" given current objects
+    )
+  )
+)

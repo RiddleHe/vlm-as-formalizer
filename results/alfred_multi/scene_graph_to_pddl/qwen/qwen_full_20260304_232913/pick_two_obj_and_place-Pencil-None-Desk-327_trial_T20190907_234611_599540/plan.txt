@@ -1,0 +1,4 @@
+(gotolocation robot orange_pencil)
+(pickupobject robot orange_pencil)
+(gotolocation robot wooden_table)
+(putobjectinreceptacle robot orange_pencil wooden_table)

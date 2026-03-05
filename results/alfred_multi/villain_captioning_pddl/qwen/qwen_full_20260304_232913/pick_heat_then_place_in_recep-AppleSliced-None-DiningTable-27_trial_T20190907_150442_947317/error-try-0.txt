@@ -1,0 +1,3 @@
+Predicate argument has wrong type:
+  atLocation microwave countertop: microwave is not a agent
+

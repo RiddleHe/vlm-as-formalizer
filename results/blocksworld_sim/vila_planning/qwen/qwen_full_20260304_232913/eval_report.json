@@ -1,0 +1,1055 @@
+{
+  "result_dir": [
+    "/home/mh3897/vlm-asf-muyu/results/blocksworld_sim/vila_planning/qwen/qwen_full_20260304_232913",
+    null
+  ],
+  "data_dir": [
+    "/home/mh3897/vlm-asf-muyu/data/blocksworld_sim",
+    null
+  ],
+  "summary": {
+    "tasks_total": 10,
+    "tasks_with_plan": 10,
+    "successes": 1,
+    "failures": 9,
+    "success_rate": 0.1,
+    "avg_steps_planned": 8.6,
+    "avg_steps_executed": 3.4
+  },
+  "tasks": [
+    {
+      "task_id": "problem_1",
+      "has_plan": true,
+      "mapping": {
+        "green": "green_block",
+        "pink": "pink_block",
+        "red": "red_block",
+        "robot": "robot",
+        "yellow": "yellow_block"
+      },
+      "plan_len": 8,
+      "success": true,
+      "stopped_step": 8,
+      "total_steps": 8,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "green_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "red_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "yellow_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "green_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": null
+    },
+    {
+      "task_id": "problem_10",
+      "has_plan": true,
+      "mapping": {
+        "blue": "blue_block",
+        "green": "green_block",
+        "orange": "orange_block",
+        "pink": "pink_block",
+        "red": "red_block",
+        "robot1": "robot",
+        "yellow": "yellow_block"
+      },
+      "plan_len": 12,
+      "success": false,
+      "stopped_step": 12,
+      "total_steps": 12,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "green_block",
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "yellow_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "pink_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "red_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "orange_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "green_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": null
+    },
+    {
+      "task_id": "problem_2",
+      "has_plan": true,
+      "mapping": {
+        "blue_block": "blue_block",
+        "pink_block": "pink_block",
+        "purple_block": "purple_block",
+        "red_block": "red_block",
+        "robot1": "robot"
+      },
+      "plan_len": 6,
+      "success": false,
+      "stopped_step": 2,
+      "total_steps": 6,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "handfull",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "holding",
+          "args": [
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "blue_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "blue_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "purple_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "pink_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": "Precondition failed at step 2: (stack red_block blue_block robot)"
+    },
+    {
+      "task_id": "problem_3",
+      "has_plan": true,
+      "mapping": {
+        "green": "green_block",
+        "pink": "pink_block",
+        "purple": "purple_block",
+        "red": "red_block",
+        "robot1": "robot",
+        "yellow": "yellow_block"
+      },
+      "plan_len": 6,
+      "success": false,
+      "stopped_step": 5,
+      "total_steps": 6,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "red_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "green_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "green_block",
+            "pink_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "purple_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "red_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "yellow_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": "Precondition failed at step 5: (pick-up red_block robot)"
+    },
+    {
+      "task_id": "problem_4",
+      "has_plan": true,
+      "mapping": {
+        "blue": "blue_block",
+        "orange": "orange_block",
+        "purple": "purple_block",
+        "red": "red_block",
+        "robot": "robot",
+        "yellow": "yellow_block"
+      },
+      "plan_len": 9,
+      "success": false,
+      "stopped_step": 1,
+      "total_steps": 9,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "yellow_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "yellow_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "blue_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "purple_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "red_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": "Precondition failed at step 1: (pick-up red_block robot)"
+    },
+    {
+      "task_id": "problem_5",
+      "has_plan": true,
+      "mapping": {
+        "blue": "blue_block",
+        "green": "green_block",
+        "orange": "orange_block",
+        "red": "red_block",
+        "robot": "robot",
+        "yellow": "yellow_block"
+      },
+      "plan_len": 8,
+      "success": false,
+      "stopped_step": 1,
+      "total_steps": 8,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "green_block",
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "yellow_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "red_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "blue_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "orange_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "green_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": "Precondition failed at step 1: (unstack yellow_block red_block robot)"
+    },
+    {
+      "task_id": "problem_6",
+      "has_plan": true,
+      "mapping": {
+        "orange": "orange_block",
+        "pink": "pink_block",
+        "purple": "purple_block",
+        "red": "red_block",
+        "robot": "robot",
+        "yellow": "yellow_block"
+      },
+      "plan_len": 5,
+      "success": false,
+      "stopped_step": 1,
+      "total_steps": 5,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "yellow_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "purple_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "orange_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": "Precondition failed at step 1: (unstack pink_block purple_block robot)"
+    },
+    {
+      "task_id": "problem_7",
+      "has_plan": true,
+      "mapping": {
+        "blue": "blue_block",
+        "green": "green_block",
+        "pink": "pink_block",
+        "purple": "purple_block",
+        "red": "red_block",
+        "robot1": "robot",
+        "yellow": "yellow_block"
+      },
+      "plan_len": 12,
+      "success": false,
+      "stopped_step": 1,
+      "total_steps": 12,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "clear",
+          "args": [
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "purple_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "pink_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "green_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "green_block",
+            "red_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "purple_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "blue_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": "Precondition failed at step 1: (pick-up yellow_block robot)"
+    },
+    {
+      "task_id": "problem_8",
+      "has_plan": true,
+      "mapping": {
+        "green": "green_block",
+        "orange": "orange_block",
+        "pink": "pink_block",
+        "purple": "purple_block",
+        "red": "red_block",
+        "robot": "robot",
+        "yellow": "yellow_block"
+      },
+      "plan_len": 9,
+      "success": false,
+      "stopped_step": 1,
+      "total_steps": 9,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "handempty",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "pink_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "pink_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "green_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "green_block",
+            "yellow_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "pink_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "orange_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "orange_block",
+            "red_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": "Precondition failed at step 1: (unstack green_block yellow_block robot)"
+    },
+    {
+      "task_id": "problem_9",
+      "has_plan": true,
+      "mapping": {
+        "blue": "blue_block",
+        "green": "green_block",
+        "orange": "orange_block",
+        "purple": "purple_block",
+        "red": "red_block",
+        "robot": "robot",
+        "yellow": "yellow_block"
+      },
+      "plan_len": 11,
+      "success": false,
+      "stopped_step": 2,
+      "total_steps": 11,
+      "final_state": [
+        {
+          "predicate": "clear",
+          "args": [
+            "purple_block"
+          ]
+        },
+        {
+          "predicate": "handfull",
+          "args": [
+            "robot"
+          ]
+        },
+        {
+          "predicate": "holding",
+          "args": [
+            "orange_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "green_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "green_block",
+            "yellow_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "blue_block"
+          ]
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "red_block"
+          ]
+        },
+        {
+          "predicate": "ontable",
+          "args": [
+            "red_block"
+          ]
+        }
+      ],
+      "goal_state": [
+        {
+          "predicate": "on",
+          "args": [
+            "purple_block",
+            "blue_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "blue_block",
+            "green_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "green_block",
+            "yellow_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "yellow_block",
+            "red_block"
+          ],
+          "negated": false
+        },
+        {
+          "predicate": "on",
+          "args": [
+            "red_block",
+            "orange_block"
+          ],
+          "negated": false
+        }
+      ],
+      "error": "Precondition failed at step 2: (pick-up red_block robot)"
+    }
+  ]
+}

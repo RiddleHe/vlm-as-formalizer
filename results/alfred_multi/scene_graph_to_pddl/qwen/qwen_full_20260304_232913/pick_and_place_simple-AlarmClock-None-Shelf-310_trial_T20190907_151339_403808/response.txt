@@ -1,0 +1,48 @@
+Scene graph:
+agent: agent1
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): wooden_cabinet_top, wooden_cabinet_bottom, wooden_desk
+object: black_lamp, black_monitor, silver_clock, black_smartphone, cd_disc, wooden_cabinet_top, wooden_cabinet_bottom, wooden_desk
+openable (receptacle) true if a receptacle is openable: (openable wooden_cabinet_top), (openable wooden_cabinet_bottom)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn black_lamp)
+isToggled (object) true if the object has been toggled: (isToggled black_lamp)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle black_monitor wooden_cabinet_top), (inReceptacle silver_clock wooden_cabinet_bottom), (inReceptacle black_smartphone wooden_cabinet_bottom), (inReceptacle cd_disc wooden_desk)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_clock_on_desk)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        wooden_cabinet_top - receptacle
+        wooden_cabinet_bottom - receptacle
+        wooden_desk - receptacle
+        black_lamp - object
+        black_monitor - object
+        silver_clock - object
+        black_smartphone - object
+        cd_disc - object
+    )
+    (:init
+        (openable wooden_cabinet_top)
+        (openable wooden_cabinet_bottom)
+        (isOn black_lamp)
+        (isToggled black_lamp)
+        (inReceptacle black_monitor wooden_cabinet_top)
+        (inReceptacle silver_clock wooden_cabinet_bottom)
+        (inReceptacle black_smartphone wooden_cabinet_bottom)
+        (inReceptacle cd_disc wooden_desk)
+    )
+    (:goal (and (inReceptacle silver_clock wooden_desk)))
+)
+```

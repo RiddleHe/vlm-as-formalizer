@@ -1,0 +1,8 @@
+(gotolocation agent1 disc1)
+(pickupobject agent1 disc1)
+(gotolocation agent1 desk_shelf)
+(putobjectinreceptacle agent1 disc1 desk_shelf)
+(gotolocation agent1 disc2)
+(pickupobject agent1 disc2)
+(gotolocation agent1 desk_shelf)
+(putobjectinreceptacle agent1 disc2 desk_shelf)

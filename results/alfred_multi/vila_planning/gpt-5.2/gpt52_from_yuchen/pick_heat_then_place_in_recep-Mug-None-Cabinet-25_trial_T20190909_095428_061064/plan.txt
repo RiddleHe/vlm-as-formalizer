@@ -1,0 +1,8 @@
+(GotoLocation agent1 coffee_machine)
+(PickupObject agent1 mug)
+(GotoLocation agent1 microwave)
+(HeatObject agent1 microwave mug)
+(GotoLocation agent1 cabinet)
+(OpenObject agent1 cabinet)
+(PutObjectInReceptacle agent1 mug cabinet)
+(CloseObject agent1 cabinet)

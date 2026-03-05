@@ -1,0 +1,69 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): stainless steel double sink
+knife (object): yellow-handled knife
+receptacle (object): wooden cabinet under sink, wooden cabinet above sink
+object: white mug, loaf of bread, fork, salt shaker, pepper shaker, wine glass, coffee machine
+openable (receptacle) true if a receptacle is openable: (openable wooden cabinet under sink), (openable wooden cabinet above sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn coffee machine)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle white mug coffee machine), (inReceptacle loaf of bread wooden cabinet under sink), (inReceptacle fork wooden cabinet under sink), (inReceptacle salt shaker wooden cabinet under sink), (inReceptacle pepper shaker wooden cabinet under sink), (inReceptacle wine glass window sill)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem warm_mug_and_put_in_cabinet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        wooden_cabinet_under_sink - receptacle
+        wooden_cabinet_above_sink - receptacle
+        white_mug - object
+        loaf_of_bread - object
+        fork - object
+        salt_shaker - object
+        pepper_shaker - object
+        wine_glass - object
+        coffee_machine - object
+    )
+    (:init
+        (openable wooden_cabinet_under_sink)
+        (openable wooden_cabinet_above_sink)
+        (isOn coffee_machine)
+        (inReceptacle white_mug coffee_machine)
+        (inReceptacle loaf_of_bread wooden_cabinet_under_sink)
+        (inReceptacle fork wooden_cabinet_under_sink)
+        (inReceptacle salt_shaker wooden_cabinet_under_sink)
+        (inReceptacle pepper_shaker wooden_cabinet_under_sink)
+        (inReceptacle wine_glass window_sill) ; Note: window_sill is not defined as a receptacle, so this may need adjustment. But per scene graph, it's included.
+        (not (holdsAny robot))
+        (not (atLocation robot white_mug))
+        (not (atLocation robot coffee_machine))
+        (not (atLocation robot wooden_cabinet_under_sink))
+        (not (atLocation robot wooden_cabinet_above_sink))
+        (not (isHot white_mug))
+        (not (isClean white_mug))
+        (not (isCool white_mug))
+        (not (isSliced white_mug))
+        (not (isToggled white_mug))
+        (not (opened wooden_cabinet_under_sink))
+        (not (opened wooden_cabinet_above_sink))
+    )
+    (:goal (and
+        (inReceptacle white_mug wooden_cabinet_above_sink)
+        (isHot white_mug)
+    ))
+)
+```

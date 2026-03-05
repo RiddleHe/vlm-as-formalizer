@@ -1,0 +1,48 @@
+(define (problem place_pan_with_knife)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        table - receptacle
+        stove - receptacle
+        pan - receptacle
+        knife - knife
+        pot1 pot2 - receptacle
+        trash_can - object
+        melon1 melon2 - object
+        wine_bottle - object
+        egg - object
+        salt_shaker - object
+        green_block - object
+        spoon - object
+        spatula - object
+        funnel - object
+        chair - object
+    )
+    (:init
+        (atLocation robot table) ; Assuming robot starts near the table for simplicity, as it's the main interaction area
+        (inReceptacle pan table)
+        (inReceptacle knife table)
+        (inReceptacle pot1 stove)
+        (inReceptacle pot2 stove)
+        (inReceptacle melon1 table)
+        (inReceptacle melon2 table)
+        (inReceptacle wine_bottle table)
+        (inReceptacle egg table)
+        (inReceptacle salt_shaker table)
+        (inReceptacle green_block table)
+        (inReceptacle spoon table)
+        (inReceptacle spatula table)
+        (inReceptacle funnel table)
+        (not (holdsAny robot))
+        (not (isSliced knife))
+        (not (isClean knife))
+        (not (isHot knife))
+        (not (isCool knife))
+        (not (isOn stove))
+        (not (isToggled stove))
+    )
+    (:goal (and
+        (inReceptacle knife pan)
+        (inReceptacle pan table)
+    ))
+)

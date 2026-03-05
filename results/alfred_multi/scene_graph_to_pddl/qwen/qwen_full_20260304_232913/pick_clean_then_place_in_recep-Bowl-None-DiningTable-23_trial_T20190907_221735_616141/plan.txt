@@ -1,0 +1,6 @@
+(gotolocation robot green_table)
+(pickupobject robot metal_pan)
+(gotolocation robot kitchen_sink)
+(cleanobject robot kitchen_sink metal_pan)
+(gotolocation robot green_table)
+(putobjectinreceptacle robot metal_pan green_table)

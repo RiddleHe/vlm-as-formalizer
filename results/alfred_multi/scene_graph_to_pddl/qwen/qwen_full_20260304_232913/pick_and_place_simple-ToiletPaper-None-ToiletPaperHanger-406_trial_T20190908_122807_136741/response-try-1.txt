@@ -1,0 +1,50 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): bathroom_sink
+knife (object): 
+receptacle (object): bathroom_sink, toilet, toilet_paper_dispenser
+object: toilet_paper_roll, white_towel, green_toothbrush, brown_toothbrush, toilet_brush, plunger, toilet_paper_dispenser, bathroom_sink, toilet
+openable (receptacle) true if a receptacle is openable: (openable toilet)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle white_towel bathroom_sink), (inReceptacle green_toothbrush bathroom_sink), (inReceptacle brown_toothbrush bathroom_sink), (inReceptacle toilet_brush toilet), (inReceptacle plunger toilet), (inReceptacle toilet_paper_roll bathroom_sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem move_toilet_paper)
+    (:domain put_task)
+    (:objects
+        agent
+        bathroom_sink - receptacle
+        toilet - receptacle
+        toilet_paper_dispenser - receptacle
+        toilet_paper_roll - object
+        white_towel - object
+        green_toothbrush - object
+        brown_toothbrush - object
+        toilet_brush - object
+        plunger - object
+    )
+    (:init
+        (openable toilet)
+        (inReceptacle white_towel bathroom_sink)
+        (inReceptacle green_toothbrush bathroom_sink)
+        (inReceptacle brown_toothbrush bathroom_sink)
+        (inReceptacle toilet_brush toilet)
+        (inReceptacle plunger toilet)
+        (inReceptacle toilet_paper_roll bathroom_sink)
+    )
+    (:goal (and
+        (inReceptacle toilet_paper_roll toilet_paper_dispenser)
+    ))
+)
+```

@@ -1,0 +1,22 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        black_bowl - object
+        sink1 - sink
+        fridge1 - fridge
+    )
+    (:init
+        (atLocation agent1 black_bowl)
+        (openable fridge1)
+        (not (opened fridge1))
+        (not (holdsAny agent1))
+        (not (isCool black_bowl))
+    )
+    (:goal
+        (and
+            (inReceptacle black_bowl sink1)
+            (isCool black_bowl)
+        )
+    )
+)

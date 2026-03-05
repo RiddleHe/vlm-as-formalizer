@@ -1,0 +1,23 @@
+(define (problem put_clean_mug_on_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        mug - object
+        sink - sink
+        table - receptacle
+    )
+    (:init
+        (atLocation agent1 sink)
+        (inReceptacle mug sink)
+        (not (isClean mug))
+        (not (holdsAny agent1))
+        (not (holds agent1 mug))
+        (not (atLocation agent1 table))
+    )
+    (:goal
+        (and
+            (inReceptacle mug table)
+            (isClean mug)
+        )
+    )
+)

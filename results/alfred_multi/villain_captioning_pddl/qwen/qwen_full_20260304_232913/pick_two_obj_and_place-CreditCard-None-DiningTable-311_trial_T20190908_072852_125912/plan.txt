@@ -1,0 +1,8 @@
+(gotolocation agent1 credit_card1)
+(pickupobject agent1 credit_card1)
+(gotolocation agent1 table)
+(putobjectinreceptacle agent1 credit_card1 table)
+(gotolocation agent1 tv_stand)
+(pickupobject agent1 credit_card2)
+(gotolocation agent1 table)
+(putobjectinreceptacle agent1 credit_card2 table)

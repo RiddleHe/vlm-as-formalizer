@@ -1,0 +1,58 @@
+Scene graph:
+agent: agent
+microwave (receptacle): red microwave
+fridge (receptacle): gray fridge
+sink (receptacle): kitchen sink
+knife (object): knife in sink
+receptacle (object): green trash bin
+object: silver kettle, red tomato, orange cup, black mug, brown bread, fork, knife
+openable (receptacle) true if a receptacle is openable: (openable red microwave), (openable gray fridge), (openable kitchen sink), (openable green trash bin)
+opened (receptacle) true if a receptacle is opened: (opened red microwave), (opened gray fridge), (opened kitchen sink), (opened green trash bin)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle knife kitchen sink), (inReceptacle fork kitchen sink), (inReceptacle black mug coffee maker)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_slice_tomato_in_trash)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        trash_bin - receptacle
+        knife - object
+        tomato - object
+        kettle - object
+        cup - object
+        mug - object
+        bread - object
+        fork - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (openable trash_bin)
+        (opened microwave)
+        (opened fridge)
+        (opened sink)
+        (opened trash_bin)
+        (inReceptacle knife sink)
+        (inReceptacle fork sink)
+        (inReceptacle mug coffee_maker) ; Note: coffee_maker is not defined as a receptacle in domain, so this may need adjustment
+        (atLocation agent sink) ; Assuming agent starts near sink as it's a common starting point
+    )
+    (:goal (and
+        (isSliced tomato)
+        (inReceptacle tomato trash_bin)
+    ))
+)
+```

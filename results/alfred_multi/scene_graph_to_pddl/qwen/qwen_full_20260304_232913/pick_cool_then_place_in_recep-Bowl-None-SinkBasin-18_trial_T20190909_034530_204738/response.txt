@@ -1,0 +1,45 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife_on_table
+receptacle (object): black_bowl, white_cup, potted_plant, salt_shaker, pepper_shaker, soap_dispenser, fridge, sink
+object: agent, black_bowl, white_cup, potted_plant, salt_shaker, pepper_shaker, soap_dispenser, knife_on_table, tomato, lettuce, egg, fridge, sink
+openable (receptacle) true if a receptacle is openable: (openable fridge), (openable sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle black_bowl table), (inReceptacle white_cup table), (inReceptacle potted_plant table), (inReceptacle salt_shaker table), (inReceptacle pepper_shaker table), (inReceptacle soap_dispenser table), (inReceptacle tomato table), (inReceptacle lettuce table), (inReceptacle knife_on_table table), (inReceptacle egg sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation agent table)
+
+PDDL problem: ```pddl
+(define (problem put_chilled_bowl_in_sink)
+    (:domain put_task)
+    (:objects
+        agent - agent
+        fridge - fridge
+        sink - sink
+        black_bowl - object
+        table - object
+    )
+    (:init
+        (openable fridge)
+        (openable sink)
+        (inReceptacle black_bowl table)
+        (atLocation agent table)
+    )
+    (:goal
+        (and
+            (inReceptacle black_bowl sink)
+            (isCool black_bowl)
+        )
+    )
+)
+```

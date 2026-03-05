@@ -1,0 +1,82 @@
+Scene graph:
+agent: (none visible)
+microwave (receptacle): (none visible)
+fridge (receptacle): (none visible)
+sink (receptacle):
+- sink_stainless_countertop
+knife (object):
+- knife_yellow_handle_counter
+receptacle (object):
+- sink_stainless_countertop
+object:
+- toaster_silver_two_slot
+- espresso_machine_black_left
+- cup_white_on_espresso_tray
+- table_white_center
+- bowl_metal_left_on_table
+- bowl_metal_center_on_table
+- salt_shaker_small_on_table
+- tomato_red_left_on_table
+- tomato_red_center_on_table
+- tomato_red_right_on_table
+- potato_brown_back_on_table
+- apple_red_right_on_table
+- watermelon_whole_right_on_table
+- loaf_bread_right_on_table
+- soap_dispenser_gray_right_on_table
+- trash_bin_green_back
+- spoon_metal_on_table
+- fork_metal_on_table
+- egg_left_in_sink
+- egg_right_in_sink
+- sponge_green_yellow_in_sink
+- cup_white_in_sink
+- fork_metal_left_of_sink
+- fork_metal_right_of_sink
+- bottle_green_on_counter
+- pan_metal_on_stove
+
+openable (receptacle) true if a receptacle is openable: (none)
+opened (receptacle) true if a receptacle is opened: (none)
+holdsAny (agent) agent ?a holds an object: (none)
+isClean (object) true if the object has been clean in sink: (none)
+isHot (object) true if the object has been heated up: (none)
+isCool (object) true if the object has been cooled: (none)
+isOn (object) true if the object is on: (none)
+isToggled (object) true if the object has been toggled: (none)
+isSliced (object) true if the object is sliced: (none)
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle egg_left_in_sink sink_stainless_countertop)
+- (inReceptacle egg_right_in_sink sink_stainless_countertop)
+- (inReceptacle sponge_green_yellow_in_sink sink_stainless_countertop)
+- (inReceptacle cup_white_in_sink sink_stainless_countertop)
+holds (agent, object) object ?o is held by agent ?a: (none)
+atLocation (agent, object) : (none)
+
+PDDL problem: (define (problem put_task_clean_spoon_on_table)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    sink_stainless_countertop - sink
+    table_white_center - receptacle
+
+    spoon_metal_on_table - object
+  )
+
+  (:init
+    ;; Robot starts not at any location (no atLocation facts)
+
+    ;; Receptacle relations from scene graph
+    ;; (none involving the spoon; spoon is currently on the table but not modeled as inReceptacle)
+
+    ;; No objects are initially clean per scene graph
+  )
+
+  (:goal
+    (and
+      (isClean spoon_metal_on_table)
+      (inReceptacle spoon_metal_on_table table_white_center)
+    )
+  )
+)

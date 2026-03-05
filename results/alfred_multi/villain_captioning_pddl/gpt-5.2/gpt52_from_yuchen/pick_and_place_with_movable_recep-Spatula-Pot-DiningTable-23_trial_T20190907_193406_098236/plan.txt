@@ -1,0 +1,7 @@
+(gotolocation robot spatula)
+(pickupobject robot spatula)
+(gotolocation robot pot_left)
+(putobjectinreceptacle robot spatula pot_left)
+(pickupobject robot pot_left)
+(gotolocation robot table)
+(putobjectinreceptacle robot pot_left table)

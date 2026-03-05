@@ -1,0 +1,4 @@
+(gotolocation agent1 lamp)
+(toggleobject agent1 lamp)
+(gotolocation agent1 laptop_left)
+(pickupobject agent1 laptop_left)

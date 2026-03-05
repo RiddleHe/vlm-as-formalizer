@@ -1,0 +1,43 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): none
+fridge (receptacle): black_french_door_fridge
+sink (receptacle): silver_inset_sink_basin
+knife (object): none
+receptacle (object): black_french_door_fridge, silver_inset_sink_basin
+object: metal_spoon_on_countertop, metal_fork_in_sink, red_tomato_in_sink, brown_potato_on_countertop_right, brown_bread_loaf_on_countertop_right
+openable (receptacle) true if a receptacle is openable: (openable black_french_door_fridge)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle metal_fork_in_sink silver_inset_sink_basin), (inReceptacle red_tomato_in_sink silver_inset_sink_basin)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_task_problem_1)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+    black_french_door_fridge - fridge
+    silver_inset_sink_basin - sink
+    brown_potato_on_countertop_right - object
+  )
+  (:init
+    (openable black_french_door_fridge)
+
+    (inReceptacle metal_fork_in_sink silver_inset_sink_basin)
+    (inReceptacle red_tomato_in_sink silver_inset_sink_basin)
+  )
+  (:goal
+    (and
+      (isCool brown_potato_on_countertop_right)
+      (isSliced brown_potato_on_countertop_right)
+      (inReceptacle brown_potato_on_countertop_right silver_inset_sink_basin)
+    )
+  )
+)

@@ -1,0 +1,4 @@
+(gotolocation robot pan)
+(gotolocation robot table)
+(pickupobject robot knife)
+(putobjectinreceptacle robot knife pan)

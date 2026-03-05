@@ -1,0 +1,61 @@
+Scene graph:
+agent: robot
+microwave (receptacle): silver_microwave_with_green_apple_inside
+fridge (receptacle): stainless_steel_dishwasher (Note: This is mislabeled as fridge in domain but visually is a dishwasher; however, per domain we must treat it as fridge for planning purposes)
+sink (receptacle): white_sink_with_black_pot_inside
+knife (object): none visible
+receptacle (object): silver_microwave_with_green_apple_inside, stainless_steel_dishwasher, white_sink_with_black_pot_inside, black_trash_can_under_counter
+object: black_pot_on_stove, silver_kettle, brown_egg, pink_oil_bottle, black_toaster, silver_salt_shaker, green_apple_in_microwave, black_pot_in_sink, black_trash_can_under_counter
+openable (receptacle) true if a receptacle is openable: (openable silver_microwave_with_green_apple_inside), (openable stainless_steel_dishwasher), (openable white_sink_with_black_pot_inside), (openable black_trash_can_under_counter)
+opened (receptacle) true if a receptacle is opened: (opened silver_microwave_with_green_apple_inside) [microwave door is open in image 4], (opened white_sink_with_black_pot_inside) [sink is inherently open], (opened black_trash_can_under_counter) [trash can is open in image 3]
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn black_pot_on_stove), (isOn black_toaster), (isOn silver_microwave_with_green_apple_inside)
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle green_apple_in_microwave silver_microwave_with_green_apple_inside), (inReceptacle black_pot_in_sink white_sink_with_black_pot_inside), (inReceptacle brown_egg black_trash_can_under_counter) [egg is in trash can in image 3]
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem heat_egg_and_trash)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        silver_microwave_with_green_apple_inside - microwave
+        stainless_steel_dishwasher - fridge
+        white_sink_with_black_pot_inside - sink
+        black_trash_can_under_counter - receptacle
+        brown_egg - object
+        green_apple_in_microwave - object
+        black_pot_on_stove - object
+        silver_kettle - object
+        pink_oil_bottle - object
+        black_toaster - object
+        silver_salt_shaker - object
+        black_pot_in_sink - object
+    )
+    (:init
+        (openable silver_microwave_with_green_apple_inside)
+        (openable stainless_steel_dishwasher)
+        (openable white_sink_with_black_pot_inside)
+        (openable black_trash_can_under_counter)
+        (opened silver_microwave_with_green_apple_inside)
+        (opened white_sink_with_black_pot_inside)
+        (opened black_trash_can_under_counter)
+        (inReceptacle green_apple_in_microwave silver_microwave_with_green_apple_inside)
+        (inReceptacle black_pot_in_sink white_sink_with_black_pot_inside)
+        (inReceptacle brown_egg black_trash_can_under_counter)
+        (isOn black_pot_on_stove)
+        (isOn black_toaster)
+        (isOn silver_microwave_with_green_apple_inside)
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (isHot brown_egg)
+        (inReceptacle brown_egg black_trash_can_under_counter)
+    ))
+)
+```

@@ -1,0 +1,7 @@
+(GotoLocation robot cup)
+(PickupObject robot cup)
+(GotoLocation robot fork)
+(PickupObject robot fork)
+(PutObjectInReceptacle robot fork cup)
+(GotoLocation robot countertop)
+(PutObjectInReceptacle robot cup countertop)

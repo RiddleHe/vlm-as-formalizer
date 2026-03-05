@@ -1,0 +1,6 @@
+failed
+Predicate argument has wrong type:
+  atLocation lettuce dining_table: lettuce is not a agent
+  atLocation knife stovetop: knife is not a agent
+
+

@@ -1,0 +1,8 @@
+(gotolocation agent1 candle1)
+(pickupobject agent1 candle1)
+(gotolocation agent1 shelf)
+(putobjectinreceptacle agent1 candle1 shelf)
+(gotolocation agent1 toilet)
+(pickupobject agent1 candle2)
+(gotolocation agent1 shelf)
+(putobjectinreceptacle agent1 candle2 shelf)

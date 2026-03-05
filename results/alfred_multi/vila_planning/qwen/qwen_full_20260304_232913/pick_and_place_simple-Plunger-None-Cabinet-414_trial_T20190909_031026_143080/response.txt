@@ -1,0 +1,6 @@
+(GotoLocation robot plunger)
+(PickupObject robot plunger)
+(GotoLocation robot cabinet)
+(OpenObject robot cabinet)
+(PutObjectInReceptacle robot plunger cabinet)
+(CloseObject robot cabinet)

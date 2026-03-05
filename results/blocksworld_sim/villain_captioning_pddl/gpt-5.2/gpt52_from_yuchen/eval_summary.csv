@@ -1,0 +1,2 @@
+route,dataset,model,gen_success_rate,pddl_valid_rate,task_success_rate,obj_precision,obj_recall,obj_f1,init_precision,init_recall,init_f1,goal_precision,goal_recall,goal_f1,macro_precision,macro_recall,macro_f1
+villain_captioning_pddl,blocksworld_sim,gpt-5.2,1.0,1.0,0.9,1.0,0.9667,0.9831,1.0,0.955,0.977,0.9383,0.935,0.9367,0.9794,0.9522,0.9656

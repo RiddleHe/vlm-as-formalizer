@@ -1,0 +1,47 @@
+```pddl
+(define (problem wash_mug_and_place_in_coffee_maker)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        coffee_maker - receptacle
+        sink - receptacle
+        coffee_mug - object
+        wine_bottle - object
+        fork - object
+        knife - object
+        glass - object
+        potato - object
+        bowl - object
+        toaster - object
+        cabinets - object
+    )
+    (:init
+        ; Initial locations
+        (atLocation robot coffee_maker) ; Robot starts near the coffee maker
+        ; Objects in receptacles
+        (inReceptacle coffee_mug coffee_maker)
+        (inReceptacle knife sink)
+        (inReceptacle glass sink)
+        (inReceptacle potato sink)
+        (inReceptacle bowl sink)
+        ; Object properties
+        (not (isClean coffee_mug))
+        (not (isHot coffee_mug))
+        (not (isCool coffee_mug))
+        (not (isSliced coffee_mug))
+        (not (isOn coffee_maker))
+        (not (isToggled coffee_maker))
+        ; Receptacle properties
+        (not (opened sink)) ; Sink is not openable in this domain, so this is irrelevant but included for completeness
+        (not (opened coffee_maker)) ; Coffee maker is not openable in this domain
+        ; Agent state
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (inReceptacle coffee_mug coffee_maker)
+            (isClean coffee_mug)
+        )
+    )
+)
+```

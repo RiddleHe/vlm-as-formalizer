@@ -1,0 +1,8 @@
+(GotoLocation agent toilet_paper_roll_empty)
+(PickupObject agent toilet_paper_roll_empty)
+(GotoLocation agent toilet_back)
+(PutObjectInReceptacle agent toilet_paper_roll_empty toilet_back)
+(GotoLocation agent toilet_paper_roll_full)
+(PickupObject agent toilet_paper_roll_full)
+(GotoLocation agent toilet_back)
+(PutObjectInReceptacle agent toilet_paper_roll_full toilet_back)

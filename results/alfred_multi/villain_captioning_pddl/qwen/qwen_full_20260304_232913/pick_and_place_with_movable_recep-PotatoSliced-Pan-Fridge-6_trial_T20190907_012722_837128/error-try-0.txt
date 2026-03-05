@@ -1,0 +1,14 @@
+Predicate argument has wrong type:
+  atLocation pan countertop: pan is not a agent
+  atLocation knife countertop: knife is not a agent
+  atLocation trash_can floor: trash_can is not a agent
+  atLocation potato countertop: potato is not a agent
+  atLocation microwave countertop: microwave is not a agent
+  atLocation fridge wall: fridge is not a agent
+
+Object does not have a type:
+  wall
+  tomato
+  countertop
+  floor
+

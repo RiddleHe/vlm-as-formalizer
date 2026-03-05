@@ -1,0 +1,6 @@
+(gotolocation agent1 drawer1)
+(pickupobject agent1 fork1)
+(gotolocation agent1 sink1)
+(cleanobject agent1 sink1 fork1)
+(gotolocation agent1 drawer1)
+(putobjectinreceptacle agent1 fork1 drawer1)

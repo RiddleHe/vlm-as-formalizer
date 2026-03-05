@@ -1,0 +1,27 @@
+(define (problem put_heated_apple_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        apple - object
+        microwave - microwave
+        table - receptacle
+        sponge - object
+        knife - knife
+    )
+    (:init
+        (atLocation robot table)
+        (inReceptacle apple table)
+        (inReceptacle sponge table)
+        (openable microwave)
+        (not (opened microwave))
+        (not (isHot apple))
+        (not (isSliced apple))
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (inReceptacle apple table)
+            (isHot apple)
+        )
+    )
+)

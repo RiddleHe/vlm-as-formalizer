@@ -1,0 +1,44 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave fridge trash_can - receptacle
+        knife pan potato - object
+    )
+    (:init
+        ; Locations
+        (atLocation robot microwave)
+        (atLocation knife countertop)
+        (atLocation pan countertop)
+        (atLocation potato countertop)
+        (atLocation microwave countertop)
+        (atLocation fridge wall)
+        (atLocation trash_can floor)
+
+        ; Receptacle properties
+        (openable microwave)
+        (openable fridge)
+        (openable trash_can)
+        (opened trash_can) ; trash can is open as tomato is visible inside
+
+        ; Object states
+        (not (isSliced potato))
+        (not (isHot potato))
+        (not (isCool potato))
+        (not (isClean potato))
+        (not (isOn microwave))
+        (not (isToggled microwave))
+
+        ; Contents
+        (inReceptacle tomato trash_can)
+    )
+    (:goal
+        (and
+            (inReceptacle pan fridge)
+            (inReceptacle knife pan)
+            (inReceptacle potato pan)
+            (isSliced potato)
+            (isHot potato)
+        )
+    )
+)

@@ -1,0 +1,17 @@
+(define (problem put_pump_bottle_in_garbage_can)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        pump_bottle - object
+        garbage_can - receptacle
+    )
+    (:init
+        (atLocation robot pump_bottle)
+        (not (holdsAny robot))
+        (openable garbage_can)
+        (not (opened garbage_can))
+    )
+    (:goal
+        (inReceptacle pump_bottle garbage_can)
+    )
+)

@@ -1,0 +1,8 @@
+(gotolocation agent1 black_microwave)
+(pickupobject agent1 purple_soap_dispenser)
+(gotolocation agent1 wooden_cabinet)
+(putobjectinreceptacle agent1 purple_soap_dispenser wooden_cabinet)
+(gotolocation agent1 silver_knife)
+(pickupobject agent1 silver_knife)
+(gotolocation agent1 wooden_cabinet)
+(putobjectinreceptacle agent1 silver_knife wooden_cabinet)

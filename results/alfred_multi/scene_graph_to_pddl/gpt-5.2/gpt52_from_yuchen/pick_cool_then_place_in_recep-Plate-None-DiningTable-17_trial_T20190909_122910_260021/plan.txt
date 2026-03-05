@@ -1,0 +1,6 @@
+(gotolocation robot metal_spoon_left_edge)
+(pickupobject robot metal_spoon_left_edge)
+(gotolocation robot fridge)
+(coolobject robot fridge metal_spoon_left_edge)
+(gotolocation robot white_table_with_lower_shelf)
+(putobjectinreceptacle robot metal_spoon_left_edge white_table_with_lower_shelf)

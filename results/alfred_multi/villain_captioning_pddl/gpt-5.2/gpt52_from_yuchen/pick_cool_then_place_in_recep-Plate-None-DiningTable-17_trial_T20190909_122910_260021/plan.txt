@@ -1,0 +1,4 @@
+(gotolocation robot plate1)
+(pickupobject robot plate1)
+(gotolocation robot table)
+(putobjectinreceptacle robot plate1 table)

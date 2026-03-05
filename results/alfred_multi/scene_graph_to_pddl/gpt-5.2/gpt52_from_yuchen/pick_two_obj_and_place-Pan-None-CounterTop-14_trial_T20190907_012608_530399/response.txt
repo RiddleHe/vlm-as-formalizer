@@ -1,0 +1,53 @@
+Scene graph:
+agent: none visible
+microwave (receptacle): (microwave_black_right_counter)
+fridge (receptacle): none visible
+sink (receptacle): none visible
+knife (object): none visible
+receptacle (object): (microwave_black_right_counter)
+object: (pan_large_front_right_handle) (pan_small_back_right) (mixing_bowl_metal_left_burner) (bread_loaf_on_counter) (lettuce_head_on_counter) (green_plastic_cup_left_counter) (spoon_left_counter) (spoon_right_counter) (butter_knife_left_counter)
+
+openable (receptacle) true if a receptacle is openable: (openable microwave_black_right_counter)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_task_pans_on_counter)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    microwave_black_right_counter - microwave
+
+    pan_large_front_right_handle - object
+    pan_small_back_right - object
+
+    mixing_bowl_metal_left_burner - object
+    bread_loaf_on_counter - object
+    lettuce_head_on_counter - object
+    green_plastic_cup_left_counter - object
+    spoon_left_counter - object
+    spoon_right_counter - object
+    butter_knife_left_counter - object
+  )
+
+  (:init
+    (openable microwave_black_right_counter)
+  )
+
+  (:goal
+    (and
+      (inReceptacle pan_large_front_right_handle microwave_black_right_counter)
+      (inReceptacle pan_small_back_right microwave_black_right_counter)
+    )
+  )
+)

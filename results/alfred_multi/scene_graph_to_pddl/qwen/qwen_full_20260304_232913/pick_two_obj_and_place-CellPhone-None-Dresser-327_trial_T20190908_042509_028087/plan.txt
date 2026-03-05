@@ -1,0 +1,8 @@
+(gotolocation robot wooden_table_with_books)
+(pickupobject robot black_phone_on_table_with_books)
+(gotolocation robot wooden_dresser_at_foot_of_bed)
+(putobjectinreceptacle robot black_phone_on_table_with_books wooden_dresser_at_foot_of_bed)
+(gotolocation robot black_phone_on_table_with_bowl)
+(pickupobject robot black_phone_on_table_with_bowl)
+(gotolocation robot wooden_dresser_at_foot_of_bed)
+(putobjectinreceptacle robot black_phone_on_table_with_bowl wooden_dresser_at_foot_of_bed)

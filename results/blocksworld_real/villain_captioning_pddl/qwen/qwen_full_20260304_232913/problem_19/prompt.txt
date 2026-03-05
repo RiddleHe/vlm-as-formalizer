@@ -1,0 +1,188 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot) ; if robot is not seen in the image, it can be assumed to exist and is handempty
+        (handfull ?x - robot)
+        (holding ?x - block) ; block x is being held by the robot
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    You can always assume that at least one robot arm is available if not in the image.
+    Instruction: Create 2 stacks: blue over orange, yellow over green over red over purple
+    
+
+SCENE CAPTION:
+The scene contains five distinct blocks, each a different color, placed on a flat, light-colored surface. The blocks are identified by their colors: red, yellow, green, blue, and purple. A robotic arm is not visible in the images, but according to domain assumptions, at least one robot is present and initially has an empty hand.
+
+In the initial state, all five blocks are on the table and not stacked on top of each other. Specifically:
+- The red block is positioned near the center of the visible area.
+- The yellow block is to the left of the red block.
+- The green block is to the right of the red block.
+- The blue block is partially visible above the green block in later frames, but in the initial state, it is on the table and not on top of any other block.
+- The purple block is visible in the upper right portion of the scene, also on the table.
+
+All blocks are clear (no block is on top of any other block). Therefore, for each block, the predicate (clear ?x) is true, and (ontable ?x) is true. The robot is assumed to be in a handempty state.
+
+The goal is to create two stacks: one with the blue block over the orange block (note: there is no orange block; this is likely a misstatement and should refer to the red block, as red is the only unaccounted block in the second stack and visually present), and the other stack with yellow over green over red over purple. Since there is no orange block, we interpret "orange" as "red" for the purpose of this task.
+
+Thus, the target configuration requires:
+- Stack 1: blue on red.
+- Stack 2: yellow on green, green on red, red on purple — which implies a four-block stack: yellow over green over red over purple.
+
+However, note that the red block cannot be in both stacks simultaneously. This suggests the instruction may have intended the first stack to be blue over red, and the second stack to be yellow over green over purple (with red being the base of the first stack). Alternatively, if the instruction is taken literally, it is impossible because red cannot be in two places at once.
+
+Given the visual evidence and the domain, we proceed with the assumption that the intended goal is:
+- Stack 1: blue on red.
+- Stack 2: yellow on green, green on purple (with red being the base of the first stack, and purple being the base of the second).
+
+But the instruction explicitly says “yellow over green over red over purple”, which implies red is above purple and below green, and green is below yellow. This would require red to be in the second stack, not the first. Therefore, the first stack “blue over orange” must be interpreted as “blue over [some other block]”, but since only red is left, and it’s needed in the second stack, there is a conflict.
+
+Re-evaluating: the instruction likely contains a typo. Given the blocks present (red, yellow, green, blue, purple), and the goal to create two stacks, the only feasible interpretation is:
+- Stack 1: blue on red.
+- Stack 2: yellow on green on purple (with red not in this stack).
+
+But the instruction says “yellow over green over red over purple”, which places red above purple and below green. This would mean the second stack is yellow-green-red-purple, and the first stack is blue on [nothing?], which is impossible.
+
+Alternatively, perhaps “orange” is a mistake for “purple”, so the first stack is blue on purple, and the second is yellow on green on red on [nothing?], which also doesn’t work.
+
+Given the ambiguity, we describe the initial state as observed and note the instruction’s inconsistency.
+
+Initial state description:
+- Blocks: red, yellow, green, blue, purple — all on table, all clear.
+- Robot: handempty, present but not visible.
+- No blocks are on top of each other.
+- The red block is centrally located, yellow to its left, green to its right, blue and purple in the background, all on the table.
+
+The instruction to create “blue over orange” (interpreted as blue over red) and “yellow over green over red over purple” is logically impossible with five blocks because red cannot be in two stacks. Therefore, the task as stated cannot be executed without clarification. However, for planning purposes, we assume the intended goal is to create two stacks: one with blue on red, and the other with yellow on green on purple (leaving red as the base of the first stack). But this does not match the instruction.
+
+Alternatively, if we ignore the first stack and focus on the second, the instruction “yellow over green over red over purple” implies a four-block stack, leaving blue alone, but then the first stack “blue over orange” is unfulfilled.
+
+Given the constraints, we describe the initial state and note the instruction’s conflict.
+
+Final scene description for planning:
+- Objects: five blocks — red, yellow, green, blue, purple.
+- All blocks are on the table (ontable ?x is true for all).
+- All blocks are clear (clear ?x is true for all).
+- Robot is handempty.
+- No blocks are stacked.
+- The goal as stated is inconsistent because it requires the red block to be in two different stacks simultaneously. For planning, we assume the intended goal is to create a stack of yellow on green on red on purple, and a separate stack of blue on [a sixth block, which doesn't exist], which is impossible. Therefore, we must reinterpret.
+
+Best interpretation for feasibility: the instruction meant “blue over red” and “yellow over green over purple”, with red being the base of the first stack and purple the base of the second. This uses all five blocks: blue on red, and yellow on green on purple. This is possible.
+
+Thus, we proceed with that interpretation for the scene description, noting the discrepancy.
+
+Scene description for the initial state (before any actions):
+- Block red: on table, clear.
+- Block yellow: on table, clear.
+- Block green: on table, clear.
+- Block blue: on table, clear.
+- Block purple: on table, clear.
+- Robot: handempty.
+
+The target state is:
+- Stack 1: blue on red.
+- Stack 2: yellow on green, green on purple.
+
+This uses all blocks and is feasible. The instruction’s mention of “red over purple” in the second stack is likely a mistake, and we assume it should be “green on purple” with red being the base of the first stack.
+
+Therefore, the detailed scene description is as above, with the understanding that the goal is to achieve the two stacks as reinterpreted.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

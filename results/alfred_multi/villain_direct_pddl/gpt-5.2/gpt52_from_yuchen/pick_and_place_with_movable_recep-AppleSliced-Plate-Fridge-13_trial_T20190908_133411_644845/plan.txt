@@ -1,0 +1,4 @@
+(gotolocation agent0 plate0)
+(pickupobject agent0 plate0)
+(gotolocation agent0 fridge0)
+(putobjectinreceptacle agent0 plate0 fridge0)

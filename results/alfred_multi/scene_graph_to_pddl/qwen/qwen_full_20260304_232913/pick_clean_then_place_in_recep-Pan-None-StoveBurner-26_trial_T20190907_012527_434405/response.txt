@@ -1,0 +1,45 @@
+Scene graph:
+agent: robot
+microwave (receptacle): microwave_oven_with_plate_inside
+fridge (receptacle): none
+sink (receptacle): stainless_steel_sink
+knife (object): none
+receptacle (object): stove_top_with_burners, microwave_oven_with_plate_inside, stainless_steel_sink
+object: dirty_square_pan, brown_paper_bag, egg, plate_inside_microwave, stove_top_with_burners, microwave_oven_with_plate_inside, stainless_steel_sink
+openable (receptacle) true if a receptacle is openable: (openable microwave_oven_with_plate_inside), (openable stainless_steel_sink)
+opened (receptacle) true if a receptacle is opened: (opened microwave_oven_with_plate_inside)
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn stove_top_with_burners)
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle plate_inside_microwave microwave_oven_with_plate_inside), (inReceptacle dirty_square_pan stove_top_with_burners)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem rinse_pan)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave_oven_with_plate_inside - microwave
+        stainless_steel_sink - sink
+        stove_top_with_burners - receptacle
+        dirty_square_pan - object
+        brown_paper_bag - object
+        egg - object
+        plate_inside_microwave - object
+    )
+    (:init
+        (openable microwave_oven_with_plate_inside)
+        (openable stainless_steel_sink)
+        (opened microwave_oven_with_plate_inside)
+        (isOn stove_top_with_burners)
+        (inReceptacle plate_inside_microwave microwave_oven_with_plate_inside)
+        (inReceptacle dirty_square_pan stove_top_with_burners)
+    )
+    (:goal (and (isClean dirty_square_pan)))
+)
+```

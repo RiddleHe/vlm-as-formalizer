@@ -1,0 +1,4 @@
+(gotolocation robot_agent gray_pump_bottle_on_toilet_tank)
+(pickupobject robot_agent gray_pump_bottle_on_toilet_tank)
+(gotolocation robot_agent green_garbage_can_under_counter)
+(putobjectinreceptacle robot_agent gray_pump_bottle_on_toilet_tank green_garbage_can_under_counter)

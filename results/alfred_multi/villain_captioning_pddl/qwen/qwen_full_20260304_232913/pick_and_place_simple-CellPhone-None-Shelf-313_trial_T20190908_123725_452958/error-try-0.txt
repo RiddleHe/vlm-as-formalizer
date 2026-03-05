@@ -1,0 +1,5 @@
+Predicate argument has wrong type:
+  atLocation cd2 end_table: cd2 is not a agent
+  atLocation cd1 end_table: cd1 is not a agent
+  atLocation cd_player end_table: cd_player is not a agent
+

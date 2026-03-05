@@ -1,0 +1,8 @@
+(gotolocation robot_agent black_leather_sofa)
+(pickupobject robot_agent green_remote_control_on_sofa)
+(gotolocation robot_agent brown_tufted_chair_seat)
+(putobjectinreceptacle robot_agent green_remote_control_on_sofa brown_tufted_chair_seat)
+(gotolocation robot_agent teal_remote_control_on_sofa)
+(pickupobject robot_agent teal_remote_control_on_sofa)
+(gotolocation robot_agent brown_tufted_chair_seat)
+(putobjectinreceptacle robot_agent teal_remote_control_on_sofa brown_tufted_chair_seat)

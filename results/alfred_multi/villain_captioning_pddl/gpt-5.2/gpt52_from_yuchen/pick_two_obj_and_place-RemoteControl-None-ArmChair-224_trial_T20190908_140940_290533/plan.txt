@@ -1,0 +1,8 @@
+(gotolocation robot remote_1)
+(pickupobject robot remote_1)
+(gotolocation robot chair_seat_1)
+(putobjectinreceptacle robot remote_1 chair_seat_1)
+(gotolocation robot sofa_seat_1)
+(pickupobject robot remote_2)
+(gotolocation robot chair_seat_1)
+(putobjectinreceptacle robot remote_2 chair_seat_1)

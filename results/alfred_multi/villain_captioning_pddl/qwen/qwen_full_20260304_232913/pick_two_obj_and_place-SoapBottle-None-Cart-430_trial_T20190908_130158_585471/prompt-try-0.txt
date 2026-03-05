@@ -1,0 +1,255 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Put two spray bottles on the metal rack.
+    
+
+SCENE CAPTION:
+The scene is a bathroom environment with several objects relevant to the task of placing spray bottles on a metal rack. The domain defines types such as `receptacle` and `object`, and predicates like `inReceptacle`, `atLocation`, and `holds`.
+
+**Objects and Types:**
+
+- **Metal Rack**: A multi-tiered, silver-colored, wheeled metal cart with horizontal bars forming shelves. It is a `receptacle` because it can hold objects. It is positioned near the wall and has at least two levels visible. It is not openable.
+- **Yellow Spray Bottle**: A bright yellow plastic spray bottle with a white nozzle. It is currently resting on the top shelf of the metal rack. It is an `object`.
+- **Blue Bin**: A small, rectangular blue plastic bin with a white spray bottle icon on its side. It is placed on the floor next to the metal rack, partially tucked under it. It is a `receptacle` and contains one spray bottle. It is not openable.
+- **White Spray Bottle (in bin)**: A white plastic spray bottle with a yellow nozzle, identical in shape to the yellow one, located inside the blue bin. It is an `object`.
+- **Toilet**: A standard white ceramic toilet with a tank and bowl. The tank lid is closed. It is not a receptacle for the purposes of this task.
+- **Toilet Paper Holder**: A dark brown, wall-mounted holder with a curved arm. It is empty. It is not a receptacle.
+- **Silver Dispenser**: A cylindrical silver dispenser with a brown pump, sitting on the toilet tank. It is an `object`.
+- **Plunger**: A green rubber-cup plunger with a dark brown handle, standing on the floor next to the toilet. It is an `object`.
+
+**Quantities:**
+
+- Spray Bottles: 2 total (one yellow on rack, one white in blue bin).
+- Receptacles: 2 (metal rack, blue bin).
+- Other Objects: 3 (silver dispenser, plunger, toilet paper holder).
+
+**Spatial Relationships:**
+
+- The **yellow spray bottle** is `inReceptacle` the **metal rack** (specifically on its top shelf).
+- The **white spray bottle** is `inReceptacle` the **blue bin**.
+- The **blue bin** is located on the floor, adjacent to and slightly under the **metal rack**.
+- The **metal rack** is positioned near the toilet and the wall.
+- The **silver dispenser** is on top of the toilet tank.
+- The **plunger** is on the floor beside the toilet.
+- The **toilet paper holder** is mounted on the wall to the left of the toilet.
+
+**Current State Relevant to Planning Task:**
+
+- The robot is not currently at any object’s location (`not (atLocation ?a ?o)` for all objects).
+- The yellow spray bottle is already on the metal rack; the task requires placing a second spray bottle there.
+- The white spray bottle is currently inside the blue bin and must be retrieved and placed on the metal rack.
+- The metal rack is not openable, so no `OpenObject` action is needed for it.
+- The blue bin is a receptacle, and since the white spray bottle is inside it, the robot must first `GotoLocation` the bin, then `PickupObject` the white spray bottle, then `GotoLocation` the metal rack, and finally `PutObjectInReceptacle` the white spray bottle onto the rack.
+
+**Visual Properties:**
+
+- The **metal rack** is shiny, silver, and has four wheels.
+- The **yellow spray bottle** is vibrant yellow with a white trigger nozzle.
+- The **blue bin** is a deep blue with a white pictogram of a spray bottle, indicating its contents or purpose.
+- The **white spray bottle** in the bin has a yellow nozzle, making it visually distinct from the yellow bottle.
+- The **silver dispenser** has a metallic finish and a brown pump top.
+- The **plunger** has a teal-green rubber cup and a dark brown wooden handle.
+- The **toilet paper holder** is a simple, dark brown metal fixture.
+
+The task requires the robot to move the white spray bottle from the blue bin to the metal rack, resulting in two spray bottles on the rack. The yellow spray bottle is already in place.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

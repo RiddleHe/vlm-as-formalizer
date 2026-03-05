@@ -1,0 +1,162 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain blocksworld)
+    (:requirements :strips :typing)
+    (:types block robot)
+    (:predicates 
+        (on ?x - block ?y - block) ; block x is on block y
+        (ontable ?x - block) ; block x is on table, not on another block
+        (clear ?x - block) ; there is no block on top of block x
+        (handempty ?x - robot) ; if robot is not seen in the image, it can be assumed to exist and is handempty
+        (handfull ?x - robot)
+        (holding ?x - block) ; block x is being held by the robot
+    )
+    (:action pick-up
+        :parameters (?x - block ?robot - robot)
+        :precondition (and
+            (clear ?x) 
+            (ontable ?x) 
+            (handempty ?robot)
+        )
+        :effect (and
+            (not (ontable ?x))
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (holding ?x)
+        )
+    )
+    (:action put-down
+        :parameters (?x - block ?robot - robot)
+        :precondition (and 
+            (holding ?x)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (ontable ?x))
+        )
+    (:action stack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (holding ?x) 
+            (clear ?y)
+            (handfull ?robot)
+        )
+        :effect (and 
+            (not (holding ?x))
+            (not (clear ?y))
+            (clear ?x)
+            (handempty ?robot)
+            (not (handfull ?robot))
+            (on ?x ?y)
+        )
+    )
+    (:action unstack
+        :parameters (?x - block ?y - block ?robot - robot)
+        :precondition (and
+            (on ?x ?y)
+            (clear ?x)
+            (handempty ?robot)
+        )
+        :effect (and 
+            (holding ?x)
+            (clear ?y)
+            (not (clear ?x))
+            (not (handempty ?robot))
+            (handfull ?robot)
+            (not (on ?x ?y))
+        )
+    )
+)
+
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    You can always assume that at least one robot arm is available if not in the image.
+    Instruction: Create a stack of blocks: yellow over red over blue over orange over green.
+
+    
+
+SCENE CAPTION:
+Scene Description:
+
+1. Objects and their types:
+   - There are five blocks, each of type “block” as defined in the domain.
+   - One robot is assumed to exist (not visible in image) and is of type “robot”.
+
+2. Quantities:
+   - 5 blocks total.
+   - 1 robot (assumed to be present and initially handempty).
+
+3. Spatial relationships (matching domain predicates):
+   - The blocks are stacked vertically in a single tower.
+   - From bottom to top: yellow block, red block, blue block, orange block, green block.
+   - Predicate assignments based on current stack:
+     - (on yellow red) — yellow is on red? No — correction: yellow is at the bottom, so it is on the table.
+     - Actually: 
+       - (ontable yellow) — yellow block is on the table (base of stack).
+       - (on red yellow) — red block is on yellow.
+       - (on blue red) — blue block is on red.
+       - (on orange blue) — orange block is on blue.
+       - (on green orange) — green block is on orange.
+     - (clear green) — green block is at the top, nothing on it.
+     - (clear yellow) — false, red is on yellow.
+     - (clear red) — false, blue is on red.
+     - (clear blue) — false, orange is on blue.
+     - (clear orange) — false, green is on orange.
+     - (handempty robot) — assumed true, robot is not holding any block.
+     - (handfull robot) — false.
+     - (holding ?x) — false for all blocks.
+
+4. Current state of each object relevant to the planning task:
+   - All blocks are stacked in the order: yellow (bottom), red, blue, orange, green (top).
+   - The robot is not interacting with any block and is assumed to be handempty.
+   - The current stack does NOT match the target instruction (“yellow over red over blue over orange over green”) — in fact, it is the reverse: green is on top, yellow is at the bottom. The instruction requires yellow to be on top of red, which is on top of blue, etc., meaning yellow should be the topmost block. Therefore, the current configuration is the inverse of the goal.
+
+5. Colors, positions, and distinguishing features:
+   - Block colors (from bottom to top):
+     - Yellow: bottom block, directly on table surface.
+     - Red: second from bottom, on yellow.
+     - Blue: middle block, on red.
+     - Orange: second from top, on blue.
+     - Green: top block, on orange.
+   - All blocks are cube-shaped and uniformly sized.
+   - The background is black fabric, providing high contrast to clearly distinguish block colors and positions.
+   - The stack is centered in the image, standing vertically.
+
+Note: The instruction requires the final stack to be yellow on top of red, red on top of blue, blue on top of orange, orange on top of green — meaning green should be at the bottom and yellow at the top. The current state is the reverse of this goal. Planning will require unstacking the entire tower and rebuilding it in reverse order.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

@@ -1,0 +1,2 @@
+(pickupobject robot spray_bottle)
+(putobjectinreceptacle robot spray_bottle toilet)

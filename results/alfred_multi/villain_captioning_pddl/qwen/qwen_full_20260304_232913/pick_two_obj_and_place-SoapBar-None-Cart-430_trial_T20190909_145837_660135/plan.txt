@@ -1,0 +1,4 @@
+(gotolocation agent sink)
+(pickupobject agent pink-soap)
+(gotolocation agent steel-rack)
+(putobjectinreceptacle agent pink-soap steel-rack)

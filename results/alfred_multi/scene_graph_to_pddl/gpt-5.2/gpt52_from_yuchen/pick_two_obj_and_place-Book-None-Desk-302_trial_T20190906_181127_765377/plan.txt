@@ -1,0 +1,8 @@
+(gotolocation robot bed_with_orange_geometric_bedspread)
+(pickupobject robot book_blue_cover_left_on_bed)
+(gotolocation robot wooden_desk_with_drawer_right)
+(putobjectinreceptacle robot book_blue_cover_left_on_bed wooden_desk_with_drawer_right)
+(gotolocation robot bed_with_orange_geometric_bedspread)
+(pickupobject robot book_purple_cover_lower_left_on_bed)
+(gotolocation robot wooden_desk_with_drawer_right)
+(putobjectinreceptacle robot book_purple_cover_lower_left_on_bed wooden_desk_with_drawer_right)

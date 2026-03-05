@@ -1,0 +1,47 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): wooden side table, brown armchair
+object: pink lamp, white lampshade, decorative figurines, patterned pillow, brown armchair, wooden side table
+openable (receptacle) true if a receptacle is openable: (openable wooden side table), (openable brown armchair)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle patterned pillow brown armchair), (inReceptacle pink lamp wooden side table), (inReceptacle white lampshade wooden side table), (inReceptacle decorative figurines wooden side table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem pick_pillow_and_turn_on_lamp)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        wooden_side_table - receptacle
+        brown_armchair - receptacle
+        pink_lamp - object
+        white_lampshade - object
+        decorative_figurines - object
+        patterned_pillow - object
+    )
+    (:init
+        (openable wooden_side_table)
+        (openable brown_armchair)
+        (inReceptacle patterned_pillow brown_armchair)
+        (inReceptacle pink_lamp wooden_side_table)
+        (inReceptacle white_lampshade wooden_side_table)
+        (inReceptacle decorative_figurines wooden_side_table)
+    )
+    (:goal (and
+        (holds robot patterned_pillow)
+        (isOn pink_lamp)
+    ))
+)
+```

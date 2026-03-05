@@ -1,0 +1,4 @@
+(gotolocation robot cd1)
+(pickupobject robot cd1)
+(gotolocation robot dresser)
+(putobjectinreceptacle robot cd1 dresser)

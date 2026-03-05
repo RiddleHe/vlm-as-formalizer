@@ -1,0 +1,51 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): black refrigerator with water dispenser
+sink (receptacle): kitchen sink with faucet
+knife (object): knife with yellow handle on countertop
+receptacle (object): blue recycling bin
+object: brown ball, potted plant, green notebook, watermelon magnet, photo magnet, smiley face magnet
+openable (receptacle) true if a receptacle is openable: (openable black refrigerator with water dispenser)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle brown ball blue recycling bin)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_cold_brown_ball_in_sink)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        fridge - fridge
+        sink - sink
+        brown_ball - object
+        recycling_bin - receptacle
+        knife - knife
+    )
+    (:init
+        (openable fridge)
+        (not (opened fridge))
+        (inReceptacle brown_ball recycling_bin)
+        (not (isCool brown_ball))
+        (not (isClean brown_ball))
+        (not (holdsAny robot))
+        (not (atLocation robot fridge))
+        (not (atLocation robot sink))
+        (not (atLocation robot recycling_bin))
+    )
+    (:goal
+        (and
+            (inReceptacle brown_ball sink)
+            (isCool brown_ball)
+        )
+    )
+)
+```

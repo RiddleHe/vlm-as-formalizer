@@ -1,0 +1,2 @@
+(pickupobject robot pump_bottle)
+(putobjectinreceptacle robot pump_bottle garbage_can)

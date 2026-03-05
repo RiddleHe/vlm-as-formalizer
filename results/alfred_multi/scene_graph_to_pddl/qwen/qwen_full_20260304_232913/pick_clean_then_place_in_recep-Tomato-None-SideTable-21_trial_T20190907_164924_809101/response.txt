@@ -1,0 +1,63 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): black fridge
+sink (receptacle): silver sink
+knife (object): knife with yellow handle
+receptacle (object): black table, black trash bag
+object: brown tomato, green lettuce, brown bowl, salt shaker, black trash bag, black table, knife with yellow handle, brown egg
+openable (receptacle) true if a receptacle is openable: (openable black fridge), (openable silver sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle green lettuce silver sink), (inReceptacle knife with yellow handle silver sink), (inReceptacle brown egg silver sink), (inReceptacle brown tomato black table), (inReceptacle brown bowl black table), (inReceptacle salt shaker black table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_washed_tomato_on_table)
+    (:domain put_task)
+    (:objects
+        agent
+        black_fridge - fridge
+        silver_sink - sink
+        black_table - receptacle
+        black_trash_bag - receptacle
+        brown_tomato - object
+        green_lettuce - object
+        brown_bowl - object
+        salt_shaker - object
+        knife_with_yellow_handle - knife
+        brown_egg - object
+    )
+    (:init
+        (openable black_fridge)
+        (openable silver_sink)
+        (not (opened black_fridge))
+        (not (opened silver_sink))
+        (not (holdsAny agent))
+        (not (isClean brown_tomato))
+        (not (isHot brown_tomato))
+        (not (isCool brown_tomato))
+        (not (isOn brown_tomato))
+        (not (isToggled brown_tomato))
+        (not (isSliced brown_tomato))
+        (inReceptacle green_lettuce silver_sink)
+        (inReceptacle knife_with_yellow_handle silver_sink)
+        (inReceptacle brown_egg silver_sink)
+        (inReceptacle brown_tomato black_table)
+        (inReceptacle brown_bowl black_table)
+        (inReceptacle salt_shaker black_table)
+        (atLocation agent black_table)  ; Starting location can be arbitrary; we set it to black_table for simplicity
+    )
+    (:goal (and
+        (inReceptacle brown_tomato black_table)
+        (isClean brown_tomato)
+    ))
+)
+```

@@ -1,0 +1,59 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): microwave_black_countertop
+fridge (receptacle): fridge_black_double_door
+sink (receptacle): none visible.
+knife (object): knife_yellow_handle_on_island
+receptacle (object): island_countertop_brown, microwave_black_countertop, fridge_black_double_door
+object: loaf_bread_brown_on_island, bottle_clear_with_brown_cap_on_island, small_round_brown_item_on_island, cabbage_green_on_island, cup_brown_on_island
+openable (receptacle) true if a receptacle is openable: (openable microwave_black_countertop), (openable fridge_black_double_door)
+opened (receptacle) true if a receptacle is opened: none.
+holdsAny (agent) agent ?a holds an object: none.
+isClean (object) true if the object has been clean in sink: none.
+isHot (object) true if the object has been heated up: none.
+isCool (object) true if the object has been cooled: none.
+isOn (object) true if the object is on: none.
+isToggled (object) true if the object has been toggled: none.
+isSliced (object) true if the object is sliced: none.
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle loaf_bread_brown_on_island island_countertop_brown), (inReceptacle bottle_clear_with_brown_cap_on_island island_countertop_brown), (inReceptacle knife_yellow_handle_on_island island_countertop_brown), (inReceptacle small_round_brown_item_on_island island_countertop_brown), (inReceptacle cabbage_green_on_island island_countertop_brown), (inReceptacle cup_brown_on_island island_countertop_brown)
+holds (agent, object) object ?o is held by agent ?a: none.
+atLocation (agent, object) : none.
+
+PDDL problem: (define (problem put_task_chill_potato_on_island)
+  (:domain put_task)
+
+  (:objects
+    robot - agent
+
+    microwave_black_countertop - microwave
+    fridge_black_double_door - fridge
+    island_countertop_brown - receptacle
+
+    knife_yellow_handle_on_island - knife
+
+    loaf_bread_brown_on_island - object
+    bottle_clear_with_brown_cap_on_island - object
+    small_round_brown_item_on_island - object  ; used as the potato
+    cabbage_green_on_island - object
+    cup_brown_on_island - object
+  )
+
+  (:init
+    (openable microwave_black_countertop)
+    (openable fridge_black_double_door)
+
+    (inReceptacle loaf_bread_brown_on_island island_countertop_brown)
+    (inReceptacle bottle_clear_with_brown_cap_on_island island_countertop_brown)
+    (inReceptacle knife_yellow_handle_on_island island_countertop_brown)
+    (inReceptacle small_round_brown_item_on_island island_countertop_brown)
+    (inReceptacle cabbage_green_on_island island_countertop_brown)
+    (inReceptacle cup_brown_on_island island_countertop_brown)
+  )
+
+  (:goal
+    (and
+      (isCool small_round_brown_item_on_island)
+      (inReceptacle small_round_brown_item_on_island island_countertop_brown)
+    )
+  )
+)

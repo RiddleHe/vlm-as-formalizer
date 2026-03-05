@@ -1,0 +1,8 @@
+(gotolocation agent bed)
+(pickupobject agent book1)
+(gotolocation agent desk)
+(putobjectinreceptacle agent book1 desk)
+(gotolocation agent bed)
+(pickupobject agent book2)
+(gotolocation agent desk)
+(putobjectinreceptacle agent book2 desk)

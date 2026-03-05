@@ -1,0 +1,23 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        keychain1 keychain2 - object
+        couch - receptacle
+        table1 table2 - receptacle
+    )
+    (:init
+        (atLocation agent1 table1)
+        (inReceptacle keychain1 table1)
+        (inReceptacle keychain2 table2)
+        (openable couch)
+        (openable table1)
+        (openable table2)
+    )
+    (:goal
+        (and
+            (inReceptacle keychain1 couch)
+            (inReceptacle keychain2 couch)
+        )
+    )
+)

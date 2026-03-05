@@ -1,0 +1,4 @@
+(gotolocation agent1 plunger1)
+(pickupobject agent1 plunger1)
+(gotolocation agent1 sinkcabinet1)
+(putobjectinreceptacle agent1 plunger1 sinkcabinet1)

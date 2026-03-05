@@ -1,0 +1,62 @@
+Scene graph:
+agent: agent1
+microwave (receptacle): microwave1
+fridge (receptacle): fridge1
+sink (receptacle): sink1
+knife (object): knife1
+receptacle (object): black_table1, white_table1, pan1, pot1
+object: apple1, apple2, salt_shaker1, spoon1, bottle1, plate1
+openable (receptacle) true if a receptacle is openable: (openable microwave1), (openable fridge1), (openable sink1)
+opened (receptacle) true if a receptacle is opened: (opened microwave1)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn microwave1)
+isToggled (object) true if the object has been toggled: (isToggled microwave1)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle apple1 black_table1), (inReceptacle spoon1 black_table1), (inReceptacle bottle1 black_table1), (inReceptacle plate1 black_table1), (inReceptacle salt_shaker1 white_table1), (inReceptacle apple2 white_table1), (inReceptacle pan1 white_table1)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_warm_apple_on_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        sink1 - sink
+        knife1 - knife
+        black_table1 - receptacle
+        white_table1 - receptacle
+        pan1 - receptacle
+        pot1 - receptacle
+        apple1 - object
+        apple2 - object
+        salt_shaker1 - object
+        spoon1 - object
+        bottle1 - object
+        plate1 - object
+    )
+    (:init
+        (openable microwave1)
+        (openable fridge1)
+        (openable sink1)
+        (opened microwave1)
+        (isOn microwave1)
+        (isToggled microwave1)
+        (inReceptacle apple1 black_table1)
+        (inReceptacle spoon1 black_table1)
+        (inReceptacle bottle1 black_table1)
+        (inReceptacle plate1 black_table1)
+        (inReceptacle salt_shaker1 white_table1)
+        (inReceptacle apple2 white_table1)
+        (inReceptacle pan1 white_table1)
+    )
+    (:goal (and
+        (inReceptacle apple1 white_table1)
+        (isHot apple1)
+    ))
+)
+```

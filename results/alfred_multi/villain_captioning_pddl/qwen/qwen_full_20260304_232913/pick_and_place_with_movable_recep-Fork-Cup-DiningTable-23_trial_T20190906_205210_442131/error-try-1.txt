@@ -1,0 +1,19 @@
+Predicate argument has wrong type:
+  atLocation cup kitchen_island_counter: cup is not a agent
+  atLocation egg sink: egg is not a agent
+  atLocation melon kitchen_island_counter: melon is not a agent
+  atLocation spoon sink: spoon is not a agent
+  atLocation pan2 stove: pan2 is not a agent
+  atLocation lettuce2 counter_next_to_coffee_maker: lettuce2 is not a agent
+  atLocation pan1 stove: pan1 is not a agent
+  atLocation funnel sink: funnel is not a agent
+  atLocation knife kitchen_island_counter: knife is not a agent
+  atLocation lettuce1 counter_next_to_coffee_maker: lettuce1 is not a agent
+  atLocation coffee_maker counter_left_of_stove: coffee_maker is not a agent
+  atLocation fork kitchen_island_counter: fork is not a agent
+
+Object does not have a type:
+  stove
+  counter_next_to_coffee_maker
+  counter_left_of_stove
+

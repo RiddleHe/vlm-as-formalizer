@@ -1,0 +1,64 @@
+Scene graph:
+block: 
+- blue_top_block: a blue block at the top of the vertical stack
+- yellow_second_block: a yellow block directly under the blue block in the stack
+- red_third_block: a red block directly under the yellow block in the stack
+- orange_fourth_block: an orange block directly under the red block in the stack
+- green_bottom_block: a green block at the bottom of the vertical stack (touching the table)
+- purple_single_block: a purple block sitting alone on the table to the left of the stack
+
+robot:
+- robot_arm: robot arm (not visible, assumed available)
+
+ontable (block) block x is on table, not on another block:
+- (ontable green_bottom_block)
+- (ontable purple_single_block)
+
+clear (block) there is no block on top of block x:
+- (clear blue_top_block)
+- (clear purple_single_block)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot_arm)
+
+handfull (robot) :
+- none
+
+holding (block) block x is being held by the robot:
+- none
+
+on (block, block) block x is on block y:
+- (on blue_top_block yellow_second_block)
+- (on yellow_second_block red_third_block)
+- (on red_third_block orange_fourth_block)
+- (on orange_fourth_block green_bottom_block)
+
+PDDL problem: (define (problem blocksworld_stacks_2)
+  (:domain blocksworld)
+  (:objects
+    blue_top_block yellow_second_block red_third_block orange_fourth_block green_bottom_block purple_single_block - block
+    robot_arm - robot
+  )
+  (:init
+    (ontable green_bottom_block)
+    (ontable purple_single_block)
+
+    (on blue_top_block yellow_second_block)
+    (on yellow_second_block red_third_block)
+    (on red_third_block orange_fourth_block)
+    (on orange_fourth_block green_bottom_block)
+
+    (clear blue_top_block)
+    (clear purple_single_block)
+
+    (handempty robot_arm)
+  )
+  (:goal
+    (and
+      (on red_third_block blue_top_block)
+      (on yellow_second_block green_bottom_block)
+      (on green_bottom_block orange_fourth_block)
+      (on orange_fourth_block purple_single_block)
+    )
+  )
+)

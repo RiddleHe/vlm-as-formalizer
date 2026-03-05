@@ -1,0 +1,58 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): wooden desk, wooden cabinet, metal bowl left, metal bowl right
+object: pen, cd, laptop, lamp, basketball, boots, metal bowl left, metal bowl right, wooden desk, wooden cabinet
+openable (receptacle) true if a receptacle is openable: (openable metal bowl left), (openable metal bowl right), (openable wooden cabinet)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn lamp)
+isToggled (object) true if the object has been toggled: (isToggled lamp)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle cd wooden cabinet), (inReceptacle metal bowl left wooden cabinet), (inReceptacle metal bowl right wooden cabinet)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot wooden desk)
+
+PDDL problem: ```pddl
+(define (problem put_pen_in_bowl)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        pen - object
+        cd - object
+        laptop - object
+        lamp - object
+        basketball - object
+        boots - object
+        metal_bowl_left - receptacle
+        metal_bowl_right - receptacle
+        wooden_desk - receptacle
+        wooden_cabinet - receptacle
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+    )
+    (:init
+        (openable metal_bowl_left)
+        (openable metal_bowl_right)
+        (openable wooden_cabinet)
+        (isOn lamp)
+        (isToggled lamp)
+        (inReceptacle cd wooden_cabinet)
+        (inReceptacle metal_bowl_left wooden_cabinet)
+        (inReceptacle metal_bowl_right wooden_cabinet)
+        (atLocation robot wooden_desk)
+    )
+    (:goal (and
+        (inReceptacle pen metal_bowl_left)
+        (atLocation robot wooden_desk)
+    ))
+)
+```

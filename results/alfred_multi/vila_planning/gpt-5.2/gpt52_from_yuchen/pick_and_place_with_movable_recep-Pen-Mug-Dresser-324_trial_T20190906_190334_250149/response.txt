@@ -1,0 +1,3 @@
+(GotoLocation agent1 dresser_near_computer)
+(PickupObject agent1 pen)
+(PutObjectInReceptacle agent1 pen black_cup)

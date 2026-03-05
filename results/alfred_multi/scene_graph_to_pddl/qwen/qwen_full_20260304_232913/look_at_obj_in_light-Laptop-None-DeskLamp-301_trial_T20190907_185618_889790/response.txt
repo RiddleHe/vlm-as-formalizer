@@ -1,0 +1,53 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): white_bed, beige_nightstand
+object: gray_laptop_on_bed, gray_laptop_on_bed_with_logo, black_smartphone_on_bed, book_on_bed, white_pillow_on_bed, beige_lamp_on_nightstand, silver_alarm_clock_on_nightstand
+openable (receptacle) true if a receptacle is openable: (openable beige_nightstand)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle gray_laptop_on_bed white_bed), (inReceptacle gray_laptop_on_bed_with_logo white_bed), (inReceptacle black_smartphone_on_bed white_bed), (inReceptacle book_on_bed white_bed), (inReceptacle white_pillow_on_bed white_bed), (inReceptacle beige_lamp_on_nightstand beige_nightstand), (inReceptacle silver_alarm_clock_on_nightstand beige_nightstand)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem carry_laptop_turn_on_light)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        white_bed - receptacle
+        beige_nightstand - receptacle
+        gray_laptop_on_bed - object
+        gray_laptop_on_bed_with_logo - object
+        black_smartphone_on_bed - object
+        book_on_bed - object
+        white_pillow_on_bed - object
+        beige_lamp_on_nightstand - object
+        silver_alarm_clock_on_nightstand - object
+    )
+    (:init
+        (openable beige_nightstand)
+        (inReceptacle gray_laptop_on_bed white_bed)
+        (inReceptacle gray_laptop_on_bed_with_logo white_bed)
+        (inReceptacle black_smartphone_on_bed white_bed)
+        (inReceptacle book_on_bed white_bed)
+        (inReceptacle white_pillow_on_bed white_bed)
+        (inReceptacle beige_lamp_on_nightstand beige_nightstand)
+        (inReceptacle silver_alarm_clock_on_nightstand beige_nightstand)
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (holds robot gray_laptop_on_bed)
+        (isOn beige_lamp_on_nightstand)
+    ))
+)
+```

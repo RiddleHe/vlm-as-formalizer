@@ -1,0 +1,4 @@
+(GotoLocation robot sponge)
+(PickupObject robot sponge)
+(GotoLocation robot toilet_tank)
+(PutObjectInReceptacle robot sponge toilet_tank)

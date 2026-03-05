@@ -1,0 +1,52 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): black fridge with digital display
+sink (receptacle): 
+knife (object): silver knife on countertop
+receptacle (object): wooden shelf rack
+object: white mug, silver toaster, black coffee maker, silver knife, wooden shelf rack, black fridge with digital display
+openable (receptacle) true if a receptacle is openable: (openable black fridge with digital display)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn silver toaster), (isOn black coffee maker)
+isToggled (object) true if the object has been toggled: (isToggled silver toaster), (isToggled black coffee maker)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle white mug black coffee maker)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot black coffee maker)
+
+PDDL problem: ```pddl
+(define (problem chill_mug_and_set_on_rack)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        black_fridge_with_digital_display - fridge
+        wooden_shelf_rack - receptacle
+        white_mug - object
+        silver_knife - knife
+        silver_toaster - object
+        black_coffee_maker - object
+        sink - sink
+        microwave - microwave
+    )
+    (:init
+        (openable black_fridge_with_digital_display)
+        (not (opened black_fridge_with_digital_display))
+        (inReceptacle white_mug black_coffee_maker)
+        (isOn silver_toaster)
+        (isOn black_coffee_maker)
+        (isToggled silver_toaster)
+        (isToggled black_coffee_maker)
+        (atLocation robot black_coffee_maker)
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (inReceptacle white_mug wooden_shelf_rack)
+        (isCool white_mug)
+    ))
+)
+```

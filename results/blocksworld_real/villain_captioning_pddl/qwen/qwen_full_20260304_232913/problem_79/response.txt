@@ -1,0 +1,37 @@
+```pddl
+(define (problem blocksworld_goal)
+    (:domain blocksworld)
+    (:objects
+        blue - block
+        green - block
+        orange - block
+        purple - block
+        yellow - block
+        robot - robot
+    )
+    (:init
+        (on green orange)
+        (ontable orange)
+        (ontable blue)
+        (ontable purple)
+        (ontable yellow)
+        (clear green)
+        (clear blue)
+        (clear purple)
+        (clear yellow)
+        (not (clear orange))
+        (handempty robot)
+        (not (handfull robot))
+        (not (holding blue))
+        (not (holding green))
+        (not (holding orange))
+        (not (holding purple))
+        (not (holding yellow))
+    )
+    (:goal (and
+        (on blue orange)
+        (on purple green)
+        (on yellow orange) ; Note: "red" is not present; assuming "orange" is intended as per available blocks.
+    ))
+)
+```

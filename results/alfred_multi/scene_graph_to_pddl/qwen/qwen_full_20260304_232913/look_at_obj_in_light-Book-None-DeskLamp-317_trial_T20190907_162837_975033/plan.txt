@@ -1,0 +1,6 @@
+(gotolocation robot green_lamp)
+(pickupobject robot green_lamp)
+(gotolocation robot bed)
+(putobjectinreceptacle robot green_lamp bed)
+(gotolocation robot green_lamp)
+(gotolocation robot bed)

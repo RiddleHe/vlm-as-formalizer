@@ -1,0 +1,105 @@
+Scene graph:
+agent: 
+- (agent, robot_agent)
+
+microwave (receptacle): 
+- (microwave, black_countertop_microwave_left)
+
+fridge (receptacle): 
+- none
+
+sink (receptacle): 
+- (sink, stainless_inset_sink_center)
+
+knife (object): 
+- none
+
+receptacle (object): 
+- (receptacle, black_countertop_microwave_left)
+- (receptacle, stainless_inset_sink_center)
+- (receptacle, white_lower_cabinet_under_sink)
+- (receptacle, white_lower_cabinet_right_of_sink)
+- (receptacle, open_white_drawer_left_of_microwave)
+
+object: 
+- (object, robot_agent)
+- (object, clear_glass_tumbler_in_sink_left)
+- (object, clear_glass_bottle_in_sink_left)
+- (object, clear_glass_tumbler_in_sink_center)
+- (object, small_clear_cup_in_sink_center)
+- (object, brown_scrub_sponge_in_sink_right)
+- (object, black_countertop_microwave_left)
+- (object, stainless_inset_sink_center)
+- (object, white_lower_cabinet_under_sink)
+- (object, white_lower_cabinet_right_of_sink)
+- (object, open_white_drawer_left_of_microwave)
+
+openable (receptacle) true if a receptacle is openable:
+- (openable, black_countertop_microwave_left)
+- (openable, white_lower_cabinet_under_sink)
+- (openable, white_lower_cabinet_right_of_sink)
+- (openable, open_white_drawer_left_of_microwave)
+
+opened (receptacle) true if a receptacle is opened:
+- (opened, open_white_drawer_left_of_microwave)
+
+holdsAny (agent) agent ?a holds an object:
+- none
+
+isClean (object) true if the object has been clean in sink:
+- none
+
+isHot (object) true if the object has been heated up:
+- none
+
+isCool (object) true if the object has been cooled:
+- none
+
+isOn (object) true if the object is on:
+
+PDDL problem: (define (problem put_hot_glass_in_cabinet)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    black_countertop_microwave_left - microwave
+    stainless_inset_sink_center - sink
+
+    white_lower_cabinet_under_sink - receptacle
+    white_lower_cabinet_right_of_sink - receptacle
+    open_white_drawer_left_of_microwave - receptacle
+
+    clear_glass_tumbler_in_sink_left - object
+    clear_glass_bottle_in_sink_left - object
+    clear_glass_tumbler_in_sink_center - object
+    small_clear_cup_in_sink_center - object
+    brown_scrub_sponge_in_sink_right - object
+  )
+
+  (:init
+    ;; receptacle properties
+    (openable black_countertop_microwave_left)
+    (openable white_lower_cabinet_under_sink)
+    (openable white_lower_cabinet_right_of_sink)
+    (openable open_white_drawer_left_of_microwave)
+
+    ;; currently opened
+    (opened open_white_drawer_left_of_microwave)
+
+    ;; object placements
+    (inReceptacle clear_glass_tumbler_in_sink_left stainless_inset_sink_center)
+    (inReceptacle clear_glass_bottle_in_sink_left stainless_inset_sink_center)
+    (inReceptacle clear_glass_tumbler_in_sink_center stainless_inset_sink_center)
+    (inReceptacle small_clear_cup_in_sink_center stainless_inset_sink_center)
+    (inReceptacle brown_scrub_sponge_in_sink_right stainless_inset_sink_center)
+
+    ;; robot starts not holding anything (no holds/holdsAny facts)
+  )
+
+  (:goal
+    (and
+      (isHot clear_glass_tumbler_in_sink_left)
+      (inReceptacle clear_glass_tumbler_in_sink_left white_lower_cabinet_under_sink)
+    )
+  )
+)

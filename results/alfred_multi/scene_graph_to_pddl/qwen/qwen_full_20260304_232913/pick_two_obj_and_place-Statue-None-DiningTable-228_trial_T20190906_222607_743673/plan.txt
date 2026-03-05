@@ -1,0 +1,6 @@
+(pickupobject agent1 black_statue1)
+(gotolocation agent1 wooden_coffee_table)
+(putobjectinreceptacle agent1 black_statue1 wooden_coffee_table)
+(pickupobject agent2 black_statue2)
+(gotolocation agent2 wooden_coffee_table)
+(putobjectinreceptacle agent2 black_statue2 wooden_coffee_table)

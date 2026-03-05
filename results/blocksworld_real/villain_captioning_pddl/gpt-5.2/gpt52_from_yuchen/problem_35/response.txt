@@ -1,0 +1,46 @@
+```lisp
+(define (problem blocksworld_scene_stack1)
+  (:domain blocksworld)
+
+  (:objects
+    green blue red orange yellow purple - block
+    robot1 - robot
+  )
+
+  (:init
+    ;; existing stack
+    (on orange blue)
+    (ontable blue)
+    (clear orange)
+
+    ;; single blocks on table
+    (ontable green)
+    (clear green)
+
+    (ontable red)
+    (clear red)
+
+    (ontable yellow)
+    (clear yellow)
+
+    (ontable purple)
+    (clear purple)
+
+    ;; blue is not clear because orange is on it
+
+    ;; robot initial state
+    (handempty robot1)
+  )
+
+  (:goal
+    (and
+      (on purple yellow)
+      (on yellow orange)
+      (on orange red)
+      (on red blue)
+      (on blue green)
+      (ontable green)
+    )
+  )
+)
+```

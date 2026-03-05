@@ -1,0 +1,56 @@
+Scene graph:
+agent: agent
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife
+receptacle (object): wooden_table, countertop
+object: green_lettuce, brown_bread, egg, potato, gray_plate, red_frying_pan, salt_shaker, gray_mug, ladle, spatula, knife, wooden_table, countertop, microwave, fridge, sink
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge), (openable sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle green_lettuce wooden_table), (inReceptacle brown_bread wooden_table), (inReceptacle egg wooden_table), (inReceptacle potato wooden_table), (inReceptacle gray_plate wooden_table), (inReceptacle red_frying_pan wooden_table), (inReceptacle salt_shaker wooden_table), (inReceptacle gray_mug wooden_table), (inReceptacle ladle wooden_table), (inReceptacle spatula wooden_table), (inReceptacle knife wooden_table), (inReceptacle gray_mug countertop), (inReceptacle metal_cup countertop), (inReceptacle salt_shaker countertop)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem cleanup_knife_mug)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave
+        fridge
+        sink
+        knife
+        gray_mug
+        wooden_table
+        countertop
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (inReceptacle knife wooden_table)
+        (inReceptacle gray_mug wooden_table)
+        (inReceptacle gray_mug countertop)
+        (not (atLocation agent wooden_table))
+        (not (atLocation agent countertop))
+        (not (atLocation agent sink))
+        (not (holdsAny agent))
+        (not (isClean knife))
+        (not (isClean gray_mug))
+    )
+    (:goal (and
+        (isClean knife)
+        (isClean gray_mug)
+        (inReceptacle knife sink)
+        (inReceptacle gray_mug sink)
+    ))
+)
+```

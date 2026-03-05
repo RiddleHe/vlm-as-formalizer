@@ -1,0 +1,4 @@
+(gotolocation robot sidetable)
+(toggleobject robot lamp)
+(gotolocation robot newspaper)
+(pickupobject robot newspaper)

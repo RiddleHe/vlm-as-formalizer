@@ -1,0 +1,28 @@
+(define (problem put_microwaved_cup_in_fridge)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        cup - object
+        knife - knife
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (atLocation robot microwave)
+        (inReceptacle cup microwave)
+        (not (isHot cup))
+        (not (isCool cup))
+        (not (isClean cup))
+        (not (isSliced cup))
+        (not (isOn microwave))
+        (not (isOn fridge))
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (inReceptacle cup fridge)
+        (isHot cup)
+    ))
+)

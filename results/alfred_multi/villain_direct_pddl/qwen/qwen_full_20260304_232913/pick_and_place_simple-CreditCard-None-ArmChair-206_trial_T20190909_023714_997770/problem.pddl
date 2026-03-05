@@ -1,0 +1,19 @@
+(define (problem move_credit_card_to_armchair)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        credit_card - object
+        armchair - receptacle
+    )
+    (:init
+        (openable armchair)
+        (not (atLocation robot armchair))
+        (not (atLocation robot credit_card))
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (inReceptacle credit_card armchair)
+        )
+    )
+)

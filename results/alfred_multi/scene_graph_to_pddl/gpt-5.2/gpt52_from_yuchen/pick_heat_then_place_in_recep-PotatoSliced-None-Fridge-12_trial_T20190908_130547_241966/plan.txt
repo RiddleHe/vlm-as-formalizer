@@ -1,0 +1,4 @@
+(gotolocation robot_agent small_yellow_handled_knife_on_counter)
+(pickupobject robot_agent small_yellow_handled_knife_on_counter)
+(gotolocation robot_agent tall_gray_fridge_freezer)
+(putobjectinreceptacle robot_agent small_yellow_handled_knife_on_counter tall_gray_fridge_freezer)

@@ -1,0 +1,54 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): black_fridge
+sink (receptacle): kitchen_sink
+knife (object): knife_on_sink
+receptacle (object): black_table, black_fridge, kitchen_sink
+object: tomato_on_sink, tomato_on_table, lettuce_in_sink, knife_on_sink, black_table, black_fridge, kitchen_sink
+openable (receptacle) true if a receptacle is openable: (openable black_fridge)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle lettuce_in_sink kitchen_sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_washed_tomato_on_table)
+    (:domain put_task)
+    (:objects
+        agent
+        black_fridge - fridge
+        kitchen_sink - sink
+        black_table - receptacle
+        tomato_on_sink - object
+        tomato_on_table - object
+        lettuce_in_sink - object
+        knife_on_sink - knife
+    )
+    (:init
+        (openable black_fridge)
+        (not (opened black_fridge))
+        (inReceptacle lettuce_in_sink kitchen_sink)
+        (atLocation agent black_table) ; Assuming agent starts near black_table as a plausible initial location
+        (not (holdsAny agent))
+        (not (isClean tomato_on_sink))
+        (not (isSliced tomato_on_sink))
+        (not (isHot tomato_on_sink))
+        (not (isCool tomato_on_sink))
+        (not (isOn tomato_on_sink))
+        (not (isToggled tomato_on_sink))
+        (atLocation agent black_table) ; Agent is initially at black_table
+    )
+    (:goal (and
+        (inReceptacle tomato_on_sink black_table)
+        (isClean tomato_on_sink)
+    ))
+)
+```

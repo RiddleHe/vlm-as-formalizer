@@ -1,0 +1,51 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): small_gray_knife_on_lower_shelf_right
+receptacle (object): white_desk_surface_top_view, wooden_shelf_unit_lower_shelf
+object: metal_bowl_on_white_desk_left, keyring_with_keys_on_white_desk_center, compact_disc_on_lower_shelf_left_center, orange_pencil_on_lower_shelf_left, brown_basketball_right_edge, blue_digital_clock_left_edge
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle metal_bowl_on_white_desk_left white_desk_surface_top_view), (inReceptacle keyring_with_keys_on_white_desk_center white_desk_surface_top_view), (inReceptacle compact_disc_on_lower_shelf_left_center wooden_shelf_unit_lower_shelf), (inReceptacle orange_pencil_on_lower_shelf_left wooden_shelf_unit_lower_shelf), (inReceptacle small_gray_knife_on_lower_shelf_right wooden_shelf_unit_lower_shelf)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: (define (problem put_two_pencils_on_desk)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+    white_desk_surface_top_view - receptacle
+    wooden_shelf_unit_lower_shelf - receptacle
+    orange_pencil_on_lower_shelf_left - object
+    metal_bowl_on_white_desk_left - object
+    keyring_with_keys_on_white_desk_center - object
+    compact_disc_on_lower_shelf_left_center - object
+    small_gray_knife_on_lower_shelf_right - knife
+    brown_basketball_right_edge - object
+    blue_digital_clock_left_edge - object
+  )
+
+  (:init
+    (inReceptacle metal_bowl_on_white_desk_left white_desk_surface_top_view)
+    (inReceptacle keyring_with_keys_on_white_desk_center white_desk_surface_top_view)
+    (inReceptacle compact_disc_on_lower_shelf_left_center wooden_shelf_unit_lower_shelf)
+    (inReceptacle orange_pencil_on_lower_shelf_left wooden_shelf_unit_lower_shelf)
+    (inReceptacle small_gray_knife_on_lower_shelf_right wooden_shelf_unit_lower_shelf)
+  )
+
+  (:goal
+    (and
+      (inReceptacle orange_pencil_on_lower_shelf_left white_desk_surface_top_view)
+      (inReceptacle compact_disc_on_lower_shelf_left_center white_desk_surface_top_view)
+    )
+  )
+)

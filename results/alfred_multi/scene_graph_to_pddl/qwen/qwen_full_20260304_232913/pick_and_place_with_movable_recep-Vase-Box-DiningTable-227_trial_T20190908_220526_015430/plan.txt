@@ -1,0 +1,4 @@
+(gotolocation robot openable_box)
+(gotolocation robot dining_table)
+(pickupobject robot plate)
+(putobjectinreceptacle robot plate openable_box)

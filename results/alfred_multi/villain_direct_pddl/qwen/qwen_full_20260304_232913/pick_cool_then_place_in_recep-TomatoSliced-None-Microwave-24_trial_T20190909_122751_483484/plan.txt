@@ -1,0 +1,5 @@
+(gotolocation agent1 fridge1)
+(pickupobject agent1 tomato1)
+(coolobject agent1 fridge1 tomato1)
+(gotolocation agent1 microwave1)
+(putobjectinreceptacle agent1 tomato1 microwave1)

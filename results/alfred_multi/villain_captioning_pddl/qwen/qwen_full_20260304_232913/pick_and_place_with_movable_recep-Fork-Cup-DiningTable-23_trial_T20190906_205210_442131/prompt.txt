@@ -1,0 +1,299 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: place a cup with a fork in it on top of the kitchen island counter
+    
+
+SCENE CAPTION:
+The scene depicts a kitchen environment with various objects and receptacles relevant to the planning task. The following is a detailed description based on the provided images and domain definitions.
+
+---
+
+**1. Objects and Their Types**
+
+- **Receptacles:**
+  - **Sink**: A stainless steel sink with a faucet, located on a green countertop. It contains a spoon, a small metallic funnel, and a white egg. The sink is a receptacle and is openable.
+  - **Microwave**: Not visible in the images, but defined in the domain as a receptacle capable of heating objects.
+  - **Fridge**: Partially visible on the left side of the sink image (black appliance). It is a receptacle and is openable.
+  - **Stove**: A white stove with two burners, each holding a metallic pot. The stove is not a receptacle per the domain, but it holds pots.
+  - **Cabinets**: Wooden cabinets under the sink and stove are receptacles, but their contents are not visible.
+  - **Kitchen Island Counter**: A green countertop with a checkered pattern, visible in the dining table image. It is not a receptacle but a surface for placing objects.
+
+- **Objects (non-receptacles):**
+  - **Knife**: A metallic knife is visible on the kitchen island counter (dining table image). It is an object of type “knife”.
+  - **Fork**: A metallic fork is visible in the sink (with the spoon and egg) and also on the kitchen island counter. It is an object.
+  - **Cup**: A small white cup is visible under the kitchen island counter (in the lower shelf area in the dining table image). It is an object.
+  - **Pots**: Two metallic pots are on the stove burners. They are objects.
+  - **Cabbage**: Two green cabbages are on the countertop next to the stove. They are objects.
+  - **Egg**: A white egg is in the sink. It is an object.
+  - **Spoon**: A metallic spoon is in the sink. It is an object.
+  - **Funnel**: A small metallic funnel is in the sink. It is an object.
+  - **Coffee Maker**: A red coffee maker is on the countertop next to the stove. It is an object.
+  - **Soap Dispenser**: A metallic soap dispenser is on the kitchen island counter. It is an object.
+  - **Pan**: A brown pan is on the kitchen island counter. It is an object.
+  - **Mugs**: Two small mugs are under the kitchen island counter (lower shelf). They are objects.
+
+---
+
+**2. Quantities of Each Object Type**
+
+- **Receptacles**: 4 (sink, microwave, fridge, cabinets — though microwave and cabinets are not fully visible, they are implied by the domain and scene context).
+- **Knives**: 1 (on the kitchen island counter).
+- **Forks**: At least 2 (one in the sink, one on the kitchen island counter).
+- **Cups**: At least 1 (the small white cup under the island counter; mugs may be considered cups, but are distinct in context).
+- **Pots**: 2 (on the stove).
+- **Cabbages**: 2 (on the countertop).
+- **Eggs**: 1 (in the sink).
+- **Spoons**: 1 (in the sink).
+- **Funnels**: 1 (in the sink).
+- **Coffee Makers**: 1.
+- **Soap Dispensers**: 1.
+- **Pans**: 1.
+- **Mugs**: 2 (under the island counter).
+
+---
+
+**3. Spatial Relationships Between Objects**
+
+- The **sink** contains a **spoon**, a **funnel**, and an **egg**. These objects are `inReceptacle` the sink.
+- The **stove** has two **pots** on its burners. The pots are placed on the stove, not in a receptacle.
+- The **kitchen island counter** has a **knife**, a **fork**, a **soap dispenser**, a **pan**, and two **bowls** on its surface. These objects are on the counter, not in a receptacle.
+- A **cup** is located under the kitchen island counter (on a lower shelf), along with two **mugs**. These are `inReceptacle` the shelf area (though the shelf is not explicitly defined as a receptacle in the domain, it functions as one in the scene).
+- The **fridge** is to the left of the sink, and the **cabinets** are under the sink and stove.
+- The **cabbages** are on the countertop next to the stove.
+
+---
+
+**4. Current State of Each Object Relevant to the Planning Task**
+
+- **Cup**: Located under the kitchen island counter. It is not held by the agent, not clean, not hot, not cool, not sliced, and not toggled.
+- **Fork**: One fork is in the sink, another is on the kitchen island counter. Neither is held by the agent, not clean (unless cleaned), not hot, not cool, not sliced, and not toggled.
+- **Knife**: On the kitchen island counter. Not held by the agent, not clean, not hot, not cool, not sliced, and not toggled.
+- **Sink**: Contains objects and is not opened (as it is a basin, not a door-type receptacle, but it is openable per the domain).
+- **Fridge**: Partially visible, not opened, and no objects are being held from it.
+- **Stove**: Not a receptacle, but has pots on it. The stove is not toggled on or off in the images.
+
+---
+
+**5. Colors, Positions, and Other Visual Properties**
+
+- **Sink**: Stainless steel, rectangular, with a faucet. Located on a green countertop.
+- **Cup**: Small, white, cylindrical, located on a lower shelf under the kitchen island counter.
+- **Fork**: Metallic, shiny, with four tines. One is in the sink, another is on the green checkered kitchen island counter.
+- **Knife**: Metallic, with a black handle, on the kitchen island counter.
+- **Pots**: Metallic, square-shaped, on the stove burners.
+- **Cabbages**: Green, round, on the countertop next to the stove.
+- **Egg**: White, oval, in the sink.
+- **Spoon**: Metallic, in the sink.
+- **Funnel**: Small, metallic, in the sink.
+- **Coffee Maker**: Red, with a black handle, on the countertop.
+- **Soap Dispenser**: Metallic, conical, on the kitchen island counter.
+- **Pan**: Brown, rectangular, on the kitchen island counter.
+- **Mugs**: Small, gray, under the kitchen island counter.
+- **Floor**: Wooden, brown, with a plank pattern.
+- **Cabinets**: Wooden, brown, under the sink and stove.
+- **Stove**: White, with black burners and a black oven door.
+
+---
+
+The task requires placing a cup with a fork in it on top of the kitchen island counter. Currently, the cup is under the counter, and a fork is either in the sink or on the counter. The robot must first retrieve the cup and a fork, place the fork in the cup, and then place the cup with the fork on the kitchen island counter. The sink may need to be used to clean the fork if required, but the instruction does not specify cleaning. The robot must navigate to the locations of the cup and fork, pick them up, and perform the placement.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

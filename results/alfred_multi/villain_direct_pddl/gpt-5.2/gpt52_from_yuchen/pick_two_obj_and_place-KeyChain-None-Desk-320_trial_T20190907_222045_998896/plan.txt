@@ -1,0 +1,8 @@
+(gotolocation robot dresser)
+(pickupobject robot keys1)
+(gotolocation robot white_table)
+(putobjectinreceptacle robot keys1 white_table)
+(gotolocation robot dresser)
+(pickupobject robot keys2)
+(gotolocation robot white_table)
+(putobjectinreceptacle robot keys2 white_table)

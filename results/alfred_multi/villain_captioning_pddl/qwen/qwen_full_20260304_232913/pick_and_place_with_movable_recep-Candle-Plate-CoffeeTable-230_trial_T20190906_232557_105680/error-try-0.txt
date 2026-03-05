@@ -1,0 +1,16 @@
+Predicate argument has wrong type:
+  atLocation newspaper1 dining_table: newspaper1 is not a agent
+  atLocation tissue_box dining_table: tissue_box is not a agent
+  atLocation laptop dining_table: laptop is not a agent
+  atLocation newspaper2 dining_table: newspaper2 is not a agent
+  atLocation candle coffee_table: candle is not a agent
+  atLocation plate1 dining_table: plate1 is not a agent
+  atLocation remote dining_table: remote is not a agent
+  atLocation blue_object dining_table: blue_object is not a agent
+  atLocation cardboard_box coffee_table: cardboard_box is not a agent
+  atLocation plant coffee_table: plant is not a agent
+  atLocation vase coffee_table: vase is not a agent
+  atLocation candle dining_table: candle is not a agent
+  atLocation plate2 dining_table: plate2 is not a agent
+  atLocation plate1 coffee_table: plate1 is not a agent
+

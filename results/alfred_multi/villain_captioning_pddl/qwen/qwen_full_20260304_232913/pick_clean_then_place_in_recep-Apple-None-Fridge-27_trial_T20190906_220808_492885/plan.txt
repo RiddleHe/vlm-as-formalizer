@@ -1,0 +1,6 @@
+(gotolocation agent apple)
+(pickupobject agent apple)
+(gotolocation agent sink)
+(cleanobject agent sink apple)
+(gotolocation agent fridge)
+(putobjectinreceptacle agent apple fridge)

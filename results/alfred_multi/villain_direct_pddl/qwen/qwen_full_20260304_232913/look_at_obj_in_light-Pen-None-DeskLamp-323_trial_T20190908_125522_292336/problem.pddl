@@ -1,0 +1,26 @@
+(define (problem get_pencil_and_look_under_lamp)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        pencil - object
+        lamp - object
+        nightstand - receptacle
+        box - receptacle
+        keychain - object
+        card - object
+    )
+    (:init
+        (atLocation robot nightstand)
+        (inReceptacle pencil nightstand)
+        (inReceptacle box nightstand)
+        (inReceptacle keychain nightstand)
+        (inReceptacle card nightstand)
+        (inReceptacle lamp box)
+        (openable box)
+        (opened box)
+    )
+    (:goal (and
+        (holds robot pencil)
+        (atLocation robot lamp)
+    ))
+)

@@ -1,0 +1,8 @@
+(GotoLocation robot1 apple)
+(PickupObject robot1 apple)
+(GotoLocation robot1 sink)
+(CleanObject robot1 sink apple)
+(GotoLocation robot1 fridge)
+(OpenObject robot1 fridge)
+(PutObjectInReceptacle robot1 apple fridge)
+(CloseObject robot1 fridge)

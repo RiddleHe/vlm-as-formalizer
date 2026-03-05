@@ -1,0 +1,83 @@
+Scene graph:
+block: 
+- purple_block_top: a purple cube in the center, currently at the top of a 3-block stack
+- blue_block_middle: a blue cube in the center, directly under the purple block
+- green_block_bottom: a green cube in the center, directly under the blue block and on the table
+- orange_block_single: an orange cube on the table in front-left of the central stack
+- yellow_block_top_rightstack: a yellow cube on the right, sitting on another block
+- red_block_bottom_rightstack: a red cube on the right, under the yellow block and on the table
+
+robot:
+- robot_arm: assumed robot (not visible)
+
+ontable (block) block x is on table, not on another block:
+- (ontable green_block_bottom)
+- (ontable orange_block_single)
+- (ontable red_block_bottom_rightstack)
+
+clear (block) there is no block on top of block x:
+- (clear purple_block_top)
+- (clear orange_block_single)
+- (clear yellow_block_top_rightstack)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot_arm)
+
+handfull (robot) :
+- none
+
+holding (block) block x is being held by the robot:
+- none
+
+on (block, block) block x is on block y:
+- (on purple_block_top blue_block_middle)
+- (on blue_block_middle green_block_bottom)
+- (on yellow_block_top_rightstack red_block_bottom_rightstack)
+
+PDDL problem: ```lisp
+(define (problem blocksworld_scene_1)
+  (:domain blocksworld)
+
+  (:objects
+    purple_block_top - block
+    blue_block_middle - block
+    orange_block_single - block
+    green_block_bottom - block
+    red_block_bottom_rightstack - block
+    yellow_block_top_rightstack - block
+    robot_arm - robot
+  )
+
+  (:init
+    ;; stack in center
+    (on purple_block_top blue_block_middle)
+    (on blue_block_middle green_block_bottom)
+    (ontable green_block_bottom)
+
+    ;; single block
+    (ontable orange_block_single)
+
+    ;; stack on right
+    (on yellow_block_top_rightstack red_block_bottom_rightstack)
+    (ontable red_block_bottom_rightstack)
+
+    ;; clear blocks
+    (clear purple_block_top)
+    (clear orange_block_single)
+    (clear yellow_block_top_rightstack)
+
+    ;; robot state
+    (handempty robot_arm)
+  )
+
+  (:goal
+    (and
+      (on blue_block_middle orange_block_single)
+      (on orange_block_single green_block_bottom)
+      (on green_block_bottom purple_block_top)
+      (on purple_block_top red_block_bottom_rightstack)
+      (on red_block_bottom_rightstack yellow_block_top_rightstack)
+    )
+  )
+)
+```

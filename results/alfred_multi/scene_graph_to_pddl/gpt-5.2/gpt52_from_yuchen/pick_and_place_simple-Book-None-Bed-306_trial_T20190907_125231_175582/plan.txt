@@ -1,0 +1,4 @@
+(gotolocation agent1 blue_book_on_desk_right_of_laptop)
+(pickupobject agent1 blue_book_on_desk_right_of_laptop)
+(gotolocation agent1 wooden_bed_with_slatted_footboard)
+(putobjectinreceptacle agent1 blue_book_on_desk_right_of_laptop wooden_bed_with_slatted_footboard)

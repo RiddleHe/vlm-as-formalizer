@@ -1,0 +1,61 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): none
+fridge (receptacle): tall_white_fridge_right
+sink (receptacle): none
+knife (object): none
+receptacle (object): white_table_with_metal_legs
+object: brown_loaf_of_bread_on_table, small_red_tomato_on_table, metal_spatula_on_table, black_cylinder_cup_on_table, tall_purple_rectangular_box_on_table, gray_block_container_left_on_table
+
+openable (receptacle) true if a receptacle is openable: (openable tall_white_fridge_right)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle brown_loaf_of_bread_on_table white_table_with_metal_legs)
+- (inReceptacle small_red_tomato_on_table white_table_with_metal_legs)
+- (inReceptacle metal_spatula_on_table white_table_with_metal_legs)
+- (inReceptacle black_cylinder_cup_on_table white_table_with_metal_legs)
+- (inReceptacle tall_purple_rectangular_box_on_table white_table_with_metal_legs)
+- (inReceptacle gray_block_container_left_on_table white_table_with_metal_legs)
+
+holds (agent, object) object ?o is held by agent ?a: none
+
+atLocation (agent, object) :
+none
+
+PDDL problem: (define (problem put_tomato_on_table)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+    tall_white_fridge_right - fridge
+    white_table_with_metal_legs - receptacle
+    small_red_tomato_on_table - object
+    brown_loaf_of_bread_on_table - object
+    metal_spatula_on_table - object
+    black_cylinder_cup_on_table - object
+    tall_purple_rectangular_box_on_table - object
+    gray_block_container_left_on_table - object
+  )
+  (:init
+    (openable tall_white_fridge_right)
+
+    (inReceptacle brown_loaf_of_bread_on_table white_table_with_metal_legs)
+    (inReceptacle small_red_tomato_on_table white_table_with_metal_legs)
+    (inReceptacle metal_spatula_on_table white_table_with_metal_legs)
+    (inReceptacle black_cylinder_cup_on_table white_table_with_metal_legs)
+    (inReceptacle tall_purple_rectangular_box_on_table white_table_with_metal_legs)
+    (inReceptacle gray_block_container_left_on_table white_table_with_metal_legs)
+  )
+  (:goal
+    (and
+      (inReceptacle small_red_tomato_on_table white_table_with_metal_legs)
+    )
+  )
+)

@@ -1,0 +1,6 @@
+(unstack yellow_block_top purple_block robot_arm)
+(put-down yellow_block_top robot_arm)
+(unstack purple_block blue_block robot_arm)
+(stack purple_block yellow_block_top robot_arm)
+(unstack blue_block green_block robot_arm)
+(stack blue_block orange_block_separate robot_arm)

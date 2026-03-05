@@ -1,0 +1,4 @@
+(gotolocation robot box)
+(pickupobject robot box)
+(gotolocation robot couch)
+(putobjectinreceptacle robot box couch)

@@ -1,0 +1,49 @@
+Scene graph:
+agent: agent
+microwave (receptacle): black_microwave
+fridge (receptacle): black_fridge
+sink (receptacle): sink
+knife (object): yellow_knife
+receptacle (object): gray_trash_bin
+object: red_apple, brown_egg, yellow_knife, gray_trash_bin
+openable (receptacle) true if a receptacle is openable: (openable black_microwave), (openable black_fridge)
+opened (receptacle) true if a receptacle is opened: (opened black_microwave)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle red_apple black_microwave), (inReceptacle brown_egg black_microwave), (inReceptacle yellow_knife black_microwave)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation agent black_microwave)
+
+PDDL problem: ```pddl
+(define (problem chill_apple_and_put_in_bin)
+    (:domain put_task)
+    (:objects
+        agent
+        black_microwave - microwave
+        black_fridge - fridge
+        sink - sink
+        yellow_knife - knife
+        gray_trash_bin - receptacle
+        red_apple - object
+        brown_egg - object
+    )
+    (:init
+        (openable black_microwave)
+        (openable black_fridge)
+        (opened black_microwave)
+        (inReceptacle red_apple black_microwave)
+        (inReceptacle brown_egg black_microwave)
+        (inReceptacle yellow_knife black_microwave)
+        (atLocation agent black_microwave)
+    )
+    (:goal (and
+        (inReceptacle red_apple gray_trash_bin)
+        (isCool red_apple)
+    ))
+)
+```

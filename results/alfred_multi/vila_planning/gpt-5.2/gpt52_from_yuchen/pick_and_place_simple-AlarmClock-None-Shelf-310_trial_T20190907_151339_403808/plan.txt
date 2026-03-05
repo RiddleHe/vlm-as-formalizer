@@ -1,0 +1,4 @@
+(GotoLocation agent1 clock)
+(PickupObject agent1 clock)
+(GotoLocation agent1 desk)
+(PutObjectInReceptacle agent1 clock desk)

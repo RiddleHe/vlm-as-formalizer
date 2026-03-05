@@ -1,0 +1,6 @@
+(GotoLocation robot book)
+(PickupObject robot book)
+(GotoLocation robot desklamp)
+(ToggleObject robot desklamp)
+(GotoLocation robot bed)
+(PutObjectInReceptacle robot book bed)

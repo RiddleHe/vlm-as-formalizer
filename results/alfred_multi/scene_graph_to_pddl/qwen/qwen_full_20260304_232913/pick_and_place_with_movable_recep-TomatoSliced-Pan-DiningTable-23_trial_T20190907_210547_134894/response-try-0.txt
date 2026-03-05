@@ -1,0 +1,81 @@
+Scene graph:
+agent: agent
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife_on_table, knife_on_island
+receptacle (object): bowl_on_table, pan_on_stove, pot_on_stove, island, table
+object: tomato_on_table, tomato_on_island, lettuce_on_table, wine_bottle_1, wine_bottle_2, wine_bottle_3, salt_shaker, pepper_shaker, glass, egg, spoon, fork, knife_on_table, knife_on_island, bowl_on_table, pan_on_stove, pot_on_stove, island, table
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge), (openable sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn pan_on_stove), (isOn pot_on_stove)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle tomato_on_table table), (inReceptacle lettuce_on_table table), (inReceptacle wine_bottle_1 table), (inReceptacle wine_bottle_2 table), (inReceptacle wine_bottle_3 table), (inReceptacle salt_shaker table), (inReceptacle pepper_shaker table), (inReceptacle glass table), (inReceptacle egg table), (inReceptacle spoon table), (inReceptacle fork table), (inReceptacle knife_on_table table), (inReceptacle bowl_on_table table), (inReceptacle tomato_on_island island), (inReceptacle knife_on_island island)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem place_pan_with_sliced_tomato)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave
+        fridge
+        sink
+        knife_on_table
+        knife_on_island
+        bowl_on_table
+        pan_on_stove
+        pot_on_stove
+        island
+        table
+        tomato_on_table
+        tomato_on_island
+        lettuce_on_table
+        wine_bottle_1
+        wine_bottle_2
+        wine_bottle_3
+        salt_shaker
+        pepper_shaker
+        glass
+        egg
+        spoon
+        fork
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (isOn pan_on_stove)
+        (isOn pot_on_stove)
+        (inReceptacle tomato_on_table table)
+        (inReceptacle lettuce_on_table table)
+        (inReceptacle wine_bottle_1 table)
+        (inReceptacle wine_bottle_2 table)
+        (inReceptacle wine_bottle_3 table)
+        (inReceptacle salt_shaker table)
+        (inReceptacle pepper_shaker table)
+        (inReceptacle glass table)
+        (inReceptacle egg table)
+        (inReceptacle spoon table)
+        (inReceptacle fork table)
+        (inReceptacle knife_on_table table)
+        (inReceptacle bowl_on_table table)
+        (inReceptacle tomato_on_island island)
+        (inReceptacle knife_on_island island)
+        (not (holdsAny agent))
+    )
+    (:goal
+        (and
+            (inReceptacle tomato_on_island island)
+            (inReceptacle pan_on_stove island)
+            (isSliced tomato_on_island)
+        )
+    )
+)
+```

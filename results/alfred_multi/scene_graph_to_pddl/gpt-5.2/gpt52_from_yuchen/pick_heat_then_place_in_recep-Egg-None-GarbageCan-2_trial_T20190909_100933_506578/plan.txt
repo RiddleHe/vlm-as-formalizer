@@ -1,0 +1,6 @@
+(gotolocation robot_agent small_brown_egg_on_counter)
+(pickupobject robot_agent small_brown_egg_on_counter)
+(gotolocation robot_agent red_front_microwave_on_counter)
+(heatobject robot_agent red_front_microwave_on_counter small_brown_egg_on_counter)
+(gotolocation robot_agent white_trash_bin_floor_corner)
+(putobjectinreceptacle robot_agent small_brown_egg_on_counter white_trash_bin_floor_corner)

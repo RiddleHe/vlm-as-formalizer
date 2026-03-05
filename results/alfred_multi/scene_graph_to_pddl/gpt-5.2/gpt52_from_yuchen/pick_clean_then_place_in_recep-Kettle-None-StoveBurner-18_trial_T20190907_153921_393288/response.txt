@@ -1,0 +1,59 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): none visible.
+fridge (receptacle): none visible.
+sink (receptacle): 
+- double-basin-metal-sink-with-central-faucet
+knife (object): none visible.
+receptacle (object): 
+- double-basin-metal-sink-with-central-faucet
+object: 
+- silver-tea-kettle-with-blue-handle-on-stove
+- gray-funnel-in-pan-on-stove
+- metal-pan-on-left-burner
+- stove-cooktop-surface
+- white-countertop-to-right-of-stove
+- metal-fork-on-white-countertop
+
+openable (receptacle) true if a receptacle is openable: none.
+opened (receptacle) true if a receptacle is opened: none.
+holdsAny (agent) agent ?a holds an object: none.
+isClean (object) true if the object has been clean in sink: none.
+isHot (object) true if the object has been heated up: none.
+isCool (object) true if the object has been cooled: none.
+isOn (object) true if the object is on: none.
+isToggled (object) true if the object has been toggled: none.
+isSliced (object) true if the object is sliced: none.
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle gray-funnel-in-pan-on-stove metal-pan-on-left-burner)
+holds (agent, object) object ?o is held by agent ?a: none.
+atLocation (agent, object) :
+none.
+
+PDDL problem: (define (problem put_task_teapot_on_stove)
+  (:domain put_task)
+  (:objects
+    robot - agent
+    double-basin-metal-sink-with-central-faucet - sink
+    silver-tea-kettle-with-blue-handle-on-stove - object
+    gray-funnel-in-pan-on-stove - object
+    metal-pan-on-left-burner - receptacle
+    stove-cooktop-surface - receptacle
+    white-countertop-to-right-of-stove - receptacle
+    metal-fork-on-white-countertop - object
+  )
+
+  (:init
+    ;; robot starts not at any location (no atLocation facts)
+
+    ;; receptacle relationships from scene graph
+    (inReceptacle gray-funnel-in-pan-on-stove metal-pan-on-left-burner)
+  )
+
+  (:goal
+    (and
+      (isClean silver-tea-kettle-with-blue-handle-on-stove)
+      (inReceptacle silver-tea-kettle-with-blue-handle-on-stove stove-cooktop-surface)
+    )
+  )
+)

@@ -1,0 +1,8 @@
+(GotoLocation agent towel_1)
+(PickupObject agent towel_1)
+(GotoLocation agent bathtub)
+(PutObjectInReceptacle agent towel_1 bathtub)
+(GotoLocation agent towel_2)
+(PickupObject agent towel_2)
+(GotoLocation agent bathtub)
+(PutObjectInReceptacle agent towel_2 bathtub)

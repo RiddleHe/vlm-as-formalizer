@@ -1,0 +1,31 @@
+(define (problem put_sliced_bread_in_fridge)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        fridge1 microwave1 sink1 - receptacle
+        bread1 bread2 bread3 knife1 - object
+    )
+    (:init
+        (openable fridge1)
+        (openable microwave1)
+        (not (opened fridge1))
+        (not (opened microwave1))
+        (not (isSliced bread1))
+        (not (isSliced bread2))
+        (not (isSliced bread3))
+        (not (holdsAny agent1))
+        (not (atLocation agent1 bread1))
+        (not (atLocation agent1 bread2))
+        (not (atLocation agent1 bread3))
+        (not (atLocation agent1 knife1))
+        (not (atLocation agent1 fridge1))
+        (not (atLocation agent1 microwave1))
+        (not (atLocation agent1 sink1))
+        (atLocation agent1 bread2) ; assuming agent starts near bread2 on table for simplicity, as per image 2
+        (atLocation agent1 knife1) ; knife is on the same table as bread2
+    )
+    (:goal (and
+        (inReceptacle bread2 fridge1)
+        (isSliced bread2)
+    ))
+)

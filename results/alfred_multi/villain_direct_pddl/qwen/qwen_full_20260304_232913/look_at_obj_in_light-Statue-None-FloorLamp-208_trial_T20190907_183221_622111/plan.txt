@@ -1,0 +1,3 @@
+(gotolocation agent1 lamp)
+(gotolocation agent1 table)
+(pickupobject agent1 trophy)

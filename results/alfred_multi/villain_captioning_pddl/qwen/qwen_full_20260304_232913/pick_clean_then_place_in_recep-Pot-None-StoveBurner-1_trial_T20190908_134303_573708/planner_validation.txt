@@ -1,0 +1,8 @@
+failed
+Predicate argument has wrong type:
+  atLocation sink1 sink1: sink1 is not a agent
+  atLocation pot1 stove1: pot1 is not a agent
+  atLocation pot2 stove1: pot2 is not a agent
+  atLocation mug1 stove1: mug1 is not a agent
+
+

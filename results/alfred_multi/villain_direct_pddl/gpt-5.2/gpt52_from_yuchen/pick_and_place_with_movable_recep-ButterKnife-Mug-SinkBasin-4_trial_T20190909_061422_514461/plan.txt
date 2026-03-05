@@ -1,0 +1,6 @@
+(pickupobject robot knife1)
+(cleanobject robot sink1 knife1)
+(putobjectinreceptacle robot knife1 sink1)
+(pickupobject robot mug1)
+(cleanobject robot sink1 mug1)
+(putobjectinreceptacle robot mug1 sink1)

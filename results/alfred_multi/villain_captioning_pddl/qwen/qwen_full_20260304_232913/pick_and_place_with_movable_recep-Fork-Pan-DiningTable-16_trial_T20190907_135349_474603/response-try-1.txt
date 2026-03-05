@@ -1,0 +1,48 @@
+```pddl
+(define (problem put_frying_pan_with_fork_on_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        round_table kitchen_counter - receptacle
+        knife1 fork1 frying_pan1 bottle1 potato1 paper_towel_roll1 zucchini1 zucchini2 egg1 bread1 spatula1 - object
+    )
+    (:init
+        (atLocation agent1 round_table) ; Assuming agent starts near the table for simplicity, as no initial location is specified
+        (inReceptacle knife1 round_table)
+        (inReceptacle fork1 round_table)
+        (inReceptacle bottle1 round_table)
+        (inReceptacle potato1 round_table)
+        (inReceptacle paper_towel_roll1 round_table)
+        (inReceptacle zucchini1 round_table)
+        (inReceptacle zucchini2 round_table)
+        (inReceptacle egg1 round_table)
+        (inReceptacle bread1 kitchen_counter)
+        (inReceptacle spatula1 kitchen_counter)
+        (not (holdsAny agent1))
+        (not (opened round_table))
+        (not (opened kitchen_counter))
+        (not (isClean knife1))
+        (not (isClean fork1))
+        (not (isClean frying_pan1))
+        (not (isHot knife1))
+        (not (isHot fork1))
+        (not (isHot frying_pan1))
+        (not (isCool knife1))
+        (not (isCool fork1))
+        (not (isCool frying_pan1))
+        (not (isOn knife1))
+        (not (isOn fork1))
+        (not (isOn frying_pan1))
+        (not (isToggled knife1))
+        (not (isToggled fork1))
+        (not (isToggled frying_pan1))
+        (not (isSliced knife1))
+        (not (isSliced fork1))
+        (not (isSliced frying_pan1))
+    )
+    (:goal (and
+        (inReceptacle fork1 frying_pan1)
+        (inReceptacle frying_pan1 round_table)
+    ))
+)
+```

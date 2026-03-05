@@ -1,0 +1,4 @@
+(gotolocation robot plunger)
+(pickupobject robot plunger)
+(gotolocation robot cabinet)
+(putobjectinreceptacle robot plunger cabinet)

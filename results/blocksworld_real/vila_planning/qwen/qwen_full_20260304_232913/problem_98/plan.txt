@@ -1,0 +1,6 @@
+(unstack orange red robot)
+(unstack yellow blue robot)
+(unstack purple green robot)
+(stack orange red robot)
+(stack yellow blue robot)
+(stack purple green robot)

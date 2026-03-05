@@ -1,0 +1,4 @@
+(GotoLocation robot sofa)
+(PickupObject robot newspaper)
+(GotoLocation robot desklamp)
+(ToggleObject robot desklamp)

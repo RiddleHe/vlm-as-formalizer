@@ -1,0 +1,6 @@
+(GotoLocation robot plate)
+(PickupObject robot keys)
+(PutObjectInReceptacle robot keys plate)
+(PickupObject robot plate)
+(GotoLocation robot small_table)
+(PutObjectInReceptacle robot plate small_table)

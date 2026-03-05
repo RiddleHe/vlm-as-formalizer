@@ -1,0 +1,92 @@
+Scene graph:
+agent: 
+- robot_agent (agent): the robotic agent (not visible)
+
+microwave (receptacle): 
+- stainless_microwave_on_right_counter (microwave receptacle): silver microwave with keypad and “OFF” display on the right-side counter
+
+fridge (receptacle): 
+- black_fridge_with_smiley_magnet (fridge receptacle): black refrigerator with a yellow smiley magnet and a small photo
+
+sink (receptacle): 
+- none
+
+knife (object): 
+- dark_blade_knife_on_counter (knife): knife lying on the countertop (blade visible near counter edge)
+
+receptacle (object): 
+- stainless_microwave_on_right_counter (microwave receptacle)
+- black_fridge_with_smiley_magnet (fridge receptacle)
+
+object: 
+- green_lettuce_head_left (object): green lettuce head on the counter (left/near center)
+- green_lettuce_head_right (object): green lettuce head on the counter (right)
+- clear_salt_shaker_with_metal_top (object): salt shaker on the counter
+- rectangular_bread_loaf_on_counter (object): loaf of bread on the counter
+- dark_blade_knife_on_counter (knife): knife on the counter
+
+openable (receptacle) true if a receptacle is openable:
+- (openable stainless_microwave_on_right_counter)
+- (openable black_fridge_with_smiley_magnet)
+
+opened (receptacle) true if a receptacle is opened:
+- none
+
+holdsAny (agent) agent ?a holds an object:
+- none
+
+isClean (object) true if the object has been clean in sink:
+- none
+
+isHot (object) true if the object has been heated up:
+- none
+
+isCool (object) true if the object has been cooled:
+- none
+
+isOn (object) true if the object is on:
+- none
+
+isToggled (object) true if the object has been toggled:
+- none
+
+isSliced (object) true if the object is sliced:
+
+PDDL problem: (define (problem cook_chill_bread_slice_problem)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    stainless_microwave_on_right_counter - microwave
+    black_fridge_with_smiley_magnet - fridge
+
+    dark_blade_knife_on_counter - knife
+    rectangular_bread_loaf_on_counter - object
+    green_lettuce_head_left - object
+    green_lettuce_head_right - object
+    clear_salt_shaker_with_metal_top - object
+  )
+
+  (:init
+    ;; receptacles that can be opened
+    (openable stainless_microwave_on_right_counter)
+    (openable black_fridge_with_smiley_magnet)
+
+    ;; objects are at their own locations initially (agent starts at no location)
+    (atLocation robot_agent stainless_microwave_on_right_counter)
+    (atLocation robot_agent black_fridge_with_smiley_magnet)
+    (atLocation robot_agent dark_blade_knife_on_counter)
+    (atLocation robot_agent rectangular_bread_loaf_on_counter)
+    (atLocation robot_agent green_lettuce_head_left)
+    (atLocation robot_agent green_lettuce_head_right)
+    (atLocation robot_agent clear_salt_shaker_with_metal_top)
+  )
+
+  (:goal
+    (and
+      (isSliced rectangular_bread_loaf_on_counter)
+      (isHot rectangular_bread_loaf_on_counter)
+      (isCool rectangular_bread_loaf_on_counter)
+    )
+  )
+)

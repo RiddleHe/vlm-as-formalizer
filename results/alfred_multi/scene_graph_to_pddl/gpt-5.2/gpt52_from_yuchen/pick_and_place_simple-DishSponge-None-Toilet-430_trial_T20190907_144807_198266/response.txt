@@ -1,0 +1,59 @@
+Scene graph:
+agent: none
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object):
+- toilet_tank_lid_left_bottom (receptacle)
+- bathtub_white_topview (receptacle)
+- shower_tray_with_glass_door_right (receptacle)
+object:
+- toilet_paper_roll_on_tank_left_bottom (object)
+- shower_glass_door_handle_right (object)
+- wooden_stool_partial_top_left (object)
+- bathtub_grab_bar_right (object)
+- bathtub_drain_circle_top (object)
+- bathtub_drain_circle_middle (object)
+
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle toilet_paper_roll_on_tank_left_bottom toilet_tank_lid_left_bottom)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_task_bathroom_sponge_toilet_tank)
+  (:domain put_task)
+  (:objects
+    agent0 - agent
+
+    toilet_tank_lid_left_bottom - receptacle
+    bathtub_white_topview - receptacle
+    shower_tray_with_glass_door_right - receptacle
+
+    toilet_paper_roll_on_tank_left_bottom - object
+    shower_glass_door_handle_right - object
+    wooden_stool_partial_top_left - object
+    bathtub_grab_bar_right - object
+    bathtub_drain_circle_top - object
+    bathtub_drain_circle_middle - object
+  )
+
+  (:init
+    (inReceptacle toilet_paper_roll_on_tank_left_bottom toilet_tank_lid_left_bottom)
+  )
+
+  (:goal
+    (and
+      (inReceptacle green_sponge toilet_tank_lid_left_bottom)
+    )
+  )
+)

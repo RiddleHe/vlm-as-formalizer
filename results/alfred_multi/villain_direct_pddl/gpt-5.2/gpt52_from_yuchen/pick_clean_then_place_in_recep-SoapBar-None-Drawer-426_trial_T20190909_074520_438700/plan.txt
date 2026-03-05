@@ -1,0 +1,6 @@
+(gotolocation robot counter)
+(pickupobject robot soapbar)
+(gotolocation robot sink)
+(cleanobject robot sink soapbar)
+(gotolocation robot drawer)
+(putobjectinreceptacle robot soapbar drawer)

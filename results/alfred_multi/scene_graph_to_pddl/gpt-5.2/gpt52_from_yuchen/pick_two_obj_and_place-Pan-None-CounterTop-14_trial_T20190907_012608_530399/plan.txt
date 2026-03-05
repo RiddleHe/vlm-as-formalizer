@@ -1,0 +1,8 @@
+(gotolocation robot pan_large_front_right_handle)
+(pickupobject robot pan_large_front_right_handle)
+(gotolocation robot microwave_black_right_counter)
+(putobjectinreceptacle robot pan_large_front_right_handle microwave_black_right_counter)
+(gotolocation robot pan_small_back_right)
+(pickupobject robot pan_small_back_right)
+(gotolocation robot microwave_black_right_counter)
+(putobjectinreceptacle robot pan_small_back_right microwave_black_right_counter)

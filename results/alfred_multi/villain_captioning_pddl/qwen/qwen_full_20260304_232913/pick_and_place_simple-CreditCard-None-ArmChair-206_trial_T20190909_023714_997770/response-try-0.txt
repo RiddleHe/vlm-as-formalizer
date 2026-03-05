@@ -1,0 +1,22 @@
+```pddl
+(define (problem move_credit_card_to_armchair)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        armchair1 - object  ; treated as a receptacle for placement, though not in domain types
+        credit_card1 - object
+    )
+    (:init
+        (not (atLocation agent1 armchair1))
+        (not (atLocation agent1 credit_card1))
+        (not (holdsAny agent1))
+        ; Assuming credit_card1 is initially at some location not shown, e.g., on a table or floor
+        ; Since location is unknown, we do not assert (atLocation agent1 credit_card1) initially
+        ; We assume it is accessible and can be picked up after GotoLocation
+        ; No receptacles (microwave, fridge, sink) are present or relevant
+    )
+    (:goal (and
+        (inReceptacle credit_card1 armchair1)
+    ))
+)
+```

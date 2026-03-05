@@ -1,0 +1,45 @@
+Scene graph:
+agent: agent1
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): dark_wooden_cabinet_left, dark_wooden_cabinet_right, golden_bucket
+object: agent1, dark_wooden_cabinet_left, dark_wooden_cabinet_right, golden_bucket, tall_lamp_with_green_shade, cell_phone
+openable (receptacle) true if a receptacle is openable: (openable dark_wooden_cabinet_left), (openable dark_wooden_cabinet_right)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn tall_lamp_with_green_shade)
+isToggled (object) true if the object has been toggled: (isToggled tall_lamp_with_green_shade)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle cell_phone dark_wooden_cabinet_left)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem examine_cell_phone)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        dark_wooden_cabinet_left - receptacle
+        dark_wooden_cabinet_right - receptacle
+        golden_bucket - receptacle
+        tall_lamp_with_green_shade - object
+        cell_phone - object
+    )
+    (:init
+        (openable dark_wooden_cabinet_left)
+        (openable dark_wooden_cabinet_right)
+        (isOn tall_lamp_with_green_shade)
+        (isToggled tall_lamp_with_green_shade)
+        (inReceptacle cell_phone dark_wooden_cabinet_left)
+    )
+    (:goal (and
+        (atLocation agent1 tall_lamp_with_green_shade)
+        (holds agent1 cell_phone)
+    ))
+)
+```

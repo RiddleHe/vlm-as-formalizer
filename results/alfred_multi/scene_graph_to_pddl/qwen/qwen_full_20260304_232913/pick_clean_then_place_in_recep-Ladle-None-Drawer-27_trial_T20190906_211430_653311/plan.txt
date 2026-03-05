@@ -1,0 +1,5 @@
+(gotolocation robot spoon)
+(pickupobject robot spoon)
+(gotolocation robot double_basin_sink)
+(cleanobject robot double_basin_sink spoon)
+(putobjectinreceptacle robot spoon double_basin_sink)

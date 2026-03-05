@@ -1,0 +1,53 @@
+Scene graph:
+agent: robot
+microwave (receptacle): black microwave on countertop
+fridge (receptacle): black fridge with magnets and water dispenser
+sink (receptacle): not visible in images
+knife (object): yellow-handled knife on countertop next to loaf
+receptacle (object): wooden countertop island
+object: brown loaf of bread, green lettuce, dark brown potato, silver bottle with red cap, wooden cup, yellow-handled knife, black microwave, black fridge, wooden countertop island
+openable (receptacle) true if a receptacle is openable: (openable black microwave), (openable black fridge)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle brown loaf of bread wooden countertop island), (inReceptacle green lettuce wooden countertop island), (inReceptacle dark brown potato wooden countertop island), (inReceptacle silver bottle with red cap wooden countertop island), (inReceptacle wooden cup wooden countertop island), (inReceptacle yellow-handled knife wooden countertop island)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_chilled_potato_on_island)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        black_microwave - microwave
+        black_fridge - fridge
+        wooden_countertop_island - receptacle
+        yellow_handled_knife - knife
+        brown_loaf_of_bread - object
+        green_lettuce - object
+        dark_brown_potato - object
+        silver_bottle_with_red_cap - object
+        wooden_cup - object
+    )
+    (:init
+        (openable black_microwave)
+        (openable black_fridge)
+        (inReceptacle brown_loaf_of_bread wooden_countertop_island)
+        (inReceptacle green_lettuce wooden_countertop_island)
+        (inReceptacle dark_brown_potato wooden_countertop_island)
+        (inReceptacle silver_bottle_with_red_cap wooden_countertop_island)
+        (inReceptacle wooden_cup wooden_countertop_island)
+        (inReceptacle yellow_handled_knife wooden_countertop_island)
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (inReceptacle dark_brown_potato wooden_countertop_island)
+        (isCool dark_brown_potato)
+    ))
+)
+```

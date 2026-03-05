@@ -1,0 +1,4 @@
+(GotoLocation agent cd)
+(PickupObject agent cd)
+(GotoLocation agent lamp)
+(ToggleObject agent lamp)

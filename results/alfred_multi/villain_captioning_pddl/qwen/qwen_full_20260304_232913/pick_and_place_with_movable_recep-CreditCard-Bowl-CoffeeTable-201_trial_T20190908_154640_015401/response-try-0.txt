@@ -1,0 +1,41 @@
+```pddl
+(define (problem put_bowl_with_card_on_glass_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        bowl_gray - object
+        credit_card_red - object
+        glass_table - receptacle
+        dining_table - object
+    )
+    (:init
+        ; Agent is not at any location initially
+        (not (atLocation agent1 bowl_gray))
+        (not (atLocation agent1 credit_card_red))
+        (not (atLocation agent1 glass_table))
+        (not (atLocation agent1 dining_table))
+        
+        ; Credit card is in the glass table (on its lower shelf)
+        (inReceptacle credit_card_red glass_table)
+        
+        ; Bowl is on the dining table (dining_table is not a receptacle, so no inReceptacle predicate)
+        ; We assume the bowl is at the location of the dining table for navigation
+        (atLocation bowl_gray dining_table)
+        
+        ; Glass table is not openable (no doors/lids)
+        (not (openable glass_table))
+        
+        ; Agent is not holding anything
+        (not (holdsAny agent1))
+    )
+    (:goal
+        (and
+            ; The bowl (with credit card in it) is on the glass table
+            ; Since the domain doesn't allow "in" for non-receptacle objects, we interpret "with credit card in it" as placing both together on the glass table
+            ; We'll place the bowl on the glass table and ensure the credit card is also on the glass table (adjacent or in the same receptacle)
+            (inReceptacle bowl_gray glass_table)
+            (inReceptacle credit_card_red glass_table)
+        )
+    )
+)
+```

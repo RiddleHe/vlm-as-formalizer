@@ -1,0 +1,27 @@
+```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        tomato - object
+        knife - knife
+        pan - receptacle
+        island - receptacle
+        stove - receptacle
+    )
+    (:init
+        (atLocation robot stove)
+        (inReceptacle tomato stove)
+        (inReceptacle knife island)
+        (inReceptacle pan stove)
+        (not (isSliced tomato))
+    )
+    (:goal
+        (and
+            (inReceptacle tomato pan)
+            (inReceptacle pan island)
+            (isSliced tomato)
+        )
+    )
+)
+```

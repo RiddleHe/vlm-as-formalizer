@@ -1,0 +1,38 @@
+(define (problem place_keys_on_couch)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        couch - receptacle
+        cardboard_box - receptacle
+        side_table - object
+        slatted_bench - object
+        keys1 - object
+        keys2 - object
+        keys3 - object
+        keys4 - object
+        remote1 - object
+        remote2 - object
+        green_box - object
+        book - object
+        chair - object
+    )
+    (:init
+        (atLocation robot side_table)
+        (inReceptacle keys1 side_table)
+        (inReceptacle keys2 side_table)
+        (inReceptacle keys3 slatted_bench)
+        (inReceptacle keys4 slatted_bench)
+        (inReceptacle cardboard_box couch)
+        (openable cardboard_box)
+        (opened cardboard_box)
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (inReceptacle keys1 couch)
+            (inReceptacle keys2 couch)
+            (inReceptacle keys3 couch)
+            (inReceptacle keys4 couch)
+        )
+    )
+)

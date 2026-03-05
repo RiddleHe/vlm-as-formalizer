@@ -1,0 +1,61 @@
+Scene graph:
+agent: none
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object): white_table_with_lower_shelf
+object: brown_bread_loaf, metal_spoon_left_edge, metal_knife_left_of_bread, metal_fork_center, salt_shaker_upper_center, pepper_shaker_lower_center, red_apple_right_center, green_lettuce_right, green_rectangular_sponge_back_right
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle brown_bread_loaf white_table_with_lower_shelf), (inReceptacle metal_spoon_left_edge white_table_with_lower_shelf), (inReceptacle metal_knife_left_of_bread white_table_with_lower_shelf), (inReceptacle metal_fork_center white_table_with_lower_shelf), (inReceptacle salt_shaker_upper_center white_table_with_lower_shelf), (inReceptacle pepper_shaker_lower_center white_table_with_lower_shelf), (inReceptacle red_apple_right_center white_table_with_lower_shelf), (inReceptacle green_lettuce_right white_table_with_lower_shelf), (inReceptacle green_rectangular_sponge_back_right white_table_with_lower_shelf)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_task_problem_1)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    white_table_with_lower_shelf - receptacle
+    fridge - fridge
+
+    brown_bread_loaf - object
+    metal_spoon_left_edge - object
+    metal_knife_left_of_bread - knife
+    metal_fork_center - object
+    salt_shaker_upper_center - object
+    pepper_shaker_lower_center - object
+    red_apple_right_center - object
+    green_lettuce_right - object
+    green_rectangular_sponge_back_right - object
+  )
+
+  (:init
+    ;; objects currently on/in the table receptacle
+    (inReceptacle brown_bread_loaf white_table_with_lower_shelf)
+    (inReceptacle metal_spoon_left_edge white_table_with_lower_shelf)
+    (inReceptacle metal_knife_left_of_bread white_table_with_lower_shelf)
+    (inReceptacle metal_fork_center white_table_with_lower_shelf)
+    (inReceptacle salt_shaker_upper_center white_table_with_lower_shelf)
+    (inReceptacle pepper_shaker_lower_center white_table_with_lower_shelf)
+    (inReceptacle red_apple_right_center white_table_with_lower_shelf)
+    (inReceptacle green_lettuce_right white_table_with_lower_shelf)
+    (inReceptacle green_rectangular_sponge_back_right white_table_with_lower_shelf)
+  )
+
+  (:goal
+    (and
+      ;; interpret "plate" as an available dishware-like item in the scene: metal_spoon_left_edge
+      (isCool metal_spoon_left_edge)
+      (inReceptacle metal_spoon_left_edge white_table_with_lower_shelf)
+    )
+  )
+)

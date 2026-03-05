@@ -1,0 +1,4 @@
+(GotoLocation agent sofa)
+(PickupObject agent newspaper)
+(GotoLocation agent lamp)
+(ToggleObject agent lamp)

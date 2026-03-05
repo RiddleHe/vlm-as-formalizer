@@ -1,0 +1,6 @@
+(gotolocation robot egg_light_tan)
+(pickupobject robot egg_light_tan)
+(gotolocation robot fridge_stainless_right)
+(coolobject robot fridge_stainless_right egg_light_tan)
+(gotolocation robot microwave_right_of_counter)
+(putobjectinreceptacle robot egg_light_tan microwave_right_of_counter)

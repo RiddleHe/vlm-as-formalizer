@@ -1,0 +1,8 @@
+(GotoLocation agent phone1)
+(PickupObject agent phone1)
+(GotoLocation agent dresser)
+(PutObjectInReceptacle agent phone1 dresser)
+(GotoLocation agent phone2)
+(PickupObject agent phone2)
+(GotoLocation agent dresser)
+(PutObjectInReceptacle agent phone2 dresser)

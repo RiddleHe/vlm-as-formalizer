@@ -1,0 +1,67 @@
+```pddl
+(define (problem cook_potato_slice)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        sink1 - sink
+        knife1 - knife
+        potato_slice1 - object
+        pot1 - object
+        apple1 - object
+        skillet1 - object
+        container1 - object
+        salt_shaker1 - object
+        pepper_shaker1 - object
+    )
+    (:init
+        ; Agent is not at any location initially
+        (not (atLocation agent1 microwave1))
+        (not (atLocation agent1 fridge1))
+        (not (atLocation agent1 sink1))
+        (not (atLocation agent1 knife1))
+        (not (atLocation agent1 potato_slice1))
+        (not (atLocation agent1 pot1))
+        (not (atLocation agent1 apple1))
+        (not (atLocation agent1 skillet1))
+        (not (atLocation agent1 container1))
+        (not (atLocation agent1 salt_shaker1))
+        (not (atLocation agent1 pepper_shaker1))
+
+        ; Receptacles are openable
+        (openable microwave1)
+        (openable fridge1)
+        (openable sink1)
+
+        ; Receptacles are initially closed
+        (not (opened microwave1))
+        (not (opened fridge1))
+
+        ; Objects are in their initial locations
+        (inReceptacle apple1 microwave1)
+        (inReceptacle potato_slice1 pot1)
+        (atLocation agent1 pot1) ; Agent can see the pot, so it's at that location
+
+        ; Objects are not held
+        (not (holdsAny agent1))
+
+        ; States of objects
+        (not (isClean potato_slice1))
+        (not (isHot potato_slice1))
+        (not (isCool potato_slice1))
+        (not (isOn potato_slice1))
+        (not (isToggled potato_slice1))
+        (not (isSliced potato_slice1))
+
+        ; The potato slice is not yet sliced, so we need to slice it first
+        ; The knife is on the countertop
+        (atLocation agent1 knife1) ; Agent can see the knife, so it's at that location
+    )
+    (:goal (and
+        (inReceptacle potato_slice1 fridge1)
+        (isHot potato_slice1)
+        (isSliced potato_slice1)
+    ))
+)
+```

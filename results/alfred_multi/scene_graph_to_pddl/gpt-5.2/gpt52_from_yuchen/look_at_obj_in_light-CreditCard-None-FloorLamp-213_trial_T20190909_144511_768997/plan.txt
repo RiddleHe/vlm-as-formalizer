@@ -1,0 +1,3 @@
+(gotolocation robot red_credit_card_on_table)
+(pickupobject robot red_credit_card_on_table)
+(gotolocation robot tall_floor_lamp_green_shade)

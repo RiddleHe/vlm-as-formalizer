@@ -1,0 +1,8 @@
+The provided scene contains no objects that match the types defined in the `put_task` domain (`microwave`, `fridge`, `sink`, `knife`, `receptacle`, or `agent`). The instruction to “examine a cell phone next to the light of the tall lamp” cannot be represented because:
+- There is no `cell phone` object type in the domain.
+- The lamp and furniture are not defined as domain objects and cannot be classified as `receptacle` or any other type without explicit domain support.
+- No domain predicates (e.g., `atLocation`, `holds`, `inReceptacle`) can be applied, as no domain objects exist in the scene.
+
+Therefore, it is impossible to generate a valid PDDL problem that satisfies the domain constraints and the instruction. The domain lacks the necessary object types and predicates to model the scene or the task.
+
+**Conclusion**: No PDDL problem can be generated for this scene and instruction under the given domain.

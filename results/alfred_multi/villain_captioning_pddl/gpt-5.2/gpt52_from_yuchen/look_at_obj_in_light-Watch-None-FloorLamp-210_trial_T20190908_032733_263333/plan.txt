@@ -1,0 +1,4 @@
+(gotolocation robot lamp1)
+(toggleobject robot lamp1)
+(gotolocation robot ring1)
+(pickupobject robot ring1)

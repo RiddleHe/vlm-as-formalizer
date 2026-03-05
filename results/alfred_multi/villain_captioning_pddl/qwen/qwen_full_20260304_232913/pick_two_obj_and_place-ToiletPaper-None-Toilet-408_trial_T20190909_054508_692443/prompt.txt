@@ -1,0 +1,253 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Put an empty and one full toilet paper roll on the back of a toilet.
+    
+
+SCENE CAPTION:
+The scene is a bathroom with a checkered floor of alternating dark gray and light beige tiles. The walls are a plain, light gray color. The primary objects relevant to the task are located in the corner and along one wall.
+
+**Objects and Types:**
+- **Toilet**: A white ceramic toilet is positioned against the right wall. Its tank is rectangular and flat on top, providing a surface for placing objects. In the domain, the toilet is not defined as a `receptacle`, so it is treated as a generic `object` for placement purposes.
+- **Toilet Paper Rolls**: There are two toilet paper rolls.
+    - One **full roll** is white with a brown cardboard core. It is currently sitting inside a gray, rectangular, open-top trash can.
+    - One **empty roll** (just the brown cardboard core) is not visible in any of the images, implying it is not yet in the scene or is out of view. For the task, it must be acquired or is assumed to be available.
+- **Trash Can**: A gray, rectangular, open-top bin with a black base. It is positioned in the corner of the room, against the wall. It is a `receptacle` as it can hold objects. The full toilet paper roll is currently `inReceptacle` the trash can.
+- **Sink and Vanity**: A dark gray rectangular sink basin sits on a light wood countertop, which is part of a white vanity cabinet. The sink is a `receptacle` but is not relevant to the current task. A bronze faucet is mounted on the sink.
+- **Mirror**: A large, rectangular mirror is mounted on the wall above the sink.
+- **Toilet Paper Holder**: A silver, wall-mounted toilet paper holder is visible in the reflection of the mirror. It is currently empty.
+- **Cleaning Spray Bottle**: A green spray bottle is sitting on top of the toilet tank. It is an `object` but not relevant to the task.
+- **Towels**: Two green towels are hanging on wall-mounted rings, visible in the mirror’s reflection.
+
+**Quantities:**
+- Toilet: 1
+- Toilet Paper Rolls: 2 (1 full, 1 empty—though the empty one is not visually present)
+- Trash Can: 1
+- Sink: 1
+- Mirror: 1
+- Toilet Paper Holder: 1
+- Cleaning Spray Bottle: 1
+- Towels: 2
+
+**Spatial Relationships:**
+- The trash can is in the corner, near the toilet.
+- The full toilet paper roll is `inReceptacle` the trash can.
+- The toilet is to the right of the sink/vanity unit.
+- The green spray bottle is `on` the toilet tank.
+- The empty toilet paper roll’s location is unknown; it is not in the trash can or on the toilet.
+
+**Current State for Planning:**
+- The robot is not `atLocation` any object initially.
+- The trash can is open (it is an open-top bin, so it is always `opened` and `openable`).
+- The full toilet paper roll is `inReceptacle` the trash can.
+- The empty toilet paper roll is not in the scene or not visible; its state is unknown.
+- The toilet tank is an available surface for placing objects, but it is not a `receptacle` in the domain, so the robot will need to `PutObjectInReceptacle` on it, which may require a domain extension or treating it as a generic surface.
+
+**Visual Properties:**
+- The toilet paper roll in the trash can is white with a visible brown core.
+- The trash can is matte gray with a black base.
+- The toilet is glossy white.
+- The floor tiles are square, with a distinct checkerboard pattern.
+- The walls are a flat, light gray with a subtle texture.
+
+The task requires the robot to retrieve the full toilet paper roll from the trash can and place it on the toilet tank, along with an empty roll (which must be located or provided). The robot must first `GotoLocation` the trash can, `PickupObject` the full roll, `GotoLocation` the toilet, and then `PutObjectInReceptacle` the roll on the toilet tank. The empty roll must be similarly acquired and placed.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

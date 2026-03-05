@@ -1,0 +1,32 @@
+(define (problem put_pot_with_spatula_on_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        pot1 pot2 - object
+        spatula - object
+        table - receptacle
+        stove - receptacle
+        sink - receptacle
+        fridge - receptacle
+        microwave - receptacle
+        knife - knife
+    )
+    (:init
+        (atLocation agent1 stove)
+        (inReceptacle pot1 stove)
+        (inReceptacle pot2 stove)
+        (inReceptacle spatula stove)
+        (openable table)
+        (openable stove)
+        (openable sink)
+        (openable fridge)
+        (openable microwave)
+        (not (holdsAny agent1))
+    )
+    (:goal
+        (and
+            (inReceptacle pot1 table)
+            (inReceptacle spatula pot1)
+        )
+    )
+)

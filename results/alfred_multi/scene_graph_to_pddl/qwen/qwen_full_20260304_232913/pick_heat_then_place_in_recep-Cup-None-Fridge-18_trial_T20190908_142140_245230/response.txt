@@ -1,0 +1,58 @@
+Scene graph:
+agent: robot
+microwave (receptacle): stainless steel microwave on countertop
+fridge (receptacle): white refrigerator with two doors
+sink (receptacle): double basin stainless steel sink
+knife (object): black-handled knife in sink
+receptacle (object): stainless steel microwave on countertop, white refrigerator with two doors, double basin stainless steel sink
+object: black-handled knife in sink, green lettuce in sink, stainless steel microwave on countertop, white refrigerator with two doors, double basin stainless steel sink
+openable (receptacle) true if a receptacle is openable: (openable stainless steel microwave on countertop), (openable white refrigerator with two doors)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle black-handled knife in sink double basin stainless steel sink), (inReceptacle green lettuce in sink double basin stainless steel sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_microwaved_cup_in_fridge)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife - knife
+        lettuce - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (inReceptacle knife sink)
+        (inReceptacle lettuce sink)
+        (not (opened microwave))
+        (not (opened fridge))
+        (not (holdsAny robot))
+        (not (isHot lettuce))
+        (not (isCool lettuce))
+        (not (isClean lettuce))
+        (not (isSliced lettuce))
+        (not (isOn microwave))
+        (not (isToggled microwave))
+        (not (atLocation robot microwave))
+        (not (atLocation robot fridge))
+        (not (atLocation robot sink))
+    )
+    (:goal
+        (and
+            (inReceptacle lettuce fridge)
+            (isHot lettuce)
+        )
+    )
+)
+```

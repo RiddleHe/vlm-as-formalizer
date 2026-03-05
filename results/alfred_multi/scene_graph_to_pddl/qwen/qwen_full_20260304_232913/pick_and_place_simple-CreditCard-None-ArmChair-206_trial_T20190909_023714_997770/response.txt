@@ -1,0 +1,37 @@
+Scene graph:
+agent: agent1
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): dark_blue_armchair, dark_wooden_table
+object: dark_blue_armchair, dark_wooden_table, credit_card
+openable (receptacle) true if a receptacle is openable: (openable dark_blue_armchair), (openable dark_wooden_table)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle credit_card dark_wooden_table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation agent1 dark_wooden_table)
+
+PDDL problem: (define (problem move_credit_card_to_armchair)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        dark_blue_armchair - receptacle
+        dark_wooden_table - receptacle
+        credit_card - object
+    )
+    (:init
+        (openable dark_blue_armchair)
+        (openable dark_wooden_table)
+        (inReceptacle credit_card dark_wooden_table)
+        (atLocation agent1 dark_wooden_table)
+    )
+    (:goal (and (inReceptacle credit_card dark_blue_armchair)))
+)

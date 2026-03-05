@@ -1,0 +1,6 @@
+(gotolocation robot_agent green_head_of_lettuce_left_on_table)
+(pickupobject robot_agent green_head_of_lettuce_left_on_table)
+(gotolocation robot_agent tall_gray_fridge_in_center_view)
+(coolobject robot_agent tall_gray_fridge_in_center_view green_head_of_lettuce_left_on_table)
+(gotolocation robot_agent white_table_with_metal_legs)
+(putobjectinreceptacle robot_agent green_head_of_lettuce_left_on_table white_table_with_metal_legs)

@@ -1,0 +1,8 @@
+(gotolocation robot tvstand)
+(pickupobject robot card1)
+(gotolocation robot table)
+(putobjectinreceptacle robot card1 table)
+(gotolocation robot tvstand)
+(pickupobject robot card2)
+(gotolocation robot table)
+(putobjectinreceptacle robot card2 table)

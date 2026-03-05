@@ -1,0 +1,48 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): gray_marble_sink
+knife (object): 
+receptacle (object): gray_marble_sink
+object: hand_towel, purple_bottle, gray_soap_dispenser, small_golden_object, orange_cylindrical_object, towel_rack
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle hand_towel towel_rack)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_hand_towel_on_counter)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        gray_marble_sink - sink
+        hand_towel - object
+        towel_rack - object
+        purple_bottle - object
+        gray_soap_dispenser - object
+        small_golden_object - object
+        orange_cylindrical_object - object
+    )
+    (:init
+        (inReceptacle hand_towel towel_rack)
+        (not (atLocation robot gray_marble_sink))
+        (not (atLocation robot towel_rack))
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (atLocation robot gray_marble_sink)
+            (inReceptacle hand_towel gray_marble_sink)
+        )
+    )
+)
+```

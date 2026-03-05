@@ -1,0 +1,49 @@
+(define (problem place_rinsed_soap_in_drawer)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        cabinet - receptacle
+        sink - receptacle
+        soap1 - object
+        soap2 - object
+        knife - object
+        toilet_paper - object
+        soap_dispenser - object
+    )
+    (:init
+        (not (atLocation agent1 cabinet))
+        (not (atLocation agent1 sink))
+        (not (atLocation agent1 soap1))
+        (not (atLocation agent1 soap2))
+        (not (atLocation agent1 knife))
+        (not (atLocation agent1 toilet_paper))
+        (not (atLocation agent1 soap_dispenser))
+        
+        (openable cabinet)
+        (not (opened cabinet))
+        
+        (inReceptacle soap1 cabinet)
+        (inReceptacle soap2 cabinet)
+        (inReceptacle knife cabinet)
+        (inReceptacle toilet_paper cabinet)
+        (inReceptacle soap_dispenser cabinet)
+        
+        (not (holdsAny agent1))
+        (not (isClean soap1))
+        (not (isClean soap2))
+        (not (isHot soap1))
+        (not (isHot soap2))
+        (not (isCool soap1))
+        (not (isCool soap2))
+        (not (isSliced soap1))
+        (not (isSliced soap2))
+        (not (isOn soap1))
+        (not (isOn soap2))
+        (not (isToggled soap1))
+        (not (isToggled soap2))
+    )
+    (:goal (and
+        (inReceptacle soap1 cabinet)
+        (isClean soap1)
+    ))
+)

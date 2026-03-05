@@ -1,0 +1,6 @@
+(GotoLocation agent1 tomato)
+(PickupObject agent1 tomato)
+(GotoLocation agent1 sink)
+(CleanObject agent1 sink tomato)
+(GotoLocation agent1 black_table)
+(PutObjectInReceptacle agent1 tomato black_table)

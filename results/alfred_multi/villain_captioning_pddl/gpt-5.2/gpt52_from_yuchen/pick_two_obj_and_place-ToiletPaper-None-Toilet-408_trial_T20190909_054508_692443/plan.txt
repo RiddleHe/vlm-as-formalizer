@@ -1,0 +1,8 @@
+(gotolocation robot sink1)
+(pickupobject robot tp_empty)
+(gotolocation robot toiletback)
+(putobjectinreceptacle robot tp_empty toiletback)
+(gotolocation robot sink1)
+(pickupobject robot tp_full)
+(gotolocation robot toiletback)
+(putobjectinreceptacle robot tp_full toiletback)

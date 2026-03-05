@@ -1,0 +1,4 @@
+Predicate argument has wrong type:
+  atLocation watch2 dining_table: watch2 is not a agent
+  atLocation watch1 dining_table: watch1 is not a agent
+

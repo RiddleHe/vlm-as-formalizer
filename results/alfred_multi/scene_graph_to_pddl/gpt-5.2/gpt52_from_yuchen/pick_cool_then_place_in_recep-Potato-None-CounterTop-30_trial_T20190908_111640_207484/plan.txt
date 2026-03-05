@@ -1,0 +1,6 @@
+(gotolocation robot small_round_brown_item_on_island)
+(pickupobject robot small_round_brown_item_on_island)
+(gotolocation robot fridge_black_double_door)
+(coolobject robot fridge_black_double_door small_round_brown_item_on_island)
+(gotolocation robot island_countertop_brown)
+(putobjectinreceptacle robot small_round_brown_item_on_island island_countertop_brown)

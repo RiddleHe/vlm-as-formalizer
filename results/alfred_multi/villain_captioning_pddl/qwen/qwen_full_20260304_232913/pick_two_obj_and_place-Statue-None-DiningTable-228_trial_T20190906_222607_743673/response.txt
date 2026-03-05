@@ -1,0 +1,27 @@
+```pddl
+(define (problem set_statues_on_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        statue1 statue2 - object
+        coffee_table - object
+        remote_control coaster - object
+    )
+    (:init
+        (atLocation agent1 coffee_table)
+        (not (holdsAny agent1))
+        (not (holds agent1 statue1))
+        (not (holds agent1 statue2))
+        (not (inReceptacle statue1 coffee_table))
+        (not (inReceptacle statue2 coffee_table))
+    )
+    (:goal (and
+        (atLocation agent1 coffee_table)
+        (not (holdsAny agent1))
+        (not (holds agent1 statue1))
+        (not (holds agent1 statue2))
+        (not (inReceptacle statue1 coffee_table))
+        (not (inReceptacle statue2 coffee_table))
+    ))
+)
+```

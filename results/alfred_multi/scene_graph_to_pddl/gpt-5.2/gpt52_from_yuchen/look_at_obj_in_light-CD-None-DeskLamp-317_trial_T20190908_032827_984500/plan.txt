@@ -1,0 +1,3 @@
+(gotolocation robot_agent green_shaded_table_lamp)
+(toggleobject robot_agent green_shaded_table_lamp)
+(gotolocation robot_agent cd_disc_shiny)

@@ -1,0 +1,2 @@
+(pickupobject robot spraybottle1)
+(putobjectinreceptacle robot spraybottle1 cabinet1)

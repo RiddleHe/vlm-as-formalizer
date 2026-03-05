@@ -1,0 +1,62 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): stainless steel double sink
+knife (object): yellow-handled knife
+receptacle (object): wooden cabinet under sink, wooden cabinet above sink
+object: white mug, loaf of bread, fork, salt shaker, pepper shaker, green apple, coffee machine, yellow-handled knife, stainless steel double sink, wooden cabinet under sink, wooden cabinet above sink
+openable (receptacle) true if a receptacle is openable: (openable wooden cabinet under sink), (openable wooden cabinet above sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle white mug coffee machine), (inReceptacle loaf of bread wooden cabinet under sink), (inReceptacle fork wooden cabinet under sink), (inReceptacle salt shaker wooden cabinet under sink), (inReceptacle pepper shaker wooden cabinet under sink), (inReceptacle green apple wooden cabinet under sink), (inReceptacle yellow-handled knife wooden cabinet under sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem warm_mug_and_put_in_cabinet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        cabinet_under_sink - receptacle
+        cabinet_above_sink - receptacle
+        mug - object
+        bread - object
+        fork - object
+        salt_shaker - object
+        pepper_shaker - object
+        green_apple - object
+        coffee_machine - object
+    )
+    (:init
+        (openable cabinet_under_sink)
+        (openable cabinet_above_sink)
+        (inReceptacle mug coffee_machine)
+        (inReceptacle bread cabinet_under_sink)
+        (inReceptacle fork cabinet_under_sink)
+        (inReceptacle salt_shaker cabinet_under_sink)
+        (inReceptacle pepper_shaker cabinet_under_sink)
+        (inReceptacle green_apple cabinet_under_sink)
+        (inReceptacle knife cabinet_under_sink)
+        (not (atLocation robot mug))
+        (not (atLocation robot cabinet_above_sink))
+        (not (holdsAny robot))
+        (not (isHot mug))
+        (not (opened cabinet_above_sink))
+    )
+    (:goal (and
+        (inReceptacle mug cabinet_above_sink)
+        (isHot mug)
+    ))
+)
+```

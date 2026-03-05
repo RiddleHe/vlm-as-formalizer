@@ -1,0 +1,4 @@
+(GotoLocation robot trophy)
+(PickupObject robot trophy)
+(GotoLocation robot desklamp)
+(ToggleObject robot desklamp)

@@ -1,0 +1,45 @@
+```pddl
+(define (problem move_cd_to_dresser)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        desk - receptacle
+        dresser - receptacle
+        cd1 cd2 - object
+        mug - object
+        digital_device - object
+        lamp - object
+        bowl - object
+        smartphone - object
+        books - object
+    )
+    (:init
+        (atLocation robot desk)
+        (inReceptacle cd1 desk)
+        (inReceptacle cd2 desk)
+        (inReceptacle mug desk)
+        (inReceptacle digital_device desk)
+        (inReceptacle lamp desk)
+        (inReceptacle bowl desk)
+        (inReceptacle smartphone desk)
+        (inReceptacle books desk)
+        (not (holdsAny robot))
+        (not (opened desk))
+        (not (opened dresser))
+        (not (isClean cd1))
+        (not (isClean cd2))
+        (not (isHot cd1))
+        (not (isHot cd2))
+        (not (isCool cd1))
+        (not (isCool cd2))
+        (not (isSliced cd1))
+        (not (isSliced cd2))
+        (isOn lamp)
+        (isToggled lamp)
+    )
+    (:goal (and
+        (inReceptacle cd1 dresser)
+        (not (inReceptacle cd1 desk))
+    ))
+)
+```

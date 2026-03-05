@@ -1,0 +1,2 @@
+(GotoLocation agent trophy)
+(GotoLocation agent lamp)

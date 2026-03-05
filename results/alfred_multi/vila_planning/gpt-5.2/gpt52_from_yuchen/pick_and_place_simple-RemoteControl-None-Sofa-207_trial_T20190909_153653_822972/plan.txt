@@ -1,0 +1,4 @@
+(GotoLocation robot remote)
+(PickupObject robot remote)
+(GotoLocation robot sofa)
+(PutObjectInReceptacle robot remote sofa)

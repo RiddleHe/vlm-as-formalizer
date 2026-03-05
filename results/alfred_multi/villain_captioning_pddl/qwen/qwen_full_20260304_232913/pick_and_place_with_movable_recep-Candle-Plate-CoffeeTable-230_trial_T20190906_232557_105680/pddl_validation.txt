@@ -1,0 +1,8 @@
+invalid
+Object does not have a type:
+  tissue1
+
+Predicate not defined in domain:
+  exists
+
+

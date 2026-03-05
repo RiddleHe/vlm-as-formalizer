@@ -1,0 +1,32 @@
+```pddl
+(define (problem put_cold_bowl_in_cabinet)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        bowl - object
+        knife - knife
+        fridge - fridge
+        cabinet_above_fridge - receptacle
+        sink - sink
+    )
+    (:init
+        (atLocation agent1 bowl)
+        (inReceptacle bowl sink)
+        (openable cabinet_above_fridge)
+        (not (opened cabinet_above_fridge))
+        (not (holdsAny agent1))
+        (not (isCool bowl))
+        (not (isHot bowl))
+        (not (isClean bowl))
+        (not (isSliced bowl))
+        (not (isOn bowl))
+        (not (isToggled bowl))
+    )
+    (:goal
+        (and
+            (inReceptacle bowl cabinet_above_fridge)
+            (isCool bowl)
+        )
+    )
+)
+```

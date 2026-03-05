@@ -1,0 +1,4 @@
+(gotolocation robot_agent yellow_handle_kitchen_knife_on_table)
+(pickupobject robot_agent yellow_handle_kitchen_knife_on_table)
+(gotolocation robot_agent green_lettuce_head_right_side_on_table)
+(sliceobject robot_agent green_lettuce_head_right_side_on_table yellow_handle_kitchen_knife_on_table)

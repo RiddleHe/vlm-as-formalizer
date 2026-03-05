@@ -1,0 +1,243 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Place two towel into the bathtub.
+    
+
+SCENE CAPTION:
+Scene appears to be a modern bathroom with a vanity/sink area, a mirror, and a bathtub. The relevant objects for the planning domain and the instruction (“Place two towel into the bathtub”) are as follows.
+
+## Receptacles / fixtures (domain-relevant)
+- **Bathtub (receptacle; treat as a sink-like receptacle for “holding” objects)**
+  - Quantity: **1**
+  - Appearance/location: Large **white/gray** tub on the **right side** of the scene (seen from above/side). Curved inner basin is visible with a drain near the bottom of the tub interior.
+  - State: No door/lid is visible, so it is **not openable** in the sense of the domain. It is currently **empty** (no objects seen inside).
+
+- **Sink / vanity sink (sink; receptacle)**
+  - Quantity: **1**
+  - Appearance/location: Sink is on the **left side** on a dark countertop, with a faucet. The sink basin is visible in the lower images via the mirror/vanity view.
+  - State: Not relevant to the towel-into-bathtub goal, but it is a receptacle in the domain.
+
+## Other visible objects (may be treated as generic objects if needed)
+- **Towels (objects; not a special type in the domain, so treat as generic “object”)**
+  - Quantity: **2 towels total** are visible, both hanging:
+    1. **Towel A**: Hanging on a **metal ring** mounted to the **right wall** (in the middle image). The towel is **light-colored (white/pale gray)** and hangs straight down.
+    2. **Towel B**: Another **light-colored** towel hanging on a **metal ring** mounted to the **left wall** (in the bottom image). Also hangs straight down.
+  - Current state/relationships: Both towels are **not inside** the bathtub and **not inside** any other receptacle. They are supported by towel rings (wall-mounted), but those rings are not domain receptacles.
+
+- **Soap dispenser / bottle (generic object)**
+  - Quantity: **1**
+  - Appearance/location: A small **blue/teal** bottle on the **countertop** near the sink (top-left image).
+
+## Spatial relationships important for planning predicates
+- The **bathtub** is on the **right**, adjacent to the bathroom wall; it is separate from the vanity area.
+- The **sink/vanity** is on the **left**, with the countertop and faucet visible.
+- **Towel A** is on the **right-side wall**, nearer the vanity/mirror area than the tub interior, and would need to be picked up and moved to the bathtub.
+- **Towel B** is on the **left-side wall**, also near the vanity area, and would need to be picked up and moved to the bathtub.
+- The **bathtub currently contains no towels** (no `(inReceptacle towel bathtub)` relationships currently hold).
+
+## Task-relevant state summary
+- Robot initial condition: robot is **not at any object location** (per problem statement).
+- To satisfy the instruction, the robot will need to:
+  - Navigate to **each towel’s location** (wall towel ring areas), pick up each towel one at a time, then navigate to the **bathtub** and place it **into the bathtub**.
+- The **bathtub is available and empty**, suitable as the target receptacle for both towels.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

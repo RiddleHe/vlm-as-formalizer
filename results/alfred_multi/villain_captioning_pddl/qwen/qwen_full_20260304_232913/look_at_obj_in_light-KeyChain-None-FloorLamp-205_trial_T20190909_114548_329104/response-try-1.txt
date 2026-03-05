@@ -1,0 +1,66 @@
+```pddl
+(define (problem look_at_keys_by_lamp)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        laptop - object
+        red_card - object
+        golden_statue1 - object
+        golden_statue2 - object
+        golden_statue3 - object
+        keys - object
+        lamp - object
+        dining_table - object
+        side_table - object
+        chair1 - object
+        chair2 - object
+        chair3 - object
+        chair4 - object
+        television - object
+    )
+    (:init
+        ; The robot is not at any location initially
+        (not (atLocation robot dining_table))
+        (not (atLocation robot side_table))
+        (not (atLocation robot lamp))
+        (not (atLocation robot keys))
+
+        ; Objects are on the dining table
+        (atLocation dining_table laptop)
+        (atLocation dining_table red_card)
+        (atLocation dining_table golden_statue1)
+        (atLocation dining_table golden_statue2)
+        (atLocation dining_table golden_statue3)
+        (atLocation dining_table keys)
+
+        ; Lamp is on the side table
+        (atLocation side_table lamp)
+
+        ; Television is on a cabinet (not relevant for receptacle or action)
+        (atLocation television)
+
+        ; Chairs are around the table (not relevant for receptacle or action)
+        (atLocation chair1)
+        (atLocation chair2)
+        (atLocation chair3)
+        (atLocation chair4)
+
+        ; Lamp is not toggled on initially
+        (not (isOn lamp))
+
+        ; No objects are held
+        (not (holdsAny robot))
+
+        ; No objects are in receptacles (none defined)
+        ; No objects are clean, hot, cool, or sliced
+    )
+    (:goal
+        (and
+            ; The lamp must be toggled on to provide light
+            (isOn lamp)
+            ; The robot must be at the location of the keys to look at them
+            (atLocation robot keys)
+        )
+    )
+)
+```

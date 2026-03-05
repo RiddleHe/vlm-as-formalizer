@@ -1,0 +1,24 @@
+(define (problem put_candle_in_drawer)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        candle - object
+        sink - sink
+        drawer - receptacle
+        soap - object
+        soap_bottle - object
+    )
+    (:init
+        (atLocation agent1 sink)
+        (inReceptacle candle sink)
+        (inReceptacle soap sink)
+        (inReceptacle soap_bottle sink)
+        (openable drawer)
+        (not (opened drawer))
+    )
+    (:goal
+        (and
+            (inReceptacle candle drawer)
+        )
+    )
+)

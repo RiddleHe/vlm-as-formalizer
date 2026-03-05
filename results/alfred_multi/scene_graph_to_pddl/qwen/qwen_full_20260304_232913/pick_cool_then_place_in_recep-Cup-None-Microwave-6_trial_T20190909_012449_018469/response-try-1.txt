@@ -1,0 +1,45 @@
+Scene graph:
+agent: agent
+microwave (receptacle): stainless steel microwave on countertop
+fridge (receptacle): black refrigerator with smiley face magnet
+sink (receptacle): none visible
+knife (object): none visible
+receptacle (object): wooden cabinet under countertop, granite countertop
+object: stainless steel microwave on countertop, black refrigerator with smiley face magnet, wooden cabinet under countertop, granite countertop, pepper grinder on countertop
+openable (receptacle) true if a receptacle is openable: (openable black refrigerator with smiley face magnet), (openable wooden cabinet under countertop)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn stainless steel microwave on countertop)
+isToggled (object) true if the object has been toggled: (isToggled stainless steel microwave on countertop)
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem place_cooled_cup_in_microwave)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        cup - object
+    )
+    (:init
+        (openable fridge)
+        (not (opened fridge))
+        (isOn microwave)
+        (isToggled microwave)
+        (atLocation agent microwave)
+    )
+    (:goal (and
+        (inReceptacle cup microwave)
+        (isCool cup)
+    ))
+)
+```

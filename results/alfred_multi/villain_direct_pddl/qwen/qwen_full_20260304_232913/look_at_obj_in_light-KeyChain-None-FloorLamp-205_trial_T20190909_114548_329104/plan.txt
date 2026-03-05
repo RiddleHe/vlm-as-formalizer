@@ -1,0 +1,3 @@
+(gotolocation robot keys)
+(pickupobject robot keys)
+(gotolocation robot tall_lamp)

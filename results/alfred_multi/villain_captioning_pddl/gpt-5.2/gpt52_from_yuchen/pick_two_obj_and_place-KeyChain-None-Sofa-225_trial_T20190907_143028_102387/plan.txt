@@ -1,0 +1,8 @@
+(gotolocation robot keypair_a)
+(pickupobject robot keypair_a)
+(gotolocation robot couch)
+(putobjectinreceptacle robot keypair_a couch)
+(gotolocation robot side_table)
+(pickupobject robot keypair_b)
+(gotolocation robot couch)
+(putobjectinreceptacle robot keypair_b couch)

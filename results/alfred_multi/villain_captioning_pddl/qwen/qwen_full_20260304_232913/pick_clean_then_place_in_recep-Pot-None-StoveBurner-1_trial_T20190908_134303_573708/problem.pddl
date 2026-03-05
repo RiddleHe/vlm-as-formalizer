@@ -1,0 +1,43 @@
+(define (problem put_pot_on_stove)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        pot1 pot2 - object
+        mug1 - object
+        sink1 - sink
+        stove1 - object
+    )
+    (:init
+        (not (atLocation agent1 pot1))
+        (not (atLocation agent1 pot2))
+        (not (atLocation agent1 mug1))
+        (not (atLocation agent1 sink1))
+        (not (atLocation agent1 stove1))
+        (not (holdsAny agent1))
+        (not (isClean pot1))
+        (not (isClean pot2))
+        (not (isHot pot1))
+        (not (isHot pot2))
+        (not (isCool pot1))
+        (not (isCool pot2))
+        (not (isSliced pot1))
+        (not (isSliced pot2))
+        (not (isOn stove1))
+        (not (isToggled stove1))
+        (not (opened sink1))
+        (not (openable sink1)) ; sink is not openable per domain
+        (not (inReceptacle pot1 sink1))
+        (not (inReceptacle pot2 sink1))
+        (not (inReceptacle mug1 sink1))
+        ; Pot1 is on the left burner of stove1, pot2 on the right burner — treated as being at stove1 location
+        (atLocation pot1 stove1)
+        (atLocation pot2 stove1)
+        (atLocation mug1 stove1) ; mug is on countertop adjacent to stove, so we consider it at stove1 for simplicity
+        (atLocation sink1 sink1) ; sink is at its own location
+    )
+    (:goal (and
+        (atLocation agent1 stove1)
+        (inReceptacle pot1 stove1) ; pot1 is on stove (already true, but goal requires it to be there)
+        (isClean pot1) ; assuming "with water" implies it has been cleaned in sink
+    ))
+)

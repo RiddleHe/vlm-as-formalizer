@@ -1,0 +1,7 @@
+(GotoLocation robot microwave)
+(OpenObject robot microwave)
+(PickupObject robot egg)
+(GotoLocation robot sink)
+(CleanObject robot sink egg)
+(GotoLocation robot countertop)
+(PutObjectInReceptacle robot egg countertop)

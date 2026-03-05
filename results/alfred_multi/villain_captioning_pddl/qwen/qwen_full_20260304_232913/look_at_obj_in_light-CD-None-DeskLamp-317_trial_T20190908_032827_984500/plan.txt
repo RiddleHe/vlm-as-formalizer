@@ -1,0 +1,4 @@
+(gotolocation robot cd)
+(pickupobject robot cd)
+(gotolocation robot nightstand)
+(toggleobject robot table_lamp)

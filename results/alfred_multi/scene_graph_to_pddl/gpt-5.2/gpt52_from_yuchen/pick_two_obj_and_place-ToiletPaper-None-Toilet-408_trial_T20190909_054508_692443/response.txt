@@ -1,0 +1,46 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object): black_plastic_trash_bin_near_wall
+object: white_toilet_paper_roll_inside_trash_bin, white_toilet_tank_right_side, gray_double_basin_vanity_sink_left_side, large_wall_mirror_above_sink
+
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle white_toilet_paper_roll_inside_trash_bin black_plastic_trash_bin_near_wall)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_task_bathroom_toilet_paper)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    black_plastic_trash_bin_near_wall - receptacle
+
+    white_toilet_paper_roll_inside_trash_bin - object
+    white_toilet_tank_right_side - object
+    gray_double_basin_vanity_sink_left_side - object
+    large_wall_mirror_above_sink - object
+  )
+
+  (:init
+    (inReceptacle white_toilet_paper_roll_inside_trash_bin black_plastic_trash_bin_near_wall)
+  )
+
+  (:goal
+    (and
+      (inReceptacle white_toilet_paper_roll_inside_trash_bin white_toilet_tank_right_side)
+    )
+  )
+)

@@ -1,0 +1,46 @@
+Scene graph:
+agent: robot
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife_on_table, knife_on_counter
+receptacle (object): golden_cup, plate_on_counter, plate_on_table, green_book, salt_shaker, pepper_shaker, cup_on_table
+object: red_tomato, yellow_apple, fork_on_counter, spatula_on_counter, green_lettuce, green_book, salt_shaker, pepper_shaker, cup_on_table, knife_on_table, knife_on_counter, golden_cup, plate_on_counter, plate_on_table
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge), (openable sink)
+opened (receptacle) true if a receptacle is opened: (opened microwave)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle red_tomato microwave), (inReceptacle plate_on_counter golden_cup)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot microwave)
+
+PDDL problem: ```pddl
+(define (problem put_heated_tomato_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave fridge sink - receptacle
+        knife_on_table knife_on_counter - knife
+        red_tomato yellow_apple fork_on_counter spatula_on_counter green_lettuce green_book salt_shaker pepper_shaker cup_on_table - object
+        golden_cup plate_on_counter plate_on_table - receptacle
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (opened microwave)
+        (inReceptacle red_tomato microwave)
+        (inReceptacle plate_on_counter golden_cup)
+        (atLocation robot microwave)
+    )
+    (:goal (and
+        (inReceptacle red_tomato plate_on_table)
+        (isHot red_tomato)
+    ))
+)
+```

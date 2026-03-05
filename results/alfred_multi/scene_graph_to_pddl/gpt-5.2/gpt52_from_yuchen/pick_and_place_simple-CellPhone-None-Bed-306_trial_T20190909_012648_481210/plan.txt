@@ -1,0 +1,4 @@
+(gotolocation robot smartphone_white_on_desk)
+(pickupobject robot smartphone_white_on_desk)
+(gotolocation robot wooden_single_bed_with_headboard)
+(putobjectinreceptacle robot smartphone_white_on_desk wooden_single_bed_with_headboard)

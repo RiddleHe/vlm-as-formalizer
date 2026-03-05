@@ -1,0 +1,56 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): knife_with_yellow_handle
+receptacle (object): round_table, kitchen_counter
+object: round_table, kitchen_counter, knife_with_yellow_handle, potato, green_vegetable, bottle, paper_towel_roll, small_green_box, egg, bread, spatula
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle potato round_table), (inReceptacle green_vegetable round_table), (inReceptacle bottle round_table), (inReceptacle paper_towel_roll round_table), (inReceptacle small_green_box round_table), (inReceptacle egg round_table), (inReceptacle bread kitchen_counter), (inReceptacle spatula kitchen_counter)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_frying_pan_with_fork_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        round_table - receptacle
+        kitchen_counter - receptacle
+        knife_with_yellow_handle - knife
+        potato - object
+        green_vegetable - object
+        bottle - object
+        paper_towel_roll - object
+        small_green_box - object
+        egg - object
+        bread - object
+        spatula - object
+    )
+    (:init
+        (inReceptacle potato round_table)
+        (inReceptacle green_vegetable round_table)
+        (inReceptacle bottle round_table)
+        (inReceptacle paper_towel_roll round_table)
+        (inReceptacle small_green_box round_table)
+        (inReceptacle egg round_table)
+        (inReceptacle bread kitchen_counter)
+        (inReceptacle spatula kitchen_counter)
+        (atLocation robot kitchen_counter) ; assuming robot starts near counter
+    )
+    (:goal
+        (and
+            (inReceptacle spatula round_table)
+        )
+    )
+)
+```

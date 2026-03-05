@@ -1,0 +1,49 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): sink_with_faucet
+knife (object): 
+receptacle (object): sink_with_faucet, toilet_paper_dispenser
+object: toilet_paper_roll, white_towel, toothbrush, plunger, toilet_brush, toilet_paper_dispenser, sink_with_faucet
+openable (receptacle) true if a receptacle is openable: (openable toilet_paper_dispenser)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle toilet_paper_roll sink_with_faucet)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem move_toilet_paper)
+    (:domain put_task)
+    (:objects
+        agent
+        sink_with_faucet - sink
+        toilet_paper_dispenser - receptacle
+        toilet_paper_roll - object
+        white_towel - object
+        toothbrush - object
+        plunger - object
+        toilet_brush - object
+    )
+    (:init
+        (openable toilet_paper_dispenser)
+        (not (opened toilet_paper_dispenser))
+        (inReceptacle toilet_paper_roll sink_with_faucet)
+        (not (atLocation agent sink_with_faucet))
+        (not (atLocation agent toilet_paper_dispenser))
+        (not (holdsAny agent))
+    )
+    (:goal
+        (and
+            (inReceptacle toilet_paper_roll toilet_paper_dispenser)
+        )
+    )
+)
+```

@@ -1,0 +1,262 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Find pen on desk, put into metal bowl, place onto desk.
+    
+
+SCENE CAPTION:
+Scene Description:
+
+1. Objects and their types:
+   - Agent: A robotic agent is present in the scene, initially not located at any object.
+   - Receptacles:
+     - Two metal bowls (silver-colored, circular, placed side by side on a wooden cabinet top).
+     - A wooden cabinet (light brown, with drawers, functions as a receptacle for holding objects).
+     - A desk (light gray surface, with a laptop on it, functions as a receptacle).
+     - A nightstand (orange-brown, with a lamp, clock, and pen on top; functions as a receptacle).
+   - Objects:
+     - A pen (white, thin, cylindrical, located on the nightstand).
+     - A CD (iridescent, circular, located on the cabinet top near the bowls).
+     - A pair of brown boots (on the floor near the cabinet).
+     - A basketball (orange, spherical, on the floor near the cabinet).
+     - A laptop (black, on the desk).
+     - A lamp (yellow shade, on the nightstand).
+     - A digital clock (gray with blue screen, on the nightstand).
+     - A black office chair (with wheels, under the desk).
+
+2. Quantities:
+   - Receptacles: 4 (two metal bowls, one cabinet, one desk, one nightstand — note: bowls are separate objects but both are receptacles; cabinet and nightstand are single receptacles each).
+   - Objects: 8 (pen, CD, boots, basketball, laptop, lamp, clock, chair — note: boots are a pair but counted as one object type; chair is not a receptacle but an object).
+
+3. Spatial relationships:
+   - The pen is on the nightstand (atLocation agent ?pen is false initially; pen is inReceptacle ?pen ?nightstand).
+   - The two metal bowls are on the cabinet top (inReceptacle ?bowl1 ?cabinet, inReceptacle ?bowl2 ?cabinet).
+   - The CD is on the cabinet top, next to the bowls (not in a receptacle, on surface).
+   - The laptop is on the desk (inReceptacle ?laptop ?desk).
+   - The lamp and clock are on the nightstand (inReceptacle ?lamp ?nightstand, inReceptacle ?clock ?nightstand).
+   - The boots and basketball are on the floor near the cabinet (not in any receptacle).
+   - The chair is under the desk (not in a receptacle, positioned adjacent to desk).
+
+4. Current state relevant to the task:
+   - The pen is not held by the agent (holdsAny agent is false; holds agent pen is false).
+   - The metal bowls are not opened (they are open-top, so openable is true but opened state is not applicable; they are accessible).
+   - The pen is not in any bowl (inReceptacle pen bowl is false).
+   - The agent is not at any location (atLocation agent ?any is false initially).
+   - No object is clean, hot, cool, sliced, or toggled (all predicates like isClean, isHot, etc., are false for all objects).
+   - The pen is on the nightstand and needs to be picked up.
+
+5. Colors and visual properties:
+   - Pen: White, thin, vertical orientation on the nightstand.
+   - Metal bowls: Silver, reflective, identical in size and shape, side by side.
+   - Cabinet: Light brown wood, with horizontal drawer handles, flat top surface.
+   - Nightstand: Orange-brown wood, rectangular, with a lamp (yellow shade), clock (gray body, blue screen), and pen on top.
+   - CD: Rainbow-iridescent, circular, lying flat on cabinet.
+   - Boots: Dark brown, tall, on wooden parquet floor.
+   - Basketball: Orange with black lines, on floor near cabinet.
+   - Laptop: Black, open, on gray desk.
+   - Lamp: Yellow conical shade, black base, on nightstand.
+   - Clock: Gray circular body, blue digital display.
+   - Chair: Black padded seat, five-wheeled base, under desk.
+   - Floor: Wooden parquet pattern, light brown.
+
+The task requires the agent to navigate to the nightstand, pick up the pen, place it into one of the metal bowls, and then place the bowl (with pen inside) onto the desk. The bowls are accessible and do not need to be opened. The desk is a valid receptacle for placing the bowl.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

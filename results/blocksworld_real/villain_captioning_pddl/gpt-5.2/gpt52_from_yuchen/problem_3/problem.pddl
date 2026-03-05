@@ -1,0 +1,36 @@
+(define (problem blocksworld_scene_2stacks)
+  (:domain blocksworld)
+  (:objects
+    blue-block green-block orange-block red-block yellow-block purple-block - block
+    robot1 - robot
+  )
+
+  (:init
+    ;; stack from bottom (table) to top
+    (ontable green-block)
+    (on blue-block green-block)
+    (on orange-block blue-block)
+    (on red-block orange-block)
+    (on yellow-block red-block)
+    (on purple-block yellow-block)
+
+    ;; only the top block is clear
+    (clear purple-block)
+
+    ;; robot state
+    (handempty robot1)
+  )
+
+  (:goal
+    (and
+      ;; stack 1: purple over red
+      (on purple-block red-block)
+
+      ;; stack 2: yellow over orange over green over blue (blue at bottom)
+      (ontable blue-block)
+      (on green-block blue-block)
+      (on orange-block green-block)
+      (on yellow-block orange-block)
+    )
+  )
+)

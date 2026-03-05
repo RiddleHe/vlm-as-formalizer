@@ -1,0 +1,59 @@
+Scene graph:
+agent: agent
+microwave (receptacle): dark red microwave
+fridge (receptacle): black fridge
+sink (receptacle): stainless steel double sink
+knife (object): knife on table
+receptacle (object): countertop, table
+object: apple on table, apple in microwave, apple in sink, cup in sink, bowl in sink
+openable (receptacle) true if a receptacle is openable: (openable dark red microwave), (openable black fridge), (openable stainless steel double sink)
+opened (receptacle) true if a receptacle is opened: (opened dark red microwave), (opened black fridge), (opened stainless steel double sink)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn dark red microwave)
+isToggled (object) true if the object has been toggled: (isToggled dark red microwave)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle apple in microwave dark red microwave), (inReceptacle apple in sink stainless steel double sink), (inReceptacle cup in sink stainless steel double sink), (inReceptacle bowl in sink stainless steel double sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_cleaned_apple_in_fridge)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        apple_on_table - object
+        apple_in_microwave - object
+        apple_in_sink - object
+        cup_in_sink - object
+        bowl_in_sink - object
+        countertop - object
+        table - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (opened microwave)
+        (opened fridge)
+        (opened sink)
+        (isOn microwave)
+        (isToggled microwave)
+        (inReceptacle apple_in_microwave microwave)
+        (inReceptacle apple_in_sink sink)
+        (inReceptacle cup_in_sink sink)
+        (inReceptacle bowl_in_sink sink)
+        (atLocation agent table) ; assuming agent starts near table as it's a common starting point
+    )
+    (:goal (and
+        (inReceptacle apple_in_sink fridge)
+        (isClean apple_in_sink)
+    ))
+)
+```

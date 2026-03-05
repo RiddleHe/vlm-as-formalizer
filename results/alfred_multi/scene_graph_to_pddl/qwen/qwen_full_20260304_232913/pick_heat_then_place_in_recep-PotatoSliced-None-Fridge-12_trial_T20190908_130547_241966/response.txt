@@ -1,0 +1,51 @@
+Scene graph:
+agent: robot
+microwave (receptacle): microwave oven on wooden shelf
+fridge (receptacle): dark-colored refrigerator with handle on left
+sink (receptacle): sink faucet visible below microwave
+knife (object): knife with brown handle on countertop next to pot
+receptacle (object): black pot on countertop, blue cast iron pan on stove, brown container with pump on countertop
+object: black pot, blue cast iron pan, brown container with pump, knife, potato (inside microwave), microwave oven, refrigerator, sink faucet
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge)
+opened (receptacle) true if a receptacle is opened: (opened microwave)  ; microwave door appears slightly ajar
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn blue cast iron pan)
+isToggled (object) true if the object has been toggled: (isToggled blue cast iron pan)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle potato microwave)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot microwave)
+
+PDDL problem: ```pddl
+(define (problem cook_and_refrigerate_potato_slice)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife - knife
+        potato - object
+        black_pot - object
+        blue_cast_iron_pan - object
+        brown_container - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (opened microwave)
+        (inReceptacle potato microwave)
+        (isOn blue_cast_iron_pan)
+        (isToggled blue_cast_iron_pan)
+        (atLocation robot microwave)
+    )
+    (:goal (and
+        (inReceptacle potato fridge)
+        (isSliced potato)
+        (isHot potato)
+    ))
+)
+```

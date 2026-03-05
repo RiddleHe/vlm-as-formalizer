@@ -1,0 +1,18 @@
+(define (problem move_toilet_paper)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        toilet_paper - object
+        toilet_paper_dispenser - receptacle
+        sink - sink
+        toilet - receptacle
+    )
+    (:init
+        (atLocation robot sink)
+        (inReceptacle toilet_paper sink)
+        (openable toilet_paper_dispenser)
+    )
+    (:goal
+        (inReceptacle toilet_paper toilet_paper_dispenser)
+    )
+)

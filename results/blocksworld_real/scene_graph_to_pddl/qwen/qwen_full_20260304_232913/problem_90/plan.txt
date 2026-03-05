@@ -1,0 +1,6 @@
+(unstack orange_block green_block robot1)
+(stack orange_block yellow_block robot1)
+(pick-up purple_block robot1)
+(stack purple_block green_block robot1)
+(unstack red_block purple_block robot1)
+(stack red_block blue_block robot1)

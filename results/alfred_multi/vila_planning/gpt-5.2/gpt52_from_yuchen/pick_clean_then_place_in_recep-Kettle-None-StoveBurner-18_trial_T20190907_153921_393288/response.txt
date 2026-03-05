@@ -1,0 +1,6 @@
+(GotoLocation agent teapot)
+(PickupObject agent teapot)
+(GotoLocation agent sink)
+(CleanObject agent sink teapot)
+(GotoLocation agent stove)
+(PutObjectInReceptacle agent teapot stove)

@@ -1,0 +1,7 @@
+(GotoLocation robot bowl)
+(PickupObject robot bowl)
+(GotoLocation robot pencil)
+(PickupObject robot pencil)
+(PutObjectInReceptacle robot pencil bowl)
+(GotoLocation robot nightstand)
+(PutObjectInReceptacle robot bowl nightstand)

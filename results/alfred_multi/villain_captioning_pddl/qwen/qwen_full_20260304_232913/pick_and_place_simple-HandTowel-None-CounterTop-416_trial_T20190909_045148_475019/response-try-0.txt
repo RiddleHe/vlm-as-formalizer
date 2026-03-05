@@ -1,0 +1,67 @@
+```pddl
+(define (problem put_hand_towel_on_counter)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        sink - sink
+        hand_towel - object
+        soap_bar - object
+        soap_dispenser - object
+        small_bottle - object
+        purple_bottle - object
+        towel_ring - object  ; treated as a location object for the towel
+        countertop - object  ; treated as a location surface, not a receptacle
+    )
+    (:init
+        ; Initial location: robot is not at any object
+        (not (atLocation robot sink))
+        (not (atLocation robot hand_towel))
+        (not (atLocation robot towel_ring))
+        (not (atLocation robot countertop))
+        (not (atLocation robot soap_bar))
+        (not (atLocation robot soap_dispenser))
+        (not (atLocation robot small_bottle))
+        (not (atLocation robot purple_bottle))
+
+        ; Hand towel is at the towel ring (hanging)
+        (atLocation hand_towel towel_ring)
+
+        ; Objects are on the countertop (as per scene)
+        (atLocation soap_bar countertop)
+        (atLocation soap_dispenser countertop)
+        (atLocation small_bottle countertop)
+        (atLocation purple_bottle countertop)
+
+        ; Sink is empty and not openable
+        (not (openable sink))
+        (not (opened sink))
+        (not (inReceptacle hand_towel sink))
+        (not (inReceptacle soap_bar sink))
+        (not (inReceptacle soap_dispenser sink))
+        (not (inReceptacle small_bottle sink))
+        (not (inReceptacle purple_bottle sink))
+
+        ; Robot holds nothing
+        (not (holdsAny robot))
+        (not (holds robot hand_towel))
+
+        ; No cleaning, heating, cooling, toggling, or slicing needed for this task
+        (not (isClean hand_towel))
+        (not (isHot hand_towel))
+        (not (isCool hand_towel))
+        (not (isOn hand_towel))
+        (not (isToggled hand_towel))
+        (not (isSliced hand_towel))
+    )
+    (:goal
+        ; Goal: hand_towel is on the countertop
+        ; Since countertop is not a receptacle, we interpret "on the counter" as being at the countertop location
+        ; and not held by the robot.
+        (and
+            (atLocation hand_towel countertop)
+            (not (holds robot hand_towel))
+            (not (holdsAny robot))
+        )
+    )
+)
+```

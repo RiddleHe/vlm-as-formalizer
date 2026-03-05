@@ -1,0 +1,20 @@
+```pddl
+(define (problem put_clean_teapot_on_stove)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        teapot - object
+        stove - receptacle
+        sink - sink
+    )
+    (:init
+        (atLocation robot stove)
+        (inReceptacle teapot stove)
+        (not (isClean teapot))
+    )
+    (:goal (and
+        (inReceptacle teapot stove)
+        (isClean teapot)
+    ))
+)
+```

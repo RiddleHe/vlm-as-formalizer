@@ -1,0 +1,11 @@
+...e
+INFO     translator command line string: /local-ssd/mh3897/envs/pddl/bin/python /home/mh3897/pddl/villain/downward/builds/release/bin/translate/translate.py /tmp/tmptsez9o1w/domain.pddl /tmp/tmptsez9o1w/problem.pddl --sas-file /tmp/tmptsez9o1w/output_plan.sas
+Parsing...
+Parsing task
+	->Parsing element #16 in init block
+Error in initial state specification
+Reason: Atom atlocation(robot, egg) is true and false.
+translate exit code: 31
+
+Driver aborting after translate
+INFO     Planner time: 0.07s

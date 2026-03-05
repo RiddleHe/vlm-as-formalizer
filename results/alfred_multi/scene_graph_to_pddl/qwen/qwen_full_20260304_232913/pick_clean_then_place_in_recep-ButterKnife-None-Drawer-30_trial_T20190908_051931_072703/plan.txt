@@ -1,0 +1,5 @@
+(gotolocation robot kitchen_sink)
+(pickupobject robot silver_knife_in_sink)
+(cleanobject robot kitchen_sink silver_knife_in_sink)
+(gotolocation robot wooden_cabinet_drawer)
+(putobjectinreceptacle robot silver_knife_in_sink wooden_cabinet_drawer)

@@ -1,0 +1,4 @@
+(gotolocation agent1 green_sponge)
+(pickupobject agent1 green_sponge)
+(gotolocation agent1 toilet)
+(putobjectinreceptacle agent1 green_sponge toilet)

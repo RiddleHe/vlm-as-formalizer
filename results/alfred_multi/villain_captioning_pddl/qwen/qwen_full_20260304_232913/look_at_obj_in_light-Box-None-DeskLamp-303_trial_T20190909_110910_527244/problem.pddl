@@ -1,0 +1,52 @@
+(define (problem look_at_box_by_lamp)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        box - object
+        lamp - object
+        nightstand - object
+        desk - object
+        bed - object
+        tablet - object
+        bowl - object
+        clock - object
+        cup_with_pens - object
+        tennis_racket - object
+        blue_object - object
+    )
+    (:init
+        ; Robot is not at any location initially
+        (not (atLocation robot box))
+        (not (atLocation robot lamp))
+        (not (atLocation robot nightstand))
+        (not (atLocation robot desk))
+        (not (atLocation robot bed))
+        (not (atLocation robot tablet))
+        (not (atLocation robot bowl))
+        (not (atLocation robot clock))
+        (not (atLocation robot cup_with_pens))
+        (not (atLocation robot tennis_racket))
+        (not (atLocation robot blue_object))
+
+        ; Lamp is on (required for "by the light of a lamp")
+        (isOn lamp)
+
+        ; No object is held
+        (not (holdsAny robot))
+
+        ; No cleaning, heating, cooling, slicing, or toggling has occurred
+        (not (isClean box))
+        (not (isHot box))
+        (not (isCool box))
+        (not (isSliced box))
+        (not (isToggled box))
+    )
+    (:goal
+        (and
+            ; Robot must be at the box's location to "look at" it
+            (atLocation robot box)
+            ; Lamp must be on to provide light (already true in init, but included for clarity)
+            (isOn lamp)
+        )
+    )
+)

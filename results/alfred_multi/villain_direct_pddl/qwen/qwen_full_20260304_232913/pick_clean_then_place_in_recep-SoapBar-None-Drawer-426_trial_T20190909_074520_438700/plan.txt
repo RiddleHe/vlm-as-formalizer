@@ -1,0 +1,4 @@
+(gotolocation agent1 soap1)
+(pickupobject agent1 soap1)
+(gotolocation agent1 drawer1)
+(putobjectinreceptacle agent1 soap1 drawer1)

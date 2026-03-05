@@ -1,0 +1,4 @@
+(gotolocation robot desk)
+(pickupobject robot credit_card)
+(gotolocation robot armchair)
+(putobjectinreceptacle robot credit_card armchair)

@@ -1,0 +1,6 @@
+(gotolocation agent1 plate1)
+(pickupobject agent1 plate1)
+(gotolocation agent1 sink1)
+(putobjectinreceptacle agent1 plate1 sink1)
+(pickupobject agent1 spoon1)
+(gotolocation agent1 plate1)

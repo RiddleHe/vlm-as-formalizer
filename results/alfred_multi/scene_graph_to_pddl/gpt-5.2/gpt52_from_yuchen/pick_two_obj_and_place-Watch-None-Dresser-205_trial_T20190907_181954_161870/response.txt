@@ -1,0 +1,72 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): none visible.
+fridge (receptacle): none visible.
+sink (receptacle): none visible.
+knife (object): none visible.
+receptacle (object): 
+- transparent_glass_dining_table_receptacle (glass-top dining table)
+- dark_wood_tv_stand_receptacle (dark wooden TV stand/cabinet under TV)
+- open_cardboard_box_left_on_table_receptacle (open cardboard box on left side of table)
+- open_cardboard_box_right_on_table_receptacle (open cardboard box on right side of table)
+object:
+- watch_remote_left_on_table (left remote-like device on table edge)
+- watch_remote_center_on_table (center remote-like device on table edge)
+- watch_remote_right_on_table (right remote-like device on table edge)
+- red_card_on_table (small red card on table)
+
+openable (receptacle) true if a receptacle is openable: none.
+opened (receptacle) true if a receptacle is opened: none.
+holdsAny (agent) agent ?a holds an object: none.
+isClean (object) true if the object has been clean in sink: none.
+isHot (object) true if the object has been heated up: none.
+isCool (object) true if the object has been cooled: none.
+isOn (object) true if the object is on: none.
+isToggled (object) true if the object has been toggled: none.
+isSliced (object) true if the object is sliced: none.
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle watch_remote_left_on_table transparent_glass_dining_table_receptacle)
+- (inReceptacle watch_remote_center_on_table transparent_glass_dining_table_receptacle)
+- (inReceptacle watch_remote_right_on_table transparent_glass_dining_table_receptacle)
+- (inReceptacle red_card_on_table transparent_glass_dining_table_receptacle)
+- (inReceptacle open_cardboard_box_left_on_table_receptacle transparent_glass_dining_table_receptacle)
+- (inReceptacle open_cardboard_box_right_on_table_receptacle transparent_glass_dining_table_receptacle)
+holds (agent, object) object ?o is held by agent ?a: none.
+atLocation (agent, object) : none.
+
+PDDL problem: (define (problem put_task_place_two_watches_on_tv_stand)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    transparent_glass_dining_table_receptacle - receptacle
+    dark_wood_tv_stand_receptacle - receptacle
+    open_cardboard_box_left_on_table_receptacle - receptacle
+    open_cardboard_box_right_on_table_receptacle - receptacle
+
+    watch_remote_left_on_table - object
+    watch_remote_center_on_table - object
+    watch_remote_right_on_table - object
+    red_card_on_table - object
+  )
+
+  (:init
+    ;; robot starts not co-located with any object (no atLocation facts)
+
+    ;; object containment / support relations from scene graph
+    (inReceptacle watch_remote_left_on_table transparent_glass_dining_table_receptacle)
+    (inReceptacle watch_remote_center_on_table transparent_glass_dining_table_receptacle)
+    (inReceptacle watch_remote_right_on_table transparent_glass_dining_table_receptacle)
+    (inReceptacle red_card_on_table transparent_glass_dining_table_receptacle)
+    (inReceptacle open_cardboard_box_left_on_table_receptacle transparent_glass_dining_table_receptacle)
+    (inReceptacle open_cardboard_box_right_on_table_receptacle transparent_glass_dining_table_receptacle)
+  )
+
+  (:goal
+    (and
+      ;; place two watches (choose left and center) on the TV stand
+      (inReceptacle watch_remote_left_on_table dark_wood_tv_stand_receptacle)
+      (inReceptacle watch_remote_center_on_table dark_wood_tv_stand_receptacle)
+    )
+  )
+)

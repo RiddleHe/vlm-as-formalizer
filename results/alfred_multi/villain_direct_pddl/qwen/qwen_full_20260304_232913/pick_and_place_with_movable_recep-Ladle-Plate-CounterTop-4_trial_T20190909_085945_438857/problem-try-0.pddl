@@ -1,0 +1,23 @@
+(define (problem put_plate_with_spoon_on_counter)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        plate_grey - object
+        spoon_metal - object
+        counter - receptacle
+        sink - sink
+    )
+    (:init
+        (atLocation agent1 sink)
+        (inReceptacle spoon_metal sink)
+        (inReceptacle plate_grey sink)
+        (openable sink)
+        (opened sink)
+    )
+    (:goal
+        (and
+            (inReceptacle plate_grey counter)
+            (inReceptacle spoon_metal plate_grey)
+        )
+    )
+)

@@ -1,0 +1,57 @@
+Scene graph:
+agent: agent
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink_left, sink_right
+knife (object): knife_on_counter
+receptacle (object): toaster, bowl_on_counter, wineglass_on_counter
+object: tomato_in_microwave, fork_in_sink, spoon_in_sink, saltshaker_on_counter, bottle_on_counter, plate_on_counter
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge)
+opened (receptacle) true if a receptacle is opened: (opened microwave)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn microwave)
+isToggled (object) true if the object has been toggled: (isToggled microwave)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle tomato_in_microwave microwave), (inReceptacle fork_in_sink sink_right), (inReceptacle spoon_in_sink sink_left)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_cold_tomato_in_microwave)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        sink_left - receptacle
+        sink_right - receptacle
+        knife_on_counter - knife
+        toaster - receptacle
+        bowl_on_counter - object
+        wineglass_on_counter - object
+        tomato_in_microwave - object
+        fork_in_sink - object
+        spoon_in_sink - object
+        saltshaker_on_counter - object
+        bottle_on_counter - object
+        plate_on_counter - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (opened microwave)
+        (isOn microwave)
+        (isToggled microwave)
+        (inReceptacle tomato_in_microwave microwave)
+        (inReceptacle fork_in_sink sink_right)
+        (inReceptacle spoon_in_sink sink_left)
+    )
+    (:goal (and
+        (inReceptacle tomato_in_microwave microwave)
+        (isCool tomato_in_microwave)
+    ))
+)
+```

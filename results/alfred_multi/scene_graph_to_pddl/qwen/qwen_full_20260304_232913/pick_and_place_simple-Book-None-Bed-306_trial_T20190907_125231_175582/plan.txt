@@ -1,0 +1,4 @@
+(gotolocation robot blue_book_on_desk)
+(pickupobject robot blue_book_on_desk)
+(gotolocation robot wooden_bed_frame)
+(putobjectinreceptacle robot blue_book_on_desk wooden_bed_frame)

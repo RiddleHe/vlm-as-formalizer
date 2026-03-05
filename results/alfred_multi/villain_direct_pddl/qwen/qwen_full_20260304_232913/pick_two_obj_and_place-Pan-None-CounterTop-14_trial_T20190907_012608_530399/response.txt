@@ -1,0 +1,23 @@
+```pddl
+(define (problem put_pans_on_counter)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        pan1 pan2 - object
+        stove - receptacle
+        counter - receptacle
+    )
+    (:init
+        (atLocation agent1 stove)
+        (inReceptacle pan1 stove)
+        (inReceptacle pan2 stove)
+        (not (atLocation agent1 counter))
+    )
+    (:goal
+        (and
+            (inReceptacle pan1 counter)
+            (inReceptacle pan2 counter)
+        )
+    )
+)
+```

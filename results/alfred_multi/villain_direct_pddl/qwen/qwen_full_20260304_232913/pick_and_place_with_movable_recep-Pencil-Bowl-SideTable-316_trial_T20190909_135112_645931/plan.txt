@@ -1,0 +1,7 @@
+(gotolocation agent1 bed)
+(gotolocation agent1 desk)
+(pickupobject agent1 pencil)
+(putobjectinreceptacle agent1 pencil bowl)
+(pickupobject agent1 bowl)
+(gotolocation agent1 bed)
+(putobjectinreceptacle agent1 bowl nightstand)

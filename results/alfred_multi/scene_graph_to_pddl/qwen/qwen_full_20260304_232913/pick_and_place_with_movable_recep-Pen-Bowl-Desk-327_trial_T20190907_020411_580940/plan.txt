@@ -1,0 +1,5 @@
+(gotolocation robot pen)
+(pickupobject robot pen)
+(gotolocation robot metal_bowl_left)
+(putobjectinreceptacle robot pen metal_bowl_left)
+(gotolocation robot wooden_desk)

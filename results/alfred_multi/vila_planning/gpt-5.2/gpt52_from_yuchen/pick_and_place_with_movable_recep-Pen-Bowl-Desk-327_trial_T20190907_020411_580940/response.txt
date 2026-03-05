@@ -1,0 +1,7 @@
+(GotoLocation agent desk)
+(PickupObject agent pen)
+(GotoLocation agent metal_bowl)
+(PutObjectInReceptacle agent pen metal_bowl)
+(PickupObject agent metal_bowl)
+(GotoLocation agent desk)
+(PutObjectInReceptacle agent metal_bowl desk)

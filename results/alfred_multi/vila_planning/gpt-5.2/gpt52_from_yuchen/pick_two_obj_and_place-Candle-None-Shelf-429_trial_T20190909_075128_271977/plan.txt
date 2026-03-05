@@ -1,0 +1,8 @@
+(GotoLocation agent1 candle1)
+(PickupObject agent1 candle1)
+(GotoLocation agent1 shelf1)
+(PutObjectInReceptacle agent1 candle1 shelf1)
+(GotoLocation agent1 candle2)
+(PickupObject agent1 candle2)
+(GotoLocation agent1 shelf1)
+(PutObjectInReceptacle agent1 candle2 shelf1)

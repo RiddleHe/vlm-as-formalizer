@@ -1,0 +1,35 @@
+```pddl
+(define (problem cut_cook_apple)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        apple1 - object
+        knife1 - knife
+        microwave1 - microwave
+        sink1 - sink
+        side_table1 - object  ; The small black side table is not a receptacle per domain
+        brown_shelf1 - object  ; The brown shelf is assumed to be a surface, not a receptacle
+    )
+    (:init
+        (atLocation agent1 side_table1)  ; Agent starts at the side table where apple and knife are
+        (atLocation apple1 side_table1)
+        (atLocation knife1 side_table1)
+        (atLocation microwave1 microwave1)  ; Microwave is at its own location
+        (atLocation sink1 sink1)
+        (openable microwave1)
+        (not (opened microwave1))
+        (not (holdsAny agent1))
+        (not (isSliced apple1))
+        (not (isHot apple1))
+        (not (isClean apple1))
+        (not (isCool apple1))
+        (not (isOn microwave1))
+        (not (isToggled microwave1))
+    )
+    (:goal (and
+        (isSliced apple1)
+        (isHot apple1)
+        (inReceptacle apple1 brown_shelf1)  ; Assuming brown_shelf1 is a receptacle for the goal, though domain doesn't define it as one; if not, this might need adjustment
+    ))
+)
+```

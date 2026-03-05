@@ -1,0 +1,6 @@
+(gotolocation agent1 black_table1)
+(pickupobject agent1 apple1)
+(gotolocation agent1 microwave1)
+(heatobject agent1 microwave1 apple1)
+(gotolocation agent1 white_table1)
+(putobjectinreceptacle agent1 apple1 white_table1)

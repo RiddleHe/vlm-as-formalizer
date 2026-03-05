@@ -1,0 +1,8 @@
+(GotoLocation robot disk1)
+(PickupObject robot disk1)
+(GotoLocation robot bottom_right_shelf)
+(PutObjectInReceptacle robot disk1 bottom_right_shelf)
+(GotoLocation robot disk2)
+(PickupObject robot disk2)
+(GotoLocation robot bottom_right_shelf)
+(PutObjectInReceptacle robot disk2 bottom_right_shelf)

@@ -1,0 +1,6 @@
+(gotolocation robot black_table)
+(pickupobject robot silver_knife_on_table)
+(gotolocation robot kitchen_sink)
+(cleanobject robot kitchen_sink silver_knife_on_table)
+(gotolocation robot black_table)
+(putobjectinreceptacle robot silver_knife_on_table black_table)

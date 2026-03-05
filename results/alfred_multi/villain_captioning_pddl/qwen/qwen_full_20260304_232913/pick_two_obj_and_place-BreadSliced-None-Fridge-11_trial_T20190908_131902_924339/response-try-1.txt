@@ -1,0 +1,78 @@
+```pddl
+(define (problem put_sliced_bread_in_fridge)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        bread - object
+        knife - knife
+        fridge - fridge
+        dining_table - object
+        countertop - object
+        microwave - microwave
+        sink - sink
+        salt_shaker - object
+        tomato1 tomato2 - object
+        apple - object
+        egg - object
+        cup1 cup2 - object
+        sponge1 sponge2 - object
+        bowl - object
+        spoon - object
+        fork - object
+        paper_towel - object
+        stove - object
+        kettle - object
+    )
+    (:init
+        ;; Agent is not at any location initially
+        (not (atLocation robot dining_table))
+        (not (atLocation robot countertop))
+        (not (atLocation robot fridge))
+        (not (atLocation robot microwave))
+        (not (atLocation robot sink))
+        (not (atLocation robot stove))
+
+        ;; Receptacles are closed
+        (openable fridge)
+        (not (opened fridge))
+        (openable microwave)
+        (not (opened microwave))
+
+        ;; Objects are on surfaces
+        (atLocation robot dining_table) ; Assume robot starts near dining table for efficiency
+        (atLocation bread dining_table)
+        (atLocation knife dining_table)
+        (atLocation salt_shaker dining_table)
+        (atLocation tomato1 dining_table)
+        (atLocation tomato2 countertop) ; from image 5
+        (atLocation apple dining_table)
+        (atLocation egg dining_table)
+        (atLocation cup1 dining_table)
+        (atLocation cup2 dining_table)
+        (atLocation sponge1 dining_table)
+        (atLocation sponge2 dining_table)
+        (atLocation bowl dining_table)
+        (atLocation spoon dining_table)
+        (atLocation fork countertop) ; from image 3
+        (atLocation paper_towel countertop) ; from image 3
+        (atLocation stove countertop) ; stove is on countertop
+        (atLocation kettle stove) ; kettle is on stove
+
+        ;; No object is held
+        (not (holdsAny robot))
+
+        ;; No object is sliced, cleaned, heated, or cooled
+        (not (isSliced bread))
+        (not (isClean bread))
+        (not (isHot bread))
+        (not (isCool bread))
+
+        ;; Fridge is empty
+        (not (inReceptacle bread fridge))
+    )
+    (:goal (and
+        (inReceptacle bread fridge)
+        (isSliced bread)
+    ))
+)
+```

@@ -1,0 +1,63 @@
+Scene graph:
+agent: (agent, robot_agent)
+microwave (receptacle): (microwave, black_window_microwave_right_wall)
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): (knife, small_metal_keys_like_object_on_table_left)  ; treated as knife per domain typing
+receptacle (object): (receptacle, open_brown_cardboard_box_on_white_counter_left), (receptacle, white_dining_table_center), (receptacle, white_counter_under_window_right), (receptacle, white_counter_under_microwave_left)
+object: (object, round_gray_plate_on_table_right), (object, gold_trophy_statue_on_table_left), (object, folded_newspaper_on_table_center)
+
+openable (receptacle) true if a receptacle is openable: (openable, black_window_microwave_right_wall)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+(inReceptacle, round_gray_plate_on_table_right, white_dining_table_center)
+(inReceptacle, gold_trophy_statue_on_table_left, white_dining_table_center)
+(inReceptacle, folded_newspaper_on_table_center, white_dining_table_center)
+
+holds (agent, object) object ?o is held by agent ?a: none
+
+atLocation (agent, object) :
+none
+
+PDDL problem: (define (problem put_task_box_plate_on_table)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    black_window_microwave_right_wall - microwave
+
+    open_brown_cardboard_box_on_white_counter_left - receptacle
+    white_dining_table_center - receptacle
+    white_counter_under_window_right - receptacle
+    white_counter_under_microwave_left - receptacle
+
+    round_gray_plate_on_table_right - object
+    gold_trophy_statue_on_table_left - object
+    folded_newspaper_on_table_center - object
+
+    small_metal_keys_like_object_on_table_left - knife
+  )
+
+  (:init
+    (openable black_window_microwave_right_wall)
+
+    (inReceptacle round_gray_plate_on_table_right white_dining_table_center)
+    (inReceptacle gold_trophy_statue_on_table_left white_dining_table_center)
+    (inReceptacle folded_newspaper_on_table_center white_dining_table_center)
+  )
+
+  (:goal
+    (and
+      (inReceptacle round_gray_plate_on_table_right open_brown_cardboard_box_on_white_counter_left)
+      (inReceptacle open_brown_cardboard_box_on_white_counter_left white_dining_table_center)
+    )
+  )
+)

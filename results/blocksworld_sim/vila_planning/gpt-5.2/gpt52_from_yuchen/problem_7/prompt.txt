@@ -1,0 +1,25 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate a step-by-step plan for the robot(s).
+    All the possible actions and their arguments are given below:
+    ['pick-up (?x - block ?robot - robot)', 'put-down (?x - block ?robot - robot)', 'stack (?x - block ?y - block ?robot - robot)', 'unstack (?x - block ?y - block ?robot - robot)']
+
+    You must first reason what objects are in the scene that can be the arguments of the actions.
+    Then you must reason what actions to take in the plan. Be mindful of the preconditions and effects of the actions.
+    Each action should take one line in the plan.
+    The plan should be in the following format:
+    (action1 arg1 arg2 arg3)
+    (action2 arg1 arg2 arg3)
+    ...
+    
+    For the current domain,
+    You can always assume that at least one robot arm is available if not in the image.
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the plan.
+        Do not generate anything after the plan.
+        
+    Instruction: Create a stack of blocks: yellow over pink over green over red over purple over blue.
+
+    Please generate the plan for the robot. Do not generate anything after the plan.
+    

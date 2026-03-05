@@ -1,0 +1,18 @@
+(define (problem find_tomato_put_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        tomato1 - object
+        table1 - receptacle
+        fridge1 - fridge
+    )
+    (:init
+        (openable fridge1)
+        (not (opened fridge1))
+        (inReceptacle tomato1 fridge1)
+        (atLocation agent1 table1)
+    )
+    (:goal (and
+        (inReceptacle tomato1 table1)
+    ))
+)

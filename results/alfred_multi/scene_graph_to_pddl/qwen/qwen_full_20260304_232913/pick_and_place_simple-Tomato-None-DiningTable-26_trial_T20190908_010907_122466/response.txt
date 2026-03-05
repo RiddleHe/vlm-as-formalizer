@@ -1,0 +1,54 @@
+Scene graph:
+agent: robot
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife
+receptacle (object): table
+object: tomato, bread, cup, spatula
+openable (receptacle) true if a receptacle is openable: (openable fridge), (openable microwave), (openable sink)
+opened (receptacle) true if a receptacle is opened: (opened fridge)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle tomato fridge), (inReceptacle bread table), (inReceptacle cup table), (inReceptacle spatula table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot table)
+
+PDDL problem: ```pddl
+(define (problem find_tomato_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        fridge - fridge
+        microwave - microwave
+        sink - sink
+        table - receptacle
+        tomato - object
+        bread - object
+        cup - object
+        spatula - object
+        knife - knife
+    )
+    (:init
+        (openable fridge)
+        (openable microwave)
+        (openable sink)
+        (opened fridge)
+        (inReceptacle tomato fridge)
+        (inReceptacle bread table)
+        (inReceptacle cup table)
+        (inReceptacle spatula table)
+        (atLocation robot table)
+    )
+    (:goal
+        (and
+            (inReceptacle tomato table)
+        )
+    )
+)
+```

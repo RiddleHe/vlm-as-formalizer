@@ -1,0 +1,8 @@
+(pick-up green_cube_block single_robot_arm)
+(stack green_cube_block red_cube_block single_robot_arm)
+(pick-up yellow_cube_block single_robot_arm)
+(stack yellow_cube_block orange_cube_block single_robot_arm)
+(pick-up blue_cube_block single_robot_arm)
+(stack blue_cube_block yellow_cube_block single_robot_arm)
+(pick-up purple_cube_block single_robot_arm)
+(stack purple_cube_block blue_cube_block single_robot_arm)

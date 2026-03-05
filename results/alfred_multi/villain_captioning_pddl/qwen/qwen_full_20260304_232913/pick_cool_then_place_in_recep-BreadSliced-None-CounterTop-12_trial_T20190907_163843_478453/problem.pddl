@@ -1,0 +1,46 @@
+(define (problem cut_bread_fridge_task)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        bread - object
+        apple - object
+        knife - knife
+        fridge - fridge
+        pan - receptacle
+        toaster - object
+        stove - object
+    )
+    (:init
+        (openable fridge)
+        (not (opened fridge))
+        (not (holdsAny agent1))
+        (not (isSliced bread))
+        (not (isCool bread))
+        (not (isHot bread))
+        (not (isClean bread))
+        (not (isOn toaster))
+        (atLocation agent1 stove) ; assuming agent starts near stove as a default
+        (atLocation agent1 pan)
+        (atLocation agent1 bread)
+        (atLocation agent1 apple)
+        (atLocation agent1 knife)
+        (atLocation agent1 toaster)
+        (atLocation agent1 fridge)
+        (inReceptacle pan stove) ; pan is on stove
+        (not (inReceptacle bread fridge))
+        (not (inReceptacle bread pan))
+        (not (holds agent1 bread))
+        (not (holds agent1 knife))
+        (not (holds agent1 apple))
+    )
+    (:goal
+        (and
+            (isSliced bread)
+            (inReceptacle bread fridge)
+            (not (inReceptacle bread fridge)) ; removed from fridge
+            (atLocation agent1 bread)
+            (atLocation agent1 apple)
+            (not (holdsAny agent1))
+        )
+    )
+)

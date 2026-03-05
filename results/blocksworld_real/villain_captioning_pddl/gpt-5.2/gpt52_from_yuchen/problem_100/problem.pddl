@@ -1,0 +1,27 @@
+(define (problem blocksworld-stacks-2)
+  (:domain blocksworld)
+  (:objects
+    red yellow blue green orange purple - block
+    robot1 - robot
+  )
+  (:init
+    ;; all blocks are on the table and clear
+    (ontable red)    (clear red)
+    (ontable yellow) (clear yellow)
+    (ontable blue)   (clear blue)
+    (ontable green)  (clear green)
+    (ontable orange) (clear orange)
+    (ontable purple) (clear purple)
+
+    ;; robot is available and not holding anything
+    (handempty robot1)
+  )
+  (:goal
+    (and
+      (on red yellow)
+      (on yellow blue)
+      (on green orange)
+      (on orange purple)
+    )
+  )
+)

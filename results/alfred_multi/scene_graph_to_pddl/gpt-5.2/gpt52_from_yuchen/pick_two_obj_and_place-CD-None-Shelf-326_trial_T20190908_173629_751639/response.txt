@@ -1,0 +1,63 @@
+Scene graph:
+agent: none visible
+microwave (receptacle): none visible
+fridge (receptacle): none visible
+sink (receptacle): none visible
+knife (object): none visible
+receptacle (object): 
+- bottom_right_open_shelf_cubby_of_desk
+object:
+- silver_laptop_on_right_desk_surface
+- blue_textbook_on_left_desk_surface
+- iridescent_cd_disk_near_left_of_laptop_on_desk
+- iridescent_cd_disk_on_far_right_desk_surface
+- black_office_chair_with_wheels
+- desk_lamp_base_left_side (partially visible)
+
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle silver_laptop_on_right_desk_surface bottom_right_open_shelf_cubby_of_desk)
+
+holds (agent, object) object ?o is held by agent ?a: none
+
+atLocation (agent, object) :
+none
+
+PDDL problem: (define (problem put_two_disks_to_bottom_right_shelf)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    bottom_right_open_shelf_cubby_of_desk - receptacle
+
+    iridescent_cd_disk_near_left_of_laptop_on_desk - object
+    iridescent_cd_disk_on_far_right_desk_surface - object
+    silver_laptop_on_right_desk_surface - object
+    blue_textbook_on_left_desk_surface - object
+    black_office_chair_with_wheels - object
+    desk_lamp_base_left_side - object
+  )
+
+  (:init
+    ;; Robot starts with no location and holds nothing (no atLocation or holds/holdsAny facts).
+
+    ;; Scene graph stated containment
+    (inReceptacle silver_laptop_on_right_desk_surface bottom_right_open_shelf_cubby_of_desk)
+  )
+
+  (:goal
+    (and
+      (inReceptacle iridescent_cd_disk_near_left_of_laptop_on_desk bottom_right_open_shelf_cubby_of_desk)
+      (inReceptacle iridescent_cd_disk_on_far_right_desk_surface bottom_right_open_shelf_cubby_of_desk)
+    )
+  )
+)

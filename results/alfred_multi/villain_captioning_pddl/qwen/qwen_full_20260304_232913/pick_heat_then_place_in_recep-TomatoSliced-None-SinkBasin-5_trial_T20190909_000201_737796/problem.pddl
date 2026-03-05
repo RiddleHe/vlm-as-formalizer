@@ -1,0 +1,39 @@
+(define (problem heat_slice_tomato_sink)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        sink1 - sink
+        fridge1 - fridge
+        knife1 - knife
+        tomato1 - object
+        glass1 - object
+        egg1 - object
+        lettuce1 - object
+        spoon1 - object
+    )
+    (:init
+        (openable microwave1)
+        (openable fridge1)
+        (not (opened microwave1))
+        (not (opened fridge1))
+        (inReceptacle tomato1 sink1)
+        (inReceptacle glass1 sink1)
+        (inReceptacle egg1 sink1)
+        (inReceptacle lettuce1 sink1)
+        (inReceptacle spoon1 sink1)
+        (atLocation agent1 microwave1) ; assuming agent starts near microwave for planning, though not specified; alternatively, could start nowhere and need to go to sink first
+        (not (holdsAny agent1))
+        (not (isSliced tomato1))
+        (not (isHot tomato1))
+        (not (isCool tomato1))
+        (not (isClean tomato1))
+        (not (isOn microwave1))
+        (not (isToggled microwave1))
+    )
+    (:goal (and
+        (inReceptacle tomato1 sink1)
+        (isHot tomato1)
+        (isSliced tomato1)
+    ))
+)

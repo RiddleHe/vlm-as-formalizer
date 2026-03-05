@@ -1,0 +1,8 @@
+(GotoLocation robot sink)
+(PickupObject robot cup)
+(GotoLocation robot microwave)
+(HeatObject robot microwave cup)
+(GotoLocation robot cabinet)
+(OpenObject robot cabinet)
+(PutObjectInReceptacle robot cup cabinet)
+(CloseObject robot cabinet)

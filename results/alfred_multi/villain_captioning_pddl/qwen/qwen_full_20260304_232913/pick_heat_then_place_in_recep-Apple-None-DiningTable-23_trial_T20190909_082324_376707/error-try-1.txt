@@ -1,0 +1,7 @@
+Predicate argument has wrong type:
+  atLocation sponge table: sponge is not a agent
+  atLocation sink sink: sink is not a agent
+  atLocation apple table: apple is not a agent
+  atLocation microwave microwave: microwave is not a agent
+  atLocation knife table: knife is not a agent
+

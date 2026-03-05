@@ -1,0 +1,46 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): (none visible)
+fridge (receptacle): tall_black_double_door_fridge_bottom_view
+sink (receptacle): left_stainless_sink_with_faucet, right_stainless_sink_with_faucet
+knife (object): long_metal_knife_on_counter_left_of_sinks
+receptacle (object): black_countertop_toaster_oven_left_of_sinks, tall_black_double_door_fridge_bottom_view, left_stainless_sink_with_faucet, right_stainless_sink_with_faucet
+object: robot_agent, long_metal_knife_on_counter_left_of_sinks
+
+openable (receptacle) true if a receptacle is openable: (openable tall_black_double_door_fridge_bottom_view)
+opened (receptacle) true if a receptacle is opened: (none)
+holdsAny (agent) agent ?a holds an object: (none)
+isClean (object) true if the object has been clean in sink: (none)
+isHot (object) true if the object has been heated up: (none)
+isCool (object) true if the object has been cooled: (none)
+isOn (object) true if the object is on: (none)
+isToggled (object) true if the object has been toggled: (none)
+isSliced (object) true if the object is sliced: (none)
+inReceptacle (object, object) object ?o is in receptacle ?r: (none)
+holds (agent, object) object ?o is held by agent ?a: (none)
+atLocation (agent, object) : (none)
+
+PDDL problem: (define (problem put_task_cold_bowl_in_cabinet_above_fridge)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+    tall_black_double_door_fridge_bottom_view - fridge
+    left_stainless_sink_with_faucet - sink
+    right_stainless_sink_with_faucet - sink
+    black_countertop_toaster_oven_left_of_sinks - receptacle
+    long_metal_knife_on_counter_left_of_sinks - knife
+  )
+
+  (:init
+    (openable tall_black_double_door_fridge_bottom_view)
+  )
+
+  (:goal
+    (and
+      ;; Instruction requires a cold bowl in a cabinet above a fridge,
+      ;; but no bowl or cabinet object exists in the provided scene graph.
+      ;; Therefore, the goal cannot be expressed with available objects/predicates.
+    )
+  )
+)

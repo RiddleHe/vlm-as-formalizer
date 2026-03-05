@@ -1,0 +1,8 @@
+(gotolocation robot toilet_paper_roll_empty)
+(pickupobject robot toilet_paper_roll_empty)
+(gotolocation robot toilet)
+(putobjectinreceptacle robot toilet_paper_roll_empty toilet)
+(gotolocation robot trash_can)
+(pickupobject robot toilet_paper_roll_full)
+(gotolocation robot toilet)
+(putobjectinreceptacle robot toilet_paper_roll_full toilet)

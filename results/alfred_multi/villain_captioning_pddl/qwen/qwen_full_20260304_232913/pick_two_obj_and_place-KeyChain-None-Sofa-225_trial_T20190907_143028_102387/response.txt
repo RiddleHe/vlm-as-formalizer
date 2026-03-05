@@ -1,0 +1,29 @@
+```pddl
+(define (problem put_keys_on_couch)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        couch - receptacle
+        side_table - receptacle
+        silver_keys - object
+        black_keys - object
+        box - object
+        remote - object
+        device - object
+        chair - object
+    )
+    (:init
+        (atLocation robot side_table)
+        (inReceptacle silver_keys side_table)
+        (inReceptacle black_keys side_table)
+        (inReceptacle box couch)
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (inReceptacle silver_keys couch)
+            (inReceptacle black_keys couch)
+        )
+    )
+)
+```

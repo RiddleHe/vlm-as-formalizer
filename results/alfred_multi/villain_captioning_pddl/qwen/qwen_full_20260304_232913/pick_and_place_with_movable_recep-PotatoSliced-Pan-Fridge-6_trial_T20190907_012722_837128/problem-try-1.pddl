@@ -1,0 +1,47 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        trash_can1 - receptacle
+        knife1 - knife
+        pan1 - object
+        potato1 - object
+    )
+    (:init
+        ; Receptacles and their properties
+        (openable microwave1)
+        (openable fridge1)
+        ; Objects are initially not held and not in any receptacle
+        (not (holdsAny agent1))
+        (not (holds agent1 knife1))
+        (not (holds agent1 pan1))
+        (not (holds agent1 potato1))
+        ; Initial locations: objects are on the countertop or in trash can
+        (atLocation agent1 trash_can1) ; agent starts near trash can for simplicity
+        (atLocation knife1 pan1) ; knife is on countertop near pan (assumed for task)
+        (atLocation pan1 trash_can1) ; pan is on countertop (assumed near trash can for simplicity)
+        (atLocation potato1 trash_can1) ; potato is on countertop (assumed near trash can for simplicity)
+        ; Microwave and fridge are closed
+        (not (opened microwave1))
+        (not (opened fridge1))
+        ; Potato is not cooked, not sliced
+        (not (isHot potato1))
+        (not (isSliced potato1))
+        ; Pan is empty
+        (not (inReceptacle knife1 pan1))
+        (not (inReceptacle potato1 pan1))
+        ; Trash can contains tomato (not relevant but for completeness)
+        ; (inReceptacle tomato1 trash_can1) ; tomato not in domain objects, so omitted
+    )
+    (:goal (and
+        ; Goal: pan with knife and slice of cooked potato in refrigerator
+        (inReceptacle pan1 fridge1)
+        (inReceptacle knife1 pan1)
+        (inReceptacle potato1 pan1)
+        (isSliced potato1)
+        (isHot potato1)
+        (opened fridge1) ; fridge must be opened to put pan inside
+    ))
+)

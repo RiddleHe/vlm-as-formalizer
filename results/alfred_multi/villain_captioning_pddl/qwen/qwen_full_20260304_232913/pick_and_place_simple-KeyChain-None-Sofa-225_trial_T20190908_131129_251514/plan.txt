@@ -1,0 +1,4 @@
+(gotolocation agent1 keys)
+(pickupobject agent1 keys)
+(gotolocation agent1 loveseat)
+(putobjectinreceptacle agent1 keys loveseat)

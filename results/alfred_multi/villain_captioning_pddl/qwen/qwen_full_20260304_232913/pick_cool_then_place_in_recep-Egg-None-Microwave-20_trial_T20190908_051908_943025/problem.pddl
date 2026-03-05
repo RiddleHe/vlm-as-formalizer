@@ -1,0 +1,30 @@
+(define (problem cool_egg_and_put_in_microwave)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        egg - object
+        knife - knife
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (not (opened microwave))
+        (not (opened fridge))
+        (not (holdsAny robot))
+        (not (isCool egg))
+        (not (isHot egg))
+        (not (isSliced egg))
+        (not (isClean egg))
+        (not (isOn microwave))
+        (not (isOn fridge))
+        (not (inReceptacle egg microwave))
+        (not (inReceptacle egg fridge))
+        (atLocation robot egg) ; Initial location can be set to any object; here we start at egg for efficiency, but the problem allows GotoLocation to any object.
+    )
+    (:goal (and
+        (inReceptacle egg microwave)
+        (isCool egg)
+    ))
+)

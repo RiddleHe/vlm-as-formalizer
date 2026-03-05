@@ -1,0 +1,32 @@
+```pddl
+(define (problem block_stacking)
+    (:domain blocksworld)
+    (:objects
+        red_block - block
+        orange_block - block
+        yellow_block - block
+        blue_block - block
+        green_block - block
+        purple_block - block
+        robot1 - robot
+    )
+    (:init
+        (on purple_block green_block)
+        (on green_block yellow_block)
+        (on yellow_block blue_block)
+        (on blue_block orange_block)
+        (on orange_block red_block)
+        (ontable red_block)
+        (clear purple_block)
+        (handempty robot1)
+    )
+    (:goal (and
+        (on yellow_block orange_block)
+        (on purple_block green_block)
+        (on red_block blue_block)
+        (clear yellow_block)
+        (clear purple_block)
+        (clear red_block)
+    ))
+)
+```

@@ -1,0 +1,24 @@
+(define (problem place_sponges_in_tub)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        tub - receptacle
+        black_container - receptacle
+        sponge1 sponge2 - object
+        countertop - object
+    )
+    (:init
+        (atLocation agent1 countertop) ; assuming initial position is near countertop for simplicity
+        (inReceptacle sponge1 black_container)
+        (inReceptacle sponge2 countertop)
+        (not (holdsAny agent1))
+        (not (inReceptacle sponge1 tub))
+        (not (inReceptacle sponge2 tub))
+        (not (opened black_container)) ; not openable, but we treat it as a receptacle
+        (not (opened tub)) ; tub is not openable
+    )
+    (:goal (and
+        (inReceptacle sponge1 tub)
+        (inReceptacle sponge2 tub)
+    ))
+)

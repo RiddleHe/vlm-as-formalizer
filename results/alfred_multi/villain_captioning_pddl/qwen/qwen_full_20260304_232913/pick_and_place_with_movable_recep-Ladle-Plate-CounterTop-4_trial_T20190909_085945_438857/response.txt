@@ -1,0 +1,57 @@
+```pddl
+(define (problem put_plate_with_spoon)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        sink1 - sink
+        microwave1 - microwave
+        fridge1 - fridge
+        spoon1 - object
+        knife1 - knife
+        plate1 - object
+        green_object1 - object
+    )
+    (:init
+        (openable sink1)
+        (openable microwave1)
+        (openable fridge1)
+        (not (opened sink1))
+        (not (opened microwave1))
+        (not (opened fridge1))
+        (not (holdsAny agent1))
+        (inReceptacle spoon1 sink1)
+        (inReceptacle knife1 sink1)
+        (inReceptacle green_object1 sink1)
+        (not (isClean spoon1))
+        (not (isHot spoon1))
+        (not (isCool spoon1))
+        (not (isSliced spoon1))
+        (not (isToggled spoon1))
+        (not (isClean knife1))
+        (not (isHot knife1))
+        (not (isCool knife1))
+        (not (isSliced knife1))
+        (not (isToggled knife1))
+        (not (isClean plate1))
+        (not (isHot plate1))
+        (not (isCool plate1))
+        (not (isSliced plate1))
+        (not (isToggled plate1))
+        (not (atLocation agent1 sink1))
+        (not (atLocation agent1 microwave1))
+        (not (atLocation agent1 fridge1))
+        (not (atLocation agent1 spoon1))
+        (not (atLocation agent1 knife1))
+        (not (atLocation agent1 plate1))
+        (not (atLocation agent1 green_object1))
+    )
+    (:goal (and
+        (atLocation agent1 plate1)
+        (holds agent1 spoon1)
+        (inReceptacle plate1 sink1)  ; Note: This is a workaround since counter is not a receptacle; ideally, we'd place on counter, but domain restricts to receptacles.
+        ; The instruction says "on the counter", but domain doesn't support non-receptacle surfaces. 
+        ; We assume the plate is placed in the sink (as a receptacle) for the purpose of this plan, though it's not ideal.
+        ; Alternatively, if we had a counter receptacle, we would use it. Since we don't, we use sink as a placeholder.
+    ))
+)
+```

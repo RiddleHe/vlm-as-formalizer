@@ -1,0 +1,66 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): yellow_knife_on_black_table, knife_on_small_black_table
+receptacle (object): black_round_table, small_black_table, white_table, gray_bowl_on_black_table, gray_bowl_on_small_black_table, salt_shaker_on_black_table, salt_shaker_on_small_black_table, brown_bottle_on_small_black_table, silver_mug_on_small_black_table
+object: robot, black_round_table, small_black_table, white_table, gray_bowl_on_black_table, gray_bowl_on_small_black_table, salt_shaker_on_black_table, salt_shaker_on_small_black_table, brown_bottle_on_small_black_table, silver_mug_on_small_black_table, red_tomato_on_white_table, spoon_on_black_table, spoon_on_white_table, yellow_knife_on_black_table, knife_on_small_black_table, black_vase_on_black_table, green_book_on_small_black_table, brown_cabinet_with_green_drawer
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle gray_bowl_on_black_table black_round_table), (inReceptacle salt_shaker_on_black_table black_round_table), (inReceptacle black_vase_on_black_table black_round_table), (inReceptacle spoon_on_black_table black_round_table), (inReceptacle yellow_knife_on_black_table black_round_table), (inReceptacle gray_bowl_on_small_black_table small_black_table), (inReceptacle salt_shaker_on_small_black_table small_black_table), (inReceptacle brown_bottle_on_small_black_table small_black_table), (inReceptacle silver_mug_on_small_black_table small_black_table), (inReceptacle green_book_on_small_black_table small_black_table), (inReceptacle red_tomato_on_white_table white_table), (inReceptacle spoon_on_white_table white_table), (inReceptacle knife_on_small_black_table small_black_table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_mug_with_spoon_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        black_round_table - receptacle
+        small_black_table - receptacle
+        white_table - receptacle
+        gray_bowl_on_black_table - object
+        gray_bowl_on_small_black_table - object
+        salt_shaker_on_black_table - object
+        salt_shaker_on_small_black_table - object
+        brown_bottle_on_small_black_table - object
+        silver_mug_on_small_black_table - object
+        red_tomato_on_white_table - object
+        spoon_on_black_table - object
+        spoon_on_white_table - object
+        yellow_knife_on_black_table - knife
+        knife_on_small_black_table - knife
+        black_vase_on_black_table - object
+        green_book_on_small_black_table - object
+        brown_cabinet_with_green_drawer - object
+    )
+    (:init
+        (inReceptacle gray_bowl_on_black_table black_round_table)
+        (inReceptacle salt_shaker_on_black_table black_round_table)
+        (inReceptacle black_vase_on_black_table black_round_table)
+        (inReceptacle spoon_on_black_table black_round_table)
+        (inReceptacle yellow_knife_on_black_table black_round_table)
+        (inReceptacle gray_bowl_on_small_black_table small_black_table)
+        (inReceptacle salt_shaker_on_small_black_table small_black_table)
+        (inReceptacle brown_bottle_on_small_black_table small_black_table)
+        (inReceptacle silver_mug_on_small_black_table small_black_table)
+        (inReceptacle green_book_on_small_black_table small_black_table)
+        (inReceptacle red_tomato_on_white_table white_table)
+        (inReceptacle spoon_on_white_table white_table)
+        (inReceptacle knife_on_small_black_table small_black_table)
+        (not (holdsAny robot))
+    )
+    (:goal (and
+        (inReceptacle silver_mug_on_small_black_table black_round_table)
+        (inReceptacle spoon_on_black_table silver_mug_on_small_black_table)
+    ))
+)
+```

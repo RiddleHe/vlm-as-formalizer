@@ -1,0 +1,41 @@
+(define (problem look-at-cushion-by-lamp)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    microwave - microwave
+    fridge - fridge
+    sink - sink
+
+    wooden_bedside_table_with_drawers - receptacle
+
+    blue_bed_with_blue_sheets - object
+    pink_round_cushion_on_bed_left - object
+    gray_open_laptop_on_bed - object
+    book_shih_tzu_shoos_on_bed - object
+    brown_teddy_bear_on_bed_right - object
+    red_smartphone_on_blue_blanket - object
+    green_shaded_table_lamp_on_bedside_table - object
+    black_mug_on_bedside_table - object
+    black_pen_on_bedside_table - object
+  )
+
+  (:init
+    ;; robot initially not at any object's location
+    (not (holdsAny robot_agent))
+
+    ;; objects contained in the bedside table receptacle
+    (inReceptacle green_shaded_table_lamp_on_bedside_table wooden_bedside_table_with_drawers)
+    (inReceptacle black_mug_on_bedside_table wooden_bedside_table_with_drawers)
+    (inReceptacle black_pen_on_bedside_table wooden_bedside_table_with_drawers)
+  )
+
+  (:goal
+    (and
+      ;; be at the cushion location to "look at a cushion"
+      (atLocation robot_agent pink_round_cushion_on_bed_left)
+      ;; have the lamp turned on ("by the light of a lamp")
+      (isOn green_shaded_table_lamp_on_bedside_table)
+    )
+  )
+)

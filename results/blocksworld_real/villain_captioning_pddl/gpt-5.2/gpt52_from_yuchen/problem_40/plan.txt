@@ -1,0 +1,8 @@
+(pick-up block_g robot_1)
+(stack block_g block_r robot_1)
+(pick-up block_y robot_1)
+(stack block_y block_o robot_1)
+(pick-up block_b robot_1)
+(stack block_b block_y robot_1)
+(pick-up block_p robot_1)
+(stack block_p block_b robot_1)

@@ -1,0 +1,66 @@
+Scene graph:
+agent: agent
+microwave (receptacle): stainless steel microwave on countertop
+fridge (receptacle): black refrigerator with smiley magnet
+sink (receptacle): none visible
+knife (object): silver knife on countertop near stove
+receptacle (object): gray trash can, black cup, stainless steel microwave, black refrigerator
+object: silver knife, red tomato in trash can, black cup, fork, spoon, green cutting board, silver pan, loaf of bread, green lettuce, brown potato, stainless steel microwave, black refrigerator, gray trash can
+openable (receptacle) true if a receptacle is openable: (openable stainless steel microwave), (openable black refrigerator)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn stainless steel microwave)
+isToggled (object) true if the object has been toggled: (isToggled stainless steel microwave)
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle red tomato in trash can gray trash can), (inReceptacle black cup countertop), (inReceptacle fork countertop), (inReceptacle spoon countertop), (inReceptacle green cutting board countertop), (inReceptacle silver pan countertop), (inReceptacle loaf of bread countertop), (inReceptacle green lettuce countertop), (inReceptacle brown potato countertop)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        pan - object
+        potato - object
+        trash_can - receptacle
+        cup - object
+        fork - object
+        spoon - object
+        cutting_board - object
+        bread - object
+        lettuce - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (isOn microwave)
+        (isToggled microwave)
+        (inReceptacle potato trash_can)
+        (inReceptacle cup countertop)
+        (inReceptacle fork countertop)
+        (inReceptacle spoon countertop)
+        (inReceptacle cutting_board countertop)
+        (inReceptacle pan countertop)
+        (inReceptacle bread countertop)
+        (inReceptacle lettuce countertop)
+        (atLocation agent countertop) ; assuming agent starts at countertop for initial interaction
+    )
+    (:goal
+        (and
+            (inReceptacle pan fridge)
+            (inReceptacle knife pan)
+            (isSliced potato)
+            (isHot potato)
+            (inReceptacle potato pan)
+        )
+    )
+)
+```

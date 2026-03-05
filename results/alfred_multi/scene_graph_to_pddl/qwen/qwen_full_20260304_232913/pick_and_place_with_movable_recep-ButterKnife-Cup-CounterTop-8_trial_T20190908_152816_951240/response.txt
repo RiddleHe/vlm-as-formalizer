@@ -1,0 +1,50 @@
+Scene graph:
+agent: agent1
+microwave (receptacle): black_microwave
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): silver_knife
+receptacle (object): wooden_cabinet
+object: loaf_of_bread, silver_knife, purple_soap_dispenser, egg, wooden_cabinet, black_microwave
+openable (receptacle) true if a receptacle is openable: (openable black_microwave), (openable wooden_cabinet)
+opened (receptacle) true if a receptacle is opened: (opened black_microwave)
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn black_microwave)
+isToggled (object) true if the object has been toggled: (isToggled black_microwave)
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle silver_knife black_microwave), (inReceptacle loaf_of_bread black_microwave), (inReceptacle purple_soap_dispenser black_microwave), (inReceptacle egg black_microwave)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object): none
+
+PDDL problem: ```pddl
+(define (problem put_glass_and_knife_on_shelf)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        black_microwave - microwave
+        wooden_cabinet - receptacle
+        silver_knife - knife
+        loaf_of_bread - object
+        purple_soap_dispenser - object
+        egg - object
+    )
+    (:init
+        (openable black_microwave)
+        (openable wooden_cabinet)
+        (opened black_microwave)
+        (isOn black_microwave)
+        (isToggled black_microwave)
+        (inReceptacle silver_knife black_microwave)
+        (inReceptacle loaf_of_bread black_microwave)
+        (inReceptacle purple_soap_dispenser black_microwave)
+        (inReceptacle egg black_microwave)
+    )
+    (:goal (and
+        (inReceptacle silver_knife wooden_cabinet)
+        (inReceptacle purple_soap_dispenser wooden_cabinet)
+    ))
+)
+```

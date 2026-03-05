@@ -1,0 +1,8 @@
+(gotolocation robot wooden_dresser)
+(pickupobject robot blue_keys)
+(gotolocation robot white_table)
+(putobjectinreceptacle robot blue_keys white_table)
+(gotolocation robot wooden_dresser)
+(pickupobject robot other_keys)
+(gotolocation robot white_table)
+(putobjectinreceptacle robot other_keys white_table)

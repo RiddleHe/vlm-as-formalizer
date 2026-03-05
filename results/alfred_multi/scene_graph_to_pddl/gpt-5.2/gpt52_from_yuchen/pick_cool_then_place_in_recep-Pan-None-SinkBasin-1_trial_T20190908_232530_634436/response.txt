@@ -1,0 +1,56 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): none
+fridge (receptacle): white_curved_front_fridge_right_edge
+sink (receptacle): stainless_single_basin_sink_under_window
+knife (object): white_handle_knife_on_left_counter
+receptacle (object): white_curved_front_fridge_right_edge, stainless_single_basin_sink_under_window
+object: white_curved_front_fridge_right_edge, stainless_single_basin_sink_under_window, white_handle_knife_on_left_counter, round_ridged_pan_on_counter_center, clear_glass_bottle_on_counter_back, red_tomato_on_counter_back_right_of_bottle, brown_kiwi_on_counter_near_tomato, white_paper_towel_roll_on_counter_right, red_apple_front_left_on_counter, red_apple_front_center_on_counter, red_apple_front_right_on_counter, small_blue_card_on_left_counter
+openable (receptacle) true if a receptacle is openable: (openable white_curved_front_fridge_right_edge)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem chill_pan_put_in_sink)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+
+    white_curved_front_fridge_right_edge - fridge
+    stainless_single_basin_sink_under_window - sink
+
+    round_ridged_pan_on_counter_center - object
+    white_handle_knife_on_left_counter - knife
+    clear_glass_bottle_on_counter_back - object
+    red_tomato_on_counter_back_right_of_bottle - object
+    brown_kiwi_on_counter_near_tomato - object
+    white_paper_towel_roll_on_counter_right - object
+    red_apple_front_left_on_counter - object
+    red_apple_front_center_on_counter - object
+    red_apple_front_right_on_counter - object
+    small_blue_card_on_left_counter - object
+  )
+
+  (:init
+    ;; receptacle properties from scene graph
+    (openable white_curved_front_fridge_right_edge)
+
+    ;; robot initially holds nothing and is not at any location (no atLocation / holdsAny facts)
+  )
+
+  (:goal
+    (and
+      (isCool round_ridged_pan_on_counter_center)
+      (inReceptacle round_ridged_pan_on_counter_center stainless_single_basin_sink_under_window)
+    )
+  )
+)

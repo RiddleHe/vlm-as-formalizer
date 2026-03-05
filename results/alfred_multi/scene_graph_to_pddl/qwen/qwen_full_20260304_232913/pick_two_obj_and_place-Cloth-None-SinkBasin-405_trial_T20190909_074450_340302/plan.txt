@@ -1,0 +1,8 @@
+(gotolocation agent1 pink_sponge_in_bathtub)
+(pickupobject agent1 pink_sponge_in_bathtub)
+(gotolocation agent1 beige_oval_sink)
+(putobjectinreceptacle agent1 pink_sponge_in_bathtub beige_oval_sink)
+(gotolocation agent1 bathtub)
+(pickupobject agent1 red_rag)
+(gotolocation agent1 beige_oval_sink)
+(putobjectinreceptacle agent1 red_rag beige_oval_sink)

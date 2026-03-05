@@ -1,0 +1,6 @@
+(gotolocation robot_agent yellow_apple_on_left_table)
+(pickupobject robot_agent yellow_apple_on_left_table)
+(gotolocation robot_agent double_basin_metal_sink)
+(cleanobject robot_agent double_basin_metal_sink yellow_apple_on_left_table)
+(gotolocation robot_agent black_fridge_large_left)
+(putobjectinreceptacle robot_agent yellow_apple_on_left_table black_fridge_large_left)

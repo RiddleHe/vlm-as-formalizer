@@ -1,0 +1,8 @@
+(gotolocation robot spatula_on_counter_left)
+(pickupobject robot spatula_on_counter_left)
+(gotolocation robot wooden_counter_drawer)
+(putobjectinreceptacle robot spatula_on_counter_left wooden_counter_drawer)
+(gotolocation robot spatula_on_counter_right)
+(pickupobject robot spatula_on_counter_right)
+(gotolocation robot wooden_counter_drawer)
+(putobjectinreceptacle robot spatula_on_counter_right wooden_counter_drawer)

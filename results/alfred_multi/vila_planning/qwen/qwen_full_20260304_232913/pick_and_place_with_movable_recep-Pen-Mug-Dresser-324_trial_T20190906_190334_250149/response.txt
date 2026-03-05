@@ -1,0 +1,4 @@
+(GotoLocation robot dresser)
+(PickupObject robot pen)
+(GotoLocation robot cup)
+(PutObjectInReceptacle robot pen cup)

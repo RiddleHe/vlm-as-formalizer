@@ -1,0 +1,56 @@
+Scene graph:
+agent: agent
+microwave (receptacle): red microwave
+fridge (receptacle): black fridge
+sink (receptacle): sink
+knife (object): knife on counter
+receptacle (object): black bowl, blue plate, green plate, black cup, red cup, brown bread, green lettuce, apple piece
+object: knife, black bowl, blue plate, green plate, black cup, red cup, brown bread, green lettuce, apple piece
+openable (receptacle) true if a receptacle is openable: (openable red microwave), (openable black fridge)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle black cup red microwave), (inReceptacle red cup red microwave), (inReceptacle apple piece blue plate)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        agent
+        red_microwave - microwave
+        black_fridge - fridge
+        sink - sink
+        knife - knife
+        black_bowl - receptacle
+        blue_plate - receptacle
+        green_plate - receptacle
+        black_cup - receptacle
+        red_cup - receptacle
+        brown_bread - object
+        green_lettuce - object
+        apple_piece - object
+    )
+    (:init
+        (openable red_microwave)
+        (openable black_fridge)
+        (inReceptacle black_cup red_microwave)
+        (inReceptacle red_cup red_microwave)
+        (inReceptacle apple_piece blue_plate)
+        (atLocation agent knife) ; Assuming agent starts near knife as it's on counter
+    )
+    (:goal
+        (and
+            (inReceptacle blue_plate black_fridge)
+            (inReceptacle knife black_fridge)
+            (inReceptacle apple_piece black_fridge)
+        )
+    )
+)
+```

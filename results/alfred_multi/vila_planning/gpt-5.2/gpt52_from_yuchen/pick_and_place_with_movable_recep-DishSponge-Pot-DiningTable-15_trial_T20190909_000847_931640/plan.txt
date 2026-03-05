@@ -1,0 +1,7 @@
+(GotoLocation agent1 sponge)
+(PickupObject agent1 sponge)
+(GotoLocation agent1 pot)
+(PickupObject agent1 pot)
+(GotoLocation agent1 table)
+(PutObjectInReceptacle agent1 sponge table)
+(PutObjectInReceptacle agent1 pot table)

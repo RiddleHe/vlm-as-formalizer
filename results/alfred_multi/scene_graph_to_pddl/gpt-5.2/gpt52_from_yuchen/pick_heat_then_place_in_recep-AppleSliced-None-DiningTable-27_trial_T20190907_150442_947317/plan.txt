@@ -1,0 +1,4 @@
+(gotolocation robot apple_yellow_mid_right)
+(pickupobject robot apple_yellow_mid_right)
+(gotolocation robot microwave_red_countertop_right)
+(heatobject robot microwave_red_countertop_right apple_yellow_mid_right)

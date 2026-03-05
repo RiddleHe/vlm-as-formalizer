@@ -1,0 +1,5 @@
+(gotolocation robot left_square_bathroom_sink_basin)
+(pickupobject robot purple_cleaning_rag_between_sinks)
+(cleanobject robot left_square_bathroom_sink_basin purple_cleaning_rag_between_sinks)
+(gotolocation robot white_toilet_tank_lid_surface)
+(putobjectinreceptacle robot purple_cleaning_rag_between_sinks white_toilet_tank_lid_surface)

@@ -1,0 +1,8 @@
+(gotolocation robot wooden_dresser_top)
+(pickupobject robot blue_keys_set_left_on_dresser)
+(gotolocation robot white_table_with_sun_pattern)
+(putobjectinreceptacle robot blue_keys_set_left_on_dresser white_table_with_sun_pattern)
+(gotolocation robot wooden_dresser_top)
+(pickupobject robot blue_keys_set_right_on_dresser)
+(gotolocation robot white_table_with_sun_pattern)
+(putobjectinreceptacle robot blue_keys_set_right_on_dresser white_table_with_sun_pattern)

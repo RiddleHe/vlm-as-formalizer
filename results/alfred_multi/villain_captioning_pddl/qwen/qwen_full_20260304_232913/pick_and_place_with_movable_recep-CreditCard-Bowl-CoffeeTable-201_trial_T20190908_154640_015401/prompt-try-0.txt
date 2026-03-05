@@ -1,0 +1,254 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Putting a bowl with a credit card in it on the glass table
+    
+
+SCENE CAPTION:
+Scene Description:
+
+The scene contains a dining area with a wooden dining table and a glass coffee table, both situated on a beige carpet. The primary objects of interest for the task are a bowl, a credit card, and the glass table.
+
+1. Objects and their types:
+   - Bowl: A gray, round bowl is present. It is classified as an "object" in the domain (not a receptacle, as it is not listed as such in the domain types, though in reality it can hold items; for this domain, it is treated as a simple object unless specified otherwise).
+   - Credit Card: A small, red rectangular object, visually identifiable as a credit card, is located on the lower shelf of the glass coffee table. It is classified as an "object".
+   - Glass Table: A two-tiered glass coffee table with a black metal frame. It is classified as a "receptacle" because it can hold objects (as evidenced by items on its shelves). The top shelf holds a tissue box, a small black tray with two round items, and a white bowl. The bottom shelf holds the red credit card and a white plate.
+   - Dining Table: A wooden table with a brown surface and orange legs. It is not classified as a receptacle in the domain file, so it is treated as an "object".
+   - Chairs: Two dark blue upholstered chairs with wooden legs are positioned around the dining table. They are not relevant to the domain types.
+   - Statue: A black figurine of a person on a black base is on the dining table. It is an "object".
+   - Remote Control: A silver remote control is on the dining table. It is an "object".
+   - Vases: Two yellow vases are on the dining table. They are "objects".
+   - Book: A large book is on the dining table. It is an "object".
+
+2. Quantities:
+   - 1 bowl (gray, on dining table in first image; white bowl on glass table in second/third images — note: two different bowls may be present, but for task, we focus on the gray one to be moved)
+   - 1 credit card (red, on lower shelf of glass table)
+   - 1 glass table (receptacle)
+   - 1 dining table (object)
+   - 2 chairs (irrelevant to domain)
+   - 1 statue (object)
+   - 1 remote (object)
+   - 2 vases (objects)
+   - 1 book (object)
+
+3. Spatial relationships:
+   - The gray bowl is initially on the dining table (as seen in image 1 and 4).
+   - The red credit card is on the lower shelf of the glass coffee table (images 2 and 3).
+   - The glass coffee table is positioned near a dark sofa (right side of image 2) and is separate from the dining table.
+   - The dining table has multiple objects on it: statue, remote, vases, book, and the gray bowl.
+   - The glass table holds multiple items: tissue box, black tray with round items, white bowl (top shelf), and credit card, white plate (bottom shelf).
+
+4. Current state of objects relevant to the task:
+   - The gray bowl is not being held by any agent and is not in any receptacle (it is on the dining table, which is not a receptacle in this domain).
+   - The credit card is in the glass table (specifically on its lower shelf), so (inReceptacle credit_card glass_table) is true.
+   - The glass table is a receptacle and is not openable (no indication of doors or lids), so (openable glass_table) is false.
+   - No agent is present, so (holdsAny agent) is false, and (atLocation agent ?) is false for all objects initially.
+
+5. Visual properties for distinction:
+   - The gray bowl is matte, round, and medium-sized, located on the dining table.
+   - The credit card is bright red, rectangular, and small, resting on the lower glass shelf of the coffee table.
+   - The glass table has a transparent top and bottom shelf with black metal framing.
+   - The dining table is solid wood with a brown finish and orange legs.
+   - The white bowl on the glass table is distinct from the gray bowl on the dining table by color and location.
+
+Note: The task requires putting the bowl (with the credit card in it) on the glass table. This implies the robot must first pick up the credit card from the glass table, then pick up the gray bowl from the dining table, put the credit card into the bowl (though the domain does not have a predicate for “in” for non-receptacle objects, so this may need to be handled by placing them together or treating the bowl as a temporary receptacle), and then place the bowl (with card) back on the glass table. However, since the domain does not define the bowl as a receptacle, the plan may need to place the card and bowl adjacently on the glass table or use a different approach. For the scene description, we note the current states and locations as observed.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

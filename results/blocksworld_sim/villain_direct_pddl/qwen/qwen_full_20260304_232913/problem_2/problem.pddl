@@ -1,0 +1,26 @@
+(define (problem blockstacking)
+    (:domain blocksworld)
+    (:objects
+        pink_block - block
+        purple_block - block
+        blue_block - block
+        red_block - block
+        robot1 - robot
+    )
+    (:init
+        (on pink_block purple_block)
+        (on purple_block blue_block)
+        (ontable blue_block)
+        (clear pink_block)
+        (ontable red_block)
+        (clear red_block)
+        (handempty robot1)
+    )
+    (:goal (and
+        (on red_block blue_block)
+        (on blue_block purple_block)
+        (on purple_block pink_block)
+        (ontable pink_block)
+        (clear red_block)
+    ))
+)

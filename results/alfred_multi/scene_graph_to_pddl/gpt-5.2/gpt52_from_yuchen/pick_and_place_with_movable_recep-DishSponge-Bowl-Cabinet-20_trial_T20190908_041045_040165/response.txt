@@ -1,0 +1,43 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): right_counter_sink
+knife (object): silver_counter_knife_right_of_toaster
+receptacle (object): right_counter_sink, white_dishwasher_front, silver_two_slot_toaster_on_counter, black_coffee_machine_left, white_mug_on_coffee_machine_drip_tray, green_yellow_sponge_on_right_counter, white_mug_on_left_counter, stovetop_pot_on_front_left_burner
+object: silver_counter_knife_right_of_toaster, brown_potato_on_counter_right_of_toaster
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: (define (problem put_task_bowl_in_cupboard_left_of_dishwasher)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+    white_dishwasher_front - receptacle
+  )
+  (:init
+    ;; Robot starts not at any object's location (no atLocation facts)
+
+    ;; No receptacles in the provided scene graph are marked openable/opened
+
+    ;; No object containment relations are provided in the scene graph
+  )
+  (:goal
+    (and
+      ;; The instruction mentions a "bowl" and a "cupboard to the left of the dishwasher",
+      ;; but neither a bowl nor a cupboard object exists in the provided scene graph.
+      ;; Therefore, a valid goal cannot be expressed using only existing objects.
+      (inReceptacle white_dishwasher_front white_dishwasher_front)
+    )
+  )
+)

@@ -1,0 +1,6 @@
+(gotolocation robot_agent red_apple_on_counter)
+(pickupobject robot_agent red_apple_on_counter)
+(gotolocation robot_agent black_double_door_fridge_front)
+(coolobject robot_agent black_double_door_fridge_front red_apple_on_counter)
+(gotolocation robot_agent white_plastic_trash_bin_floor_left)
+(putobjectinreceptacle robot_agent red_apple_on_counter white_plastic_trash_bin_floor_left)

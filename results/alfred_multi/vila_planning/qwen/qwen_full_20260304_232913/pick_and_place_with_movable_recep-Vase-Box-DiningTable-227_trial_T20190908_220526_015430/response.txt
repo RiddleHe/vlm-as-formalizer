@@ -1,0 +1,8 @@
+(GotoLocation robot box)
+(PickupObject robot box)
+(GotoLocation robot diningtable)
+(PutObjectInReceptacle robot box diningtable)
+(GotoLocation robot plate)
+(PickupObject robot plate)
+(GotoLocation robot box)
+(PutObjectInReceptacle robot plate box)

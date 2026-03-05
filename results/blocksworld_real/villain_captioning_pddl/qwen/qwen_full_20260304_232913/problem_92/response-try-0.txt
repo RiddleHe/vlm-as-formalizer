@@ -1,0 +1,34 @@
+```pddl
+(define (problem blocksworld_rearrange)
+    (:domain blocksworld)
+    (:objects
+        block-orange
+        block-red
+        block-purple
+        block-yellow
+        block-green
+        block-blue
+        robot1 - robot
+    )
+    (:init
+        (on block-orange block-red)
+        (on block-red block-purple)
+        (on block-purple block-yellow)
+        (on block-yellow block-green)
+        (on block-green block-blue)
+        (ontable block-blue)
+        (clear block-orange)
+        (handempty robot1)
+    )
+    (:goal (and
+        (on block-red block-green)
+        (on block-green block-purple)
+        (ontable block-purple)
+        (clear block-red)
+        (on block-orange block-blue)
+        (on block-blue block-yellow)
+        (ontable block-yellow)
+        (clear block-orange)
+    ))
+)
+```

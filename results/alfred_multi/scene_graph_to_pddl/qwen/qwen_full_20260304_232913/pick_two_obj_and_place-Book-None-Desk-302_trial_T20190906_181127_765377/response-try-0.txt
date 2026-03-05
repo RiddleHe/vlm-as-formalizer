@@ -1,0 +1,55 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): bed, desk
+object: agent, bed, desk, book1, book2, laptop, panda_toy, chair, tablet1, tablet2
+openable (receptacle) true if a receptacle is openable: (openable bed), (openable desk)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle book1 bed), (inReceptacle book2 bed), (inReceptacle laptop bed), (inReceptacle panda_toy bed), (inReceptacle tablet1 desk), (inReceptacle tablet2 desk)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_books_on_desk)
+    (:domain put_task)
+    (:objects
+        agent
+        bed - receptacle
+        desk - receptacle
+        book1 - object
+        book2 - object
+        laptop - object
+        panda_toy - object
+        chair - object
+        tablet1 - object
+        tablet2 - object
+    )
+    (:init
+        (openable bed)
+        (openable desk)
+        (inReceptacle book1 bed)
+        (inReceptacle book2 bed)
+        (inReceptacle laptop bed)
+        (inReceptacle panda_toy bed)
+        (inReceptacle tablet1 desk)
+        (inReceptacle tablet2 desk)
+        (not (atLocation agent bed))
+        (not (atLocation agent desk))
+        (not (holdsAny agent))
+    )
+    (:goal (and
+        (inReceptacle book1 desk)
+        (inReceptacle book2 desk)
+    ))
+)
+```

@@ -1,0 +1,4 @@
+(gotolocation robot pink_soap)
+(pickupobject robot pink_soap)
+(gotolocation robot steel_rack)
+(putobjectinreceptacle robot pink_soap steel_rack)

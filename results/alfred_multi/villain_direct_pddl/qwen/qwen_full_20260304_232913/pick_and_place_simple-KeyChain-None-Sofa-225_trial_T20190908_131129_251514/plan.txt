@@ -1,0 +1,4 @@
+(gotolocation robot keys)
+(pickupobject robot keys)
+(gotolocation robot loveseat)
+(putobjectinreceptacle robot keys loveseat)

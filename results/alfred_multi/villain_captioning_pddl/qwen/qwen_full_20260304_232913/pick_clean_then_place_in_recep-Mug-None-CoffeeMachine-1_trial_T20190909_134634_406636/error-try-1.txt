@@ -1,0 +1,4 @@
+Predicate expects wrong number of arguments:
+  inReceptacle cabinet_left: should have 2 arguments
+  inReceptacle cabinet_right: should have 2 arguments
+

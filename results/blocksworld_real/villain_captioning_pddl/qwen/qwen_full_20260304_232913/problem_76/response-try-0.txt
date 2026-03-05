@@ -1,0 +1,31 @@
+```pddl
+(define (problem blocksworld_task)
+    (:domain blocksworld)
+    (:objects
+        orange_block - block
+        blue_block - block
+        green_block - block
+        purple_block - block
+        yellow_block - block
+        robot1 - robot
+    )
+    (:init
+        (on yellow_block purple_block)
+        (on purple_block green_block)
+        (on green_block blue_block)
+        (on blue_block orange_block)
+        (ontable orange_block)
+        (clear yellow_block)
+        (handempty robot1)
+    )
+    (:goal (and
+        (on red_block purple_block) ; Note: red_block is not present in the scene; this goal cannot be achieved with given blocks.
+        (on yellow_block green_block)
+        (on green_block orange_block)
+        (on orange_block blue_block)
+        (ontable blue_block)
+        (clear yellow_block)
+        (clear red_block)
+    ))
+)
+```

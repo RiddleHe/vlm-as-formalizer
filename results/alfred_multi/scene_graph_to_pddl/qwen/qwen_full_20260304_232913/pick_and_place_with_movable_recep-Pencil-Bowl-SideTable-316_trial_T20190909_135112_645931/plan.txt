@@ -1,0 +1,4 @@
+(gotolocation robot blue_pencil)
+(pickupobject robot blue_pencil)
+(gotolocation robot nightstand)
+(putobjectinreceptacle robot blue_pencil nightstand)

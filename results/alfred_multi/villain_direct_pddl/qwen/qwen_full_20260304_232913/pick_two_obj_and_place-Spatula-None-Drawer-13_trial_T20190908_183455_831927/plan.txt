@@ -1,0 +1,7 @@
+(pickupobject agent1 spatula1)
+(gotolocation agent1 counter_drawer)
+(putobjectinreceptacle agent1 spatula1 counter_drawer)
+(gotolocation agent1 spatula2)
+(pickupobject agent1 spatula2)
+(gotolocation agent1 counter_drawer)
+(putobjectinreceptacle agent1 spatula2 counter_drawer)

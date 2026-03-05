@@ -1,0 +1,55 @@
+Scene graph:
+agent: none visible.
+microwave (receptacle): none visible.
+fridge (receptacle): none visible.
+sink (receptacle): none visible.
+knife (object): none visible.
+receptacle (object): none visible.
+object: 
+- silver_ring_with_brown_band_on_left_side_of_wooden_dresser
+- tall_table_lamp_with_beige_shade_and_red_trim
+- flat_screen_tv_on_back_of_wooden_dresser
+- beige_human_figure_statue_on_black_base_right_side_of_dresser
+- wooden_dresser_top_surface
+openable (receptacle) true if a receptacle is openable: none.
+opened (receptacle) true if a receptacle is opened: none.
+holdsAny (agent) agent ?a holds an object: none.
+isClean (object) true if the object has been clean in sink: none.
+isHot (object) true if the object has been heated up: none.
+isCool (object) true if the object has been cooled: none.
+isOn (object) true if the object is on: none.
+isToggled (object) true if the object has been toggled: none.
+isSliced (object) true if the object is sliced: none.
+inReceptacle (object, object) object ?o is in receptacle ?r: none.
+holds (agent, object) object ?o is held by agent ?a: none.
+atLocation (agent, object) : none.
+
+PDDL problem: (define (problem put_task_ring_lamp)
+  (:domain put_task)
+
+  (:objects
+    robot - agent
+    silver_ring_with_brown_band_on_left_side_of_wooden_dresser - object
+    tall_table_lamp_with_beige_shade_and_red_trim - object
+    flat_screen_tv_on_back_of_wooden_dresser - object
+    beige_human_figure_statue_on_black_base_right_side_of_dresser - object
+    wooden_dresser_top_surface - object
+  )
+
+  (:init
+    ;; robot starts not at any object's location (no atLocation facts)
+
+    ;; scene layout: objects are on/at the dresser top surface
+    (inReceptacle silver_ring_with_brown_band_on_left_side_of_wooden_dresser wooden_dresser_top_surface)
+    (inReceptacle tall_table_lamp_with_beige_shade_and_red_trim wooden_dresser_top_surface)
+    (inReceptacle flat_screen_tv_on_back_of_wooden_dresser wooden_dresser_top_surface)
+    (inReceptacle beige_human_figure_statue_on_black_base_right_side_of_dresser wooden_dresser_top_surface)
+  )
+
+  (:goal
+    (and
+      (holds robot silver_ring_with_brown_band_on_left_side_of_wooden_dresser)
+      (isOn tall_table_lamp_with_beige_shade_and_red_trim)
+    )
+  )
+)

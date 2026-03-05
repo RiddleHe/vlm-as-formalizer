@@ -1,0 +1,32 @@
+(define (problem blocksworld_task)
+    (:domain blocksworld)
+    (:objects
+        orange - block
+        red - block
+        blue - block
+        green - block
+        purple - block
+        yellow - block
+        robot - robot
+    )
+    (:init
+        (on orange red)
+        (on red blue)
+        (on blue green)
+        (on green purple)
+        (on purple yellow)
+        (ontable yellow)
+        (clear orange)
+        (handempty robot)
+    )
+    (:goal (and
+        (on green orange)
+        (ontable orange)
+        (clear green)
+        (on purple yellow)
+        (on yellow red)
+        (on red blue)
+        (ontable blue)
+        (clear purple)
+    ))
+)

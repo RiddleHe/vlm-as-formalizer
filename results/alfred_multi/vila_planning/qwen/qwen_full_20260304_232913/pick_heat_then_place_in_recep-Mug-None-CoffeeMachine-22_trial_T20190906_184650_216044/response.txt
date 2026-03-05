@@ -1,0 +1,7 @@
+(GotoLocation robot coffee_machine)
+(GotoLocation robot mug)
+(PickupObject robot mug)
+(GotoLocation robot microwave)
+(HeatObject robot microwave mug)
+(GotoLocation robot coffee_machine)
+(PutObjectInReceptacle robot mug coffee_machine)

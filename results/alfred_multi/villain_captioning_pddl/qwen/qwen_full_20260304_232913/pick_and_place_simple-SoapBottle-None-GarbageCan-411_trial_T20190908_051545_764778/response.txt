@@ -1,0 +1,27 @@
+```pddl
+(define (problem put_pump_bottle_in_garbage_can)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        pump_bottle - object
+        garbage_can - receptacle
+        toilet_tank - object
+        countertop - object
+        sink - receptacle
+    )
+    (:init
+        (atLocation agent1 toilet_tank) ; agent starts near the toilet tank where the pump bottle is
+        (inReceptacle pump_bottle toilet_tank) ; pump bottle is on the toilet tank (treated as surface/object)
+        (not (holdsAny agent1)) ; agent is not holding anything
+        (not (opened garbage_can)) ; garbage can is not openable, so opened is irrelevant, but we can omit or leave false
+        (not (isClean pump_bottle))
+        (not (isHot pump_bottle))
+        (not (isCool pump_bottle))
+        (not (isSliced pump_bottle))
+        (not (isToggled pump_bottle))
+    )
+    (:goal (and
+        (inReceptacle pump_bottle garbage_can)
+    ))
+)
+```

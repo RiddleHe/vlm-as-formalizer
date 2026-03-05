@@ -1,0 +1,4 @@
+(gotolocation robot patterned_pillow)
+(pickupobject robot patterned_pillow)
+(gotolocation robot pink_lamp)
+(toggleobject robot pink_lamp)

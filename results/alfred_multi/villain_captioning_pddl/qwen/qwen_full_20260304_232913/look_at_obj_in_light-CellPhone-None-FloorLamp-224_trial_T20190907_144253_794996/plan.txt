@@ -1,0 +1,1 @@
+(gotolocation robot cell_phone)

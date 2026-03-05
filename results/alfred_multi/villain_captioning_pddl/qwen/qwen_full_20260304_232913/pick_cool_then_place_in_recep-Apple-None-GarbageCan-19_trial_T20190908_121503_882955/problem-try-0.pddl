@@ -1,0 +1,36 @@
+(define (problem chill_apple_and_bin)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        apple - object
+        microwave - microwave
+        fridge - fridge
+        white_bin - receptacle
+        knife - knife
+    )
+    (:init
+        (atLocation agent1 apple) ; Assuming agent starts near apple for simplicity, as per instruction to go to location first
+        (not (holdsAny agent1))
+        (not (isCool apple))
+        (not (isSliced apple))
+        (not (isHot apple))
+        (not (isOn microwave))
+        (not (opened microwave))
+        (not (opened fridge))
+        (not (inReceptacle apple microwave))
+        (not (inReceptacle apple fridge))
+        (not (inReceptacle apple white_bin))
+        (openable microwave)
+        (openable fridge)
+        (not (openable white_bin)) ; white bin is not openable
+        (atLocation agent1 apple)
+        (atLocation apple microwave) ; apple is on countertop near microwave
+        (atLocation knife apple) ; knife is on countertop next to apple
+        (atLocation fridge microwave) ; fridge is to the right of microwave
+        (atLocation white_bin apple) ; white bin is on floor near countertop area
+    )
+    (:goal (and
+        (inReceptacle apple white_bin)
+        (isCool apple)
+    ))
+)

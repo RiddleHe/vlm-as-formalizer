@@ -1,0 +1,7 @@
+(GotoLocation robot grey_plate)
+(PickupObject robot grey_plate)
+(GotoLocation robot candle)
+(PickupObject robot candle)
+(PutObjectInReceptacle robot candle grey_plate)
+(GotoLocation robot coffee_table)
+(PutObjectInReceptacle robot grey_plate coffee_table)

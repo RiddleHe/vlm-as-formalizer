@@ -1,0 +1,7 @@
+(gotolocation robot microwave)
+(pickupobject robot pan)
+(gotolocation robot table)
+(putobjectinreceptacle robot pan table)
+(pickupobject robot knife)
+(gotolocation robot pan)
+(putobjectinreceptacle robot knife pan)

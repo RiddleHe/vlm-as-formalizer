@@ -1,0 +1,4 @@
+(gotolocation agent credit_card)
+(pickupobject agent credit_card)
+(gotolocation agent armchair)
+(putobjectinreceptacle agent credit_card armchair)

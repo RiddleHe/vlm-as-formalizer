@@ -1,0 +1,5 @@
+Predicate argument has wrong type:
+  atLocation knife1 table1: knife1 is not a agent
+  atLocation fridge1 table1: fridge1 is not a agent
+  atLocation tomato1 table1: tomato1 is not a agent
+

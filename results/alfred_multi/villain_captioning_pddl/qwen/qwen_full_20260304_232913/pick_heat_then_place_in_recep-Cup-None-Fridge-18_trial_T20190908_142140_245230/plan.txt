@@ -1,0 +1,6 @@
+(gotolocation robot cup)
+(pickupobject robot cup)
+(gotolocation robot microwave)
+(heatobject robot microwave cup)
+(gotolocation robot fridge)
+(putobjectinreceptacle robot cup fridge)

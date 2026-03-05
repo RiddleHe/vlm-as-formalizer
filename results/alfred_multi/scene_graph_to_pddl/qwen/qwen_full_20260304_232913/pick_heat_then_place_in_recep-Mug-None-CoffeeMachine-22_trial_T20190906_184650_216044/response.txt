@@ -1,0 +1,49 @@
+Scene graph:
+agent: robot
+microwave (receptacle): red microwave on counter
+fridge (receptacle): none visible
+sink (receptacle): none visible
+knife (object): none visible
+receptacle (object): wooden counter top, coffee maker
+object: coffee cup, spoon, red microwave, wooden counter top, coffee maker
+openable (receptacle) true if a receptacle is openable: (openable red microwave)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn red microwave)
+isToggled (object) true if the object has been toggled: (isToggled red microwave)
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem put_warm_coffee_cup_in_coffee_maker)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        coffee_maker - receptacle
+        coffee_cup - object
+        wooden_counter_top - receptacle
+    )
+    (:init
+        (openable microwave)
+        (isOn microwave)
+        (isToggled microwave)
+        (atLocation robot wooden_counter_top)
+        (not (holdsAny robot))
+        (not (isHot coffee_cup))
+        (not (inReceptacle coffee_cup microwave))
+        (not (inReceptacle coffee_cup coffee_maker))
+        (not (inReceptacle coffee_cup wooden_counter_top))
+        (not (holds robot coffee_cup))
+    )
+    (:goal (and
+        (inReceptacle coffee_cup coffee_maker)
+        (isHot coffee_cup)
+    ))
+)
+```

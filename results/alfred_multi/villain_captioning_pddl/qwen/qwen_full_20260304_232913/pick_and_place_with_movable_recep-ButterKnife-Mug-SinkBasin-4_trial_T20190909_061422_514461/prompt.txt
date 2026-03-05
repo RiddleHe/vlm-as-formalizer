@@ -1,0 +1,255 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: clean up a knife and a mug then put them into the sink
+    
+
+SCENE CAPTION:
+Scene Description:
+
+The scene is set in a kitchen environment with a wooden dining table and a marble countertop adjacent to a sink. The task is to clean a knife and a mug, then place them into the sink.
+
+1. Objects and their types:
+   - Receptacles: 
+     - Sink (marble countertop area with faucet, located on the right side of the scene; it is a receptacle and is openable).
+     - Microwave (black appliance on the table; not used in this task).
+     - Fridge (not visible in images, but defined in domain; not relevant here).
+   - Objects:
+     - Knife (metallic, with a black handle; lying horizontally on the wooden table, near a ladle and a spatula).
+     - Mug (gray ceramic, cylindrical, with a handle; placed on the wooden table near a salt shaker and a frying pan).
+     - Ladle (metallic, long-handled, with a deep spoon bowl; on the table).
+     - Spatula (light-colored, flat head, long handle; on the table).
+     - Salt shaker (transparent glass with a silver top; on the table).
+     - Frying pan (black, with a red handle; on the table).
+     - Plate (gray, octagonal; on the table).
+     - Lettuce (green, leafy; on the table).
+     - Potato (brown, oval; on the table).
+     - Bread loaf (golden-brown, rectangular; on the table in some views).
+     - Egg (brown, oval; on the table).
+
+2. Quantities:
+   - 1 knife
+   - 1 mug
+   - 1 sink (receptacle)
+   - Multiple other objects (ladle, spatula, salt shaker, etc.) that are not relevant to the current task.
+
+3. Spatial relationships:
+   - The knife and mug are both on the wooden table, side by side near the center of the table.
+   - The sink is located on the marble countertop to the right of the table, accessible from the table area.
+   - The robot is initially not at any object’s location (as per domain assumption).
+   - The knife and mug are not currently held by any agent and are not in any receptacle.
+   - The sink is not opened (as it is a fixed receptacle; no “open” state needed for sink in this domain, but it is implicitly accessible).
+
+4. Current state of relevant objects:
+   - Knife: Not clean (isClean predicate is false), not held, not in any receptacle.
+   - Mug: Not clean (isClean predicate is false), not held, not in any receptacle.
+   - Sink: Not containing any objects (empty), and is accessible (no need to open).
+
+5. Visual properties:
+   - Knife: Metallic blade, black handle, lying flat on the table, oriented horizontally.
+   - Mug: Gray ceramic, glossy finish, handle on the right side, positioned upright.
+   - Sink: Gray marble countertop with a copper faucet, rectangular basin visible.
+   - Table: Wooden surface, medium brown, with visible grain, supported by four legs.
+   - Floor: Light gray tiled, square tiles with white grout.
+
+The robot must first navigate to the table to pick up the knife, then to the sink to clean it, then return to the table to pick up the mug, clean it at the sink, and finally place both into the sink.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

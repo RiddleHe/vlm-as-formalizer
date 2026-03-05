@@ -1,0 +1,6 @@
+(GotoLocation robot tea_pot)
+(PickupObject robot tea_pot)
+(GotoLocation robot sink)
+(CleanObject robot sink tea_pot)
+(GotoLocation robot stove)
+(PutObjectInReceptacle robot tea_pot stove)

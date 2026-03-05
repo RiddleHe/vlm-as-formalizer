@@ -1,0 +1,4 @@
+(GotoLocation agent pen)
+(PickupObject agent pen)
+(GotoLocation agent dresser)
+(PutObjectInReceptacle agent pen dresser)

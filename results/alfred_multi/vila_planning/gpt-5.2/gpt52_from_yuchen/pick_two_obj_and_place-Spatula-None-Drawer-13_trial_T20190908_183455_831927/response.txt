@@ -1,0 +1,7 @@
+(GotoLocation robot counter)
+(PickupObject robot spatula1)
+(OpenObject robot counterDrawer)
+(PutObjectInReceptacle robot spatula1 counterDrawer)
+(PickupObject robot spatula2)
+(PutObjectInReceptacle robot spatula2 counterDrawer)
+(CloseObject robot counterDrawer)

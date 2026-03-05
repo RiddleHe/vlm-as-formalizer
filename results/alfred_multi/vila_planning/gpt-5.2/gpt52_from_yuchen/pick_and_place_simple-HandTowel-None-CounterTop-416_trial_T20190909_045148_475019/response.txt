@@ -1,0 +1,4 @@
+(GotoLocation robot hand_towel)
+(PickupObject robot hand_towel)
+(GotoLocation robot counter)
+(PutObjectInReceptacle robot hand_towel counter)

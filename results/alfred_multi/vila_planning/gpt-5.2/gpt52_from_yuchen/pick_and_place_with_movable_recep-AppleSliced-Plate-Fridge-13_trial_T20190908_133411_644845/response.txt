@@ -1,0 +1,6 @@
+(GotoLocation agent1 plate)
+(PickupObject agent1 plate)
+(GotoLocation agent1 fridge)
+(OpenObject agent1 fridge)
+(PutObjectInReceptacle agent1 plate fridge)
+(CloseObject agent1 fridge)

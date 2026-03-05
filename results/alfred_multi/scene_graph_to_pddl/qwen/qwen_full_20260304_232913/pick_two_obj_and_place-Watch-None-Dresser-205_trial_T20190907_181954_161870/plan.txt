@@ -1,0 +1,8 @@
+(gotolocation agent1 remote_control1)
+(pickupobject agent1 remote_control1)
+(gotolocation agent1 tv_stand)
+(putobjectinreceptacle agent1 remote_control1 tv_stand)
+(gotolocation agent1 dining_table)
+(pickupobject agent1 remote_control2)
+(gotolocation agent1 tv_stand)
+(putobjectinreceptacle agent1 remote_control2 tv_stand)

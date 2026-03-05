@@ -1,0 +1,6 @@
+(gotolocation robot microwave)
+(pickupobject robot egg)
+(gotolocation robot sink)
+(cleanobject robot sink egg)
+(gotolocation robot counter)
+(putobjectinreceptacle robot egg counter)

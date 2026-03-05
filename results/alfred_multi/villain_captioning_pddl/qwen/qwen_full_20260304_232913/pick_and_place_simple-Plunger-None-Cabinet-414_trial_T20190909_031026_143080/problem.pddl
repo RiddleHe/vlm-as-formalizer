@@ -1,0 +1,31 @@
+(define (problem place_plunger_in_cabinet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        plunger - object
+        sink_cabinet - receptacle
+        sink - receptacle
+        toilet - object
+        toilet_brush - object
+    )
+    (:init
+        (not (atLocation robot plunger))
+        (not (atLocation robot sink_cabinet))
+        (not (atLocation robot sink))
+        (not (atLocation robot toilet))
+        (not (atLocation robot toilet_brush))
+        (not (holdsAny robot))
+        (not (opened sink_cabinet))
+        (openable sink_cabinet)
+        (not (inReceptacle plunger sink_cabinet))
+        (not (inReceptacle plunger sink))
+        (not (isClean plunger))
+        (not (isHot plunger))
+        (not (isCool plunger))
+        (not (isSliced plunger))
+        (not (isToggled plunger))
+    )
+    (:goal (and
+        (inReceptacle plunger sink_cabinet)
+    ))
+)

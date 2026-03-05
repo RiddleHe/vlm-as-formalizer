@@ -1,0 +1,51 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): brown sink bowl
+knife (object): 
+receptacle (object): brown sink bowl
+object: green spray bottle, white toilet paper roll, yellow toothbrush, white towel, black framed mirror
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_spray_bottle_on_toilet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        sink_bowl - sink
+        spray_bottle - object
+        toilet_paper - object
+        toothbrush - object
+        towel - object
+        mirror - object
+        toilet - receptacle  ; assuming toilet is a receptacle based on instruction
+    )
+    (:init
+        (atLocation robot sink_bowl)  ; robot starts near sink
+        (inReceptacle spray_bottle sink_bowl)  ; spray bottle is initially in the sink bowl
+        (inReceptacle toilet_paper sink_bowl)  ; toilet paper is in the sink bowl
+        (inReceptacle toothbrush sink_bowl)    ; toothbrush is in the sink bowl
+        (inReceptacle towel sink_bowl)         ; towel is in the sink bowl
+        (openable toilet)                    ; toilet is openable
+        (not (opened toilet))                ; toilet is initially closed
+        (not (holdsAny robot))               ; robot is not holding anything
+    )
+    (:goal
+        (and
+            (inReceptacle spray_bottle toilet)  ; spray bottle should be on top of the toilet
+        )
+    )
+)
+```

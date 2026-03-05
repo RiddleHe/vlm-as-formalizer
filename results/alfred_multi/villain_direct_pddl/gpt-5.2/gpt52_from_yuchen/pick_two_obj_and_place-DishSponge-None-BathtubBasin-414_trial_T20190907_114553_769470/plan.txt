@@ -1,0 +1,7 @@
+(pickupobject robot sponge_green)
+(gotolocation robot tub)
+(putobjectinreceptacle robot sponge_green tub)
+(gotolocation robot sponge_green2)
+(pickupobject robot sponge_green2)
+(gotolocation robot tub)
+(putobjectinreceptacle robot sponge_green2 tub)

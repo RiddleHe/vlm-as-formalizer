@@ -1,0 +1,6 @@
+(GotoLocation robot countertop)
+(PickupObject robot bowl)
+(GotoLocation robot cabinet)
+(OpenObject robot cabinet)
+(PutObjectInReceptacle robot bowl cabinet)
+(CloseObject robot cabinet)

@@ -1,0 +1,6 @@
+(gotolocation robot potato_in_sink)
+(pickupobject robot potato_in_sink)
+(gotolocation robot brown_microwave_on_counter)
+(heatobject robot brown_microwave_on_counter potato_in_sink)
+(gotolocation robot stainless_steel_sink_with_two_basins)
+(putobjectinreceptacle robot potato_in_sink stainless_steel_sink_with_two_basins)

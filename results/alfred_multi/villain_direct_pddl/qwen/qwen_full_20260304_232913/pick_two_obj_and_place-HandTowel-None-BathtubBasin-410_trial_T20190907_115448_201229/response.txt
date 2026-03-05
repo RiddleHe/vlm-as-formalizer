@@ -1,0 +1,26 @@
+```pddl
+(define (problem put_towels_in_bathtub)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        bathtub - receptacle
+        towel1 towel2 - object
+        sink - receptacle
+        mirror - object
+        towel_rack - object
+    )
+    (:init
+        (atLocation robot sink)
+        (inReceptacle towel1 towel_rack)
+        (inReceptacle towel2 towel_rack)
+        (openable bathtub)
+        (not (opened bathtub))
+    )
+    (:goal
+        (and
+            (inReceptacle towel1 bathtub)
+            (inReceptacle towel2 bathtub)
+        )
+    )
+)
+```

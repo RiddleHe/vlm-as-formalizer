@@ -1,0 +1,2 @@
+(GotoLocation robot toilet)
+(PutObjectInReceptacle robot green_sponge toilet)

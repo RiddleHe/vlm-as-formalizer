@@ -1,0 +1,2 @@
+(gotolocation agent1 lamp)
+(toggleobject agent1 lamp)

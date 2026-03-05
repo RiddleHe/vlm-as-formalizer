@@ -1,0 +1,57 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): stainless steel sink
+knife (object): yellow-handled knife, silver knife
+receptacle (object): stainless steel sink
+object: robot, stainless steel sink, yellow-handled knife, silver knife, green bottle, fork, pot, egg, mug, green book, tomato, lettuce, potato, bowl, coffee maker, toaster
+openable (receptacle) true if a receptacle is openable: (openable stainless steel sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn toaster)
+isToggled (object) true if the object has been toggled: (isToggled toaster)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle egg stainless steel sink), (inReceptacle green book stainless steel sink), (inReceptacle mug stainless steel sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem stand_cleaned_spoon_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        stainless_steel_sink - sink
+        yellow_handled_knife - knife
+        silver_knife - knife
+        green_bottle - object
+        fork - object
+        pot - object
+        egg - object
+        mug - object
+        green_book - object
+        tomato - object
+        lettuce - object
+        potato - object
+        bowl - object
+        coffee_maker - object
+        toaster - object
+    )
+    (:init
+        (openable stainless_steel_sink)
+        (isOn toaster)
+        (isToggled toaster)
+        (inReceptacle egg stainless_steel_sink)
+        (inReceptacle green_book stainless_steel_sink)
+        (inReceptacle mug stainless_steel_sink)
+        (atLocation robot stainless_steel_sink) ; assuming robot starts near sink for cleaning task
+    )
+    (:goal (and
+        (isClean fork) ; assuming "spoon" refers to "fork" as no spoon is present
+        (atLocation robot fork) ; robot must be at fork's location after cleaning
+    ))
+)
+```

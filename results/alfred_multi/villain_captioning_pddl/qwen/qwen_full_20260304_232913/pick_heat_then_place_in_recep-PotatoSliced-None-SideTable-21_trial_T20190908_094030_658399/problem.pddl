@@ -1,0 +1,43 @@
+(define (problem put_heated_potato_slice)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        sink - sink
+        black_table - receptacle  ; Treating black table as a receptacle for placement purposes
+        potato - object
+        salt_shaker - object
+        knife - knife
+        egg - object
+        mug - object
+    )
+    (:init
+        ; Locations
+        (atLocation robot black_table)  ; Assuming robot starts near the black table for efficiency
+        ; Object states
+        (not (isSliced potato))
+        (not (isHot potato))
+        (not (isClean potato))
+        (not (isCool potato))
+        (not (isOn microwave))
+        (not (isToggled microwave))
+        (not (holdsAny robot))
+        ; Object placements
+        (inReceptacle potato black_table)
+        (inReceptacle salt_shaker black_table)
+        (inReceptacle knife black_table)
+        (inReceptacle egg black_table)
+        (inReceptacle mug black_table)
+        ; Receptacle properties
+        (openable microwave)
+        (opened microwave)  ; Assume microwave is initially open for simplicity, or can be opened
+    )
+    (:goal
+        (and
+            (isSliced potato)
+            (isHot potato)
+            (inReceptacle potato black_table)
+            ; Implicitly next to salt shaker (same receptacle, proximity not modeled)
+        )
+    )
+)

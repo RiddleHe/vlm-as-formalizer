@@ -1,0 +1,115 @@
+Scene graph:
+agent: 
+- agent_robot
+
+microwave (receptacle): 
+- microwave_red_countertop_right (red microwave on left-side counter near fridge)
+
+fridge (receptacle): 
+- fridge_tall_gray_back (tall gray fridge at back left)
+
+sink (receptacle): 
+- sink_double_basin_left (double-basin sink on left counter)
+
+knife (object): 
+- knife_black_handle_dishrack (black-handled knife in dish rack by sink)
+
+receptacle (object): 
+- microwave_red_countertop_right
+- fridge_tall_gray_back
+- sink_double_basin_left
+- trash_bin_green_floor_left (green open trash bin on floor by counter)
+- dish_rack_white_by_sink (white dish rack on counter by sink)
+- cup_orange_hexagonal_counter (orange hexagonal cup/container on counter)
+- coffee_machine_blue_counter (blue coffee machine on counter)
+- toaster_red_counter (small red toaster on counter)
+
+object: 
+- tomato_red_counter (red tomato on counter near kettle and toaster)
+- kettle_silver_blue_handle_counter (silver kettle with blue handle on counter)
+- mug_black_coffee_machine (black mug at coffee machine drip area)
+- bread_loaf_left_counter (loaf of bread on counter near dishwasher)
+- fork_metal_counter (metal fork on counter)
+- bowl_white_inside_microwave (white bowl inside microwave)
+
+openable (receptacle) true if a receptacle is openable: 
+- (openable microwave_red_countertop_right)
+- (openable fridge_tall_gray_back)
+
+opened (receptacle) true if a receptacle is opened: 
+- (opened microwave_red_countertop_right)
+
+holdsAny (agent) agent ?a holds an object: 
+- none
+
+isClean (object) true if the object has been clean in sink: 
+- none
+
+isHot (object) true if the object has been heated up: 
+- none
+
+isCool (object) true if the object has been cooled: 
+- none
+
+isOn (object) true if the object is on: 
+- none
+
+isToggled (object) true if the object has been toggled: 
+- none
+
+isSliced (object) true if the object is sliced: 
+- none
+
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+- (inReceptacle bowl_white_inside_microwave microwave_red_countertop_right)
+- (inReceptacle knife_black_handle_dishrack dish_rack_white_by_sink)
+- (inReceptacle mug_black_coffee_machine coffee_machine_blue_counter)
+
+holds (agent, object) object ?o is held by agent ?a: 
+- none
+
+atLocation (agent, object) : 
+- none
+
+PDDL problem: (define (problem put_task_tomato_slice_in_trash)
+  (:domain put_task)
+  (:objects
+    agent_robot - agent
+
+    microwave_red_countertop_right - microwave
+    fridge_tall_gray_back - fridge
+    sink_double_basin_left - sink
+
+    knife_black_handle_dishrack - knife
+
+    trash_bin_green_floor_left
+    dish_rack_white_by_sink
+    cup_orange_hexagonal_counter
+    coffee_machine_blue_counter
+    toaster_red_counter - receptacle
+
+    tomato_red_counter
+    kettle_silver_blue_handle_counter
+    mug_black_coffee_machine
+    bread_loaf_left_counter
+    fork_metal_counter
+    bowl_white_inside_microwave - object
+  )
+
+  (:init
+    (openable microwave_red_countertop_right)
+    (openable fridge_tall_gray_back)
+    (opened microwave_red_countertop_right)
+
+    (inReceptacle bowl_white_inside_microwave microwave_red_countertop_right)
+    (inReceptacle knife_black_handle_dishrack dish_rack_white_by_sink)
+    (inReceptacle mug_black_coffee_machine coffee_machine_blue_counter)
+  )
+
+  (:goal
+    (and
+      (isSliced tomato_red_counter)
+      (inReceptacle tomato_red_counter trash_bin_green_floor_left)
+    )
+  )
+)

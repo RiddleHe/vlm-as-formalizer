@@ -1,0 +1,23 @@
+```pddl
+(define (problem pick_pillow_and_turn_on_lamp)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        pillow - object
+        lamp - object
+        side_table - object
+        sofa - object
+    )
+    (:init
+        (atLocation robot side_table) ; Assuming robot starts near side table for simplicity, as no initial location is specified
+        (inReceptacle pillow sofa) ; Pillow is on the sofa
+        (inReceptacle lamp side_table) ; Lamp is on the side table
+        (not (isOn lamp)) ; Lamp is currently off
+        (not (holdsAny robot)) ; Robot is not holding anything
+    )
+    (:goal (and
+        (holds robot pillow)
+        (isOn lamp)
+    ))
+)
+```

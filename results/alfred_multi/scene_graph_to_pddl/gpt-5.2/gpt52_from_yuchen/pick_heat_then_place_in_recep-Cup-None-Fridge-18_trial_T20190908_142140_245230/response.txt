@@ -1,0 +1,51 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): countertop_microwave_red_front
+fridge (receptacle): tall_fridge_white_double_door
+sink (receptacle): double_basin_sink_stainless_left, double_basin_sink_stainless_right
+knife (object): black_handle_spatula_like_knife_in_right_sink
+receptacle (object): countertop_microwave_red_front, tall_fridge_white_double_door, double_basin_sink_stainless_left, double_basin_sink_stainless_right
+object: robot_agent, countertop_microwave_red_front, tall_fridge_white_double_door, double_basin_sink_stainless_left, double_basin_sink_stainless_right, black_handle_spatula_like_knife_in_right_sink, green_cabbage_like_vegetable_in_right_sink
+openable (receptacle) true if a receptacle is openable: (openable countertop_microwave_red_front), (openable tall_fridge_white_double_door)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle black_handle_spatula_like_knife_in_right_sink double_basin_sink_stainless_right), (inReceptacle green_cabbage_like_vegetable_in_right_sink double_basin_sink_stainless_right)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_task_microwaved_cup_into_fridge)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    countertop_microwave_red_front - microwave
+    tall_fridge_white_double_door - fridge
+    double_basin_sink_stainless_left - sink
+    double_basin_sink_stainless_right - sink
+
+    black_handle_spatula_like_knife_in_right_sink - knife
+    green_cabbage_like_vegetable_in_right_sink - object
+  )
+
+  (:init
+    (openable countertop_microwave_red_front)
+    (openable tall_fridge_white_double_door)
+
+    (inReceptacle black_handle_spatula_like_knife_in_right_sink double_basin_sink_stainless_right)
+    (inReceptacle green_cabbage_like_vegetable_in_right_sink double_basin_sink_stainless_right)
+  )
+
+  ;; Instruction: Put a microwaved cup into the fridge
+  ;; Note: No cup object is present in the provided scene graph, so the task
+  ;; cannot be grounded without violating the constraint that all PDDL objects
+  ;; must exist in the scene graph.
+  (:goal
+    (and)
+  )
+)

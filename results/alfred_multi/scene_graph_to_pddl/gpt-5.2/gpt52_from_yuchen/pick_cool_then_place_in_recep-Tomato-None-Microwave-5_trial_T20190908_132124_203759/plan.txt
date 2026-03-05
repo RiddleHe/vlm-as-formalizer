@@ -1,0 +1,6 @@
+(gotolocation robot_agent brown_countertop_surface)
+(pickupobject robot_agent gray_tomato_on_counter)
+(gotolocation robot_agent tall_black_fridge_center_view)
+(coolobject robot_agent tall_black_fridge_center_view gray_tomato_on_counter)
+(gotolocation robot_agent black_microwave_right_counter)
+(putobjectinreceptacle robot_agent gray_tomato_on_counter black_microwave_right_counter)

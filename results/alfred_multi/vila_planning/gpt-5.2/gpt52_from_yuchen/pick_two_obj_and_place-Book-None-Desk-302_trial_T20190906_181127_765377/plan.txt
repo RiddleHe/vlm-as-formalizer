@@ -1,0 +1,8 @@
+(GotoLocation agent0 book1)
+(PickupObject agent0 book1)
+(GotoLocation agent0 desk)
+(PutObjectInReceptacle agent0 book1 desk)
+(GotoLocation agent0 book2)
+(PickupObject agent0 book2)
+(GotoLocation agent0 desk)
+(PutObjectInReceptacle agent0 book2 desk)

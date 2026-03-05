@@ -1,0 +1,4 @@
+(GotoLocation robot pump_bottle)
+(PickupObject robot pump_bottle)
+(GotoLocation robot garbage_can)
+(PutObjectInReceptacle robot pump_bottle garbage_can)

@@ -1,0 +1,6 @@
+(GotoLocation robot toilet)
+(PickupObject robot spraybottle)
+(GotoLocation robot cabinet)
+(OpenObject robot cabinet)
+(PutObjectInReceptacle robot spraybottle cabinet)
+(CloseObject robot cabinet)

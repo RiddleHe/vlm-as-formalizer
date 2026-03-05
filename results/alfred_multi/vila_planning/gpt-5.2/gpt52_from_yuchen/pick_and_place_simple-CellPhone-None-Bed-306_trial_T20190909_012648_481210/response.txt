@@ -1,0 +1,4 @@
+(GotoLocation agent desk)
+(PickupObject agent phone)
+(GotoLocation agent bed)
+(PutObjectInReceptacle agent phone bed)

@@ -1,0 +1,7 @@
+(gotolocation robot counter)
+(pickupobject robot knife1)
+(sliceobject robot tomato1 knife1)
+(putobjectinreceptacle robot knife1 counter)
+(pickupobject robot tomato1)
+(gotolocation robot trashcan)
+(putobjectinreceptacle robot tomato1 trashcan)

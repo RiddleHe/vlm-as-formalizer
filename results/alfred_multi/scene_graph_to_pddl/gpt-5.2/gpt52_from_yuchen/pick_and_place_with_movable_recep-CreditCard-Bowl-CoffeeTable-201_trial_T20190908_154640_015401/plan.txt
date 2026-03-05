@@ -1,0 +1,7 @@
+(gotolocation robot_agent glass_side_table_centerleft)
+(pickupobject robot_agent red_card_on_lower_shelf_glass_side_table)
+(gotolocation robot_agent gray_round_bowl_on_dining_table)
+(putobjectinreceptacle robot_agent red_card_on_lower_shelf_glass_side_table gray_round_bowl_on_dining_table)
+(pickupobject robot_agent gray_round_bowl_on_dining_table)
+(gotolocation robot_agent glass_side_table_centerleft)
+(putobjectinreceptacle robot_agent gray_round_bowl_on_dining_table glass_side_table_centerleft)

@@ -1,0 +1,59 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): stainless steel sink
+knife (object): fork on countertop, knife in sink
+receptacle (object): blue coffee maker, red toaster, white cabinet drawer, white cabinet door
+object: green wine bottle, white coffee mug, fork on countertop, knife in sink, stainless steel sink, blue coffee maker, red toaster, white cabinet drawer, white cabinet door
+openable (receptacle) true if a receptacle is openable: (openable stainless steel sink), (openable white cabinet drawer), (openable white cabinet door)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn blue coffee maker), (isOn red toaster)
+isToggled (object) true if the object has been toggled: (isToggled blue coffee maker), (isToggled red toaster)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle white coffee mug blue coffee maker), (inReceptacle fork on countertop stainless steel sink), (inReceptacle knife in sink stainless steel sink), (inReceptacle glass in sink stainless steel sink), (inReceptacle potato in sink stainless steel sink), (inReceptacle bowl in sink stainless steel sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem wash_mug_and_place_in_coffee_maker)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        sink - sink
+        coffee_maker - receptacle
+        mug - object
+        fork - object
+        knife - object
+        wine_bottle - object
+        toaster - receptacle
+        cabinet_drawer - receptacle
+        cabinet_door - receptacle
+    )
+    (:init
+        (openable sink)
+        (openable cabinet_drawer)
+        (openable cabinet_door)
+        (isOn coffee_maker)
+        (isOn toaster)
+        (isToggled coffee_maker)
+        (isToggled toaster)
+        (inReceptacle mug coffee_maker)
+        (inReceptacle fork sink)
+        (inReceptacle knife sink)
+        (inReceptacle wine_bottle sink) ; assuming wine bottle is on countertop near sink as per image
+        (not (isClean mug))
+        (not (holdsAny robot))
+        (not (atLocation robot sink))
+        (not (atLocation robot coffee_maker))
+    )
+    (:goal (and
+        (inReceptacle mug coffee_maker)
+        (isClean mug)
+    ))
+)
+```

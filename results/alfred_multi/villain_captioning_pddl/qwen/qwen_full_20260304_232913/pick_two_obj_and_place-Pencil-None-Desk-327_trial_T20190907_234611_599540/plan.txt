@@ -1,0 +1,4 @@
+(gotolocation robot pencil)
+(pickupobject robot pencil)
+(gotolocation robot desk)
+(putobjectinreceptacle robot pencil desk)

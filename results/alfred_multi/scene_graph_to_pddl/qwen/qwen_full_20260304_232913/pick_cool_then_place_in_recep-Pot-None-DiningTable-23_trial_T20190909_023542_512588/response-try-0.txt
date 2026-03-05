@@ -1,0 +1,57 @@
+Scene graph:
+agent: agent
+microwave (receptacle): 
+fridge (receptacle): black_fridge
+sink (receptacle): 
+knife (object): 
+receptacle (object): green_tablecloth_table, black_fridge, silver_stove_top, silver_metal_bowl, silver_metal_bowl_2
+object: green_tablecloth_table, black_fridge, silver_stove_top, silver_metal_bowl, silver_metal_bowl_2, green_cabbage, red_tomato, brown_frying_pan, brown_wooden_chair, brown_wooden_chair_2, silver_cup, silver_cup_2, silver_cup_3, silver_cup_4, silver_cup_5, silver_cup_6, silver_cup_7, silver_cup_8, silver_cup_9, silver_cup_10, silver_cup_11, silver_cup_12, silver_cup_13, silver_cup_14, silver_cup_15, silver_cup_16, silver_cup_17, silver_cup_18, silver_cup_19, silver_cup_20, silver_cup_21, silver_cup_22, silver_cup_23, silver_cup_24, silver_cup_25, silver_cup_26, silver_cup_27, silver_cup_28, silver_cup_29, silver_cup_30, silver_cup_31, silver_cup_32, silver_cup_33, silver_cup_34, silver_cup_35, silver_cup_36, silver_cup_37, silver_cup_38, silver_cup_39, silver_cup_40, silver_cup_41, silver_cup_42, silver_cup_43, silver_cup_44, silver_cup_45, silver_cup_46, silver_cup_47, silver_cup_48, silver_cup_49, silver_cup_50, silver_cup_51, silver_cup_52, silver_cup_53, silver_cup_54, silver_cup_55, silver_cup_56, silver_cup_57, silver_cup_58, silver_cup_59, silver_cup_60, silver_cup_61, silver_cup_62, silver_cup_63, silver_cup_64, silver_cup_65, silver_cup_66, silver_cup_67, silver_cup_68, silver_cup_69, silver_cup_70, silver_cup_71, silver_cup_72, silver_cup_73, silver_cup_74, silver_cup_75, silver_cup_76, silver_cup_77, silver_cup_78, silver_cup_79, silver_cup_80, silver_cup_81, silver_cup_82, silver_cup_83, silver_cup_84, silver_cup_85, silver_cup_86, silver_cup_87, silver_cup_88, silver_cup_89, silver_cup_90, silver_cup_91, silver_cup_92, silver_cup_93, silver_cup_94, silver_cup_95, silver_cup_96, silver_cup_97, silver_cup_98, silver_cup_99, silver_cup_100
+openable (receptacle) true if a receptacle is openable: (openable black_fridge)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle green_cabbage green_tablecloth_table), (inReceptacle red_tomato green_tablecloth_table), (inReceptacle brown_frying_pan green_tablecloth_table), (inReceptacle silver_cup silver_metal_bowl), (inReceptacle silver_cup_2 silver_metal_bowl_2)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_chilled_bowl_on_table)
+    (:domain put_task)
+    (:objects
+        agent
+        black_fridge - fridge
+        green_tablecloth_table - receptacle
+        silver_metal_bowl - receptacle
+        green_cabbage - object
+        red_tomato - object
+        brown_frying_pan - object
+        silver_cup - object
+        silver_cup_2 - object
+    )
+    (:init
+        (openable black_fridge)
+        (not (opened black_fridge))
+        (inReceptacle green_cabbage green_tablecloth_table)
+        (inReceptacle red_tomato green_tablecloth_table)
+        (inReceptacle brown_frying_pan green_tablecloth_table)
+        (inReceptacle silver_cup silver_metal_bowl)
+        (inReceptacle silver_cup_2 silver_metal_bowl)
+        (not (holdsAny agent))
+        (not (atLocation agent black_fridge))
+        (not (atLocation agent green_tablecloth_table))
+        (not (atLocation agent silver_metal_bowl))
+        (not (isCool silver_metal_bowl))
+    )
+    (:goal
+        (and
+            (inReceptacle silver_metal_bowl green_tablecloth_table)
+            (isCool silver_metal_bowl)
+        )
+    )
+)
+```

@@ -1,0 +1,68 @@
+Scene graph:
+agent: agent
+microwave (receptacle): black microwave on countertop
+fridge (receptacle): black fridge with magnets
+sink (receptacle): sink next to microwave
+knife (object): knife on table near potato
+receptacle (object): round wooden table, black microwave, black fridge, sink
+object: potato on table, red apple on table, loaf of bread on table, green book on table, silver plate on table, black coffee maker on table, black mug on coffee maker, small bottle on table, fork on countertop, knife on table
+openable (receptacle) true if a receptacle is openable: (openable black fridge), (openable black microwave), (openable sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn black microwave), (isOn black coffee maker)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle black mug black coffee maker)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_heated_potato_in_fridge)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        potato - object
+        apple - object
+        bread - object
+        book - object
+        plate - object
+        coffee_maker - object
+        mug - object
+        bottle - object
+        fork - object
+        table - object
+    )
+    (:init
+        (openable fridge)
+        (openable microwave)
+        (openable sink)
+        (isOn microwave)
+        (isOn coffee_maker)
+        (inReceptacle mug coffee_maker)
+        (atLocation agent table)
+        (atLocation potato table)
+        (atLocation apple table)
+        (atLocation bread table)
+        (atLocation book table)
+        (atLocation plate table)
+        (atLocation knife table)
+        (atLocation bottle table)
+        (atLocation fork countertop)
+        (atLocation microwave countertop)
+        (atLocation fridge wall)
+        (atLocation sink countertop)
+    )
+    (:goal (and
+        (inReceptacle potato fridge)
+        (isHot potato)
+        (isCool potato)
+    ))
+)
+```

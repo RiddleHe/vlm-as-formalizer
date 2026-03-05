@@ -1,0 +1,21 @@
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        newspaper - object
+        lamp - object
+        sofa - receptacle
+        side_table - receptacle
+    )
+    (:init
+        (atLocation robot side_table) ; Assuming robot starts near the side table with the lamp
+        (inReceptacle newspaper sofa)
+        (not (isOn lamp))
+        (openable sofa)
+        (opened sofa)
+    )
+    (:goal (and
+        (holds robot newspaper)
+        (isOn lamp)
+    ))
+)

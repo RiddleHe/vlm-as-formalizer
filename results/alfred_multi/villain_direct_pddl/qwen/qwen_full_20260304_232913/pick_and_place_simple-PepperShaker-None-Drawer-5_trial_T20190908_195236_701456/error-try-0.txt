@@ -1,0 +1,3 @@
+Predicate argument has wrong type:
+  atLocation saltshaker egg: saltshaker is not a agent
+

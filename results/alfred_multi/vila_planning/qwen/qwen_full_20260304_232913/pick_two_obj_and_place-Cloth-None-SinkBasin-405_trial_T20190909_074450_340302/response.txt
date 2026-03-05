@@ -1,0 +1,8 @@
+(GotoLocation robot bathtub)
+(PickupObject robot cloth)
+(GotoLocation robot sink)
+(PutObjectInReceptacle robot cloth sink)
+(GotoLocation robot bathtub)
+(PickupObject robot cloth)
+(GotoLocation robot sink)
+(PutObjectInReceptacle robot cloth sink)

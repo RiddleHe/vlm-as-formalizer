@@ -1,0 +1,64 @@
+Scene graph:
+agent: agent
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife on table
+receptacle (object): table
+object: head of lettuce on left, head of lettuce on right, salt shaker, pepper shaker, green book, spoon, wine glass, mug, knife on table, table, microwave, fridge, sink
+openable (receptacle) true if a receptacle is openable: (openable fridge), (openable microwave), (openable sink)
+opened (receptacle) true if a receptacle is opened: (opened fridge)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle head of lettuce on left table), (inReceptacle head of lettuce on right table), (inReceptacle salt shaker table), (inReceptacle pepper shaker table), (inReceptacle green book table), (inReceptacle spoon table), (inReceptacle wine glass table), (inReceptacle mug table), (inReceptacle knife on table table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem chill_lettuce)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave
+        fridge
+        sink
+        knife
+        table
+        head_of_lettuce_left
+        head_of_lettuce_right
+        salt_shaker
+        pepper_shaker
+        green_book
+        spoon
+        wine_glass
+        mug
+    )
+    (:init
+        (openable fridge)
+        (openable microwave)
+        (openable sink)
+        (opened fridge)
+        (inReceptacle head_of_lettuce_left table)
+        (inReceptacle head_of_lettuce_right table)
+        (inReceptacle salt_shaker table)
+        (inReceptacle pepper_shaker table)
+        (inReceptacle green_book table)
+        (inReceptacle spoon table)
+        (inReceptacle wine_glass table)
+        (inReceptacle mug table)
+        (inReceptacle knife table)
+        (atLocation agent table)  ; assuming agent starts near table for simplicity
+    )
+    (:goal
+        (and
+            (isCool head_of_lettuce_left)
+            (inReceptacle head_of_lettuce_left table)
+        )
+    )
+)
+```

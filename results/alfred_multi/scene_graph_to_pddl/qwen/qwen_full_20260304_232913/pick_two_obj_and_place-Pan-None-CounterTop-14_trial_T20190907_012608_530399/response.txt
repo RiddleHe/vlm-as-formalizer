@@ -1,0 +1,68 @@
+Scene graph:
+agent: robot
+microwave (receptacle): black microwave
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): silver knife on counter
+receptacle (object): black microwave, silver pan on stove, silver pan on stove, silver bowl on stove
+object: robot, black microwave, silver pan on stove, silver pan on stove, silver bowl on stove, silver knife on counter, green cup on counter, green cabbage on counter, brown bread on counter, silver spoon on counter, silver spoon on counter
+openable (receptacle) true if a receptacle is openable: (openable black microwave)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn silver pan on stove), (isOn silver pan on stove), (isOn silver bowl on stove)
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: none
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem place_pans_on_counter)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        pan1 - object
+        pan2 - object
+        bowl - object
+        knife - object
+        cup - object
+        cabbage - object
+        bread - object
+        spoon1 - object
+        spoon2 - object
+        counter - receptacle
+        stove - receptacle
+    )
+    (:init
+        (openable microwave)
+        (not (opened microwave))
+        (isOn pan1)
+        (isOn pan2)
+        (isOn bowl)
+        (not (holdsAny robot))
+        (not (atLocation robot pan1))
+        (not (atLocation robot pan2))
+        (not (atLocation robot counter))
+        (not (atLocation robot stove))
+        (not (inReceptacle pan1 stove))
+        (not (inReceptacle pan2 stove))
+        (not (inReceptacle bowl stove))
+        (not (inReceptacle knife counter))
+        (not (inReceptacle cup counter))
+        (not (inReceptacle cabbage counter))
+        (not (inReceptacle bread counter))
+        (not (inReceptacle spoon1 counter))
+        (not (inReceptacle spoon2 counter))
+    )
+    (:goal
+        (and
+            (inReceptacle pan1 counter)
+            (inReceptacle pan2 counter)
+        )
+    )
+)
+```

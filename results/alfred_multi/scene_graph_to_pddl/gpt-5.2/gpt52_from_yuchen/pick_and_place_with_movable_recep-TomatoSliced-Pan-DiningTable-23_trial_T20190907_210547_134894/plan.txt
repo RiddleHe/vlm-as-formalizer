@@ -1,0 +1,5 @@
+(gotolocation robot_agent green_kitchen_island_countertop)
+(pickupobject robot_agent red_tomato_whole_on_island)
+(putobjectinreceptacle robot_agent red_tomato_whole_on_island black_square_pan_on_island)
+(pickupobject robot_agent metal_table_knife_on_island)
+(sliceobject robot_agent red_tomato_whole_on_island metal_table_knife_on_island)

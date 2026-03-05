@@ -1,0 +1,20 @@
+(define (problem place_sponge_on_toilet)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        green_sponge - object
+        toilet - receptacle
+        toilet_paper - object
+    )
+    (:init
+        (not (atLocation agent1 green_sponge))
+        (not (atLocation agent1 toilet))
+        (not (holdsAny agent1))
+        (not (holds agent1 green_sponge))
+        (not (inReceptacle green_sponge toilet))
+        (inReceptacle toilet_paper toilet)
+        (openable toilet)
+        (not (opened toilet))
+    )
+    (:goal (and (inReceptacle green_sponge toilet)))
+)

@@ -1,0 +1,44 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): green_couch, small_table
+object: green_lampshade, green_couch, small_table, red_cushion, remote_control, book
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle remote_control green_couch), (inReceptacle book green_couch), (inReceptacle red_cushion green_couch)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot green_couch)
+
+PDDL problem: ```pddl
+(define (problem turn_on_lamp_with_remote)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        green_couch - receptacle
+        small_table - receptacle
+        green_lampshade - object
+        red_cushion - object
+        remote_control - object
+        book - object
+    )
+    (:init
+        (atLocation robot green_couch)
+        (inReceptacle remote_control green_couch)
+        (inReceptacle book green_couch)
+        (inReceptacle red_cushion green_couch)
+        (not (isOn green_lampshade))
+        (not (holdsAny robot))
+    )
+    (:goal (and (isOn green_lampshade)))
+)
+```

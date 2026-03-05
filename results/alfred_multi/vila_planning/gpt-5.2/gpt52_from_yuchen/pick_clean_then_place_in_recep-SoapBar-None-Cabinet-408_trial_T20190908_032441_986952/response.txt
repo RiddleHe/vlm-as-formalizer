@@ -1,0 +1,6 @@
+(GotoLocation agent1 soapbar)
+(PickupObject agent1 soapbar)
+(GotoLocation agent1 whitecabinet)
+(OpenObject agent1 whitecabinet)
+(PutObjectInReceptacle agent1 soapbar whitecabinet)
+(CloseObject agent1 whitecabinet)

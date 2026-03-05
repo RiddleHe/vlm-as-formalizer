@@ -1,0 +1,4 @@
+(pickupobject robot spray_bottle_blue)
+(putobjectinreceptacle robot spray_bottle_blue metal_rack)
+(pickupobject robot spray_bottle_yellow)
+(putobjectinreceptacle robot spray_bottle_yellow metal_rack)

@@ -1,0 +1,66 @@
+Scene graph:
+block: orange_block, yellow_block, blue_block, red_block, green_block, purple_block
+robot: robot_arm
+
+ontable (block) block x is on table, not on another block:
+- (ontable yellow_block)
+- (ontable red_block)
+- (ontable green_block)
+- (ontable purple_block)
+
+clear (block) there is no block on top of block x:
+- (clear orange_block)
+- (clear blue_block)
+- (clear green_block)
+- (clear purple_block)
+
+handempty (robot) if robot is not seen in the image, it can be assumed to exist and is handempty:
+- (handempty robot_arm)
+
+handfull (robot) :
+- (handfull robot_arm)
+
+holding (block) block x is being held by the robot:
+- (holding orange_block)
+- (holding yellow_block)
+- (holding blue_block)
+- (holding red_block)
+- (holding green_block)
+- (holding purple_block)
+
+on (block, block) block x is on block y:
+- (on orange_block yellow_block)
+- (on blue_block red_block)
+
+PDDL problem: (define (problem blocksworld_stacks_2)
+  (:domain blocksworld)
+  (:objects
+    orange_block yellow_block blue_block red_block green_block purple_block - block
+    robot_arm - robot
+  )
+  (:init
+    ;; relations from scene graph
+    (ontable yellow_block)
+    (ontable red_block)
+    (ontable green_block)
+    (ontable purple_block)
+
+    (on orange_block yellow_block)
+    (on blue_block red_block)
+
+    (clear orange_block)
+    (clear blue_block)
+    (clear green_block)
+    (clear purple_block)
+
+    (handempty robot_arm)
+  )
+  (:goal
+    (and
+      (on red_block yellow_block)
+      (on yellow_block blue_block)
+      (on orange_block green_block)
+      (on green_block purple_block)
+    )
+  )
+)

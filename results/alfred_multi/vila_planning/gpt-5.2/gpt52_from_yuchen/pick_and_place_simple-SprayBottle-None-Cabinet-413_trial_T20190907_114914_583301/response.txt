@@ -1,0 +1,6 @@
+(GotoLocation agent1 spray_bottle)
+(PickupObject agent1 spray_bottle)
+(GotoLocation agent1 cabinet)
+(OpenObject agent1 cabinet)
+(PutObjectInReceptacle agent1 spray_bottle cabinet)
+(CloseObject agent1 cabinet)

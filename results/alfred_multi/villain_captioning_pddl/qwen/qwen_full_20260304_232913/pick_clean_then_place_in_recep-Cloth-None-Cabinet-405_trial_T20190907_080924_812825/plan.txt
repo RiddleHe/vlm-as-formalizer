@@ -1,0 +1,7 @@
+(gotolocation agent1 cloth1)
+(pickupobject agent1 cloth1)
+(gotolocation agent1 sink1)
+(cleanobject agent1 sink1 cloth1)
+(gotolocation agent1 cabinet1)
+(putobjectinreceptacle agent1 cloth1 cabinet1)
+(openobject agent1 cabinet1)

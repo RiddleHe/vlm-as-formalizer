@@ -1,0 +1,5 @@
+(gotolocation robot metal_fork_on_upper_shelf_right)
+(pickupobject robot metal_fork_on_upper_shelf_right)
+(gotolocation robot sink_basin_with_faucet)
+(cleanobject robot sink_basin_with_faucet metal_fork_on_upper_shelf_right)
+(putobjectinreceptacle robot metal_fork_on_upper_shelf_right sink_basin_with_faucet)

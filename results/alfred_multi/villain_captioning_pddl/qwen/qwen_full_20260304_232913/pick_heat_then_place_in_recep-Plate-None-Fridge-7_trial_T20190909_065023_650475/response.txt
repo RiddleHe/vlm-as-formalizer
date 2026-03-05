@@ -1,0 +1,35 @@
+```pddl
+(define (problem put_heated_plate_in_fridge)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        grey_plate1 - object
+    )
+    (:init
+        (openable microwave1)
+        (openable fridge1)
+        (not (opened microwave1))
+        (not (opened fridge1))
+        (not (holdsAny agent1))
+        (not (isHot grey_plate1))
+        (not (isCool grey_plate1))
+        (not (isClean grey_plate1))
+        (not (isSliced grey_plate1))
+        (not (isOn microwave1))
+        (not (isToggled microwave1))
+        (not (atLocation agent1 microwave1))
+        (not (atLocation agent1 fridge1))
+        (not (atLocation agent1 grey_plate1))
+        (not (inReceptacle grey_plate1 microwave1))
+        (not (inReceptacle grey_plate1 fridge1))
+    )
+    (:goal
+        (and
+            (inReceptacle grey_plate1 fridge1)
+            (isHot grey_plate1)
+        )
+    )
+)
+```

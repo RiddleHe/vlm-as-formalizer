@@ -1,0 +1,7 @@
+(pickupobject agent1 salt_shaker1)
+(gotolocation agent1 cabinet_below_counter)
+(putobjectinreceptacle agent1 salt_shaker1 cabinet_below_counter)
+(gotolocation agent1 salt_shaker2)
+(pickupobject agent1 salt_shaker2)
+(gotolocation agent1 cabinet_below_counter)
+(putobjectinreceptacle agent1 salt_shaker2 cabinet_below_counter)

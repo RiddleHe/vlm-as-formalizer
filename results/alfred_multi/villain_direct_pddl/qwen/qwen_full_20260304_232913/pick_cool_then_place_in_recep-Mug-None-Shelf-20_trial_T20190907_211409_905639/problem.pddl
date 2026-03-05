@@ -1,0 +1,29 @@
+(define (problem chill_mug_and_set_on_rack)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        mug - object
+        fridge - fridge
+        rack - receptacle
+        coffee_maker - object
+        toaster - object
+        knife - knife
+        sink - sink
+        microwave - microwave
+    )
+    (:init
+        (atLocation robot coffee_maker)
+        (inReceptacle mug coffee_maker)
+        (openable fridge)
+        (not (opened fridge))
+        (not (isCool mug))
+        (not (holdsAny robot))
+        (not (holds robot mug))
+    )
+    (:goal
+        (and
+            (inReceptacle mug rack)
+            (isCool mug)
+        )
+    )
+)

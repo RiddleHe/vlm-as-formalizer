@@ -1,0 +1,7 @@
+(GotoLocation robot sink)
+(PickupObject robot soapbar)
+(CleanObject robot sink soapbar)
+(GotoLocation robot cabinet)
+(OpenObject robot cabinet)
+(PutObjectInReceptacle robot soapbar cabinet)
+(CloseObject robot cabinet)

@@ -1,0 +1,18 @@
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  agent
+
+Predicate argument has wrong type:
+  openable pot_on_stove: pot_on_stove is not a receptacle
+  openable shelf_under_table: shelf_under_table is not a receptacle
+  opened bowl_on_table: bowl_on_table is not a receptacle
+  opened pan_on_stove: pan_on_stove is not a receptacle
+  openable bowl_on_table: bowl_on_table is not a receptacle
+  opened island_table: island_table is not a receptacle
+  opened shelf_under_table: shelf_under_table is not a receptacle
+  openable pan_on_stove: pan_on_stove is not a receptacle
+  opened pot_on_stove: pot_on_stove is not a receptacle
+  openable island_table: island_table is not a receptacle
+
+Object does not have a type:
+  stove
+

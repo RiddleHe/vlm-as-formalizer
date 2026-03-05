@@ -1,0 +1,6 @@
+(gotolocation agent1 brown_ball1)
+(pickupobject agent1 brown_ball1)
+(gotolocation agent1 fridge1)
+(coolobject agent1 fridge1 brown_ball1)
+(gotolocation agent1 sink1)
+(putobjectinreceptacle agent1 brown_ball1 sink1)

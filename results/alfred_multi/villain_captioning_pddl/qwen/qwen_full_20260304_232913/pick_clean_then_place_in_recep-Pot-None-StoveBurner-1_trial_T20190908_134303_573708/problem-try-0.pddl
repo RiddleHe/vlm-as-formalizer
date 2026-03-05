@@ -1,0 +1,37 @@
+(define (problem put_pot_on_stove)
+    (:domain put_task)
+    (:objects
+        agent - agent
+        stove - receptacle
+        sink - receptacle
+        pot1 pot2 - object
+        mug knife - object
+    )
+    (:init
+        (openable sink)
+        (not (opened sink))
+        (inReceptacle pot1 stove)
+        (inReceptacle pot2 stove)
+        (not (atLocation agent stove))
+        (not (atLocation agent sink))
+        (not (atLocation agent pot1))
+        (not (atLocation agent pot2))
+        (not (atLocation agent mug))
+        (not (atLocation agent knife))
+        (not (holdsAny agent))
+        (not (isClean pot1))
+        (not (isClean pot2))
+        (not (isHot pot1))
+        (not (isHot pot2))
+        (not (isCool pot1))
+        (not (isCool pot2))
+        (not (isSliced pot1))
+        (not (isSliced pot2))
+        (not (isOn stove))
+        (not (isToggled stove))
+    )
+    (:goal (and
+        (inReceptacle pot1 stove)
+        (inReceptacle pot2 stove)
+    ))
+)

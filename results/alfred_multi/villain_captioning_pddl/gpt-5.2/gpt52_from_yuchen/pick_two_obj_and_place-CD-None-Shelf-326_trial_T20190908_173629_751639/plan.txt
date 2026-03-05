@@ -1,0 +1,4 @@
+(pickupobject robot disk_1)
+(putobjectinreceptacle robot disk_1 bottom_right_shelf)
+(pickupobject robot disk_2)
+(putobjectinreceptacle robot disk_2 bottom_right_shelf)

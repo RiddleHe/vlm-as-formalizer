@@ -1,0 +1,48 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): stainless steel sink
+knife (object): knife on countertop
+receptacle (object): stainless steel sink, stove top, oven
+object: pot with water, empty pot, white mug, knife on countertop, stainless steel sink, stove top, oven
+openable (receptacle) true if a receptacle is openable: (openable stainless steel sink), (openable oven)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn stove top)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle pot with water stove top), (inReceptacle empty pot stove top), (inReceptacle white mug countertop)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object):
+
+PDDL problem: ```pddl
+(define (problem put_pot_on_stove)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        stove_top - receptacle
+        oven - receptacle
+        sink - receptacle
+        pot_with_water - object
+        empty_pot - object
+        white_mug - object
+        knife - object
+    )
+    (:init
+        (openable sink)
+        (openable oven)
+        (isOn stove_top)
+        (inReceptacle pot_with_water stove_top)
+        (inReceptacle empty_pot stove_top)
+        (inReceptacle white_mug stove_top) ; corrected to match scene graph (though image shows mug on countertop, scene graph says stove_top)
+        (atLocation robot stove_top) ; assuming robot starts at stove for interaction, as no initial location is specified
+    )
+    (:goal (and
+        (inReceptacle pot_with_water stove_top)
+    ))
+)
+```

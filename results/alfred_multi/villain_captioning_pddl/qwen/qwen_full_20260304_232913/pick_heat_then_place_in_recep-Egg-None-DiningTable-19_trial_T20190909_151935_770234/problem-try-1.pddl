@@ -1,0 +1,41 @@
+(define (problem cook_egg)
+    (:domain put_task)
+    (:objects
+        agent - agent
+        microwave - microwave
+        sink - sink
+        egg - object
+        knife - knife
+        fork - object
+        sponge - object
+        tomato - object
+        mug - object
+        bowl - object
+        bottle - object
+        spatula - object
+        table - object
+    )
+    (:init
+        (atLocation agent sink)
+        (inReceptacle egg sink)
+        (inReceptacle mug sink)
+        (inReceptacle fork sink)
+        (inReceptacle sponge sink)
+        (atLocation agent table)
+        (atLocation agent microwave)
+        (openable sink)
+        (not (opened sink))
+        (not (isHot egg))
+        (not (isSliced egg))
+        (not (isClean egg))
+        (not (isCool egg))
+        (not (isOn microwave))
+        (not (isToggled microwave))
+        (not (holds agent egg))
+        (not (holdsAny agent))
+    )
+    (:goal (and
+        (inReceptacle egg table)
+        (isHot egg)
+    ))
+)

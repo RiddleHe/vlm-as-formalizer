@@ -1,0 +1,281 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Put a heated apple on the table, left of the sponge.
+    
+
+SCENE CAPTION:
+### Scene overview (kitchen/dining area)
+The images show a rectangular dining table with various utensils and food items on top, plus a nearby stove with a microwave mounted above it. No robot/agent is visible; per problem statement the agent starts with **no** `(atLocation agent object)` true.
+
+---
+
+## 1) Objects and domain types present
+
+### Receptacles (from domain)
+- **Microwave (1)**: A silver/gray microwave mounted above the stove (front door visible). It is a **receptacle** and is typically **openable** in this domain. Door appears **closed** (no visible open door).
+- **Table (1)**: The large green tabletop surface where most items sit. In this task context it functions as a placement surface/receptacle (can “hold things”).
+- **Sink (0 visible)**: No sink is shown in these views.
+- **Fridge (0 visible)**: No fridge is shown in these views.
+
+### Knife (domain type)
+- **Knife (1)**: A kitchen knife with a tan/yellow handle on the left side of the table, near a loaf-like brown item.
+
+### Other objects (domain “object”)
+- **Apple (1)**: A red apple located on the right half of the table.
+- **Sponge (1)**: A rectangular sponge near the center of the table; green top with a yellow layer beneath.
+- Additional non-domain-specific items visible (still “object” in general): forks, spoons, a spatula/turner, a pencil, a dark bottle, a frying pan, a plate, cabbage/lettuce, and bread/loaf-like item.
+
+---
+
+## 2) Quantities (relevant to the instruction/domain)
+- Microwaves: **1**
+- Tables (placement surface): **1**
+- Sponges: **1**
+- Apples: **1**
+- Knives: **1**
+- Fridges: **0 visible**
+- Sinks: **0 visible**
+
+---
+
+## 3) Spatial relationships (useful for planning predicates)
+
+### Tabletop layout (key objects)
+- **Sponge**: Near the middle of the table surface.
+- **Apple**: On the right half of the table, positioned **to the right of the sponge** (not left of it).
+- **Microwave**: Not on the table; mounted above the stove in a different area of the scene.
+
+### “Left of the sponge” target region (for final placement)
+- The **left side of the sponge** is occupied/nearby by a **spatula/turner** and a **red pencil** crossing near that central area. This region is still on the table and could be used as the intended placement zone, but it is currently **not** where the apple is.
+
+---
+
+## 4) Current state relevant to the task predicates
+
+### Apple state (task requires “heated”)
+- The apple is **not visibly in the microwave** and there is no cue that it is hot.
+- Therefore, based on the scene, the apple should be treated as **not heated yet** (i.e., no evidence for `(isHot apple)`).
+
+### Microwave state (for heating)
+- Microwave door appears **closed**; its “opened” state is not visually indicated as true.
+- Whether it is “on/toggled” is not visually confirmed; no clear indicator lights are visible in these frames.
+
+### Sponge
+- Sponge is on the table, not held. No “clean” status is visually implied; it is simply present as a landmark for the placement instruction.
+
+### Agent hands
+- The agent is initially **not holding anything** (per task statement: not at any object’s location; also no holding shown).
+
+---
+
+## 5) Visual descriptors to distinguish key objects
+- **Apple**: Medium-sized, round, **red**, on a **fork** near the right side of the table.
+- **Sponge**: Rectangular, **green top** with **yellow underside**, near center of the table.
+- **Microwave**: Metallic gray, mounted above stove, with a keypad panel on the right.
+- **Knife**: Silver blade with **tan/yellow handle**, on the left side of the table.
+
+---
+
+### Most important task-relevant fact
+- The **apple is currently on the table to the right of the sponge** and does **not** appear heated yet; to satisfy the instruction it will need to be heated (using the microwave) and then placed back on the **table left of the sponge**.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

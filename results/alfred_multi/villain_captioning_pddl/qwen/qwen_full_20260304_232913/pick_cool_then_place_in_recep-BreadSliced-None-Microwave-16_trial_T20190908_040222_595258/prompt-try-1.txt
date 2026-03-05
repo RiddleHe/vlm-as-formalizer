@@ -1,0 +1,278 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Place a cooled bread slice into the microwave.
+    
+
+SCENE CAPTION:
+The scene is a kitchen environment with various objects placed on a round white table and on tiled countertops. The goal is to place a cooled bread slice into the microwave.
+
+**Objects and their types:**
+
+- **Receptacles:**
+    - **Microwave:** A red and black microwave oven mounted above a countertop. It is a receptacle and is currently not opened. It is not turned on.
+    - **Fridge:** A dark gray refrigerator with colorful letter magnets (A, B, C, P) on its front. It is a receptacle and is currently closed.
+    - **Sink:** Not visible in any of the provided images, so its state and location are unknown.
+
+- **Objects:**
+    - **Bread:** Two brown, rectangular slices of bread are on the white table. They are not sliced, not heated, and not cooled.
+    - **Knife:** A knife with a yellow handle is lying on a wooden countertop near a stove. It is not being held by any agent.
+    - **Tomato:** A red tomato is on the white table. It is not sliced.
+    - **Salt Shaker:** A white salt shaker with a silver top is on the white table.
+    - **Pepper Shaker:** A white pepper shaker with a silver top is on the white table.
+    - **Roll of Paper Towels:** A gray roll of paper towels is on the white table.
+    - **Eggs:** Two brown eggs are on the white table.
+    - **Mugs:** Two silver mugs are on the white table.
+    - **Spoon:** A metal spoon is on the white table.
+    - **Green Book:** A green book is on the white table.
+    - **Toaster:** A black toaster is on a countertop, next to the tomato and a salt shaker.
+    - **Bottle:** A dark green bottle is on the white table.
+    - **Cup:** A silver cup is on the white table.
+
+**Quantities:**
+
+- 1 Microwave
+- 1 Fridge
+- 2 Bread slices
+- 1 Knife
+- 1 Tomato
+- 2 Salt/Pepper shakers (1 each)
+- 1 Roll of paper towels
+- 2 Eggs
+- 2 Mugs
+- 1 Spoon
+- 1 Green book
+- 1 Toaster
+- 1 Bottle
+- 1 Cup
+
+**Spatial Relationships:**
+
+- The two bread slices are on the white table, near the tomato and salt shaker.
+- The knife is on a separate wooden countertop, not on the table.
+- The microwave is mounted above a countertop, not on the table.
+- The fridge is on the floor, with its front facing the camera.
+- The toaster is on a countertop, next to the tomato.
+- The sink is not visible in any image.
+
+**Current State of Objects (Relevant to Planning):**
+
+- The bread slices are not sliced, not heated, and not cooled.
+- The knife is not being held and is not near the bread.
+- The microwave is not opened and is not turned on.
+- The fridge is closed.
+- No object is currently being held by an agent.
+- No object is in a receptacle (except possibly the microwave and fridge, which are closed).
+
+**Visual Properties:**
+
+- The bread slices are brown and rectangular.
+- The knife has a yellow handle and a silver blade.
+- The tomato is red and round.
+- The microwave is red with a black front panel and control buttons.
+- The fridge is dark gray with colorful letter magnets.
+- The table is white and round, with a checkered shadow pattern on it.
+- The countertops are tiled with beige tiles.
+- The toaster is black with two slots.
+
+The robot needs to first go to the table to pick up a bread slice, then go to the countertop to pick up the knife, slice the bread, then go to the fridge to cool the bread slice, and finally go to the microwave to place the cooled bread slice inside.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

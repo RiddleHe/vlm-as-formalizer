@@ -1,0 +1,72 @@
+```pddl
+(define (problem put_washed_slice_potato_in_microwave)
+    (:domain put_task)
+    (:objects
+        agent - agent
+        microwave - microwave
+        sink - sink
+        fridge - fridge
+        potato - object
+        knife_countertop - knife
+        knife_floor - knife
+        fork_table - object
+        spoon - object
+        spatula - object
+        salt_shaker_table - object
+        salt_shaker_countertop - object
+        apple_sink - object
+        apple_table - object
+        kettle - object
+        mug - object
+        bowl - object
+        cup - object
+        table - receptacle
+        countertop - receptacle
+        floor - receptacle
+    )
+    (:init
+        (openable microwave)
+        (not (opened microwave))
+        (openable sink)
+        (not (opened sink))
+        (openable fridge)
+        (not (opened fridge))
+        
+        (inReceptacle fork_table table)
+        (inReceptacle spoon table)
+        (inReceptacle spatula table)
+        (inReceptacle salt_shaker_table table)
+        (inReceptacle apple_table table)
+        (inReceptacle kettle table)
+        (inReceptacle bowl table)
+        (inReceptacle cup table)
+        
+        (inReceptacle mug sink)
+        (inReceptacle fork_table sink)
+        (inReceptacle apple_sink sink)
+        
+        (atLocation potato table)
+        (atLocation knife_countertop countertop)
+        (atLocation knife_floor floor)
+        (atLocation salt_shaker_countertop countertop)
+        
+        (not (holdsAny agent))
+        (not (isClean potato))
+        (not (isHot potato))
+        (not (isCool potato))
+        (not (isSliced potato))
+        (not (isOn microwave))
+        (not (isToggled microwave))
+        
+        (atLocation agent table) ; Initial location of agent is arbitrary; we can set it to table for starting point.
+    )
+    (:goal
+        (and
+            (inReceptacle potato microwave)
+            (isClean potato)
+            (isSliced potato)
+            (isHot potato)
+        )
+    )
+)
+```

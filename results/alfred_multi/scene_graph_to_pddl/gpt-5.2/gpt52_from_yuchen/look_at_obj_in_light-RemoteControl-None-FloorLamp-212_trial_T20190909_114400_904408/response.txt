@@ -1,0 +1,66 @@
+Scene graph:
+agent: none
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object):
+- green_three_cushion_sofa_receptacle
+- beige_lampshade_table_lamp_receptacle
+object:
+- red_square_throw_pillow
+- lightwood_rectangular_object_on_sofa
+- blue_credit_card_like_card_on_sofa
+- white_tv_remote_control_with_buttons
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on:
+- (isOn beige_lampshade_table_lamp_receptacle)
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle red_square_throw_pillow green_three_cushion_sofa_receptacle)
+- (inReceptacle lightwood_rectangular_object_on_sofa green_three_cushion_sofa_receptacle)
+- (inReceptacle blue_credit_card_like_card_on_sofa green_three_cushion_sofa_receptacle)
+- (inReceptacle white_tv_remote_control_with_buttons green_three_cushion_sofa_receptacle)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```lisp
+(define (problem turn_on_lamp_with_remote)
+  (:domain put_task)
+  (:objects
+    robot - agent
+
+    green_three_cushion_sofa_receptacle - receptacle
+    beige_lampshade_table_lamp_receptacle - receptacle
+
+    red_square_throw_pillow - object
+    lightwood_rectangular_object_on_sofa - object
+    blue_credit_card_like_card_on_sofa - object
+    white_tv_remote_control_with_buttons - object
+  )
+
+  (:init
+    ;; objects in receptacles
+    (inReceptacle red_square_throw_pillow green_three_cushion_sofa_receptacle)
+    (inReceptacle lightwood_rectangular_object_on_sofa green_three_cushion_sofa_receptacle)
+    (inReceptacle blue_credit_card_like_card_on_sofa green_three_cushion_sofa_receptacle)
+    (inReceptacle white_tv_remote_control_with_buttons green_three_cushion_sofa_receptacle)
+
+    ;; lamp state
+    (isOn beige_lampshade_table_lamp_receptacle)
+  )
+
+  (:goal
+    (and
+      (isToggled white_tv_remote_control_with_buttons)
+      (isOn beige_lampshade_table_lamp_receptacle)
+    )
+  )
+)
+```

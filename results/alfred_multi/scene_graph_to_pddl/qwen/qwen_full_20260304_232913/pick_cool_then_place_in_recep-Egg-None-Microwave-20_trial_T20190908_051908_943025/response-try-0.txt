@@ -1,0 +1,72 @@
+Scene graph:
+agent: agent
+microwave (receptacle): black microwave
+fridge (receptacle): black fridge
+sink (receptacle): green sink
+knife (object): silver knife
+receptacle (object): green sink, black microwave, black fridge
+object: brown loaf of bread, red apple, white egg, silver knife, green sink, black microwave, black fridge, gray bowl, blue plate, yellow ladle, gray soap dispenser, white salt shaker, wooden chair
+openable (receptacle) true if a receptacle is openable: (openable black microwave), (openable black fridge)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle white egg green sink), (inReceptacle red apple green sink), (inReceptacle brown loaf of bread green sink), (inReceptacle gray bowl green sink), (inReceptacle blue plate green sink), (inReceptacle yellow ladle green sink), (inReceptacle gray soap dispenser green sink), (inReceptacle white salt shaker green sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem cool_egg_and_put_in_microwave)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        egg - object
+        apple - object
+        bread - object
+        bowl - object
+        plate - object
+        ladle - object
+        soap_dispenser - object
+        salt_shaker - object
+        chair - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (inReceptacle egg sink)
+        (inReceptacle apple sink)
+        (inReceptacle bread sink)
+        (inReceptacle bowl sink)
+        (inReceptacle plate sink)
+        (inReceptacle ladle sink)
+        (inReceptacle soap_dispenser sink)
+        (inReceptacle salt_shaker sink)
+        (not (holdsAny agent))
+        (not (atLocation agent microwave))
+        (not (atLocation agent fridge))
+        (not (atLocation agent sink))
+        (not (isCool egg))
+        (not (isHot egg))
+        (not (isSliced egg))
+        (not (isClean egg))
+        (not (isOn microwave))
+        (not (isToggled microwave))
+        (not (opened fridge))
+        (not (opened microwave))
+    )
+    (:goal
+        (and
+            (inReceptacle egg microwave)
+            (isCool egg)
+        )
+    )
+)
+```

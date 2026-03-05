@@ -1,0 +1,8 @@
+(gotolocation agent1 toilet_paper_empty)
+(pickupobject agent1 toilet_paper_empty)
+(gotolocation agent1 cabinet_second_from_left)
+(putobjectinreceptacle agent1 toilet_paper_empty cabinet_second_from_left)
+(gotolocation agent1 countertop)
+(pickupobject agent1 toilet_paper_full)
+(gotolocation agent1 cabinet_second_from_left)
+(putobjectinreceptacle agent1 toilet_paper_full cabinet_second_from_left)

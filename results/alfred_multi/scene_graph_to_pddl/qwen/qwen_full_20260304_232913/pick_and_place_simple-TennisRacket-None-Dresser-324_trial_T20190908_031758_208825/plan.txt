@@ -1,0 +1,3 @@
+(pickupobject robot tennis_racket)
+(gotolocation robot wooden_dresser_with_drawers)
+(putobjectinreceptacle robot tennis_racket wooden_dresser_with_drawers)

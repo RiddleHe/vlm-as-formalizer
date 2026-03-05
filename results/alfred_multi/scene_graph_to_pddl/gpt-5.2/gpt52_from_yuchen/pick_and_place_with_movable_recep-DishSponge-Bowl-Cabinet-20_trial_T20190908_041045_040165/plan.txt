@@ -1,0 +1,3 @@
+(gotolocation robot_agent white_dishwasher_front)
+(pickupobject robot_agent white_dishwasher_front)
+(putobjectinreceptacle robot_agent white_dishwasher_front white_dishwasher_front)

@@ -1,0 +1,2 @@
+(gotolocation robot yellow_pencil)
+(pickupobject robot yellow_pencil)

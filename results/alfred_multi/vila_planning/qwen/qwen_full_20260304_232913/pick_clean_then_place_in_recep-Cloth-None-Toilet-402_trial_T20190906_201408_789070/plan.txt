@@ -1,0 +1,5 @@
+(GotoLocation robot sink)
+(PickupObject robot cloth)
+(CleanObject robot sink cloth)
+(GotoLocation robot toilet)
+(PutObjectInReceptacle robot cloth toilet)

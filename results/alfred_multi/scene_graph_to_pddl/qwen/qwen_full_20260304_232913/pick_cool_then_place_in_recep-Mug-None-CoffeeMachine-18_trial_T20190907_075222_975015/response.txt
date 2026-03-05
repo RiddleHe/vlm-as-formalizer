@@ -1,0 +1,41 @@
+Scene graph:
+agent: robot
+microwave (receptacle): none
+fridge (receptacle): silver_fridge_with_black_handles
+sink (receptacle): none
+knife (object): none
+receptacle (object): silver_fridge_with_black_handles, coffee_maker_with_display
+object: white_cup_on_coffee_maker, copper_vase_left, copper_vase_right, coffee_maker_with_display, silver_fridge_with_black_handles
+openable (receptacle) true if a receptacle is openable: (openable silver_fridge_with_black_handles)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn coffee_maker_with_display)
+isToggled (object) true if the object has been toggled: (isToggled coffee_maker_with_display)
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle white_cup_on_coffee_maker coffee_maker_with_display)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem cool_cup)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        silver_fridge_with_black_handles - fridge
+        coffee_maker_with_display - receptacle
+        white_cup_on_coffee_maker - object
+        copper_vase_left - object
+        copper_vase_right - object
+    )
+    (:init
+        (openable silver_fridge_with_black_handles)
+        (isOn coffee_maker_with_display)
+        (isToggled coffee_maker_with_display)
+        (inReceptacle white_cup_on_coffee_maker coffee_maker_with_display)
+    )
+    (:goal (isCool white_cup_on_coffee_maker))
+)
+```

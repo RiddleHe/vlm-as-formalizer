@@ -1,0 +1,17 @@
+```pddl
+(define (problem put_task_problem)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        ring - object
+        lamp - object
+        table - receptacle
+    )
+    (:init
+        (atLocation robot table)
+        (inReceptacle ring table)
+        (not (isOn lamp))
+    )
+    (:goal (and (isOn lamp)))
+)
+```

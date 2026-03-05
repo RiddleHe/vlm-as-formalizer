@@ -1,0 +1,7 @@
+(GotoLocation agent table)
+(PickupObject agent spoon)
+(GotoLocation agent sink)
+(CleanObject agent sink spoon)
+(OpenObject agent cabinet)
+(PutObjectInReceptacle agent spoon cabinet)
+(CloseObject agent cabinet)

@@ -1,0 +1,6 @@
+(gotolocation agent1 lamp)
+(pickupobject agent1 lamp)
+(gotolocation agent1 brown_cardboard_box)
+(putobjectinreceptacle agent1 lamp brown_cardboard_box)
+(gotolocation agent1 lamp)
+(gotolocation agent1 brown_cardboard_box)

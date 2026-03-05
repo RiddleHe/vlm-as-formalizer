@@ -1,0 +1,6 @@
+(GotoLocation robot desk)
+(PickupObject robot pen)
+(GotoLocation robot bowl)
+(PutObjectInReceptacle robot pen bowl)
+(GotoLocation robot desk)
+(PutObjectInReceptacle robot bowl desk)

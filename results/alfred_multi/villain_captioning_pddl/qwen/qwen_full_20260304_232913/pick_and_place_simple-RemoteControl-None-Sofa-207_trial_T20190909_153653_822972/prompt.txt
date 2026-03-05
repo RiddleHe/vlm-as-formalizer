@@ -1,0 +1,261 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Place a remote on the sofa
+    
+
+SCENE CAPTION:
+Scene Description:
+
+The scene depicts a living room environment with several key objects relevant to the robotic planning task. The primary focus is on a black leather sofa and a black coffee table situated on a large, ornate rug with red, blue, and beige patterns over a light wooden floor.
+
+1. Objects and Their Types:
+   - Agent: A robotic agent is present, though not visually depicted in the images. It is assumed to be capable of moving and interacting with objects in the scene.
+   - Receptacles: The black leather sofa qualifies as a receptacle because it can hold objects (e.g., the blue cylindrical pillow and the remote control). The coffee table is not a receptacle in the domain’s sense (it’s not modeled as one in the domain file), so it is treated as a regular object. The open cardboard box on the coffee table is also not defined as a receptacle in the domain.
+   - Objects: 
+     - Remote control: A silver remote with a blue screen and directional pad, located on the coffee table in the second image.
+     - Blue cylindrical pillow: Located on the sofa in the third image.
+     - Gray toy dolphin: Located on the coffee table in the first image.
+     - Scattered papers: On the coffee table in the first image.
+     - Open cardboard box: On the coffee table in all images.
+     - Black leather sofa: A large three-seater sofa with visible cushions and armrests.
+     - Coffee table: A black rectangular table with thin metal legs.
+     - Rug: A large patterned rug under the coffee table and sofa.
+     - Additional furniture: Two black chairs and a side table with a yellow vase are visible in the background of the third image, but are not relevant to the current task.
+
+2. Quantities:
+   - 1 sofa (receptacle)
+   - 1 remote control (object)
+   - 1 blue pillow (object, currently on sofa)
+   - 1 toy dolphin (object, on coffee table)
+   - Multiple scattered papers (objects, on coffee table)
+   - 1 open cardboard box (object, on coffee table)
+   - 1 coffee table (object, not a receptacle per domain)
+   - 1 rug (object, not a receptacle)
+   - 2 black chairs (objects, not receptacles per domain)
+   - 1 side table with vase (objects, not relevant)
+
+3. Spatial Relationships:
+   - The remote control is on the coffee table (as seen in the second image).
+   - The blue pillow is on the sofa (as seen in the third image).
+   - The toy dolphin and papers are on the coffee table (first image).
+   - The open box is on the coffee table (all images).
+   - The coffee table is positioned in front of the sofa, centered on the rug.
+   - The sofa is against the wall in the third image, with chairs and a side table to its right.
+
+4. Current State of Objects Relevant to the Task:
+   - The remote control is not currently held by the agent and is resting on the coffee table.
+   - The sofa is not currently holding the remote control; it is holding a blue pillow.
+   - The agent is not at any object’s location initially (as per instruction).
+   - No objects are marked as cleaned, heated, cooled, sliced, or toggled — these states are irrelevant for the current task.
+   - The sofa is not openable (it is not modeled as an openable receptacle in the domain), so no open/close actions are applicable.
+
+5. Visual Properties:
+   - The remote control is silver with a rectangular shape, blue screen, and white directional pad; it is clearly distinguishable on the black coffee table.
+   - The sofa is black leather with visible seams and cushions; it has a large, comfortable appearance.
+   - The coffee table is matte black with thin, dark metal legs; it has a smooth surface holding various items.
+   - The rug has a complex geometric and floral pattern with dominant red and blue colors and a beige border.
+   - The toy dolphin is gray and stylized, lying on its side on the table.
+   - The blue pillow is cylindrical and bright blue, contrasting with the black sofa.
+
+The task is to place the remote control on the sofa. The agent must first navigate to the coffee table to pick up the remote, then move to the sofa and place the remote on it. The sofa is treated as a receptacle for this purpose, even though it is not openable. No other domain predicates (like opened, isClean, etc.) are relevant to this simple placement task.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

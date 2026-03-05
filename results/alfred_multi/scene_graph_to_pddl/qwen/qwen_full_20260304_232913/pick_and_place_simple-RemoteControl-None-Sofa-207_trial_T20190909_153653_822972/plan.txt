@@ -1,0 +1,4 @@
+(gotolocation robot remote_control)
+(pickupobject robot remote_control)
+(gotolocation robot black_sofa)
+(putobjectinreceptacle robot remote_control black_sofa)

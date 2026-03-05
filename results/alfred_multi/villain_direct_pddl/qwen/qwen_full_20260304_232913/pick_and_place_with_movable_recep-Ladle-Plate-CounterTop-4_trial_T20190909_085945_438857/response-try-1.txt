@@ -1,0 +1,22 @@
+```pddl
+(define (problem put_plate_with_spoon_on_counter)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        counter1 counter2 - receptacle
+        plate_grey - object
+        spoon_metal - object
+    )
+    (:init
+        (atLocation agent1 counter1)
+        (inReceptacle plate_grey counter1)
+        (inReceptacle spoon_metal counter2)
+    )
+    (:goal
+        (and
+            (inReceptacle plate_grey counter1)
+            (inReceptacle spoon_metal plate_grey)
+        )
+    )
+)
+```

@@ -1,0 +1,6 @@
+(GotoLocation agent stove)
+(PickupObject agent pot)
+(PickupObject agent spatula)
+(PutObjectInReceptacle agent spatula pot)
+(GotoLocation agent table)
+(PutObjectInReceptacle agent pot table)

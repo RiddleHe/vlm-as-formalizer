@@ -1,0 +1,4 @@
+(gotolocation agent1 side_table)
+(toggleobject agent1 lamp)
+(gotolocation agent1 newspaper)
+(pickupobject agent1 newspaper)

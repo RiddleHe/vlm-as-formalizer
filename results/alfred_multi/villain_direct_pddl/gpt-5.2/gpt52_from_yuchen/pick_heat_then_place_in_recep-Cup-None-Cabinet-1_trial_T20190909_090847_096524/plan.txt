@@ -1,0 +1,6 @@
+(gotolocation robot glass1)
+(pickupobject robot glass1)
+(gotolocation robot microwave1)
+(heatobject robot microwave1 glass1)
+(gotolocation robot cabinet1)
+(putobjectinreceptacle robot glass1 cabinet1)

@@ -1,0 +1,3 @@
+(pickupobject robot_1 cup_1)
+(gotolocation robot_1 desk_1)
+(putobjectinreceptacle robot_1 cup_1 desk_1)

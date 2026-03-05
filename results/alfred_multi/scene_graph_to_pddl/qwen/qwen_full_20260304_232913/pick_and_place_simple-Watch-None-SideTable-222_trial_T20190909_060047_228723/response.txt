@@ -1,0 +1,42 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): small_wooden_table, tv_stand
+object: watch_on_tv_stand, watch_on_floor, newspaper_on_small_wooden_table, statue_on_tv_stand, remote_control_on_tv_stand, credit_card_on_tv_stand, small_wooden_table, tv_stand
+openable (receptacle) true if a receptacle is openable: 
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle newspaper_on_small_wooden_table small_wooden_table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot tv_stand)
+
+PDDL problem: ```pddl
+(define (problem move_watch_to_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        small_wooden_table - receptacle
+        tv_stand - receptacle
+        watch_on_tv_stand - object
+        watch_on_floor - object
+        newspaper_on_small_wooden_table - object
+        statue_on_tv_stand - object
+        remote_control_on_tv_stand - object
+        credit_card_on_tv_stand - object
+    )
+    (:init
+        (atLocation robot tv_stand)
+        (inReceptacle newspaper_on_small_wooden_table small_wooden_table)
+    )
+    (:goal (and (inReceptacle watch_on_tv_stand small_wooden_table)))
+)
+```

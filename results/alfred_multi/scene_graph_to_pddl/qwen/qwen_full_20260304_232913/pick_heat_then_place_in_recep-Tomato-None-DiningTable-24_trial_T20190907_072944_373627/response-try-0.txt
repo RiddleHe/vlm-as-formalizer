@@ -1,0 +1,70 @@
+Scene graph:
+agent: robot
+microwave (receptacle): microwave
+fridge (receptacle): fridge
+sink (receptacle): sink
+knife (object): knife_on_table, knife_on_counter
+receptacle (object): golden_trash_can, black_plate, green_book, brown_cabinet
+object: red_tomato, yellow_apple, silver_fork, salt_shaker, black_plate, green_book, golden_trash_can, brown_cabinet, lettuce, black_stool, silver_knife, silver_spoon, copper_mug, soap_dispenser, microwave, sink, fridge
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable fridge), (openable sink)
+opened (receptacle) true if a receptacle is opened: (opened microwave)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle red_tomato black_plate), (inReceptacle yellow_apple brown_cabinet), (inReceptacle silver_fork black_plate), (inReceptacle salt_shaker brown_cabinet), (inReceptacle lettuce table), (inReceptacle green_book table), (inReceptacle silver_knife table), (inReceptacle silver_spoon table), (inReceptacle copper_mug table), (inReceptacle soap_dispenser table)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot black_plate)
+
+PDDL problem: ```pddl
+(define (problem put_heated_tomato_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife_on_table - knife
+        knife_on_counter - knife
+        golden_trash_can - receptacle
+        black_plate - receptacle
+        green_book - receptacle
+        brown_cabinet - receptacle
+        red_tomato - object
+        yellow_apple - object
+        silver_fork - object
+        salt_shaker - object
+        lettuce - object
+        black_stool - object
+        silver_knife - object
+        silver_spoon - object
+        copper_mug - object
+        soap_dispenser - object
+        table - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (opened microwave)
+        (inReceptacle red_tomato black_plate)
+        (inReceptacle yellow_apple brown_cabinet)
+        (inReceptacle silver_fork black_plate)
+        (inReceptacle salt_shaker brown_cabinet)
+        (inReceptacle lettuce table)
+        (inReceptacle green_book table)
+        (inReceptacle silver_knife table)
+        (inReceptacle silver_spoon table)
+        (inReceptacle copper_mug table)
+        (inReceptacle soap_dispenser table)
+        (atLocation robot black_plate)
+    )
+    (:goal (and
+        (inReceptacle red_tomato table)
+        (isHot red_tomato)
+    ))
+)
+```

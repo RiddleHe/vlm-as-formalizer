@@ -1,0 +1,8 @@
+(gotolocation robot saltshaker1)
+(pickupobject robot saltshaker1)
+(gotolocation robot lower_cabinet)
+(putobjectinreceptacle robot saltshaker1 lower_cabinet)
+(gotolocation robot shelf)
+(pickupobject robot saltshaker2)
+(gotolocation robot lower_cabinet)
+(putobjectinreceptacle robot saltshaker2 lower_cabinet)

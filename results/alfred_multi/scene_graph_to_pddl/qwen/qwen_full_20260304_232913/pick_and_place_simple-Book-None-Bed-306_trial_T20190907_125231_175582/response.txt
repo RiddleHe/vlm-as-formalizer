@@ -1,0 +1,64 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): blue pen on desk
+receptacle (object): wooden desk, wooden bed frame, gray trash can
+object: gray laptop on bed, gray laptop on desk, blue book on desk, black chair, gray trash can, wooden desk, wooden bed frame, blue pen on desk, white lamp on desk, silver CD on desk, black radiator on wall, gray carpet, white brick wall, black and white patterned blanket on bed, black and white patterned blanket on floor, gray trash can lid
+openable (receptacle) true if a receptacle is openable: (openable gray trash can)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn gray laptop on bed), (isOn gray laptop on desk), (isOn white lamp on desk)
+isToggled (object) true if the object has been toggled: (isToggled gray laptop on bed), (isToggled gray laptop on desk), (isToggled white lamp on desk)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle gray laptop on bed wooden bed frame), (inReceptacle gray laptop on desk wooden desk), (inReceptacle blue book on desk wooden desk), (inReceptacle blue pen on desk wooden desk), (inReceptacle white lamp on desk wooden desk), (inReceptacle silver CD on desk wooden desk)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) : (atLocation robot wooden desk)
+
+PDDL problem: ```pddl
+(define (problem move_book_to_bed)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        wooden_desk - receptacle
+        wooden_bed_frame - receptacle
+        gray_trash_can - receptacle
+        blue_book_on_desk - object
+        gray_laptop_on_bed - object
+        gray_laptop_on_desk - object
+        blue_pen_on_desk - object
+        white_lamp_on_desk - object
+        silver_CD_on_desk - object
+        black_chair - object
+        gray_carpet - object
+        white_brick_wall - object
+        black_and_white_patterned_blanket_on_bed - object
+        black_and_white_patterned_blanket_on_floor - object
+        gray_trash_can_lid - object
+        black_radiator_on_wall - object
+    )
+    (:init
+        (openable gray_trash_can)
+        (isOn gray_laptop_on_bed)
+        (isOn gray_laptop_on_desk)
+        (isOn white_lamp_on_desk)
+        (isToggled gray_laptop_on_bed)
+        (isToggled gray_laptop_on_desk)
+        (isToggled white_lamp_on_desk)
+        (inReceptacle gray_laptop_on_bed wooden_bed_frame)
+        (inReceptacle gray_laptop_on_desk wooden_desk)
+        (inReceptacle blue_book_on_desk wooden_desk)
+        (inReceptacle blue_pen_on_desk wooden_desk)
+        (inReceptacle white_lamp_on_desk wooden_desk)
+        (inReceptacle silver_CD_on_desk wooden_desk)
+        (atLocation robot wooden_desk)
+    )
+    (:goal (and
+        (inReceptacle blue_book_on_desk wooden_bed_frame)
+    ))
+)
+```

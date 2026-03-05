@@ -1,0 +1,6 @@
+(gotolocation robot apple1)
+(pickupobject robot apple1)
+(gotolocation robot fridge1)
+(coolobject robot fridge1 apple1)
+(gotolocation robot whitebin1)
+(putobjectinreceptacle robot apple1 whitebin1)

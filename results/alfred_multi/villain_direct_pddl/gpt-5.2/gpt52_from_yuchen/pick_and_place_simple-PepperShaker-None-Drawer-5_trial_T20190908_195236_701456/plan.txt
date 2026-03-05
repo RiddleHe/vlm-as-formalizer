@@ -1,0 +1,2 @@
+(pickupobject robot saltshaker1)
+(putobjectinreceptacle robot saltshaker1 drawer1)

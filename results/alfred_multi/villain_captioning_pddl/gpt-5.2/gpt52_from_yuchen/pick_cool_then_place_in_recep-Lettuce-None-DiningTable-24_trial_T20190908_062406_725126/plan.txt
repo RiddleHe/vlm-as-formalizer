@@ -1,0 +1,6 @@
+(gotolocation robot lettuce1)
+(pickupobject robot lettuce1)
+(gotolocation robot fridge)
+(coolobject robot fridge lettuce1)
+(gotolocation robot table)
+(putobjectinreceptacle robot lettuce1 table)

@@ -1,0 +1,11 @@
+Predicate argument has wrong type:
+  atLocation mug countertop: mug is not a agent
+  atLocation green_glass countertop: green_glass is not a agent
+  atLocation pepper_grinder countertop: pepper_grinder is not a agent
+  atLocation toaster countertop: toaster is not a agent
+  atLocation bread2 countertop: bread2 is not a agent
+  atLocation plant countertop: plant is not a agent
+  atLocation bread1 countertop: bread1 is not a agent
+  atLocation microwave countertop: microwave is not a agent
+  atLocation pot countertop: pot is not a agent
+

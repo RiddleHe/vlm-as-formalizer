@@ -1,0 +1,4 @@
+(gotolocation robot grey_plate)
+(pickupobject robot grey_plate)
+(gotolocation robot counter)
+(putobjectinreceptacle robot grey_plate counter)

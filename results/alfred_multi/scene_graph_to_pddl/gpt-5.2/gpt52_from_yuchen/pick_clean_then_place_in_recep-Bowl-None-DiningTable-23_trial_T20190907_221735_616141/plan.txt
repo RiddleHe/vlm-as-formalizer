@@ -1,0 +1,7 @@
+(gotolocation robot clear-glass-bottle-carafe)
+(pickupobject robot clear-glass-bottle-carafe)
+(gotolocation robot silver-metal-pan)
+(putobjectinreceptacle robot clear-glass-bottle-carafe silver-metal-pan)
+(pickupobject robot silver-metal-pan)
+(gotolocation robot square-bowl-1)
+(putobjectinreceptacle robot silver-metal-pan square-bowl-1)

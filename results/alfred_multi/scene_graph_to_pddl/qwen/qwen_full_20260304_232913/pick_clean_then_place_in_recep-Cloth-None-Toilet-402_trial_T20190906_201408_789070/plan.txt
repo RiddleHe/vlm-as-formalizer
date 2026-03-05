@@ -1,0 +1,6 @@
+(gotolocation robot toilet_tank_lid)
+(gotolocation robot left_sink)
+(pickupobject robot purple_rag)
+(cleanobject robot left_sink purple_rag)
+(gotolocation robot toilet_tank_lid)
+(putobjectinreceptacle robot purple_rag toilet_tank_lid)

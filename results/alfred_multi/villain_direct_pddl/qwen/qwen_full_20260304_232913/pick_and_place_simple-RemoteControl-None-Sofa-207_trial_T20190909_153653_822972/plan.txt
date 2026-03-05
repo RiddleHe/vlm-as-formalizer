@@ -1,0 +1,2 @@
+(gotolocation robot sofa)
+(putobjectinreceptacle robot remote sofa)

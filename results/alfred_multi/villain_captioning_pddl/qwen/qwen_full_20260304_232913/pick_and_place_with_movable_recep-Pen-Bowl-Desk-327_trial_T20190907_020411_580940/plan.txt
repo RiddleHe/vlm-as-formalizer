@@ -1,0 +1,7 @@
+(gotolocation agent pen)
+(pickupobject agent pen)
+(gotolocation agent bowl1)
+(putobjectinreceptacle agent pen bowl1)
+(pickupobject agent bowl1)
+(gotolocation agent desk)
+(putobjectinreceptacle agent bowl1 desk)

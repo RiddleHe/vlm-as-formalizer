@@ -1,0 +1,20 @@
+(define (problem put_frying_pan_with_fork_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        round_table - receptacle
+        frying_pan - object
+        fork - object
+    )
+    (:init
+        (atLocation robot frying_pan)
+        (atLocation robot fork)
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (inReceptacle fork frying_pan)
+            (inReceptacle frying_pan round_table)
+        )
+    )
+)

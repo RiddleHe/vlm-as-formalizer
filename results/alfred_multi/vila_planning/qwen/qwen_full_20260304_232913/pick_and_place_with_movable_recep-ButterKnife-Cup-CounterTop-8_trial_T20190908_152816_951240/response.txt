@@ -1,0 +1,8 @@
+(GotoLocation robot countertop)
+(PickupObject robot knife)
+(GotoLocation robot shelf)
+(PutObjectInReceptacle robot knife shelf)
+(GotoLocation robot countertop)
+(PickupObject robot glass)
+(GotoLocation robot shelf)
+(PutObjectInReceptacle robot glass shelf)

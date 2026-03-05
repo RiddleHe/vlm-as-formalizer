@@ -1,0 +1,7 @@
+(GotoLocation robot bowl)
+(PickupObject robot bowl)
+(GotoLocation robot creditcard)
+(PickupObject robot creditcard)
+(PutObjectInReceptacle robot creditcard bowl)
+(GotoLocation robot coffeetable)
+(PutObjectInReceptacle robot bowl coffeetable)

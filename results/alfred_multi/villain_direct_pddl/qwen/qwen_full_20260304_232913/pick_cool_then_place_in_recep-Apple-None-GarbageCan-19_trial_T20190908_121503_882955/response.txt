@@ -1,0 +1,24 @@
+```pddl
+(define (problem chill_apple_and_put_in_bin)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        apple - object
+        fridge - fridge
+        trash_can - receptacle
+        microwave - microwave
+    )
+    (:init
+        (atLocation agent1 microwave)
+        (openable fridge)
+        (not (opened fridge))
+        (not (isCool apple))
+        (not (inReceptacle apple fridge))
+        (not (inReceptacle apple trash_can))
+    )
+    (:goal (and
+        (inReceptacle apple trash_can)
+        (isCool apple)
+    ))
+)
+```

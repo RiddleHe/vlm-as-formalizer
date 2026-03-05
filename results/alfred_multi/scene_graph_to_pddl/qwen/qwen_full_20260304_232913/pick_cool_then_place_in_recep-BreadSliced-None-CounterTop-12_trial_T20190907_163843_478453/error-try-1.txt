@@ -1,0 +1,10 @@
+...  translator command line string: /local-ssd/mh3897/envs/pddl/bin/python /home/mh3897/pddl/villain/downward/builds/release/bin/translate/translate.py /tmp/tmpem0odxeq/domain.pddl /tmp/tmpem0odxeq/problem.pddl --sas-file /tmp/tmpem0odxeq/output_plan.sas
+Parsing...
+Parsing task
+	->Parsing element #16 in init block
+Error in initial state specification
+Reason: Atom atlocation(robot, silver_knife) is true and false.
+translate exit code: 31
+
+Driver aborting after translate
+INFO     Planner time: 0.07s

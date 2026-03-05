@@ -1,0 +1,4 @@
+(gotolocation robot two_brown_candles)
+(pickupobject robot two_brown_candles)
+(gotolocation robot beige_cabinet)
+(putobjectinreceptacle robot two_brown_candles beige_cabinet)

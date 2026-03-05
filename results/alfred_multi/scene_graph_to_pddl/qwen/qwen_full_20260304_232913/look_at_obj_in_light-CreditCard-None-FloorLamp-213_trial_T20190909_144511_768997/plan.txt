@@ -1,0 +1,4 @@
+(gotolocation robot red_credit_card)
+(pickupobject robot red_credit_card)
+(gotolocation robot tall_lamp_with_green_shade)
+(toggleobject robot tall_lamp_with_green_shade)

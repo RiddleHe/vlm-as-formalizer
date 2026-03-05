@@ -1,0 +1,40 @@
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  microwave
+  open_cardboard_box
+  statue
+  grey_plate_1
+  blue_cup
+  laptop
+  tissue_box
+  grey_plate_2
+  knife
+  green_cup
+  sink
+  potted_plant
+  agent
+  candle
+  fridge
+  remote_control
+  newspaper_2
+  newspaper_1
+
+Object does not have a type:
+  microwave
+  open_cardboard_box
+  statue
+  grey_plate_1
+  blue_cup
+  laptop
+  tissue_box
+  grey_plate_2
+  knife
+  green_cup
+  sink
+  potted_plant
+  agent
+  candle
+  fridge
+  remote_control
+  newspaper_2
+  newspaper_1
+

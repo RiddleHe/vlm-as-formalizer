@@ -1,0 +1,46 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): wooden_desk_with_shelf
+object: blue_book_with_purpose_8, silver_laptop, cd_disk_on_desk, cd_disk_on_desk_right, black_office_chair, wooden_desk_with_shelf
+openable (receptacle) true if a receptacle is openable: (openable wooden_desk_with_shelf)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn silver_laptop)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: 
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem move_disks_to_shelf)
+    (:domain put_task)
+    (:objects
+        robot_agent - agent
+        wooden_desk_with_shelf - receptacle
+        blue_book_with_purpose_8 - object
+        silver_laptop - object
+        cd_disk_on_desk - object
+        cd_disk_on_desk_right - object
+        black_office_chair - object
+    )
+    (:init
+        (openable wooden_desk_with_shelf)
+        (isOn silver_laptop)
+        (atLocation robot_agent wooden_desk_with_shelf)
+        (not (holdsAny robot_agent))
+        (not (opened wooden_desk_with_shelf))
+    )
+    (:goal (and
+        (inReceptacle cd_disk_on_desk wooden_desk_with_shelf)
+        (inReceptacle cd_disk_on_desk_right wooden_desk_with_shelf)
+    ))
+)
+```

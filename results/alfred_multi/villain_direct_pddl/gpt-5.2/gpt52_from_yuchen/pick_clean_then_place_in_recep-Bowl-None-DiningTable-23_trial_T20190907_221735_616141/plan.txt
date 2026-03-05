@@ -1,0 +1,4 @@
+(gotolocation robot water1)
+(pickupobject robot water1)
+(gotolocation robot kitchen_island)
+(putobjectinreceptacle robot water1 pan1)

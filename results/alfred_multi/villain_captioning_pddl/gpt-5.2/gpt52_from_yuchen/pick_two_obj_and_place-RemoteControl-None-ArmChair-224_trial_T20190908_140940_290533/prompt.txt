@@ -1,0 +1,255 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Move two remotes to the seat of a chair.
+    
+
+SCENE CAPTION:
+Scene overview (living-room area, multiple camera views)
+- The scene contains a black leather sofa with several small items on its seat cushions, a nearby brown/tan cushioned chair (single-seat) near a window, and some side cabinets along a yellow wall. There is also a fireplace visible in one view, but no kitchen appliances (microwave/fridge/sink) are visible in these images.
+
+Relevant object types in the domain
+- agent: 1 robot agent (not visible), and per problem statement it starts with **no (atLocation agent …)** facts true.
+- receptacle (domain “receptacle” type): 1 chair (treat the chair’s seat as the target receptacle for placing objects).
+  - Note: The chair is not shown as openable; it is just a place to put items.
+- knife: 0 visible.
+- Other small objects (domain “object” type, not receptacles): 2 remotes (the instruction-relevant items), plus several non-remote items (phone, cardboard box, paper/envelope, green pillow, trophy).
+
+Instruction-relevant objects (two remotes)
+1. Remote_1 (teal/green remote)
+   - Appearance: teal/green body with many small buttons; lies flat on the sofa seat.
+   - Location: on the black leather sofa, on the left/middle seat cushion area (seen clearly in the sofa top-down images).
+2. Remote_2 (not clearly visible as a second distinct remote in the provided frames)
+   - The instruction says “two remotes.” In the images, only one clearly identifiable remote is visible (Remote_1).
+   - If a second remote exists, it is not clearly distinguishable in these views (it may be out of frame, occluded, or visually ambiguous). The only clearly remote-shaped item present is Remote_1.
+
+Target receptacle/location (chair seat)
+- Chair_1 (single-seat chair)
+  - Appearance: brown/tan padded chair with a tufted cushion; positioned near a window; partially sunlit.
+  - The “seat of the chair” is empty (no objects on the chair cushion/seat in the shown view).
+  - Spatial: chair is to the right of the fireplace area and near the window; it is separate from the sofa.
+
+Other visible objects (context, may affect navigation but not required by instruction)
+- Sofa_1: black leather sofa (serves as the current support surface for several items).
+  - On the sofa seat (same general area as Remote_1):
+    - Phone_1: a white/black smartphone lying face-up/flat near the center-right cushion.
+    - Box_1: an open brown cardboard box on the right side of the sofa seat.
+    - Paper_1: a rectangular paper/envelope-like item (light gray/white) on the middle cushion.
+    - Pillow_1: a green pillow on the left side of the sofa (visible in one wider shot).
+- Along yellow wall:
+  - Cabinet_1 / Cabinet_2: dark wood cabinets/side tables.
+  - Bin_1: gold-colored cylindrical trash bin.
+  - Trophy_1: a gold figurine/trophy on top of one cabinet.
+
+Predicate-relevant spatial relationships (described in domain terms)
+- Remote_1 is currently located on Sofa_1’s seat area (i.e., the agent would need to (GotoLocation agent Remote_1) to pick it up).
+- Chair_1 seat is currently clear/available to receive objects.
+- No objects are currently shown as being “inReceptacle” of Chair_1 (chair seat empty).
+- Remote_1 is not held by the agent (agent starts holding nothing; no evidence of holds/holdsAny).
+- No openable/opened states are visually relevant here (no fridge/microwave/sink shown; chair/sofa are not depicted as openable).
+
+Current state summary relevant to the task
+- Two remotes are required to be moved to Chair_1’s seat.
+- One remote (Remote_1) is clearly visible on Sofa_1.
+- Chair_1 seat (the destination receptacle/location) is empty and ready for placement.
+- The agent must first navigate to the remotes’ locations before pickup, and then navigate to Chair_1 to place them.
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

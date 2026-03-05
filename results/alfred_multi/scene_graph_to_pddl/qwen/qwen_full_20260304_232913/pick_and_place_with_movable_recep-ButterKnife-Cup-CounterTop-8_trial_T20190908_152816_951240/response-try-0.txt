@@ -1,0 +1,50 @@
+Scene graph:
+agent: agent
+microwave (receptacle): black microwave
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): silver knife
+receptacle (object): wooden cabinet
+object: loaf of bread, soap dispenser, egg, silver knife, black microwave, wooden cabinet
+openable (receptacle) true if a receptacle is openable: (openable black microwave), (openable wooden cabinet)
+opened (receptacle) true if a receptacle is opened: (opened black microwave)
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle silver knife black microwave), (inReceptacle loaf of bread wooden cabinet), (inReceptacle soap dispenser wooden cabinet), (inReceptacle egg wooden cabinet)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object): none
+
+PDDL problem: ```pddl
+(define (problem put_glass_and_knife_on_shelf)
+    (:domain put_task)
+    (:objects
+        agent
+        microwave - receptacle
+        fridge - receptacle
+        sink - receptacle
+        knife - object
+        cabinet - receptacle
+        bread - object
+        soap_dispenser - object
+        egg - object
+    )
+    (:init
+        (openable microwave)
+        (openable cabinet)
+        (opened microwave)
+        (inReceptacle knife microwave)
+        (inReceptacle bread cabinet)
+        (inReceptacle soap_dispenser cabinet)
+        (inReceptacle egg cabinet)
+    )
+    (:goal (and
+        (inReceptacle knife cabinet)
+        (inReceptacle soap_dispenser cabinet)
+    ))
+)
+```

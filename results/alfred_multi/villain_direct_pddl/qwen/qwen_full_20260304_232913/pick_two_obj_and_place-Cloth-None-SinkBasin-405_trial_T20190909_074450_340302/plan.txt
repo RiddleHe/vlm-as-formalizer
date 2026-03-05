@@ -1,0 +1,8 @@
+(gotolocation agent1 rag2)
+(pickupobject agent1 rag2)
+(gotolocation agent1 sink)
+(putobjectinreceptacle agent1 rag2 sink)
+(gotolocation agent1 bathtub)
+(pickupobject agent1 rag1)
+(gotolocation agent1 sink)
+(putobjectinreceptacle agent1 rag1 sink)

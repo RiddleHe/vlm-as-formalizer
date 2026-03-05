@@ -1,0 +1,6 @@
+failed
+Object does not have a type:
+  fridge1
+  microwave1
+
+

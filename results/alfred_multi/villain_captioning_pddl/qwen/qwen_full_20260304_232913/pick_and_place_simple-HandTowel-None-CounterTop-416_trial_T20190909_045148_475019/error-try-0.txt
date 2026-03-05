@@ -1,0 +1,8 @@
+Predicate argument has wrong type:
+  atLocation purple_bottle countertop: purple_bottle is not a agent
+  atLocation soap_bar countertop: soap_bar is not a agent
+  atLocation hand_towel towel_ring: hand_towel is not a agent
+  atLocation soap_dispenser countertop: soap_dispenser is not a agent
+  atLocation hand_towel countertop: hand_towel is not a agent
+  atLocation small_bottle countertop: small_bottle is not a agent
+

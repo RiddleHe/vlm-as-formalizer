@@ -1,0 +1,2 @@
+route,dataset,model,gen_success_rate,pddl_valid_rate,task_success_rate,obj_precision,obj_recall,obj_f1,init_precision,init_recall,init_f1,goal_precision,goal_recall,goal_f1,macro_precision,macro_recall,macro_f1
+villain_captioning_pddl,alfred_multi,gpt-5.2,0.0,0.0,0.22,1.0,0.5279,0.691,0.605,0.1533,0.2447,0.9001,0.4811,0.6271,0.835,0.3875,0.5293

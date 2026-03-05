@@ -1,0 +1,6 @@
+(gotolocation robot table1)
+(pickupobject robot remote1)
+(putobjectinreceptacle robot remote1 box1)
+(pickupobject robot box1)
+(gotolocation robot couch1)
+(putobjectinreceptacle robot box1 couch1)

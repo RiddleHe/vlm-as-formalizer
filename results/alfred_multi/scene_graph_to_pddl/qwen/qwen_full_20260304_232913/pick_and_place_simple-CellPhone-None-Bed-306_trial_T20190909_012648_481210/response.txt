@@ -1,0 +1,52 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): wooden dresser, bed, trash can
+object: robot, wooden dresser, bed, trash can, phone, pen, lamp, chair, laptop, blue circular object, white blanket, black keyboard, brown carpet
+openable (receptacle) true if a receptacle is openable: (openable wooden dresser), (openable trash can)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn lamp)
+isToggled (object) true if the object has been toggled: (isToggled lamp)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle phone wooden dresser), (inReceptacle pen wooden dresser), (inReceptacle blue circular object laptop), (inReceptacle black keyboard bed)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_phone_on_bed)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        wooden_dresser - receptacle
+        bed - receptacle
+        trash_can - receptacle
+        phone - object
+        pen - object
+        lamp - object
+        chair - object
+        laptop - object
+        blue_circular_object - object
+        black_keyboard - object
+        white_blanket - object
+        brown_carpet - object
+    )
+    (:init
+        (openable wooden_dresser)
+        (openable trash_can)
+        (isOn lamp)
+        (isToggled lamp)
+        (inReceptacle phone wooden_dresser)
+        (inReceptacle pen wooden_dresser)
+        (inReceptacle blue_circular_object laptop)
+        (inReceptacle black_keyboard bed)
+    )
+    (:goal (and (inReceptacle phone bed)))
+)
+```

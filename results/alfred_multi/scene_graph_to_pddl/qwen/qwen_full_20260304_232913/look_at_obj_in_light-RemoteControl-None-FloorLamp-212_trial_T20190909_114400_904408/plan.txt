@@ -1,0 +1,2 @@
+(gotolocation robot green_lampshade)
+(toggleobject robot green_lampshade)

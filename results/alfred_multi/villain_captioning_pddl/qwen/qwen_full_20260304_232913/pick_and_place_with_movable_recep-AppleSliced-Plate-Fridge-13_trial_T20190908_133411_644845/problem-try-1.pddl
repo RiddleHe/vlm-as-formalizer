@@ -1,0 +1,41 @@
+(define (problem put_plate_in_fridge)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        fridge1 - fridge
+        knife1 - knife
+        plate1 - object
+        apple_piece1 - object
+    )
+    (:init
+        (openable microwave1)
+        (openable fridge1)
+        (not (opened microwave1))
+        (not (opened fridge1))
+        (not (holdsAny agent1))
+        (not (isOn microwave1))
+        (not (isOn fridge1))
+        (not (isClean knife1))
+        (not (isClean plate1))
+        (not (isClean apple_piece1))
+        (not (isHot knife1))
+        (not (isHot plate1))
+        (not (isHot apple_piece1))
+        (not (isCool knife1))
+        (not (isCool plate1))
+        (not (isCool apple_piece1))
+        (not (isSliced apple_piece1))
+        (not (isToggled microwave1))
+        (not (isToggled fridge1))
+        (atLocation agent1 microwave1) ; agent starts near microwave, can be adjusted
+        (inReceptacle knife1 microwave1) ; assuming knife is inside microwave for task initiation
+        (inReceptacle plate1 microwave1) ; assuming plate is inside microwave for task initiation
+        (inReceptacle apple_piece1 microwave1) ; assuming apple piece is inside microwave for task initiation
+    )
+    (:goal (and
+        (inReceptacle plate1 fridge1)
+        (inReceptacle knife1 plate1)
+        (inReceptacle apple_piece1 plate1)
+    ))
+)

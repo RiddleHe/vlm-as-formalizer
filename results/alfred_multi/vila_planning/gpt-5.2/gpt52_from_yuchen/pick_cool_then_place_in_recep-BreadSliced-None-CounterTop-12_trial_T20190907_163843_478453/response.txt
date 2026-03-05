@@ -1,0 +1,6 @@
+(GotoLocation robot counter)
+(PickupObject robot bread)
+(SliceObject robot bread knife)
+(PutObjectInReceptacle robot bread fridge)
+(PickupObject robot bread)
+(PutObjectInReceptacle robot bread counter)

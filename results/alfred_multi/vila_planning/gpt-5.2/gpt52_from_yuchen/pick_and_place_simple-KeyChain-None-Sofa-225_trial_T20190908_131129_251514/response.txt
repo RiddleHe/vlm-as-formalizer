@@ -1,0 +1,4 @@
+(GotoLocation agent keys)
+(PickupObject agent keys)
+(GotoLocation agent loveseat)
+(PutObjectInReceptacle agent keys loveseat)

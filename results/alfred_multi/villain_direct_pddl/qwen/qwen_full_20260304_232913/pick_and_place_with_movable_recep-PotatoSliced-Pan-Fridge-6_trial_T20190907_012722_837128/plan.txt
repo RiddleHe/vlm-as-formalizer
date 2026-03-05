@@ -1,0 +1,7 @@
+(gotolocation robot potato)
+(pickupobject robot potato)
+(gotolocation robot pan)
+(putobjectinreceptacle robot potato pan)
+(pickupobject robot pan)
+(gotolocation robot fridge)
+(putobjectinreceptacle robot pan fridge)

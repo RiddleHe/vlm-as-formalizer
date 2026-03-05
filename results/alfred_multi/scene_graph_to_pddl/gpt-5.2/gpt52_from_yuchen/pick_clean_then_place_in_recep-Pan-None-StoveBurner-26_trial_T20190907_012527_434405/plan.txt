@@ -1,0 +1,4 @@
+(gotolocation robot dirty_square_pan_on_stove)
+(pickupobject robot dirty_square_pan_on_stove)
+(gotolocation robot sink_right_counter)
+(cleanobject robot sink_right_counter dirty_square_pan_on_stove)

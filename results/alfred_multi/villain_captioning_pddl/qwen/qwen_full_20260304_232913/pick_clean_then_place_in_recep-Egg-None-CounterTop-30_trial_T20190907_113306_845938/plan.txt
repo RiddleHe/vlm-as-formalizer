@@ -1,0 +1,6 @@
+(gotolocation agent1 egg1)
+(pickupobject agent1 egg1)
+(gotolocation agent1 sink1)
+(cleanobject agent1 sink1 egg1)
+(gotolocation agent1 counter1)
+(putobjectinreceptacle agent1 egg1 counter1)

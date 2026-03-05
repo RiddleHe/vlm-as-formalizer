@@ -1,0 +1,22 @@
+```pddl
+(define (problem cool_egg_and_put_in_microwave)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        egg - object
+        fridge - fridge
+        microwave - microwave
+    )
+    (:init
+        (atLocation robot egg)
+        (openable fridge)
+        (not (opened fridge))
+        (not (isCool egg))
+        (not (isHot egg))
+    )
+    (:goal (and
+        (inReceptacle egg microwave)
+        (isCool egg)
+    ))
+)
+```

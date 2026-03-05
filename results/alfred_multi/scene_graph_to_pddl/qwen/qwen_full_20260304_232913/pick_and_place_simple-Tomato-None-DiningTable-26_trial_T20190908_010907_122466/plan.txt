@@ -1,0 +1,4 @@
+(gotolocation robot fridge)
+(pickupobject robot tomato)
+(gotolocation robot table)
+(putobjectinreceptacle robot tomato table)

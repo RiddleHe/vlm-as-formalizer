@@ -1,0 +1,7 @@
+(GotoLocation robot toaster)
+(PickupObject robot bread)
+(PutObjectInReceptacle robot bread toaster)
+(HeatObject robot toaster bread)
+(GotoLocation robot counter_in_front_of_sink)
+(PickupObject robot bread)
+(PutObjectInReceptacle robot bread counter_in_front_of_sink)

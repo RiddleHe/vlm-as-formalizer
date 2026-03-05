@@ -1,0 +1,266 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: fill the pan with water, put the pan on the kitchen island
+    
+
+SCENE CAPTION:
+Scene Description:
+
+The scene depicts a kitchen environment with a dining table (serving as the kitchen island) and a sink area. The robot's task is to fill a pan with water and place it on the kitchen island.
+
+1. Objects and Their Types:
+   - Receptacles:
+     - Sink: A white rectangular sink with a faucet, mounted on a green countertop with wooden cabinets below. It is a receptacle and is openable.
+     - Pan: A metallic, rectangular pan with handles, currently on the green table (kitchen island). It is a receptacle and can hold water.
+     - Two square bowls: Brownish, square-shaped bowls on the table. They are receptacles.
+     - Two wine bottles: Green glass bottles on the table. They are not receptacles in the context of this domain (not defined as such and not used for holding other objects in the task).
+     - Glass bottle: A clear glass bottle on the table. Not a receptacle for this task.
+     - Two chairs: Wooden chairs at the table. Not receptacles.
+   - Objects:
+     - Knife: A metallic knife on the table. It is an object and is also a knife type.
+     - Fork: A metallic fork on the table. It is an object.
+     - Spoon: A metallic spoon on the table. It is an object.
+     - Apple: A red apple on the table. It is an object.
+     - Green object: Partially visible green object on the right edge of the table (possibly a lime or avocado). It is an object.
+     - Cup: A small cup visible under the table in the second image. It is an object.
+
+2. Quantities:
+   - Receptacles: 3 (sink, pan, two bowls — but note: the two bowls are separate, so total 3 distinct receptacles including pan and sink).
+   - Knives: 1
+   - Forks: 1
+   - Spoons: 1
+   - Bottles: 3 (two green wine bottles, one clear glass bottle)
+   - Chairs: 2
+   - Apple: 1
+   - Cup: 1 (under table)
+
+3. Spatial Relationships:
+   - The pan is currently on the green table (kitchen island).
+   - The sink is located on a separate counter to the right of the table (as seen in the third image), with wooden flooring and a black fridge partially visible to the left of the sink.
+   - The knife, fork, spoon, bowls, bottles, and apple are all on the green table.
+   - The cup is under the table (on a lower shelf or floor level, as seen in the second image).
+   - The robot is not currently at any object’s location (initial state).
+
+4. Current State of Objects Relevant to the Task:
+   - The pan is on the table and is empty (not filled with water).
+   - The sink is not currently being used and is in a default state (not opened or closed — it’s a fixed receptacle; the domain does not require opening/closing for sink, but it is openable).
+   - No object is currently held by the agent (robot).
+   - The pan is not clean (no indication of being washed, though it may not be required for this task).
+   - The pan is not hot or cool.
+   - The pan is not sliced.
+   - The sink is not toggled (not applicable).
+
+5. Visual Properties:
+   - The table is green with a checkered shadow pattern (possibly from a window or light source).
+   - The pan is metallic with a reflective surface and brownish handles.
+   - The sink is white ceramic with a metallic faucet and is set into a green countertop.
+   - The bowls are brown with a textured, possibly ceramic or stone-like appearance.
+   - The knife, fork, and spoon are metallic and shiny.
+   - The wine bottles are dark green glass with labels.
+   - The glass bottle is clear and cylindrical.
+   - The apple is bright red and round.
+   - The floor is wooden with a medium brown tone.
+   - The chairs are dark brown wood with spindle backs.
+
+Note: The robot must first go to the pan (on the table), pick it up, then go to the sink, fill it with water (which implies holding the pan at the sink and performing a cleaning-like action to fill it — though the domain only has CleanObject for sink, which sets isClean; we may need to interpret “fill with water” as a cleaning action for this domain), and then return to the table to put the pan down. However, the domain does not have a specific “fill with water” action, so we will use CleanObject as a proxy for filling with water in this context. The pan must then be placed back on the table (kitchen island).
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

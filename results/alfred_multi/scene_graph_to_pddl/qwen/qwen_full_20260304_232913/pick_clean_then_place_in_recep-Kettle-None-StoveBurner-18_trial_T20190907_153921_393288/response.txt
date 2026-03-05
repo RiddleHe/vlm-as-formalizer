@@ -1,0 +1,49 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): double_basin_sink
+knife (object): 
+receptacle (object): stove_top, double_basin_sink
+object: tea_pot_with_blue_handle, fork_on_counter, pot_on_stove_left, stove_top, double_basin_sink, counter_top
+openable (receptacle) true if a receptacle is openable: (openable double_basin_sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn stove_top)
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle tea_pot_with_blue_handle stove_top), (inReceptacle pot_on_stove_left stove_top), (inReceptacle fork_on_counter counter_top)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_clean_teapot_on_stove)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        double_basin_sink - sink
+        stove_top - receptacle
+        counter_top - receptacle
+        tea_pot_with_blue_handle - object
+        fork_on_counter - object
+        pot_on_stove_left - object
+        microwave - microwave
+        fridge - fridge
+        knife - knife
+    )
+    (:init
+        (openable double_basin_sink)
+        (isOn stove_top)
+        (inReceptacle tea_pot_with_blue_handle stove_top)
+        (inReceptacle pot_on_stove_left stove_top)
+        (inReceptacle fork_on_counter counter_top)
+    )
+    (:goal (and
+        (isClean tea_pot_with_blue_handle)
+        (inReceptacle tea_pot_with_blue_handle stove_top)
+    ))
+)
+```

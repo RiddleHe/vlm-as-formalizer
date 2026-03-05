@@ -1,0 +1,15 @@
+(define (problem move_pen_to_dresser)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        dresser - receptacle
+        pen - object
+    )
+    (:init
+        (atLocation agent1 dresser)  ; Agent is initially at the dresser location as per scene context
+        (inReceptacle pen dresser)   ; Pen is already on the dresser
+        (not (openable dresser))     ; Dresser is not openable (it's a surface)
+        (not (holdsAny agent1))      ; Agent is not holding any object
+    )
+    (:goal (and (inReceptacle pen dresser)))
+)

@@ -1,0 +1,10 @@
+Object does not have a type:
+  stove
+  countertop
+
+Predicate argument has wrong type:
+  atLocation egg countertop: egg is not a agent
+
+Predicate not defined in domain:
+  false
+

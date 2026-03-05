@@ -1,0 +1,5 @@
+(gotolocation robot sink1)
+(pickupobject robot spoon1)
+(cleanobject robot sink1 spoon1)
+(gotolocation robot microwave1)
+(putobjectinreceptacle robot spoon1 microwave1)

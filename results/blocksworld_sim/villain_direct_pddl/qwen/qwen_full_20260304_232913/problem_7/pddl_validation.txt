@@ -1,0 +1,5 @@
+invalid
+Object does not have a type:
+  blue_block
+
+

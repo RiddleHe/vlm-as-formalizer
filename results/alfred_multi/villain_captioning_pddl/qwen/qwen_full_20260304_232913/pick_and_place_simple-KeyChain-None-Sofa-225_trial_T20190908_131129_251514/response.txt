@@ -1,0 +1,54 @@
+```pddl
+(define (problem move_keys_to_loveseat)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        side_table - receptacle
+        loveseat - receptacle
+        cardboard_box - receptacle
+        keys - object
+        laptop - object
+        remote_control - object
+        chair - object
+    )
+    (:init
+        ; Agent is not initially at any location
+        (not (atLocation agent1 side_table))
+        (not (atLocation agent1 loveseat))
+        (not (atLocation agent1 cardboard_box))
+        (not (atLocation agent1 keys))
+        (not (atLocation agent1 laptop))
+        (not (atLocation agent1 remote_control))
+        (not (atLocation agent1 chair))
+
+        ; The side table is a receptacle and holds the keys
+        (inReceptacle keys side_table)
+
+        ; The loveseat is a receptacle and holds the laptop, remote control, and cardboard box
+        (inReceptacle laptop loveseat)
+        (inReceptacle remote_control loveseat)
+        (inReceptacle cardboard_box loveseat)
+
+        ; The cardboard box is openable and currently open
+        (openable cardboard_box)
+        (opened cardboard_box)
+
+        ; The side table and loveseat are not openable
+        (not (openable side_table))
+        (not (openable loveseat))
+
+        ; The agent is not holding anything
+        (not (holdsAny agent1))
+
+        ; The keys are not cleaned, heated, cooled, sliced, or toggled
+        (not (isClean keys))
+        (not (isHot keys))
+        (not (isCool keys))
+        (not (isSliced keys))
+        (not (isToggled keys))
+    )
+    (:goal (and
+        (inReceptacle keys loveseat)
+    ))
+)
+```

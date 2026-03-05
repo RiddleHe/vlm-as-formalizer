@@ -1,0 +1,63 @@
+Scene graph:
+agent: robot
+microwave (receptacle): black microwave on countertop
+fridge (receptacle): none
+sink (receptacle): kitchen sink with faucet
+knife (object): knife on table near red apple, knife in sink
+receptacle (object): wooden table, black coffee maker, brown bowl on table, black mug in sink, black mug on coffee maker
+object: red apple on table, red apple near fork on table, green book on table, silver fork on table, silver fork in sink, brown bowl on table, black mug in sink, black mug on coffee maker, knife on table near red apple, knife in sink, brown egg in sink, black coffee maker, black microwave on countertop, kitchen sink with faucet, wooden table, brown chair near table, door handle on wall
+openable (receptacle) true if a receptacle is openable: (openable microwave), (openable sink)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn black coffee maker), (isOn black microwave on countertop)
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle black mug sink), (inReceptacle brown egg sink), (inReceptacle silver fork sink), (inReceptacle green book sink), (inReceptacle black mug coffee maker), (inReceptacle brown bowl table), (inReceptacle red apple table), (inReceptacle green book table), (inReceptacle knife table), (inReceptacle silver fork table), (inReceptacle red apple table near fork)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem place_cooked_egg_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        sink - sink
+        table - receptacle
+        knife - knife
+        egg - object
+        mug - object
+        fork - object
+        book - object
+        bowl - object
+        apple - object
+        coffee_maker - object
+    )
+    (:init
+        (openable microwave)
+        (openable sink)
+        (isOn microwave)
+        (isOn coffee_maker)
+        (inReceptacle mug sink)
+        (inReceptacle egg sink)
+        (inReceptacle fork sink)
+        (inReceptacle book sink)
+        (inReceptacle mug coffee_maker)
+        (inReceptacle bowl table)
+        (inReceptacle apple table)
+        (inReceptacle book table)
+        (inReceptacle knife table)
+        (inReceptacle fork table)
+        (atLocation robot sink) ; assuming robot starts near sink as egg is there
+    )
+    (:goal
+        (and
+            (inReceptacle egg table)
+            (isHot egg)
+        )
+    )
+)
+```

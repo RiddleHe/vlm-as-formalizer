@@ -1,0 +1,46 @@
+Scene graph:
+agent: robot
+microwave (receptacle): black microwave on countertop
+fridge (receptacle): none
+sink (receptacle): stainless steel sink with faucet
+knife (object): none
+receptacle (object): brown loaf of bread, green sponge, black mug, potted plant, egg inside microwave
+object: brown loaf of bread, green sponge, black mug, potted plant, egg inside microwave
+openable (receptacle) true if a receptacle is openable: (openable black microwave on countertop)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle egg inside microwave black microwave on countertop)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem put_clean_egg_on_counter)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        sink - sink
+        egg - object
+        counter - receptacle
+    )
+    (:init
+        (openable microwave)
+        (inReceptacle egg microwave)
+        (not (atLocation robot microwave))
+        (not (atLocation robot sink))
+        (not (atLocation robot counter))
+        (not (isClean egg))
+    )
+    (:goal (and
+        (atLocation robot counter)
+        (inReceptacle egg counter)
+        (isClean egg)
+    ))
+)
+```

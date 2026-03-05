@@ -1,0 +1,8 @@
+(gotolocation robot sink1)
+(pickupobject robot sponge_counter)
+(gotolocation robot tub1)
+(putobjectinreceptacle robot sponge_counter tub1)
+(gotolocation robot sponge_bin)
+(pickupobject robot sponge_bin)
+(gotolocation robot tub1)
+(putobjectinreceptacle robot sponge_bin tub1)

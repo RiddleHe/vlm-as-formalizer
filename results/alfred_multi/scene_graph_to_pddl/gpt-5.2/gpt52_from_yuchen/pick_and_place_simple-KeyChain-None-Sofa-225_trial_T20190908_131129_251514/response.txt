@@ -1,0 +1,76 @@
+Scene graph:
+agent: 
+- robot_agent (agent)
+
+microwave (receptacle): 
+- none
+
+fridge (receptacle): 
+- none
+
+sink (receptacle): 
+- none
+
+knife (object): 
+- none
+
+receptacle (object): 
+- black_leather_loveseat_sofa (receptacle)
+- white_square_side_table (receptacle)
+- open_cardboard_box_on_loveseat (receptacle)
+
+object: 
+- black_table_lamp_with_white_shade (object)
+- set_of_keys_with_black_fob (object)
+- black_laptop_on_loveseat (object)
+- tv_remote_on_loveseat (object)
+- orange_throw_pillow_on_loveseat (object)
+- teal_wooden_chair (object)
+
+openable (receptacle) true if a receptacle is openable:
+- (openable open_cardboard_box_on_loveseat)
+
+opened (receptacle) true if a receptacle is opened:
+- (opened open_cardboard_box_on_loveseat)
+
+holdsAny (agent) agent ?a holds an object:
+
+PDDL problem: (define (problem put_task_keys_to_loveseat)
+  (:domain put_task)
+  (:objects
+    robot_agent - agent
+
+    black_leather_loveseat_sofa - receptacle
+    white_square_side_table - receptacle
+    open_cardboard_box_on_loveseat - receptacle
+
+    set_of_keys_with_black_fob - object
+    black_table_lamp_with_white_shade - object
+    black_laptop_on_loveseat - object
+    tv_remote_on_loveseat - object
+    orange_throw_pillow_on_loveseat - object
+    teal_wooden_chair - object
+  )
+
+  (:init
+    (openable open_cardboard_box_on_loveseat)
+    (opened open_cardboard_box_on_loveseat)
+
+    ;; object locations / containment
+    (inReceptacle black_table_lamp_with_white_shade white_square_side_table)
+    (inReceptacle set_of_keys_with_black_fob white_square_side_table)
+
+    (inReceptacle open_cardboard_box_on_loveseat black_leather_loveseat_sofa)
+    (inReceptacle black_laptop_on_loveseat black_leather_loveseat_sofa)
+    (inReceptacle tv_remote_on_loveseat black_leather_loveseat_sofa)
+    (inReceptacle orange_throw_pillow_on_loveseat black_leather_loveseat_sofa)
+
+    ;; agent starts not holding anything (and not initially at any location)
+  )
+
+  (:goal
+    (and
+      (inReceptacle set_of_keys_with_black_fob black_leather_loveseat_sofa)
+    )
+  )
+)

@@ -1,0 +1,64 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): none
+fridge (receptacle): none
+sink (receptacle): none
+knife (object): none
+receptacle (object): dark_wood_coffee_table, round_table_with_white_lace_tablecloth, black_square_side_table_by_red_wall
+object: bronze_statue_left_on_coffee_table, bronze_statue_center_on_coffee_table, bronze_statue_right_on_coffee_table, tv_remote_on_coffee_table, small_round_object_on_coffee_table, square_glass_coaster_on_coffee_table, tv_remote_on_round_table, newspaper_on_round_table, blue_card_left_on_round_table, blue_card_right_on_round_table
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle bronze_statue_left_on_coffee_table dark_wood_coffee_table), (inReceptacle bronze_statue_center_on_coffee_table dark_wood_coffee_table), (inReceptacle bronze_statue_right_on_coffee_table dark_wood_coffee_table), (inReceptacle tv_remote_on_coffee_table dark_wood_coffee_table), (inReceptacle small_round_object_on_coffee_table dark_wood_coffee_table), (inReceptacle square_glass_coaster_on_coffee_table dark_wood_coffee_table), (inReceptacle tv_remote_on_round_table round_table_with_white_lace_tablecloth), (inReceptacle newspaper_on_round_table round_table_with_white_lace_tablecloth), (inReceptacle blue_card_left_on_round_table round_table_with_white_lace_tablecloth), (inReceptacle blue_card_right_on_round_table round_table_with_white_lace_tablecloth)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem put_task_statues_on_table)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+
+    dark_wood_coffee_table - receptacle
+    round_table_with_white_lace_tablecloth - receptacle
+    black_square_side_table_by_red_wall - receptacle
+
+    bronze_statue_left_on_coffee_table - object
+    bronze_statue_center_on_coffee_table - object
+    bronze_statue_right_on_coffee_table - object
+    tv_remote_on_coffee_table - object
+    small_round_object_on_coffee_table - object
+    square_glass_coaster_on_coffee_table - object
+    tv_remote_on_round_table - object
+    newspaper_on_round_table - object
+    blue_card_left_on_round_table - object
+    blue_card_right_on_round_table - object
+  )
+
+  (:init
+    (inReceptacle bronze_statue_left_on_coffee_table dark_wood_coffee_table)
+    (inReceptacle bronze_statue_center_on_coffee_table dark_wood_coffee_table)
+    (inReceptacle bronze_statue_right_on_coffee_table dark_wood_coffee_table)
+    (inReceptacle tv_remote_on_coffee_table dark_wood_coffee_table)
+    (inReceptacle small_round_object_on_coffee_table dark_wood_coffee_table)
+    (inReceptacle square_glass_coaster_on_coffee_table dark_wood_coffee_table)
+
+    (inReceptacle tv_remote_on_round_table round_table_with_white_lace_tablecloth)
+    (inReceptacle newspaper_on_round_table round_table_with_white_lace_tablecloth)
+    (inReceptacle blue_card_left_on_round_table round_table_with_white_lace_tablecloth)
+    (inReceptacle blue_card_right_on_round_table round_table_with_white_lace_tablecloth)
+  )
+
+  (:goal
+    (and
+      (inReceptacle bronze_statue_left_on_coffee_table dark_wood_coffee_table)
+      (inReceptacle bronze_statue_center_on_coffee_table dark_wood_coffee_table)
+    )
+  )
+)

@@ -1,0 +1,3 @@
+(gotolocation robot_agent green_shaded_table_lamp_on_bedside_table)
+(toggleobject robot_agent green_shaded_table_lamp_on_bedside_table)
+(gotolocation robot_agent pink_round_cushion_on_bed_left)

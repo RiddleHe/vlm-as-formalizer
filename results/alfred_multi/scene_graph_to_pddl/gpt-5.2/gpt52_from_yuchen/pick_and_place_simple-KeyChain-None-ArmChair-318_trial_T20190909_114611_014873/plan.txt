@@ -1,0 +1,8 @@
+(gotolocation robot_agent dark_wood_desk_with_drawers)
+(pickupobject robot_agent white_keys_left_on_desk_surface)
+(gotolocation robot_agent floral_upholstered_armchair)
+(putobjectinreceptacle robot_agent white_keys_left_on_desk_surface floral_upholstered_armchair)
+(gotolocation robot_agent white_keys_right_on_desk_surface)
+(pickupobject robot_agent white_keys_right_on_desk_surface)
+(gotolocation robot_agent floral_upholstered_armchair)
+(putobjectinreceptacle robot_agent white_keys_right_on_desk_surface floral_upholstered_armchair)

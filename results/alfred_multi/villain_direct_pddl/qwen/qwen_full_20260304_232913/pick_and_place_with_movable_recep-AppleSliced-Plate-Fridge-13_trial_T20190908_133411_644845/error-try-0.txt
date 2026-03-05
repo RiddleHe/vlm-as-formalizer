@@ -1,0 +1,4 @@
+Object does not have a type:
+  stove1
+  counter1
+

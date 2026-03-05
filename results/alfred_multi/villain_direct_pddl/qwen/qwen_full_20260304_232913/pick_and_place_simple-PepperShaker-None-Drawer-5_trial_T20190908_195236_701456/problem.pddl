@@ -1,0 +1,19 @@
+(define (problem put_salt_shaker_in_drawer)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        drawer - receptacle
+        salt_shaker - object
+    )
+    (:init
+        (openable drawer)
+        (not (opened drawer))
+        (atLocation robot salt_shaker)
+        (not (holdsAny robot))
+    )
+    (:goal
+        (and
+            (inReceptacle salt_shaker drawer)
+        )
+    )
+)

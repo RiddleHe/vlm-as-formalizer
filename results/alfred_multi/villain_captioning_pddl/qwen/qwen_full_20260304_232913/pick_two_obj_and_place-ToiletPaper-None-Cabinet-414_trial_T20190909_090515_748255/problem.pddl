@@ -1,0 +1,24 @@
+(define (problem put_toilet_paper_in_cabinet)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        toilet_paper_full - object
+        toilet_paper_empty - object
+        cabinet_second_from_left - receptacle
+        countertop - object
+        sink - receptacle
+    )
+    (:init
+        (atLocation agent1 countertop)
+        (not (holdsAny agent1))
+        (not (opened cabinet_second_from_left))
+        (openable cabinet_second_from_left)
+        (inReceptacle toilet_paper_full countertop)
+        (inReceptacle toilet_paper_empty countertop)
+    )
+    (:goal (and
+        (inReceptacle toilet_paper_full cabinet_second_from_left)
+        (inReceptacle toilet_paper_empty cabinet_second_from_left)
+        (not (opened cabinet_second_from_left))
+    ))
+)

@@ -1,0 +1,4 @@
+(gotolocation agent1 cup1)
+(pickupobject agent1 cup1)
+(gotolocation agent1 fridge1)
+(coolobject agent1 fridge1 cup1)

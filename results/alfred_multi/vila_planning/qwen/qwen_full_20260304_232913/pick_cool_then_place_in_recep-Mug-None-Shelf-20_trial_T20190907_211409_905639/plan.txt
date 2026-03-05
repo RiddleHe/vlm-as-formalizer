@@ -1,0 +1,8 @@
+(GotoLocation robot mug)
+(PickupObject robot mug)
+(GotoLocation robot fridge)
+(OpenObject robot fridge)
+(CoolObject robot fridge mug)
+(CloseObject robot fridge)
+(GotoLocation robot shelf)
+(PutObjectInReceptacle robot mug shelf)

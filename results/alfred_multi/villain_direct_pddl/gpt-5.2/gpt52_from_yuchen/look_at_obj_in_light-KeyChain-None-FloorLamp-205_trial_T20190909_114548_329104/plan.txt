@@ -1,0 +1,2 @@
+(gotolocation robot dining_table)
+(toggleobject robot tall_lamp)

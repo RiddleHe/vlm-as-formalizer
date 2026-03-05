@@ -1,0 +1,6 @@
+(gotolocation robot black_table)
+(pickupobject robot tomato)
+(gotolocation robot sink)
+(cleanobject robot sink tomato)
+(gotolocation robot black_table)
+(putobjectinreceptacle robot tomato black_table)

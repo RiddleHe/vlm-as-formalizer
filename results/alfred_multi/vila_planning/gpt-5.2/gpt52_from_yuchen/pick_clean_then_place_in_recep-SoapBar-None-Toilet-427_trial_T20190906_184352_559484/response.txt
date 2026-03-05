@@ -1,0 +1,6 @@
+(GotoLocation agent bathtub)
+(PickupObject agent soapbar)
+(GotoLocation agent sink)
+(CleanObject agent sink soapbar)
+(GotoLocation agent toilet)
+(PutObjectInReceptacle agent soapbar toilet)

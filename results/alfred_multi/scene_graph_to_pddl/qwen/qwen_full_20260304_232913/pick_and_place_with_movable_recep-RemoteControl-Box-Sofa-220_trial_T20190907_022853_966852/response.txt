@@ -1,0 +1,47 @@
+Scene graph:
+agent: robot
+microwave (receptacle): 
+fridge (receptacle): 
+sink (receptacle): 
+knife (object): 
+receptacle (object): open_cardboard_box, green_checkered_couch
+object: open_cardboard_box, green_checkered_couch, green_candle, gray_remote_control, brown_remote_control, small_brown_box_with_gray_object_inside, golden_cushion
+openable (receptacle) true if a receptacle is openable: (openable open_cardboard_box)
+opened (receptacle) true if a receptacle is opened: (opened open_cardboard_box)
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle gray_remote_control open_cardboard_box), (inReceptacle small_brown_box_with_gray_object_inside open_cardboard_box), (inReceptacle golden_cushion green_checkered_couch)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_remote_in_box_on_couch)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        open_cardboard_box - receptacle
+        green_checkered_couch - receptacle
+        gray_remote_control - object
+        golden_cushion - object
+        green_candle - object
+        brown_remote_control - object
+        small_brown_box_with_gray_object_inside - object
+    )
+    (:init
+        (openable open_cardboard_box)
+        (opened open_cardboard_box)
+        (inReceptacle gray_remote_control open_cardboard_box)
+        (inReceptacle small_brown_box_with_gray_object_inside open_cardboard_box)
+        (inReceptacle golden_cushion green_checkered_couch)
+        (atLocation robot open_cardboard_box) ; assuming robot starts near the box for practicality
+    )
+    (:goal (and
+        (inReceptacle open_cardboard_box green_checkered_couch)
+    ))
+)
+```

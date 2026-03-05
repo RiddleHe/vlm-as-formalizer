@@ -1,0 +1,52 @@
+(define (problem put_bowl_creditcard_on_glass_table)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+
+    wooden_dining_table_topright - receptacle
+    glass_side_table_centerleft - receptacle
+    gray_round_bowl_on_dining_table - receptacle
+    clear_round_bowl_inside_glass_side_table - receptacle
+
+    white_remote_on_dining_table - object
+    black_statue_pair_on_dining_table - object
+    yellow_gourd_vase1_on_dining_table - object
+    yellow_gourd_vase2_on_dining_table - object
+    magazine_stack_on_dining_table_left - object
+    black_square_dish_on_glass_side_table - object
+    two_decorative_spheres_in_black_square_dish - object
+    tissue_box_on_glass_side_table - object
+    red_card_on_lower_shelf_glass_side_table - object
+    black_bracelet_on_glass_side_table_shelf - object
+  )
+
+  (:init
+    ;; robot initially not at any object's location
+    (not (holdsAny robot_agent))
+
+    ;; dining table contents
+    (inReceptacle gray_round_bowl_on_dining_table wooden_dining_table_topright)
+    (inReceptacle white_remote_on_dining_table wooden_dining_table_topright)
+    (inReceptacle black_statue_pair_on_dining_table wooden_dining_table_topright)
+    (inReceptacle yellow_gourd_vase1_on_dining_table wooden_dining_table_topright)
+    (inReceptacle yellow_gourd_vase2_on_dining_table wooden_dining_table_topright)
+    (inReceptacle magazine_stack_on_dining_table_left wooden_dining_table_topright)
+
+    ;; glass side table contents
+    (inReceptacle clear_round_bowl_inside_glass_side_table glass_side_table_centerleft)
+    (inReceptacle black_square_dish_on_glass_side_table glass_side_table_centerleft)
+    (inReceptacle tissue_box_on_glass_side_table glass_side_table_centerleft)
+    (inReceptacle red_card_on_lower_shelf_glass_side_table glass_side_table_centerleft)
+    (inReceptacle black_bracelet_on_glass_side_table_shelf glass_side_table_centerleft)
+    (inReceptacle two_decorative_spheres_in_black_square_dish black_square_dish_on_glass_side_table)
+  )
+
+  (:goal
+    (and
+      ;; interpret "credit card" as the red_card object from the scene graph
+      (inReceptacle red_card_on_lower_shelf_glass_side_table gray_round_bowl_on_dining_table)
+      (inReceptacle gray_round_bowl_on_dining_table glass_side_table_centerleft)
+    )
+  )
+)

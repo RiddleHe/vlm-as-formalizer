@@ -1,0 +1,23 @@
+(define (problem place_remote_on_sofa)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        remote - object
+        sofa - receptacle
+        coffee_table - object
+        box - object
+        papers - object
+        dog_statue - object
+        rug - object
+        chair - object
+    )
+    (:init
+        (atLocation robot coffee_table)
+        (holds robot remote)
+        (openable sofa)
+        (not (opened sofa))
+    )
+    (:goal
+        (inReceptacle remote sofa)
+    )
+)

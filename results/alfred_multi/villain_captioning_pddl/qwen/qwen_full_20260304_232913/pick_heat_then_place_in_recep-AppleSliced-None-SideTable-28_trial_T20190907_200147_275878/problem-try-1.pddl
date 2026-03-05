@@ -1,0 +1,32 @@
+(define (problem cut_cook_apple)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        microwave1 - microwave
+        sink1 - sink
+        fridge1 - fridge
+        apple1 - object
+        knife1 - knife
+        brown_shelf1 - object
+        table1 - object
+        countertop1 - object
+    )
+    (:init
+        (openable microwave1)
+        (not (opened microwave1))
+        (atLocation agent1 countertop1) ; agent starts near countertop where apple and knife are
+        (inReceptacle apple1 countertop1)
+        (inReceptacle knife1 sink1)
+        (not (isSliced apple1))
+        (not (isHot apple1))
+        (not (isCool apple1))
+        (not (isClean apple1))
+        (not (holdsAny agent1))
+        (not (isOn microwave1))
+    )
+    (:goal (and
+        (isSliced apple1)
+        (isHot apple1)
+        (inReceptacle apple1 brown_shelf1)
+    ))
+)

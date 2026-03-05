@@ -1,0 +1,54 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): black_countertop_microwave_left
+fridge (receptacle): black_double_door_fridge_front
+sink (receptacle): (none visible)
+knife (object): (none visible)
+receptacle (object): black_countertop_microwave_left, black_double_door_fridge_front, white_plastic_trash_bin_floor_left
+object: red_apple_on_counter, brown_egg_on_counter, yellow_handle_knife_like_utensil_on_counter, clear_salt_shaker_on_counter, metal_spoon_on_counter, metal_fork_on_counter, blue_soap_dispenser_on_wall
+
+openable (receptacle) true if a receptacle is openable: (openable black_countertop_microwave_left), (openable black_double_door_fridge_front)
+opened (receptacle) true if a receptacle is opened: (none)
+holdsAny (agent) agent ?a holds an object: (none)
+isClean (object) true if the object has been clean in sink: (none)
+isHot (object) true if the object has been heated up: (none)
+isCool (object) true if the object has been cooled: (none)
+isOn (object) true if the object is on: (none)
+isToggled (object) true if the object has been toggled: (none)
+isSliced (object) true if the object is sliced: (none)
+inReceptacle (object, object) object ?o is in receptacle ?r: (none)
+holds (agent, object) object ?o is held by agent ?a: (none)
+atLocation (agent, object) : (none)
+
+PDDL problem: (define (problem chill_apple_put_in_white_bin)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+
+    black_countertop_microwave_left - microwave
+    black_double_door_fridge_front - fridge
+    white_plastic_trash_bin_floor_left - receptacle
+
+    red_apple_on_counter - object
+    brown_egg_on_counter - object
+    yellow_handle_knife_like_utensil_on_counter - object
+    clear_salt_shaker_on_counter - object
+    metal_spoon_on_counter - object
+    metal_fork_on_counter - object
+    blue_soap_dispenser_on_wall - object
+  )
+
+  (:init
+    (openable black_countertop_microwave_left)
+    (openable black_double_door_fridge_front)
+    ;; robot starts not at any location; nothing is held; nothing is in any receptacle
+  )
+
+  (:goal
+    (and
+      (isCool red_apple_on_counter)
+      (inReceptacle red_apple_on_counter white_plastic_trash_bin_floor_left)
+    )
+  )
+)

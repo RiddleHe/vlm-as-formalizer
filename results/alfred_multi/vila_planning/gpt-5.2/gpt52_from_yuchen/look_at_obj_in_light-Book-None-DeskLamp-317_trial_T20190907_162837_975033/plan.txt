@@ -1,0 +1,5 @@
+(GotoLocation robot bed)
+(PickupObject robot book)
+(GotoLocation robot nightstand)
+(PickupObject robot lamp)
+(ToggleObject robot lamp)

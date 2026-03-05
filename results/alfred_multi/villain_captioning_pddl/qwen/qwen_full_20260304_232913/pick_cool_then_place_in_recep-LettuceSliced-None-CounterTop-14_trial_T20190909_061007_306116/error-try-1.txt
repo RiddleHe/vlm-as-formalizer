@@ -1,0 +1,11 @@
+Object does not have a type:
+  spoon1
+  egg1
+
+Predicate argument has wrong type:
+  atLocation lettuce1 dining_table1: lettuce1 is not a agent
+  atLocation knife1 stovetop1: knife1 is not a agent
+
+Predicate not defined in domain:
+  forall
+

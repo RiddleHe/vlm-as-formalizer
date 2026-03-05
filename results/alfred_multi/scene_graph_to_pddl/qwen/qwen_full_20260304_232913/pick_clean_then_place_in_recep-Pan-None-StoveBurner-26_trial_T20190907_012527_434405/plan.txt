@@ -1,0 +1,4 @@
+(gotolocation robot dirty_square_pan)
+(pickupobject robot dirty_square_pan)
+(gotolocation robot stainless_steel_sink)
+(cleanobject robot stainless_steel_sink dirty_square_pan)

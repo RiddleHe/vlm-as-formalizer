@@ -1,0 +1,249 @@
+
+    You are helping a robotic planning task. 
+    Given the image of a scene and an instruction, generate the PDDL file with objects, initial state, and goal specification.
+    Your output should adhere to the constraints defined in the domain file.
+    You must output the PDDL file in the correct format.
+    Examples of PDDL problems given a different domain instruction:
+    Domain: hanoi
+    Instruction: Move all disks to the rightmost peg.
+    PDDL problem:
+    (define (problem hanoi3)
+        (:domain hanoi)
+        (:objects
+            peg1
+            peg2
+            orange_disk1
+            orange_disk2
+        )
+            (:init
+                (clear orange_disk1)
+                (on orange_disk1 orange_disk2)
+                (on orange_disk2 peg1)
+            )
+        (:goal (and (on orange_disk2 peg2) (on orange_disk1 orange_disk2)))
+    )
+    
+    For the current domain, this is the domain file:
+    (define (domain put_task)
+ (:requirements
+  :adl
+ )
+ (:types
+  agent
+  microwave fridge sink - receptacle  ; an object is a receptacle if it can hold things
+  knife receptacle - object           ; if not an receptacle, default to object
+  )
+
+
+ (:predicates
+    (openable ?r - receptacle)                                ; true if a receptacle is openable
+    (opened ?r - receptacle)                                  ; true if a receptacle is opened
+    (inReceptacle ?o - object ?r - object)                ; object ?o is in receptacle ?r
+    (holds ?a - agent ?o - object)                            ; object ?o is held by agent ?a
+    (holdsAny ?a - agent)                                     ; agent ?a holds an object
+    (isClean ?o - object)                                     ; true if the object has been clean in sink
+    (isHot ?o - object)                                       ; true if the object has been heated up
+    (isCool ?o - object)                                      ; true if the object has been cooled
+    (isOn ?o - object)                                        ; true if the object is on
+    (isToggled ?o - object)                                   ; true if the object has been toggled
+    (isSliced ?o - object)                                    ; true if the object is sliced
+    (atLocation ?a - agent ?o - object)
+ )
+
+;; agent goes to receptacle
+ (:action GotoLocation
+    :parameters (?a - agent ?lEnd - object)
+    :precondition (and
+            (not (atLocation ?a ?lEnd))
+            )
+    :effect (and
+                (atLocation ?a ?lEnd)
+                (forall (?l - object)
+                    (when (and (atLocation ?a ?l) (not (= ?l ?lEnd)))
+                        (not (atLocation ?a ?l))))
+                (forall (?l - object)
+                     (when (inReceptacle ?l ?lEnd) (atLocation ?a ?l)))
+            )
+ )
+
+;; agent opens receptacle
+ (:action OpenObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            )
+    :effect (and
+                (opened ?r)
+            )
+ )
+;; agent closes receptacle
+ (:action CloseObject
+    :parameters (?a - agent ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (openable ?r)
+            (opened ?r)
+            )
+    :effect (and
+                (not (opened ?r))
+            )
+
+ )
+
+;; agent picks up object
+ (:action PickupObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            (not (holdsAny ?a))
+            )
+    :effect (and
+                (holds ?a ?o)
+                (holdsAny ?a)
+                (forall (?r - receptacle)
+                    (not (inReceptacle ?o ?r))
+                )
+            )
+ )
+
+;; agent puts down an object in a receptacle
+ (:action PutObjectInReceptacle
+    :parameters (?a - agent ?o - object ?r - receptacle)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (inReceptacle ?o ?r)
+                (not (holds ?a ?o))
+                (not (holdsAny ?a))
+            )
+ )
+
+;; agent cleans some object
+ (:action CleanObject
+    :parameters (?a - agent ?r - sink ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isClean ?o)
+            )
+ )
+
+
+;; agent heats-up some object
+ (:action HeatObject
+    :parameters (?a - agent ?r - microwave ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isHot ?o)
+            )
+ )
+
+;; agent cools some object
+ (:action CoolObject
+    :parameters (?a - agent ?r - fridge ?o - object)
+    :precondition (and
+            (atLocation ?a ?r)
+            (holds ?a ?o)
+            )
+    :effect (and
+                (isCool ?o)
+            )
+ )
+
+
+;; agent toggle object
+ (:action ToggleObject
+    :parameters (?a - agent ?o - object)
+    :precondition (and
+            (atLocation ?a ?o)
+            )
+    :effect (and
+                (when (isOn ?o)
+                    (not (isOn ?o)))
+                (when (not (isOn ?o))
+                    (isOn ?o))
+                (isToggled ?o)
+            )
+ )
+
+
+;; agent slices some object with a knife
+ (:action SliceObject
+    :parameters (?a - agent ?co - object ?ko - knife)
+    :precondition
+            (and
+                (atLocation ?a ?co)
+                (holds ?a ?ko)
+            )
+    :effect (and
+                (isSliced ?co)
+            )
+ )
+
+
+)
+    
+        The image of the scene has been provided.
+        Please first analyze the image and then generate the PDDL problem.
+        
+    The robot is initially not at any object's location. It needs to first go to a location to interact with an object. If an object A can hold another object B, it is a receptacle and must be recognized as such.
+    Instruction: Move two credit cards to the table. from the television stand.
+    
+
+SCENE CAPTION:
+Scene overview (hotel-room like setting)
+- The scene contains a **television on a white TV stand** (a low cabinet with drawers) and a **dark rectangular table/desk** with chairs.
+- A **green upholstered couch/armchair** sits immediately to the right of the TV stand.
+- The floor has a **red/orange patterned carpet**.
+
+Relevant objects (by domain types and task relevance)
+
+1) Receptacles / surfaces (domain “receptacle” concept)
+- **TV stand top surface**: acts as a placement surface holding several small items (treatable as a receptacle for “inReceptacle” relations in this domain setting).
+- **Table/desk top surface**: the instruction target location (“the table”); it is a flat surface that currently holds several items (also a receptacle-like placement surface).
+
+2) Small movable objects (domain “object”)
+On the **television stand (source area)**:
+- **2 credit cards** (both red, rectangular, card-sized)
+  - CreditCard_1: red card located on the right side of the TV stand top, near the TV base’s right arc.
+  - CreditCard_2: red card located closer to the middle-left area of the TV stand top, below/near the TV base.
+- **1 pencil/pen-like object** (thin, dark/black stick): lying on the right side of the TV stand top, roughly parallel to the front edge, near the right credit card.
+- **1 slim blue stick-like item** (possibly a pen/stylus): lying near/inside the arc of the TV base, slightly left of center on the stand.
+
+On the **table/desk (destination area)**:
+- **1 laptop** (open, black keyboard visible) positioned centrally on the table.
+- **1 white mug/cup** to the right of the laptop.
+- **1 set of keys** with keychain and multiple keys, to the left-front of the laptop.
+- **1 tape dispenser** on the far left side of the table.
+- **1 book** (light cover) on the far right side of the table.
+
+Objects and quantities (task-relevant counts)
+- Credit cards: **2** (both currently on the TV stand top).
+- Table (destination surface): **1**.
+- TV stand (source surface): **1**.
+- Other small objects on TV stand: **2** (one black pencil/pen-like, one blue stick-like).
+
+Spatial relationships / predicate-style facts (descriptive)
+- Both **red credit cards are on the TV stand top surface** (i.e., they are currently “in/on” the TV stand receptacle/surface, not on the table).
+- The **table top surface** currently contains (has placed on it) the laptop, mug, keys, tape dispenser, and a book; **no credit cards are on the table yet**.
+- The right-side credit card is **near the black pencil/pen-like object** on the TV stand.
+- The TV base (a dark curved stand) occupies the back-left/top portion of the TV stand surface; one credit card is closer to the base, and one is to the right of it.
+
+Agent/robot state relevant to planning
+- The robot/agent is **not initially at any object’s location** (must use `GotoLocation` first before picking up credit cards or placing them on the table).
+- No receptacles in view appear to be openable (no microwave/fridge/sink shown), and there are **no visible “opened/closed” states** applicable here.
+- The credit cards appear in a normal state (not sliced/clean/hot/cool/toggled—none of these properties are visually indicated).
+
+Based on the above scene caption, the images, and the instruction, generate the PDDL problem file.
+Use the caption to understand what objects are present and their current state.
+Make sure the PDDL problem accurately reflects the scene described in the caption.
+
+Generate the PDDL problem:

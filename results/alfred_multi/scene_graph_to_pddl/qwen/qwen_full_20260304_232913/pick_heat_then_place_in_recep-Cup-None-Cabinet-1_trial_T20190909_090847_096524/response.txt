@@ -1,0 +1,61 @@
+Scene graph:
+agent: robot
+microwave (receptacle): stainless steel microwave
+fridge (receptacle): white fridge
+sink (receptacle): stainless steel sink
+knife (object): silver knife
+receptacle (object): white cabinet under sink
+object: clear glass, brown potato, silver spoon, white cabinet under sink, stainless steel microwave, white fridge, stainless steel sink, silver knife
+openable (receptacle) true if a receptacle is openable: (openable stainless steel microwave), (openable white fridge), (openable white cabinet under sink)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle clear glass stainless steel sink), (inReceptacle brown potato stainless steel sink), (inReceptacle silver spoon stainless steel sink)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_hot_glass_in_cabinet)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife - knife
+        cabinet - receptacle
+        glass - object
+        potato - object
+        spoon - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable cabinet)
+        (inReceptacle glass sink)
+        (inReceptacle potato sink)
+        (inReceptacle spoon sink)
+        (not (holdsAny robot))
+        (not (isHot glass))
+        (not (isClean glass))
+        (not (isCool glass))
+        (not (isSliced glass))
+        (not (isOn microwave))
+        (not (isToggled microwave))
+        (not (atLocation robot sink))
+        (not (atLocation robot microwave))
+        (not (atLocation robot cabinet))
+    )
+    (:goal
+        (and
+            (inReceptacle glass cabinet)
+            (isHot glass)
+        )
+    )
+)
+```

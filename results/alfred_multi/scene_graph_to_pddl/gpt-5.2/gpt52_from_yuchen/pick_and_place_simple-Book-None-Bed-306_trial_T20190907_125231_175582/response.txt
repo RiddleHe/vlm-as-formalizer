@@ -1,0 +1,101 @@
+Scene graph:
+agent: none visible
+microwave (receptacle): none visible
+fridge (receptacle): none visible
+sink (receptacle): none visible
+knife (object): none visible
+receptacle (object):
+- wooden_bed_with_slatted_footboard (receptacle)
+- wooden_desk_with_drawers (receptacle)
+- small_metal_trash_can_with_lid (receptacle)
+object:
+- gray_laptop_on_desk (object)
+- blue_book_on_desk_right_of_laptop (object)
+- blue_pen_on_desk_left_side (object)
+- black_smartphone_on_desk_left_of_laptop (object)
+- pink_cd_disc_on_desk_near_phone (object)
+- square_table_lamp_on_desk_left (object)
+- black_speaker_on_desk_left (object)
+- dark_blue_padded_chair_at_desk (object)
+- panda_stuffed_toy_on_bed_left (object)
+- two_blue_pillows_on_bed_top (object)
+- white_mattress_on_bed (object)
+- wall_heater_radiator_right_of_bed (object)
+- small_gray_trash_bin_near_bed_back_left (object)
+openable (receptacle) true if a receptacle is openable: none
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: none
+isToggled (object) true if the object has been toggled: none
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r:
+- (inReceptacle gray_laptop_on_desk wooden_desk_with_drawers)
+- (inReceptacle blue_book_on_desk_right_of_laptop wooden_desk_with_drawers)
+- (inReceptacle blue_pen_on_desk_left_side wooden_desk_with_drawers)
+- (inReceptacle black_smartphone_on_desk_left_of_laptop wooden_desk_with_drawers)
+- (inReceptacle pink_cd_disc_on_desk_near_phone wooden_desk_with_drawers)
+- (inReceptacle square_table_lamp_on_desk_left wooden_desk_with_drawers)
+- (inReceptacle black_speaker_on_desk_left wooden_desk_with_drawers)
+- (inReceptacle dark_blue_padded_chair_at_desk wooden_desk_with_drawers)
+- (inReceptacle panda_stuffed_toy_on_bed_left wooden_bed_with_slatted_footboard)
+- (inReceptacle two_blue_pillows_on_bed_top wooden_bed_with_slatted_footboard)
+- (inReceptacle white_mattress_on_bed wooden_bed_with_slatted_footboard)
+- (inReceptacle small_metal_trash_can_with_lid small_metal_trash_can_with_lid)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: (define (problem move_book_desk_to_bed)
+  (:domain put_task)
+  (:objects
+    agent1 - agent
+
+    wooden_bed_with_slatted_footboard - receptacle
+    wooden_desk_with_drawers - receptacle
+    small_metal_trash_can_with_lid - receptacle
+
+    gray_laptop_on_desk - object
+    blue_book_on_desk_right_of_laptop - object
+    blue_pen_on_desk_left_side - object
+    black_smartphone_on_desk_left_of_laptop - object
+    pink_cd_disc_on_desk_near_phone - object
+    square_table_lamp_on_desk_left - object
+    black_speaker_on_desk_left - object
+    dark_blue_padded_chair_at_desk - object
+    panda_stuffed_toy_on_bed_left - object
+    two_blue_pillows_on_bed_top - object
+    white_mattress_on_bed - object
+    wall_heater_radiator_right_of_bed - object
+    small_gray_trash_bin_near_bed_back_left - object
+  )
+
+  (:init
+    ;; Robot initially not at any object's location
+    ;; (no atLocation facts)
+
+    ;; Receptacle containment relationships from scene graph
+    (inReceptacle gray_laptop_on_desk wooden_desk_with_drawers)
+    (inReceptacle blue_book_on_desk_right_of_laptop wooden_desk_with_drawers)
+    (inReceptacle blue_pen_on_desk_left_side wooden_desk_with_drawers)
+    (inReceptacle black_smartphone_on_desk_left_of_laptop wooden_desk_with_drawers)
+    (inReceptacle pink_cd_disc_on_desk_near_phone wooden_desk_with_drawers)
+    (inReceptacle square_table_lamp_on_desk_left wooden_desk_with_drawers)
+    (inReceptacle black_speaker_on_desk_left wooden_desk_with_drawers)
+    (inReceptacle dark_blue_padded_chair_at_desk wooden_desk_with_drawers)
+
+    (inReceptacle panda_stuffed_toy_on_bed_left wooden_bed_with_slatted_footboard)
+    (inReceptacle two_blue_pillows_on_bed_top wooden_bed_with_slatted_footboard)
+    (inReceptacle white_mattress_on_bed wooden_bed_with_slatted_footboard)
+
+    ;; As given by scene graph
+    (inReceptacle small_metal_trash_can_with_lid small_metal_trash_can_with_lid)
+  )
+
+  (:goal
+    (and
+      (inReceptacle blue_book_on_desk_right_of_laptop wooden_bed_with_slatted_footboard)
+    )
+  )
+)

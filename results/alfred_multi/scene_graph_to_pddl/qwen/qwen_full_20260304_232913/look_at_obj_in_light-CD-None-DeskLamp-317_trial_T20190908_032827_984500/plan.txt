@@ -1,0 +1,3 @@
+(gotolocation robot cd)
+(pickupobject robot cd)
+(gotolocation robot lamp)

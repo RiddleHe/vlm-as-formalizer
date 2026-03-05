@@ -1,0 +1,5 @@
+(GotoLocation agent microwave)
+(PickupObject agent potato)
+(HeatObject agent microwave potato)
+(GotoLocation agent sink)
+(PutObjectInReceptacle agent potato sink)

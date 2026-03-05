@@ -1,0 +1,3 @@
+(pickupobject robot clock)
+(gotolocation robot desk)
+(putobjectinreceptacle robot clock desk)

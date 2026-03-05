@@ -1,0 +1,37 @@
+invalid
+Objects missing '- type' definition. Every line should be of the form 'object1 - type':
+  knife_on_table
+  martini_glass
+  sink
+  bowl_on_table
+  pan_on_stove
+  pot_on_stove
+  salt_shaker
+  knife_on_stove
+  wine_bottle_2
+  tomato_2
+  lettuce_2
+  soap_dispenser
+  tomato_1
+  wine_bottle_1
+  agent
+  fridge
+  lettuce_1
+  microwave
+  wine_bottle_3
+
+Object does not have a type:
+  microwave
+  pan_on_stove
+  tomato_2
+  lettuce_2
+  knife_on_table
+  pot_on_stove
+  tomato_1
+  sink
+  agent
+  fridge
+  lettuce_1
+  bowl_on_table
+
+

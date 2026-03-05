@@ -1,0 +1,52 @@
+Scene graph:
+agent: robot
+microwave (receptacle): grey_microwave_on_cabinet
+fridge (receptacle): none visible
+sink (receptacle): none visible
+knife (object): none visible
+receptacle (object): wooden_cabinet_left, wooden_cabinet_right, wooden_cabinet_above_microwave
+object: grey_plate, black_pot, kettle, grey_microwave_on_cabinet, wooden_cabinet_left, wooden_cabinet_right, wooden_cabinet_above_microwave
+openable (receptacle) true if a receptacle is openable: (openable wooden_cabinet_left), (openable wooden_cabinet_right), (openable wooden_cabinet_above_microwave)
+opened (receptacle) true if a receptacle is opened: none
+holdsAny (agent) agent ?a holds an object: none
+isClean (object) true if the object has been clean in sink: none
+isHot (object) true if the object has been heated up: none
+isCool (object) true if the object has been cooled: none
+isOn (object) true if the object is on: (isOn grey_microwave_on_cabinet)
+isToggled (object) true if the object has been toggled: (isToggled grey_microwave_on_cabinet)
+isSliced (object) true if the object is sliced: none
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle grey_plate wooden_cabinet_left), (inReceptacle black_pot wooden_cabinet_right), (inReceptacle kettle wooden_cabinet_above_microwave)
+holds (agent, object) object ?o is held by agent ?a: none
+atLocation (agent, object) : none
+
+PDDL problem: ```pddl
+(define (problem put_heated_plate_in_fridge)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        grey_microwave_on_cabinet - microwave
+        wooden_cabinet_left - receptacle
+        wooden_cabinet_right - receptacle
+        wooden_cabinet_above_microwave - receptacle
+        grey_plate - object
+        black_pot - object
+        kettle - object
+    )
+    (:init
+        (openable wooden_cabinet_left)
+        (openable wooden_cabinet_right)
+        (openable wooden_cabinet_above_microwave)
+        (isOn grey_microwave_on_cabinet)
+        (isToggled grey_microwave_on_cabinet)
+        (inReceptacle grey_plate wooden_cabinet_left)
+        (inReceptacle black_pot wooden_cabinet_right)
+        (inReceptacle kettle wooden_cabinet_above_microwave)
+    )
+    (:goal
+        (and
+            (inReceptacle grey_plate fridge)
+            (isHot grey_plate)
+        )
+    )
+)
+```

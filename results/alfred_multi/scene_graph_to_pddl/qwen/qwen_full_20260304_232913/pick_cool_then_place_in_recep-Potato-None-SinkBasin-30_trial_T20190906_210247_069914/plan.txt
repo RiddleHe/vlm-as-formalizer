@@ -1,0 +1,6 @@
+(gotolocation robot brown_ball)
+(pickupobject robot brown_ball)
+(gotolocation robot fridge)
+(coolobject robot fridge brown_ball)
+(gotolocation robot sink)
+(putobjectinreceptacle robot brown_ball sink)

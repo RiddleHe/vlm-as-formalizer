@@ -1,0 +1,45 @@
+```pddl
+(define (problem put_pot_with_spatula_on_table)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        table - receptacle
+        stove - object
+        knife - knife
+        spatula - object
+        pot1 - object
+        pot2 - object
+        blackPot - object
+        mug1 - object
+        mug2 - object
+        mug3 - object
+        tray - object
+        plate - object
+        tableShelf - receptacle
+    )
+    (:init
+        (atLocation agent1 stove) ; Assuming agent starts near stove for simplicity, but can be changed to not at any location
+        (inReceptacle blackPot tableShelf)
+        (inReceptacle mug1 tableShelf)
+        (inReceptacle mug2 tableShelf)
+        (atLocation agent1 mug3) ; mug3 is on the floor, so agent can be near it
+        (atLocation agent1 knife)
+        (atLocation agent1 spatula)
+        (atLocation agent1 pot1)
+        (atLocation agent1 pot2)
+        (atLocation agent1 tray)
+        (atLocation agent1 plate)
+        (not (holdsAny agent1))
+        (not (opened tableShelf)) ; tableShelf is not openable per domain, but included for completeness
+        (not (isClean spatula))
+        (not (isHot spatula))
+        (not (isCool spatula))
+        (not (isSliced spatula))
+        (not (isToggled spatula))
+    )
+    (:goal (and
+        (inReceptacle spatula pot1)
+        (inReceptacle pot1 table)
+    ))
+)
+```

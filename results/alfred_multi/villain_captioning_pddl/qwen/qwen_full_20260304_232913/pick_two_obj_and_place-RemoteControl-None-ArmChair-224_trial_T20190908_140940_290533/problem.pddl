@@ -1,0 +1,20 @@
+(define (problem move_remotes_to_chair)
+    (:domain put_task)
+    (:objects
+        agent1 - agent
+        remote1 remote2 - object
+        chair - receptacle
+        sofa - object
+    )
+    (:init
+        (atLocation agent1 sofa)
+        (inReceptacle remote1 sofa)
+        (inReceptacle remote2 sofa)
+        (not (holdsAny agent1))
+        (not (atLocation agent1 chair))
+    )
+    (:goal (and
+        (inReceptacle remote1 chair)
+        (inReceptacle remote2 chair)
+    ))
+)

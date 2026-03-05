@@ -1,0 +1,6 @@
+Predicate argument has wrong type:
+  atLocation rack coffee_maker: rack is not a agent
+  atLocation knife coffee_maker: knife is not a agent
+  atLocation mug coffee_maker: mug is not a agent
+  atLocation fridge coffee_maker: fridge is not a agent
+

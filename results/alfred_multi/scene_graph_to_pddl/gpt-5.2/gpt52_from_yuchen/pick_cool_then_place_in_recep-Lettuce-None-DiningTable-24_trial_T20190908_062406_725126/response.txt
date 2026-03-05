@@ -1,0 +1,63 @@
+Scene graph:
+agent: robot_agent
+microwave (receptacle): black_microwave_on_right_side_of_table
+fridge (receptacle): tall_gray_fridge_in_center_view
+sink (receptacle): 
+knife (object): 
+receptacle (object): white_table_with_metal_legs, black_round_tray_under_mug
+object: green_head_of_lettuce_left_on_table, green_head_of_lettuce_right_on_table, green_head_of_lettuce_top_right, clear_salt_shaker_left, clear_salt_shaker_middle, clear_salt_shaker_right, green_rectangular_sponge_left, metal_spoon_left, metal_spoon_right, tall_clear_bottle_with_yellow_liquid_center, beige_mug_on_tray, clear_wine_glass_center, clear_wine_glass_right, white_funnel_like_object_left
+openable (receptacle) true if a receptacle is openable: (openable black_microwave_on_right_side_of_table), (openable tall_gray_fridge_in_center_view)
+opened (receptacle) true if a receptacle is opened: 
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: 
+isToggled (object) true if the object has been toggled: 
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle beige_mug_on_tray black_round_tray_under_mug)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: (define (problem put_task_lettuce_chill_on_table)
+  (:domain put_task)
+
+  (:objects
+    robot_agent - agent
+
+    black_microwave_on_right_side_of_table - microwave
+    tall_gray_fridge_in_center_view - fridge
+
+    white_table_with_metal_legs - receptacle
+    black_round_tray_under_mug - receptacle
+
+    green_head_of_lettuce_left_on_table - object
+    green_head_of_lettuce_right_on_table - object
+    green_head_of_lettuce_top_right - object
+    clear_salt_shaker_left - object
+    clear_salt_shaker_middle - object
+    clear_salt_shaker_right - object
+    green_rectangular_sponge_left - object
+    metal_spoon_left - object
+    metal_spoon_right - object
+    tall_clear_bottle_with_yellow_liquid_center - object
+    beige_mug_on_tray - object
+    clear_wine_glass_center - object
+    clear_wine_glass_right - object
+    white_funnel_like_object_left - object
+  )
+
+  (:init
+    (openable black_microwave_on_right_side_of_table)
+    (openable tall_gray_fridge_in_center_view)
+
+    (inReceptacle beige_mug_on_tray black_round_tray_under_mug)
+  )
+
+  (:goal
+    (and
+      (isCool green_head_of_lettuce_left_on_table)
+      (inReceptacle green_head_of_lettuce_left_on_table white_table_with_metal_legs)
+    )
+  )
+)

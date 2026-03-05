@@ -1,0 +1,8 @@
+(gotolocation robot toiletpaper_empty)
+(pickupobject robot toiletpaper_empty)
+(gotolocation robot toilet)
+(putobjectinreceptacle robot toiletpaper_empty toilet)
+(gotolocation robot toiletpaper_full)
+(pickupobject robot toiletpaper_full)
+(gotolocation robot toilet)
+(putobjectinreceptacle robot toiletpaper_full toilet)

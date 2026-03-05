@@ -1,0 +1,56 @@
+Scene graph:
+agent: robot
+microwave (receptacle): dark red microwave on countertop
+fridge (receptacle): black fridge (partially visible, bottom view)
+sink (receptacle): double stainless steel sink with faucet
+knife (object): knife on countertop next to apple
+receptacle (object): countertop, table, cabinet under sink
+object: apple on table, apple in microwave, cup in sink, bowl in sink, egg in sink
+openable (receptacle) true if a receptacle is openable: (openable dark red microwave on countertop), (openable black fridge), (openable double stainless steel sink with faucet)
+opened (receptacle) true if a receptacle is opened: (opened dark red microwave on countertop) — inferred from visible interior, (opened black fridge) — inferred from open view, (opened double stainless steel sink with faucet) — sink is inherently open
+holdsAny (agent) agent ?a holds an object: 
+isClean (object) true if the object has been clean in sink: 
+isHot (object) true if the object has been heated up: 
+isCool (object) true if the object has been cooled: 
+isOn (object) true if the object is on: (isOn dark red microwave on countertop)
+isToggled (object) true if the object has been toggled: (isToggled dark red microwave on countertop)
+isSliced (object) true if the object is sliced: 
+inReceptacle (object, object) object ?o is in receptacle ?r: (inReceptacle apple in microwave dark red microwave on countertop), (inReceptacle cup in sink double stainless steel sink with faucet), (inReceptacle bowl in sink double stainless steel sink with faucet), (inReceptacle egg in sink double stainless steel sink with faucet)
+holds (agent, object) object ?o is held by agent ?a: 
+atLocation (agent, object) :
+
+PDDL problem: ```pddl
+(define (problem put_cleaned_apple_in_fridge)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        microwave - microwave
+        fridge - fridge
+        sink - sink
+        knife - knife
+        apple - object
+        cup - object
+        bowl - object
+        egg - object
+    )
+    (:init
+        (openable microwave)
+        (openable fridge)
+        (openable sink)
+        (opened microwave)
+        (opened fridge)
+        (opened sink)
+        (isOn microwave)
+        (isToggled microwave)
+        (inReceptacle apple microwave)
+        (inReceptacle cup sink)
+        (inReceptacle bowl sink)
+        (inReceptacle egg sink)
+        (atLocation robot microwave) ; assuming robot starts near microwave as per image 1
+    )
+    (:goal (and
+        (inReceptacle apple fridge)
+        (isClean apple)
+    ))
+)
+```

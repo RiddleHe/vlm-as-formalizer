@@ -1,0 +1,25 @@
+```pddl
+(define (problem put_mug_with_spoon_on_table)
+    (:domain put_task)
+    (:objects
+        robot - agent
+        mug - receptacle
+        spoon - object
+        black_round_table - receptacle
+        small_black_side_table - receptacle
+        white_table - receptacle
+    )
+    (:init
+        (atLocation robot white_table)
+        (inReceptacle spoon white_table)
+        (inReceptacle mug small_black_side_table)
+        (not (holdsAny robot))
+        (not (inReceptacle spoon mug))
+        (not (inReceptacle mug black_round_table))
+    )
+    (:goal (and
+        (inReceptacle spoon mug)
+        (inReceptacle mug black_round_table)
+    ))
+)
+```

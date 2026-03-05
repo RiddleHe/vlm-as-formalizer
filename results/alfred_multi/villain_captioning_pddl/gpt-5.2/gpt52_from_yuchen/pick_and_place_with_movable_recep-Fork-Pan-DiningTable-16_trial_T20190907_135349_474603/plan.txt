@@ -1,0 +1,7 @@
+(gotolocation agent1 round_table)
+(pickupobject agent1 fork)
+(gotolocation agent1 frying_pan)
+(putobjectinreceptacle agent1 fork frying_pan)
+(pickupobject agent1 frying_pan)
+(gotolocation agent1 round_table)
+(putobjectinreceptacle agent1 frying_pan round_table)

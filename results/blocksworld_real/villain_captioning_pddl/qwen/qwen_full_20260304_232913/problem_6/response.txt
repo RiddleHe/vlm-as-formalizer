@@ -1,0 +1,37 @@
+```pddl
+(define (problem block-stacking-goal)
+    (:domain blocksworld)
+    (:objects
+        blue - block
+        purple - block
+        yellow - block
+        orange - block
+        red - block
+        green - block
+        robot1 - robot
+    )
+    (:init
+        (ontable yellow)
+        (ontable orange)
+        (ontable red)
+        (ontable green)
+        (ontable purple)
+        (on blue purple)
+        (clear blue)
+        (clear yellow)
+        (clear orange)
+        (clear red)
+        (clear green)
+        (handempty robot1)
+    )
+    (:goal (and
+        (on blue orange)
+        (on orange red)
+        (on red purple)
+        (on purple green)
+        (on green yellow)
+        (clear blue)
+        (ontable yellow)
+    ))
+)
+```

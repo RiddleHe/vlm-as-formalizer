@@ -1,0 +1,11 @@
+Predicate argument has wrong type:
+  atLocation remote2 coffee_table: remote2 is not a agent
+  atLocation remote1 coffee_table: remote1 is not a agent
+  atLocation small_green_box coffee_table: small_green_box is not a agent
+  atLocation round_gold_cushion couch: round_gold_cushion is not a agent
+  atLocation cardboard_box coffee_table: cardboard_box is not a agent
+  atLocation green_cup coffee_table: green_cup is not a agent
+
+Predicate not defined in domain:
+  or
+
